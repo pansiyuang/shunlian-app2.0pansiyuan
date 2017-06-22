@@ -163,28 +163,36 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param views
      */
     protected void visible(View... views){
-       if (views != null && views.length > 0){
-           for (int i = 0; i < views.length; i++) {
-               views[i].setVisibility(View.VISIBLE);
-           }
-       }
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
+
+
 
     /**
      * 隐藏view
      * @param views
      */
     protected void gone(View... views){
-        if (views != null && views.length > 0){
-            for (int i = 0; i < views.length; i++) {
-                views[i].setVisibility(View.GONE);
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                }
             }
         }
     }
 
     @Override
     protected void onDestroy() {
-        unbinder.unbind();
+        if (unbinder != null){
+            unbinder.unbind();
+        }
         super.onDestroy();
     }
 }

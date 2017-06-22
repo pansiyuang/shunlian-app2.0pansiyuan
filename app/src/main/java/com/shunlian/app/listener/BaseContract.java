@@ -1,4 +1,4 @@
-package com.shunlian.app.view;
+package com.shunlian.app.listener;
 
 //                            _ooOoo_
 //                           o8888888o
@@ -23,19 +23,18 @@ package com.shunlian.app.view;
 //                佛祖保佑                 永无BUG
 
 /**
- * Created by zhang on 2017/6/21 14 : 28.
+ * Created by zhang on 2017/6/22 15 : 38.
  */
 
-public interface IView {
+public interface BaseContract {
 
     /**
-     * 显示网络请求失败的界面
+     * 加载view
      */
-    void showFailureView();
-
+    void attachView();
 
     /**
-     * 显示空数据界面
+     * 卸载view
      */
-    void showDataEmptyView();
+    void detachView();
 }

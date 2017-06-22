@@ -29,16 +29,20 @@ import com.shunlian.app.bean.UserInfo;
 import com.shunlian.app.bean.UserLoginEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by zhang on 2017/4/13 16 : 06.
@@ -48,7 +52,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
 
-    @Headers("Content-type:application/json; charset=utf-8")
+//    @Headers("Content-type:application/json; charset=utf-8")
     @POST("user/login.json")
     Call<BaseEntity<UserLoginEntity>> getUserLogin1(@Body UserInfo info);
 
@@ -57,8 +61,26 @@ public interface ApiService {
     @GET("my/home.json")
     Call<BaseEntity<MyHomeEntity>> getmyHome();
 
+    @GET("Goods/item.json")
+    Call<ResponseBody> goodsItem(@Query("goodsId") String goodsId);
 
 
+//    shopId  count page usePage sort sortby
+
+    @GET("Shop/home.json")
+    Call<ResponseBody> shopHome(@Query("shopId") String shopId,@Query("count") String count);
+
+
+    @GET("Shop/home.json")
+    Call<ResponseBody> shopHome1(@QueryMap Map<String,String> map);
+
+
+    @GET
+    Call<ResponseBody> url(@Url String url);
+
+
+    @GET("shop/{abc}/home.json")
+    Call<ResponseBody> url1(@Path("abc") String abc);
 
 
     @Multipart
