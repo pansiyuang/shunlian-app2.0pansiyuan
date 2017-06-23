@@ -6,4 +6,31 @@
     <declare-styleable name="SpinKitView">
         <attr name="SpinKit_Color" format="color" />
     </declare-styleable>
+    
+    <!--MyImageView-->
+    <declare-styleable name="MyImageView">
+        <attr name="iv_control_adapter" format="boolean" />
+        <attr name="iv_control_width" format="integer" />
+        <attr name="iv_control_height" format="integer" />
+    </declare-styleable>
+    <!--MyRelativeLayout-->
+    <declare-styleable name="MyRelativeLayout">
+        <attr name="rl_control_adapter" format="boolean" />
+        <attr name="rl_control_width" format="integer" />
+        <attr name="rl_control_height" format="integer" />
+    </declare-styleable>
+
+    <!--MyLinearLayout-->
+    <declare-styleable name="MyLinearLayout">
+        <attr name="ll_control_adapter" format="boolean" />
+        <attr name="ll_control_width" format="integer" />
+        <attr name="ll_control_height" format="integer" />
+    </declare-styleable>
+    <!--MyFrameLayout-->
+    <declare-styleable name="MyFrameLayout">
+        <attr name="fl_control_adapter" format="boolean" />
+        <attr name="fl_control_width" format="integer" />
+        <attr name="fl_control_height" format="integer" />
+    </declare-styleable>
+
 </resources>

@@ -61,6 +61,13 @@ public interface ApiService {
     @GET("my/home.json")
     Call<BaseEntity<MyHomeEntity>> getmyHome();
 
+    @GET("my/home.json")
+    Call getmyHome1();
+
+
+
+
+
     @GET("Goods/item.json")
     Call<ResponseBody> goodsItem(@Query("goodsId") String goodsId);
 

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.TransformUtil;
@@ -33,38 +33,34 @@ import com.shunlian.app.utils.TransformUtil;
 //                佛祖保佑                 永无BUG
 
 /**
- * Created by zhang on 2017/6/21 14 : 23.
+ * Created by zhang on 2017/6/23 16 : 24.
  */
 
-public class MyImageView extends ImageView {
-
+public class MyFrameLayout extends FrameLayout {
     private boolean aBoolean;
     private int control_width;
     private int control_height;
 
-    public MyImageView(Context context) {
-        this(context, null);
+    public MyFrameLayout(Context context) {
+        this(context,null);
     }
 
-    public MyImageView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public MyFrameLayout(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
     }
 
-    public MyImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyImageView, defStyleAttr, 0);
-        aBoolean = a.getBoolean(R.styleable.MyImageView_iv_control_adapter, false);
-        control_width = a.getInteger(R.styleable.MyImageView_iv_control_width, 0);
-        control_height = a.getInteger(R.styleable.MyImageView_iv_control_height, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyFrameLayout, defStyleAttr,0);
+        aBoolean = a.getBoolean(R.styleable.MyFrameLayout_fl_control_adapter, false);
+        control_width = a.getInteger(R.styleable.MyFrameLayout_fl_control_width, 0);
+        control_height = a.getInteger(R.styleable.MyFrameLayout_fl_control_height, 0);
         a.recycle();
     }
 
     private void init() {
-
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -72,7 +68,7 @@ public class MyImageView extends ImageView {
             int mode_width = MeasureSpec.getMode(widthMeasureSpec);
             int mode_height = MeasureSpec.getMode(heightMeasureSpec);
 
-            int[] realWH = TransformUtil.countRealWH(getContext(), control_width, control_height);
+            int[] realWH = TransformUtil.countRealWH(getContext(),control_width, control_height);
 
             widthMeasureSpec = MeasureSpec.makeMeasureSpec(realWH[0], mode_width);
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(realWH[1], mode_height);
@@ -83,13 +79,12 @@ public class MyImageView extends ImageView {
 
     /**
      * 设置控件大小，宽高都为像素
-     *
      * @param width
      * @param height
      */
-    public void setWHProportion(int width, int height) {
+    public void setWHProportion(int width,int height){
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
-        int[] realWH = TransformUtil.countRealWH(getContext(), width, height);
+        int[] realWH = TransformUtil.countRealWH(getContext(),width, height);
         int real_w = realWH[0];
         int real_h = realWH[1];
 

@@ -6,13 +6,31 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
-import com.shunlian.app.presenter.TestPresenter;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
+
+import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
 
 
     private long mExitTime;
     private boolean isDoubleBack = false;
+
+    @BindView(R.id.ll_special)
+    MyRelativeLayout ll_special;
+
+    @BindView(R.id.special_miaosha)
+    MyImageView special_miaosha;
+
+    @BindView(R.id.special_qingliang)
+    MyImageView special_qingliang;
+
+    @BindView(R.id.special_man)
+    MyImageView special_man;
+
+    @BindView(R.id.special_woman)
+    MyImageView special_woman;
 
     /**
      * 布局id
@@ -30,9 +48,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        TestPresenter testPresenter = new TestPresenter(this,null);
+//        TestPresenter testPresenter = new TestPresenter(this,null);
 
-
+        ll_special.setWHProportion(720,414);
+        special_miaosha.setWHProportion(298,414);
+        special_qingliang.setWHProportion(422,207);
+        special_man.setWHProportion(211,207);
+        special_woman.setWHProportion(211,207);
     }
 
     @Override
@@ -53,7 +75,7 @@ public class MainActivity extends BaseActivity {
                 intent.addCategory(Intent.CATEGORY_HOME);
                 try {
                     startActivity(intent);
-                }catch (ActivityNotFoundException e){
+                } catch (ActivityNotFoundException e) {
                     finish();
                 }
             }
@@ -61,7 +83,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
