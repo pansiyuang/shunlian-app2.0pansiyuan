@@ -32,6 +32,8 @@ import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.math.BigDecimal;
+
 /**
  * Created by zhang on 2017/4/14 13 : 06.
  */
@@ -254,5 +256,39 @@ public class TransformUtil {
         realWH[0] = (int) (real_w + 0.5f);
         realWH[1] = (int) (real_h + 0.5f);
         return realWH;
+    }
+    /**
+     * 格式化单位
+     *
+     * @param size size
+     * @return size
+     */
+    public static String getFormatSize(double size) {
+
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            return size + "Byte";
+        }
+
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "KB";
+        }
+
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "MB";
+        }
+
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 }
