@@ -22,11 +22,14 @@ package com.shunlian.app.presenter;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.content.Context;
+
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.UserInfo;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.listener.INetDataCallback;
+import com.shunlian.app.view.IView;
 
 import retrofit2.Call;
 
@@ -36,23 +39,14 @@ import retrofit2.Call;
 
 public class TestPresenter extends BasePresenter {
 
-    public TestPresenter(){
 
-        Call<BaseEntity<UserLoginEntity>> userLogin1 = getSaveCookieApiService().getUserLogin1(new UserInfo("13007562706", "123456", null));
+    public TestPresenter(Context context, IView iView) {
+        super(context, iView);
+    }
 
-        getNetData(userLogin1, new INetDataCallback<BaseEntity<UserLoginEntity>>() {
-            @Override
-            public void onSuccess(BaseEntity<UserLoginEntity> userLoginEntityBaseEntity) {
-                System.out.println(userLoginEntityBaseEntity.data.toString());
+    private void goodsItem() {
 
-                myHome();
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
+        getApiService().goodsItem("");
     }
 
     private void myHome() {
@@ -68,5 +62,46 @@ public class TestPresenter extends BasePresenter {
 
             }
         });
+    }
+
+    /**
+     * 处理网络请求
+     */
+    @Override
+    protected void initApi() {
+        Call<BaseEntity<UserLoginEntity>> userLogin1 = getSaveCookieApiService().getUserLogin1(new UserInfo("13007562706", "123456", null));
+
+        getNetData(userLogin1, new INetDataCallback<BaseEntity<UserLoginEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<UserLoginEntity> userLoginEntityBaseEntity) {
+                System.out.println(userLoginEntityBaseEntity.data.toString());
+
+                myHome();
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
+
+        goodsItem();
+    }
+
+    /**
+     * 加载view
+     */
+    @Override
+    public void attachView() {
+
+    }
+
+    /**
+     * 卸载view
+     */
+    @Override
+    public void detachView() {
+
     }
 }

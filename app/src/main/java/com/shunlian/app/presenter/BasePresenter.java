@@ -22,9 +22,13 @@ package com.shunlian.app.presenter;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.content.Context;
+
+import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.view.IView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,12 +39,22 @@ import retrofit2.Retrofit;
  * Created by zhang on 2017/4/22 16 : 32.
  */
 
-public class BasePresenter{
+public abstract class BasePresenter<T extends IView> implements BaseContract {
 
-    public BasePresenter(){
+    protected Context context;
+    protected T iView;
 
+    public BasePresenter(Context context, T iView){
+        this.context = context;
+        this.iView = iView;
+
+        initApi();
     }
 
+    /**
+     * 处理网络请求
+     */
+    protected abstract void initApi() ;
 
 
     private Retrofit getRetrofit(){
@@ -53,7 +67,7 @@ public class BasePresenter{
         return tools.getRetrofit();
     }
 
-    /**
+    /*
      * 需要保存cookie
      * @return
      */
@@ -69,7 +83,7 @@ public class BasePresenter{
         return tools.getRetrofit();
     }
 
-    /**
+    /*
      * 需要携带cookie
      * @return
      */
@@ -124,13 +138,27 @@ public class BasePresenter{
                 T body = response.body();
                 if (body != null){
                     callback.onSuccess(body);
+                }else{
+                    if (iView != null){
+                        iView.showDataEmptyView();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<T> call, Throwable t) {
                 callback.onFailure();
+                if (iView != null){
+                    iView.showFailureView();
+                }
             }
         });
+    }
+
+    /**
+     * 处理刷新逻辑
+     */
+    public void onRefresh(){
+
     }
 }
