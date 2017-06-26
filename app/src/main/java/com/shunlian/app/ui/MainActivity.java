@@ -11,6 +11,7 @@ public class MainActivity extends BaseActivity {
      *
      * @return
      */
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -23,8 +24,6 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
 
         TestPresenter testPresenter = new TestPresenter();
-
-
     }
 
     @Override
