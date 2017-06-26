@@ -2,19 +2,39 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    signingConfigs {
+        ShunLianPower {
+            List<String> lists = new File('D:/signState.txt').readLines();
+            String alias = lists.get(0);
+            String pwd = lists.get(1);
+            storeFile file('D:/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
+    }
+
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.shunlian.app"
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 14
-        versionName "1.4.2"
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -27,9 +47,9 @@ dependencies {
     //            exclude group: 'com.android.support', module: 'support-annotations'
     //        })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:25.2.1'
+    compile 'com.android.support:appcompat-v7:25.2.1'
+    compile 'com.android.support:support-v4:25.2.1'
     //NET
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
