@@ -31,16 +31,15 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by zhang on 2017/4/13 16 : 15.
  */
 
 public final class InterentTools {
-    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
-//        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
+//    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
+        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit retrofit;
 
@@ -144,8 +143,7 @@ public final class InterentTools {
             retrofit = new Retrofit.Builder()
                     .client(okHttpBuilder.build())
                     .baseUrl(HTTPADDR)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(JacksonConverterFactory.create())
                     .build();
             return new InterentTools();
         }

@@ -39,12 +39,12 @@ import retrofit2.Retrofit;
  * Created by zhang on 2017/4/22 16 : 32.
  */
 
-public abstract class BasePresenter<T extends IView> implements BaseContract {
+public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     protected Context context;
-    protected T iView;
+    protected IV iView;
 
-    public BasePresenter(Context context, T iView){
+    public BasePresenter(Context context, IV iView){
         this.context = context;
         this.iView = iView;
 
