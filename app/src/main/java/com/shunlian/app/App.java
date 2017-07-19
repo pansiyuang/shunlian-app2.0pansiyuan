@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.shunlian.app.utils.sideslip.ActivityHelper;
+
 
 //                            _ooOoo_
 //                           o8888888o
@@ -34,6 +36,11 @@ import android.support.multidex.MultiDex;
 public class App extends Application {
 
     public static App mApp;
+    private ActivityHelper mActivityHelper;
+
+    public static ActivityHelper getActivityHelper() {
+        return mApp.mActivityHelper;
+    }
 
     @Override
     public void attachBaseContext(Context base) {
@@ -47,5 +54,8 @@ public class App extends Application {
         super.onCreate();
         mApp = this;
 
+        //注册侧滑返回生命周期回调
+        mActivityHelper = new ActivityHelper();
+        registerActivityLifecycleCallbacks(mActivityHelper);
     }
 }

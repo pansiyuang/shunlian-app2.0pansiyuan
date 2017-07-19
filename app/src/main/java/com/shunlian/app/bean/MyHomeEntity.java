@@ -1,6 +1,5 @@
 package com.shunlian.app.bean;
 
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by MBENBEN on 2016/10/11 14 : 46.
@@ -28,7 +27,6 @@ public class MyHomeEntity {
         public String pending;
         public String waitsend;
         public String receipt;
-        @SerializedName("return")
         public String refund;
 
         @Override

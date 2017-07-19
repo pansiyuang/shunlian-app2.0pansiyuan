@@ -2,12 +2,20 @@ package com.shunlian.app.ui;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.SimpleRecyclerAdapter;
+import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.refresh.PullToRefreshView;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -32,6 +40,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.special_woman)
     MyImageView special_woman;
 
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
+
+    @BindView(R.id.ll_layout)
+    PullToRefreshView ll_layout;
+
     /**
      * 布局id
      *
@@ -50,11 +64,38 @@ public class MainActivity extends BaseActivity {
 
 //        TestPresenter testPresenter = new TestPresenter(this,null);
 
-        ll_special.setWHProportion(720,414);
-        special_miaosha.setWHProportion(298,414);
-        special_qingliang.setWHProportion(422,207);
-        special_man.setWHProportion(211,207);
-        special_woman.setWHProportion(211,207);
+//        ll_special.setWHProportion(720,414);
+//        special_miaosha.setWHProportion(298,414);
+//        special_qingliang.setWHProportion(422,207);
+//        special_man.setWHProportion(211,207);
+//        special_woman.setWHProportion(211,207);
+
+        List<String> items = DataUtil.getListString(40, "条目");
+
+
+        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this,android.R.layout.simple_list_item_1,items) {
+
+            @Override
+            public void convert(SimpleViewHolder holder, String s) {
+                holder.setText(android.R.id.text1,s);
+            }
+        };
+
+        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        recy_view.setLayoutManager(manager);
+        recy_view.setAdapter(simpleRecyclerAdapter);
+
+        ll_layout.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ll_layout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ll_layout.setRefreshing(false);
+                    }
+                },3000);
+            }
+        });
     }
 
     @Override
