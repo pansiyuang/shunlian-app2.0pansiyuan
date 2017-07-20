@@ -61,6 +61,8 @@ public class MainActivity extends BaseActivity {
      */
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
 
 //        TestPresenter testPresenter = new TestPresenter(this,null);
 

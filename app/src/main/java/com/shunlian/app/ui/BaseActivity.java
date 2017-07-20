@@ -1,22 +1,19 @@
 package com.shunlian.app.ui;
 
-import android.annotation.TargetApi;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.mylibrary.BarHide;
+import com.shunlian.mylibrary.ImmersionBar;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import butterknife.ButterKnife;
@@ -56,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ImmersionBar.with(this).init();
         setContentView(getLayoutId());
         unbinder = ButterKnife.bind(this);
         initListener();
@@ -105,59 +103,50 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 改变小米的状态栏字体颜色为黑色, 要求MIUI6以上
-     * lightStatusBar为真时表示黑色字体
+     * 设置状态栏的颜色
+     * @param statusBarColor
      */
-    private void processMIUI(boolean lightStatusBar) {
-        Class<? extends Window> clazz = getWindow().getClass();
-        try {
-            int darkModeFlag;
-            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-            extraFlagField.invoke(getWindow(), lightStatusBar ? darkModeFlag : 0, darkModeFlag);
-        } catch (Exception ignored) {
-
-        }
+    public void setStatusBarColor(@ColorRes int statusBarColor){
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(statusBarColor).init();
     }
-
 
     /**
-     * 处理Lollipop以上
-     * <p>
-     * Lollipop可以设置为沉浸，不能设置字体颜色(所以白色背景会很丑)
-     * <p>
-     * M(API23)可以设定
+     * 当状态栏颜色为白色
+     * 设置状态栏字体的颜色，仅限于魅族flymeos4以上，小米MIUI6以上，Android6.0以上
+     * 如果不支持修改颜色就给状态栏设置为透明度
      */
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void processLollipopAbove(boolean lightStatusBar, boolean transparentStatusBar) {
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
-        }
-        int flag = getWindow().getDecorView().getSystemUiVisibility();
-
-        if (lightStatusBar) {
-        /**
-
-         * see {@link <a href="https://developer.android.com/reference/android/R.attr.html#windowLightStatusBar"></a>}
-
-         */
-            flag |= (WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-                    | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-        if (transparentStatusBar) {
-            //改变字体颜色
-            flag |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        }
-        getWindow().getDecorView().setSystemUiVisibility(flag);
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-
+    public void setStatusBarFontDark(){
+        ImmersionBar.with(this).statusBarDarkFont(true,0.2f).init();
     }
 
+    /**
+     * 隐藏状态栏
+     */
+    public void setHideStatus(){
+        ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+    }
+
+    /**
+     * 如果此设备有导航栏的话，调用该方法隐藏导航栏
+     */
+    public void setHideNavigation(){
+        if (ImmersionBar.hasNavigationBar(this))
+            ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
+    }
+
+    /**
+     * 隐藏导航栏和状态栏
+     */
+    public void setHideStatusAndNavigation(){
+        ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
+    }
+
+    /**
+     * 恢复显示导航栏和状态栏
+     */
+    public void setShowStatusAndNavigation(){
+        ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
+    }
     /**
      * 显示view
      * @param views
@@ -194,5 +183,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             unbinder.unbind();
         }
         super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 }
