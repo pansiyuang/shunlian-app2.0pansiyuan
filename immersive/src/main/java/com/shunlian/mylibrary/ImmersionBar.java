@@ -1464,10 +1464,10 @@ public class ImmersionBar {
      */
     private void setStatusBarView() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mBarParams.statusBarViewByHeight != null) {
-//            ViewGroup.LayoutParams params = mBarParams.statusBarViewByHeight.getLayoutParams();
-//            params.height = mConfig.getStatusBarHeight();
-//            mBarParams.statusBarViewByHeight.setLayoutParams(params);
-            mBarParams.statusBarViewByHeight.setPadding(0,mConfig.getStatusBarHeight(),0,0);
+            ViewGroup.LayoutParams params = mBarParams.statusBarViewByHeight.getLayoutParams();
+            params.height = mConfig.getStatusBarHeight();
+            mBarParams.statusBarViewByHeight.setLayoutParams(params);
+//            mBarParams.statusBarViewByHeight.setPadding(0,mConfig.getStatusBarHeight(),0,0);
         }
     }
 
