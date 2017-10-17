@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.refresh.PullToRefreshView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ll_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:background="#c9c3c3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/ll_special"
+            android:layout_width="match_parent"
+            android:layout_height="414px"
+            android:background="#f4f4f4"
+            app:rl_control_adapter="true"
+            android:visibility="gone"
+            app:rl_control_height="414"
+            app:rl_control_width="720">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/special_miaosha"
+                android:layout_width="298px"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/line_special"
+                android:background="#f00"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="720"
+                app:iv_control_width="298" />
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/special_qingliang"
+                android:layout_width="422px"
+                android:layout_height="207px"
+                android:layout_below="@+id/line_special"
+                android:layout_marginLeft="0.5dp"
+                android:layout_toRightOf="@+id/special_miaosha"
+                android:background="#0f0"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="207"
+                app:iv_control_width="422" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/special_man"
+                android:layout_width="211px"
+                android:layout_height="207px"
+                android:layout_below="@+id/special_qingliang"
+                android:layout_marginLeft="0.5dp"
+                android:layout_marginTop="0.5dp"
+                android:layout_toRightOf="@+id/special_miaosha"
+                android:background="#1288F0"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="207"
+                app:iv_control_width="211" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/special_woman"
+                android:layout_width="211px"
+                android:layout_height="207px"
+                android:layout_below="@+id/special_qingliang"
+                android:layout_marginLeft="0.5dp"
+                android:layout_marginTop="0.5dp"
+                android:layout_toRightOf="@+id/special_man"
+                android:background="#FF8202"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="207"
+                app:iv_control_width="211" />
+
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+
+
+
+    </com.shunlian.app.widget.refresh.PullToRefreshView>
+
+
+
