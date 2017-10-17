@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-//        TestPresenter testPresenter = new TestPresenter(this,null);
+        TestPresenter testPresenter = new TestPresenter(this,null);
 
 //        ll_special.setWHProportion(720,414);
 //        special_miaosha.setWHProportion(298,414);

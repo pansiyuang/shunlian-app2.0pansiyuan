@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">顺联动力</string>
+    <!--注册-->
+    <string name="RegisterOneAct_qsrtjrid">请输入推荐人ID</string>
+    <string name="RegisterOneAct_qsrsjh">请输入手机号</string>
+    <string name="RegisterOneAct_qsryzm">请输入验证码</string>
+    <string name="RegisterOneAct_sjxztjr">随机选择推荐人</string>
+    <string name="RegisterTwoAct_yzmyfsd">验证码已发送到</string>
+    <string name="RegisterTwoAct_qsrxmm">请输入新密码</string>
+    <string name="RegisterTwoAct_qcxsrxmm">请重新输入新密码</string>
+    <string name="RegisterTwoAct_qsrndnc">请输入您的昵称</string>
+    <string name="RegisterTwoAct_finish">完成</string>
+
 </resources>

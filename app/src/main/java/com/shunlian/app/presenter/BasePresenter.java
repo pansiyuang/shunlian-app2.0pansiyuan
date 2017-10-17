@@ -147,6 +147,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
             @Override
             public void onFailure(Call<T> call, Throwable t) {
+                if (t != null)
+                    t.printStackTrace();
                 callback.onFailure();
                 if (iView != null){
                     iView.showFailureView();

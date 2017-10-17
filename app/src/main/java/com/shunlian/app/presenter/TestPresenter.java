@@ -24,13 +24,18 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.MyHomeEntity;
-import com.shunlian.app.bean.UserInfo;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.view.IView;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -39,6 +44,8 @@ import retrofit2.Call;
 
 public class TestPresenter extends BasePresenter {
 
+
+    private String stringEntry;
 
     public TestPresenter(Context context, IView iView) {
         super(context, iView);
@@ -69,7 +76,19 @@ public class TestPresenter extends BasePresenter {
      */
     @Override
     protected void initApi() {
-        Call<BaseEntity<UserLoginEntity>> userLogin1 = getSaveCookieApiService().getUserLogin1(new UserInfo("13007562706", "123456", null));
+        System.out.println("==========initApi==============");
+        Map<String,String> fieldMap = new HashMap<>();
+        fieldMap.put("username","13400000006");
+        fieldMap.put("password","123456");
+        fieldMap.put("captcha","");
+        String stringEntry = null;
+        try {
+            stringEntry =  new ObjectMapper().writeValueAsString(fieldMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),stringEntry);
+        Call<BaseEntity<UserLoginEntity>> userLogin1 = getSaveCookieApiService().getUserLogin1(requestBody);
 
         getNetData(userLogin1, new INetDataCallback<BaseEntity<UserLoginEntity>>() {
             @Override
@@ -81,7 +100,7 @@ public class TestPresenter extends BasePresenter {
 
             @Override
             public void onFailure() {
-
+                System.out.println("==========失败==============");
             }
         });
 

@@ -2,11 +2,19 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#000000</color>
     <color name="background_gray1">#EBEBEB</color>
     <color name="my_gray_two">#666666</color>
     <color name="white">#ffffff</color>
     <color name="shape1">#5d8df7</color>
     <color name="shape2">#5EB9F8</color>
     <color name="shape3">#5CC2F8</color>
+
+
+
+    <!--app-->
+    <color name="hint_color">#cccccc</color>
+    <color name="line_color">#d8d8d8</color>
+    <color name="text_color">#1c1b20</color>
+
 </resources>

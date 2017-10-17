@@ -22,6 +22,8 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.os.Environment;
+
 import com.shunlian.app.utils.AddCookiesInterceptor;
 import com.shunlian.app.utils.HttpRequestHeader;
 import com.shunlian.app.utils.ReceivedCookiesInterceptor;
@@ -38,6 +40,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 
 public final class InterentTools {
+    public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
+            "/Android/data/com.shunlian.app/ShunLian/Cache/";
 //    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
         public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
     private static OkHttpClient.Builder okHttpBuilder;
