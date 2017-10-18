@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@mipmap/icon_login_close"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="绑定手机号"
+        android:textColor="@color/new_text"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="25dp"
+        />
+
+
+    <include layout="@layout/layout_input"/>
+</LinearLayout>

@@ -92,12 +92,9 @@
     <color name="tab_text_n">#3e3e3e</color>
     <color name="color_value_6c">#cccccc</color>
     <color name="text_black_one">#1d1c21</color>
+    <color name="e4_color">#e4e4e4</color>
 
 
 
-    <!--app-->
-    <color name="hint_color">#cccccc</color>
-    <color name="line_color">#d8d8d8</color>
-    <color name="text_color">#1c1b20</color>
 
 </resources>
