@@ -4,12 +4,14 @@
     android:id="@+id/activity_register_two"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.shunlian.app.ui.register.RegisterTwoAct">
 
 
     <com.shunlian.app.widget.MyImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/miv_close"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="14dp"
         android:src="@mipmap/icon_login_back" />
@@ -22,7 +24,7 @@
         android:layout_marginTop="60dp"
         android:lines="1"
         android:text="@string/RegisterTwoAct_yzmyfsd"
-        android:textColor="@color/text_color"
+        android:textColor="@color/new_text"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -34,8 +36,18 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="20dp"
         android:text="130 0756 0706"
-        android:textColor="@color/text_color"
+        android:textColor="@color/new_text"
         android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/tv_phone"
+        android:text="59s"
+        android:background="@drawable/frame_line85"
+        android:layout_marginRight="25dp"
+        />
 
     <LinearLayout
         android:id="@+id/ll_code"
@@ -48,18 +60,21 @@
         android:orientation="horizontal">
 
 
-        <TextView
+        <EditText
+            android:id="@+id/et_code1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:gravity="center"
-            android:text="8"
-            android:textColor="@color/text_color"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textColor="@color/new_text"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/et_code2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -67,11 +82,15 @@
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:gravity="center"
-            android:text="8"
-            android:textColor="@color/text_color"
+            android:maxLength="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="number"
+            android:textColor="@color/new_text"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/et_code3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -79,11 +98,15 @@
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:gravity="center"
-            android:text="8"
-            android:textColor="@color/text_color"
+            android:maxLength="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="number"
+            android:textColor="@color/new_text"
             android:textSize="20sp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/et_code4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -91,8 +114,11 @@
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:gravity="center"
-            android:text="8"
-            android:textColor="@color/text_color"
+            android:maxLength="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="number"
+            android:textColor="@color/new_text"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -104,8 +130,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/RegisterTwoAct_qsrxmm"
         android:layout_marginTop="25dp"
-        android:textColorHint="@color/hint_color"
-        android:textColor="@color/hint_color"
+        android:textColorHint="@color/color_value_6c"
+        android:textColor="@color/color_value_6c"
         android:textSize="12sp"
         android:background="@null"
         android:inputType="number"
@@ -122,8 +148,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/RegisterTwoAct_qcxsrxmm"
         android:layout_marginTop="25dp"
-        android:textColorHint="@color/hint_color"
-        android:textColor="@color/hint_color"
+        android:textColorHint="@color/color_value_6c"
+        android:textColor="@color/color_value_6c"
         android:textSize="12sp"
         android:background="@null"
         android:inputType="number"
@@ -139,8 +165,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/RegisterTwoAct_qsrndnc"
         android:layout_marginTop="25dp"
-        android:textColorHint="@color/hint_color"
-        android:textColor="@color/hint_color"
+        android:textColorHint="@color/color_value_6c"
+        android:textColor="@color/color_value_6c"
         android:textSize="12sp"
         android:background="@null"
         android:inputType="number"
@@ -161,6 +187,8 @@
         android:layout_below="@+id/et_nickname"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:background="@drawable/shape_pink_btn"
+        android:padding="10dp"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>

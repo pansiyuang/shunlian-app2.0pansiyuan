@@ -10,8 +10,8 @@
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:src="@mipmap/icon_login_close"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
@@ -20,90 +20,15 @@
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@mipmap/icon_login_logo"
         android:layout_marginTop="65dp"
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"/>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/miv_logo"
-        android:id="@+id/ll_id"
-        android:layout_marginTop="55dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        >
+    <include layout="@layout/layout_input"/>
 
-        <EditText
-            android:id="@+id/et_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/RegisterOneAct_qsrtjrid"
-            android:textColorHint="@color/hint_color"
-            android:textColor="@color/hint_color"
-            android:textSize="12sp"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:drawablePadding="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/RegisterOneAct_sjxztjr"
-            android:padding="5dp"
-            android:textSize="10sp"
-            android:textColor="@color/text_color"
-            android:background="@drawable/rounded_rectangle_3px"
-            android:layout_alignParentRight="true"
-            />
-
-    </RelativeLayout>
-
-
-    <EditText
-        android:id="@+id/et_phone"
-        android:layout_below="@+id/ll_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/RegisterOneAct_qsrsjh"
-        android:layout_marginTop="25dp"
-        android:textColorHint="@color/hint_color"
-        android:textColor="@color/hint_color"
-        android:textSize="12sp"
-        android:background="@null"
-        android:inputType="number"
-        android:drawableBottom="@drawable/edittext_line"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:drawablePadding="10dp"/>
-
-    <EditText
-        android:layout_below="@+id/et_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/RegisterOneAct_qsryzm"
-        android:layout_marginTop="25dp"
-        android:textColorHint="@color/hint_color"
-        android:textColor="@color/hint_color"
-        android:textSize="12sp"
-        android:background="@null"
-        android:drawableBottom="@drawable/edittext_line"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:drawablePadding="10dp"/>
-
-    <com.shunlian.app.widget.MyImageView
-        android:layout_below="@+id/et_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/icon_login_close"
-        android:layout_marginTop="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="25dp"
-        />
 
 </RelativeLayout>
