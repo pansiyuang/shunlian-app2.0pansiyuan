@@ -21,8 +21,11 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="33dp"
         android:background="@null"
+        android:digits="0123456789"
         android:drawableRight="@mipmap/icon_login_delet"
-        android:hint="@string/LoginPswFrg_qsrsjh"
+        android:hint="@string/LoginPswFrg_inputphone"
+        android:inputType="number"
+        android:maxLength="13"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textColorHint="@color/color_value_6c"
@@ -47,24 +50,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/iv_hidden_psw"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/iv_verifi"
             android:background="@null"
-            android:hint="@string/LoginPswFrg_qsrmm"
-            android:inputType="textPassword"
+            android:hint="@string/LoginPswFrg_qsryzm"
+            android:maxLength="4"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:textColorHint="@color/color_value_6c"
             android:textSize="12sp" />
 
         <com.shunlian.app.widget.MyImageView
-            android:id="@+id/iv_hidden_psw"
+            android:id="@+id/iv_verifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:src="@mipmap/icon_login_eyes_h"
-            android:visibility="invisible" />
+            android:scaleType="centerCrop" />
     </RelativeLayout>
 
     <View
@@ -72,7 +74,7 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:background="@color/line_color"></View>
+        android:background="@color/light_gray"></View>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -98,16 +100,4 @@
             android:textColor="@color/new_gray"
             android:textSize="12sp" />
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/shape_pink_btn"
-        android:text="@string/LoginPswFrg_dl"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"></Button>
 </LinearLayout>

@@ -135,6 +135,4 @@ public abstract class BaseFragment extends Fragment {
             bind.unbind();
         }
     }
-
-
 }

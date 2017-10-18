@@ -14,4 +14,12 @@
     <string name="SelectRecommendAct_sztjr">选择推荐人</string>
     <string name="SelectRecommendAct_sure">确定</string>
 
+    <!--登陆-->
+    <string name="LoginPswFrg_qsrsjh">请输入手机号/用户ID</string>
+    <string name="LoginPswFrg_inputphone">请输入手机号</string>
+    <string name="LoginPswFrg_qsrmm">请输入密码</string>
+    <string name="LoginPswFrg_qsryzm">请输入验证码</string>
+    <string name="LoginPswFrg_wxdl">微信登录</string>
+    <string name="LoginPswFrg_xyhzc">新用户注册</string>
+    <string name="LoginPswFrg_dl">登录</string>
 </resources>
