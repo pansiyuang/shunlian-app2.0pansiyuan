@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 
 import butterknife.BindView;
 
@@ -30,6 +33,17 @@ public class RegisterTwoAct extends BaseActivity {
     @BindView(R.id.et_code4)
     EditText et_code4;
 
+    @BindView(R.id.et_pwd)
+    EditText et_pwd;
+
+    @BindView(R.id.et_rpwd)
+    EditText et_rpwd;
+
+    @BindView(R.id.et_nickname)
+    EditText et_nickname;
+
+    private String nickname;
+
     public static void startAct(Context context, String phone){
         Intent intent = new Intent(context,RegisterTwoAct.class);
         intent.putExtra("phone",phone);
@@ -45,14 +59,8 @@ public class RegisterTwoAct extends BaseActivity {
     @Override
     protected void initListener() {
         super.initListener();
-        et_code2.setFocusable(false);
-        et_code2.setFocusableInTouchMode(false);
 
-        et_code3.setFocusable(false);
-        et_code3.setFocusableInTouchMode(false);
-
-        et_code4.setFocusable(false);
-        et_code4.setFocusableInTouchMode(false);
+        setEdittextFocusable(false,et_code2,et_code3,et_code4);
 
         et_code1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,9 +71,7 @@ public class RegisterTwoAct extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)){
-                    et_code2.setFocusableInTouchMode(true);
-                    et_code2.setFocusable(true);
-                    et_code2.requestFocus();
+                    setEdittextFocusable(true,et_code2);
                 }
             }
 
@@ -84,13 +90,9 @@ public class RegisterTwoAct extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)){
-                    et_code3.setFocusableInTouchMode(true);
-                    et_code3.setFocusable(true);
-                    et_code3.requestFocus();
+                    setEdittextFocusable(true,et_code3);
                 }else {
-                    et_code1.setFocusableInTouchMode(true);
-                    et_code1.setFocusable(true);
-                    et_code1.requestFocus();
+                    setEdittextFocusable(true,et_code1);
                 }
             }
 
@@ -109,13 +111,9 @@ public class RegisterTwoAct extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)){
-                    et_code4.setFocusableInTouchMode(true);
-                    et_code4.setFocusable(true);
-                    et_code4.requestFocus();
+                    setEdittextFocusable(true,et_code4);
                 }else {
-                    et_code2.setFocusableInTouchMode(true);
-                    et_code2.setFocusable(true);
-                    et_code2.requestFocus();
+                    setEdittextFocusable(true,et_code2);
                 }
             }
 
@@ -134,15 +132,68 @@ public class RegisterTwoAct extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)){
-                    et_code3.setFocusableInTouchMode(true);
-                    et_code3.setFocusable(true);
-                    et_code3.requestFocus();
+                    setEdittextFocusable(true,et_code3);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        et_rpwd.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                String pwd = et_pwd.getText().toString();
+                if (TextUtils.isEmpty(pwd)){
+                    Common.staticToast("密码不能为空");
+                    setEdittextFocusable(true,et_pwd);
+                    return false;
+                }
+                if (!Common.regularPwd(pwd)){
+                    Common.staticToast("密码只能由字母和数字组合");
+                    et_pwd.setText("");
+                    setEdittextFocusable(true,et_pwd);
+                    return false;
+                }
+                return false;
+            }
+        });
+
+        et_nickname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String pwd = et_pwd.getText().toString();
+                String rpwd = et_rpwd.getText().toString();
+                if (TextUtils.isEmpty(rpwd)){
+                    Common.staticToast("密码不能为空");
+                    setEdittextFocusable(true,et_rpwd);
+                    return;
+                }
+                if (!pwd.equals(rpwd)){
+                    Common.staticToast("两次输入的密码不一致");
+                    et_rpwd.setText("");
+                    setEdittextFocusable(true,et_rpwd);
+                    return;
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                byte[] bytes = s.toString().getBytes();
+                if (bytes.length > 24){
+                    Common.staticToast("昵称设置过长");
+                    et_nickname.setText(nickname);
+                    et_nickname.setSelection(nickname.length());
+                }else {
+                    nickname = s.toString();
+                }
             }
         });
     }
@@ -154,5 +205,15 @@ public class RegisterTwoAct extends BaseActivity {
 
         String phone = getIntent().getStringExtra("phone");
         tv_phone.setText(phone);
+    }
+
+    private void setEdittextFocusable(boolean focusable,EditText... editText){
+        for (int i = 0; i < editText.length; i++) {
+            editText[i].setFocusable(focusable);
+            editText[i].setFocusableInTouchMode(focusable);
+            if (focusable){
+                editText[i].requestFocus();
+            }
+        }
     }
 }

@@ -88,7 +88,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 初始化监听器
      */
-    private void initListener() {
+    protected void initListener() {
 
     }
 
