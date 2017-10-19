@@ -51,7 +51,6 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         baseContext = getActivity();
         View layoutId = getLayoutId(inflater, container);
-
         return layoutId;
     }
 
@@ -60,6 +59,7 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bind = ButterKnife.bind(this, view);
+        initViews();
         initListener();
         initData();
     }
@@ -85,6 +85,11 @@ public abstract class BaseFragment extends Fragment {
      */
     protected abstract View getLayoutId(LayoutInflater inflater, ViewGroup container);
 
+    /**
+     * 初始化所有控件
+     */
+    protected void initViews() {
+    }
 
     /**
      * 初始化监听器

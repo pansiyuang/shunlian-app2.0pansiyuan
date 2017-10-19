@@ -18,7 +18,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/18.
  */
 
-public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListener {
+public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListener, VerificationCodeInput.Listener {
     private CountDownTimer countDownTimer;
     private String currentPhone;
 
@@ -99,6 +99,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initListener() {
         super.initListener();
         tv_time.setOnClickListener(this);
+        input_code.setOnCompleteListener(this);
     }
 
     @Override
@@ -113,5 +114,10 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         super.onDestroy();
         countDownTimer.cancel();
         countDownTimer = null;
+    }
+
+    @Override
+    public void onComplete(String content) {
+
     }
 }

@@ -27,11 +27,16 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     @BindView(R.id.edt_account)
     ClearableEditText edt_account;
 
-
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_login_verification, container, false);
         return rootView;
+    }
+
+    @Override
+    protected void initViews() {
+        edt_verifi.setEnabled(false);
+        super.initViews();
     }
 
     @Override
@@ -46,12 +51,14 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         edt_account.addTextChangedListener(phoneTextWatcher);
         phoneTextWatcher.setOnInputListener(this);
 
-        edt_account.addTextChangedListener(new MyTextWatch());
+        edt_verifi.addTextChangedListener(new MyTextWatch());
     }
 
     @Override
     public void onInput() {//输入手机号码完成
-
+        edt_verifi.setEnabled(true);
+        edt_verifi.requestFocus();
+        edt_verifi.setSelection(edt_verifi.getText().length());
     }
 
 
@@ -72,9 +79,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
             if (edt_verifi.getText().toString().length() == 4) {
                 //输入完验证码跳转逻辑
                 String phoneNum = edt_account.getText().toString();
-                if (phoneNum.length() == 13) {
-                    InputVerfiCodeAct.startAct(getActivity(), phoneNum);
-                }
+                InputVerfiCodeAct.startAct(getActivity(), phoneNum);
             }
         }
     }

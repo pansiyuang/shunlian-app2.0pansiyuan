@@ -23,8 +23,12 @@ import butterknife.BindView;
 public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private boolean isHidden = true;
-    private MyImageView iv_hidden_psw;
-    private EditText edt_psw;
+
+    @BindView(R.id.iv_hidden_psw)
+    MyImageView iv_hidden_psw;
+
+    @BindView(R.id.edt_psw)
+    EditText edt_psw;
 
     @BindView(R.id.tv_new_regist)
     TextView tv_new_regist;
@@ -32,14 +36,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_login_psw, container, false);
-        initView();
         return rootView;
-    }
-
-    @Override
-    protected void initListener() {
-        super.initListener();
-        tv_new_regist.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +47,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initListener() {
         super.initListener();
+        tv_new_regist.setOnClickListener(this);
         iv_hidden_psw.setOnClickListener(this);
         edt_psw.addTextChangedListener(new TextWatcher() {
             @Override
@@ -72,11 +70,6 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
                 }
             }
         });
-    }
-
-    private void initView() {
-        iv_hidden_psw = (MyImageView) rootView.findViewById(R.id.iv_hidden_psw);
-        edt_psw = (EditText) rootView.findViewById(R.id.edt_psw);
     }
 
     @Override
