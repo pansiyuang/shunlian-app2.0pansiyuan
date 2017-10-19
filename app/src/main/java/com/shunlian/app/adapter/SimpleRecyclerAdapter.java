@@ -36,7 +36,7 @@ public abstract class SimpleRecyclerAdapter <T> extends RecyclerView.Adapter<Sim
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(mContext).inflate(mLayoutResId, parent, false);
-        return new SimpleViewHolder(inflate);
+        return new SimpleViewHolder(inflate,this);
     }
 
     @Override

@@ -43,7 +43,8 @@ public final class InterentTools {
     public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
             "/Android/data/com.shunlian.app/ShunLian/Cache/";
 //    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
-        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
+//        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
+        public final static String HTTPADDR = "http://v20-seller.shunliandongli.com/";//测试接口
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit retrofit;
 

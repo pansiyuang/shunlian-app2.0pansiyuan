@@ -42,12 +42,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/tv_phone"
-        android:text="59s"
-        android:background="@drawable/frame_line85"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="25dp"
-        />
+        android:background="@drawable/frame_line85"
+        android:text="59s" />
 
     <LinearLayout
         android:id="@+id/ll_code"
@@ -68,8 +67,8 @@
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:gravity="center"
-            android:maxLength="1"
             android:inputType="number"
+            android:maxLength="1"
             android:textColor="@color/new_text"
             android:textSize="20sp" />
 
@@ -81,11 +80,11 @@
             android:layout_weight="1"
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
-            android:gravity="center"
-            android:maxLength="1"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:gravity="center"
             android:inputType="number"
+            android:maxLength="1"
             android:textColor="@color/new_text"
             android:textSize="20sp" />
 
@@ -97,11 +96,11 @@
             android:layout_weight="1"
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
-            android:gravity="center"
-            android:maxLength="1"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:gravity="center"
             android:inputType="number"
+            android:maxLength="1"
             android:textColor="@color/new_text"
             android:textSize="20sp" />
 
@@ -113,11 +112,11 @@
             android:layout_weight="1"
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
-            android:gravity="center"
-            android:maxLength="1"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:gravity="center"
             android:inputType="number"
+            android:maxLength="1"
             android:textColor="@color/new_text"
             android:textSize="20sp" />
     </LinearLayout>
@@ -125,71 +124,101 @@
 
     <EditText
         android:id="@+id/et_pwd"
-        android:layout_below="@+id/ll_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/RegisterTwoAct_qsrxmm"
-        android:layout_marginTop="25dp"
-        android:textColorHint="@color/color_value_6c"
-        android:textColor="@color/color_value_6c"
-        android:textSize="12sp"
-        android:inputType="textPassword"
-        android:background="@null"
-        android:maxLength="16"
-        android:drawableBottom="@drawable/edittext_line"
+        android:layout_below="@+id/ll_code"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:drawablePadding="10dp"/>
+        android:layout_marginTop="25dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/edittext_line"
+        android:drawablePadding="10dp"
+        android:hint="@string/RegisterTwoAct_qsrxmm"
+        android:inputType="textPassword"
+        android:maxLength="16"
+        android:textColor="@color/color_value_6c"
+        android:textColorHint="@color/color_value_6c"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/iv_hidden_psw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ll_code"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:src="@mipmap/icon_login_eyes_h"
+        android:visibility="invisible" />
 
 
     <EditText
         android:id="@+id/et_rpwd"
-        android:layout_below="@+id/et_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/RegisterTwoAct_qcxsrxmm"
-        android:layout_marginTop="25dp"
-        android:textColorHint="@color/color_value_6c"
-        android:textColor="@color/color_value_6c"
-        android:textSize="12sp"
-        android:inputType="textPassword"
-        android:maxLength="16"
-        android:background="@null"
-        android:drawableBottom="@drawable/edittext_line"
+        android:layout_below="@+id/et_pwd"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:drawablePadding="10dp"/>
+        android:layout_marginTop="25dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/edittext_line"
+        android:drawablePadding="10dp"
+        android:hint="@string/RegisterTwoAct_qcxsrxmm"
+        android:inputType="textPassword"
+        android:maxLength="16"
+        android:textColor="@color/color_value_6c"
+        android:textColorHint="@color/color_value_6c"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/iv_hidden_rpsw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/et_pwd"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:src="@mipmap/icon_login_eyes_h"
+        android:visibility="invisible" />
 
     <EditText
         android:id="@+id/et_nickname"
-        android:layout_below="@+id/et_rpwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/RegisterTwoAct_qsrndnc"
-        android:layout_marginTop="25dp"
-        android:textColorHint="@color/color_value_6c"
-        android:textColor="@color/color_value_6c"
-        android:textSize="12sp"
-        android:background="@null"
-        android:drawableBottom="@drawable/edittext_line"
+        android:layout_below="@+id/et_rpwd"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:drawablePadding="10dp"/>
+        android:layout_marginTop="25dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/edittext_line"
+        android:drawablePadding="10dp"
+        android:hint="@string/RegisterTwoAct_qsrndnc"
+        android:textColor="@color/color_value_6c"
+        android:textColorHint="@color/color_value_6c"
+        android:textSize="12sp" />
 
 
     <TextView
-        android:layout_marginTop="35dp"
-        android:text="@string/RegisterTwoAct_finish"
         android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/white"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/et_nickname"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/shape_pink_btn"
+        android:gravity="center"
         android:padding="10dp"
-        android:layout_height="wrap_content" />
+        android:text="@string/RegisterTwoAct_finish"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

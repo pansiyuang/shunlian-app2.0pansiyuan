@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
@@ -52,6 +53,11 @@ import retrofit2.http.Url;
 public interface ApiService {
 
 
+    /**
+     * 测试
+     * @param requestBody
+     * @return
+     */
 //    @Headers("Content-type:application/json; charset=utf-8")
     @POST("user/login.json")
     Call<BaseEntity<UserLoginEntity>> getUserLogin1(@Body RequestBody requestBody);
@@ -76,4 +82,11 @@ public interface ApiService {
     @Multipart
     @POST("My/Sign.step2.json")
     Call<BaseEntity<UploadCmtPicEntity>> uploadPics(@Part List<MultipartBody.Part> files);
+
+    /**
+     * 2.0正式接口
+     * @return
+     */
+    @GET("member/register/codeList")
+    Call<BaseEntity<MemberCodeListEntity>> memberCodeList(@QueryMap Map<String,String> map);
 }

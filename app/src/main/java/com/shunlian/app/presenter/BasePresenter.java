@@ -24,11 +24,24 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IView;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -128,25 +141,29 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
-    protected <T> void getNetData(Call<T> tCall, final INetDataCallback<T> callback){
+    protected <T> void  getNetData(Call<BaseEntity<T>> tCall,final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
 
-        tCall.enqueue(new Callback<T>() {
+        tCall.enqueue(new Callback<BaseEntity<T>>() {
             @Override
-            public void onResponse(Call<T> call, Response<T> response) {
-                T body = response.body();
-                if (body != null){
-                    callback.onSuccess(body);
-                }else{
-                    if (iView != null){
+            public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
+                BaseEntity<T> body = response.body();
+                LogUtil.longW("onResponse============"+body.toString());
+                if (body.code >= 1000){//请求成功
+                    if (body.data != null){
+                        callback.onSuccess(body);
+                    }else {
                         iView.showDataEmptyView();
                     }
+                }else {
+                    //请求错误
+                    handlerCode(body.code,body.message);
                 }
             }
 
             @Override
-            public void onFailure(Call<T> call, Throwable t) {
+            public void onFailure(Call<BaseEntity<T>> call, Throwable t) {
                 if (t != null)
                     t.printStackTrace();
                 callback.onFailure();
@@ -157,10 +174,51 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         });
     }
 
+    private void handlerCode(Integer code, String message) {
+        Common.staticToast(message);
+        switch (code){
+            // TODO: 2017/10/19
+        }
+    }
+
+
     /**
      * 处理刷新逻辑
      */
     public void onRefresh(){
 
+    }
+
+    public String getStringMD5(String str) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(str.getBytes());
+            BigInteger bigInt = new BigInteger(1, digest.digest());
+            return bigInt.toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String sortAndMD5(Map<String,String> map){
+        List<String> strs = new ArrayList<>();
+        Iterator<String> iterator = map.keySet().iterator();
+        while (iterator.hasNext()){
+            String next = iterator.next();
+            strs.add(next);
+        }
+        Collections.sort(strs);
+        StringBuilder sign = new StringBuilder();
+        for (int i = 0; i < strs.size(); i++) {
+            String key = strs.get(i);
+            String value = map.get(key);
+            sign.append(key+"="+value);
+            sign.append("&");
+            if (i == strs.size() - 1){
+                sign.append("key="+ Constant.KEY);
+            }
+        }
+        return getStringMD5(sign.toString());
     }
 }

@@ -49,13 +49,14 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
 
 
 
-    public SimpleViewHolder(final View view) {
+    public SimpleViewHolder(final View view, SimpleRecyclerAdapter tSimpleRecyclerAdapter) {
         super(view);
         this.views = new SparseArray<>();
         this.childClickViewIds = new LinkedHashSet<>();
         this.itemChildLongClickViewIds = new LinkedHashSet<>();
         this.nestViews = new HashSet<>();
         convertView = view;
+        adapter = tSimpleRecyclerAdapter;
 
 
     }
