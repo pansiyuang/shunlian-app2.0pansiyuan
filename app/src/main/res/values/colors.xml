@@ -9,7 +9,6 @@
     <color name="shape3">#5CC2F8</color>
 
 
-
     <!-- title颜色
  -->
     <color name="my_line_gray">#DDDDDD</color>
@@ -92,8 +91,7 @@
     <color name="color_value_6c">#cccccc</color>
     <color name="text_black_one">#1d1c21</color>
     <color name="e4_color">#e4e4e4</color>
-
-
-
+    <color name="light_gray_two">#d8d8d8</color>
+    <color name="pin_normal">#6B767E</color>
 
 </resources>

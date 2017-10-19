@@ -34,9 +34,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
 
     }
 
-    private void initView() {
-        iv_hidden_psw = (MyImageView) rootView.findViewById(R.id.iv_hidden_psw);
-        edt_psw = (EditText) rootView.findViewById(R.id.edt_psw);
+    @Override
+    protected void initListener() {
+        super.initListener();
         iv_hidden_psw.setOnClickListener(this);
         edt_psw.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,6 +59,11 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener {
                 }
             }
         });
+    }
+
+    private void initView() {
+        iv_hidden_psw = (MyImageView) rootView.findViewById(R.id.iv_hidden_psw);
+        edt_psw = (EditText) rootView.findViewById(R.id.edt_psw);
     }
 
     @Override
