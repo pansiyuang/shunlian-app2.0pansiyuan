@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.register;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
@@ -33,6 +36,10 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.miv_code)
     MyImageView miv_code;
 
+    public static void stratAct(Context context){
+        context.startActivity(new Intent(context,RegisterOneAct.class));
+    }
+
 
     @Override
     protected int getLayoutId() {
@@ -42,6 +49,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initListener() {
         super.initListener();
+        et_phone.addTextChangedListener(new PhoneTextWatcher(et_phone));
         miv_close.setOnClickListener(this);
         tv_select.setOnClickListener(this);
         et_phone.addTextChangedListener(new TextWatcher() {
