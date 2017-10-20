@@ -1,13 +1,26 @@
 package com.shunlian.app.ui.register;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 
-public class BindingPhoneAct extends AppCompatActivity {
+import com.shunlian.app.R;
+import com.shunlian.app.ui.BaseActivity;
+
+import butterknife.BindView;
+
+public class BindingPhoneAct extends BaseActivity {
+
+
+    @BindView(R.id.rl_id)
+    RelativeLayout rl_id;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_binding_phone);
+    protected int getLayoutId() {
+        return R.layout.binding_phone;
+    }
+
+    @Override
+    protected void initData() {
+        rl_id.setVisibility(View.GONE);
     }
 }

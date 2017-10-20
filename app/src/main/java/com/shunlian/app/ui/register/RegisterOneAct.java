@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
@@ -35,6 +36,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.miv_code)
     MyImageView miv_code;
     private String id;//推荐人id
+    private RegisterOnePresenter onePresenter;
 
     public static void stratAct(Context context){
         context.startActivity(new Intent(context,RegisterOneAct.class));
@@ -56,12 +58,14 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                String phone = et_phone.getText().toString();
+                String phone = et_phone.getText().toString().replaceAll(" ","");
                 if (TextUtils.isEmpty(phone)){
                     return;
                 }
-                if ("1234".equals(s.toString())){
-                    RegisterTwoAct.startAct(RegisterOneAct.this, phone);
+                if (!TextUtils.isEmpty(s) && s.length() >= 4){
+                    et_code.setSelection(s.length());
+                    String code = et_code.getText().toString();
+                    onePresenter.sendSmsCode(phone,code);
                 }
             }
         });
@@ -72,6 +76,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         GlideUtils.getInstance().downPicture(this, InterentTools.HTTPADDR + "member/Common/vcode", miv_code);
+        onePresenter = new RegisterOnePresenter(RegisterOneAct.this, null);
     }
 
     @Override
@@ -82,7 +87,6 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.miv_code:
                 GlideUtils.getInstance().downPicture(this, InterentTools.HTTPADDR + "member/Common/vcode", miv_code);
-//                GlideUtils.getInstance().loadImage(this,miv_code, );
                 break;
         }
     }

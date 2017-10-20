@@ -112,11 +112,6 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         setHeader();
-        FrameLayout.LayoutParams ll_dc_Params = (FrameLayout.LayoutParams) ll_detail_content.getLayoutParams();
-        int[] ints = TransformUtil.countRealWH(this, 570, 720);
-        ll_dc_Params.width = ints[0];
-        ll_dc_Params.height = ints[1];
-        ll_detail_content.setLayoutParams(ll_dc_Params);
 
         LinearLayout.LayoutParams iconParams = (LinearLayout.LayoutParams) miv_icon.getLayoutParams();
         int[] ints1 = TransformUtil.countRealWH(this, 200, 200);

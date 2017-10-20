@@ -20,6 +20,9 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:iv_control_adapter="true"
+        app:iv_control_width="40"
+        app:iv_control_height="40"
         android:src="@mipmap/img_login_choice"
         android:layout_marginLeft="60dp"/>
 
@@ -51,13 +54,13 @@
             app:iv_control_adapter="true"
             app:iv_control_width="38"
             app:iv_control_height="28"
+            app:iv_margin_right="20"
             android:src="@mipmap/img_login_v2" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="45dp"
             android:layout_height="14dp"
-            android:layout_marginLeft="10dp"
             android:background="@mipmap/bg_login_jingyingdaoshi"
             android:gravity="center"
             android:text="精英导师"

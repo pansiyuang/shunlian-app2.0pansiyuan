@@ -95,6 +95,6 @@ public interface ApiService {
     @GET("member/register/codeList")
     Call<BaseEntity<MemberCodeListEntity>> memberCodeList(@QueryMap Map<String,String> map);
 
-    @GET("member/Common/vcode")
-    Call<ResponseBody> code();
+    @POST("member/common/sendSmsCode")
+    Call<BaseEntity> sendSmsCode(@Body RequestBody requestBody);
 }

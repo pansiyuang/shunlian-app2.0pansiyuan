@@ -40,6 +40,11 @@ public class MyFrameLayout extends FrameLayout {
     private boolean aBoolean;
     private int control_width;
     private int control_height;
+    private int margin;
+    private int margin_left;
+    private int margin_top;
+    private int margin_bottom;
+    private int margin_right;
 
     public MyFrameLayout(Context context) {
         this(context,null);
@@ -56,10 +61,42 @@ public class MyFrameLayout extends FrameLayout {
         aBoolean = a.getBoolean(R.styleable.MyFrameLayout_fl_control_adapter, false);
         control_width = a.getInteger(R.styleable.MyFrameLayout_fl_control_width, 0);
         control_height = a.getInteger(R.styleable.MyFrameLayout_fl_control_height, 0);
+        margin = a.getInteger(R.styleable.MyFrameLayout_fl_margin, 0);
+        margin_left = a.getInteger(R.styleable.MyFrameLayout_fl_margin_left, 0);
+        margin_top = a.getInteger(R.styleable.MyFrameLayout_fl_margin_top, 0);
+        margin_right = a.getInteger(R.styleable.MyFrameLayout_fl_margin_right, 0);
+        margin_bottom = a.getInteger(R.styleable.MyFrameLayout_fl_margin_bottom, 0);
         a.recycle();
     }
 
     private void init() {
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (aBoolean){
+            if (margin != 0){
+                int marginLR = TransformUtil.countRealWidth(getContext(), margin);
+                int marginTB = TransformUtil.countRealHeight(getContext(), margin);
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                if (layoutParams instanceof ViewGroup.MarginLayoutParams){
+                    ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
+                    marginLayoutParams.setMargins(marginLR,marginTB,marginLR,marginTB);
+                }
+            }else {
+                int real_left = TransformUtil.countRealWidth(getContext(), margin_left);
+                int real_right = TransformUtil.countRealWidth(getContext(), margin_right);
+                int real_top = TransformUtil.countRealHeight(getContext(), margin_top);
+                int real_bottom = TransformUtil.countRealHeight(getContext(), margin_bottom);
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                if (layoutParams instanceof ViewGroup.MarginLayoutParams){
+                    ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
+                    marginLayoutParams.setMargins(real_left,real_top,real_right,real_bottom);
+                }
+            }
+            requestLayout();
+        }
     }
 
     @Override

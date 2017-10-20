@@ -89,6 +89,7 @@
             android:drawablePadding="10dp"
             android:hint="@string/RegisterOneAct_qsryzm"
             android:layout_marginTop="10dp"
+            android:maxLength="4"
             android:textColor="@color/color_value_6c"
             android:textColorHint="@color/color_value_6c"
             android:textSize="12sp" />

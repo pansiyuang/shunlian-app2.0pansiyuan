@@ -257,6 +257,30 @@ public class TransformUtil {
         realWH[1] = (int) (real_h + 0.5f);
         return realWH;
     }
+
+    /**
+     * 计算真实宽
+     * @param context
+     * @param width 720*1280标注图上给的像素
+     * @return
+     */
+    public static int countRealWidth(Context context,int width){
+        float wp = width / Constant.DRAWING_WIDTH;
+        float realW = wp * DeviceInfoUtil.getDeviceWidth(context);
+        return (int) (realW + 0.5f);
+    }
+
+    /**
+     * 计算真实高
+     * @param context
+     * @param height 720*1280标注图上给的像素
+     * @return
+     */
+    public static int countRealHeight(Context context,int height){
+        float hp = height / Constant.DRAWING_HEIGHT;
+        float realH = hp * DeviceInfoUtil.getDeviceHeight(context);
+        return (int) (realH + 0.5f);
+    }
     /**
      * 格式化单位
      *
