@@ -294,8 +294,12 @@ public class GlideUtils {
     }
 
     //Glide下载图片
-    public void downPicture(Context context, String url,ImageView imageView){
-        Glide.with(context).load(url).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE) //缓存策略
-        .into(imageView);
+    public void downPicture(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url)
+                .asBitmap()
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
+                .skipMemoryCache(true)//跳过内存缓存
+                .into(imageView);
     }
 }

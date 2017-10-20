@@ -56,7 +56,6 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
 
     private void initViews() {
-
         et_pwd.setVisibility(View.GONE);
         et_rpwd.setVisibility(View.GONE);
         et_nickname.setVisibility(View.GONE);
@@ -73,7 +72,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                tv_time.setText("重新获取");
+                tv_time.setText(getResources().getString(R.string.LoginPswFrg_cxhq));
                 tv_time.setEnabled(true);
             }
         };

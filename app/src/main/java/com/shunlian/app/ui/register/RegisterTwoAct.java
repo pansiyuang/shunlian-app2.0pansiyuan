@@ -73,7 +73,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
             @Override
             public void onComplete(String content) {
-                // TODO: 2017/10/20  
+                // TODO: 2017/10/20
             }
         });
 

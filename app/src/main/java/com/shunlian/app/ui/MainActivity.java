@@ -80,11 +80,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void convert(SimpleViewHolder holder, String s,int position) {
-                holder.setText(android.R.id.text1, s);
+                holder.setText(android.R.id.text1,s);
             }
         };
 
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recy_view.setLayoutManager(manager);
         recy_view.setAdapter(simpleRecyclerAdapter);
 
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         ll_layout.setRefreshing(false);
                     }
-                }, 3000);
+                },3000);
             }
         });
     }
@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
