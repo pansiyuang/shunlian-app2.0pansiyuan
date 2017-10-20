@@ -2,7 +2,6 @@ package com.shunlian.app.ui.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
@@ -55,17 +54,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         return R.layout.activity_register_two;
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentPhone = getIntent().getStringExtra("phoneNum");
-        initViews();
-    }
-
-
     private void initViews() {
-
         et_pwd.setVisibility(View.GONE);
         et_rpwd.setVisibility(View.GONE);
         et_nickname.setVisibility(View.GONE);
@@ -82,7 +71,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                tv_time.setText("重新获取");
+                tv_time.setText(getResources().getString(R.string.LoginPswFrg_cxhq));
                 tv_time.setEnabled(true);
             }
         };
@@ -93,6 +82,9 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        currentPhone = getIntent().getStringExtra("phoneNum");
+        initViews();
     }
 
     @Override

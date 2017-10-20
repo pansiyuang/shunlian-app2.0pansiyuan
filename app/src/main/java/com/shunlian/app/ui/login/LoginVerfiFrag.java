@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
@@ -47,7 +49,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     protected void initData() {
-
+        GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
     }
 
     @Override
@@ -73,6 +75,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_verifi:
+                GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
                 break;
         }
     }
@@ -94,13 +97,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         public void afterTextChanged(Editable editable) {
             String verifiCode = edt_verifi.getText().toString();
             if (verifiCode.length() == 4) {
-//                if (verifiCode.equals(currentCode)) {
-//                    //输入完验证码跳转逻辑
-//                    String phoneNum = edt_account.getText().toString();
-//                    InputVerfiCodeAct.startAct(getActivity(), phoneNum);
-//                } else {
-//                    Common.staticToast("验证码输入错误");
-//                }
+                //输入完验证码跳转逻辑
+                String phoneNum = edt_account.getText().toString();
+                InputVerfiCodeAct.startAct(getActivity(), phoneNum);
             }
         }
     }
