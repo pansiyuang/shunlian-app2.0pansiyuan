@@ -38,7 +38,7 @@ public class MemberCodeListEntity {
         public String avatar;
         public String level;
         public String member_role;
-        public int heat;
+        public String heat;
         public String regtime;
         public String code;
 

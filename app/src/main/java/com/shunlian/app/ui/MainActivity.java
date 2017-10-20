@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        TestPresenter testPresenter = new TestPresenter(this, null);
+        TestPresenter testPresenter = new TestPresenter(this,null);
 
 //        ll_special.setWHProportion(720,414);
 //        special_miaosha.setWHProportion(298,414);
@@ -79,12 +79,12 @@ public class MainActivity extends BaseActivity {
         SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
 
             @Override
-            public void convert(SimpleViewHolder holder, String s) {
-                holder.setText(android.R.id.text1, s);
+            public void convert(SimpleViewHolder holder, String s,int position) {
+                holder.setText(android.R.id.text1,s);
             }
         };
 
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recy_view.setLayoutManager(manager);
         recy_view.setAdapter(simpleRecyclerAdapter);
 
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         ll_layout.setRefreshing(false);
                     }
-                }, 3000);
+                },3000);
             }
         });
     }
@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
