@@ -5,10 +5,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.widget.ClearableEditText;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
@@ -17,15 +19,19 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/17.
  */
 
-public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener {
+public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener, View.OnClickListener {
     private View rootView;
     private PhoneTextWatcher phoneTextWatcher;
 
     @BindView(R.id.edt_verifi)
-    ClearableEditText edt_verifi;
+    EditText edt_verifi;
 
     @BindView(R.id.edt_account)
     ClearableEditText edt_account;
+
+    @BindView(R.id.iv_verifi)
+    MyImageView iv_verifi;
+
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -52,6 +58,8 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         phoneTextWatcher.setOnInputListener(this);
 
         edt_verifi.addTextChangedListener(new MyTextWatch());
+        iv_verifi.setOnClickListener(this);
+
     }
 
     @Override
@@ -59,6 +67,14 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         edt_verifi.setEnabled(true);
         edt_verifi.requestFocus();
         edt_verifi.setSelection(edt_verifi.getText().length());
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_verifi:
+                break;
+        }
     }
 
 
@@ -76,10 +92,15 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (edt_verifi.getText().toString().length() == 4) {
-                //输入完验证码跳转逻辑
-                String phoneNum = edt_account.getText().toString();
-                InputVerfiCodeAct.startAct(getActivity(), phoneNum);
+            String verifiCode = edt_verifi.getText().toString();
+            if (verifiCode.length() == 4) {
+//                if (verifiCode.equals(currentCode)) {
+//                    //输入完验证码跳转逻辑
+//                    String phoneNum = edt_account.getText().toString();
+//                    InputVerfiCodeAct.startAct(getActivity(), phoneNum);
+//                } else {
+//                    Common.staticToast("验证码输入错误");
+//                }
             }
         }
     }

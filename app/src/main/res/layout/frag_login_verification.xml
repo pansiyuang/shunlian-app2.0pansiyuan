@@ -45,7 +45,7 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp">
 
-        <com.shunlian.app.widget.ClearableEditText
+        <EditText
             android:id="@+id/edt_verifi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -5,4 +5,13 @@ package com.shunlian.app.view;
  */
 
 public class IVerfiView implements IView {
+    @Override
+    public void showFailureView() {
+
+    }
+
+    @Override
+    public void showDataEmptyView() {
+
+    }
 }

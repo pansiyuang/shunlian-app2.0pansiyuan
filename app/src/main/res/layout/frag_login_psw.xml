@@ -23,6 +23,7 @@
         android:background="@null"
         android:drawableRight="@mipmap/icon_login_delet"
         android:hint="@string/LoginPswFrg_qsrsjh"
+        android:maxLength="16"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textColorHint="@color/color_value_6c"
@@ -51,6 +52,7 @@
             android:background="@null"
             android:hint="@string/LoginPswFrg_qsrmm"
             android:inputType="textPassword"
+            android:maxLength="16"
             android:textColorHint="@color/color_value_6c"
             android:textSize="12sp" />
 
