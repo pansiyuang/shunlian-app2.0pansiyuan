@@ -205,16 +205,6 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         tv_phone.setText(phone);
     }
 
-    private void setEdittextFocusable(boolean focusable,EditText... editText){
-        for (int i = 0; i < editText.length; i++) {
-            editText[i].setFocusable(focusable);
-            editText[i].setFocusableInTouchMode(focusable);
-            if (focusable){
-                editText[i].requestFocus();
-            }
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){

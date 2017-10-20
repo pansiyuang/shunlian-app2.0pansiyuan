@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -187,6 +188,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if (view != null) {
                     view.setVisibility(View.GONE);
                 }
+            }
+        }
+    }
+
+    protected void setEdittextFocusable(boolean focusable,EditText... editText){
+        for (int i = 0; i < editText.length; i++) {
+            editText[i].setFocusable(focusable);
+            editText[i].setFocusableInTouchMode(focusable);
+            if (focusable){
+                editText[i].requestFocus();
             }
         }
     }

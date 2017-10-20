@@ -294,4 +294,10 @@ public class GlideUtils {
     public void pauseRequests(Context context) {
         Glide.with(context).pauseRequests();
     }
+
+    //Glide下载图片
+    public void downPicture(Context context, String url,ImageView imageView){
+        Glide.with(context).load(url).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE) //缓存策略
+        .into(imageView);
+    }
 }

@@ -41,10 +41,10 @@ public abstract class SimpleRecyclerAdapter <T> extends RecyclerView.Adapter<Sim
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, int position) {
-        convert(holder, mData.get(position));
+        convert(holder, mData.get(position),position);
     }
 
-    public abstract void convert(SimpleViewHolder holder, T t);
+    public abstract void convert(SimpleViewHolder holder, T t,int position);
 
     @Override
     public int getItemCount() {

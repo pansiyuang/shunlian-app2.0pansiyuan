@@ -16,6 +16,8 @@
         android:src="@mipmap/img_login_v1" />
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_select"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/img_login_choice"
