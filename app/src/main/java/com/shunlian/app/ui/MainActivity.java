@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
         SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
 
             @Override
-            public void convert(SimpleViewHolder holder, String s) {
+            public void convert(SimpleViewHolder holder, String s,int position) {
                 holder.setText(android.R.id.text1, s);
             }
         };

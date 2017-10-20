@@ -2,7 +2,6 @@ package com.shunlian.app.ui.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
@@ -56,14 +55,6 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentPhone = getIntent().getStringExtra("phoneNum");
-        initViews();
-    }
-
-
     private void initViews() {
 
         et_pwd.setVisibility(View.GONE);
@@ -93,6 +84,8 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        currentPhone = getIntent().getStringExtra("phoneNum");
+        initViews();
     }
 
     @Override
