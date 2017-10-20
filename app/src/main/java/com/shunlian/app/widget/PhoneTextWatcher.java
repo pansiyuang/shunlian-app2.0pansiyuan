@@ -11,6 +11,7 @@ import android.widget.EditText;
 public class PhoneTextWatcher implements TextWatcher {
 
     private EditText numberEditText;
+    private OnInputCompleteListener mListener;
     int beforeLen = 0;
     int afterLen = 0;
 
@@ -36,11 +37,23 @@ public class PhoneTextWatcher implements TextWatcher {
                 numberEditText.setText(new StringBuffer(txt).insert(txt.length() - 1, " ").toString());
                 numberEditText.setSelection(numberEditText.getText().length());
             }
+
+            if (txt.length() == 13 && mListener != null) {
+                mListener.onInput();
+            }
         } else {//删除文字
             if (txt.length() == 4 || txt.length() == 9) {
                 numberEditText.setText(new StringBuffer(txt).delete(txt.length() - 1, txt.length()).toString());
                 numberEditText.setSelection(numberEditText.getText().length());
             }
         }
+    }
+
+    public void setOnInputListener(OnInputCompleteListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnInputCompleteListener {
+        void onInput();
     }
 }

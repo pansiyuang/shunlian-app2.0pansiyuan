@@ -40,93 +40,35 @@
         android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tv_phone"
         android:layout_alignParentRight="true"
         android:layout_marginRight="25dp"
         android:background="@drawable/frame_line85"
-        android:text="59s" />
+        android:text="59s"
+        android:textColor="@color/new_gray" />
 
-    <LinearLayout
-        android:id="@+id/ll_code"
+    <com.shunlian.app.widget.VerificationCodeInput xmlns:ver="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/input_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_phone"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="50dp"
-        android:orientation="horizontal">
-
-
-        <EditText
-            android:id="@+id/et_code1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textColor="@color/new_text"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/et_code2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textColor="@color/new_text"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/et_code3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textColor="@color/new_text"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/et_code4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textColor="@color/new_text"
-            android:textSize="20sp" />
-    </LinearLayout>
+        android:text="1234"
+        android:textSize="40sp"
+        ver:box="4"
+        ver:padding="10dp"></com.shunlian.app.widget.VerificationCodeInput>
 
 
     <EditText
         android:id="@+id/et_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_code"
+        android:layout_below="@+id/input_code"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="25dp"
@@ -139,21 +81,6 @@
         android:textColor="@color/color_value_6c"
         android:textColorHint="@color/color_value_6c"
         android:textSize="12sp" />
-
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/iv_hidden_psw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/ll_code"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:src="@mipmap/icon_login_eyes_h"
-        android:visibility="invisible" />
 
 
     <EditText
@@ -174,21 +101,6 @@
         android:textColorHint="@color/color_value_6c"
         android:textSize="12sp" />
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/iv_hidden_rpsw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/et_pwd"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:src="@mipmap/icon_login_eyes_h"
-        android:visibility="invisible" />
-
     <EditText
         android:id="@+id/et_nickname"
         android:layout_width="match_parent"
@@ -207,6 +119,7 @@
 
 
     <TextView
+        android:id="@+id/tv_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_nickname"

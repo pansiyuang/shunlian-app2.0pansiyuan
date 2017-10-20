@@ -50,8 +50,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         baseContext = getActivity();
-        View layoutId =  getLayoutId(inflater, container);
-
+        View layoutId = getLayoutId(inflater, container);
         return layoutId;
     }
 
@@ -60,6 +59,7 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bind = ButterKnife.bind(this, view);
+        initViews();
         initListener();
         initData();
     }
@@ -78,12 +78,18 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 设置布局id
+     *
      * @param inflater
      * @param container
      * @return
      */
-    protected abstract View getLayoutId(LayoutInflater inflater, ViewGroup container) ;
+    protected abstract View getLayoutId(LayoutInflater inflater, ViewGroup container);
 
+    /**
+     * 初始化所有控件
+     */
+    protected void initViews() {
+    }
 
     /**
      * 初始化监听器
@@ -100,9 +106,10 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 显示view
+     *
      * @param views
      */
-    protected void visible(View... views){
+    protected void visible(View... views) {
         if (views != null && views.length > 0) {
             for (View view : views) {
                 if (view != null) {
@@ -113,12 +120,12 @@ public abstract class BaseFragment extends Fragment {
     }
 
 
-
     /**
      * 隐藏view
+     *
      * @param views
      */
-    protected void gone(View... views){
+    protected void gone(View... views) {
         if (views != null && views.length > 0) {
             for (View view : views) {
                 if (view != null) {
@@ -131,7 +138,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (bind != null){
+        if (bind != null) {
             bind.unbind();
         }
     }

@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.presenter.TestPresenter;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        TestPresenter testPresenter = new TestPresenter(this,null);
+        TestPresenter testPresenter = new TestPresenter(this, null);
 
 //        ll_special.setWHProportion(720,414);
 //        special_miaosha.setWHProportion(298,414);
@@ -76,15 +76,15 @@ public class MainActivity extends BaseActivity {
         List<String> items = DataUtil.getListString(40, "条目");
 
 
-        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this,android.R.layout.simple_list_item_1,items) {
+        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
 
             @Override
-            public void convert(SimpleViewHolder holder, String s,int position) {
-                holder.setText(android.R.id.text1,s);
+            public void convert(SimpleViewHolder holder, String s) {
+                holder.setText(android.R.id.text1, s);
             }
         };
 
-        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recy_view.setLayoutManager(manager);
         recy_view.setAdapter(simpleRecyclerAdapter);
 
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         ll_layout.setRefreshing(false);
                     }
-                },3000);
+                }, 3000);
             }
         });
     }
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                Toast.makeText(this, "再按一次退出顺联动力", Toast.LENGTH_SHORT).show();
+                Common.staticToast("再按一次退出顺联动力");
                 mExitTime = System.currentTimeMillis();
             } else {
                 isDoubleBack = true;
@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

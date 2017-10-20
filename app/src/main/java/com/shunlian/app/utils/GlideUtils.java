@@ -12,10 +12,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 public class GlideUtils {
 
     /**
-     *
-     *  Glide默认加载RGB_565
+     * Glide默认加载RGB_565
      * context可传 context、activity、fragment
-     *
      */
 
     private static GlideUtils mInstance;
@@ -45,7 +43,7 @@ public class GlideUtils {
 
 
     public void loadImage(Context context, ImageView imageView, String imgUrl) {
-        loadImage(context,imageView, imgUrl,true);
+        loadImage(context, imageView, imgUrl, true);
     }
 
     /**

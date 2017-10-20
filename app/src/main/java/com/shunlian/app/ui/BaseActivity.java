@@ -119,9 +119,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 设置状态栏的颜色
+     *
      * @param statusBarColor
      */
-    public void setStatusBarColor(@ColorRes int statusBarColor){
+    public void setStatusBarColor(@ColorRes int statusBarColor) {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(statusBarColor).init();
     }
 
@@ -130,21 +131,21 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置状态栏字体的颜色，仅限于魅族flymeos4以上，小米MIUI6以上，Android6.0以上
      * 如果不支持修改颜色就给状态栏设置为透明度
      */
-    public void setStatusBarFontDark(){
-        ImmersionBar.with(this).statusBarDarkFont(true,0.2f).init();
+    public void setStatusBarFontDark() {
+        ImmersionBar.with(this).statusBarDarkFont(true, 0.2f).init();
     }
 
     /**
      * 隐藏状态栏
      */
-    public void setHideStatus(){
+    public void setHideStatus() {
         ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
     }
 
     /**
      * 如果此设备有导航栏的话，调用该方法隐藏导航栏
      */
-    public void setHideNavigation(){
+    public void setHideNavigation() {
         if (ImmersionBar.hasNavigationBar(this))
             ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
     }
@@ -152,21 +153,23 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 隐藏导航栏和状态栏
      */
-    public void setHideStatusAndNavigation(){
+    public void setHideStatusAndNavigation() {
         ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
     }
 
     /**
      * 恢复显示导航栏和状态栏
      */
-    public void setShowStatusAndNavigation(){
+    public void setShowStatusAndNavigation() {
         ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
     }
+
     /**
      * 显示view
+     *
      * @param views
      */
-    protected void visible(View... views){
+    protected void visible(View... views) {
         if (views != null && views.length > 0) {
             for (View view : views) {
                 if (view != null) {
@@ -177,12 +180,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 隐藏view
+     *
      * @param views
      */
-    protected void gone(View... views){
+    protected void gone(View... views) {
         if (views != null && views.length > 0) {
             for (View view : views) {
                 if (view != null) {
@@ -204,7 +207,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (unbinder != null){
+        if (unbinder != null) {
             unbinder.unbind();
         }
         super.onDestroy();
