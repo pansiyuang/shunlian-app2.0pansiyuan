@@ -11,7 +11,7 @@
         android:padding="15dp">
 
         <com.shunlian.app.widget.MyImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/miv_close"
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:src="@mipmap/icon_login_close" />

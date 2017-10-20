@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/ll_id"
+        android:id="@+id/rl_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/miv_logo"
@@ -40,24 +40,39 @@
 
     </RelativeLayout>
 
-    <com.shunlian.app.widget.ClearableEditText
-        android:id="@+id/et_phone"
+    <LinearLayout
+        android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@+id/ll_id"
         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:background="@null"
-        android:drawableBottom="@drawable/edittext_line"
-        android:drawablePadding="10dp"
-        android:hint="@string/RegisterOneAct_qsrsjh"
-        android:inputType="number"
-        android:textColor="@color/color_value_6c"
-        android:textColorHint="@color/color_value_6c"
-        android:textSize="12sp" />
+        android:layout_marginRight="25dp">
+
+        <com.shunlian.app.widget.ClearableEditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawableRight="@mipmap/icon_login_delet"
+            android:hint="@string/RegisterOneAct_qsrsjh"
+            android:inputType="number"
+            android:maxLength="13"
+            android:digits="0123456789"
+            android:textColor="@color/color_value_6c"
+            android:textColorHint="@color/color_value_6c"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/light_gray_two"/>
+
+    </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/ll_code"
+        android:id="@+id/rl_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_phone"

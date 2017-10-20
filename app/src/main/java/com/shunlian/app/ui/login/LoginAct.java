@@ -42,7 +42,7 @@ public class LoginAct extends BaseActivity {
     }
 
     private void initView() {
-        iv_back = (MyImageView) findViewById(R.id.iv_back);
+        iv_back = (MyImageView) findViewById(R.id.miv_close);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
 
         FragmentManager fragmentManager = getSupportFragmentManager();

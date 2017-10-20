@@ -29,9 +29,14 @@ package com.shunlian.app.utils;
  */
 
 public final class Constant {
-    /**效果图宽*/
+    /**
+     * 效果图宽
+     */
     public static final float DRAWING_WIDTH = 720.0f;
-    /**效果图高*/
+    /**
+     * 效果图高
+     */
     public static final float DRAWING_HEIGHT = 1280.0f;
 
+    public static final String KEY = "sdf21111111111";
 }

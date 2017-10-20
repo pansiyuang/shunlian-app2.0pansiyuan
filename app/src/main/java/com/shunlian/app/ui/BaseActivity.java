@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.shunlian.app.R;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -56,9 +58,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         ImmersionBar.with(this).init();
         setContentView(getLayoutId());
         unbinder = ButterKnife.bind(this);
+        finishAct();
         initListener();
         initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
+    }
+
+    private void finishAct() {
+        View byId = ButterKnife.findById(this, R.id.miv_close);
+        byId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -100,6 +113,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPrefUtil.saveSharedPrfString("deviceHeight", String.valueOf(DeviceInfoUtil.getDeviceHeight(this)));
         SharedPrefUtil.saveSharedPrfString("UserAgent", DeviceInfoUtil.getUserAgent(this));
         SharedPrefUtil.saveSharedPrfString("DeviceIp", DeviceInfoUtil.getDeviceIp(this));
+        SharedPrefUtil.saveSharedPrfString("Net-Type", NetworkUtils.getNetWorkStatusName(this));
     }
 
     /**
