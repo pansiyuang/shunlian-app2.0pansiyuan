@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        TestPresenter testPresenter = new TestPresenter(this,null);
+        TestPresenter testPresenter = new TestPresenter(this, null);
 
 //        ll_special.setWHProportion(720,414);
 //        special_miaosha.setWHProportion(298,414);

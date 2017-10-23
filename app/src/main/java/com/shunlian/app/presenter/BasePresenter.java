@@ -61,7 +61,6 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         this.context = context;
         this.iView = iView;
 
-        initApi();
     }
 
     /**
@@ -150,7 +149,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
                 BaseEntity<T> body = response.body();
                 LogUtil.longW("onResponse============"+body.toString());
-                if (body.code >= 1000){//请求成功
+                if (body.code == 1000){//请求成功
                     if (body.data != null){
                         callback.onSuccess(body);
                     }else {
@@ -189,7 +188,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     }
 
-    public String getStringMD5(String str) {
+    private String getStringMD5(String str) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(str.getBytes());

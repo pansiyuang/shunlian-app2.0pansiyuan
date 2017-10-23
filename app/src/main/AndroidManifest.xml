@@ -29,19 +29,22 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".ui.register.RegisterOneAct"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.register.RegisterTwoAct"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.LoginAct"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.register.SelectRecommendAct"></activity>
-        <activity android:name=".ui.login.InputVerfiCodeAct"></activity>
+        <activity android:name=".ui.register.SelectRecommendAct" />
+        <activity android:name=".ui.login.InputVerfiCodeAct" />
+        <activity android:name=".ui.register.BindingPhoneAct"></activity>
     </application>
+
 </manifest>

@@ -61,6 +61,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         return R.layout.activity_register_two;
     }
 
+
     private void initViews() {
         et_pwd.setVisibility(View.GONE);
         et_rpwd.setVisibility(View.GONE);
@@ -89,7 +90,6 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
         currentPhone = getIntent().getStringExtra("phoneNum");
         loginPresenter = new LoginPresenter(this, this, LoginPresenter.TYPE_MOBILE);
         initViews();

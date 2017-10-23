@@ -22,25 +22,11 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
 
     public SelectRecommendPresenter(Context context, ISelectRecommendView iView) {
         super(context, iView);
+        initApi();
     }
 
     @Override
     protected void initApi() {
-
-      /*  Call<ResponseBody> code = getApiService().code();
-        code.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ResponseBody body = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });*/
-
-
         Map<String,String> map = new HashMap<>();
         long time = System.currentTimeMillis() / 1000;
         map.put("page","1");
