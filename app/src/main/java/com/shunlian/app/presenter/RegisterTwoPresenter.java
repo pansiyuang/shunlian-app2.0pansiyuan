@@ -37,7 +37,7 @@ public class RegisterTwoPresenter extends BasePresenter {
         map.put("code",code);
         map.put("password",password);
         map.put("nickname",nickname);
-        map.put("sign",sortAndMD5(map));
+        sortAndMD5(map);
         String s = null;
         try {
             s = new ObjectMapper().writeValueAsString(map);

@@ -200,7 +200,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         return null;
     }
 
-    public String sortAndMD5(Map<String,String> map){
+    public void sortAndMD5(Map<String,String> map){
         long time = System.currentTimeMillis() / 1000;
         map.put("timestamp",String.valueOf(time));
         List<String> strs = new ArrayList<>();
@@ -220,6 +220,6 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 sign.append("key="+ Constant.KEY);
             }
         }
-        return getStringMD5(sign.toString());
+        map.put("sign",getStringMD5(sign.toString()));
     }
 }
