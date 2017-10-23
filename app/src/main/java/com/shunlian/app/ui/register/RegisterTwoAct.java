@@ -50,10 +50,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private boolean isHiddenPwd;
     private boolean isHiddenRPwd;
     private CountDownTimer countDownTimer;
+    private String smsCode;
 
-    public static void startAct(Context context, String phone){
+    public static void startAct(Context context, String smsCode, String phone){
         Intent intent = new Intent(context,RegisterTwoAct.class);
         intent.putExtra("phone",phone);
+        intent.putExtra("smsCode",smsCode);
         context.startActivity(intent);
     }
 
@@ -74,6 +76,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(String content) {
                 // TODO: 2017/10/20
+                if (!smsCode.equals(content)){
+                    Common.staticToast("手机验证码错误");
+                }
             }
         });
 
@@ -161,6 +166,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         setStatusBarFontDark();
 
         String phone = getIntent().getStringExtra("phone");
+        smsCode = getIntent().getStringExtra("smsCode");
         tv_phone.setText(phone);
 
         countDown();

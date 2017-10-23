@@ -95,6 +95,18 @@ public interface ApiService {
     @GET("member/register/codeList")
     Call<BaseEntity<MemberCodeListEntity>> memberCodeList(@QueryMap Map<String,String> map);
 
+    /**
+     * 发送验证码
+     * @param requestBody
+     * @return
+     */
     @POST("member/common/sendSmsCode")
-    Call<BaseEntity> sendSmsCode(@Body RequestBody requestBody);
+    Call<BaseEntity<String>> sendSmsCode(@Body RequestBody requestBody);
+
+    /**
+     * 获取图形验证码
+     * @return
+     */
+    @GET("member/Common/vcode")
+    Call<ResponseBody> graphicalCode();
 }

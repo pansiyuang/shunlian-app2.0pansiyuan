@@ -2,6 +2,8 @@ package com.shunlian.app.ui.register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,16 +12,16 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
-import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
+import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
-public class RegisterOneAct extends BaseActivity implements View.OnClickListener {
+public class RegisterOneAct extends BaseActivity implements View.OnClickListener ,IRegisterOneView{
 
     @BindView(R.id.et_id)
     EditText et_id;
@@ -37,6 +39,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     MyImageView miv_code;
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
+    private String phone;
 
     public static void stratAct(Context context){
         context.startActivity(new Intent(context,RegisterOneAct.class));
@@ -58,7 +61,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                String phone = et_phone.getText().toString().replaceAll(" ","");
+                phone = et_phone.getText().toString().replaceAll(" ","");
                 if (TextUtils.isEmpty(phone)){
                     return;
                 }
@@ -75,8 +78,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        GlideUtils.getInstance().downPicture(this, InterentTools.HTTPADDR + "member/Common/vcode", miv_code);
-        onePresenter = new RegisterOnePresenter(RegisterOneAct.this, null);
+        onePresenter = new RegisterOnePresenter(RegisterOneAct.this, this);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
                 SelectRecommendAct.startAct(this);
                 break;
             case R.id.miv_code:
-                GlideUtils.getInstance().downPicture(this, InterentTools.HTTPADDR + "member/Common/vcode", miv_code);
+                onePresenter.getCode();
                 break;
         }
     }
@@ -101,5 +103,32 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             et_id.setText(nickname);
             setEdittextFocusable(true,et_phone);
         }
+    }
+
+    @Override
+    public void setCode(byte[] bytes) {
+        if (bytes != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            miv_code.setImageBitmap(bitmap);
+        }else {
+            Common.staticToast("获取验证码失败");
+        }
+    }
+
+    @Override
+    public void smsCode(String smsCode) {
+        if (!TextUtils.isEmpty(smsCode)){
+            RegisterTwoAct.startAct(this,phone,smsCode);
+        }
+    }
+
+    @Override
+    public void showFailureView() {
+
+    }
+
+    @Override
+    public void showDataEmptyView() {
+
     }
 }
