@@ -109,21 +109,16 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
 
     private void checkAndCommit() {
         StringBuilder stringBuilder = new StringBuilder();
-        boolean full = true;
         for (int i = 0; i < box; i++) {
             EditText editText = (EditText) getChildAt(i);
             String content = editText.getText().toString();
             if (content.length() == 0) {
-                full = false;
                 break;
             } else {
                 stringBuilder.append(content);
-            }
-        }
-        if (full) {
-            if (listener != null) {
-                listener.onComplete(stringBuilder.toString());
-                setEnabled(false);
+                if (listener != null) {
+                    listener.onComplete(stringBuilder.toString());
+                }
             }
         }
     }
@@ -230,5 +225,18 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
 
     public interface Listener {
         void onComplete(String content);
+    }
+
+    public void clearData() {
+        if (mEditTextList.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < mEditTextList.size(); i++) {
+            mEditTextList.get(i).setText("");
+        }
+        mEditTextList.get(0).requestFocus();
+        if (listener != null) {
+            listener.onComplete("");
+        }
     }
 }
