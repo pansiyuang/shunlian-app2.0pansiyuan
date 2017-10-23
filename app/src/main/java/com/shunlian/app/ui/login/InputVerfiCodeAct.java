@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -39,8 +40,8 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.et_nickname)
     EditText et_nickname;
 
-    @BindView(R.id.tv_complete)
-    TextView tv_complete;
+    @BindView(R.id.btn_complete)
+    Button btn_complete;
 
 
     public static void startAct(Context context, String phoneNum) {
@@ -59,7 +60,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         et_pwd.setVisibility(View.GONE);
         et_rpwd.setVisibility(View.GONE);
         et_nickname.setVisibility(View.GONE);
-        tv_complete.setText(getString(R.string.LoginPswFrg_dl));
+        btn_complete.setText(getString(R.string.LoginPswFrg_dl));
 
         tv_phone.setText(currentPhone);
 

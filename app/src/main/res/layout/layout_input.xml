@@ -3,6 +3,7 @@
     android:layout_below="@+id/miv_logo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="55dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -11,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/miv_logo"
         android:layout_marginBottom="25dp"
-        android:layout_marginTop="55dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
 

@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -47,8 +48,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.tv_time)
     TextView tv_time;
 
-    @BindView(R.id.tv_complete)
-    TextView tv_complete;
+    @BindView(R.id.btn_complete)
+    Button btn_complete;
 
     private String nickname;
     private boolean isHiddenPwd;
@@ -79,7 +80,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         iv_hidden_psw.setOnClickListener(this);
         iv_hidden_rpsw.setOnClickListener(this);
         tv_time.setOnClickListener(this);
-        tv_complete.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
 
         input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
             @Override
@@ -230,7 +231,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     countDownTimer.start();
                 }
                 break;
-            case R.id.tv_complete:
+            case R.id.btn_complete:
                 registerTwoPresenter.register(phone.replaceAll(" ", ""),smsCode,codeId,et_pwd.getText().toString(),nickname);
                 break;
         }
