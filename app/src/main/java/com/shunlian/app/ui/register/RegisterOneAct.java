@@ -39,7 +39,6 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     MyImageView miv_code;
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
-    private String phone;
 
     public static void stratAct(Context context){
         context.startActivity(new Intent(context,RegisterOneAct.class));
@@ -61,7 +60,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                phone = et_phone.getText().toString().replaceAll(" ","");
+                Editable text = et_id.getText();
+                if (TextUtils.isEmpty(text)){
+                    Common.staticToast("推荐人id不能为空");
+                    return;
+                }
+                String phone = et_phone.getText().toString().replaceAll(" ","");
                 if (TextUtils.isEmpty(phone)){
                     return;
                 }
@@ -118,7 +122,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     public void smsCode(String smsCode) {
         if (!TextUtils.isEmpty(smsCode)){
-            RegisterTwoAct.startAct(this,phone,smsCode);
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),et_id.getText().toString());
         }
     }
 

@@ -109,4 +109,12 @@ public interface ApiService {
      */
     @GET("member/Common/vcode")
     Call<ResponseBody> graphicalCode();
+
+    /**
+     * 注册
+     * @param requestBody
+     * @return
+     */
+    @POST("member/register/index")
+    Call<BaseEntity<String>> register(@Body RequestBody requestBody);
 }

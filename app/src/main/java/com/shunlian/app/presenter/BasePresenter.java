@@ -201,6 +201,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     public String sortAndMD5(Map<String,String> map){
+        long time = System.currentTimeMillis() / 1000;
+        map.put("timestamp",String.valueOf(time));
         List<String> strs = new ArrayList<>();
         Iterator<String> iterator = map.keySet().iterator();
         while (iterator.hasNext()){

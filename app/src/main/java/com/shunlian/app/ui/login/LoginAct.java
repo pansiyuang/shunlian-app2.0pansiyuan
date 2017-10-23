@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
  */
 
 public class LoginAct extends BaseActivity {
-    private MyImageView iv_back;
     private ViewPager mViewPager;
     private ViewPagerAdapter mAdapter;
     private LoginPswFrag pswFrag;
@@ -42,7 +40,6 @@ public class LoginAct extends BaseActivity {
     }
 
     private void initView() {
-        iv_back = (MyImageView) findViewById(R.id.miv_close);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
