@@ -12,7 +12,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
@@ -116,7 +115,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
                     Common.staticToast(getResources().getString(R.string.LoginPswFrg_qsryzm));
                     return;
                 }
-                loginPresenter.LoginMobile(currentPhone, currentVerfiCode);
+                loginPresenter.LoginMobile(currentPhone.replaceAll(" ", ""), currentVerfiCode);
                 break;
         }
     }
@@ -130,13 +129,13 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onComplete(String content) {
-        LogUtil.httpLogW("content:" + content);
         currentVerfiCode = content;
     }
 
     @Override
     public void login(String content) {
-
+        //登陆成功啦
+        Common.staticToast(content);
     }
 
     @Override

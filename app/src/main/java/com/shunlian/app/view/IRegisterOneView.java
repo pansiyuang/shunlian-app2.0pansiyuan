@@ -6,7 +6,8 @@ package com.shunlian.app.view;
 
 public interface IRegisterOneView extends IView {
 
-    void  setCode(byte[] bytes);
+    void setCode(byte[] bytes);
 
     void smsCode(String smsCode);
+
 }

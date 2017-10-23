@@ -9,22 +9,23 @@
         android:id="@+id/miv_close"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:src="@mipmap/icon_login_close"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@mipmap/icon_login_close" />
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="55dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="40dp"
         android:text="绑定手机号"
         android:textColor="@color/new_text"
-        android:textStyle="bold"
         android:textSize="30sp"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="25dp"
-        />
+        android:textStyle="bold" />
 
 
-    <include layout="@layout/layout_input"/>
+    <include layout="@layout/layout_input" />
 </LinearLayout>

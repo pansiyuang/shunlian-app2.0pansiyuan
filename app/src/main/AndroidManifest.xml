@@ -43,8 +43,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.register.SelectRecommendAct" />
-        <activity android:name=".ui.login.InputVerfiCodeAct" />
-        <activity android:name=".ui.register.BindingPhoneAct"></activity>
+        <activity
+            android:name=".ui.login.InputVerfiCodeAct"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.register.BindingPhoneAct"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.login.FindPswAct"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

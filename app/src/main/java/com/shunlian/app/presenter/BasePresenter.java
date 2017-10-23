@@ -57,7 +57,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected Context context;
     protected IV iView;
 
-    public BasePresenter(Context context, IV iView){
+    public BasePresenter(Context context, IV iView) {
         this.context = context;
         this.iView = iView;
 
@@ -66,10 +66,10 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     /**
      * 处理网络请求
      */
-    protected abstract void initApi() ;
+    protected abstract void initApi();
 
 
-    private Retrofit getRetrofit(){
+    private Retrofit getRetrofit() {
         InterentTools tools = new InterentTools.Builder()
                 .isOpenLogging(true)
                 .connectTimeout()
@@ -83,7 +83,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * 需要保存cookie
      * @return
      */
-    private Retrofit getSaveCookieRetrofit(){
+    private Retrofit getSaveCookieRetrofit() {
         InterentTools tools = new InterentTools.Builder()
                 .isOpenLogging(true)
                 .connectTimeout()
@@ -99,7 +99,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * 需要携带cookie
      * @return
      */
-    private Retrofit getAddCookieRetrofit(){
+    private Retrofit getAddCookieRetrofit() {
         InterentTools tools = new InterentTools.Builder()
                 .isOpenLogging(true)
                 .connectTimeout()
@@ -111,36 +111,39 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
 
-    protected ApiService getApiService(){
+    protected ApiService getApiService() {
         ApiService apiService = getRetrofit().create(ApiService.class);
         return apiService;
     }
 
     /**
      * 需要保存cookie调用这个
+     *
      * @return
      */
-    protected ApiService getSaveCookieApiService(){
+    protected ApiService getSaveCookieApiService() {
         ApiService apiService = getSaveCookieRetrofit().create(ApiService.class);
         return apiService;
     }
 
     /**
      * 需要携带cookie调这个
+     *
      * @return
      */
-    protected ApiService getAddCookieApiService(){
+    protected ApiService getAddCookieApiService() {
         ApiService apiService = getAddCookieRetrofit().create(ApiService.class);
         return apiService;
     }
 
     /**
      * 请求网络数据
+     *
      * @param tCall
      * @param callback
      * @param <T>
      */
-    protected <T> void  getNetData(Call<BaseEntity<T>> tCall,final INetDataCallback<BaseEntity<T>> callback){
+    protected <T> void getNetData(Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback) {
         if (tCall == null || callback == null)
             return;
 
@@ -148,16 +151,17 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             @Override
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
                 BaseEntity<T> body = response.body();
-                LogUtil.longW("onResponse============"+body.toString());
-                if (body.code == 1000){//请求成功
-                    if (body.data != null){
+                LogUtil.longW("onResponse============" + body.toString());
+                if (body.code == 1000) {//请求成功
+                    if (body.data != null) {
+                        LogUtil.longW("onSuccess============");
                         callback.onSuccess(body);
-                    }else {
+                    } else {
                         iView.showDataEmptyView();
                     }
-                }else {
+                } else {
                     //请求错误
-                    handlerCode(body.code,body.message);
+                    handlerCode(body.code, body.message);
                 }
             }
 
@@ -166,7 +170,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 if (t != null)
                     t.printStackTrace();
                 callback.onFailure();
-                if (iView != null){
+                if (iView != null) {
                     iView.showFailureView();
                 }
             }
@@ -175,7 +179,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     private void handlerCode(Integer code, String message) {
         Common.staticToast(message);
-        switch (code){
+        switch (code) {
             // TODO: 2017/10/19
         }
     }
@@ -184,7 +188,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     /**
      * 处理刷新逻辑
      */
-    public void onRefresh(){
+    public void onRefresh() {
 
     }
 
@@ -200,10 +204,10 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         return null;
     }
 
-    public String sortAndMD5(Map<String,String> map){
+    public String sortAndMD5(Map<String, String> map) {
         List<String> strs = new ArrayList<>();
         Iterator<String> iterator = map.keySet().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             String next = iterator.next();
             strs.add(next);
         }
@@ -212,10 +216,10 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         for (int i = 0; i < strs.size(); i++) {
             String key = strs.get(i);
             String value = map.get(key);
-            sign.append(key+"="+value);
+            sign.append(key + "=" + value);
             sign.append("&");
-            if (i == strs.size() - 1){
-                sign.append("key="+ Constant.KEY);
+            if (i == strs.size() - 1) {
+                sign.append("key=" + Constant.KEY);
             }
         }
         return getStringMD5(sign.toString());

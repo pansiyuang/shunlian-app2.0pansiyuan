@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.login;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -33,11 +32,6 @@ public class LoginAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         initView();
     }
 
@@ -49,8 +43,8 @@ public class LoginAct extends BaseActivity {
         fragmentList = new ArrayList<>();
         pswFrag = new LoginPswFrag();
         verfiFrag = new LoginVerfiFrag();
-        fragmentList.add(pswFrag);
         fragmentList.add(verfiFrag);
+        fragmentList.add(pswFrag);
         mAdapter = new ViewPagerAdapter(fragmentManager, fragmentList);
 
         mViewPager.setAdapter(mAdapter);

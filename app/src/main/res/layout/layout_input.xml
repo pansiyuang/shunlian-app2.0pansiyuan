@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_below="@+id/miv_logo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@+id/miv_logo"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/miv_logo"
         android:layout_marginBottom="25dp"
-        android:layout_marginTop="55dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
 
@@ -44,21 +43,21 @@
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@+id/ll_id"
         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
+        android:layout_marginRight="25dp"
+        android:orientation="vertical">
 
         <com.shunlian.app.widget.ClearableEditText
             android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:digits="0123456789"
             android:drawableRight="@mipmap/icon_login_delet"
             android:hint="@string/RegisterOneAct_qsrsjh"
             android:inputType="number"
             android:maxLength="13"
-            android:digits="0123456789"
             android:textColor="@color/color_value_6c"
             android:textColorHint="@color/color_value_6c"
             android:textSize="12sp" />
@@ -67,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
-            android:background="@color/light_gray_two"/>
+            android:background="@color/light_gray_two" />
 
     </LinearLayout>
 
@@ -84,11 +83,11 @@
             android:id="@+id/et_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@null"
             android:drawableBottom="@drawable/edittext_line"
             android:drawablePadding="10dp"
             android:hint="@string/RegisterOneAct_qsryzm"
-            android:layout_marginTop="10dp"
             android:maxLength="4"
             android:textColor="@color/color_value_6c"
             android:textColorHint="@color/color_value_6c"
@@ -98,7 +97,6 @@
             android:id="@+id/miv_code"
             android:layout_width="72dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="25dp"/>
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 </LinearLayout>

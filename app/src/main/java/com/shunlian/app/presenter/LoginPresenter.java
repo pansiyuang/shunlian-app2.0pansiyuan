@@ -2,15 +2,18 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.ILoginView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/10/20.
@@ -63,17 +66,18 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
     }
 
     private void LoginAction(Map map) {
-        Call<ResponseBody> baseEntityCall = getApiService().memberCodeList(map);
-        baseEntityCall.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
+        try {
+            String stringEntry = new ObjectMapper().writeValueAsString(map);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+            Call<BaseEntity<String>> baseEntityCall = getAddCookieApiService().login(requestBody);
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
+                @Override
+                public void onSuccess(BaseEntity<String> entity) {
+                    super.onSuccess(entity);
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -62,6 +62,7 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
             layoutParams.gravity = Gravity.CENTER;
 
             editText.setOnKeyListener(this);
+            editText.setTag(i);
             editText.setTextColor(Color.BLACK);
             editText.setLayoutParams(layoutParams);
             editText.setGravity(Gravity.CENTER);
@@ -74,7 +75,6 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
             editText.setCompoundDrawables(null, null, null, drawable);
             editText.setCompoundDrawablePadding(TransformUtil.dip2px(mContext, 10));
 
-            editText.setId(i);
             editText.setEms(1);
             editText.addTextChangedListener(this);
             addView(editText, i);
@@ -214,6 +214,7 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
         EditText editText = (EditText) view;
         if (keyCode == KeyEvent.KEYCODE_DEL && editText.getText().length() == 0) {
             int action = event.getAction();
+            currentPosition = (int) editText.getTag();
             if (currentPosition != 0 && action == KeyEvent.ACTION_DOWN) {
                 currentPosition--;
                 mEditTextList.get(currentPosition).requestFocus();
@@ -225,18 +226,5 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
 
     public interface Listener {
         void onComplete(String content);
-    }
-
-    public void clearData() {
-        if (mEditTextList.size() == 0) {
-            return;
-        }
-        for (int i = 0; i < mEditTextList.size(); i++) {
-            mEditTextList.get(i).setText("");
-        }
-        mEditTextList.get(0).requestFocus();
-        if (listener != null) {
-            listener.onComplete("");
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.login;
 
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -8,11 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
-import com.shunlian.app.presenter.SendSmsPresenter;
-import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.view.ISendSmsView;
+import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
@@ -23,10 +22,10 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/17.
  */
 
-public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener, View.OnClickListener, ISendSmsView {
+public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener, View.OnClickListener, IRegisterOneView {
     private View rootView;
     private PhoneTextWatcher phoneTextWatcher;
-    private SendSmsPresenter sendSmsPresenter;
+    private RegisterOnePresenter onePresenter;
 
     @BindView(R.id.edt_verifi)
     EditText edt_verifi;
@@ -36,7 +35,6 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @BindView(R.id.iv_verifi)
     MyImageView iv_verifi;
-
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -52,13 +50,12 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void onResume() {
-        GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
         super.onResume();
     }
 
     @Override
     protected void initData() {
-        sendSmsPresenter = new SendSmsPresenter(getActivity(), LoginVerfiFrag.this);
+        onePresenter = new RegisterOnePresenter(getActivity(), this);
     }
 
     @Override
@@ -85,14 +82,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_verifi:
-                GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
+                onePresenter.getCode();
                 break;
         }
-    }
-
-    @Override
-    public void sendSms(String smsCode) {
-
     }
 
     @Override
@@ -105,17 +97,28 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     }
 
+    @Override
+    public void setCode(byte[] bytes) {
+        if (bytes != null) {
+            iv_verifi.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+        }
+    }
+
+    @Override
+    public void smsCode(String smsCode) {
+        String currentPhoneNum = edt_account.getText().toString();
+        InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum);
+    }
+
 
     private class MyTextWatch implements TextWatcher {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
@@ -129,10 +132,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         String phoneNum = edt_account.getText().toString();
         if (verifiCode.length() == 4 && phoneNum.length() == 13) {
             //输入完验证码跳转逻辑
-
-            sendSmsPresenter.checkCode(verifiCode);
-//            sendSmsPresenter.sendSms(phoneNum.replaceAll(" ", ""), verifiCode);
-//                    InputVerfiCodeAct.startAct(getActivity(), phoneNum);
+            onePresenter.sendSmsCode(phoneNum.replaceAll(" ", ""), verifiCode);
         }
     }
 }

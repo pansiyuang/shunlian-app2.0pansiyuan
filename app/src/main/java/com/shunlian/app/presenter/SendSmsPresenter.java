@@ -48,18 +48,28 @@ public class SendSmsPresenter extends BasePresenter<ISendSmsView> {
         map.put("code", code);
         map.put("timestamp", String.valueOf(time));
         map.put("sign", sortAndMD5(map));
-        Call<ResponseBody> baseEntityCall = getApiService().checkCode(map);
-        baseEntityCall.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        try {
+            String stringEntry = new ObjectMapper().writeValueAsString(map);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+            Call<ResponseBody> baseEntityCall = getApiService().checkCode(requestBody);
+            baseEntityCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        LogUtil.httpLogW("response:" + response.body().string());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 

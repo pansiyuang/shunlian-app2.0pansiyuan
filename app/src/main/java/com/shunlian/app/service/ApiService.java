@@ -108,6 +108,7 @@ public interface ApiService {
 
     /**
      * 发送验证码
+     *
      * @param requestBody
      * @return
      */
@@ -116,18 +117,20 @@ public interface ApiService {
 
     /**
      * 获取图形验证码
+     *
      * @return
      */
     @GET("member/Common/vcode")
     Call<ResponseBody> graphicalCode();
+
     Call<ResponseBody> code();
 
     @POST("/member/common/sendSmsCode")
     Call<ResponseBody> sendSms(@Body RequestBody requestBody);
 
     @POST("/member/login/index")
-    Call<ResponseBody> login(@QueryMap Map<String, String> map);
+    Call<BaseEntity<String>> login(@Body RequestBody requestBody);
 
     @POST("/member/Common/checkCode")
-    Call<ResponseBody> checkCode(@QueryMap Map<String, String> map);
+    Call<ResponseBody> checkCode(@Body RequestBody requestBody);
 }

@@ -51,19 +51,18 @@
         android:text="59s"
         android:textColor="@color/new_gray" />
 
-    <com.shunlian.app.widget.VerificationCodeInput
+    <com.shunlian.app.widget.VerificationCodeInput xmlns:ver="http://schemas.android.com/apk/res-auto"
         android:id="@+id/input_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_phone"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_marginTop="50dp"
         android:text="1234"
         android:textSize="40sp"
         ver:box="4"
-        ver:padding="10dp"
-        android:layout_below="@+id/tv_phone"
-        android:layout_alignLeft="@+id/et_pwd"
-        android:layout_alignStart="@+id/et_pwd"></com.shunlian.app.widget.VerificationCodeInput>
-        ver:padding="10dp"/>
+        ver:padding="10dp" />
 
 
     <EditText
