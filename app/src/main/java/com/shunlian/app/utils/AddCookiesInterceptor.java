@@ -36,8 +36,10 @@ public class AddCookiesInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         final Request.Builder builder = chain.request().newBuilder();
         String cookie = SharedPrefUtil.getSharedPrfString("cookie", "");
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
         //添加cookie
         builder.addHeader("Cookie", cookie);
+        builder.addHeader("token", token);
         return chain.proceed(builder.build());
     }
 }

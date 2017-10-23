@@ -5,7 +5,9 @@ import android.content.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 
 import java.util.HashMap;
@@ -45,12 +47,12 @@ public class RegisterTwoPresenter extends BasePresenter {
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),s);
-        Call<BaseEntity<String>> register = getApiService().register(requestBody);
-        getNetData(register,new SimpleNetDataCallback<BaseEntity<String>>(){
+        Call<BaseEntity<RegisterFinishEntity>> register = getApiService().register(requestBody);
+        getNetData(register,new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<String> entity) {
+            public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
                 super.onSuccess(entity);
-
+                SharedPrefUtil.saveSharedPrfString("token",entity.data.token);
             }
         });
     }

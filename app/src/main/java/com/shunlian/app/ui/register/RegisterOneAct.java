@@ -122,7 +122,10 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     public void smsCode(String smsCode) {
         if (!TextUtils.isEmpty(smsCode)){
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),et_id.getText().toString());
+            if (TextUtils.isEmpty(id)){
+                id = et_id.getText().toString();
+            }
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
         }
     }
 
