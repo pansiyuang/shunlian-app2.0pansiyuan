@@ -79,6 +79,7 @@
         android:hint="@string/RegisterTwoAct_qsrxmm"
         android:inputType="textPassword"
         android:maxLength="16"
+        android:textCursorDrawable="@drawable/edit_cursor"
         android:textColor="@color/color_value_6c"
         android:textColorHint="@color/color_value_6c"
         android:textSize="12sp" />
@@ -113,6 +114,7 @@
         android:hint="@string/RegisterTwoAct_qcxsrxmm"
         android:inputType="textPassword"
         android:maxLength="16"
+        android:textCursorDrawable="@drawable/edit_cursor"
         android:textColor="@color/color_value_6c"
         android:textColorHint="@color/color_value_6c"
         android:textSize="12sp" />
@@ -144,6 +146,7 @@
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
         android:hint="@string/RegisterTwoAct_qsrndnc"
+        android:textCursorDrawable="@drawable/edit_cursor"
         android:textColor="@color/color_value_6c"
         android:textColorHint="@color/color_value_6c"
         android:textSize="12sp" />
