@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
+import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 
@@ -133,4 +134,12 @@ public interface ApiService {
 
     @POST("/member/Common/checkCode")
     Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+
+    /**
+     * 注册
+     * @param requestBody
+     * @return
+     */
+    @POST("member/register/index")
+    Call<BaseEntity<RegisterFinishEntity>> register(@Body RequestBody requestBody);
 }

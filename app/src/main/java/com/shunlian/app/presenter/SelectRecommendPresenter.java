@@ -28,11 +28,9 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
     @Override
     protected void initApi() {
         Map<String,String> map = new HashMap<>();
-        long time = System.currentTimeMillis() / 1000;
         map.put("page","1");
         map.put("pageSize","9");
-        map.put("timestamp",String.valueOf(time));
-        map.put("sign",sortAndMD5(map));
+        sortAndMD5(map);
 
         Call<BaseEntity<MemberCodeListEntity>> baseEntityCall = getApiService().memberCodeList(map);
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<MemberCodeListEntity>>(){

@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -67,6 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void finishAct() {
         View byId = ButterKnife.findById(this, R.id.miv_close);
+        TransformUtil.expandViewTouchDelegate(byId,30,30,30,30);
         byId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

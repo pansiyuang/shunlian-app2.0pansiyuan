@@ -37,9 +37,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.miv_code)
     MyImageView miv_code;
+
+    @BindView(R.id.miv_logo)
+    MyImageView miv_logo;
+
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
-    private String phone;
 
     public static void stratAct(Context context){
         context.startActivity(new Intent(context,RegisterOneAct.class));
@@ -57,12 +60,19 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         et_phone.addTextChangedListener(new PhoneTextWatcher(et_phone));
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
+        miv_logo.setOnClickListener(this);
         et_code.addTextChangedListener(new SimpleTextWatcher(){
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                phone = et_phone.getText().toString().replaceAll(" ","");
+                Editable text = et_id.getText();
+                if (TextUtils.isEmpty(text)){
+                    Common.staticToast("推荐人id不能为空");
+                    return;
+                }
+                String phone = et_phone.getText().toString().replaceAll(" ","");
                 if (TextUtils.isEmpty(phone)){
+                    Common.staticToast("手机号不能为空");
                     return;
                 }
                 if (!TextUtils.isEmpty(s) && s.length() >= 4){
@@ -89,6 +99,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.miv_code:
                 onePresenter.getCode();
+                break;
+            case R.id.miv_logo:
+                TestAct.startAct(this);
                 break;
         }
     }
@@ -118,7 +131,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     public void smsCode(String smsCode) {
         if (!TextUtils.isEmpty(smsCode)){
-            RegisterTwoAct.startAct(this,phone,smsCode);
+            if (TextUtils.isEmpty(id)){
+                id = et_id.getText().toString();
+            }
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
+        }else {
+            Common.staticToast("手机验证码发送失败");
         }
     }
 

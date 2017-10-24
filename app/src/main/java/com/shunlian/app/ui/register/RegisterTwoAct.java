@@ -8,10 +8,12 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -46,16 +48,23 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.tv_time)
     TextView tv_time;
 
+    @BindView(R.id.btn_complete)
+    Button btn_complete;
+
     private String nickname;
     private boolean isHiddenPwd;
     private boolean isHiddenRPwd;
     private CountDownTimer countDownTimer;
     private String smsCode;
+    private String codeId;
+    private RegisterTwoPresenter registerTwoPresenter;
+    private String phone;
 
-    public static void startAct(Context context, String smsCode, String phone){
+    public static void startAct(Context context, String smsCode, String phone, String codeId){
         Intent intent = new Intent(context,RegisterTwoAct.class);
         intent.putExtra("phone",phone);
         intent.putExtra("smsCode",smsCode);
+        intent.putExtra("codeId",codeId);
         context.startActivity(intent);
     }
 
@@ -71,11 +80,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         iv_hidden_psw.setOnClickListener(this);
         iv_hidden_rpsw.setOnClickListener(this);
         tv_time.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
 
         input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
             @Override
             public void onComplete(String content) {
-                // TODO: 2017/10/20
                 if (!smsCode.equals(content)){
                     Common.staticToast("手机验证码错误");
                 }
@@ -165,11 +174,13 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        String phone = getIntent().getStringExtra("phone");
+        phone = getIntent().getStringExtra("phone");
         smsCode = getIntent().getStringExtra("smsCode");
+        codeId = getIntent().getStringExtra("codeId");
         tv_phone.setText(phone);
-
         countDown();
+
+        registerTwoPresenter = new RegisterTwoPresenter(this,null);
 
     }
 
@@ -219,6 +230,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 if (countDownTimer != null){
                     countDownTimer.start();
                 }
+                break;
+            case R.id.btn_complete:
+                registerTwoPresenter.register(phone.replaceAll(" ", ""),smsCode,codeId,et_pwd.getText().toString(),nickname);
                 break;
         }
     }

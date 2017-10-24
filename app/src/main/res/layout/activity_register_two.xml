@@ -149,8 +149,8 @@
         android:textSize="12sp" />
 
 
-    <TextView
-        android:id="@+id/tv_complete"
+    <Button
+        android:id="@+id/btn_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_nickname"
