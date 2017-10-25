@@ -43,11 +43,9 @@ public class SendSmsPresenter extends BasePresenter<ISendSmsView> {
     }
 
     public void checkCode(String code) {
-        long time = System.currentTimeMillis() / 1000;
         Map<String, String> map = new HashMap<>();
         map.put("code", code);
-        map.put("timestamp", String.valueOf(time));
-        map.put("sign", sortAndMD5(map));
+        sortAndMD5(map);
         try {
             String stringEntry = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
@@ -74,12 +72,10 @@ public class SendSmsPresenter extends BasePresenter<ISendSmsView> {
 
 
     public void sendSms(String mobile, String vcode) {
-        long time = System.currentTimeMillis() / 1000;
         Map<String, String> map = new HashMap<>();
         map.put("mobile", mobile);
         map.put("vcode", vcode);
-        map.put("timestamp", String.valueOf(time));
-        map.put("sign", sortAndMD5(map));
+        sortAndMD5(map);
         try {
             String stringEntry = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);

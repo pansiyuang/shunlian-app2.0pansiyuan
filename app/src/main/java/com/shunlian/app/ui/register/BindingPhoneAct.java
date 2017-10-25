@@ -23,6 +23,8 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
+import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_REGIST;
+
 public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, View.OnClickListener {
     /**
      * 用户状态
@@ -133,7 +135,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
             if (state == USER_STATES_NEW && TextUtils.isEmpty(id)){
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id,TYPE_REGIST);
         }else {
             Common.staticToast("手机验证码发送失败");
         }

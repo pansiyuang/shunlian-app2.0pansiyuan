@@ -21,6 +21,8 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
+import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_REGIST;
+
 public class RegisterOneAct extends BaseActivity implements View.OnClickListener ,IRegisterOneView{
 
     @BindView(R.id.et_id)
@@ -134,7 +136,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)){
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id,TYPE_REGIST);
         }else {
             Common.staticToast("手机验证码发送失败");
         }

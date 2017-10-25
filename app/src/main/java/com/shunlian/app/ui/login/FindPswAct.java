@@ -13,12 +13,15 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.register.RegisterTwoAct;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_FIND_PSW;
 
 /**
  * Created by Administrator on 2017/10/23.
@@ -86,7 +89,8 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
 
     @Override
     public void smsCode(String smsCode) {
-
+        String phoneNum = et_phone.getText().toString();
+        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", TYPE_FIND_PSW);
     }
 
     @Override
@@ -132,7 +136,6 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
         String verifiCode = et_code.getText().toString();
         String phoneNum = et_phone.getText().toString();
         if (verifiCode.length() == 4 && phoneNum.length() == 13) {
-            //输入完验证码跳转逻辑
             onePresenter.sendSmsCode(phoneNum.replaceAll(" ", ""), verifiCode);
         }
     }

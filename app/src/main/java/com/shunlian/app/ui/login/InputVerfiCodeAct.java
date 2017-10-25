@@ -99,7 +99,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initListener() {
         super.initListener();
         tv_time.setOnClickListener(this);
-        tv_complete.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
         input_code.setOnCompleteListener(this);
     }
 
@@ -111,7 +111,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
                     countDownTimer.start();
                 }
                 break;
-            case R.id.tv_complete:
+            case R.id.btn_complete:
                 if (TextUtils.isEmpty(currentVerfiCode) || currentVerfiCode.length() < 4) {
                     Common.staticToast(getResources().getString(R.string.LoginPswFrg_qsryzm));
                     return;

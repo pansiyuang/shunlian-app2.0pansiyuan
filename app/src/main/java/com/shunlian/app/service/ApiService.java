@@ -137,9 +137,16 @@ public interface ApiService {
 
     /**
      * 注册
+     *
      * @param requestBody
      * @return
      */
     @POST("member/register/index")
     Call<BaseEntity<RegisterFinishEntity>> register(@Body RequestBody requestBody);
+
+    /**
+     * 找回密码
+     */
+    @POST("/member/userinfo/findPwd")
+    Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
 }

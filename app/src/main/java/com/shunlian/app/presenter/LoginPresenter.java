@@ -44,24 +44,20 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
     }
 
     public void LoginUserName(String userName, String psw) {
-        long time = System.currentTimeMillis() / 1000;
         Map<String, String> map = new HashMap<>();
         map.put("type", currentType);
         map.put("username", userName);
         map.put("password", psw);
-        map.put("timestamp", String.valueOf(time));
-        map.put("sign", sortAndMD5(map));
+        sortAndMD5(map);
         LoginAction(map);
     }
 
     public void LoginMobile(String mobile, String code) {
-        long time = System.currentTimeMillis() / 1000;
         Map<String, String> map = new HashMap<>();
         map.put("type", currentType);
         map.put("mobile", mobile);
         map.put("code", code);
-        map.put("timestamp", String.valueOf(time));
-        map.put("sign", sortAndMD5(map));
+        sortAndMD5(map);
         LoginAction(map);
     }
 

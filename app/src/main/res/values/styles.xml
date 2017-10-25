@@ -27,4 +27,8 @@
         <attr name="padding" format="dimension" />
         <attr name="inputType" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="MyEditText">
+        <attr name="hintText" format="string" />
+    </declare-styleable>
 </resources>

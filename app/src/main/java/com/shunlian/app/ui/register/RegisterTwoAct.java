@@ -17,12 +17,16 @@ import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
+import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import butterknife.BindView;
 
-public class RegisterTwoAct extends BaseActivity implements View.OnClickListener {
+public class RegisterTwoAct extends BaseActivity implements View.OnClickListener, IRegisterTwoView {
+    public static String TYPE_FIND_PSW = "find_password";
+    public static String TYPE_REGIST = "regist";
+    private String currentType;
 
     @BindView(R.id.tv_phone)
     TextView tv_phone;
@@ -60,11 +64,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private RegisterTwoPresenter registerTwoPresenter;
     private String phone;
 
-    public static void startAct(Context context, String smsCode, String phone, String codeId){
-        Intent intent = new Intent(context,RegisterTwoAct.class);
-        intent.putExtra("phone",phone);
-        intent.putExtra("smsCode",smsCode);
-        intent.putExtra("codeId",codeId);
+    public static void startAct(Context context, String smsCode, String phone, String codeId, String type) {
+        Intent intent = new Intent(context, RegisterTwoAct.class);
+        intent.putExtra("phone", phone);
+        intent.putExtra("smsCode", smsCode);
+        intent.putExtra("codeId", codeId);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 
@@ -85,19 +90,19 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
             @Override
             public void onComplete(String content) {
-                if (!smsCode.equals(content)){
+                if (!smsCode.equals(content)) {
                     Common.staticToast("手机验证码错误");
                 }
             }
         });
 
-        et_pwd.addTextChangedListener(new SimpleTextWatcher(){
+        et_pwd.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                if (!TextUtils.isEmpty(s)){
+                if (!TextUtils.isEmpty(s)) {
                     iv_hidden_psw.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     iv_hidden_psw.setVisibility(View.INVISIBLE);
                     iv_hidden_psw.setImageResource(R.mipmap.icon_login_eyes_h);
                     et_pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -109,15 +114,15 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 String pwd = et_pwd.getText().toString();
-                if (TextUtils.isEmpty(pwd)){
+                if (TextUtils.isEmpty(pwd)) {
                     Common.staticToast("密码不能为空");
-                    setEdittextFocusable(true,et_pwd);
+                    setEdittextFocusable(true, et_pwd);
                     return false;
                 }
-                if (!Common.regularPwd(pwd)){
+                if (!Common.regularPwd(pwd)) {
                     Common.staticToast("密码只能由字母和数字组合");
                     et_pwd.setText("");
-                    setEdittextFocusable(true,et_pwd);
+                    setEdittextFocusable(true, et_pwd);
                     return false;
                 }
                 return false;
@@ -127,9 +132,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         et_rpwd.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s)){
+                if (!TextUtils.isEmpty(s)) {
                     iv_hidden_rpsw.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     iv_hidden_rpsw.setVisibility(View.INVISIBLE);
                     iv_hidden_rpsw.setImageResource(R.mipmap.icon_login_eyes_h);
                     et_rpwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -142,15 +147,15 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 String pwd = et_pwd.getText().toString();
                 String rpwd = et_rpwd.getText().toString();
-                if (TextUtils.isEmpty(rpwd)){
+                if (TextUtils.isEmpty(rpwd)) {
                     Common.staticToast("密码不能为空");
-                    setEdittextFocusable(true,et_rpwd);
+                    setEdittextFocusable(true, et_rpwd);
                     return;
                 }
-                if (!pwd.equals(rpwd)){
+                if (!pwd.equals(rpwd)) {
                     Common.staticToast("两次输入的密码不一致");
                     et_rpwd.setText("");
-                    setEdittextFocusable(true,et_rpwd);
+                    setEdittextFocusable(true, et_rpwd);
                     return;
                 }
             }
@@ -158,11 +163,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 byte[] bytes = s.toString().getBytes();
-                if (bytes.length > 24){
+                if (bytes.length > 24) {
                     Common.staticToast("昵称设置过长");
                     et_nickname.setText(nickname);
                     et_nickname.setSelection(nickname.length());
-                }else {
+                } else {
                     nickname = s.toString();
                 }
             }
@@ -177,10 +182,17 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         phone = getIntent().getStringExtra("phone");
         smsCode = getIntent().getStringExtra("smsCode");
         codeId = getIntent().getStringExtra("codeId");
+        currentType = getIntent().getStringExtra("type");
+
         tv_phone.setText(phone);
+
+        if (TYPE_FIND_PSW.equals(currentType)) {
+            et_nickname.setVisibility(View.GONE);
+        }
+
         countDown();
 
-        registerTwoPresenter = new RegisterTwoPresenter(this,null);
+        registerTwoPresenter = new RegisterTwoPresenter(this, null);
 
     }
 
@@ -203,44 +215,48 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_hidden_psw:
-                if (isHiddenPwd){//隐藏
+                if (isHiddenPwd) {//隐藏
                     isHiddenPwd = false;
-                    isShowPwd(et_pwd,false);
+                    isShowPwd(et_pwd, false);
                     iv_hidden_psw.setImageResource(R.mipmap.icon_login_eyes_h);
-                }else {
+                } else {
                     isHiddenPwd = true;
-                    isShowPwd(et_pwd,true);
+                    isShowPwd(et_pwd, true);
                     iv_hidden_psw.setImageResource(R.mipmap.icon_login_eyes_n);
                 }
                 break;
             case R.id.iv_hidden_rpsw:
-                if (isHiddenRPwd){
+                if (isHiddenRPwd) {
                     isHiddenRPwd = false;
-                    isShowPwd(et_rpwd,false);
+                    isShowPwd(et_rpwd, false);
                     iv_hidden_rpsw.setImageResource(R.mipmap.icon_login_eyes_h);
-                }else {
+                } else {
                     isHiddenRPwd = true;
-                    isShowPwd(et_rpwd,true);
+                    isShowPwd(et_rpwd, true);
                     iv_hidden_rpsw.setImageResource(R.mipmap.icon_login_eyes_n);
                 }
                 break;
             case R.id.tv_time:
-                if (countDownTimer != null){
+                if (countDownTimer != null) {
                     countDownTimer.start();
                 }
                 break;
             case R.id.btn_complete:
-                registerTwoPresenter.register(phone.replaceAll(" ", ""),smsCode,codeId,et_pwd.getText().toString(),nickname);
+                if (TYPE_FIND_PSW.equals(currentType)) {
+                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), smsCode);
+                } else if (TYPE_REGIST.equals(currentType)) {
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname);
+                }
                 break;
         }
     }
 
-    private void isShowPwd(EditText editText,boolean isShow) {
-        if (isShow){//显示
+    private void isShowPwd(EditText editText, boolean isShow) {
+        if (isShow) {//显示
             editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        }else {
+        } else {
             editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
         editText.setSelection(editText.getText().length());
@@ -254,4 +270,21 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             countDownTimer = null;
         }
     }
+
+
+    @Override
+    public void resetPsw(String message) {
+        Common.staticToast(message);
+    }
+
+    @Override
+    public void showFailureView() {
+
+    }
+
+    @Override
+    public void showDataEmptyView() {
+
+    }
+
 }

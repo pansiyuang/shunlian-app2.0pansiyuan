@@ -55,16 +55,9 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
     }
 
     public void sendSmsCode(String phone, String code) {
-        long time = System.currentTimeMillis() / 1000;
         Map<String, String> map = new HashMap<>();
         map.put("mobile", phone);
         map.put("vcode", code);
-        map.put("timestamp", String.valueOf(time));
-        map.put("sign", sortAndMD5(map));
-    public void sendSmsCode(String phone,String code){
-        Map<String,String> map = new HashMap<>();
-        map.put("mobile",phone);
-        map.put("vcode",code);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);

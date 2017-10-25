@@ -8,7 +8,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.SharedPrefUtil;
-import com.shunlian.app.view.IView;
+import com.shunlian.app.view.IRegisterTwoView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +21,9 @@ import retrofit2.Call;
  * Created by Administrator on 2017/10/23.
  */
 
-public class RegisterTwoPresenter extends BasePresenter {
+public class RegisterTwoPresenter extends BasePresenter<IRegisterTwoView> {
 
-    public RegisterTwoPresenter(Context context, IView iView) {
+    public RegisterTwoPresenter(Context context, IRegisterTwoView iView) {
         super(context, iView);
     }
 
@@ -32,13 +32,13 @@ public class RegisterTwoPresenter extends BasePresenter {
 
     }
 
-    public void register(String mobile,String mobile_code,String code,String password,String nickname){
-        Map<String,String> map = new HashMap<>();
-        map.put("mobile",mobile);
-        map.put("mobile_code",mobile_code);
-        map.put("code",code);
-        map.put("password",password);
-        map.put("nickname",nickname);
+    public void register(String mobile, String mobile_code, String code, String password, String nickname) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("mobile_code", mobile_code);
+        map.put("code", code);
+        map.put("password", password);
+        map.put("nickname", nickname);
         sortAndMD5(map);
         String s = null;
         try {
@@ -46,16 +46,41 @@ public class RegisterTwoPresenter extends BasePresenter {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),s);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), s);
         Call<BaseEntity<RegisterFinishEntity>> register = getApiService().register(requestBody);
-        getNetData(register,new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>(){
+        getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
             @Override
             public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
                 super.onSuccess(entity);
-                SharedPrefUtil.saveSharedPrfString("token",entity.data.token);
+                SharedPrefUtil.saveSharedPrfString("token", entity.data.token);
             }
         });
     }
+
+    public void findPsw(String mobile, String password, String pwd, String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", mobile);
+        map.put("password", password);
+        map.put("pwd", pwd);
+        map.put("code", code);
+        sortAndMD5(map);
+        String s = null;
+        try {
+            s = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), s);
+        Call<BaseEntity<RegisterFinishEntity>> register = getApiService().findPsw(requestBody);
+        getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
+                iView.resetPsw(entity.message);
+                super.onSuccess(entity);
+            }
+        });
+    }
+
 
     @Override
     public void attachView() {

@@ -17,6 +17,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ILoginView;
+import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 
 import butterknife.BindView;
@@ -39,7 +40,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     EditText edt_account;
 
     @BindView(R.id.edt_psw)
-    EditText edt_psw;
+    MyEditText edt_psw;
 
     @BindView(R.id.tv_new_regist)
     TextView tv_new_regist;

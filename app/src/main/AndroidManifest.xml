@@ -52,8 +52,6 @@
         <activity
             android:name=".ui.login.FindPswAct"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.login.InputVerfiCodeAct" />
-        <activity android:name=".ui.register.BindingPhoneAct" />
         <activity android:name=".ui.register.TestAct"></activity>
     </application>
 
