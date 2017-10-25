@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,8 +33,11 @@ public class RegisterTwoPresenter extends BasePresenter {
 
     }
 
-    public void register(String mobile,String mobile_code,String code,String password,String nickname){
+    public void register(String mobile,String mobile_code,String code,String password,String nickname,String unique_sign){
         Map<String,String> map = new HashMap<>();
+        if (!TextUtils.isEmpty(unique_sign)){
+            map.put("unique_sign",unique_sign);
+        }
         map.put("mobile",mobile);
         map.put("mobile_code",mobile_code);
         map.put("code",code);

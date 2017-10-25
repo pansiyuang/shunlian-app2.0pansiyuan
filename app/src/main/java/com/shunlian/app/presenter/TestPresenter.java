@@ -68,6 +68,11 @@ public class TestPresenter extends BasePresenter {
             public void onFailure() {
 
             }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+
+            }
         });
     }
 
@@ -101,6 +106,11 @@ public class TestPresenter extends BasePresenter {
             @Override
             public void onFailure() {
                 System.out.println("==========失败==============");
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+
             }
         });
 

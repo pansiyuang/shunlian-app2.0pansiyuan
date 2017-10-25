@@ -140,7 +140,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
-    protected <T> void  getNetData(Call<BaseEntity<T>> tCall,final INetDataCallback<BaseEntity<T>> callback){
+    protected <T> void  getNetData(final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
 
@@ -156,6 +156,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         iView.showDataEmptyView();
                     }
                 }else {
+                    callback.onErrorCode(body.code,body.message);
                     //请求错误
                     handlerCode(body.code,body.message);
                 }
@@ -193,7 +194,20 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(str.getBytes());
             BigInteger bigInt = new BigInteger(1, digest.digest());
-            return bigInt.toString(16);
+            String s = bigInt.toString(16);
+//            s="a123456789012345678952145a";//a123456789012345678952145a000
+            if (s.length() < 32){
+                int legnth = 32 - s.length();
+//                LogUtil.zhLogW("getStringMD5=========legnth=="+legnth);
+//                LogUtil.zhLogW("getStringMD5=========s=="+s);
+//                LogUtil.zhLogW("前getStringMD5=========s.length()=="+s.length());
+                for (int i = 0; i < legnth; i++) {
+                    s = "0" + s;
+                }
+//                LogUtil.zhLogW("后getStringMD5=========s.length()=="+s.length());
+//                LogUtil.zhLogW("后getStringMD5=========s=="+s);
+            }
+            return s;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

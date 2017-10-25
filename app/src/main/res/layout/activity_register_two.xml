@@ -67,22 +67,16 @@
 
     <EditText
         android:id="@+id/et_pwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editText_attribute"
         android:layout_below="@+id/input_code"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="25dp"
-        android:background="@null"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
         android:hint="@string/RegisterTwoAct_qsrxmm"
         android:inputType="textPassword"
-        android:maxLength="16"
-        android:textCursorDrawable="@drawable/edit_cursor"
-        android:textColor="@color/color_value_6c"
-        android:textColorHint="@color/color_value_6c"
-        android:textSize="12sp" />
+        android:maxLength="16"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/iv_hidden_psw"
@@ -102,22 +96,16 @@
 
     <EditText
         android:id="@+id/et_rpwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editText_attribute"
         android:layout_below="@+id/et_pwd"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="25dp"
-        android:background="@null"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
         android:hint="@string/RegisterTwoAct_qcxsrxmm"
         android:inputType="textPassword"
-        android:maxLength="16"
-        android:textCursorDrawable="@drawable/edit_cursor"
-        android:textColor="@color/color_value_6c"
-        android:textColorHint="@color/color_value_6c"
-        android:textSize="12sp" />
+        android:maxLength="16"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/iv_hidden_rpsw"
@@ -136,20 +124,14 @@
 
     <EditText
         android:id="@+id/et_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editText_attribute"
         android:layout_below="@+id/et_rpwd"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="25dp"
-        android:background="@null"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
-        android:hint="@string/RegisterTwoAct_qsrndnc"
-        android:textCursorDrawable="@drawable/edit_cursor"
-        android:textColor="@color/color_value_6c"
-        android:textColorHint="@color/color_value_6c"
-        android:textSize="12sp" />
+        android:hint="@string/RegisterTwoAct_qsrndnc"/>
 
 
     <Button

@@ -53,6 +53,26 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
         });
     }
 
+    public void checkCode(String code){
+        Map<String,String> map = new HashMap<>();
+        map.put("code",code);
+        sortAndMD5(map);
+        Call<BaseEntity<String>> baseEntityCall = getApiService().checkCode(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+            @Override
+            public void onSuccess(BaseEntity<String> entity) {
+                super.onSuccess(entity);
+                iView.checkCode(true);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.checkCode(false);
+            }
+        });
+    }
+
     public void sendSmsCode(String phone,String code){
         Map<String,String> map = new HashMap<>();
         map.put("mobile",phone);

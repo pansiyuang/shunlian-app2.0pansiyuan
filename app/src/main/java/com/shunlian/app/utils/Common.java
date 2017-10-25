@@ -24,6 +24,8 @@ package com.shunlian.app.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.shunlian.app.App;
@@ -68,5 +70,22 @@ public class Common {
             toast.setText(content);
         }
         toast.show();
+    }
+
+    //隐藏虚拟键盘
+    public static void hideKeyboard(View view){
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        }
+    }
+
+    //显示虚拟键盘
+    public static void showKeyboard(View v){
+        v.setFocusable(true);
+        v.setFocusableInTouchMode(true);
+        v.requestFocus();
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v,InputMethodManager.SHOW_FORCED);
     }
 }

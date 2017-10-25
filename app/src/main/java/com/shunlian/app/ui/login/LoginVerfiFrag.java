@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -33,6 +35,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @BindView(R.id.iv_verifi)
     MyImageView iv_verifi;
+
+    @BindView(R.id.tv_new_regist)
+    TextView tv_new_regist;
 
 
     @Override
@@ -58,6 +63,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         phoneTextWatcher = new PhoneTextWatcher(edt_account);
         edt_account.addTextChangedListener(phoneTextWatcher);
         phoneTextWatcher.setOnInputListener(this);
+        tv_new_regist.setOnClickListener(this);
 
         edt_verifi.addTextChangedListener(new MyTextWatch());
         iv_verifi.setOnClickListener(this);
@@ -76,6 +82,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         switch (view.getId()) {
             case R.id.iv_verifi:
                 GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
+                break;
+            case R.id.tv_new_regist:
+                RegisterOneAct.stratAct(baseContext,null);
                 break;
         }
     }

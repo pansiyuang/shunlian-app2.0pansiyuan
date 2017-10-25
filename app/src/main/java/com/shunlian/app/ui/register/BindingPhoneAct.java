@@ -123,8 +123,10 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
 
     @Override
     public void setCode(byte[] bytes) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        miv_code.setImageBitmap(bitmap);
+        if (bytes != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            miv_code.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -133,10 +135,15 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
             if (state == USER_STATES_NEW && TextUtils.isEmpty(id)){
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id,null);
         }else {
             Common.staticToast("手机验证码发送失败");
         }
+    }
+
+    @Override
+    public void checkCode(boolean isSuccess) {
+
     }
 
     @Override
@@ -158,6 +165,21 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
             case R.id.tv_select:
                 SelectRecommendAct.startAct(this);
                 break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean focusable1 = et_id.isFocusable();
+        boolean focusable = et_phone.isFocusable();
+        boolean focusable2 = et_code.isFocusable();
+        if (focusable){
+            Common.hideKeyboard(et_phone);
+        }else if (focusable1){
+            Common.hideKeyboard(et_id);
+        }else if (focusable2){
+            Common.hideKeyboard(et_code);
         }
     }
 }

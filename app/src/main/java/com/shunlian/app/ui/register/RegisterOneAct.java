@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,9 +44,13 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
+    private boolean isCheckCode;
+    private String unique_sign;
 
-    public static void stratAct(Context context){
-        context.startActivity(new Intent(context,RegisterOneAct.class));
+    public static void stratAct(Context context,String unique_sign){
+        Intent intent = new Intent(context, RegisterOneAct.class);
+        intent.putExtra("unique_sign",unique_sign);
+        context.startActivity(intent);
     }
 
 
@@ -61,20 +66,46 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
         miv_logo.setOnClickListener(this);
+        et_phone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isEtIdEmpty()){
+                    return false;
+                }else {
+                    if (TextUtils.isEmpty(id)){
+                        id = et_id.getText().toString();
+                    }
+                    onePresenter.checkCode(id);
+                }
+                return false;
+            }
+        });
+
+        et_phone.addTextChangedListener(new SimpleTextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (!TextUtils.isEmpty(s) && s.length() >= 13){
+                    setEdittextFocusable(true,et_code);
+                }
+            }
+        });
+
+        et_code.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isEtIdEmpty())
+                    return false;
+                if (isEtPhoneEmpty())
+                    return false;
+                return false;
+            }
+        });
         et_code.addTextChangedListener(new SimpleTextWatcher(){
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
-                Editable text = et_id.getText();
-                if (TextUtils.isEmpty(text)){
-                    Common.staticToast("推荐人id不能为空");
-                    return;
-                }
                 String phone = et_phone.getText().toString().replaceAll(" ","");
-                if (TextUtils.isEmpty(phone)){
-                    Common.staticToast("手机号不能为空");
-                    return;
-                }
                 if (!TextUtils.isEmpty(s) && s.length() >= 4){
                     et_code.setSelection(s.length());
                     String code = et_code.getText().toString();
@@ -84,10 +115,33 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         });
     }
 
+    private boolean isEtPhoneEmpty() {
+        String phone = et_phone.getText().toString().replaceAll(" ","");
+        if (TextUtils.isEmpty(phone)){
+            Common.staticToast("手机号不能为空");
+            setEdittextFocusable(true,et_phone);
+            setEdittextFocusable(false,et_code);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isEtIdEmpty() {
+        Editable text = et_id.getText();
+        if (TextUtils.isEmpty(text)){
+            Common.staticToast("推荐人id不能为空");
+            setEdittextFocusable(true,et_id);
+            setEdittextFocusable(false,et_phone,et_code);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        unique_sign = getIntent().getStringExtra("unique_sign");
         onePresenter = new RegisterOnePresenter(RegisterOneAct.this, this);
     }
 
@@ -115,6 +169,8 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             String nickname = data.getStringExtra("nickname");
             et_id.setText(nickname);
             setEdittextFocusable(true,et_phone);
+            // TODO: 2017/10/25 软键盘不弹出 
+            Common.showKeyboard(et_phone);
         }
     }
 
@@ -130,13 +186,21 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void smsCode(String smsCode) {
-        if (!TextUtils.isEmpty(smsCode)){
+        if (!TextUtils.isEmpty(smsCode) && isCheckCode){
             if (TextUtils.isEmpty(id)){
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id);
+            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id,unique_sign);
         }else {
             Common.staticToast("手机验证码发送失败");
+        }
+    }
+
+    @Override
+    public void checkCode(boolean isSuccess) {
+        isCheckCode = isSuccess;
+        if (!isSuccess){
+            setEdittextFocusable(true,et_id);
         }
     }
 
@@ -148,5 +212,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     public void showDataEmptyView() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        Common.hideKeyboard(et_phone);
+        super.onDestroy();
     }
 }
