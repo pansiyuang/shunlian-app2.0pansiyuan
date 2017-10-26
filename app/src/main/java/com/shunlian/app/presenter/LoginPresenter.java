@@ -65,7 +65,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
         try {
             String stringEntry = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
-            Call<BaseEntity<String>> baseEntityCall = getAddCookieApiService().login(requestBody);
+            Call<BaseEntity<String>> baseEntityCall = getSaveCookieApiService().login(requestBody);
             getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
                 @Override
                 public void onSuccess(BaseEntity<String> entity) {
