@@ -16,12 +16,10 @@
 
     <com.shunlian.app.widget.ClearableEditText
         android:id="@+id/edt_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editText_attribute"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="33dp"
-        android:background="@null"
         android:drawableRight="@mipmap/icon_login_delet"
         android:maxLength="16"
         android:paddingBottom="10dp"
@@ -45,11 +43,9 @@
 
         <com.shunlian.app.widget.MyEditText
             android:id="@+id/edt_psw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_hidden_psw"
-            android:background="@null"
             android:inputType="textPassword"
             android:maxLength="16"
             android:textSize="20sp"
