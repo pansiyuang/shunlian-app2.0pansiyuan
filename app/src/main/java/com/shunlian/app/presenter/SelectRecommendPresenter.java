@@ -26,7 +26,7 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
     }
 
     @Override
-    protected void initApi() {
+    public void initApi() {
         Map<String,String> map = new HashMap<>();
         map.put("page","1");
         map.put("pageSize","9");

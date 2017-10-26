@@ -34,4 +34,6 @@ public interface INetDataCallback<T> {
 
     void onFailure();
 
+    void onErrorCode(int code,String message);
+
 }

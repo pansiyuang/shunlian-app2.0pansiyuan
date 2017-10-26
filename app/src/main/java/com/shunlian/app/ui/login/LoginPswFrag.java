@@ -19,6 +19,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
 
@@ -51,6 +52,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     @BindView(R.id.tv_find_psw)
     TextView tv_find_psw;
 
+    @BindView(R.id.tv_wx_login)
+    TextView tv_wx_login;
+
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_login_psw, container, false);
@@ -68,6 +72,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         tv_new_regist.setOnClickListener(this);
         iv_hidden_psw.setOnClickListener(this);
         btn_login.setOnClickListener(this);
+        tv_wx_login.setOnClickListener(this);
         tv_find_psw.setOnClickListener(this);
         edt_psw.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,7 +108,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext);
+                RegisterOneAct.stratAct(baseContext,null);
                 break;
 
             case R.id.tv_find_psw:
@@ -126,6 +131,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                     return;
                 }
                 loginPresenter.LoginUserName(currentAccount, currentPsw);
+                break;
+            case R.id.tv_wx_login:
+                WXEntryActivity.startAct(baseActivity,"login");
                 break;
         }
     }

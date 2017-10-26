@@ -1,16 +1,18 @@
 package com.shunlian.app.ui.login;
 
-import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -36,6 +38,10 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     @BindView(R.id.iv_verifi)
     MyImageView iv_verifi;
 
+    @BindView(R.id.tv_new_regist)
+    TextView tv_new_regist;
+
+
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_login_verification, container, false);
@@ -48,10 +54,6 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         super.initViews();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected void initData() {
@@ -64,6 +66,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         phoneTextWatcher = new PhoneTextWatcher(edt_account);
         edt_account.addTextChangedListener(phoneTextWatcher);
         phoneTextWatcher.setOnInputListener(this);
+        tv_new_regist.setOnClickListener(this);
 
         edt_verifi.addTextChangedListener(new MyTextWatch());
         iv_verifi.setOnClickListener(this);
@@ -83,6 +86,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         switch (view.getId()) {
             case R.id.iv_verifi:
                 onePresenter.getCode();
+                break;
+            case R.id.tv_new_regist:
+                RegisterOneAct.stratAct(baseContext,null);
                 break;
         }
     }

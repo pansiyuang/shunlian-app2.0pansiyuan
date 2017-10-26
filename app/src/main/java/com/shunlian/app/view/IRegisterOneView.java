@@ -10,4 +10,10 @@ public interface IRegisterOneView extends IView {
 
     void smsCode(String smsCode);
 
+
+    /**
+     * 推荐人id验证
+     * @param isSuccess
+     */
+    void checkCode(boolean isSuccess);
 }

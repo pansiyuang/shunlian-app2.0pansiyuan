@@ -61,14 +61,16 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private CountDownTimer countDownTimer;
     private String smsCode;
     private String codeId;
+    private String unique_sign;
     private RegisterTwoPresenter registerTwoPresenter;
     private String phone;
 
-    public static void startAct(Context context, String smsCode, String phone, String codeId, String type) {
-        Intent intent = new Intent(context, RegisterTwoAct.class);
-        intent.putExtra("phone", phone);
-        intent.putExtra("smsCode", smsCode);
-        intent.putExtra("codeId", codeId);
+    public static void startAct(Context context, String smsCode, String phone, String codeId,String unique_sign){
+        Intent intent = new Intent(context,RegisterTwoAct.class);
+        intent.putExtra("phone",phone);
+        intent.putExtra("smsCode",smsCode);
+        intent.putExtra("codeId",codeId);
+        intent.putExtra("unique_sign",unique_sign);
         intent.putExtra("type", type);
         context.startActivity(intent);
     }
@@ -182,6 +184,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         phone = getIntent().getStringExtra("phone");
         smsCode = getIntent().getStringExtra("smsCode");
         codeId = getIntent().getStringExtra("codeId");
+        unique_sign = getIntent().getStringExtra("unique_sign");
         currentType = getIntent().getStringExtra("type");
 
         tv_phone.setText(phone);
@@ -248,6 +251,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), smsCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
                     registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname);
+                }else {
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;
         }

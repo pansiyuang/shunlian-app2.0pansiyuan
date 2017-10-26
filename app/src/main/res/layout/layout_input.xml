@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_below="@+id/miv_logo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/miv_logo"
@@ -17,16 +19,11 @@
 
         <EditText
             android:id="@+id/et_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:drawableBottom="@drawable/edittext_line"
-            android:drawablePadding="10dp"
+            style="@style/editText_attribute"
             android:hint="@string/RegisterOneAct_qsrtjrid"
-            android:textColor="@color/color_value_6c"
-            android:textColorHint="@color/color_value_6c"
-            android:textCursorDrawable="@drawable/edit_cursor"
-            android:textSize="12sp" />
+            android:drawableBottom = "@drawable/edittext_line"
+            android:drawablePadding ="10dp"
+            />
 
         <TextView
             android:id="@+id/tv_select"
@@ -56,6 +53,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:digits="0123456789"
+            style="@style/editText_attribute"
             android:drawableRight="@mipmap/icon_login_delet"
             android:hint="@string/RegisterOneAct_qsrsjh"
             android:inputType="number"
@@ -64,6 +62,7 @@
             android:textColorHint="@color/color_value_6c"
             android:textCursorDrawable="@drawable/edit_cursor"
             android:textSize="12sp" />
+            android:digits="0123456789"/>
 
         <View
             android:layout_width="match_parent"
@@ -84,23 +83,20 @@
 
         <EditText
             android:id="@+id/et_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@null"
+            style="@style/editText_attribute"
             android:drawableBottom="@drawable/edittext_line"
             android:drawablePadding="10dp"
             android:hint="@string/RegisterOneAct_qsryzm"
-            android:maxLength="4"
-            android:textColor="@color/color_value_6c"
-            android:textColorHint="@color/color_value_6c"
-            android:textCursorDrawable="@drawable/edit_cursor"
-            android:textSize="12sp" />
+            android:layout_marginTop="10dp"
+            android:maxLength="4"/>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_code"
             android:layout_width="72dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true" />
+            app:iv_control_adapter="true"
+            app:iv_control_height="60"
+            app:iv_control_width="144"
+            android:layout_alignParentRight="true"/>
     </RelativeLayout>
 </LinearLayout>

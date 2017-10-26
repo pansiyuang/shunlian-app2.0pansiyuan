@@ -28,6 +28,7 @@ import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
+import com.shunlian.app.bean.WXLoginEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -143,6 +144,22 @@ public interface ApiService {
      */
     @POST("member/register/index")
     Call<BaseEntity<RegisterFinishEntity>> register(@Body RequestBody requestBody);
+
+    /**
+     * 微信登录
+     * @param requestBody
+     * @return
+     */
+    @POST("member/oauth/wechat")
+    Call<BaseEntity<WXLoginEntity>> wxLogin(@Body RequestBody requestBody);
+
+    /**
+     * 推荐人验证
+     * @param map
+     * @return
+     */
+    @GET("member/register/checkCode")
+    Call<BaseEntity<String>> checkCode(@QueryMap Map<String,String> map);
 
     /**
      * 找回密码

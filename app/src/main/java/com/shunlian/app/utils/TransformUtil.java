@@ -28,11 +28,16 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.shunlian.app.R;
+
 import java.math.BigDecimal;
+
+import static android.graphics.BitmapFactory.decodeResource;
 
 /**
  * Created by zhang on 2017/4/14 13 : 06.
@@ -145,7 +150,7 @@ public class TransformUtil {
         // 不加载bitmap，只获取图片额外信息
         opts.inJustDecodeBounds = true;
 
-        BitmapFactory.decodeResource(ctx.getResources(),id,opts);
+        decodeResource(ctx.getResources(),id,opts);
 
         // 获得图片的宽高
         int pHeight = opts.outHeight;
@@ -162,7 +167,7 @@ public class TransformUtil {
         opts.inJustDecodeBounds = false;
         Bitmap bm = null;
         try {
-            bm = BitmapFactory.decodeResource(ctx.getResources(),id,opts);
+            bm = decodeResource(ctx.getResources(),id,opts);
         }catch (OutOfMemoryError error){
 
         }
@@ -208,6 +213,29 @@ public class TransformUtil {
         int msize= Math.round(size * ratio);
         return msize;
     }*/
+
+    public static Bitmap convertVIP(Context context,String vip){
+        Bitmap bitmap = null;
+        if (TextUtils.isEmpty(vip)){
+            return bitmap;
+        }
+        if (vip.equalsIgnoreCase("v0")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v0);
+        }else if (vip.equalsIgnoreCase("v1")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v1);
+        }else if (vip.equalsIgnoreCase("v2")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v2);
+        }else if (vip.equalsIgnoreCase("v3")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v3);
+        }else if (vip.equalsIgnoreCase("v4")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v4);
+        }else if (vip.equalsIgnoreCase("v5")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v5);
+        }else if (vip.equalsIgnoreCase("v6")){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v6);
+        }
+        return bitmap;
+    }
 
     /**
      * 扩大控件点击范围

@@ -2,6 +2,7 @@ package com.shunlian.app.ui.register;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
@@ -69,6 +70,12 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
     @BindView(R.id.tv_sure)
     TextView tv_sure;
+
+    @BindView(R.id.miv_vip)
+    MyImageView miv_vip;
+
+    @BindView(R.id.tv_vipname)
+    TextView tv_vipname;
 
     private String recommenderId;
     private String nickname;
@@ -144,6 +151,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
        switch (v.getId()){
            case R.id.tv_next:
+               presenter.initApi();
                break;
            case R.id.tv_notSelect:
                dialogHidden();
@@ -184,7 +192,18 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 TextView tv_nickname = holder.getView(R.id.tv_nickname);
                 tv_nickname.setText(s.nickname);
                 TextView tv_title = holder.getView(R.id.tv_title);
-                tv_title.setText(s.member_role);
+                if ("1".equals(s.member_role)){
+                    tv_title.setVisibility(View.VISIBLE);
+                    tv_title.setText(s.member_role_msg);
+                    tv_title.setBackgroundResource(R.mipmap.bg_login_chuangkejingying);
+                }else if ("2".equals(s.member_role)){
+                    tv_title.setVisibility(View.VISIBLE);
+                    tv_title.setText(s.member_role_msg);
+                    tv_title.setBackgroundResource(R.mipmap.bg_login_jingyingdaoshi);
+                }else {
+                    tv_title.setVisibility(View.INVISIBLE);
+                }
+
                 MyImageView miv_select = holder.getView(R.id.miv_select);
                 if (position == selelctPosi){
                     miv_select.setVisibility(View.VISIBLE);
@@ -192,6 +211,9 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                     miv_select.setVisibility(View.GONE);
                 }
 
+                MyImageView miv_vip = holder.getView(R.id.miv_vip);
+                Bitmap bitmap = TransformUtil.convertVIP(SelectRecommendAct.this, s.level);
+                miv_vip.setImageBitmap(bitmap);
             }
         };
         recy_view.setAdapter(simpleRecyclerAdapter);
@@ -206,6 +228,21 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 tv_hot.setText(listBean.heat);
                 nickname = listBean.nickname;
                 recommenderId = listBean.code;
+
+                Bitmap bitmap = TransformUtil.convertVIP(SelectRecommendAct.this, listBean.level);
+                miv_vip.setImageBitmap(bitmap);
+                if ("1".equals(listBean.member_role)){
+                    tv_vipname.setVisibility(View.VISIBLE);
+                    tv_vipname.setText(listBean.member_role_msg);
+                    tv_vipname.setBackgroundResource(R.mipmap.bg_login_chuangkejingying);
+                }else if ("2".equals(listBean.member_role)){
+                    tv_vipname.setVisibility(View.VISIBLE);
+                    tv_vipname.setText(listBean.member_role_msg);
+                    tv_vipname.setBackgroundResource(R.mipmap.bg_login_jingyingdaoshi);
+                }else {
+                    tv_vipname.setVisibility(View.INVISIBLE);
+                }
+
                 dialogDetail();
             }
         });

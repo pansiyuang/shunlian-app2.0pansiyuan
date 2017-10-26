@@ -28,6 +28,25 @@
         <attr name="inputType" format="string" />
     </declare-styleable>
 
+
+    <style name="editText_attribute">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:textCursorDrawable">@drawable/edit_cursor</item>
+        <item name="android:textColor">@color/new_text</item>
+        <item name="android:textColorHint">@color/color_value_6c</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="wx">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <declare-styleable name="MyEditText">
         <attr name="hintText" format="string" />
     </declare-styleable>
