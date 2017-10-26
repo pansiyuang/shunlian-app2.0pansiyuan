@@ -57,10 +57,11 @@
             android:hint="@string/RegisterOneAct_qsrsjh"
             android:inputType="number"
             android:maxLength="13"
-            android:textColor="@color/color_value_6c"
+            app:hintText="@string/RegisterOneAct_qsrsjh"
+            android:textColor="@color/new_text"
             android:textColorHint="@color/color_value_6c"
             android:textCursorDrawable="@drawable/edit_cursor"
-            android:textSize="12sp" />
+            android:textSize="20sp" />
             android:digits="0123456789"/>
 
         <View

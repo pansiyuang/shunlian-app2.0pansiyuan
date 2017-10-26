@@ -7,7 +7,9 @@ import android.os.Message;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -173,6 +175,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     @Override
     public void showDataEmptyView() {
 
+    }
+
+    @Override
+    public void onWXCallback(WXLoginEntity wxLoginEntity) {
+        if (wxLoginEntity != null){
+            String unique_sign = wxLoginEntity.unique_sign;
+            RegisterOneAct.stratAct(this,unique_sign);
+            finish();
+        }
     }
 
     private class MyHandler extends Handler {

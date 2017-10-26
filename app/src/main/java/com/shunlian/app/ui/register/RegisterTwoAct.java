@@ -13,9 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
@@ -327,6 +329,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @Override
     public void resetPsw(String message) {
         Common.staticToast(message);
+    }
+
+    @Override
+    public void registerFinish(RegisterFinishEntity entity) {
+        SharedPrefUtil.saveSharedPrfString("token", entity.token);
+
     }
 
     @Override

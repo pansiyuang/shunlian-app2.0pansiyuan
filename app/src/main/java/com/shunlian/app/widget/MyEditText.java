@@ -32,8 +32,8 @@ public class MyEditText extends EditText {
         setCursorDrawableColor(R.drawable.edit_cursor);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyEditText);
         hintContent = a.getString(R.styleable.MyEditText_hintText);
-        setHintSize(hintContent);
         a.recycle();
+        setHintSize(hintContent);
     }
 
     public MyEditText(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -55,8 +55,8 @@ public class MyEditText extends EditText {
 
     public void setHintSize(String content) {
         SpannableString ss = new SpannableString(content);
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12), false);
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12));
         ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setHint(new SpannableString(ss));
+        setHint(ss);
     }
 }

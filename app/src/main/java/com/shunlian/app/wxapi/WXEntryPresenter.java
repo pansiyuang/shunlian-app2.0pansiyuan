@@ -1,6 +1,5 @@
 package com.shunlian.app.wxapi;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +8,6 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.presenter.BasePresenter;
-import com.shunlian.app.ui.register.RegisterOneAct;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,16 +42,14 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),json);
-        Call<BaseEntity<WXLoginEntity>> baseEntityCall = getApiService().wxLogin(requestBody);
+        final Call<BaseEntity<WXLoginEntity>> baseEntityCall = getApiService().wxLogin(requestBody);
 
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<WXLoginEntity>>(){
             @Override
             public void onSuccess(BaseEntity<WXLoginEntity> entity) {
                 super.onSuccess(entity);
                 if (entity.data.member_id == 0){
-                    RegisterOneAct.stratAct(context,entity.data.unique_sign);
-
-                    ((Activity)context).finish();
+                   iView.onWXCallback(entity.data);
                 }
             }
         });

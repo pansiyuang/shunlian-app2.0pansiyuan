@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 
 import java.util.HashMap;
@@ -56,7 +55,7 @@ public class RegisterTwoPresenter extends BasePresenter<IRegisterTwoView> {
             @Override
             public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
                 super.onSuccess(entity);
-                SharedPrefUtil.saveSharedPrfString("token", entity.data.token);
+                iView.registerFinish(entity.data);
             }
         });
     }

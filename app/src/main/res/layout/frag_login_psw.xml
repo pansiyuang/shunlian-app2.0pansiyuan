@@ -23,6 +23,7 @@
         android:layout_marginTop="33dp"
         android:background="@null"
         android:drawableRight="@mipmap/icon_login_delet"
+        app:hintText="@string/LoginPswFrg_qsrsjh"
         android:hint="@string/LoginPswFrg_qsrsjh"
         android:maxLength="16"
         android:paddingBottom="10dp"
