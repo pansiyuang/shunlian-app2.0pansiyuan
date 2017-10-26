@@ -87,6 +87,7 @@
             android:drawablePadding="10dp"
             android:hint="@string/RegisterOneAct_qsryzm"
             android:layout_marginTop="10dp"
+            android:inputType="number"
             android:maxLength="4"/>
 
         <com.shunlian.app.widget.MyImageView
