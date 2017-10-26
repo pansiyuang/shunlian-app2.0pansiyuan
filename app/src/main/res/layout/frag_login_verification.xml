@@ -16,12 +16,10 @@
 
     <com.shunlian.app.widget.ClearableEditText
         android:id="@+id/edt_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editText_attribute"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="33dp"
-        android:background="@null"
         android:digits="0123456789"
         android:drawableRight="@mipmap/icon_login_delet"
         android:inputType="number"
@@ -47,12 +45,10 @@
 
         <com.shunlian.app.widget.MyEditText
             android:id="@+id/edt_verifi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/iv_verifi"
-            android:background="@null"
             android:maxLength="4"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
