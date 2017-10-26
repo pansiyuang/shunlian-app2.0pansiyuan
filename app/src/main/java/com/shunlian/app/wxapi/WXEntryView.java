@@ -1,5 +1,6 @@
 package com.shunlian.app.wxapi;
 
+import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.view.IView;
 
 /**
@@ -8,4 +9,5 @@ import com.shunlian.app.view.IView;
 
 public interface WXEntryView extends IView {
 
+    void onWXCallback(WXLoginEntity wxLoginEntity);
 }

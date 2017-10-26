@@ -7,12 +7,10 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.lang.reflect.Field;
@@ -35,8 +33,8 @@ public class MyEditText extends EditText {
         setCursorDrawableColor(R.drawable.edit_cursor);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyEditText);
         hintContent = a.getString(R.styleable.MyEditText_hintText);
-        setHintSize(hintContent);
         a.recycle();
+        setHintSize(hintContent);
     }
 
     public MyEditText(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -63,6 +61,6 @@ public class MyEditText extends EditText {
         SpannableString ss = new SpannableString(content);
         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12));
         ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setHint(new SpannableString(ss));
+        setHint(ss);
     }
 }

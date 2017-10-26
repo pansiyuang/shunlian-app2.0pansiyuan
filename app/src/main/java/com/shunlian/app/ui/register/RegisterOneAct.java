@@ -119,7 +119,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     private boolean isEtPhoneEmpty() {
         String phone = et_phone.getText().toString().replaceAll(" ", "");
         if (TextUtils.isEmpty(phone)) {
-            Common.staticToast("手机号不能为空");
+            Common.staticToast(getString(R.string.RegisterOneAct_sjhbnwk));
             setEdittextFocusable(true, et_phone);
             setEdittextFocusable(false, et_code);
             return true;
@@ -130,7 +130,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     private boolean isEtIdEmpty() {
         Editable text = et_id.getText();
         if (TextUtils.isEmpty(text)) {
-            Common.staticToast("推荐人id不能为空");
+            Common.staticToast(getString(R.string.RegisterOneAct_tjridbnwk));
             setEdittextFocusable(true, et_id);
             setEdittextFocusable(false, et_phone, et_code);
             return true;
@@ -170,8 +170,6 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             String nickname = data.getStringExtra("nickname");
             et_id.setText(nickname);
             setEdittextFocusable(true, et_phone);
-            // TODO: 2017/10/25 软键盘不弹出
-            Common.showKeyboard(et_phone);
         }
     }
 
@@ -181,7 +179,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             miv_code.setImageBitmap(bitmap);
         } else {
-            Common.staticToast("获取验证码失败");
+            Common.staticToast(getString(R.string.RegisterOneAct_hqyzmsb));
         }
     }
 
@@ -191,9 +189,10 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, "");
+            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null);
+            finish();
         } else {
-            Common.staticToast("手机验证码发送失败");
+            Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
         }
     }
 

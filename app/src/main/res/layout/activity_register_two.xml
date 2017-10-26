@@ -51,7 +51,7 @@
         android:text="59s"
         android:textColor="@color/new_gray" />
 
-    <com.shunlian.app.widget.VerificationCodeInput xmlns:ver="http://schemas.android.com/apk/res-auto"
+    <com.shunlian.app.widget.VerificationCodeInput
         android:id="@+id/input_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         ver:padding="10dp" />
 
 
-    <EditText
+    <com.shunlian.app.widget.MyEditText
         android:id="@+id/et_pwd"
         style="@style/editText_attribute"
         android:layout_below="@+id/input_code"
@@ -74,7 +74,7 @@
         android:layout_marginTop="25dp"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
-        android:hint="@string/RegisterTwoAct_qsrxmm"
+        ver:hintText="@string/RegisterTwoAct_qsrxmm"
         android:inputType="textPassword"
         android:maxLength="16"/>
 
@@ -94,7 +94,7 @@
         android:visibility="invisible" />
 
 
-    <EditText
+    <com.shunlian.app.widget.MyEditText
         android:id="@+id/et_rpwd"
         style="@style/editText_attribute"
         android:layout_below="@+id/et_pwd"
@@ -103,7 +103,7 @@
         android:layout_marginTop="25dp"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
-        android:hint="@string/RegisterTwoAct_qcxsrxmm"
+        ver:hintText="@string/RegisterTwoAct_qcxsrxmm"
         android:inputType="textPassword"
         android:maxLength="16"/>
 
@@ -122,7 +122,7 @@
         android:src="@mipmap/icon_login_eyes_h"
         android:visibility="invisible" />
 
-    <EditText
+    <com.shunlian.app.widget.MyEditText
         android:id="@+id/et_nickname"
         style="@style/editText_attribute"
         android:layout_below="@+id/et_rpwd"
@@ -131,7 +131,8 @@
         android:layout_marginTop="25dp"
         android:drawableBottom="@drawable/edittext_line"
         android:drawablePadding="10dp"
-        android:hint="@string/RegisterTwoAct_qsrndnc"/>
+        android:textSize="15sp"
+        ver:hintText="@string/RegisterTwoAct_qsrndnc"/>
 
 
     <Button
