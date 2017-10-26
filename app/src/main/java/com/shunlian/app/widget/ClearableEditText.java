@@ -29,25 +29,22 @@ public class ClearableEditText extends MyEditText implements TextWatcher, View.O
     private int xUp = 0;
 
     public ClearableEditText(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public ClearableEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initWedgits(attrs);
+        initWedgits();
     }
 
     public ClearableEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initWedgits(attrs);
     }
 
     /**
      * 初始化各组件
-     *
-     * @param attrs 属性集
      */
-    private void initWedgits(AttributeSet attrs) {
+    private void initWedgits() {
         try {
             left = getCompoundDrawables()[0];
             right = getCompoundDrawables()[2];

@@ -22,6 +22,7 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
+
 public class RegisterOneAct extends BaseActivity implements View.OnClickListener, IRegisterOneView {
 
     @BindView(R.id.et_id)
@@ -62,7 +63,6 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initListener() {
         super.initListener();
-
         et_phone.addTextChangedListener(new PhoneTextWatcher(et_phone));
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);

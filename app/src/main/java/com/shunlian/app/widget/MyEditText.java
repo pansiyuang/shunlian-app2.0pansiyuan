@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
 import android.widget.EditText;
@@ -54,6 +55,9 @@ public class MyEditText extends EditText {
     }
 
     public void setHintSize(String content) {
+        if (TextUtils.isEmpty(content)) {
+            return;
+        }
         SpannableString ss = new SpannableString(content);
         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12));
         ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
