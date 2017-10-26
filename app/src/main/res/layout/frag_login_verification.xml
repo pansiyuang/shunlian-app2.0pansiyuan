@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -23,13 +24,12 @@
         android:background="@null"
         android:digits="0123456789"
         android:drawableRight="@mipmap/icon_login_delet"
-        android:hint="@string/LoginPswFrg_inputphone"
         android:inputType="number"
         android:maxLength="13"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:textColorHint="@color/color_value_6c"
-        android:textSize="12sp" />
+        android:textSize="20sp"
+        app:hintText="@string/LoginPswFrg_inputphone" />
 
     <View
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp">
 
-        <EditText
+        <com.shunlian.app.widget.MyEditText
             android:id="@+id/edt_verifi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,13 +53,11 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/iv_verifi"
             android:background="@null"
-            android:hint="@string/LoginPswFrg_qsryzm"
             android:maxLength="4"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:textColorHint="@color/color_value_6c"
-            android:textCursorDrawable="@drawable/edit_cursor"
-            android:textSize="12sp" />
+            android:textSize="20sp"
+            app:hintText="@string/LoginPswFrg_qsryzm" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/iv_verifi"

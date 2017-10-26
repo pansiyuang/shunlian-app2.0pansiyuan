@@ -8,13 +8,12 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 
 /**
  * Created by Administrator on 2017/10/17.
  */
 
-public class ClearableEditText extends EditText implements TextWatcher, View.OnFocusChangeListener {
+public class ClearableEditText extends MyEditText implements TextWatcher, View.OnFocusChangeListener {
 
     /**
      * 左右两侧图片资源
@@ -30,24 +29,22 @@ public class ClearableEditText extends EditText implements TextWatcher, View.OnF
     private int xUp = 0;
 
     public ClearableEditText(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public ClearableEditText(Context context, AttributeSet attrs) {
-        this(context, attrs, android.R.attr.editTextStyle);
+        super(context, attrs);
+        initWedgits();
     }
 
     public ClearableEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initWedgits(attrs);
     }
 
     /**
      * 初始化各组件
-     *
-     * @param attrs 属性集
      */
-    private void initWedgits(AttributeSet attrs) {
+    private void initWedgits() {
         try {
             left = getCompoundDrawables()[0];
             right = getCompoundDrawables()[2];
