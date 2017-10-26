@@ -46,4 +46,8 @@
         <!-- 无标题 -->
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <declare-styleable name="MyEditText">
+        <attr name="hintText" format="string" />
+    </declare-styleable>
 </resources>

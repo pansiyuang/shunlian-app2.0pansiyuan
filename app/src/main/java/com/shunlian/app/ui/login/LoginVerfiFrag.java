@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.login;
 
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -9,10 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
-import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
@@ -23,9 +24,10 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/17.
  */
 
-public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener, View.OnClickListener {
+public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnInputCompleteListener, View.OnClickListener, IRegisterOneView {
     private View rootView;
     private PhoneTextWatcher phoneTextWatcher;
+    private RegisterOnePresenter onePresenter;
 
     @BindView(R.id.edt_verifi)
     EditText edt_verifi;
@@ -52,9 +54,10 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         super.initViews();
     }
 
+
     @Override
     protected void initData() {
-        GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
+        onePresenter = new RegisterOnePresenter(getActivity(), this);
     }
 
     @Override
@@ -75,13 +78,14 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         edt_verifi.setEnabled(true);
         edt_verifi.requestFocus();
         edt_verifi.setSelection(edt_verifi.getText().length());
+        checkData();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_verifi:
-                GlideUtils.getInstance().downPicture(getActivity(), InterentTools.HTTPADDR + "member/Common/vcode", iv_verifi);
+                onePresenter.getCode();
                 break;
             case R.id.tv_new_regist:
                 RegisterOneAct.stratAct(baseContext,null);
@@ -89,27 +93,57 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         }
     }
 
+    @Override
+    public void showFailureView() {
+
+    }
+
+    @Override
+    public void showDataEmptyView() {
+
+    }
+
+    @Override
+    public void setCode(byte[] bytes) {
+        if (bytes != null) {
+            iv_verifi.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+        }
+    }
+
+    @Override
+    public void smsCode(String smsCode) {
+        String currentPhoneNum = edt_account.getText().toString();
+        InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum);
+    }
+
+    @Override
+    public void checkCode(boolean isSuccess) {
+
+    }
+
 
     private class MyTextWatch implements TextWatcher {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            String verifiCode = edt_verifi.getText().toString();
-            if (verifiCode.length() == 4) {
-                //输入完验证码跳转逻辑
-                String phoneNum = edt_account.getText().toString();
-                InputVerfiCodeAct.startAct(getActivity(), phoneNum);
-            }
+            checkData();
+        }
+    }
+
+    private void checkData() {
+        String verifiCode = edt_verifi.getText().toString();
+        String phoneNum = edt_account.getText().toString();
+        if (verifiCode.length() == 4 && phoneNum.length() == 13) {
+            //输入完验证码跳转逻辑
+            onePresenter.sendSmsCode(phoneNum.replaceAll(" ", ""), verifiCode);
         }
     }
 }

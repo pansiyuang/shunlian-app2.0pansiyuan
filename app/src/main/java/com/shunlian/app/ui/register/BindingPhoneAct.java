@@ -23,6 +23,8 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
+import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_REGIST;
+
 public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, View.OnClickListener {
     /**
      * 用户状态
@@ -37,9 +39,9 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
     private int state;
     private String id;
 
-    public static void startAct(Context context,int state){
-        Intent intent = new Intent(context,BindingPhoneAct.class);
-        intent.putExtra("state",state);
+    public static void startAct(Context context, int state) {
+        Intent intent = new Intent(context, BindingPhoneAct.class);
+        intent.putExtra("state", state);
         context.startActivity(intent);
     }
 
@@ -74,24 +76,24 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
         miv_code.setOnClickListener(this);
         tv_select.setOnClickListener(this);
 
-        et_code.addTextChangedListener(new SimpleTextWatcher(){
+        et_code.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
                 Editable text = et_id.getText();
-                if (state == USER_STATES_NEW && TextUtils.isEmpty(text)){
+                if (state == USER_STATES_NEW && TextUtils.isEmpty(text)) {
                     Common.staticToast("推荐人id不能为空");
                     return;
                 }
                 String phone = et_phone.getText().toString().replaceAll(" ", "");
-                if (TextUtils.isEmpty(phone)){
+                if (TextUtils.isEmpty(phone)) {
                     Common.staticToast("手机号不能为空");
                     return;
                 }
-                if (!TextUtils.isEmpty(s) && s.length() >= 4){
+                if (!TextUtils.isEmpty(s) && s.length() >= 4) {
                     et_code.setSelection(s.length());
                     String code = et_code.getText().toString();
-                    onePresenter.sendSmsCode(phone,code);
+                    onePresenter.sendSmsCode(phone, code);
                 }
             }
         });
@@ -102,7 +104,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         state = getIntent().getIntExtra("state", -1);
-        if (state == USER_STATES || state == USER_STATES_OLD){
+        if (state == USER_STATES || state == USER_STATES_OLD) {
             rl_id.setVisibility(View.GONE);
         }
 
@@ -113,11 +115,11 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 201 && resultCode == 200){
+        if (requestCode == 201 && resultCode == 200) {
             id = data.getStringExtra("id");
             String nickname = data.getStringExtra("nickname");
             et_id.setText(nickname);
-            setEdittextFocusable(true,et_phone);
+            setEdittextFocusable(true, et_phone);
         }
     }
 
@@ -131,12 +133,12 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
 
     @Override
     public void smsCode(String smsCode) {
-        if (!TextUtils.isEmpty(smsCode)){
-            if (state == USER_STATES_NEW && TextUtils.isEmpty(id)){
+        if (!TextUtils.isEmpty(smsCode)) {
+            if (state == USER_STATES_NEW && TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this,smsCode,et_phone.getText().toString(),id,null);
-        }else {
+            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, "", TYPE_REGIST);
+        } else {
             Common.staticToast("手机验证码发送失败");
         }
     }
@@ -158,7 +160,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.miv_code:
                 onePresenter.getCode();
                 break;
@@ -174,11 +176,11 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
         boolean focusable1 = et_id.isFocusable();
         boolean focusable = et_phone.isFocusable();
         boolean focusable2 = et_code.isFocusable();
-        if (focusable){
+        if (focusable) {
             Common.hideKeyboard(et_phone);
-        }else if (focusable1){
+        } else if (focusable1) {
             Common.hideKeyboard(et_id);
-        }else if (focusable2){
+        } else if (focusable2) {
             Common.hideKeyboard(et_code);
         }
     }

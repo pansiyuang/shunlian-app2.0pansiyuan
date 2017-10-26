@@ -35,7 +35,7 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
         getCode();
     }
 
-    public void getCode(){
+    public void getCode() {
         Call<ResponseBody> responseBodyCall = getSaveCookieApiService().graphicalCode();
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -47,6 +47,7 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -73,21 +74,20 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
         });
     }
 
-    public void sendSmsCode(String phone,String code){
-        Map<String,String> map = new HashMap<>();
-        map.put("mobile",phone);
-        map.put("vcode",code);
+    public void sendSmsCode(String phone, String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile", phone);
+        map.put("vcode", code);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);
-            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"),s);
+            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<String>> baseEntityCall = getAddCookieApiService().sendSmsCode(requestBody);
-            getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
                 @Override
                 public void onSuccess(BaseEntity<String> entity) {
                     super.onSuccess(entity);
-                    String data = entity.data;
-                    iView.smsCode(data);
+                    iView.smsCode(entity.data);
                 }
             });
 

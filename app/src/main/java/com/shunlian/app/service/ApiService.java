@@ -57,30 +57,40 @@ public interface ApiService {
 
     /**
      * 测试
+     *
      * @param requestBody
      * @return
      */
 //    @Headers("Content-type:application/json; charset=utf-8")
     @POST("user/login.json")
     Call<BaseEntity<UserLoginEntity>> getUserLogin1(@Body RequestBody requestBody);
+
     @GET("my/home.json")
     Call<BaseEntity<MyHomeEntity>> getmyHome();
+
     @GET("my/home.json")
     Call getmyHome1();
+
     @GET("Goods/item.json")
     Call<ResponseBody> goodsItem(@Query("goodsId") String goodsId);
-//    shopId  count page usePage sort sortby
+
+    //    shopId  count page usePage sort sortby
     @GET("Shop/home.json")
-    Call<ResponseBody> shopHome(@Query("shopId") String shopId,@Query("count") String count);
+    Call<ResponseBody> shopHome(@Query("shopId") String shopId, @Query("count") String count);
+
     @GET("Shop/home.json")
-    Call<ResponseBody> shopHome1(@QueryMap Map<String,String> map);
+    Call<ResponseBody> shopHome1(@QueryMap Map<String, String> map);
+
     @GET
     Call<ResponseBody> url(@Url String url);
+
     @GET("shop/{abc}/home.json")
     Call<ResponseBody> url1(@Path("abc") String abc);
+
     @Multipart
     @POST("My/comment.uploadCmtPic.json")
-    Call<BaseEntity<UploadCmtPicEntity>> uploadPic1(@Query("ordersn") String ordersn,@Part MultipartBody.Part files);
+    Call<BaseEntity<UploadCmtPicEntity>> uploadPic1(@Query("ordersn") String ordersn, @Part MultipartBody.Part files);
+
     @Multipart
     @POST("My/Sign.step2.json")
     Call<BaseEntity<UploadCmtPicEntity>> uploadPics(@Part List<MultipartBody.Part> files);
@@ -91,14 +101,16 @@ public interface ApiService {
 
     /**
      * 选择推荐人
+     *
      * @param map
      * @return
      */
     @GET("member/register/codeList")
-    Call<BaseEntity<MemberCodeListEntity>> memberCodeList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MemberCodeListEntity>> memberCodeList(@QueryMap Map<String, String> map);
 
     /**
      * 发送验证码
+     *
      * @param requestBody
      * @return
      */
@@ -107,13 +119,26 @@ public interface ApiService {
 
     /**
      * 获取图形验证码
+     *
      * @return
      */
     @GET("member/Common/vcode")
     Call<ResponseBody> graphicalCode();
 
+    Call<ResponseBody> code();
+
+    @POST("/member/common/sendSmsCode")
+    Call<ResponseBody> sendSms(@Body RequestBody requestBody);
+
+    @POST("/member/login/index")
+    Call<BaseEntity<String>> login(@Body RequestBody requestBody);
+
+    @POST("/member/Common/checkCode")
+    Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+
     /**
      * 注册
+     *
      * @param requestBody
      * @return
      */
@@ -135,4 +160,10 @@ public interface ApiService {
      */
     @GET("member/register/checkCode")
     Call<BaseEntity<String>> checkCode(@QueryMap Map<String,String> map);
+
+    /**
+     * 找回密码
+     */
+    @POST("/member/userinfo/findPwd")
+    Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
 }

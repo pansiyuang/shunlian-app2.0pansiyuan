@@ -3,13 +3,17 @@ package com.shunlian.app.ui.login;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import butterknife.BindView;
@@ -18,9 +22,11 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/18.
  */
 
-public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListener, VerificationCodeInput.Listener {
+public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListener, VerificationCodeInput.Listener, ILoginView {
     private CountDownTimer countDownTimer;
     private String currentPhone;
+    private String currentVerfiCode;
+    private LoginPresenter loginPresenter;
 
     @BindView(R.id.tv_phone)
     TextView tv_phone;
@@ -85,6 +91,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         currentPhone = getIntent().getStringExtra("phoneNum");
+        loginPresenter = new LoginPresenter(this, this, LoginPresenter.TYPE_MOBILE);
         initViews();
     }
 
@@ -92,13 +99,25 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     protected void initListener() {
         super.initListener();
         tv_time.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
         input_code.setOnCompleteListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (countDownTimer != null) {
-            countDownTimer.start();
+        switch (view.getId()) {
+            case R.id.tv_time:
+                if (countDownTimer != null) {
+                    countDownTimer.start();
+                }
+                break;
+            case R.id.btn_complete:
+                if (TextUtils.isEmpty(currentVerfiCode) || currentVerfiCode.length() < 4) {
+                    Common.staticToast(getResources().getString(R.string.LoginPswFrg_qsryzm));
+                    return;
+                }
+                loginPresenter.LoginMobile(currentPhone.replaceAll(" ", ""), currentVerfiCode);
+                break;
         }
     }
 
@@ -111,6 +130,22 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onComplete(String content) {
+        currentVerfiCode = content;
+    }
+
+    @Override
+    public void login(String content) {
+        //登陆成功啦
+        Common.staticToast(content);
+    }
+
+    @Override
+    public void showFailureView() {
+
+    }
+
+    @Override
+    public void showDataEmptyView() {
 
     }
 }

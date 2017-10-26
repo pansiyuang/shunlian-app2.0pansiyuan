@@ -83,8 +83,7 @@ public class ClearableEditText extends EditText implements TextWatcher, View.OnF
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count,
-                                  int after) {
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
 
     @Override

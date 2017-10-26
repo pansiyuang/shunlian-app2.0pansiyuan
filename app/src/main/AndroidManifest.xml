@@ -59,10 +59,13 @@
         <activity
             android:name=".ui.register.TestAct"
             android:screenOrientation="portrait" />
-        <activity android:name=".wxapi.WXEntryActivity"
+        <activity
+            android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.FindPswAct"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

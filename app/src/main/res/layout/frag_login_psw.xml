@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -43,18 +44,18 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp">
 
-        <EditText
+        <com.shunlian.app.widget.MyEditText
             android:id="@+id/edt_psw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_hidden_psw"
             android:background="@null"
-            android:hint="@string/LoginPswFrg_qsrmm"
             android:inputType="textPassword"
             android:maxLength="16"
             android:textColorHint="@color/color_value_6c"
-            android:textSize="12sp" />
+            android:textSize="20sp"
+            app:hintText="@string/LoginPswFrg_qsrmm" />
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/iv_hidden_psw"
@@ -112,4 +113,16 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"></Button>
+
+    <TextView
+        android:id="@+id/tv_find_psw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/FindPsw_zhmm"
+        android:textColor="@color/share_text"
+        android:textSize="12sp"
+        android:textStyle="bold"></TextView>
 </LinearLayout>

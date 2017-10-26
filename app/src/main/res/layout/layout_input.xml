@@ -41,25 +41,33 @@
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@+id/ll_id"
         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
+        android:layout_marginRight="25dp"
+        android:orientation="vertical">
 
         <com.shunlian.app.widget.ClearableEditText
             android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:digits="0123456789"
             style="@style/editText_attribute"
             android:drawableRight="@mipmap/icon_login_delet"
             android:hint="@string/RegisterOneAct_qsrsjh"
             android:inputType="number"
             android:maxLength="13"
+            android:textColor="@color/color_value_6c"
+            android:textColorHint="@color/color_value_6c"
+            android:textCursorDrawable="@drawable/edit_cursor"
+            android:textSize="12sp" />
             android:digits="0123456789"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
-            android:background="@color/light_gray_two"/>
+            android:background="@color/light_gray_two" />
 
     </LinearLayout>
 

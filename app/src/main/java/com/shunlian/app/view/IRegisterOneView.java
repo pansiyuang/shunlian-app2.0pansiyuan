@@ -6,9 +6,10 @@ package com.shunlian.app.view;
 
 public interface IRegisterOneView extends IView {
 
-    void  setCode(byte[] bytes);
+    void setCode(byte[] bytes);
 
     void smsCode(String smsCode);
+
 
     /**
      * 推荐人id验证
