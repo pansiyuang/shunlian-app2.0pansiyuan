@@ -2,30 +2,52 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
-
-    packagingOptions {
-        exclude 'META-INF/LICENSE'
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
+
+    signingConfigs {
+        ShunLianPower {
+            List<String> lists = new File('D:/signState.txt').readLines();
+            String alias = lists.get(0);
+            String pwd = lists.get(1);
+            storeFile file('D:/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
+    }
+    compileSdkVersion 24
+    buildToolsVersion '25.0.1'
     defaultConfig {
+        //注释掉是因为项目中已有,无需重复设置
+//        ndk {
+//            //设置支持的SO库架构
+//            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+//        }
         applicationId "com.shunlian.app"
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 14
-        versionName "1.4.2"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "1.6.8"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.ShunLianPower
     }
     buildTypes {
         release {
-            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.ShunLianPower
+        }
+        debug {
+            signingConfig signingConfigs.ShunLianPower
         }
     }
 }
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //        androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
