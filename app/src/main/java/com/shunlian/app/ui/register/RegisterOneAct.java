@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -19,7 +16,6 @@ import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
@@ -63,36 +59,28 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         return R.layout.activity_register_one;
     }
 
-    public void setHintSize(EditText editText,String content) {
-        SpannableString ss = new SpannableString(content);
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(this, 12));
-        ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        editText.setHint(ss);
-    }
-
     @Override
     protected void initListener() {
         super.initListener();
-//        setHintSize(et_phone,"请输入手机号码");
 
         et_phone.addTextChangedListener(new PhoneTextWatcher(et_phone));
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
         miv_logo.setOnClickListener(this);
-//        et_phone.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (isEtIdEmpty()) {
-//                    return false;
-//                } else {
-//                    if (TextUtils.isEmpty(id)) {
-//                        id = et_id.getText().toString();
-//                    }
-//                    onePresenter.checkCode(id);
-//                }
-//                return false;
-//            }
-//        });
+        et_phone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isEtIdEmpty()) {
+                    return false;
+                } else {
+                    if (TextUtils.isEmpty(id)) {
+                        id = et_id.getText().toString();
+                    }
+                    onePresenter.checkCode(id);
+                }
+                return false;
+            }
+        });
 
         et_phone.addTextChangedListener(new SimpleTextWatcher() {
             @Override
@@ -131,7 +119,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     private boolean isEtPhoneEmpty() {
         String phone = et_phone.getText().toString().replaceAll(" ", "");
         if (TextUtils.isEmpty(phone)) {
-            Common.staticToast("手机号不能为空");
+            Common.staticToast(getString(R.string.RegisterOneAct_sjhbnwk));
             setEdittextFocusable(true, et_phone);
             setEdittextFocusable(false, et_code);
             return true;
@@ -142,7 +130,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     private boolean isEtIdEmpty() {
         Editable text = et_id.getText();
         if (TextUtils.isEmpty(text)) {
-            Common.staticToast("推荐人id不能为空");
+            Common.staticToast(getString(R.string.RegisterOneAct_tjridbnwk));
             setEdittextFocusable(true, et_id);
             setEdittextFocusable(false, et_phone, et_code);
             return true;
@@ -182,8 +170,6 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             String nickname = data.getStringExtra("nickname");
             et_id.setText(nickname);
             setEdittextFocusable(true, et_phone);
-            // TODO: 2017/10/25 软键盘不弹出
-            Common.showKeyboard(et_phone);
         }
     }
 
@@ -193,7 +179,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             miv_code.setImageBitmap(bitmap);
         } else {
-            Common.staticToast("获取验证码失败");
+            Common.staticToast(getString(R.string.RegisterOneAct_hqyzmsb));
         }
     }
 
@@ -206,7 +192,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null);
             finish();
         } else {
-            Common.staticToast("手机验证码发送失败");
+            Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
         }
     }
 

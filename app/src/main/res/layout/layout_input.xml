@@ -16,10 +16,10 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
 
-        <EditText
+        <com.shunlian.app.widget.MyEditText
             android:id="@+id/et_id"
             style="@style/editText_attribute"
-            android:hint="@string/RegisterOneAct_qsrtjrid"
+            app:hintText="@string/RegisterOneAct_qsrtjrid"
             android:drawableBottom = "@drawable/edittext_line"
             android:drawablePadding ="10dp"
             />
@@ -81,12 +81,12 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="15dp">
 
-        <EditText
+        <com.shunlian.app.widget.MyEditText
             android:id="@+id/et_code"
             style="@style/editText_attribute"
             android:drawableBottom="@drawable/edittext_line"
             android:drawablePadding="10dp"
-            android:hint="@string/RegisterOneAct_qsryzm"
+            app:hintText="@string/RegisterOneAct_qsryzm"
             android:layout_marginTop="10dp"
             android:inputType="number"
             android:maxLength="4"/>

@@ -82,12 +82,12 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
                 super.afterTextChanged(s);
                 Editable text = et_id.getText();
                 if (state == USER_STATES_NEW && TextUtils.isEmpty(text)) {
-                    Common.staticToast("推荐人id不能为空");
+                    Common.staticToast(getString(R.string.RegisterOneAct_tjridbnwk));
                     return;
                 }
                 String phone = et_phone.getText().toString().replaceAll(" ", "");
                 if (TextUtils.isEmpty(phone)) {
-                    Common.staticToast("手机号不能为空");
+                    Common.staticToast(getString(R.string.RegisterOneAct_sjhbnwk));
                     return;
                 }
                 if (!TextUtils.isEmpty(s) && s.length() >= 4) {
@@ -139,7 +139,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
             }
             RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, "", TYPE_REGIST);
         } else {
-            Common.staticToast("手机验证码发送失败");
+            Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
         }
     }
 

@@ -97,7 +97,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             public void onComplete(String content) {
                 mCode = content;
                 if (!smsCode.equals(content)){
-                    Common.staticToast("手机验证码错误");
+                    Common.staticToast(getString(R.string.RegisterTwoAct_shyzmcw));
                 }else {
                     setEdittextFocusable(true,et_pwd);
                 }
@@ -139,7 +139,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 }
                 String pwd = et_pwd.getText().toString();
                 if (!Common.regularPwd(pwd)){
-                    Common.staticToast("密码至少8位，由字母和数字组合");
+                    Common.staticToast(getString(R.string.RegisterTwoAct_mmzh));
                     setEdittextFocusable(true,et_pwd);
                     setEdittextFocusable(false,et_rpwd);
                     return false;
@@ -178,7 +178,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     String pwd = et_pwd.getText().toString();
                     String rpwd = et_rpwd.getText().toString();
                     if (!pwd.equals(rpwd)){
-                        Common.staticToast("两次输入的密码不一致");
+                        Common.staticToast(getString(R.string.RegisterTwoAct_mmbyz));
                         setEdittextFocusable(true,et_rpwd);
                         setEdittextFocusable(false,et_nickname);
                         return false;
@@ -195,7 +195,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             public void afterTextChanged(Editable s) {
                 byte[] bytes = s.toString().getBytes();
                 if (bytes.length > 24){
-                    Common.staticToast("昵称设置过长");
+                    Common.staticToast(getString(R.string.RegisterTwoAct_ncszgc));
                     et_nickname.setText(nickname);
                     et_nickname.setSelection(nickname.length());
                 }else {
@@ -207,7 +207,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     private boolean checkCode(EditText editText) {
         if (TextUtils.isEmpty(mCode)){
-            Common.staticToast("请输入手机验证码");
+            Common.staticToast(getString(R.string.RegisterTwoAct_sjyzm));
             setEdittextFocusable(false,editText);
             return true;
         }
@@ -217,7 +217,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private boolean isEtPwdEmpty(EditText active ,EditText passive){
         String pwd = active.getText().toString();
         if (TextUtils.isEmpty(pwd)){
-            Common.staticToast("密码不能为空");
+            Common.staticToast(getString(R.string.RegisterTwoAct_mmbnwk));
             setEdittextFocusable(true,active);
             setEdittextFocusable(false,passive);
             return true;
@@ -258,7 +258,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onFinish() {
-                tv_time.setText("重新获取");
+                tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
                 tv_time.setEnabled(true);
             }
         };
