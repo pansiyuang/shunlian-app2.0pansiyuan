@@ -60,6 +60,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private String unique_sign;
     private RegisterTwoPresenter registerTwoPresenter;
     private String phone;
+    private String mCode;
 
     public static void startAct(Context context, String smsCode, String phone, String codeId,String unique_sign){
         Intent intent = new Intent(context,RegisterTwoAct.class);
@@ -87,11 +88,25 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
             @Override
             public void onComplete(String content) {
+                mCode = content;
                 if (!smsCode.equals(content)){
                     Common.staticToast("手机验证码错误");
+                }else {
+                    setEdittextFocusable(true,et_pwd);
                 }
             }
         });
+
+        et_pwd.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (checkCode(et_pwd)){
+                    return false;
+                }
+                return false;
+            }
+        });
+
 
         et_pwd.addTextChangedListener(new SimpleTextWatcher(){
             @Override
@@ -110,17 +125,19 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         et_rpwd.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                String pwd = et_pwd.getText().toString();
-                if (TextUtils.isEmpty(pwd)){
-                    Common.staticToast("密码不能为空");
-                    setEdittextFocusable(true,et_pwd);
+                if (checkCode(et_rpwd))
+                    return false;
+                if (isEtPwdEmpty(et_pwd,et_rpwd)){
                     return false;
                 }
+                String pwd = et_pwd.getText().toString();
                 if (!Common.regularPwd(pwd)){
-                    Common.staticToast("密码只能由字母和数字组合");
-                    et_pwd.setText("");
+                    Common.staticToast("密码至少8位，由字母和数字组合");
                     setEdittextFocusable(true,et_pwd);
+                    setEdittextFocusable(false,et_rpwd);
                     return false;
+                }else {
+                    setEdittextFocusable(true,et_rpwd);
                 }
                 return false;
             }
@@ -139,24 +156,34 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        et_nickname.addTextChangedListener(new SimpleTextWatcher() {
+        et_nickname.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String pwd = et_pwd.getText().toString();
-                String rpwd = et_rpwd.getText().toString();
-                if (TextUtils.isEmpty(rpwd)){
-                    Common.staticToast("密码不能为空");
-                    setEdittextFocusable(true,et_rpwd);
-                    return;
+            public boolean onTouch(View v, MotionEvent event) {
+                if (checkCode(et_nickname))
+                    return false;
+                if (isEtPwdEmpty(et_pwd,et_nickname)){
+                    return false;
                 }
-                if (!pwd.equals(rpwd)){
-                    Common.staticToast("两次输入的密码不一致");
-                    et_rpwd.setText("");
-                    setEdittextFocusable(true,et_rpwd);
-                    return;
-                }
-            }
 
+                if (isEtPwdEmpty(et_rpwd,et_nickname)){
+                    return false;
+                }else {
+                    String pwd = et_pwd.getText().toString();
+                    String rpwd = et_rpwd.getText().toString();
+                    if (!pwd.equals(rpwd)){
+                        Common.staticToast("两次输入的密码不一致");
+                        setEdittextFocusable(true,et_rpwd);
+                        setEdittextFocusable(false,et_nickname);
+                        return false;
+                    }else {
+                        setEdittextFocusable(true, et_nickname);
+                    }
+                }
+                return false;
+            }
+        });
+
+        et_nickname.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 byte[] bytes = s.toString().getBytes();
@@ -169,6 +196,26 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 }
             }
         });
+    }
+
+    private boolean checkCode(EditText editText) {
+        if (TextUtils.isEmpty(mCode)){
+            Common.staticToast("请输入手机验证码");
+            setEdittextFocusable(false,editText);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isEtPwdEmpty(EditText active ,EditText passive){
+        String pwd = active.getText().toString();
+        if (TextUtils.isEmpty(pwd)){
+            Common.staticToast("密码不能为空");
+            setEdittextFocusable(true,active);
+            setEdittextFocusable(false,passive);
+            return true;
+        }
+        return false;
     }
 
     @Override
