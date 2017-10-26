@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.login;
 
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
-import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -114,6 +114,11 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     public void smsCode(String smsCode) {
         String currentPhoneNum = edt_account.getText().toString();
         InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum);
+    }
+
+    @Override
+    public void checkCode(boolean isSuccess) {
+
     }
 
 

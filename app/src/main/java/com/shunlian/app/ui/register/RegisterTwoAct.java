@@ -26,6 +26,7 @@ import butterknife.BindView;
 public class RegisterTwoAct extends BaseActivity implements View.OnClickListener, IRegisterTwoView {
     public static String TYPE_FIND_PSW = "find_password";
     public static String TYPE_REGIST = "regist";
+    public static String TYPE_WX_LOGIN = "wx_login";
     private String currentType;
 
     @BindView(R.id.tv_phone)
@@ -65,12 +66,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private RegisterTwoPresenter registerTwoPresenter;
     private String phone;
 
-    public static void startAct(Context context, String smsCode, String phone, String codeId,String unique_sign){
-        Intent intent = new Intent(context,RegisterTwoAct.class);
-        intent.putExtra("phone",phone);
-        intent.putExtra("smsCode",smsCode);
-        intent.putExtra("codeId",codeId);
-        intent.putExtra("unique_sign",unique_sign);
+    public static void startAct(Context context, String smsCode, String phone, String codeId, String unique_sign, String type) {
+        Intent intent = new Intent(context, RegisterTwoAct.class);
+        intent.putExtra("phone", phone);
+        intent.putExtra("smsCode", smsCode);
+        intent.putExtra("codeId", codeId);
+        intent.putExtra("unique_sign", unique_sign);
         intent.putExtra("type", type);
         context.startActivity(intent);
     }
@@ -195,7 +196,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
         countDown();
 
-        registerTwoPresenter = new RegisterTwoPresenter(this, null);
+        registerTwoPresenter = new RegisterTwoPresenter(this, this);
 
     }
 
@@ -250,8 +251,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 if (TYPE_FIND_PSW.equals(currentType)) {
                     registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), smsCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname);
-                }else {
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, "");
+                } else if (TYPE_WX_LOGIN.equals(currentType)) {
                     registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;

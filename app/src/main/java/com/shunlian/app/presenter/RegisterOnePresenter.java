@@ -74,10 +74,6 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
         });
     }
 
-    public void sendSmsCode(String phone,String code){
-        Map<String,String> map = new HashMap<>();
-        map.put("mobile",phone);
-        map.put("vcode",code);
     public void sendSmsCode(String phone, String code) {
         Map<String, String> map = new HashMap<>();
         map.put("mobile", phone);

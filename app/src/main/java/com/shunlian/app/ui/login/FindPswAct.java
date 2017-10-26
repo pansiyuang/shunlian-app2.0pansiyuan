@@ -90,7 +90,12 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     @Override
     public void smsCode(String smsCode) {
         String phoneNum = et_phone.getText().toString();
-        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", TYPE_FIND_PSW);
+        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", "", TYPE_FIND_PSW);
+    }
+
+    @Override
+    public void checkCode(boolean isSuccess) {
+
     }
 
     @Override
