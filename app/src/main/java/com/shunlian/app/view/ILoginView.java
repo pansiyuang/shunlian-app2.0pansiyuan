@@ -6,4 +6,8 @@ package com.shunlian.app.view;
 
 public interface ILoginView extends IView {
     void login(String content);
+
+    void getSmsCode(String code);
+
+    void loginFail(String erroMsg);
 }

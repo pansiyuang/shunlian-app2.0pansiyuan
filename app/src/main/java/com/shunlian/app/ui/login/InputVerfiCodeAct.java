@@ -27,8 +27,8 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     private CountDownTimer countDownTimer;
     private String currentPhone;
     private String currentVerfiCode;
+    private String picCode;
     private LoginPresenter loginPresenter;
-
     @BindView(R.id.tv_phone)
     TextView tv_phone;
 
@@ -51,9 +51,10 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     Button btn_complete;
 
 
-    public static void startAct(Context context, String phoneNum) {
+    public static void startAct(Context context, String phoneNum, String vCode) {
         Intent intent = new Intent(context, InputVerfiCodeAct.class);
         intent.putExtra("phoneNum", phoneNum);
+        intent.putExtra("vCode", vCode);
         context.startActivity(intent);
     }
 
@@ -92,6 +93,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         currentPhone = getIntent().getStringExtra("phoneNum");
+        picCode = getIntent().getStringExtra("vCode");
         loginPresenter = new LoginPresenter(this, this, LoginPresenter.TYPE_MOBILE);
         initViews();
     }
@@ -111,6 +113,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
                 if (countDownTimer != null) {
                     countDownTimer.start();
                 }
+                loginPresenter.sendSmsCode(currentPhone.replaceAll(" ", ""), picCode);
                 break;
             case R.id.btn_complete:
                 if (TextUtils.isEmpty(currentVerfiCode) || currentVerfiCode.length() < 4) {
@@ -137,8 +140,18 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     @Override
     public void login(String content) {
         //登陆成功啦
-        SharedPrefUtil.saveSharedPrfString("token","");
+        SharedPrefUtil.saveSharedPrfString("token", content);
         Common.staticToast(content);
+    }
+
+    @Override
+    public void getSmsCode(String code) {
+        currentVerfiCode = code;
+    }
+
+    @Override
+    public void loginFail(String erroMsg) {
+        Common.staticToast(erroMsg);
     }
 
     @Override
