@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_below="@+id/miv_logo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="55dp"
+    app:ll_control_adapter="true"
+    app:ll_control_width="720"
+    app:ll_control_height="1280"
+    app:ll_margin_top="110"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rl_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,11 +36,12 @@
             android:padding="5dp"
             android:text="@string/RegisterOneAct_sjxztjr"
             android:textColor="@color/new_text"
+            android:layout_marginTop="5dp"
             android:textSize="10sp" />
 
-    </RelativeLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
 
-    <LinearLayout
+    <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,9 +74,9 @@
             android:layout_marginTop="10dp"
             android:background="@color/light_gray_two" />
 
-    </LinearLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
 
-    <RelativeLayout
+    <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rl_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,6 +102,7 @@
             app:iv_control_adapter="true"
             app:iv_control_height="60"
             app:iv_control_width="144"
+            app:iv_margin_top="15"
             android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-</LinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
+</com.shunlian.app.widget.MyLinearLayout>

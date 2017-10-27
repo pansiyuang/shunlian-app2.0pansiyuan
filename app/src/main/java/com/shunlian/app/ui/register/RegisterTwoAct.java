@@ -29,6 +29,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     public static String TYPE_FIND_PSW = "find_password";
     public static String TYPE_REGIST = "regist";
     private String currentType;
+    private String pictureCode;
 
     @BindView(R.id.tv_phone)
     TextView tv_phone;
@@ -68,13 +69,14 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private String phone;
     private String mCode;
 
-    public static void startAct(Context context, String smsCode, String phone, String codeId, String unique_sign, String type) {
+    public static void startAct(Context context, String smsCode, String phone, String codeId, String unique_sign, String type,String pictureCode) {
         Intent intent = new Intent(context, RegisterTwoAct.class);
-        intent.putExtra("phone", phone);
-        intent.putExtra("smsCode", smsCode);
-        intent.putExtra("codeId", codeId);
-        intent.putExtra("unique_sign", unique_sign);
+        intent.putExtra("phone", phone);//手机号
+        intent.putExtra("smsCode", smsCode);//手机验证码
+        intent.putExtra("codeId", codeId);//推荐人id
+        intent.putExtra("unique_sign", unique_sign);//微信标识
         intent.putExtra("type", type);
+        intent.putExtra("pictureCode", pictureCode);//图形验证码
         context.startActivity(intent);
     }
 
@@ -235,7 +237,10 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         codeId = getIntent().getStringExtra("codeId");
         unique_sign = getIntent().getStringExtra("unique_sign");
         currentType = getIntent().getStringExtra("type");
-
+        pictureCode = getIntent().getStringExtra("pictureCode");
+        if (!TextUtils.isEmpty(unique_sign)){
+            btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
+        }
         tv_phone.setText(phone);
 
         if (TYPE_FIND_PSW.equals(currentType)) {
@@ -294,6 +299,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 if (countDownTimer != null) {
                     countDownTimer.start();
                 }
+                registerTwoPresenter.sendSmsCode(phone.replaceAll(" ", ""),pictureCode);
                 break;
             case R.id.btn_complete:
                 if (TYPE_FIND_PSW.equals(currentType)) {
@@ -334,6 +340,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @Override
     public void registerFinish(RegisterFinishEntity entity) {
         SharedPrefUtil.saveSharedPrfString("token", entity.token);
+        Common.staticToast("注册成功");
+    }
+
+    @Override
+    public void smsCode(String smsCode) {
 
     }
 

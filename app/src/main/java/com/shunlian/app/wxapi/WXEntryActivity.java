@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.ui.register.BindingPhoneAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -181,7 +181,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     public void onWXCallback(WXLoginEntity wxLoginEntity) {
         if (wxLoginEntity != null){
             String unique_sign = wxLoginEntity.unique_sign;
-            RegisterOneAct.stratAct(this,unique_sign);
+            int member_id = wxLoginEntity.member_id;
+            int status = wxLoginEntity.status;
+             if (status == 2){
+                 BindingPhoneAct.startAct(this,0,unique_sign);
+            }else if (status == 1){
+                SharedPrefUtil.saveSharedPrfString("token","");
+            }else {
+                 BindingPhoneAct.startAct(this,1,unique_sign);
+            }
             finish();
         }
     }

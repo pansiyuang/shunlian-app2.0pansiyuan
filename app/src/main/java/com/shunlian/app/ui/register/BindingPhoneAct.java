@@ -23,8 +23,6 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_REGIST;
-
 public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, View.OnClickListener {
     /**
      * 用户状态
@@ -38,10 +36,12 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
     private RegisterOnePresenter onePresenter;
     private int state;
     private String id;
+    private String unique_sign;
 
-    public static void startAct(Context context, int state) {
+    public static void startAct(Context context, int state,String unique_sign) {
         Intent intent = new Intent(context, BindingPhoneAct.class);
         intent.putExtra("state", state);
+        intent.putExtra("unique_sign", unique_sign);
         context.startActivity(intent);
     }
 
@@ -104,6 +104,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         state = getIntent().getIntExtra("state", -1);
+        unique_sign = getIntent().getStringExtra("unique_sign");
         if (state == USER_STATES || state == USER_STATES_OLD) {
             rl_id.setVisibility(View.GONE);
         }
@@ -137,7 +138,8 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
             if (state == USER_STATES_NEW && TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, "", TYPE_REGIST);
+            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null,et_code.getText().toString());
+            finish();
         } else {
             Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
         }

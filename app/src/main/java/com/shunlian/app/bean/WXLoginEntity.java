@@ -18,6 +18,7 @@ public class WXLoginEntity {
     public String id;
     public String unique_sign;
     public int member_id;
+    public int status;
 
     @Override
     public String toString() {

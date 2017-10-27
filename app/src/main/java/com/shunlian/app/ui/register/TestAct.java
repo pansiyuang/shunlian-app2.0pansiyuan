@@ -48,13 +48,13 @@ public class TestAct extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv1:
-                BindingPhoneAct.startAct(this,0);
+                BindingPhoneAct.startAct(this,0,null);
                 break;
             case R.id.tv2:
-                BindingPhoneAct.startAct(this,1);
+                BindingPhoneAct.startAct(this,1,null);
                 break;
             case R.id.tv3:
-                BindingPhoneAct.startAct(this,2);
+                BindingPhoneAct.startAct(this,2,null);
                 break;
         }
     }

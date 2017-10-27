@@ -108,7 +108,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext,null);
+                RegisterOneAct.stratAct(baseContext);
                 break;
 
             case R.id.tv_find_psw:

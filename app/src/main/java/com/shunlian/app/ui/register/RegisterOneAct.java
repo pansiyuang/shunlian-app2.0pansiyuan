@@ -48,9 +48,8 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     private boolean isCheckCode;
     private String unique_sign;
 
-    public static void stratAct(Context context, String unique_sign) {
+    public static void stratAct(Context context) {
         Intent intent = new Intent(context, RegisterOneAct.class);
-        intent.putExtra("unique_sign", unique_sign);
         context.startActivity(intent);
     }
 
@@ -189,7 +188,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null);
+            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null,et_code.getText().toString());
             finish();
         } else {
             Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));

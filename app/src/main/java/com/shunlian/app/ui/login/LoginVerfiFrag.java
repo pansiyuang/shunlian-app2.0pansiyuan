@@ -88,7 +88,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 onePresenter.getCode();
                 break;
             case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext,null);
+                RegisterOneAct.stratAct(baseContext);
                 break;
         }
     }
