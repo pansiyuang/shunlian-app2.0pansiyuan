@@ -17,6 +17,7 @@ import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
 
@@ -41,6 +42,8 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     @BindView(R.id.tv_new_regist)
     TextView tv_new_regist;
 
+    @BindView(R.id.tv_wx_login)
+    TextView tv_wx_login;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -70,6 +73,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
         edt_verifi.addTextChangedListener(new MyTextWatch());
         iv_verifi.setOnClickListener(this);
+        tv_wx_login.setOnClickListener(this);
 
     }
 
@@ -88,7 +92,10 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 onePresenter.getCode();
                 break;
             case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext,null);
+                RegisterOneAct.stratAct(baseContext, null);
+                break;
+            case R.id.tv_wx_login:
+                WXEntryActivity.startAct(baseActivity, "login");
                 break;
         }
     }
@@ -113,7 +120,8 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     @Override
     public void smsCode(String smsCode) {
         String currentPhoneNum = edt_account.getText().toString();
-        InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum);
+        String verifiCode = edt_verifi.getText().toString();
+        InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum, verifiCode);
     }
 
     @Override

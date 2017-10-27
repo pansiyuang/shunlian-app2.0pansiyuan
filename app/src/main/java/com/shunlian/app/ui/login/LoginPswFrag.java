@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -108,7 +109,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext,null);
+                RegisterOneAct.stratAct(baseContext, null);
                 break;
 
             case R.id.tv_find_psw:
@@ -133,7 +134,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 loginPresenter.LoginUserName(currentAccount, currentPsw);
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity,"login");
+                WXEntryActivity.startAct(baseActivity, "login");
                 break;
         }
     }
@@ -152,7 +153,19 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void login(String content) {
+        //登陆成功啦
+        SharedPrefUtil.saveSharedPrfString("token", content);
+        Common.staticToast(content);
+    }
 
+    @Override
+    public void getSmsCode(String code) {
+
+    }
+
+    @Override
+    public void loginFail(String erroMsg) {
+        Common.staticToast(erroMsg);
     }
 
     @Override

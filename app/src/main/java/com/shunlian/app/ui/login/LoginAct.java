@@ -49,8 +49,8 @@ public class LoginAct extends BaseActivity {
         fragmentList = new ArrayList<>();
         pswFrag = new LoginPswFrag();
         verfiFrag = new LoginVerfiFrag();
-        fragmentList.add(verfiFrag);
         fragmentList.add(pswFrag);
+        fragmentList.add(verfiFrag);
         mAdapter = new ViewPagerAdapter(fragmentManager, fragmentList);
 
         mViewPager.setAdapter(mAdapter);

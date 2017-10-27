@@ -131,7 +131,7 @@ public interface ApiService {
     Call<ResponseBody> sendSms(@Body RequestBody requestBody);
 
     @POST("/member/login/index")
-    Call<BaseEntity<String>> login(@Body RequestBody requestBody);
+    Call<ResponseBody> login(@Body RequestBody requestBody);
 
     @POST("/member/Common/checkCode")
     Call<ResponseBody> checkCode(@Body RequestBody requestBody);
@@ -147,6 +147,7 @@ public interface ApiService {
 
     /**
      * 微信登录
+     *
      * @param requestBody
      * @return
      */
@@ -155,11 +156,12 @@ public interface ApiService {
 
     /**
      * 推荐人验证
+     *
      * @param map
      * @return
      */
     @GET("member/register/checkCode")
-    Call<BaseEntity<String>> checkCode(@QueryMap Map<String,String> map);
+    Call<BaseEntity<String>> checkCode(@QueryMap Map<String, String> map);
 
     /**
      * 找回密码
