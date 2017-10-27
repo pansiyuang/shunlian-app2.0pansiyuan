@@ -181,17 +181,18 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     public void onWXCallback(WXLoginEntity wxLoginEntity) {
         if (wxLoginEntity != null){
             String unique_sign = wxLoginEntity.unique_sign;
-            int member_id = wxLoginEntity.member_id;
-            int status = wxLoginEntity.status;
-             if (status == 2){
+            String status = wxLoginEntity.status;
+             if ("2".equals(status)){
                  BindingPhoneAct.startAct(this,0,unique_sign);
-            }else if (status == 1){
-                SharedPrefUtil.saveSharedPrfString("token","");
+            }else if ("1".equals(status)){
+                 Common.staticToast("登录成功");
+                SharedPrefUtil.saveSharedPrfString("token",wxLoginEntity.token);
             }else {
                  BindingPhoneAct.startAct(this,1,unique_sign);
             }
             finish();
         }
+        finish();
     }
 
     private class MyHandler extends Handler {

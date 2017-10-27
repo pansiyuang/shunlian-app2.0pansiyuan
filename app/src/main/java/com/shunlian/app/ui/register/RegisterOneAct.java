@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
@@ -147,6 +148,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        if (FastClickListener.isFastClick()){
+            return;
+        }
         switch (v.getId()) {
             case R.id.tv_select:
                 SelectRecommendAct.startAct(this);
@@ -188,7 +192,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, null,et_code.getText().toString());
+            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, RegisterTwoAct.TYPE_REGIST,et_code.getText().toString());
             finish();
         } else {
             Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));

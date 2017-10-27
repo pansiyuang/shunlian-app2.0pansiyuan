@@ -23,6 +23,7 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SelectRecommendPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectRecommendView;
@@ -149,6 +150,9 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        if (FastClickListener.isFastClick()){
+            return;
+        }
        switch (v.getId()){
            case R.id.tv_next:
                presenter.initApi();

@@ -17,15 +17,36 @@ public class WXLoginEntity {
 
     public String id;
     public String unique_sign;
-    public int member_id;
-    public int status;
+    public String member_id;
+    public String status;
+    public String mobile;
+    public String shareid;
+    public String code;
+    public String username;
+    public String nickname;
+    public String avatar;
+    public String is_agent;
+    public String time;
+    public String token_expires_in;
+    public String token;
 
     @Override
     public String toString() {
         return "WXLoginEntity{" +
                 "id='" + id + '\'' +
                 ", unique_sign='" + unique_sign + '\'' +
-                ", member_id=" + member_id +
+                ", member_id='" + member_id + '\'' +
+                ", status='" + status + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", shareid='" + shareid + '\'' +
+                ", code='" + code + '\'' +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", is_agent='" + is_agent + '\'' +
+                ", time='" + time + '\'' +
+                ", token_expires_in='" + token_expires_in + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

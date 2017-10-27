@@ -22,6 +22,7 @@ package com.shunlian.app.presenter;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
@@ -32,6 +33,7 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.view.IView;
 
 import java.math.BigInteger;
@@ -147,6 +149,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         if (tCall == null || callback == null)
             return;
 
+        if (!NetworkUtils.isNetworkAvailable((Activity) context)){
+            return;
+        }
         tCall.enqueue(new Callback<BaseEntity<T>>() {
             @Override
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {

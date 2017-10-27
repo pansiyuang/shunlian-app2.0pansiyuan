@@ -16,7 +16,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
@@ -272,6 +274,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        if (FastClickListener.isFastClick()){
+            return;
+        }
         switch (v.getId()) {
             case R.id.iv_hidden_psw:
                 if (isHiddenPwd) {//隐藏
@@ -339,7 +344,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void registerFinish(RegisterFinishEntity entity) {
-        SharedPrefUtil.saveSharedPrfString("token", entity.token);
+        if (TYPE_REGIST.equals(currentType) || TYPE_FIND_PSW.equals(currentType)){
+            LoginAct.startAct(this);
+        }else {
+            SharedPrefUtil.saveSharedPrfString("token", entity.token);
+        }
         Common.staticToast("注册成功");
     }
 

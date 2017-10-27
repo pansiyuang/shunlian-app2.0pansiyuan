@@ -72,7 +72,7 @@ public class RegisterTwoPresenter extends BasePresenter<IRegisterTwoView> {
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), s);
-        Call<BaseEntity<RegisterFinishEntity>> register = getApiService().register(requestBody);
+        Call<BaseEntity<RegisterFinishEntity>> register = getSaveCookieApiService().register(requestBody);
         getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
             @Override
             public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {

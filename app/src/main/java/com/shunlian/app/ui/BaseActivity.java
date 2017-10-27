@@ -53,11 +53,13 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
+    private ImmersionBar immersionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ImmersionBar.with(this).init();
+        immersionBar = ImmersionBar.with(this);
+        immersionBar.init();
         setContentView(getLayoutId());
         unbinder = ButterKnife.bind(this);
         finishAct();
@@ -127,7 +129,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param statusBarColor
      */
     public void setStatusBarColor(@ColorRes int statusBarColor) {
-        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(statusBarColor).init();
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.fitsSystemWindows(true).statusBarColor(statusBarColor).init();
     }
 
     /**
@@ -136,36 +141,51 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 如果不支持修改颜色就给状态栏设置为透明度
      */
     public void setStatusBarFontDark() {
-        ImmersionBar.with(this).statusBarDarkFont(true, 0.2f).init();
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.statusBarDarkFont(true, 0.2f).init();
     }
 
     /**
      * 隐藏状态栏
      */
     public void setHideStatus() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR).init();
     }
 
     /**
      * 如果此设备有导航栏的话，调用该方法隐藏导航栏
      */
     public void setHideNavigation() {
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
         if (ImmersionBar.hasNavigationBar(this))
-            ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
+            immersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR).init();
     }
 
     /**
      * 隐藏导航栏和状态栏
      */
     public void setHideStatusAndNavigation() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.hideBar(BarHide.FLAG_HIDE_BAR).init();
     }
 
     /**
      * 恢复显示导航栏和状态栏
      */
     public void setShowStatusAndNavigation() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
+        immersionBar.hideBar(BarHide.FLAG_SHOW_BAR).init();
     }
 
     /**
@@ -215,6 +235,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             unbinder.unbind();
         }
         super.onDestroy();
-        ImmersionBar.with(this).destroy();
+        if (immersionBar != null){
+            immersionBar.destroy();
+        }
     }
 }

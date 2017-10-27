@@ -42,15 +42,13 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),json);
-        final Call<BaseEntity<WXLoginEntity>> baseEntityCall = getApiService().wxLogin(requestBody);
+        final Call<BaseEntity<WXLoginEntity>> baseEntityCall = getSaveCookieApiService().wxLogin(requestBody);
 
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<WXLoginEntity>>(){
             @Override
             public void onSuccess(BaseEntity<WXLoginEntity> entity) {
                 super.onSuccess(entity);
-                if (entity.data.member_id == 0){
-                   iView.onWXCallback(entity.data);
-                }
+                iView.onWXCallback(entity.data);
             }
         });
     }
