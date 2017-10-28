@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
+import com.shunlian.mylibrary.KeyboardPatch;
 
 import butterknife.BindView;
 
@@ -43,6 +45,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.miv_logo)
     MyImageView miv_logo;
+
+    @BindView(R.id.view_title)
+    View view_title;
 
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
@@ -140,8 +145,15 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        miv_logo.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            view_title.setVisibility(View.VISIBLE);
+            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
+            KeyboardPatch.patch(this).enable();
+        }else {
+            view_title.setVisibility(View.GONE);
+        }
+
         unique_sign = getIntent().getStringExtra("unique_sign");
         onePresenter = new RegisterOnePresenter(RegisterOneAct.this, this);
     }
@@ -158,9 +170,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             case R.id.miv_code:
                 onePresenter.getCode();
                 break;
-            case R.id.miv_logo:
-                TestAct.startAct(this);
-                break;
+//            case R.id.miv_logo:
+//                TestAct.startAct(this);
+//                break;
         }
     }
 

@@ -24,7 +24,7 @@ public class MyEditText extends EditText {
     private Context mContext;
 
     public MyEditText(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public MyEditText(Context context, AttributeSet attrs) {

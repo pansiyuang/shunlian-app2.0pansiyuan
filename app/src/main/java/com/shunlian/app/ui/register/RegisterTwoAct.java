@@ -2,6 +2,7 @@ package com.shunlian.app.ui.register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
@@ -24,6 +25,7 @@ import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
+import com.shunlian.mylibrary.KeyboardPatch;
 
 import butterknife.BindView;
 
@@ -59,6 +61,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.btn_complete)
     Button btn_complete;
+
+    @BindView(R.id.view_title)
+    View view_title;
 
     private String nickname;
     private boolean isHiddenPwd;
@@ -231,8 +236,13 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            view_title.setVisibility(View.VISIBLE);
+            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
+            KeyboardPatch.patch(this).enable();
+        }else {
+            view_title.setVisibility(View.GONE);
+        }
 
         phone = getIntent().getStringExtra("phone");
         smsCode = getIntent().getStringExtra("smsCode");

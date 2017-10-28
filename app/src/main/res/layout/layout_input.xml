@@ -1,108 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_below="@+id/miv_logo"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:ll_control_adapter="true"
-    app:ll_control_width="720"
-    app:ll_control_height="1280"
-    app:ll_margin_top="110"
-    android:orientation="vertical">
-
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:id="@+id/rl_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/miv_logo"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
-
-        <com.shunlian.app.widget.MyEditText
-            android:id="@+id/et_id"
-            style="@style/editText_attribute"
-            app:hintText="@string/RegisterOneAct_qsrtjrid"
-            android:drawableBottom = "@drawable/edittext_line"
-            android:drawablePadding ="10dp"
-            />
-
-        <TextView
-            android:id="@+id/tv_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/rounded_rectangle_3px"
-            android:padding="5dp"
-            android:text="@string/RegisterOneAct_sjxztjr"
-            android:textColor="@color/new_text"
-            android:layout_marginTop="5dp"
-            android:textSize="10sp" />
-
-    </com.shunlian.app.widget.MyRelativeLayout>
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyLinearLayout
-        android:id="@+id/ll_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_id"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_height="match_parent"
+        app:ll_control_adapter="true"
+        app:ll_control_width="720"
+        app:ll_control_height="1280"
+        app:ll_margin_top="60"
         android:orientation="vertical">
 
-        <com.shunlian.app.widget.ClearableEditText
-            android:id="@+id/et_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:digits="0123456789"
-            style="@style/editText_attribute"
-            android:drawableRight="@mipmap/icon_login_delet"
-            android:hint="@string/RegisterOneAct_qsrsjh"
-            android:inputType="number"
-            android:maxLength="13"
-            app:hintText="@string/RegisterOneAct_qsrsjh"
-            android:textColor="@color/new_text"
-            android:textColorHint="@color/color_value_6c"
-            android:textCursorDrawable="@drawable/edit_cursor"
-            android:textSize="20sp" />
-            android:digits="0123456789"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/light_gray_two" />
-
-    </com.shunlian.app.widget.MyLinearLayout>
-
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:id="@+id/rl_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_phone"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="15dp">
-
-        <com.shunlian.app.widget.MyEditText
-            android:id="@+id/et_code"
-            style="@style/editText_attribute"
-            android:drawableBottom="@drawable/edittext_line"
-            android:drawablePadding="10dp"
-            app:hintText="@string/RegisterOneAct_qsryzm"
-            android:layout_marginTop="10dp"
-            android:inputType="number"
-            android:maxLength="4"/>
 
         <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_code"
-            android:layout_width="72dp"
-            android:layout_height="30dp"
+            android:id="@+id/miv_logo"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:iv_control_adapter="true"
-            app:iv_control_height="60"
-            app:iv_control_width="144"
-            app:iv_margin_top="15"
-            android:layout_alignParentRight="true"/>
-    </com.shunlian.app.widget.MyRelativeLayout>
-</com.shunlian.app.widget.MyLinearLayout>
+            app:iv_control_width="160"
+            app:iv_control_height="160"
+            android:src="@mipmap/icon_login_logo"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"/>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/rl_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+
+            <com.shunlian.app.widget.MyEditText
+                android:id="@+id/et_id"
+                style="@style/editText_attribute"
+                app:hintText="@string/RegisterOneAct_qsrtjrid"
+                android:drawableBottom = "@drawable/edittext_line"
+                android:drawablePadding ="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_rectangle_3px"
+                android:padding="5dp"
+                android:text="@string/RegisterOneAct_sjxztjr"
+                android:textColor="@color/new_text"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp" />
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_id"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.ClearableEditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:digits="0123456789"
+                style="@style/editText_attribute"
+                android:drawableRight="@mipmap/icon_login_delet"
+                android:hint="@string/RegisterOneAct_qsrsjh"
+                android:inputType="number"
+                android:maxLength="13"
+                app:hintText="@string/RegisterOneAct_qsrsjh"
+                android:textColor="@color/new_text"
+                android:textColorHint="@color/color_value_6c"
+                android:textCursorDrawable="@drawable/edit_cursor"
+                android:textSize="20sp" />
+            android:digits="0123456789"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/light_gray_two" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/rl_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_phone"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="15dp">
+
+            <com.shunlian.app.widget.MyEditText
+                android:id="@+id/et_code"
+                style="@style/editText_attribute"
+                android:drawableBottom="@drawable/edittext_line"
+                android:drawablePadding="10dp"
+                app:hintText="@string/RegisterOneAct_qsryzm"
+                android:layout_marginTop="10dp"
+                android:inputType="number"
+                android:maxLength="4"/>
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_code"
+                android:layout_width="72dp"
+                android:layout_height="30dp"
+                app:iv_control_adapter="true"
+                app:iv_control_height="60"
+                app:iv_control_width="144"
+                app:iv_margin_top="15"
+                android:layout_alignParentRight="true"/>
+        </com.shunlian.app.widget.MyRelativeLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+</ScrollView>
