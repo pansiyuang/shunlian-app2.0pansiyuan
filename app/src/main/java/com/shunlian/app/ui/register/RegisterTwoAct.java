@@ -318,11 +318,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_complete:
                 if (TYPE_FIND_PSW.equals(currentType)) {
-                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), smsCode);
+                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, "");
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, "");
                 } else {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;
         }
