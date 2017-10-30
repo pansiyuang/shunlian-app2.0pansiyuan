@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:padding="10dp"/>
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -36,7 +36,7 @@
     </RelativeLayout>
 
     <!--加载失败，点击重试-->
-    <TextView
+    <com.shunlian.app.widget.MyTextView
         android:id="@+id/layout_load_error"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -47,7 +47,7 @@
         android:visibility="gone" />
 
     <!--没有更多数据-->
-    <TextView
+    <com.shunlian.app.widget.MyTextView
         android:id="@+id/layout_no_more"
         android:layout_width="match_parent"
         android:layout_height="50dp"

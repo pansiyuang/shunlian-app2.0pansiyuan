@@ -26,7 +26,7 @@
         android:layout_marginLeft="60dp"/>
 
 
-    <TextView
+    <com.shunlian.app.widget.MyTextView
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             app:iv_control_height="28"
             app:iv_margin_right="20"/>
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_title"
             android:layout_width="45dp"
             android:layout_height="14dp"

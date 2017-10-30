@@ -36,7 +36,7 @@
             android:orientation="vertical">
 
 
-            <TextView
+            <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="20dp"
                 >
-                <TextView
+                <com.shunlian.app.widget.MyTextView
                     android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -67,7 +67,7 @@
                     android:textColor="@color/new_text"
                     android:textSize="20sp" />
 
-                <TextView
+                <com.shunlian.app.widget.MyTextView
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
