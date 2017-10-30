@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
@@ -108,6 +109,9 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        if (FastClickListener.isFastClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.tv_time:
                 if (countDownTimer != null) {

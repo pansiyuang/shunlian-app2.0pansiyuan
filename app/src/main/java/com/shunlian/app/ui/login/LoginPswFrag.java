@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyEditText;
@@ -100,6 +101,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
+        if (FastClickListener.isFastClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.iv_hidden_psw:
                 hiddenPsw(isHidden);

@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -87,6 +88,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void onClick(View view) {
+        if (FastClickListener.isFastClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.iv_verifi:
                 onePresenter.getCode();
