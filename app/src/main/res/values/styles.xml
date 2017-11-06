@@ -47,7 +47,4 @@
 
     </style>
 
-    <declare-styleable name="MyEditText">
-        <attr name="hintText" format="string" />
-    </declare-styleable>
 </resources>

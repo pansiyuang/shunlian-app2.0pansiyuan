@@ -58,7 +58,8 @@ public class Common {
 
 
     public static boolean regularPwd(String pwd){
-        String regular = "[a-zA-Z0-9]{8,16}";
+//        String regular = "^[[^a-zA-Z0-9]+\\w]{8,16}$";
+        String regular = "^(?!\\d+$)(?![a-zA-Z]+$)(?![^a-zA-Z0-9]+$)[[^a-zA-Z0-9]+\\w]{8,16}$";
         boolean matches = Pattern.matches(regular, pwd);
         return matches;
     }

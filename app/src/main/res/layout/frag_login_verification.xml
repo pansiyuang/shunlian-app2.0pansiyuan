@@ -27,6 +27,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="20sp"
+        android:gravity="start|center_vertical"
         app:hintText="@string/LoginPswFrg_inputphone" />
 
     <View
@@ -53,6 +54,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:textSize="20sp"
+            android:gravity="start|center_vertical"
             app:hintText="@string/LoginPswFrg_qsryzm" />
 
         <com.shunlian.app.widget.MyImageView

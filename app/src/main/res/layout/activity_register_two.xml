@@ -110,6 +110,7 @@
                     android:drawablePadding="10dp"
                     ver:hintText="@string/RegisterTwoAct_qsrxmm"
                     android:inputType="textPassword"
+                    android:gravity="start|center_vertical"
                     android:maxLength="16"/>
 
                 <com.shunlian.app.widget.MyImageView
@@ -143,6 +144,7 @@
                     android:drawablePadding="10dp"
                     ver:hintText="@string/RegisterTwoAct_qcxsrxmm"
                     android:inputType="textPassword"
+                    android:gravity="start|center_vertical"
                     android:maxLength="16"/>
 
                 <com.shunlian.app.widget.MyImageView
@@ -171,10 +173,11 @@
                 android:drawableBottom="@drawable/edittext_line"
                 android:drawablePadding="10dp"
                 android:textSize="15sp"
+                android:gravity="start|center_vertical"
                 ver:hintText="@string/RegisterTwoAct_qsrndnc"/>
 
 
-            <Button
+            <com.shunlian.app.widget.MyButton
                 android:id="@+id/btn_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

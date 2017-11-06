@@ -27,6 +27,8 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 import com.shunlian.mylibrary.KeyboardPatch;
 
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 
 public class RegisterTwoAct extends BaseActivity implements View.OnClickListener, IRegisterTwoView {
@@ -200,10 +202,23 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         });
 
         et_nickname.addTextChangedListener(new SimpleTextWatcher() {
+
             @Override
-            public void afterTextChanged(Editable s) {
-                byte[] bytes = s.toString().getBytes();
-                if (bytes.length > 24){
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                int charLength = 0;
+                String[] split = s.toString().split("");
+                for (int i = 0; i < split.length; i++) {
+                    if (i == 0){
+                        continue;
+                    }
+                    if (Pattern.matches(Reg,split[i])){
+                        charLength += 2;
+                    }else {
+                        charLength++;
+                    }
+                }
+                if (charLength > 24){
                     Common.staticToast(getString(R.string.RegisterTwoAct_ncszgc));
                     et_nickname.setText(nickname);
                     et_nickname.setSelection(nickname.length());
@@ -211,6 +226,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     nickname = s.toString();
                 }
             }
+            String Reg="^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
+
         });
     }
 

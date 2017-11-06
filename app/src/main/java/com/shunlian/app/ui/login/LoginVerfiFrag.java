@@ -61,6 +61,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     protected void initData() {
+        setEdittextFocusable(true,edt_verifi,edt_account);
         onePresenter = new RegisterOnePresenter(getActivity(), this);
     }
 
@@ -130,6 +131,11 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void checkCode(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void checkMobile(boolean isSuccess) {
 
     }
 

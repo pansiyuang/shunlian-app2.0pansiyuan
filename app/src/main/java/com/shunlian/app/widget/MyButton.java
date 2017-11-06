@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.TransformUtil;
@@ -13,8 +13,7 @@ import com.shunlian.app.utils.TransformUtil;
  * Created by Administrator on 2017/10/30.
  */
 
-public class MyTextView extends TextView {
-
+public class MyButton extends Button {
     private boolean aBoolean;
     private int control_width;
     private int control_height;
@@ -23,31 +22,30 @@ public class MyTextView extends TextView {
     private int margin_top;
     private int margin_bottom;
     private int margin_right;
-
-    public MyTextView(Context context) {
+    public MyButton(Context context) {
         this(context,null);
     }
 
-    public MyTextView(Context context, AttributeSet attrs) {
+    public MyButton(Context context, AttributeSet attrs) {
         this(context, attrs,0);
 //        Typeface face = Typeface.createFromAsset (context.getAssets(),"hkbd.ttf");
 //        setTypeface (face);
     }
 
-    public MyTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyTextView, defStyleAttr, 0);
-        aBoolean = a.getBoolean(R.styleable.MyTextView_tv_control_adapter, false);
-        control_width = a.getInteger(R.styleable.MyTextView_tv_control_width, 0);
-        control_height = a.getInteger(R.styleable.MyTextView_tv_control_height, 0);
-        margin = a.getInteger(R.styleable.MyTextView_tv_margin, 0);
-        margin_left = a.getInteger(R.styleable.MyTextView_tv_margin_left, 0);
-        margin_top = a.getInteger(R.styleable.MyTextView_tv_margin_top, 0);
-        margin_right = a.getInteger(R.styleable.MyTextView_tv_margin_right, 0);
-        margin_bottom = a.getInteger(R.styleable.MyTextView_tv_margin_bottom, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyButton,defStyleAttr,0);
+        aBoolean = a.getBoolean(R.styleable.MyButton_bt_control_adapter, false);
+        control_width = a.getInteger(R.styleable.MyButton_bt_control_width, 0);
+        control_height = a.getInteger(R.styleable.MyButton_bt_control_height, 0);
+        margin = a.getInteger(R.styleable.MyButton_bt_margin, 0);
+        margin_left = a.getInteger(R.styleable.MyButton_bt_margin_left, 0);
+        margin_top = a.getInteger(R.styleable.MyButton_bt_margin_top, 0);
+        margin_right = a.getInteger(R.styleable.MyButton_bt_margin_right, 0);
+        margin_bottom = a.getInteger(R.styleable.MyButton_bt_margin_bottom, 0);
         a.recycle();
-//        init();
     }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

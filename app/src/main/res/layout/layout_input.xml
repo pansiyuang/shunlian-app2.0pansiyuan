@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sv_content"
     android:overScrollMode="never"
     android:scrollbars="none"
     android:layout_width="match_parent"
@@ -43,6 +44,7 @@
                 app:hintText="@string/RegisterOneAct_qsrtjrid"
                 android:drawableBottom = "@drawable/edittext_line"
                 android:drawablePadding ="10dp"
+                android:gravity="start|center_vertical"
                 />
 
             <com.shunlian.app.widget.MyTextView
@@ -80,6 +82,7 @@
                 android:inputType="number"
                 android:maxLength="13"
                 app:hintText="@string/RegisterOneAct_qsrsjh"
+                android:gravity="start|center_vertical"
                 android:textColor="@color/new_text"
                 android:textColorHint="@color/color_value_6c"
                 android:textCursorDrawable="@drawable/edit_cursor"
@@ -111,6 +114,7 @@
                 app:hintText="@string/RegisterOneAct_qsryzm"
                 android:layout_marginTop="10dp"
                 android:inputType="number"
+                android:gravity="start|center_vertical"
                 android:maxLength="4"/>
 
             <com.shunlian.app.widget.MyImageView

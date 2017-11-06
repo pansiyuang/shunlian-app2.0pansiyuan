@@ -99,6 +99,11 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     }
 
     @Override
+    public void checkMobile(boolean isSuccess) {
+
+    }
+
+    @Override
     public void showFailureView() {
 
     }

@@ -98,6 +98,21 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
                 }
             }
         });
+
+        et_phone.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (!TextUtils.isEmpty(s) && !s.toString().startsWith("1")){
+                    Common.staticToast(getString(R.string.RegisterOneAct_sjhbzq));
+                    return;
+                }
+                if (!TextUtils.isEmpty(s) && s.length() >= 13) {
+                    onePresenter.checkPhone(et_phone.getText().toString().replaceAll(" ",""));
+                    setEdittextFocusable(true, et_code);
+                }
+            }
+        });
     }
 
     @Override
@@ -148,6 +163,11 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
 
     @Override
     public void checkCode(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void checkMobile(boolean isSuccess) {
 
     }
 

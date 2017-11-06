@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -49,10 +50,14 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.view_title)
     View view_title;
 
+    @BindView(R.id.sv_content)
+    ScrollView sv_content;
+
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
     private boolean isCheckCode;
     private String unique_sign;
+    private boolean isCheckMobile;
 
     public static void stratAct(Context context) {
         Intent intent = new Intent(context, RegisterOneAct.class);
@@ -72,6 +77,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
         miv_logo.setOnClickListener(this);
+        sv_content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         et_phone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -91,7 +102,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
+                if (!TextUtils.isEmpty(s) && !s.toString().startsWith("1")){
+                    Common.staticToast(getString(R.string.RegisterOneAct_sjhbzq));
+                    return;
+                }
                 if (!TextUtils.isEmpty(s) && s.length() >= 13) {
+                    onePresenter.checkPhone(et_phone.getText().toString().replaceAll(" ",""));
                     setEdittextFocusable(true, et_code);
                 }
             }
@@ -128,6 +144,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             setEdittextFocusable(true, et_phone);
             setEdittextFocusable(false, et_code);
             return true;
+        }else if (!TextUtils.isEmpty(phone) && !phone.startsWith("1") && phone.length() < 11){
+            Common.staticToast(getString(R.string.RegisterOneAct_sjhbzq));
+            setEdittextFocusable(true, et_phone);
+            setEdittextFocusable(false, et_code);
+            return true;
         }
         return false;
     }
@@ -145,6 +166,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
+        setEdittextFocusable(true,et_id);
         miv_logo.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             view_title.setVisibility(View.VISIBLE);
@@ -170,9 +192,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             case R.id.miv_code:
                 onePresenter.getCode();
                 break;
-//            case R.id.miv_logo:
-//                TestAct.startAct(this);
-//                break;
+            case R.id.miv_logo:
+                TestAct.startAct(this);
+                break;
         }
     }
 
@@ -207,7 +229,8 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, RegisterTwoAct.TYPE_REGIST,et_code.getText().toString());
             finish();
         } else {
-            Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
+            onePresenter.getCode();
+            et_code.setText("");
         }
     }
 
@@ -217,6 +240,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         if (!isSuccess) {
             setEdittextFocusable(true, et_id);
         }
+    }
+
+    @Override
+    public void checkMobile(boolean isSuccess) {
+        isCheckMobile = isSuccess;
     }
 
     @Override

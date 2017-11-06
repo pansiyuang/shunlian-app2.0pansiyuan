@@ -52,5 +52,38 @@
         <attr name="fl_margin_top" format="integer" />
         <attr name="fl_margin_bottom" format="integer" />
     </declare-styleable>
-
+    <!--MyTextView-->
+    <declare-styleable name="MyTextView">
+        <attr name="tv_control_adapter" format="boolean" />
+        <attr name="tv_control_width" format="integer" />
+        <attr name="tv_control_height" format="integer" />
+        <attr name="tv_margin" format="integer" />
+        <attr name="tv_margin_left" format="integer" />
+        <attr name="tv_margin_right" format="integer" />
+        <attr name="tv_margin_top" format="integer" />
+        <attr name="tv_margin_bottom" format="integer" />
+    </declare-styleable>
+    <!--MyButton-->
+    <declare-styleable name="MyButton">
+        <attr name="bt_control_adapter" format="boolean" />
+        <attr name="bt_control_width" format="integer" />
+        <attr name="bt_control_height" format="integer" />
+        <attr name="bt_margin" format="integer" />
+        <attr name="bt_margin_left" format="integer" />
+        <attr name="bt_margin_right" format="integer" />
+        <attr name="bt_margin_top" format="integer" />
+        <attr name="bt_margin_bottom" format="integer" />
+    </declare-styleable>
+    <!--MyEditText-->
+    <declare-styleable name="MyEditText">
+        <attr name="et_control_adapter" format="boolean" />
+        <attr name="et_control_width" format="integer" />
+        <attr name="et_control_height" format="integer" />
+        <attr name="et_margin" format="integer" />
+        <attr name="et_margin_left" format="integer" />
+        <attr name="et_margin_right" format="integer" />
+        <attr name="et_margin_top" format="integer" />
+        <attr name="et_margin_bottom" format="integer" />
+        <attr name="hintText" format="string" />
+    </declare-styleable>
 </resources>

@@ -95,23 +95,31 @@ public class MyRelativeLayout extends RelativeLayout {
                     marginLayoutParams.setMargins(real_left,real_top,real_right,real_bottom);
                 }
             }
-            requestLayout();
+            if (control_width == 0 || control_height == 0) {
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                if (control_width == 0 && control_height != 0) {
+                    int realHeight = TransformUtil.countRealHeight(getContext(), control_height);
+                    layoutParams.height = realHeight;
+                } else if (control_width != 0 && control_height == 0) {
+                    int realWidth = TransformUtil.countRealWidth(getContext(), control_width);
+                    layoutParams.width = realWidth;
+                }
+                setLayoutParams(layoutParams);
+            }
         }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (aBoolean) {
-            int mode_width = MeasureSpec.getMode(widthMeasureSpec);
-            int mode_height = MeasureSpec.getMode(heightMeasureSpec);
-
-            int[] realWH = TransformUtil.countRealWH(getContext(),control_width, control_height);
-
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(realWH[0], mode_width);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(realWH[1], mode_height);
-        }
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (aBoolean) {
+            if (control_width == 0 && control_height == 0){
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }else if (control_width != 0 && control_height != 0){
+                int[] realWH = TransformUtil.countRealWH(getContext(), control_width, control_height);
+                setMeasuredDimension(realWH[0],realWH[1]);
+            }
+        }
     }
 
     /**

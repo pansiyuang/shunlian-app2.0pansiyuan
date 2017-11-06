@@ -168,4 +168,7 @@ public interface ApiService {
      */
     @POST("/member/userinfo/findPwd")
     Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
+
+    @GET("member/register/checkMobile")
+    Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
 }

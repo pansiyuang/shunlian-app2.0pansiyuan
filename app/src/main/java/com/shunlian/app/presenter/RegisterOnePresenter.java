@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IRegisterOneView;
 
 import java.io.IOException;
@@ -74,6 +75,26 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
         });
     }
 
+    public void checkPhone(String mobile){
+        Map<String,String> map = new HashMap<>();
+        map.put("mobile",mobile);
+        sortAndMD5(map);
+        Call<BaseEntity<String>> baseEntityCall = getApiService().checkMobile(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+            @Override
+            public void onSuccess(BaseEntity<String> entity) {
+                super.onSuccess(entity);
+                iView.checkMobile(true);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.checkMobile(false);
+            }
+        });
+    }
+
     public void sendSmsCode(String phone, String code) {
         Map<String, String> map = new HashMap<>();
         map.put("mobile", phone);
@@ -88,6 +109,13 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
                 public void onSuccess(BaseEntity<String> entity) {
                     super.onSuccess(entity);
                     iView.smsCode(entity.data);
+                }
+
+                @Override
+                public void onErrorCode(int code, String message) {
+                    super.onErrorCode(code, message);
+                    Common.staticToast(message);
+                    iView.smsCode(null);
                 }
             });
 
