@@ -57,7 +57,7 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
 
     private void initViews() {
         for (int i = 0; i < box; i++) {
-            MyEditText editText = new MyEditText(getContext());
+            EditText editText = new EditText(getContext());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = Gravity.CENTER;
 
