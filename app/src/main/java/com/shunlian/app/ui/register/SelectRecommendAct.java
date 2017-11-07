@@ -133,8 +133,6 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
     private void dialogDetail() {
         sv_mask.setVisibility(View.VISIBLE);
-        recy_view.setFocusableInTouchMode(false);
-        recy_view.setFocusable(false);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1,Animation.RELATIVE_TO_SELF,0);
         animation.setDuration(300);
@@ -143,15 +141,27 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     }
 
     private void dialogHidden(){
-        sv_mask.setVisibility(View.GONE);
-        recy_view.setFocusableInTouchMode(true);
-        recy_view.setFocusable(true);
-        recy_view.requestFocus();
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1);
         animation.setDuration(300);
         frame_detail.setVisibility(View.GONE);
         frame_detail.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                sv_mask.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override

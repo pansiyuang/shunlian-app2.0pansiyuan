@@ -226,6 +226,7 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
+            Common.staticToast(smsCode);
             RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, RegisterTwoAct.TYPE_REGIST,et_code.getText().toString());
             finish();
         } else {
