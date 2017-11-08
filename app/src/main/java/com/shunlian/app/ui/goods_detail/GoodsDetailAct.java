@@ -1,26 +1,24 @@
-package com.shunlian.app.ui.store;
+package com.shunlian.app.ui.goods_detail;
 
 import android.content.Context;
 import android.content.Intent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 
 /**
- * Created by Administrator on 2017/11/7.
+ * Created by Administrator on 2017/11/8.
  */
 
-public class StoreAct extends BaseActivity {
+public class GoodsDetailAct extends BaseActivity {
 
     public static void startAct(Context context){
-        Intent intent = new Intent(context,StoreAct.class);
+        Intent intent = new Intent(context,GoodsDetailAct.class);
         context.startActivity(intent);
     }
-
     @Override
     protected int getLayoutId() {
-        return R.layout.act_store;
+        return R.layout.act_goods_detail;
     }
 
     @Override
