@@ -86,4 +86,51 @@
         <attr name="et_margin_bottom" format="integer" />
         <attr name="hintText" format="string" />
     </declare-styleable>
+
+    <!--轮播图Kanner3控件-->
+    <declare-styleable name="BaseBanner">
+        <attr name="bb_scale" format="float" />
+        <attr name="bb_isLoopEnable" format="boolean" />
+        <attr name="bb_delay" format="integer" />
+        <attr name="bb_period" format="integer" />
+        <attr name="bb_isAutoScrollEnable" format="boolean" />
+        <attr name="bb_barColor" format="color" />
+        <attr name="bb_isBarShowWhenLast" format="boolean" />
+        <attr name="bb_barPaddingLeft" format="dimension" />
+        <attr name="bb_barPaddingTop" format="dimension" />
+        <attr name="bb_barPaddingRight" format="dimension" />
+        <attr name="bb_barPaddingBottom" format="dimension" />
+        <attr name="bb_textColor" format="color" />
+        <attr name="bb_textSize" format="dimension" />
+        <attr name="bb_isTitleShow" format="boolean" />
+        <attr name="bb_isIndicatorShow" format="boolean" />
+        <attr name="bb_indicatorGravity">
+            <enum name="CENTER" value="17" />
+            <enum name="LEFT" value="3" />
+            <enum name="RIGHT" value="5" />
+        </attr>
+        <attr name="bb_pi" format="float" />
+    </declare-styleable>
+    <!--轮播图Kanner3小圆点控件-->
+    <declare-styleable name="RoundCornerIndicaor">
+        <!-- width of indicators -->
+        <attr name="rci_width" format="dimension" />
+        <!-- height of indicators -->
+        <attr name="rci_height" format="dimension" />
+        <!-- the spacing between the indicator. -->
+        <attr name="rci_gap" format="dimension" />
+        <!-- cornerRadius of the indicator. -->
+        <attr name="rci_cornerRadius" format="dimension" />
+        <!-- width of the stroke used to draw the indicators. -->
+        <attr name="rci_strokeWidth" format="dimension" />
+        <!-- color of the indicator that represents the current page. -->
+        <attr name="rci_selectColor" format="color" />
+        <!-- color of the indicator that represents pages. -->
+        <attr name="rci_unselectColor" format="color" />
+        <!-- color of the stroke used to draw the indicators. -->
+        <attr name="rci_strokeColor" format="color" />
+        <!-- Whether or not the selected indicator snaps to the indicators. -->
+        <attr name="rci_isSnap" format="boolean" />
+    </declare-styleable>
+
 </resources>

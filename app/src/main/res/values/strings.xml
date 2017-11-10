@@ -19,6 +19,7 @@
     <string name="RegisterTwoAct_mmzh">密码至少8位，由字母,数字和字符任意两种以上组合</string>
     <string name="RegisterTwoAct_mmbyz">两次输入的密码不一致</string>
     <string name="RegisterTwoAct_ncszgc">昵称设置过长</string>
+    <string name="RegisterTwoAct_qsznc">请设置昵称</string>
     <string name="RegisterTwoAct_sjyzm">请输入手机验证码</string>
     <string name="RegisterTwoAct_mmbnwk">密码不能为空</string>
     <string name="SelectRecommendAct_hyp">换一批</string>

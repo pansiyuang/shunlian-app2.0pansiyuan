@@ -94,5 +94,8 @@
     <color name="light_gray_two">#d8d8d8</color>
     <color name="pin_normal">#6B767E</color>
     <color name="pink_color">#fb0036</color>
+    <color name="value_60">#606060</color>
+    <color name="value_32">#323232</color>
+    <color name="value_9B">#9B9B9B</color>
 
 </resources>

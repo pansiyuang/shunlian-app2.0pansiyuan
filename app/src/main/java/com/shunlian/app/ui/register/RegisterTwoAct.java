@@ -334,6 +334,15 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 registerTwoPresenter.sendSmsCode(phone.replaceAll(" ", ""),pictureCode);
                 break;
             case R.id.btn_complete:
+                String pwd = et_pwd.getText().toString();
+                if (TextUtils.isEmpty(pwd)){
+                    Common.staticToast(getString(R.string.RegisterTwoAct_mmbnwk));
+                    return;
+                }
+                if (TextUtils.isEmpty(nickname)){
+                    Common.staticToast(getString(R.string.RegisterTwoAct_qsznc));
+                    return;
+                }
                 if (TYPE_FIND_PSW.equals(currentType)) {
                     registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
                 } else if (TYPE_REGIST.equals(currentType)) {

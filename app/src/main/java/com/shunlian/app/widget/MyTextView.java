@@ -2,6 +2,7 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -96,6 +97,14 @@ public class MyTextView extends TextView {
                 setMeasuredDimension(realWH[0],realWH[1]);
             }
         }
+    }
+
+    /**
+     * 设置中划线
+     */
+    public MyTextView setStrikethrough(){
+        getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
+        return this;
     }
 
     /**

@@ -89,4 +89,17 @@ public class Common {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v,InputMethodManager.SHOW_FORCED);
     }
+
+    /**
+     * 获取占位符 一个占位符代表一个3个字节
+     * @param num
+     * @return
+     */
+    public static String getPlaceholder(int num){
+        String str = "";
+        for (int i = 0; i < num; i++) {
+            str += "\u3000";
+        }
+        return str;
+    }
 }

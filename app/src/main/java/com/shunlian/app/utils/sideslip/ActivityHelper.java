@@ -22,6 +22,7 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
         if (mActivityStack == null) {
             mActivityStack = new Stack<>();
         }
+        mActivityStack.add(activity);
     }
 
     @Override
