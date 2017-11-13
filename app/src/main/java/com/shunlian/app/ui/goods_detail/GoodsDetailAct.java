@@ -27,7 +27,6 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.RollNumView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -78,7 +77,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
-        supportFragmentManager.beginTransaction().add(R.id.mfl_content,goodsDeatilFrag).commit();
+        supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
 
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
@@ -114,6 +113,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
         goodsDeatilFrag.goodsInfo(title, price, market_price, free_shipping, sales, address);
+    }
+    @Override
+    public void paramDialog(GoodsDeatilEntity goodsDeatilEntity) {
+        goodsDeatilFrag.setParamDialog(goodsDeatilEntity);
+    }
+
+    @Override
+    public void attributeDialog() {
+
     }
 
     /**
@@ -322,15 +330,5 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (rnview != null){
             rnview.clearAnimation();
         }
-    }
-
-    @Override
-    public void paramDialog(GoodsDeatilEntity goodsDeatilEntity) {
-        goodsDeatilFrag.setParamDialog(goodsDeatilEntity);
-    }
-
-    @Override
-    public void attributeDialog() {
-
     }
 }

@@ -17,7 +17,6 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentCardViewAdapter;
 import com.shunlian.app.adapter.GoodsDetailShopAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DataUtil;
@@ -40,7 +39,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/8.
  */
 
-public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListener {
+public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListener, ParamDialog.OnSelectCallBack {
 
     @BindView(R.id.kanner)
     Kanner kanner;
@@ -142,6 +141,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
     private GoodsDeatilEntity.StoreInfo infos;
     private CommentCardViewAdapter commentCardViewAdapter;
+    private ParamDialog paramDialog;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
