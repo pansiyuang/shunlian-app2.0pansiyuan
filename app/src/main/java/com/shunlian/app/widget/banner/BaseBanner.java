@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.widget.MyImageView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -216,7 +218,12 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     /** set data source list */
     public void setBanner(List<E> list) {
         this.list = list;
-
+        if (list != null && list.size() == 1){
+            removeAllViews();
+            MyImageView myImageView = new MyImageView(getContext());
+            GlideUtils.getInstance().loadImage(getContext(),myImageView,(String) list.get(0));
+            addView(myImageView,0,lp_vp);
+        }
         startScroll();
     }
 
