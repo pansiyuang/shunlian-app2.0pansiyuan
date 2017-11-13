@@ -118,9 +118,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_address.setText(address);
     }
 
-    public void setParamDialog(List<GoodsDeatilEntity.Specs> specs, List<GoodsDeatilEntity.Sku> skus) {
+    public void setParamDialog(GoodsDeatilEntity goodsDeatilEntity) {
         paramDialog = new ParamDialog(getActivity(), R.style.MyDialogStyleBottom);
-        paramDialog.initData(specs, skus);
+        paramDialog.initData(goodsDeatilEntity);
         paramDialog.setOnSelectCallBack(this);
     }
 
@@ -136,7 +136,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void onSelectComplete(String skuId, int count) {
-
+    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
     }
 }

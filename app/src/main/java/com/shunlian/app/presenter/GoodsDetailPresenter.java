@@ -62,9 +62,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         }
                         iView.goodsInfo(title, price, market_price, free_shipping, sales, area);
 
-                        if (data.specs != null && data.sku != null) {
-                            iView.paramDialog(data.specs, data.sku);
-                        }
+                        iView.paramDialog(data);
                     }
 
 

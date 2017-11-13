@@ -58,6 +58,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     private List<GoodsDeatilEntity.Specs> specs;
     private List<GoodsDeatilEntity.Sku> mSku;
+    private GoodsDeatilEntity goodsDeatilEntity;
     private Context mContext;
     private LinearLayoutManager linearLayoutManager;
     private ParamItemAdapter paramItemAdapter;
@@ -97,9 +98,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         recycler_param.setAdapter(paramItemAdapter);
     }
 
-    public void initData(List<GoodsDeatilEntity.Specs> sps, List<GoodsDeatilEntity.Sku> sku) {
-        this.specs = sps;
-        this.mSku = sku;
+    public void initData(GoodsDeatilEntity good) {
+        this.goodsDeatilEntity = good;
+        this.mSku = good.sku;
+        this.specs = goodsDeatilEntity.specs;
     }
 
     public void initListeners() {
@@ -133,7 +135,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                     }
                 }
                 if (getSkuId(ids.toString()) != null && selectCallBack != null) {
-                    selectCallBack.onSelectComplete(ids.toString(), currentCount);
+                    selectCallBack.onSelectComplete(getSkuId(ids.toString()), currentCount);
                 }
                 break;
         }
@@ -336,6 +338,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     }
 
     public interface OnSelectCallBack {
-        void onSelectComplete(String skuId, int count);
+        void onSelectComplete(GoodsDeatilEntity.Sku sku, int count);
     }
 }

@@ -74,8 +74,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-    public void paramDialog(List<GoodsDeatilEntity.Specs> specs, List<GoodsDeatilEntity.Sku> skus) {
-        goodsDeatilFrag.setParamDialog(specs, skus);
+    public void paramDialog(GoodsDeatilEntity goodsDeatilEntity) {
+        goodsDeatilFrag.setParamDialog(goodsDeatilEntity);
     }
 
     @Override

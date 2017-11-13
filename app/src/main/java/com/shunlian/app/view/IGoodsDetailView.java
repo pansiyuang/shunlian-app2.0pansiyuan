@@ -3,7 +3,6 @@ package com.shunlian.app.view;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -32,7 +31,7 @@ public interface IGoodsDetailView extends IView {
      * 商品参数对话框
      */
 
-    void paramDialog(List<GoodsDeatilEntity.Specs> specs, List<GoodsDeatilEntity.Sku> sku);
+    void paramDialog(GoodsDeatilEntity entity);
 
     /**
      * 选择商品对话框
