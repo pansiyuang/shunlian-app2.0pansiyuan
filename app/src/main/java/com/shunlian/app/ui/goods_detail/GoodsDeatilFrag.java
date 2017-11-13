@@ -222,8 +222,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     }
 
     public void setParamDialog(GoodsDeatilEntity goodsDeatilEntity) {
-        paramDialog = new ParamDialog(getActivity(), R.style.MyDialogStyleBottom);
-        paramDialog.initData(goodsDeatilEntity);
+        paramDialog = new ParamDialog(getActivity(), goodsDeatilEntity);
         paramDialog.setOnSelectCallBack(this);
     }
 
