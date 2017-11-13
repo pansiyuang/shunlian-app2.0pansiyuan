@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,14 +67,17 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private OnSelectCallBack selectCallBack;
     private int currentCount = 1;
 
-    public ParamDialog(Context context) {
-        super(context);
+    public ParamDialog(Context context, GoodsDeatilEntity goods) {
+        this(context, R.style.MyDialogStyleBottom);
+        this.mContext = context;
+        this.goodsDeatilEntity = goods;
+        mCurrentValues = new ArrayList<>();
+        this.specs = goods.specs;
+        this.mSku = goods.sku;
     }
 
     public ParamDialog(Context context, int themeResId) {
         super(context, themeResId);
-        this.mContext = context;
-        mCurrentValues = new ArrayList<>();
     }
 
     @Override
@@ -82,6 +86,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select, null, false);
         setContentView(view);
         ButterKnife.bind(this, view);
+        initViews();
         initListeners();
         setCanceledOnTouchOutside(false);
 
@@ -98,17 +103,19 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         recycler_param.setAdapter(paramItemAdapter);
     }
 
-    public void initData(GoodsDeatilEntity good) {
-        this.goodsDeatilEntity = good;
-        this.mSku = good.sku;
-        this.specs = goodsDeatilEntity.specs;
+    public void initViews() {
+        dia_tv_price.setText("¥" + goodsDeatilEntity.price);
+        tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
+        GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
     }
+
 
     public void initListeners() {
         btn_add.setOnClickListener(this);
         btn_minus.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View view) {
@@ -125,6 +132,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
+
                 sortValues();
                 StringBuffer ids = new StringBuffer();
 
@@ -304,9 +312,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
 
     private List<GoodsDeatilEntity.Specs.Values> sortValues() {
-        if (mCurrentValues == null || mCurrentValues.size() <= 1) {
-            return null;
-        }
         Collections.sort(mCurrentValues, new Comparator<GoodsDeatilEntity.Specs.Values>() {
             public int compare(GoodsDeatilEntity.Specs.Values arg0, GoodsDeatilEntity.Specs.Values arg1) {
                 return Integer.valueOf(arg0.id).compareTo(Integer.valueOf(arg1.id));

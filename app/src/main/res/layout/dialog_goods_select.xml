@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="数量"
+                    android:text="@string/goods_count"
                     android:textColor="@color/new_text"
                     android:textSize="16sp" />
 
@@ -116,7 +116,6 @@
                         android:id="@+id/dia_tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥ 149"
                         android:textColor="@color/my_orange_red"
                         android:textSize="17sp" />
 
@@ -126,7 +125,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:ellipsize="end"
-                        android:text="库存1314件"
                         android:textColor="@color/new_text"
                         android:textSize="13sp" />
 
@@ -134,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
-                        android:text="请选择规格"
+                        android:text="@string/goods_pleaseselectparam"
                         android:textColor="@color/new_text"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -155,15 +153,21 @@
 
         </LinearLayout>
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/iv_dialogPhoto"
+        <LinearLayout
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_above="@id/lLayout_view"
+            android:layout_above="@+id/lLayout_view"
             android:layout_marginBottom="-145dp"
             android:layout_marginLeft="10dp"
-            android:padding="5dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/img_guige_moren" />
+            android:background="@drawable/shape_icon"
+            android:padding="5dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/iv_dialogPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_guige_moren" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

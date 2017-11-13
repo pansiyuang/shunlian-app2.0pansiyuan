@@ -18,6 +18,8 @@ public class GoodsDeatilEntity {
     public String market_price;
     public String price;
     public String max_price;
+    public String stock;
+    public String thumb;
     public ArrayList<String> pics;
 
     public ArrayList<Sku> sku;//属性组合列表

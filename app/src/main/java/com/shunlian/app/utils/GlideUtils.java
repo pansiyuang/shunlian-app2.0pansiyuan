@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.shunlian.app.R;
 
 public class GlideUtils {
 
@@ -60,7 +61,7 @@ public class GlideUtils {
             Glide.with(context)
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
+                    .placeholder(R.mipmap.img_guige_moren)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
@@ -71,7 +72,7 @@ public class GlideUtils {
             Glide.with(context)
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
+                    .placeholder(R.mipmap.img_guige_moren)
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
                     //source:缓存源资源   result：缓存转换后的资源

@@ -15,7 +15,6 @@ import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -119,8 +118,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     }
 
     public void setParamDialog(GoodsDeatilEntity goodsDeatilEntity) {
-        paramDialog = new ParamDialog(getActivity(), R.style.MyDialogStyleBottom);
-        paramDialog.initData(goodsDeatilEntity);
+        paramDialog = new ParamDialog(getActivity(), goodsDeatilEntity);
         paramDialog.setOnSelectCallBack(this);
     }
 
