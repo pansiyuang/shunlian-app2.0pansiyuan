@@ -313,6 +313,7 @@
             android:background="@color/bg_gray_two" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/tv_select_param"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/img_common_viewarrow_1"

@@ -27,6 +27,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.RollNumView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -58,6 +59,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         Intent intent = new Intent(context,GoodsDetailAct.class);
         context.startActivity(intent);
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_goods_detail;
@@ -73,7 +75,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this,this,"148");
+        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
         supportFragmentManager.beginTransaction().add(R.id.mfl_content,goodsDeatilFrag).commit();
@@ -110,8 +112,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 发货地点
      */
     @Override
-    public void goodsInfo(String title,String price,String market_price,String free_shipping,String sales,String address) {
-        goodsDeatilFrag.goodsInfo(title,price,market_price,free_shipping,sales,address);
+    public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
+        goodsDeatilFrag.goodsInfo(title, price, market_price, free_shipping, sales, address);
     }
 
     /**
@@ -320,5 +322,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (rnview != null){
             rnview.clearAnimation();
         }
+    }
+
+    @Override
+    public void paramDialog(GoodsDeatilEntity goodsDeatilEntity) {
+        goodsDeatilFrag.setParamDialog(goodsDeatilEntity);
+    }
+
+    @Override
+    public void attributeDialog() {
+
     }
 }

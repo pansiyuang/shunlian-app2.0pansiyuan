@@ -111,6 +111,15 @@ public class GoodsDeatilEntity {
             public String name;
             public String memo;
             public String thumb;
+            private boolean isSelect;
+
+            public boolean isSelect() {
+                return isSelect;
+            }
+
+            public void setSelect(boolean select) {
+                isSelect = select;
+            }
         }
     }
 

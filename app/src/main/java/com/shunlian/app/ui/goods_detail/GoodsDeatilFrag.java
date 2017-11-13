@@ -17,6 +17,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentCardViewAdapter;
 import com.shunlian.app.adapter.GoodsDetailShopAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DataUtil;
@@ -27,6 +28,7 @@ import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
@@ -133,6 +135,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @BindView(R.id.mtv_self_hot)
     MyTextView mtv_self_hot;
 
+    @BindView(R.id.tv_select_param)
+    MyTextView tv_select_param;
 
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
@@ -141,7 +145,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.frag_goods_detail,null);
+        return inflater.inflate(R.layout.frag_goods_detail, null);
     }
 
     @Override
@@ -150,6 +154,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_collection.setOnClickListener(this);
         mll_self_push.setOnClickListener(this);
         mll_self_hot.setOnClickListener(this);
+        tv_select_param.setOnClickListener(this);
     }
 
     @Override
@@ -202,20 +207,30 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      * 销售量
      * 发货地点
      */
-    public void goodsInfo(String title,String price,String market_price,String free_shipping,String sales,String address) {
-        mtv_title.setText(Common.getPlaceholder(4)+title);
+    public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
+        mtv_title.setText(Common.getPlaceholder(4) + title);
         mtv_discount_info.setText("店铺优惠");
         mtv_price.setText(price);
         mtv_marketPrice.setStrikethrough().setText(market_price);
-        if ("0".equals(free_shipping)){
+        if ("0".equals(free_shipping)) {
             mtv_free_shipping.setText("不包邮");
-        }else {
+        } else {
             mtv_free_shipping.setText("包邮");
         }
-        mtv_sales.setText("已售"+sales+"件");
+        mtv_sales.setText("已售" + sales + "件");
         mtv_address.setText(address);
     }
 
+    public void setParamDialog(GoodsDeatilEntity goodsDeatilEntity) {
+        paramDialog = new ParamDialog(getActivity(), R.style.MyDialogStyleBottom);
+        paramDialog.initData(goodsDeatilEntity);
+        paramDialog.setOnSelectCallBack(this);
+    }
+
+    @Override
+    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
+    }
     /**
      *
      * @param is_new 是否新品
@@ -283,6 +298,11 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             case R.id.mll_self_push:
                 setState(2);
                 setStoreOtherGoods(infos.push);
+                break;
+            case R.id.tv_select_param:
+                if (paramDialog != null && !paramDialog.isShowing()) {
+                    paramDialog.show();
+                }
                 break;
         }
     }

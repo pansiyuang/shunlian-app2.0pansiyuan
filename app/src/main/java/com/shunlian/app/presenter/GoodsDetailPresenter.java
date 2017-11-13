@@ -33,19 +33,19 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
     @Override
     protected void initApi() {
-        final Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
-            getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>(){
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
                     super.onSuccess(entity);
                     GoodsDeatilEntity data = entity.data;
-                    if (data != null){
+                    if (data != null) {
                         ArrayList<String> pics = data.pics;
                         if (pics != null && pics.size() > 0)
                             iView.banner(pics);
@@ -65,6 +65,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         iView.smallLabel(data.is_new,data.is_explosion,data.is_hot,data.is_recommend);
                         iView.voucher(data.voucher);
                         iView.shopInfo(data.store_info);
+                        iView.goodsInfo(title, price, market_price, free_shipping, sales, area);
+
+                        iView.paramDialog(data);
                     }
 
 

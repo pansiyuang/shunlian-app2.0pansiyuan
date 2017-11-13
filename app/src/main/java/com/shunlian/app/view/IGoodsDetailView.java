@@ -23,8 +23,19 @@ public interface IGoodsDetailView extends IView {
      * 销售量
      * 发货地点
      */
-    void goodsInfo(String title, String price,String market_price,String free_shipping,String sales,String address);
+    void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address);
 
+
+    /**
+     * 商品参数对话框
+     */
+
+    void paramDialog(GoodsDeatilEntity entity);
+
+    /**
+     * 选择商品对话框
+     */
+    void attributeDialog();
 
 
     /**
