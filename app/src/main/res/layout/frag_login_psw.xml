@@ -25,6 +25,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="20sp"
+        android:gravity="start|center_vertical"
         app:hintText="@string/LoginPswFrg_qsrsjh" />
 
     <View
@@ -49,6 +50,7 @@
             android:inputType="textPassword"
             android:maxLength="16"
             android:textSize="20sp"
+            android:gravity="start|center_vertical"
             app:hintText="@string/LoginPswFrg_qsrmm" />
 
         <com.shunlian.app.widget.MyImageView
@@ -75,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_wx_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +88,7 @@
             android:textColor="@color/text_black_one"
             android:textSize="12sp" />
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_new_regist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +99,7 @@
             android:textSize="12sp" />
     </RelativeLayout>
 
-    <Button
+    <com.shunlian.app.widget.MyButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,15 +107,16 @@
         android:layout_marginRight="25dp"
         android:background="@drawable/shape_pink_btn"
         android:text="@string/LoginPswFrg_dl"
+        android:gravity="center"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:textStyle="bold"></Button>
+        android:textStyle="bold"></com.shunlian.app.widget.MyButton>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_find_psw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,6 +124,6 @@
             android:text="@string/FindPsw_zhmm"
             android:textColor="@color/share_text"
             android:textSize="12sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"></com.shunlian.app.widget.MyTextView>
     </LinearLayout>
 </LinearLayout>

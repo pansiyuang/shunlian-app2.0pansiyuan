@@ -1,0 +1,41 @@
+package com.shunlian.app.view;
+
+import com.shunlian.app.bean.GoodsDeatilEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Administrator on 2017/11/8.
+ */
+
+public interface IGoodsDetailView extends IView {
+
+    /**
+     * 轮播
+     *
+     * @param pics
+     */
+    void banner(ArrayList<String> pics);
+
+
+    /**
+     * 商品的标题和价格
+     * 是否包邮
+     * 销售量
+     * 发货地点
+     */
+    void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address);
+
+
+    /**
+     * 商品参数对话框
+     */
+
+    void paramDialog(List<GoodsDeatilEntity.Specs> specs, List<GoodsDeatilEntity.Sku> sku);
+
+    /**
+     * 选择商品对话框
+     */
+    void attributeDialog();
+}

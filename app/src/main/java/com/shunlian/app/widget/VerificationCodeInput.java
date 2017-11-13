@@ -74,7 +74,11 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             editText.setCompoundDrawables(null, null, null, drawable);
             editText.setCompoundDrawablePadding(TransformUtil.dip2px(mContext, 10));
-
+            if (i == 0){
+                editText.setFocusable(true);
+                editText.setFocusableInTouchMode(true);
+                editText.requestFocus();
+            }
             editText.setEms(1);
             editText.addTextChangedListener(this);
             addView(editText, i);

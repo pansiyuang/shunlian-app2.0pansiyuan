@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +18,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
+import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.wxapi.WXEntryActivity;
@@ -49,7 +49,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     TextView tv_new_regist;
 
     @BindView(R.id.btn_login)
-    Button btn_login;
+    MyButton btn_login;
 
     @BindView(R.id.tv_find_psw)
     TextView tv_find_psw;
@@ -65,6 +65,8 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        btn_login.setWHProportion(650,90);
+        setEdittextFocusable(true,edt_psw,edt_account);
         loginPresenter = new LoginPresenter(getActivity(), this, TYPE_USER);
     }
 

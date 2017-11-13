@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
@@ -168,4 +169,19 @@ public interface ApiService {
      */
     @POST("/member/userinfo/findPwd")
     Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
+
+    /**
+     * 检验手机号是否注册
+     * @param map
+     * @return
+     */
+    @GET("member/register/checkMobile")
+    Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
+
+    /**
+     * 商品详情
+     * @return
+     */
+    @POST("goods/detail")
+    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@Body RequestBody body);
 }

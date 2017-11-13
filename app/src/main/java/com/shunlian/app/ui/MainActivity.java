@@ -5,17 +5,23 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.refresh.PullToRefreshView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,13 +79,20 @@ public class MainActivity extends BaseActivity {
 //        special_man.setWHProportion(211,207);
 //        special_woman.setWHProportion(211,207);
 
-        List<String> items = DataUtil.getListString(40, "条目");
+//        List<String> items = DataUtil.getListString(40, "条目");
+        List<String> items = new ArrayList<>();
+        items.add("登录");
+        items.add("商品详情");
+        items.add("店铺");
+        items.addAll(DataUtil.getListString(40, "条目"));
+
 
 
         SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
 
             @Override
             public void convert(SimpleViewHolder holder, String s,int position) {
+                holder.addOnClickListener(android.R.id.text1);
                 holder.setText(android.R.id.text1,s);
             }
         };
@@ -87,6 +100,22 @@ public class MainActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recy_view.setLayoutManager(manager);
         recy_view.setAdapter(simpleRecyclerAdapter);
+        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                switch (position){
+                    case 0:
+                        LoginAct.startAct(MainActivity.this);
+                        break;
+                    case 1:
+                        GoodsDetailAct.startAct(MainActivity.this);
+                        break;
+                    case 2:
+                        StoreAct.startAct(MainActivity.this);
+                        break;
+                }
+            }
+        });
 
         ll_layout.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
@@ -99,6 +128,7 @@ public class MainActivity extends BaseActivity {
                 },3000);
             }
         });
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.shunlian.app.ui.register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
@@ -24,6 +25,9 @@ import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
+import com.shunlian.mylibrary.KeyboardPatch;
+
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 
@@ -59,6 +63,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.btn_complete)
     Button btn_complete;
+
+    @BindView(R.id.view_title)
+    View view_title;
 
     private String nickname;
     private boolean isHiddenPwd;
@@ -195,10 +202,23 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         });
 
         et_nickname.addTextChangedListener(new SimpleTextWatcher() {
+
             @Override
-            public void afterTextChanged(Editable s) {
-                byte[] bytes = s.toString().getBytes();
-                if (bytes.length > 24){
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                int charLength = 0;
+                String[] split = s.toString().split("");
+                for (int i = 0; i < split.length; i++) {
+                    if (i == 0){
+                        continue;
+                    }
+                    if (Pattern.matches(Reg,split[i])){
+                        charLength += 2;
+                    }else {
+                        charLength++;
+                    }
+                }
+                if (charLength > 24){
                     Common.staticToast(getString(R.string.RegisterTwoAct_ncszgc));
                     et_nickname.setText(nickname);
                     et_nickname.setSelection(nickname.length());
@@ -206,6 +226,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     nickname = s.toString();
                 }
             }
+            String Reg="^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
+
         });
     }
 
@@ -231,8 +253,13 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            view_title.setVisibility(View.VISIBLE);
+            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
+            KeyboardPatch.patch(this).enable();
+        }else {
+            view_title.setVisibility(View.GONE);
+        }
 
         phone = getIntent().getStringExtra("phone");
         smsCode = getIntent().getStringExtra("smsCode");
@@ -307,12 +334,21 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 registerTwoPresenter.sendSmsCode(phone.replaceAll(" ", ""),pictureCode);
                 break;
             case R.id.btn_complete:
+                String pwd = et_pwd.getText().toString();
+                if (TextUtils.isEmpty(pwd)){
+                    Common.staticToast(getString(R.string.RegisterTwoAct_mmbnwk));
+                    return;
+                }
+                if (TextUtils.isEmpty(nickname)){
+                    Common.staticToast(getString(R.string.RegisterTwoAct_qsznc));
+                    return;
+                }
                 if (TYPE_FIND_PSW.equals(currentType)) {
-                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), smsCode);
+                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, "");
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, "");
                 } else {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), smsCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;
         }

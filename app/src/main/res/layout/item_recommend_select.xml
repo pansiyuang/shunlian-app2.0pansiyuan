@@ -12,8 +12,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/img_login_v1" />
+        android:scaleType="fitXY"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_select"
@@ -27,14 +26,13 @@
         android:layout_marginLeft="60dp"/>
 
 
-    <TextView
+    <com.shunlian.app.widget.MyTextView
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/civ_head"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7.5dp"
-        android:text="绝望的小熊"
         android:textColor="@color/new_text"
         android:textSize="13sp" />
 
@@ -54,16 +52,13 @@
             app:iv_control_adapter="true"
             app:iv_control_width="38"
             app:iv_control_height="28"
-            app:iv_margin_right="20"
-            android:src="@mipmap/img_login_v2" />
+            app:iv_margin_right="20"/>
 
-        <TextView
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_title"
             android:layout_width="45dp"
             android:layout_height="14dp"
-            android:background="@mipmap/bg_login_jingyingdaoshi"
             android:gravity="center"
-            android:text="精英导师"
             android:textColor="@color/white"
             android:textSize="10sp" />
 

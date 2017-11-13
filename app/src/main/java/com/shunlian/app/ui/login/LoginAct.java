@@ -40,6 +40,7 @@ public class LoginAct extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         initView();
+        setHeader();
     }
 
     private void initView() {
@@ -49,8 +50,8 @@ public class LoginAct extends BaseActivity {
         fragmentList = new ArrayList<>();
         pswFrag = new LoginPswFrag();
         verfiFrag = new LoginVerfiFrag();
-        fragmentList.add(pswFrag);
         fragmentList.add(verfiFrag);
+        fragmentList.add(pswFrag);
         mAdapter = new ViewPagerAdapter(fragmentManager, fragmentList);
 
         mViewPager.setAdapter(mAdapter);

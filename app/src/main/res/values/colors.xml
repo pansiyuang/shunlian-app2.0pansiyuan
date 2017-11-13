@@ -37,6 +37,7 @@
     <color name="share_text">#858585</color>
     - <!-- 橘红色
   -->
+    <color name="my_orange_red">#FB0030</color>
     <color name="my_orange">#ff4c4c</color>
     <color name="my_dark_grey">#333333</color>
     <color name="my_pink">#f7788d</color>
@@ -97,5 +98,8 @@
     <color name="text_param_name">#282828</color>
     <color name="text_param_value">#0C0B0B</color>
     <color name="line_gay">#F0EFEF</color>
+    <color name="value_60">#606060</color>
+    <color name="value_32">#323232</color>
+    <color name="value_9B">#9B9B9B</color>
 
 </resources>

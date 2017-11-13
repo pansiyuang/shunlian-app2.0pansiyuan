@@ -58,7 +58,8 @@ public class Common {
 
 
     public static boolean regularPwd(String pwd){
-        String regular = "[a-zA-Z0-9]{8,16}";
+//        String regular = "^[[^a-zA-Z0-9]+\\w]{8,16}$";
+        String regular = "^(?!\\d+$)(?![a-zA-Z]+$)(?![^a-zA-Z0-9]+$)[[^a-zA-Z0-9]+\\w]{8,16}$";
         boolean matches = Pattern.matches(regular, pwd);
         return matches;
     }
@@ -87,5 +88,18 @@ public class Common {
         v.requestFocus();
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v,InputMethodManager.SHOW_FORCED);
+    }
+
+    /**
+     * 获取占位符 一个占位符代表一个3个字节
+     * @param num
+     * @return
+     */
+    public static String getPlaceholder(int num){
+        String str = "";
+        for (int i = 0; i < num; i++) {
+            str += "\u3000";
+        }
+        return str;
     }
 }

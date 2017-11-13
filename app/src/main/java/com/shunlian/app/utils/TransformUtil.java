@@ -282,7 +282,11 @@ public class TransformUtil {
         float real_w = wp * DeviceInfoUtil.getDeviceWidth(context);
         float real_h = real_w * height / width;
         realWH[0] = (int) (real_w + 0.5f);
-        realWH[1] = (int) (real_h + 0.5f);
+        if (width == height){
+            realWH[1] = (int) (real_w + 0.5f);
+        }else {
+            realWH[1] = (int) (real_h + 0.5f);
+        }
         return realWH;
     }
 

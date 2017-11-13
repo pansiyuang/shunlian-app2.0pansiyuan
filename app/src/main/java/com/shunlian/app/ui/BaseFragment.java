@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -131,6 +132,16 @@ public abstract class BaseFragment extends Fragment {
                 if (view != null) {
                     view.setVisibility(View.GONE);
                 }
+            }
+        }
+    }
+
+    protected void setEdittextFocusable(boolean focusable,EditText... editText){
+        for (int i = 0; i < editText.length; i++) {
+            editText[i].setFocusable(focusable);
+            editText[i].setFocusableInTouchMode(focusable);
+            if (focusable){
+                editText[i].requestFocus();
             }
         }
     }

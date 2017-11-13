@@ -53,7 +53,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
-    private ImmersionBar immersionBar;
+    protected ImmersionBar immersionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void finishAct() {
         View byId = ButterKnife.findById(this, R.id.miv_close);
         if (byId != null) {
-            TransformUtil.expandViewTouchDelegate(byId, 30, 30, 30, 30);
+            TransformUtil.expandViewTouchDelegate(byId, 50, 50, 50, 50);
             byId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

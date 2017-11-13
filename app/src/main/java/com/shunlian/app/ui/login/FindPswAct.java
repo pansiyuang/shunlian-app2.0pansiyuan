@@ -60,6 +60,7 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        setEdittextFocusable(true,et_code,et_phone);
         onePresenter = new RegisterOnePresenter(this, this);
         initViews();
     }
@@ -95,6 +96,11 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
 
     @Override
     public void checkCode(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void checkMobile(boolean isSuccess) {
 
     }
 

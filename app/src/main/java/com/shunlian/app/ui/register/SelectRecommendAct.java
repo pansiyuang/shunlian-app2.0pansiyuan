@@ -28,6 +28,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectRecommendView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
@@ -55,10 +56,10 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     CircleImageView miv_icon;
 
     @BindView(R.id.tv_select)
-    TextView tv_select;
+    MyTextView tv_select;
 
     @BindView(R.id.tv_notSelect)
-    TextView tv_notSelect;
+    MyTextView tv_notSelect;
 
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
@@ -119,8 +120,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        setHeader();
-
+        tv_select.setWHProportion(530,75);
+        tv_notSelect.setWHProportion(530,75);
         LinearLayout.LayoutParams iconParams = (LinearLayout.LayoutParams) miv_icon.getLayoutParams();
         int[] ints1 = TransformUtil.countRealWH(this, 200, 200);
         iconParams.width = ints1[0];
@@ -140,12 +141,27 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     }
 
     private void dialogHidden(){
-        sv_mask.setVisibility(View.GONE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1);
         animation.setDuration(300);
         frame_detail.setVisibility(View.GONE);
         frame_detail.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                sv_mask.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override

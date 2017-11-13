@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,6 +22,7 @@ import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
+import com.shunlian.mylibrary.KeyboardPatch;
 
 import butterknife.BindView;
 
@@ -44,10 +47,17 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.miv_logo)
     MyImageView miv_logo;
 
+    @BindView(R.id.view_title)
+    View view_title;
+
+    @BindView(R.id.sv_content)
+    ScrollView sv_content;
+
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
     private boolean isCheckCode;
     private String unique_sign;
+    private boolean isCheckMobile;
 
     public static void stratAct(Context context) {
         Intent intent = new Intent(context, RegisterOneAct.class);
@@ -67,6 +77,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
         miv_logo.setOnClickListener(this);
+        sv_content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         et_phone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -86,7 +102,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
+                if (!TextUtils.isEmpty(s) && !s.toString().startsWith("1")){
+                    Common.staticToast(getString(R.string.RegisterOneAct_sjhbzq));
+                    return;
+                }
                 if (!TextUtils.isEmpty(s) && s.length() >= 13) {
+                    onePresenter.checkPhone(et_phone.getText().toString().replaceAll(" ",""));
                     setEdittextFocusable(true, et_code);
                 }
             }
@@ -123,6 +144,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             setEdittextFocusable(true, et_phone);
             setEdittextFocusable(false, et_code);
             return true;
+        }else if (!TextUtils.isEmpty(phone) && !phone.startsWith("1") && phone.length() < 11){
+            Common.staticToast(getString(R.string.RegisterOneAct_sjhbzq));
+            setEdittextFocusable(true, et_phone);
+            setEdittextFocusable(false, et_code);
+            return true;
         }
         return false;
     }
@@ -140,8 +166,16 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        setEdittextFocusable(true,et_id);
+        miv_logo.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            view_title.setVisibility(View.VISIBLE);
+            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
+            KeyboardPatch.patch(this).enable();
+        }else {
+            view_title.setVisibility(View.GONE);
+        }
+
         unique_sign = getIntent().getStringExtra("unique_sign");
         onePresenter = new RegisterOnePresenter(RegisterOneAct.this, this);
     }
@@ -192,10 +226,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
+            Common.staticToast(smsCode);
             RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, RegisterTwoAct.TYPE_REGIST,et_code.getText().toString());
             finish();
         } else {
-            Common.staticToast(getString(R.string.RegisterOneAct_sjyzmfssb));
+            onePresenter.getCode();
+            et_code.setText("");
         }
     }
 
@@ -205,6 +241,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
         if (!isSuccess) {
             setEdittextFocusable(true, et_id);
         }
+    }
+
+    @Override
+    public void checkMobile(boolean isSuccess) {
+        isCheckMobile = isSuccess;
     }
 
     @Override

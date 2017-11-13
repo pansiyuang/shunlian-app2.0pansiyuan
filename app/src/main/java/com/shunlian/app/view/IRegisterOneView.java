@@ -16,4 +16,6 @@ public interface IRegisterOneView extends IView {
      * @param isSuccess
      */
     void checkCode(boolean isSuccess);
+
+    void checkMobile(boolean isSuccess);
 }
