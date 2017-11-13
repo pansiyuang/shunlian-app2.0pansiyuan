@@ -211,7 +211,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_title.setText(Common.getPlaceholder(4) + title);
         mtv_discount_info.setText("店铺优惠");
         mtv_price.setText(price);
-        mtv_marketPrice.setStrikethrough().setText(market_price);
+        mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb) + market_price);
         if ("0".equals(free_shipping)) {
             mtv_free_shipping.setText(getString(R.string.no_mail));
         } else {

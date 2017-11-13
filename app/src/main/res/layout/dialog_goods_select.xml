@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/goods_count"
+                    android:text="@string/count"
                     android:textColor="@color/new_text"
                     android:textSize="16sp" />
 
