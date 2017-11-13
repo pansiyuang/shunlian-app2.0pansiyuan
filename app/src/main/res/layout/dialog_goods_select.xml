@@ -148,16 +148,17 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_param"
-                android:overScrollMode="never"
-                android:scrollbars="none"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="310dp"
+                android:layout_marginTop="10dp"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="115dp"
-            android:layout_height="115dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_above="@+id/lLayout_view"
             android:layout_marginBottom="-145dp"
             android:layout_marginLeft="10dp"

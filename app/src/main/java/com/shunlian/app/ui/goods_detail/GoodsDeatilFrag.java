@@ -31,6 +31,7 @@ import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 

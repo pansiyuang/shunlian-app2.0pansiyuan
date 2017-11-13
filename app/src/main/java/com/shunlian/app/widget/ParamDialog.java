@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -26,6 +27,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
 
 /**
  * Created by Administrator on 2017/11/10.
@@ -68,6 +71,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private ParamItemAdapter paramItemAdapter;
     private List<GoodsDeatilEntity.Specs.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
+    private int recycleHeight;
+    private int totalStock;
     private int currentCount = 1;
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
@@ -93,6 +98,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         initListeners();
         setCanceledOnTouchOutside(false);
 
+        recycleHeight = getDeviceHeight(mContext) * 1 / 3;
         Window win = getWindow();
         WindowManager.LayoutParams lp = win.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -102,12 +108,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         paramItemAdapter = new ParamItemAdapter(specs);
         linearLayoutManager = new LinearLayoutManager(mContext);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         recycler_param.setLayoutManager(linearLayoutManager);
+        recycler_param.setLayoutParams(params);
         recycler_param.setAdapter(paramItemAdapter);
     }
 
     public void initViews() {
         dia_tv_price.setText("¥" + goodsDeatilEntity.price);
+        totalStock = Integer.valueOf(goodsDeatilEntity.stock);
         tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
         GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
     }
@@ -126,12 +135,17 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.btn_add:
                 currentCount++;
+                if (currentCount >= totalStock) {
+                    currentCount = totalStock;
+                    return;
+                }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_minus:
                 currentCount--;
                 if (currentCount <= 0) {
                     currentCount = 0;
+                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
