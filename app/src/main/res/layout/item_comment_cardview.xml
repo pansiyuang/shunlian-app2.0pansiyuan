@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:fl_control_adapter="true"
+    app:fl_control_width="594"
+    app:fl_control_height="313">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_rootview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardMaxElevation="16dp"
+        app:cardElevation="3dp">
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:rl_control_adapter="true"
+            app:rl_control_height="233"
+            app:rl_control_width="534">
+
+            <com.shunlian.app.widget.circle.CircleImageView
+                android:id="@+id/civ_head"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="9dp"
+                android:src="@mipmap/icon_login_logo" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/civ_head"
+                android:maxLines="1"
+                android:text="进度款撒房价"
+                android:textColor="@color/value_8e"
+                android:textSize="12sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_left="14"
+                app:tv_margin_top="35" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/mtv_nickname"
+                android:layout_toRightOf="@+id/mtv_nickname"
+                android:src="@mipmap/img_login_v1"
+                app:iv_control_adapter="true"
+                app:iv_control_height="28"
+                app:iv_control_width="25"
+                app:iv_margin_left="9" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/civ_head"
+                android:ellipsize="end"
+                android:text="道具卡设计费付款鲁大师荆防颗粒发动机上课啦荆防颗粒都烦死了看见"
+                android:textColor="@color/value_60"
+                android:textSize="12sp"
+                android:maxLines="3"
+                app:tv_control_adapter="true"
+                app:tv_control_height="99"
+                app:tv_control_width="261"
+                app:tv_margin_left="21"
+                app:tv_margin_top="23" />
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/mtv_content"
+                android:src="@mipmap/ic_launcher"
+                app:iv_control_adapter="true"
+                app:iv_control_height="233"
+                app:iv_control_width="233"
+                app:iv_margin_left="19" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</com.shunlian.app.widget.MyFrameLayout>

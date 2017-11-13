@@ -36,6 +36,7 @@ public class RollNumView extends View {
     private int mTextSize = sp2px(16);
     private int mTextColor = 0xFFFA6703;
     private Paint bgPaint;
+    private Paint edgePaint;
 
     public enum Mode {
         DOWN, UP, DOWN_AND_UP
@@ -74,6 +75,12 @@ public class RollNumView extends View {
         bgPaint.setAntiAlias(true);
         bgPaint.setStyle(Paint.Style.FILL);
         bgPaint.setColor(Color.RED);
+
+        edgePaint = new Paint();
+        edgePaint.setAntiAlias(true);
+        edgePaint.setStyle(Paint.Style.STROKE);
+        edgePaint.setStrokeWidth(2);
+        edgePaint.setColor(Color.WHITE);
 
         measureTextHeight();
     }
@@ -134,6 +141,7 @@ public class RollNumView extends View {
         int cx = getMeasuredWidth() / 2;
         int cy = getMeasuredHeight() / 2;
         canvas.drawCircle(cx,cy,Math.max(cx,cy),bgPaint);
+        canvas.drawCircle(cx,cy,Math.max(cx,cy),edgePaint);
         if (mCurNum > 9){
             drawSelf(canvas);
             return;

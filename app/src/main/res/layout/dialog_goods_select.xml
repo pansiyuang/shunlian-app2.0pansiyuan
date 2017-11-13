@@ -139,15 +139,17 @@
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/iv_cancel"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
                     android:src="@mipmap/icon_login_delet" />
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_param"
+                android:overScrollMode="never"
+                android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

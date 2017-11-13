@@ -101,5 +101,10 @@
     <color name="value_60">#606060</color>
     <color name="value_32">#323232</color>
     <color name="value_9B">#9B9B9B</color>
+    <color name="value_88">#888888</color>
+    <color name="value_20">#202020</color>
+    <color name="value_8e">#8e8e8e</color>
+    <color name="value_f8">#f8f8f8</color>
+    <color name="value_FC2F57">#FC2F57</color>
 
 </resources>

@@ -12,7 +12,6 @@ public interface IGoodsDetailView extends IView {
 
     /**
      * 轮播
-     *
      * @param pics
      */
     void banner(ArrayList<String> pics);
@@ -37,4 +36,34 @@ public interface IGoodsDetailView extends IView {
      * 选择商品对话框
      */
     void attributeDialog();
+
+
+    /**
+     *
+     * @param is_new 是否新品
+     * @param is_explosion 是否爆款
+     * @param is_hot 是否热卖
+     * @param is_recommend 是否推荐
+     */
+    void smallLabel(String is_new,String is_explosion, String is_hot,String is_recommend);
+
+    /**
+     * 优惠券
+     * @param vouchers
+     */
+    void voucher(ArrayList<GoodsDeatilEntity.Voucher> vouchers);
+
+//    public String decoration_name;//店铺名字
+//    public String star; //星级
+//    public String quality_logo;  //是否有品质标志1是0否
+//    public String goods_count;    //商品数量
+//    public String decoration_banner;    //店铺背景图
+//    public String attention_count;      //收藏数
+//    public String description_consistency;      //描述相符度
+//    public String quality_satisfy;     //质量满意度
+    /**
+     * 店铺信息
+     * @param storeInfo
+     */
+    void shopInfo(GoodsDeatilEntity.StoreInfo storeInfo);
 }

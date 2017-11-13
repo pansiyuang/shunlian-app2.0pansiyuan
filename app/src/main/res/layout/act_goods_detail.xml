@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_rootview"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +8,7 @@
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -126,17 +128,14 @@
     </com.shunlian.app.widget.MyLinearLayout>
 
 
-    <com.shunlian.app.widget.MyFrameLayout
-        android:id="@+id/mfl_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_gray_two"
         android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:paddingTop="0.5dp"
         app:ll_control_adapter="true"
         app:ll_control_height="86">
@@ -147,11 +146,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1.5"
             android:background="@color/white"
-            android:drawablePadding="5dp"
+            android:drawablePadding="2dp"
             android:drawableTop="@mipmap/icon_productdetails_tab_kefu"
             android:gravity="center"
-            android:paddingTop="5dp"
+            android:paddingTop="8dp"
             android:text="客服"
+            app:tv_control_adapter="true"
             android:textColor="@color/new_text"
             android:textSize="10sp"/>
 
@@ -161,39 +161,61 @@
             android:layout_marginLeft="0.5dp"
             android:layout_weight="1.5"
             android:background="@color/white"
-            android:drawablePadding="5dp"
+            android:drawablePadding="2dp"
             android:drawableTop="@mipmap/icon_productdetails_tab_dianpu"
             android:gravity="center"
-            android:paddingTop="5dp"
+            android:paddingTop="8dp"
             android:text="店铺"
             android:textColor="@color/new_text"
             android:textSize="10sp"
             />
 
-        <com.shunlian.app.widget.MyTextView
+        <com.shunlian.app.widget.MyRelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="0.5dp"
-            android:layout_weight="1"
             android:background="@color/white"
-            android:drawablePadding="5dp"
-            android:drawableTop="@mipmap/icon_productdetails_tab_gouwuche"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:text="购物车"
-            android:textColor="@color/new_text"
-            android:textSize="10sp"
-            />
+            android:layout_marginLeft="0.5dp"
+            android:layout_weight="1">
 
-        <com.shunlian.app.widget.MyTextView
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_car"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawablePadding="2dp"
+                android:drawableTop="@mipmap/icon_productdetails_tab_gouwuche"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:text="购物车"
+                android:textColor="@color/new_text"
+                android:textSize="10sp"
+                android:layout_centerInParent="true"/>
+
+
+            <com.shunlian.app.widget.RollNumView
+                android:id="@+id/rnview"
+                android:layout_alignRight="@+id/mtv_car"
+                android:layout_marginTop="1dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrl_add_car"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="3"
             android:background="@color/my_black_one"
-            android:gravity="center"
-            android:text="加入购物车"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:layout_weight="3">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="加入购物车"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
 
 
         <com.shunlian.app.widget.MyTextView
@@ -206,4 +228,11 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
     </com.shunlian.app.widget.MyLinearLayout>
-</LinearLayout>
+
+    <com.shunlian.app.widget.MyFrameLayout
+        android:id="@+id/mfl_content"
+        android:layout_below="@+id/mll_title"
+        android:layout_above="@+id/mll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

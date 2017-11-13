@@ -57,6 +57,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.btn_complete)
     Button btn_complete;
 
+    @BindView(R.id.iv_cancel)
+    MyImageView iv_cancel;
+
     private List<GoodsDeatilEntity.Specs> specs;
     private List<GoodsDeatilEntity.Sku> mSku;
     private GoodsDeatilEntity goodsDeatilEntity;
@@ -114,6 +117,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         btn_add.setOnClickListener(this);
         btn_minus.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
+        iv_cancel.setOnClickListener(this);
     }
 
 
@@ -144,7 +148,11 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 }
                 if (getSkuId(ids.toString()) != null && selectCallBack != null) {
                     selectCallBack.onSelectComplete(getSkuId(ids.toString()), currentCount);
+                    dismiss();
                 }
+                break;
+            case R.id.iv_cancel:
+                dismiss();
                 break;
         }
     }

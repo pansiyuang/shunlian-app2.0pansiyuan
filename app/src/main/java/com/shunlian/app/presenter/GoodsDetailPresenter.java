@@ -60,6 +60,11 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         if (goods_data != null) {
                             sales = goods_data.sales;
                         }
+                        iView.goodsInfo(title,price,market_price,free_shipping,sales,area);
+
+                        iView.smallLabel(data.is_new,data.is_explosion,data.is_hot,data.is_recommend);
+                        iView.voucher(data.voucher);
+                        iView.shopInfo(data.store_info);
                         iView.goodsInfo(title, price, market_price, free_shipping, sales, area);
 
                         iView.paramDialog(data);

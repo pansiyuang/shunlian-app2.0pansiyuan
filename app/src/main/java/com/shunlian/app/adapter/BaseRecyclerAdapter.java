@@ -12,7 +12,11 @@ import com.shunlian.app.R;
 import com.shunlian.app.utils.load.Circle;
 import com.shunlian.app.utils.load.SpinKitView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 //                            _ooOoo_
@@ -259,5 +263,33 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
          * 重新加载
          */
         void onReload();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        unbind();
+    }
+
+    public void unbind(){
+        if (unbinders != null && unbinders.size() > 0){
+            for (Unbinder bind: unbinders) {
+                if (bind != null){
+                    bind.unbind();
+                }
+            }
+            unbinders.clear();
+        }
+    }
+
+    public static List<Unbinder> unbinders = new ArrayList<>();
+
+    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder{
+
+        public BaseRecyclerViewHolder(View itemView) {
+            super(itemView);
+            Unbinder bind = ButterKnife.bind(this, itemView);
+            unbinders.add(bind);
+        }
     }
 }

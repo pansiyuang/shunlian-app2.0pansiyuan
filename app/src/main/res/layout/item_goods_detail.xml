@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:ll_control_adapter="true"
+    app:ll_control_width="198"
+    app:ll_control_height="334"
+    android:gravity="center_horizontal"
+    >
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_shop_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iv_control_adapter="true"
+        app:iv_control_width="198"
+        app:iv_control_height="198"
+        />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/value_20"
+        android:textSize="12sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/pink_color"
+        android:textSize="14sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="24"
+        />
+</com.shunlian.app.widget.MyLinearLayout>
