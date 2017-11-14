@@ -47,6 +47,6 @@
 
     <!--商品详情-->
     <string name="goods_stock">库存%s件</string>
-    <string name="goods_pleaseselectparam">请选择库存</string>
+    <string name="goods_pleaseselectparam">请选择规格</string>
     <string name="goods_count">数量</string>
 </resources>

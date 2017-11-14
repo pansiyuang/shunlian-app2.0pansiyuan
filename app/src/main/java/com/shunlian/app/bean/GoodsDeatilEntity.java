@@ -33,13 +33,12 @@ public class GoodsDeatilEntity {
     public GoodsData goods_data;
 
 
-
     public ArrayList<Voucher> voucher;
 
     public StoreInfo store_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class StoreInfo{
+    public static class StoreInfo {
         public String decoration_name;//店铺名字
         public String star; //星级
         public String quality_logo;  //是否有品质标志1是0否
@@ -76,7 +75,6 @@ public class GoodsDeatilEntity {
     }
 
 
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GoodsData {
         //销量
@@ -97,6 +95,10 @@ public class GoodsDeatilEntity {
         public String specs;
         public String name;
 
+        @Override
+        public String toString() {
+            return "id:" + id + " price:" + price + " market_price:" + market_price + " weight:" + weight + " stock:" + stock + " specs:" + specs + " name:" + name;
+        }
     }
 
 
