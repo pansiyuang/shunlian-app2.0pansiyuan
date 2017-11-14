@@ -10,8 +10,10 @@
         android:layout_width="65dp"
         android:layout_height="30dp"
         android:background="@drawable/shape_tag_nomal"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="烈焰红"
+        android:maxEms="5"
+        android:singleLine="true"
         android:textColor="@color/new_text"
         android:textSize="12sp" />
 </LinearLayout>
