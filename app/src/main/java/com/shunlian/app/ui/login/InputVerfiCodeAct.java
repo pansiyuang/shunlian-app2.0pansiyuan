@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -142,10 +143,12 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void login(String content) {
+    public void login(LoginFinishEntity content) {
         //登陆成功啦
-        SharedPrefUtil.saveSharedPrfString("token", content);
-        Common.staticToast(content);
+        SharedPrefUtil.saveSharedPrfString("token", content.token);
+        SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        finish();
     }
 
     @Override
@@ -159,12 +162,12 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 }

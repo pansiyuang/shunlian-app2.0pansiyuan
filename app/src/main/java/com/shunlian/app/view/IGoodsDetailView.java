@@ -66,4 +66,11 @@ public interface IGoodsDetailView extends IView {
      * @param storeInfo
      */
     void shopInfo(GoodsDeatilEntity.StoreInfo storeInfo);
+
+    /**
+     * 是否喜爱该商品
+     * @param is_fav
+     */
+    void isFavorite(String is_fav);
+
 }

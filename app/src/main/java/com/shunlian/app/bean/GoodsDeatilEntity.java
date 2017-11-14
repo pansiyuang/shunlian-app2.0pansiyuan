@@ -20,6 +20,7 @@ public class GoodsDeatilEntity {
     public String max_price;
     public String stock;
     public String thumb;
+    public String is_fav;
     public ArrayList<String> pics;
 
 
@@ -48,6 +49,8 @@ public class GoodsDeatilEntity {
         public String attention_count;      //收藏数
         public String description_consistency;      //描述相符度
         public String quality_satisfy;     //质量满意度
+        public String is_attention;     //1是已经收藏， 未登录就返回0
+        public String store_id;     //店铺id
 
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐

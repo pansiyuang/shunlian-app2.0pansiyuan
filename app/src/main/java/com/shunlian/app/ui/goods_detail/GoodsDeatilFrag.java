@@ -137,6 +137,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @BindView(R.id.tv_select_param)
     MyTextView tv_select_param;
 
+    private boolean isAttentionShop;
+
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
     private GoodsDeatilEntity.StoreInfo infos;
@@ -272,23 +274,21 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     }
 
-    private boolean isClick;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mtv_collection:
-                isClick = !isClick;
-                GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
-                if (isClick){
-                    background.setColor(getResources().getColor(R.color.pink_color));
-                    mtv_collection.setTextColor(Color.WHITE);
-                    mtv_collection.setText(getString(R.string.already_collected));
+                GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
+                System.out.println("=======isAttentionShop="+isAttentionShop);
+                if (isAttentionShop){
+                    detailAct.delFollowStore();
+                    setCollectionState(0);
                 }else {
-                    background.setColor(getResources().getColor(R.color.transparent));
-                    mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
-                    mtv_collection.setText(getString(R.string.collection));
+                    detailAct.followStore();
+                    setCollectionState(1);
                 }
+                isAttentionShop = !isAttentionShop;
                 break;
             case R.id.mll_self_hot:
                 setState(1);
@@ -327,6 +327,19 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(baseActivity,1.0f)
                 :TransformUtil.dip2px(baseActivity,0.5f);
         view_self_push.setLayoutParams(pushlayoutParams);
+    }
+
+    private void setCollectionState(int state){
+        GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
+        if (state == 1){
+            background.setColor(getResources().getColor(R.color.pink_color));
+            mtv_collection.setTextColor(Color.WHITE);
+            mtv_collection.setText(getString(R.string.already_collected));
+        }else {
+            background.setColor(getResources().getColor(R.color.transparent));
+            mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_collection.setText(getString(R.string.collection));
+        }
     }
     /**
      * 优惠券
@@ -374,6 +387,13 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         ratingBar1.setEnabled(false);
         ratingBar1.setNumberOfStars(Integer.valueOf(infos.star));
         ratingBar1.setRating(Integer.valueOf(infos.star));
+        if ("1".equals(infos.is_attention)){
+            setCollectionState(1);
+            isAttentionShop = true;
+        }else {
+            setCollectionState(0);
+            isAttentionShop = false;
+        }
 
         if ("1".equals(infos.quality_logo)){
             mtv_quality_goods.setVisibility(View.VISIBLE);

@@ -394,12 +394,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 

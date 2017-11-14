@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
@@ -158,10 +159,12 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void login(String content) {
+    public void login(LoginFinishEntity content) {
         //登陆成功啦
-        SharedPrefUtil.saveSharedPrfString("token", content);
-        Common.staticToast(content);
+        SharedPrefUtil.saveSharedPrfString("token", content.token);
+        SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        baseActivity.finish();
     }
 
     @Override
@@ -175,12 +178,12 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 }

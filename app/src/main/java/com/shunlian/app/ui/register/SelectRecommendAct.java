@@ -269,12 +269,12 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 
