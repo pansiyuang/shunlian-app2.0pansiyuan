@@ -102,7 +102,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥"
+                android:text="@string/rmb"
                 android:textColor="@color/pink_color"
                 android:textSize="11sp" />
 
@@ -118,7 +118,6 @@
                 android:id="@+id/mtv_marketPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥1119.00"
                 android:textSize="10.5sp"
                 app:tv_control_adapter="true"
                 app:tv_margin_left="10" />
@@ -128,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:text="新品"
+                android:text="@string/new_goods"
                 android:textSize="9sp"
                 android:textColor="@color/white"
                 app:tv_control_adapter="true"
@@ -143,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:text="爆款"
+                android:text="@string/explosion_goods"
                 android:textSize="9sp"
                 android:textColor="@color/white"
                 app:tv_control_adapter="true"
@@ -157,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:text="热卖"
+                android:text="@string/hot_goods"
                 android:textSize="9sp"
                 android:textColor="@color/white"
                 app:tv_control_adapter="true"
@@ -171,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:text="推荐"
+                android:text="@string/recommend_goods"
                 android:textSize="9sp"
                 android:textColor="@color/white"
                 app:tv_control_adapter="true"
@@ -196,7 +195,6 @@
                 android:id="@+id/mtv_free_shipping"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="包邮"
                 android:textColor="@color/new_gray"
                 android:textSize="11sp" />
 
@@ -205,7 +203,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="已售4512件"
                 android:textColor="@color/new_gray"
                 android:textSize="11sp" />
 
@@ -214,7 +211,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="浙江金华"
                 android:textColor="@color/new_gray"
                 android:textSize="11sp" />
 
@@ -241,7 +237,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="领券"
+                android:text="@string/coupons"
                 android:textSize="12sp"
                 android:textColor="@color/new_text"
                 />
@@ -282,7 +278,7 @@
             android:drawableRight="@mipmap/img_common_viewarrow_1"
             android:paddingBottom="15dp"
             android:paddingTop="17.5dp"
-            android:text="套餐详情"
+            android:text="@string/package_details"
             android:textColor="@color/new_text"
             android:textSize="12sp"
             app:tv_control_adapter="true"
@@ -300,7 +296,7 @@
             android:drawableRight="@mipmap/img_common_viewarrow_1"
             android:paddingBottom="15dp"
             android:paddingTop="17.5dp"
-            android:text="产品参数"
+            android:text="@string/product_parameter"
             android:textColor="@color/new_text"
             android:textSize="12sp"
             app:tv_control_adapter="true"
@@ -319,7 +315,7 @@
             android:drawableRight="@mipmap/img_common_viewarrow_1"
             android:paddingBottom="15dp"
             android:paddingTop="17.5dp"
-            android:text="选择  尺码  颜色分类"
+            android:text="@string/select_size_color"
             android:textColor="@color/new_text"
             android:textSize="12sp"
             app:tv_control_adapter="true"
@@ -350,7 +346,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="7天无理由退货"
+                android:text="@string/_7_days_no_reason_to_return"
                 android:textColor="@color/new_gray"
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
@@ -367,7 +363,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="正品保障"
+                android:text="@string/genuine_guarantee"
                 android:textColor="@color/new_gray"
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
@@ -384,7 +380,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24小时发货"
+                android:text="@string/_24_hours_delivery"
                 android:textColor="@color/new_gray"
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
@@ -406,7 +402,6 @@
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="评价  (36)"
                 android:textColor="@color/new_text"
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
@@ -420,7 +415,6 @@
                 android:layout_alignParentRight="true"
                 android:drawablePadding="3dp"
                 android:drawableRight="@mipmap/img_common_viewarrow_1"
-                android:text="好评率98.5%"
                 android:textColor="@color/pink_color"
                 android:textSize="12sp"
                 app:tv_control_adapter="true"
@@ -466,7 +460,6 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/miv_shop_head"
                 android:maxLines="1"
-                android:text="浙江丽水喜来多旗舰店"
                 android:textColor="@color/value_60"
                 android:textSize="15sp"
                 app:tv_control_adapter="true"
@@ -478,7 +471,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:text="品质"
+                android:text="@string/quality_goods"
                 android:textSize="9sp"
                 android:textColor="@color/white"
                 app:tv_control_adapter="true"
@@ -496,7 +489,7 @@
                 android:id="@+id/mtv_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="收藏"
+                android:text="@string/collection"
                 android:textSize="12sp"
                 android:textColor="@color/pink_color"
                 android:background="@drawable/edge_frame_r3"
@@ -550,14 +543,13 @@
                         android:id="@+id/mtv_goods_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1012545"
                         android:textColor="@color/value_32"
                         android:textSize="16sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="商品数"
+                        android:text="@string/goods_count"
                         android:textColor="@color/value_9B"
                         android:textSize="11sp"
                         app:tv_control_adapter="true"
@@ -580,14 +572,13 @@
                         android:id="@+id/mtv_attention_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1012545"
                         android:textColor="@color/value_32"
                         android:textSize="16sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="收藏数"
+                        android:text="@string/attention_count"
                         android:textColor="@color/value_9B"
                         android:textSize="11sp"
                         app:tv_control_adapter="true"
@@ -608,7 +599,7 @@
                         android:id="@+id/mtv_xiangfu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="描述相符"
+                        android:text="@string/description"
                         android:textColor="@color/value_9B"
                         android:textSize="11sp"
                         app:tv_control_adapter="true"
@@ -620,7 +611,6 @@
                         android:id="@+id/mtv_description_consistency"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4.63"
                         android:layout_toRightOf="@+id/mtv_xiangfu"
                         android:textColor="@color/pink_color"
                         android:textSize="12sp"
@@ -633,7 +623,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/mtv_xiangfu"
-                        android:text="质量满意"
+                        android:text="@string/quality_satisfy"
                         android:textColor="@color/value_9B"
                         android:textSize="11sp"
                         app:tv_control_adapter="true"
@@ -645,7 +635,6 @@
                         android:id="@+id/mtv_quality_satisfy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4.63"
                         android:layout_below="@+id/mtv_xiangfu"
                         android:layout_toRightOf="@+id/mtv_zhiliang"
                         android:textColor="@color/pink_color"
@@ -687,7 +676,7 @@
                     android:id="@+id/mtv_self_hot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本店热销"
+                    android:text="@string/this_store_sells_well"
                     android:textSize="12sp"
                     android:textColor="@color/new_text"/>
                 
@@ -713,7 +702,7 @@
                     android:id="@+id/mtv_self_push"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="店主推荐"
+                    android:text="@string/the_shopkeeper_recommended"
                     android:textSize="12sp"
                     android:textColor="@color/value_88"/>
 
@@ -754,7 +743,7 @@
                 android:layout_marginRight="10dp"
                 android:gravity="top"
                 android:drawablePadding="5dp"
-                android:text="继续拖动，查看图文详情"
+                android:text="@string/continue_dragging_to_view_text_details"
                 android:textColor="@color/value_88"
                 android:textSize="12sp" />
 

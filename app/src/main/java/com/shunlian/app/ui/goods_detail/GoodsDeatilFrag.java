@@ -211,13 +211,13 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_title.setText(Common.getPlaceholder(4) + title);
         mtv_discount_info.setText("店铺优惠");
         mtv_price.setText(price);
-        mtv_marketPrice.setStrikethrough().setText(market_price);
+        mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb) + market_price);
         if ("0".equals(free_shipping)) {
-            mtv_free_shipping.setText("不包邮");
+            mtv_free_shipping.setText(getString(R.string.no_mail));
         } else {
-            mtv_free_shipping.setText("包邮");
+            mtv_free_shipping.setText(getString(R.string.free_shipping));
         }
-        mtv_sales.setText("已售" + sales + "件");
+        mtv_sales.setText(getString(R.string.sold) + sales + getString(R.string.piece));
         mtv_address.setText(address);
     }
 
@@ -283,11 +283,11 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 if (isClick){
                     background.setColor(getResources().getColor(R.color.pink_color));
                     mtv_collection.setTextColor(Color.WHITE);
-                    mtv_collection.setText("已收藏");
+                    mtv_collection.setText(getString(R.string.already_collected));
                 }else {
                     background.setColor(getResources().getColor(R.color.transparent));
                     mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
-                    mtv_collection.setText("收藏");
+                    mtv_collection.setText(getString(R.string.collection));
                 }
                 break;
             case R.id.mll_self_hot:
@@ -346,7 +346,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 textView.setBackgroundResource(R.drawable.edge_frame_r3);
                 int padding = TransformUtil.dip2px(baseActivity, 4);
                 textView.setPadding(padding,padding,padding,padding);
-                textView.setText("满"+voucher.use_condition+"减"+voucher.denomination);
+                textView.setText(getString(R.string.pull)+voucher.use_condition+getString(R.string.reduce)+voucher.denomination);
                 mll_Coupon.addView(textView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
                 layoutParams.leftMargin = TransformUtil.dip2px(baseActivity,5.5f);
