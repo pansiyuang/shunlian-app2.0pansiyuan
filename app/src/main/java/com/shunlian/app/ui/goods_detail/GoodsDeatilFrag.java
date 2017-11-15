@@ -28,6 +28,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
+import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
@@ -73,6 +74,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @BindView(R.id.mtv_discount_info)
     MyTextView mtv_discount_info;
+
+    @BindView(R.id.mtv_combo)
+    MyTextView mtv_combo;
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -142,6 +146,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private GoodsDeatilEntity.StoreInfo infos;
     private CommentCardViewAdapter commentCardViewAdapter;
     private ParamDialog paramDialog;
+    private RecyclerDialog recyclerDialog;
+    private List<GoodsDeatilEntity.Combo> mCurrentCombos;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -154,6 +160,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_collection.setOnClickListener(this);
         mll_self_push.setOnClickListener(this);
         mll_self_hot.setOnClickListener(this);
+        mtv_combo.setOnClickListener(this);
         tv_select_param.setOnClickListener(this);
     }
 
@@ -162,11 +169,10 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         GradientDrawable infoDrawable = (GradientDrawable) mtv_discount_info.getBackground();
         infoDrawable.setColor(Color.parseColor("#FB0036"));
 
-
         List<String> fjdsakfj = DataUtil.getListString(10, "fjdsakfj");
-        LinearLayoutManager manager1 = new LinearLayoutManager(baseActivity,LinearLayoutManager.HORIZONTAL,false);
+        LinearLayoutManager manager1 = new LinearLayoutManager(baseActivity, LinearLayoutManager.HORIZONTAL, false);
         recy_cardview.setLayoutManager(manager1);
-        commentCardViewAdapter = new CommentCardViewAdapter(baseActivity,false,fjdsakfj);
+        commentCardViewAdapter = new CommentCardViewAdapter(baseActivity, false, fjdsakfj);
         recy_cardview.setAdapter(commentCardViewAdapter);
         commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -174,17 +180,18 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 valueAnimator(view);
             }
         });
+        recyclerDialog = new RecyclerDialog(getActivity());
     }
 
     private void valueAnimator(final View view) {
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(16, 8, 3);
         valueAnimator.setDuration(500);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float animatedValue = (float) animation.getAnimatedValue();
-                if (view instanceof CardView){
+                if (view instanceof CardView) {
                     CardView cardView = (CardView) view;
                     cardView.setCardElevation(TransformUtil.dip2px(baseActivity, animatedValue));
                 }
@@ -195,6 +202,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     /**
      * 轮播
+     *
      * @param pics
      */
     public void setBanner(ArrayList<String> pics) {
@@ -230,19 +238,19 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
         Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
     }
+
     /**
-     *
-     * @param is_new 是否新品
+     * @param is_new       是否新品
      * @param is_explosion 是否爆款
-     * @param is_hot 是否热卖
+     * @param is_hot       是否热卖
      * @param is_recommend 是否推荐
      */
     public void smallLabel(String is_new, String is_explosion, String is_hot, String is_recommend) {
-        if ("1".equals(is_new)){
+        if ("1".equals(is_new)) {
             mtv_new_goods.setVisibility(View.VISIBLE);
             GradientDrawable newDrawable = (GradientDrawable) mtv_new_goods.getBackground();
             newDrawable.setColor(Color.parseColor("#FBB700"));
-        }else {
+        } else {
             mtv_new_goods.setVisibility(View.GONE);
         }
 
@@ -250,7 +258,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             mtv_explosion_goods.setVisibility(View.VISIBLE);
             GradientDrawable explosionDrawable = (GradientDrawable) mtv_explosion_goods.getBackground();
             explosionDrawable.setColor(Color.parseColor("#FB6400"));
-        }else {
+        } else {
             mtv_explosion_goods.setVisibility(View.GONE);
         }
 
@@ -258,15 +266,15 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             mtv_hot_goods.setVisibility(View.VISIBLE);
             GradientDrawable hotDrawable = (GradientDrawable) mtv_hot_goods.getBackground();
             hotDrawable.setColor(Color.parseColor("#FB3500"));
-        }else {
+        } else {
             mtv_hot_goods.setVisibility(View.GONE);
         }
 
-        if ("1".equals(is_recommend)){
+        if ("1".equals(is_recommend)) {
             mtv_recommend_goods.setVisibility(View.VISIBLE);
             GradientDrawable recommedDrawable = (GradientDrawable) mtv_recommend_goods.getBackground();
             recommedDrawable.setColor(Color.parseColor("#FB0000"));
-        }else {
+        } else {
             mtv_recommend_goods.setVisibility(View.GONE);
         }
 
@@ -276,15 +284,15 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mtv_collection:
                 isClick = !isClick;
                 GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
-                if (isClick){
+                if (isClick) {
                     background.setColor(getResources().getColor(R.color.pink_color));
                     mtv_collection.setTextColor(Color.WHITE);
                     mtv_collection.setText(getString(R.string.already_collected));
-                }else {
+                } else {
                     background.setColor(getResources().getColor(R.color.transparent));
                     mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
                     mtv_collection.setText(getString(R.string.collection));
@@ -303,40 +311,48 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                     paramDialog.show();
                 }
                 break;
+            case R.id.mtv_combo:
+                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
+                    recyclerDialog.setCombos(mCurrentCombos);
+                    recyclerDialog.show();
+                }
+                break;
         }
     }
 
 
-    private void setState(int state){
+    private void setState(int state) {
         mtv_self_hot.setTextColor(state == 1 ? getResources().getColor(R.color.new_text)
-        : getResources().getColor(R.color.value_88));
+                : getResources().getColor(R.color.value_88));
         view_self_hot.setBackgroundColor(state == 1 ? getResources().getColor(R.color.pink_color)
-        :getResources().getColor(R.color.bg_gray_two));
+                : getResources().getColor(R.color.bg_gray_two));
 
         mtv_self_push.setTextColor(state == 2 ? getResources().getColor(R.color.new_text)
                 : getResources().getColor(R.color.value_88));
         view_self_push.setBackgroundColor(state == 2 ? getResources().getColor(R.color.pink_color)
-                :getResources().getColor(R.color.bg_gray_two));
+                : getResources().getColor(R.color.bg_gray_two));
 
         ViewGroup.LayoutParams hotlayoutParams = view_self_hot.getLayoutParams();
-        hotlayoutParams.height = state == 1 ? TransformUtil.dip2px(baseActivity,1.0f)
-                : TransformUtil.dip2px(baseActivity,0.5f);
+        hotlayoutParams.height = state == 1 ? TransformUtil.dip2px(baseActivity, 1.0f)
+                : TransformUtil.dip2px(baseActivity, 0.5f);
         view_self_hot.setLayoutParams(hotlayoutParams);
 
         ViewGroup.LayoutParams pushlayoutParams = view_self_push.getLayoutParams();
-        pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(baseActivity,1.0f)
-                :TransformUtil.dip2px(baseActivity,0.5f);
+        pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(baseActivity, 1.0f)
+                : TransformUtil.dip2px(baseActivity, 0.5f);
         view_self_push.setLayoutParams(pushlayoutParams);
     }
+
     /**
      * 优惠券
+     *
      * @param vouchers
      */
     public void setVoucher(ArrayList<GoodsDeatilEntity.Voucher> vouchers) {
-        if (vouchers != null && vouchers.size() > 0){
+        if (vouchers != null && vouchers.size() > 0) {
             mll_ling_Coupon.setVisibility(View.VISIBLE);
             for (int i = 0; i < vouchers.size(); i++) {
-                if (i > 3){
+                if (i > 3) {
                     break;
                 }
                 GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
@@ -345,26 +361,27 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
                 textView.setBackgroundResource(R.drawable.edge_frame_r3);
                 int padding = TransformUtil.dip2px(baseActivity, 4);
-                textView.setPadding(padding,padding,padding,padding);
-                textView.setText(getString(R.string.pull)+voucher.use_condition+getString(R.string.reduce)+voucher.denomination);
+                textView.setPadding(padding, padding, padding, padding);
+                textView.setText(getString(R.string.pull) + voucher.use_condition + getString(R.string.reduce) + voucher.denomination);
                 mll_Coupon.addView(textView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                layoutParams.leftMargin = TransformUtil.dip2px(baseActivity,5.5f);
+                layoutParams.leftMargin = TransformUtil.dip2px(baseActivity, 5.5f);
                 textView.setLayoutParams(layoutParams);
             }
 
-        }else {
+        } else {
             mll_ling_Coupon.setVisibility(View.GONE);
         }
     }
 
     /**
      * 店铺信息
+     *
      * @param infos
      */
     public void setShopInfo(GoodsDeatilEntity.StoreInfo infos) {
         this.infos = infos;
-        GlideUtils.getInstance().loadImage(baseActivity,miv_shop_head,infos.decoration_banner);
+        GlideUtils.getInstance().loadImage(baseActivity, miv_shop_head, infos.decoration_banner);
         mtv_store_name.setText(infos.decoration_name);
         mtv_goods_count.setText(infos.goods_count);
         mtv_attention_count.setText(infos.attention_count);
@@ -375,18 +392,18 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         ratingBar1.setNumberOfStars(Integer.valueOf(infos.star));
         ratingBar1.setRating(Integer.valueOf(infos.star));
 
-        if ("1".equals(infos.quality_logo)){
+        if ("1".equals(infos.quality_logo)) {
             mtv_quality_goods.setVisibility(View.VISIBLE);
             GradientDrawable qualityDrawable = (GradientDrawable) mtv_quality_goods.getBackground();
             qualityDrawable.setColor(Color.parseColor("#9414FD"));
-        }else {
+        } else {
             mtv_quality_goods.setVisibility(View.GONE);
         }
 
         setStoreOtherGoods(infos.hot);
     }
 
-    private void setStoreOtherGoods(List<GoodsDeatilEntity.StoreInfo.Item> item){
+    private void setStoreOtherGoods(List<GoodsDeatilEntity.StoreInfo.Item> item) {
         storeItems.clear();
         storeItems.addAll(item);
         if (goodsDetailShopAdapter == null) {
@@ -395,8 +412,12 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             recy_view.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(baseActivity, 12)));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(baseActivity, false, item);
             recy_view.setAdapter(goodsDetailShopAdapter);
-        }else {
+        } else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void setCombos(List<GoodsDeatilEntity.Combo> combos) {
+        mCurrentCombos = combos;
     }
 }

@@ -3,6 +3,7 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -30,6 +31,7 @@ public class GoodsDeatilEntity {
 
     public ArrayList<Sku> sku;//属性组合列表
     public ArrayList<Specs> specs;
+    public ArrayList<Combo> combo;
     public GoodsData goods_data;
 
 
@@ -127,5 +129,25 @@ public class GoodsDeatilEntity {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Combo {
+        public String combo_id;
+        public String combo_thumb;
+        public String combo_title;
+        public String combo_price;
+        public String start_time;
+        public String end_time;
+        public String start_unixtime;
+        public String end_unixtime;
+        public String max_combo_price;
+        public String old_combo_price;
+        public String max_old_combo_price;
+        public List<Goods> goods;
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Goods {
+            public String goods_id;
+            public String thumb;
+        }
+    }
 }

@@ -27,6 +27,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.RollNumView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -74,7 +75,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "63");
+        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "54"); //63、54
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
         supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
@@ -124,6 +125,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
+
+
     /**
      *
      * @param is_new 是否新品
@@ -154,6 +157,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void shopInfo(GoodsDeatilEntity.StoreInfo infos) {
         goodsDeatilFrag.setShopInfo(infos);
+    }
+
+    @Override
+    public void combo(List<GoodsDeatilEntity.Combo> comboList) {
+        goodsDeatilFrag.setCombos(comboList);
     }
 
     private int num;

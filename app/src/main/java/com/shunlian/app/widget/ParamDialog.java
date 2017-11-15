@@ -62,6 +62,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.tv_number)
     TextView tv_number;
 
+    @BindView(R.id.tv_param)
+    TextView tv_param;
+
     @BindView(R.id.btn_complete)
     Button btn_complete;
 
@@ -150,7 +153,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 currentCount++;
                 if (currentCount >= totalStock) {
                     currentCount = totalStock;
-                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
@@ -158,7 +160,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 currentCount--;
                 if (currentCount <= 0) {
                     currentCount = 0;
-                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
@@ -177,11 +178,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         public ParamItemAdapter(List<GoodsDeatilEntity.Specs> s) {
             this.spes = s;
-        }
-
-        public void setSpecs(List<GoodsDeatilEntity.Specs> spesList) {
-            spes = spesList;
-            notifyDataSetChanged();
         }
 
         @Override
@@ -356,6 +352,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 } else {
                     dia_tv_price.setText(s.market_price);
                     tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
+                    tv_param.setText(s.name);
                 }
                 break;
             }
