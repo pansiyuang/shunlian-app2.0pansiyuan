@@ -22,11 +22,14 @@ import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
+import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -51,6 +54,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.miv_is_fav)
     MyImageView miv_is_fav;
 
+    @BindView(R.id.mtv_buy_immediately)
+    MyTextView mtv_buy_immediately;
 
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
@@ -178,6 +183,36 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
+     * 套餐列表
+     *
+     * @param combos
+     */
+    @Override
+    public void comboDetail(List<GoodsDeatilEntity.Combo> combos) {
+        goodsDeatilFrag.setComboDetail(combos);
+    }
+
+    /**
+     * 商品参数列表
+     *
+     * @param attrses
+     */
+    @Override
+    public void goodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
+        goodsDeatilFrag.setGoodsParameter(attrses);
+    }
+
+    /**
+     * 评价列表
+     *
+     * @param commentses
+     */
+    @Override
+    public void commentList(List<GoodsDeatilEntity.Comments> commentses) {
+        goodsDeatilFrag.setCommentList(commentses);
+    }
+
+    /**
      * 请求关注店铺
      */
     public void followStore(){
@@ -232,6 +267,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 myImageView.setAnimation(alphaAnimation);
                 break;
         }
+    }
+
+    /*
+   显示足迹列表
+    */
+    public void showFootprintList() {
+        FootprintDialog dialog = new FootprintDialog(this);
+        dialog.show();
     }
 
     private void parabolaAnimation() {

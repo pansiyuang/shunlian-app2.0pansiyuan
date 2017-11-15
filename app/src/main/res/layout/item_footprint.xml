@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iv_control_width="173"
+        app:iv_control_height="173"
+        app:iv_margin_top="17"
+        android:src="@mipmap/icon_login_logo"
+        />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="绝地逢生咖啡机看来"
+        android:textColor="@color/new_text"
+        android:textSize="11sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="20"
+        />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="￥48.6"
+        android:textColor="@color/pink_color"
+        android:textSize="11sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="20"/>
+
+</LinearLayout>

@@ -12,7 +12,7 @@ public class GoodsDeatilEntity {
 
     public String id;
     public String title;
-    public String detail_url;
+    public Detail detail;
     public String free_shipping;
     public String area;
     public String market_price;
@@ -38,6 +38,57 @@ public class GoodsDeatilEntity {
     public ArrayList<Voucher> voucher;
 
     public StoreInfo store_info;
+
+    public ArrayList<Combo> combo;
+    public ArrayList<Attrs> attrs;
+    public ArrayList<Comments> comments;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Detail{
+        public String text;
+        public ArrayList<String> pics;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Comments{
+        public String id;
+        public String star_level;
+        public String addtime;
+        public String buytime;
+        public String sku_desc;
+        public String content;
+        public String reply;
+        public String reply_time;
+        public String vip_level;
+        public String nickname;
+        public String avatar;
+        public ArrayList<String> pics;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Attrs{
+        public String label;
+        public String value;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Combo{
+        public String combo_id;
+        public String combo_thumb;
+        public String combo_title;
+        public String combo_price;
+        public String max_combo_price;
+        public String old_combo_price;
+        public String max_old_combo_price;
+
+        public ArrayList<Goods> goods;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Goods{
+            public String goods_id;
+            public String thumb;
+        }
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class StoreInfo{

@@ -2,10 +2,7 @@
 <com.shunlian.app.widget.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:fl_control_adapter="true"
-    app:fl_control_height="313"
-    app:fl_control_width="233">
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mll_bg"
@@ -14,10 +11,10 @@
         android:layout_gravity="center"
         android:background="@color/value_f8"
         android:gravity="center"
-        android:orientation="horizontal"
         app:ll_control_adapter="true"
-        app:ll_control_height="225"
-        app:ll_control_width="233">
+        app:ll_control_width="233"
+        app:ll_control_height="233"
+        android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_more"

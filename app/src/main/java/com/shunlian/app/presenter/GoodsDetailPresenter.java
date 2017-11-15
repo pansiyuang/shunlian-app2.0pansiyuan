@@ -72,6 +72,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
                         iView.paramDialog(data);
                         iView.isFavorite(data.is_fav);
+                        iView.comboDetail(data.combo);
+                        iView.goodsParameter(data.attrs);
+                        iView.commentList(data.comments);
                     }
 
 
