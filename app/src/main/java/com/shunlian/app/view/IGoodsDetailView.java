@@ -3,6 +3,7 @@ package com.shunlian.app.view;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -73,4 +74,21 @@ public interface IGoodsDetailView extends IView {
      */
     void isFavorite(String is_fav);
 
+    /**
+     * 套餐列表
+     * @param combos
+     */
+    void comboDetail(List<GoodsDeatilEntity.Combo> combos);
+
+    /**
+     * 商品参数列表
+     * @param attrses
+     */
+    void goodsParameter(List<GoodsDeatilEntity.Attrs> attrses);
+
+    /**
+     * 评价列表
+     * @param commentses
+     */
+    void commentList(List<GoodsDeatilEntity.Comments> commentses);
 }
