@@ -57,4 +57,10 @@ public class SharedPrefUtil {
          return getsharedPreferences().edit().putString(key,value).commit();
     }
 
+    /**
+     * 清空sp文件内容
+     */
+    public static void clearSharedPreferences(){
+        getsharedPreferences().edit().clear().commit();
+    }
 }

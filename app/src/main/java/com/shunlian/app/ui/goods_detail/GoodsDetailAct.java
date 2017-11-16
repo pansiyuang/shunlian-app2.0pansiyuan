@@ -22,8 +22,10 @@ import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
+import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 
 import java.util.ArrayList;
@@ -49,11 +51,19 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.rl_rootview)
     RelativeLayout rl_rootview;
 
+    @BindView(R.id.miv_is_fav)
+    MyImageView miv_is_fav;
+
+    @BindView(R.id.mtv_buy_immediately)
+    MyTextView mtv_buy_immediately;
+
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
     private float[] mCurrentPosition = new float[2];
     private MyImageView myImageView;
+    private GoodsDetailPresenter goodsDetailPresenter;
+    private String store_id;
 
     public static void startAct(Context context){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -87,12 +97,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 
@@ -125,8 +135,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
-
-
     /**
      *
      * @param is_new 是否新品
@@ -157,13 +165,66 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void shopInfo(GoodsDeatilEntity.StoreInfo infos) {
         goodsDeatilFrag.setShopInfo(infos);
+        store_id = infos.store_id;
     }
 
+    /**
+     * 是否喜爱该商品
+     *
+     * @param is_fav
+     */
     @Override
-    public void combo(List<GoodsDeatilEntity.Combo> comboList) {
-        goodsDeatilFrag.setCombos(comboList);
+    public void isFavorite(String is_fav) {
+        if ("1".equals(is_fav)){
+            miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
+        }else {
+            miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+        }
     }
 
+    /**
+     * 套餐列表
+     *
+     * @param combos
+     */
+    @Override
+    public void comboDetail(List<GoodsDeatilEntity.Combo> combos) {
+        goodsDeatilFrag.setComboDetail(combos);
+    }
+
+    /**
+     * 商品参数列表
+     *
+     * @param attrses
+     */
+    @Override
+    public void goodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
+        goodsDeatilFrag.setGoodsParameter(attrses);
+    }
+
+    /**
+     * 评价列表
+     *
+     * @param commentses
+     */
+    @Override
+    public void commentList(List<GoodsDeatilEntity.Comments> commentses) {
+        goodsDeatilFrag.setCommentList(commentses);
+    }
+
+    /**
+     * 请求关注店铺
+     */
+    public void followStore(){
+        goodsDetailPresenter.followStore(store_id);
+    }
+
+    /**
+     * 请求取消关注店铺
+     */
+    public void delFollowStore(){
+        goodsDetailPresenter.delFollowStore(store_id);
+    }
     private int num;
     @Override
     public void onClick(View v) {
@@ -208,6 +269,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    /*
+   显示足迹列表
+    */
+    public void showFootprintList() {
+        FootprintDialog dialog = new FootprintDialog(this);
+        dialog.show();
+    }
+
     private void parabolaAnimation() {
         int[] startPoint = new int[2];
         myImageView.getLocationInWindow(startPoint);
@@ -249,8 +318,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 // 传入一个距离distance(0<=distance<=getLength())，然后会计算当前距离的坐标点和切线，pos会自动填充上坐标，这个方法很重要。
                 // mCurrentPosition此时就是中间距离点的坐标值
                 mPathMeasure.getPosTan(value, mCurrentPosition, null);
-                System.out.println("mCurrentPosition[0]=="+mCurrentPosition[0]);
-                System.out.println("mCurrentPosition[1]=="+mCurrentPosition[1]);
+//                System.out.println("mCurrentPosition[0]=="+mCurrentPosition[0]);
+//                System.out.println("mCurrentPosition[1]=="+mCurrentPosition[1]);
                 // 移动的商品图片（动画图片）的坐标设置为该中间点的坐标
                 myImageView.setX(mCurrentPosition[0]);
                 myImageView.setY(mCurrentPosition[1]);

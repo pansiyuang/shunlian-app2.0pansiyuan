@@ -5,14 +5,17 @@ import android.content.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -69,6 +72,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
                         iView.combo(data.combo);
                         iView.paramDialog(data);
+                        iView.isFavorite(data.is_fav);
+                        iView.comboDetail(data.combo);
+                        iView.goodsParameter(data.attrs);
+                        iView.commentList(data.comments);
                     }
 
 
@@ -78,6 +85,68 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 关注店铺
+     * @param storeId
+     */
+    public void followStore(String storeId){
+        Map<String,String> map = new HashMap<>();
+        map.put("storeId",storeId);
+        sortAndMD5(map);
+        String stringEntry = null;
+        try {
+            stringEntry = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addMark(requestBody);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+            }
+        });
+    }
+
+    /**
+     * 取消关注店铺
+     * @param storeId
+     */
+    public void delFollowStore(String storeId){
+        Map<String,String> map = new HashMap<>();
+        map.put("storeId",storeId);
+        sortAndMD5(map);
+        String stringEntry = null;
+        try {
+            stringEntry = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delMark(requestBody);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+            }
+        });
     }
 
     @Override

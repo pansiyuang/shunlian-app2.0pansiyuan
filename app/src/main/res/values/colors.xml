@@ -106,5 +106,7 @@
     <color name="value_8e">#8e8e8e</color>
     <color name="value_f8">#f8f8f8</color>
     <color name="value_FC2F57">#FC2F57</color>
+    <color name="value_11">#af111111</color>
+    <color name="value_EFEEEE">#EFEEEE</color>
 
 </resources>

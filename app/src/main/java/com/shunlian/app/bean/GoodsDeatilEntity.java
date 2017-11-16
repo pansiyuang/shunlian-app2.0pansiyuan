@@ -13,7 +13,7 @@ public class GoodsDeatilEntity {
 
     public String id;
     public String title;
-    public String detail_url;
+    public Detail detail;
     public String free_shipping;
     public String area;
     public String market_price;
@@ -21,6 +21,7 @@ public class GoodsDeatilEntity {
     public String max_price;
     public String stock;
     public String thumb;
+    public String is_fav;
     public ArrayList<String> pics;
 
 
@@ -39,6 +40,57 @@ public class GoodsDeatilEntity {
 
     public StoreInfo store_info;
 
+    public ArrayList<Combo> combo;
+    public ArrayList<Attrs> attrs;
+    public ArrayList<Comments> comments;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Detail{
+        public String text;
+        public ArrayList<String> pics;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Comments{
+        public String id;
+        public String star_level;
+        public String addtime;
+        public String buytime;
+        public String sku_desc;
+        public String content;
+        public String reply;
+        public String reply_time;
+        public String vip_level;
+        public String nickname;
+        public String avatar;
+        public ArrayList<String> pics;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Attrs{
+        public String label;
+        public String value;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Combo{
+        public String combo_id;
+        public String combo_thumb;
+        public String combo_title;
+        public String combo_price;
+        public String max_combo_price;
+        public String old_combo_price;
+        public String max_old_combo_price;
+
+        public ArrayList<Goods> goods;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Goods{
+            public String goods_id;
+            public String thumb;
+        }
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class StoreInfo {
         public String decoration_name;//店铺名字
@@ -49,6 +101,8 @@ public class GoodsDeatilEntity {
         public String attention_count;      //收藏数
         public String description_consistency;      //描述相符度
         public String quality_satisfy;     //质量满意度
+        public String is_attention;     //1是已经收藏， 未登录就返回0
+        public String store_id;     //店铺id
 
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐

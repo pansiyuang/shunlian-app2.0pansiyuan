@@ -69,7 +69,26 @@ public interface IGoodsDetailView extends IView {
     void shopInfo(GoodsDeatilEntity.StoreInfo storeInfo);
 
     /**
-     * 套餐
+     * 是否喜爱该商品
+     * @param is_fav
      */
-    void combo(List<GoodsDeatilEntity.Combo> comboList);
+    void isFavorite(String is_fav);
+
+    /**
+     * 套餐列表
+     * @param combos
+     */
+    void comboDetail(List<GoodsDeatilEntity.Combo> combos);
+
+    /**
+     * 商品参数列表
+     * @param attrses
+     */
+    void goodsParameter(List<GoodsDeatilEntity.Attrs> attrses);
+
+    /**
+     * 评价列表
+     * @param commentses
+     */
+    void commentList(List<GoodsDeatilEntity.Comments> commentses);
 }

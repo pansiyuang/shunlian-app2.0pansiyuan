@@ -1,0 +1,53 @@
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mrl_footprint_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/value_11"
+    android:visibility="visible">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical"
+        app:ll_control_adapter="true"
+        app:ll_control_width="230">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/value_EFEEEE"
+            android:gravity="center"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:text="我看过的"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/white"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <com.shunlian.app.widget.MyButton
+            android:id="@+id/mbtn_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:paddingBottom="14dp"
+            android:paddingTop="13dp"
+            android:text="清空"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+</com.shunlian.app.widget.MyRelativeLayout>

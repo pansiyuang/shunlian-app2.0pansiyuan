@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:fl_control_adapter="true"
-    app:fl_control_width="594"
-    app:fl_control_height="313">
-
-    <android.support.v7.widget.CardView
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_rootview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,6 +9,7 @@
         app:cardElevation="3dp">
 
         <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrl_root"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -45,6 +39,7 @@
                 app:tv_margin_top="35" />
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/mtv_nickname"
@@ -61,7 +56,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/civ_head"
                 android:ellipsize="end"
-                android:text="道具卡设计费付款鲁大师荆防颗粒发动机上课啦荆防颗粒都烦死了看见"
                 android:textColor="@color/value_60"
                 android:textSize="12sp"
                 android:maxLines="3"
@@ -73,15 +67,32 @@
 
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_show_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/mtv_content"
                 android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
                 app:iv_control_adapter="true"
                 app:iv_control_height="233"
                 app:iv_control_width="233"
                 app:iv_margin_left="19" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/miv_show_pic"
+                android:layout_alignRight="@+id/miv_show_pic"
+                android:background="@color/colorMask"
+                android:gravity="center"
+                android:text="共6张"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                app:tv_control_adapter="true"
+                app:tv_control_height="32"
+                app:tv_control_width="61" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
     </android.support.v7.widget.CardView>
-</com.shunlian.app.widget.MyFrameLayout>
+
