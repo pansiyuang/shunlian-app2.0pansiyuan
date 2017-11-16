@@ -30,6 +30,7 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -201,6 +202,9 @@ public interface ApiService {
      */
     @GET("member/register/checkMobile")
     Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
+
+    @GET("store/index")
+    Call<BaseEntity<StoreIndexEntity>> storeIndex(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情
