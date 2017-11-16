@@ -70,7 +70,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         iView.shopInfo(data.store_info);
                         iView.goodsInfo(title, price, market_price, free_shipping, sales, area);
 
-                        iView.combo(data.combo);
                         iView.paramDialog(data);
                         iView.isFavorite(data.is_fav);
                         iView.comboDetail(data.combo);

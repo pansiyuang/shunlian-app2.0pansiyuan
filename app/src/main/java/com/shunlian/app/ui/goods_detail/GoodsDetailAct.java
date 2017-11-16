@@ -20,6 +20,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -85,7 +86,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "54"); //63、54
+        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "54"); //63、54、148
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
         supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
@@ -189,6 +190,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void comboDetail(List<GoodsDeatilEntity.Combo> combos) {
+        LogUtil.httpLogW("comboDetail:" + combos.size());
         goodsDeatilFrag.setComboDetail(combos);
     }
 

@@ -3,7 +3,6 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -32,8 +31,8 @@ public class GoodsDeatilEntity {
 
     public ArrayList<Sku> sku;//属性组合列表
     public ArrayList<Specs> specs;
-    public ArrayList<Combo> combo;
     public GoodsData goods_data;
+
 
 
     public ArrayList<Voucher> voucher;
@@ -92,7 +91,7 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class StoreInfo {
+    public static class StoreInfo{
         public String decoration_name;//店铺名字
         public String star; //星级
         public String quality_logo;  //是否有品质标志1是0否
@@ -131,6 +130,7 @@ public class GoodsDeatilEntity {
     }
 
 
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GoodsData {
         //销量
@@ -151,10 +151,6 @@ public class GoodsDeatilEntity {
         public String specs;
         public String name;
 
-        @Override
-        public String toString() {
-            return "id:" + id + " price:" + price + " market_price:" + market_price + " weight:" + weight + " stock:" + stock + " specs:" + specs + " name:" + name;
-        }
     }
 
 
@@ -183,25 +179,5 @@ public class GoodsDeatilEntity {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Combo {
-        public String combo_id;
-        public String combo_thumb;
-        public String combo_title;
-        public String combo_price;
-        public String start_time;
-        public String end_time;
-        public String start_unixtime;
-        public String end_unixtime;
-        public String max_combo_price;
-        public String old_combo_price;
-        public String max_old_combo_price;
-        public List<Goods> goods;
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Goods {
-            public String goods_id;
-            public String thumb;
-        }
-    }
 }

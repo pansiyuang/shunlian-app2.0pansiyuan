@@ -59,6 +59,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @BindView(R.id.mtv_sales)
     MyTextView mtv_sales;
 
+    @BindView(R.id.mtv_attribute)
+    MyTextView mtv_attribute;
+
     @BindView(R.id.mtv_address)
     MyTextView mtv_address;
 
@@ -158,6 +161,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
     private List<GoodsDeatilEntity.Combo> mCurrentCombos;
+    private List<GoodsDeatilEntity.Attrs> mCurrentAttributes;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -171,6 +175,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mll_self_push.setOnClickListener(this);
         mll_self_hot.setOnClickListener(this);
         mtv_combo.setOnClickListener(this);
+        mtv_attribute.setOnClickListener(this);
         tv_select_param.setOnClickListener(this);
         miv_footprint.setOnClickListener(this);
     }
@@ -179,18 +184,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     protected void initData() {
         GradientDrawable infoDrawable = (GradientDrawable) mtv_discount_info.getBackground();
         infoDrawable.setColor(Color.parseColor("#FB0036"));
-
-        List<String> fjdsakfj = DataUtil.getListString(10, "fjdsakfj");
-        LinearLayoutManager manager1 = new LinearLayoutManager(baseActivity, LinearLayoutManager.HORIZONTAL, false);
-        recy_cardview.setLayoutManager(manager1);
-        commentCardViewAdapter = new CommentCardViewAdapter(baseActivity, false, fjdsakfj);
-        recy_cardview.setAdapter(commentCardViewAdapter);
-        commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                valueAnimator(view);
-            }
-        });
         recyclerDialog = new RecyclerDialog(getActivity());
     }
 
@@ -328,6 +321,12 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                     recyclerDialog.show();
                 }
                 break;
+            case R.id.mtv_attribute:
+                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
+                    recyclerDialog.setAttributes(mCurrentAttributes);
+                    recyclerDialog.show();
+                }
+                break;
         }
     }
 
@@ -452,7 +451,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      * @param combos
      */
     public void setComboDetail(List<GoodsDeatilEntity.Combo> combos) {
-
+        this.mCurrentCombos = combos;
     }
 
     /**
@@ -460,7 +459,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      * @param attrses
      */
     public void setGoodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
-
+        this.mCurrentAttributes = attrses;
     }
 
     /**
@@ -480,9 +479,5 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 valueAnimator(view);
             }
         });
-    }
-
-    public void setCombos(List<GoodsDeatilEntity.Combo> combos) {
-        mCurrentCombos = combos;
     }
 }
