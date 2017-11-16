@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="173dp">
+   <com.shunlian.app.widget.MyImageView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" 
+       android:src="@mipmap/icon_login_logo"
+       android:scaleType="centerCrop" />
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_seven"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:text="原装进口美国加州樱桃，口感清脆香甜，回味无穷"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:background="@color/bg_store_tv"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
