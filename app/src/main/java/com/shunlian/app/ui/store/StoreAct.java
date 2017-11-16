@@ -392,13 +392,14 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 //        MyRelativeLayout mrlayout_bg;
     }
 
+
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 }
