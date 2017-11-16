@@ -20,6 +20,7 @@
     <string name="RegisterTwoAct_mmzh">密码至少8位，由字母,数字和字符任意两种以上组合</string>
     <string name="RegisterTwoAct_mmbyz">两次输入的密码不一致</string>
     <string name="RegisterTwoAct_ncszgc">昵称设置过长</string>
+    <string name="RegisterTwoAct_qsznc">请设置昵称</string>
     <string name="RegisterTwoAct_sjyzm">请输入手机验证码</string>
     <string name="RegisterTwoAct_mmbnwk">密码不能为空</string>
     <string name="SelectRecommendAct_hyp">换一批</string>
@@ -61,4 +62,40 @@
     <string name="store_remai">热卖</string>
     <string name="store_diaozha">吊炸</string>
 
+
+    <!--商品详情-->
+    <string name="rmb">￥</string>
+    <string name="new_goods">新品</string>
+    <string name="explosion_goods">爆款</string>
+    <string name="hot_goods">热卖</string>
+    <string name="recommend_goods">推荐</string>
+    <string name="coupons">领券</string>
+    <string name="package_details">套餐详情</string>
+    <string name="product_parameter">产品参数</string>
+    <string name="select_size_color">选择  尺码  颜色分类</string>
+    <string name="_7_days_no_reason_to_return">7天无理由退货</string>
+    <string name="genuine_guarantee">正品保障</string>
+    <string name="_24_hours_delivery">24小时发货</string>
+    <string name="quality_goods">品质</string>
+    <string name="collection">收藏</string>
+    <string name="already_collected">已收藏</string>
+    <string name="goods_count">商品数</string>
+    <string name="attention_count">收藏数</string>
+    <string name="description">描述相符</string>
+    <string name="quality_satisfy">质量满意</string>
+    <string name="this_store_sells_well">本店热销</string>
+    <string name="the_shopkeeper_recommended">店主推荐</string>
+    <string name="continue_dragging_to_view_text_details">继续拖动，查看图文详情</string>
+    <string name="free_shipping">包邮</string>
+    <string name="no_mail">不包邮</string>
+    <string name="sold">已售</string>
+    <string name="piece">件</string>
+    <string name="pull">满</string>
+    <string name="reduce">减</string>
+    <string name="goods_stock">库存%s件</string>
+    <string name="count">数量</string>
+    <string name="goods_pleaseselectparam">请选择规格</string>
+    <string name="combo_price">套餐价</string>
+    <string name="combo_original_price">套餐原价%s</string>
+    <string name="select_combo">选择套餐</string>
 </resources>

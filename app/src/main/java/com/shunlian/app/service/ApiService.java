@@ -23,8 +23,12 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
+import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
@@ -126,16 +130,37 @@ public interface ApiService {
     @GET("member/Common/vcode")
     Call<ResponseBody> graphicalCode();
 
-    Call<ResponseBody> code();
-
+    /**
+     * 发送短信验证码
+     * @param requestBody
+     * @return
+     */
     @POST("/member/common/sendSmsCode")
     Call<ResponseBody> sendSms(@Body RequestBody requestBody);
 
+    /**
+     * 登录
+     * @param requestBody
+     * @return
+     */
     @POST("/member/login/index")
-    Call<ResponseBody> login(@Body RequestBody requestBody);
+    Call<BaseEntity<LoginFinishEntity>> login(@Body RequestBody requestBody);
 
+    /**
+     * 验证验证码
+     * @param requestBody
+     * @return
+     */
     @POST("/member/Common/checkCode")
     Call<ResponseBody> checkCode(@Body RequestBody requestBody);
+
+    /**
+     * 刷新token
+     * @param requestBody
+     * @return
+     */
+    @POST("member/login/refreshToken")
+    Call<BaseEntity<RefreshTokenEntity>> refreshToken(@Body RequestBody requestBody);
 
     /**
      * 注册
@@ -170,9 +195,35 @@ public interface ApiService {
     @POST("/member/userinfo/findPwd")
     Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
 
+    /**
+     * 检验手机号是否注册
+     * @param map
+     * @return
+     */
     @GET("member/register/checkMobile")
     Call<BaseEntity<String>> checkMobile(@QueryMap Map<String, String> map);
 
     @GET("store/index")
     Call<BaseEntity<StoreIndexEntity>> storeIndex(@QueryMap Map<String, String> map);
+
+    /**
+     * 商品详情
+     * @return
+     */
+    @POST("goods/detail")
+    Call<BaseEntity<GoodsDeatilEntity>> goodsDetail(@Body RequestBody body);
+
+    /**
+     * 关注店铺
+     * @return
+     */
+    @POST("store/addMark")
+    Call<BaseEntity<EmptyEntity>> addMark(@Body RequestBody body);
+
+    /**
+     * 取消关注店铺
+     * @return
+     */
+    @POST("store/delMark")
+    Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
 }

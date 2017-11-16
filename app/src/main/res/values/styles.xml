@@ -47,4 +47,58 @@
 
     </style>
 
+    <style name="MyDialogStyleBottom">
+        <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="MyDialogStyleRight">
+        <item name="android:windowAnimationStyle">@style/AnimRight</item>
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Mydialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item> <!--Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item><!-- 是否漂现在activity上 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+
+    <style name="AnimBottom">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+
+    <style name="AnimRight">
+        <item name="android:windowEnterAnimation">@anim/anim_slide_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_slide_out</item>
+    </style>
+
 </resources>

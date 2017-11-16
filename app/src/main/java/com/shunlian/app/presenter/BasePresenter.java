@@ -24,16 +24,23 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
+import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 
 import java.math.BigInteger;
@@ -41,10 +48,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -145,7 +155,18 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
-    protected <T> void  getNetData(final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
+    protected <T>void getNetData(final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
+        getNetData(0,0,tCall,callback);
+    }
+
+    /**
+     * 请求网络数据
+     *
+     * @param tCall
+     * @param callback
+     * @param <T>
+     */
+    protected <T> void  getNetData(final int emptyCode,final int failureCode,final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
 
@@ -158,16 +179,20 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 BaseEntity<T> body = response.body();
                 LogUtil.longW("onResponse============" + body.toString());
                 if (body.code == 1000) {//请求成功
-                    if (body.data != null) {
-                        LogUtil.longW("onSuccess============");
+                    if (body.data instanceof EmptyEntity){
                         callback.onSuccess(body);
-                    } else {
-                        iView.showDataEmptyView();
+                    }else {
+                        if (body.data != null) {
+                            LogUtil.longW("onSuccess============");
+                            callback.onSuccess(body);
+                        } else {
+                            iView.showDataEmptyView(emptyCode);
+                        }
                     }
                 }else {
                     callback.onErrorCode(body.code,body.message);
                     //请求错误
-                    handlerCode(body.code, body.message);
+                    handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode);
                 }
             }
 
@@ -177,19 +202,56 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     t.printStackTrace();
                 callback.onFailure();
                 if (iView != null) {
-                    iView.showFailureView();
+                    iView.showFailureView(failureCode);
                 }
             }
         });
     }
 
-    private void handlerCode(Integer code, String message) {
+    private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode) {
         Common.staticToast(message);
         switch (code) {
             // TODO: 2017/10/19
+            case 203:
+                String token = SharedPrefUtil.getSharedPrfString("token", "");
+                if (TextUtils.isEmpty(token)){
+                    Common.staticToast(message);
+                }else {
+                    refreshToken(clone,emptyCode,failureCode);
+                }
+                break;
         }
     }
 
+
+    private <T> void refreshToken(final Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode){
+        String refresh_token = SharedPrefUtil.getSharedPrfString("refresh_token", "");
+        String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        Map<String,String> map = new HashMap<>();
+        map.put("member_id",member_id);
+        map.put("refresh_token",refresh_token);
+        sortAndMD5(map);
+        String stringEntry = null;
+        try {
+            stringEntry = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        Call<BaseEntity<RefreshTokenEntity>> baseEntityCall = getAddCookieApiService().refreshToken(requestBody);
+        getNetData(emptyCode,failureCode,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefreshTokenEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<RefreshTokenEntity> entity) {
+                super.onSuccess(entity);
+                RefreshTokenEntity data = entity.data;
+                if (data != null) {
+                    SharedPrefUtil.saveSharedPrfString("token", data.token);
+                    SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
+                    getNetData(emptyCode,failureCode,clone,new SimpleNetDataCallback<BaseEntity<T>>());
+                }
+            }
+        });
+    }
 
     /**
      * 处理刷新逻辑

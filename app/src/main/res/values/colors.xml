@@ -97,5 +97,18 @@
     <color name="store_tagtwo">#FB6400</color>
     <color name="store_tagthree">#FB3500</color>
     <color name="store_tagfour">#FB0000</color>
+    <color name="text_param_name">#282828</color>
+    <color name="text_param_value">#0C0B0B</color>
+    <color name="line_gay">#F0EFEF</color>
+    <color name="value_60">#606060</color>
+    <color name="value_32">#323232</color>
+    <color name="value_9B">#9B9B9B</color>
+    <color name="value_88">#888888</color>
+    <color name="value_20">#202020</color>
+    <color name="value_8e">#8e8e8e</color>
+    <color name="value_f8">#f8f8f8</color>
+    <color name="value_FC2F57">#FC2F57</color>
+    <color name="value_11">#af111111</color>
+    <color name="value_EFEEEE">#EFEEEE</color>
 
 </resources>

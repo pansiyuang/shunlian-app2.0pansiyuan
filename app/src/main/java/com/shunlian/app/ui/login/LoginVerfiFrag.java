@@ -106,12 +106,12 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     }
 
     @Override
-    public void showFailureView() {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView() {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 
