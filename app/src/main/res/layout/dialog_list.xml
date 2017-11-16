@@ -6,8 +6,10 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/layout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white_ash"
         android:paddingBottom="17.5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -34,5 +36,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

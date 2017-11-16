@@ -278,6 +278,7 @@
 
             <!--套餐详情-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_combo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/img_common_viewarrow_1"
@@ -296,6 +297,7 @@
                 android:background="@color/white_ash" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/img_common_viewarrow_1"
@@ -727,7 +729,7 @@
                 android:id="@+id/recy_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
+            <!--查看详情提示-->
             <LinearLayout
                 android:id="@+id/ll_load_detail"
                 android:layout_width="match_parent"
@@ -760,6 +762,16 @@
                     android:layout_weight="1"
                     android:layout_height="0.5dp"/>
             </LinearLayout>
+
+            <!--优惠券-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!--详情-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </com.shunlian.app.widget.MyLinearLayout>
 
     </ScrollView>
