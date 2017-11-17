@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/img_common_viewarrow_1"
+        android:paddingBottom="15dp"
+        android:paddingTop="17.5dp"
+        android:text="@string/product_parameter"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="23"
+        app:tv_margin_right="23" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_gray_two" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/tv_select_param"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/img_common_viewarrow_1"
+        android:paddingBottom="15dp"
+        android:paddingTop="17.5dp"
+        android:text="@string/select_size_color"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="23"
+        app:tv_margin_right="23" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_gray_two" />
+
+    <!--商家承诺-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_margin_top="23"
+        app:ll_margin_bottom="25"
+        app:ll_margin_left="23">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_xiangqing_baozhang" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_7_days_no_reason_to_return"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="10" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_xiangqing_baozhang"
+            app:iv_control_adapter="true"
+            app:iv_margin_left="27" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/genuine_guarantee"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="10" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_xiangqing_baozhang"
+            app:iv_control_adapter="true"
+            app:iv_margin_left="30" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_24_hours_delivery"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="10" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7.2dp"
+        android:background="@color/white_ash" />
+
+</com.shunlian.app.widget.MyLinearLayout>
