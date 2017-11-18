@@ -126,7 +126,9 @@ public class GoodsDeatilEntity {
         public String end_time;
         public String denomination;
         public String use_condition;
+        public String goods_scope;
         public String memo;
+        public int is_get;
     }
 
 

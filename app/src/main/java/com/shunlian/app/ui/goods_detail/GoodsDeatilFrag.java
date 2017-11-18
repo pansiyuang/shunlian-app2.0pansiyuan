@@ -162,6 +162,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private RecyclerDialog recyclerDialog;
     private List<GoodsDeatilEntity.Combo> mCurrentCombos;
     private List<GoodsDeatilEntity.Attrs> mCurrentAttributes;
+    private List<GoodsDeatilEntity.Voucher> mCurrentVouchers;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -178,6 +179,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         mtv_attribute.setOnClickListener(this);
         tv_select_param.setOnClickListener(this);
         miv_footprint.setOnClickListener(this);
+        mll_ling_Coupon.setOnClickListener(this);
     }
 
     @Override
@@ -206,6 +208,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     /**
      * 轮播
+     *
      * @param pics
      */
     public void setBanner(ArrayList<String> pics) {
@@ -241,19 +244,19 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
         Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
     }
+
     /**
-     *
-     * @param is_new 是否新品
+     * @param is_new       是否新品
      * @param is_explosion 是否爆款
-     * @param is_hot 是否热卖
+     * @param is_hot       是否热卖
      * @param is_recommend 是否推荐
      */
     public void smallLabel(String is_new, String is_explosion, String is_hot, String is_recommend) {
-        if ("1".equals(is_new)){
+        if ("1".equals(is_new)) {
             mtv_new_goods.setVisibility(View.VISIBLE);
             GradientDrawable newDrawable = (GradientDrawable) mtv_new_goods.getBackground();
             newDrawable.setColor(Color.parseColor("#FBB700"));
-        }else {
+        } else {
             mtv_new_goods.setVisibility(View.GONE);
         }
 
@@ -261,7 +264,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             mtv_explosion_goods.setVisibility(View.VISIBLE);
             GradientDrawable explosionDrawable = (GradientDrawable) mtv_explosion_goods.getBackground();
             explosionDrawable.setColor(Color.parseColor("#FB6400"));
-        }else {
+        } else {
             mtv_explosion_goods.setVisibility(View.GONE);
         }
 
@@ -269,15 +272,15 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             mtv_hot_goods.setVisibility(View.VISIBLE);
             GradientDrawable hotDrawable = (GradientDrawable) mtv_hot_goods.getBackground();
             hotDrawable.setColor(Color.parseColor("#FB3500"));
-        }else {
+        } else {
             mtv_hot_goods.setVisibility(View.GONE);
         }
 
-        if ("1".equals(is_recommend)){
+        if ("1".equals(is_recommend)) {
             mtv_recommend_goods.setVisibility(View.VISIBLE);
             GradientDrawable recommedDrawable = (GradientDrawable) mtv_recommend_goods.getBackground();
             recommedDrawable.setColor(Color.parseColor("#FB0000"));
-        }else {
+        } else {
             mtv_recommend_goods.setVisibility(View.GONE);
         }
 
@@ -286,13 +289,13 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mtv_collection:
                 GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
-                if (isAttentionShop){
+                if (isAttentionShop) {
                     detailAct.delFollowStore();
                     setCollectionState(0);
-                }else {
+                } else {
                     detailAct.followStore();
                     setCollectionState(1);
                 }
@@ -327,53 +330,61 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                     recyclerDialog.show();
                 }
                 break;
+            case R.id.mll_ling_Coupon:
+                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
+                    recyclerDialog.setVoucheres(mCurrentVouchers);
+                    recyclerDialog.show();
+                }
+                break;
         }
     }
 
 
-    private void setState(int state){
+    private void setState(int state) {
         mtv_self_hot.setTextColor(state == 1 ? getResources().getColor(R.color.new_text)
-        : getResources().getColor(R.color.value_88));
+                : getResources().getColor(R.color.value_88));
         view_self_hot.setBackgroundColor(state == 1 ? getResources().getColor(R.color.pink_color)
-        :getResources().getColor(R.color.bg_gray_two));
+                : getResources().getColor(R.color.bg_gray_two));
 
         mtv_self_push.setTextColor(state == 2 ? getResources().getColor(R.color.new_text)
                 : getResources().getColor(R.color.value_88));
         view_self_push.setBackgroundColor(state == 2 ? getResources().getColor(R.color.pink_color)
-                :getResources().getColor(R.color.bg_gray_two));
+                : getResources().getColor(R.color.bg_gray_two));
 
         ViewGroup.LayoutParams hotlayoutParams = view_self_hot.getLayoutParams();
-        hotlayoutParams.height = state == 1 ? TransformUtil.dip2px(baseActivity,1.0f)
-                : TransformUtil.dip2px(baseActivity,0.5f);
+        hotlayoutParams.height = state == 1 ? TransformUtil.dip2px(baseActivity, 1.0f)
+                : TransformUtil.dip2px(baseActivity, 0.5f);
         view_self_hot.setLayoutParams(hotlayoutParams);
 
         ViewGroup.LayoutParams pushlayoutParams = view_self_push.getLayoutParams();
-        pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(baseActivity,1.0f)
-                :TransformUtil.dip2px(baseActivity,0.5f);
+        pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(baseActivity, 1.0f)
+                : TransformUtil.dip2px(baseActivity, 0.5f);
         view_self_push.setLayoutParams(pushlayoutParams);
     }
 
-    private void setCollectionState(int state){
+    private void setCollectionState(int state) {
         GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
-        if (state == 1){
+        if (state == 1) {
             background.setColor(getResources().getColor(R.color.pink_color));
             mtv_collection.setTextColor(Color.WHITE);
             mtv_collection.setText(getString(R.string.already_collected));
-        }else {
+        } else {
             background.setColor(getResources().getColor(R.color.transparent));
             mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
             mtv_collection.setText(getString(R.string.collection));
         }
     }
+
     /**
      * 优惠券
+     *
      * @param vouchers
      */
     public void setVoucher(ArrayList<GoodsDeatilEntity.Voucher> vouchers) {
-        if (vouchers != null && vouchers.size() > 0){
+        if (vouchers != null && vouchers.size() > 0) {
             mll_ling_Coupon.setVisibility(View.VISIBLE);
             for (int i = 0; i < vouchers.size(); i++) {
-                if (i > 2){
+                if (i > 2) {
                     break;
                 }
                 GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
@@ -384,26 +395,27 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 GradientDrawable background = (GradientDrawable) textView.getBackground();
                 background.setColor(Color.WHITE);
                 int padding = TransformUtil.dip2px(baseActivity, 4);
-                textView.setPadding(padding,padding,padding,padding);
-                textView.setText(getString(R.string.pull)+voucher.use_condition+getString(R.string.reduce)+voucher.denomination);
+                textView.setPadding(padding, padding, padding, padding);
+                textView.setText(getString(R.string.pull) + voucher.use_condition + getString(R.string.reduce) + voucher.denomination);
                 mll_Coupon.addView(textView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                layoutParams.leftMargin = TransformUtil.dip2px(baseActivity,5.5f);
+                layoutParams.leftMargin = TransformUtil.dip2px(baseActivity, 5.5f);
                 textView.setLayoutParams(layoutParams);
             }
-
-        }else {
+            mCurrentVouchers = vouchers;
+        } else {
             mll_ling_Coupon.setVisibility(View.GONE);
         }
     }
 
     /**
      * 店铺信息
+     *
      * @param infos
      */
     public void setShopInfo(GoodsDeatilEntity.StoreInfo infos) {
         this.infos = infos;
-        GlideUtils.getInstance().loadImage(baseActivity,miv_shop_head,infos.decoration_banner);
+        GlideUtils.getInstance().loadImage(baseActivity, miv_shop_head, infos.decoration_banner);
         mtv_store_name.setText(infos.decoration_name);
         mtv_goods_count.setText(infos.goods_count);
         mtv_attention_count.setText(infos.attention_count);
@@ -413,26 +425,26 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         ratingBar1.setEnabled(false);
         ratingBar1.setNumberOfStars(Integer.valueOf(infos.star));
         ratingBar1.setRating(Integer.valueOf(infos.star));
-        if ("1".equals(infos.is_attention)){
+        if ("1".equals(infos.is_attention)) {
             setCollectionState(1);
             isAttentionShop = true;
-        }else {
+        } else {
             setCollectionState(0);
             isAttentionShop = false;
         }
 
-        if ("1".equals(infos.quality_logo)){
+        if ("1".equals(infos.quality_logo)) {
             mtv_quality_goods.setVisibility(View.VISIBLE);
             GradientDrawable qualityDrawable = (GradientDrawable) mtv_quality_goods.getBackground();
             qualityDrawable.setColor(Color.parseColor("#9414FD"));
-        }else {
+        } else {
             mtv_quality_goods.setVisibility(View.GONE);
         }
 
         setStoreOtherGoods(infos.hot);
     }
 
-    private void setStoreOtherGoods(List<GoodsDeatilEntity.StoreInfo.Item> item){
+    private void setStoreOtherGoods(List<GoodsDeatilEntity.StoreInfo.Item> item) {
         storeItems.clear();
         storeItems.addAll(item);
         if (goodsDetailShopAdapter == null) {
@@ -441,13 +453,14 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             recy_view.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(baseActivity, 12)));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(baseActivity, false, item);
             recy_view.setAdapter(goodsDetailShopAdapter);
-        }else {
+        } else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
     }
 
     /**
      * 套餐列表
+     *
      * @param combos
      */
     public void setComboDetail(List<GoodsDeatilEntity.Combo> combos) {
@@ -456,6 +469,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     /**
      * 商品参数列表
+     *
      * @param attrses
      */
     public void setGoodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
@@ -464,14 +478,15 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     /**
      * 评价列表
+     *
      * @param commentses
      */
     public void setCommentList(List<GoodsDeatilEntity.Comments> commentses) {
         mtv_comment_num.setText("好评(100)");
         mtv_haopinglv.setText("好评率98.6%");
-        LinearLayoutManager manager1 = new LinearLayoutManager(baseActivity,LinearLayoutManager.HORIZONTAL,false);
+        LinearLayoutManager manager1 = new LinearLayoutManager(baseActivity, LinearLayoutManager.HORIZONTAL, false);
         recy_cardview.setLayoutManager(manager1);
-        commentCardViewAdapter = new CommentCardViewAdapter(baseActivity,false,commentses);
+        commentCardViewAdapter = new CommentCardViewAdapter(baseActivity, false, commentses);
         recy_cardview.setAdapter(commentCardViewAdapter);
         commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override

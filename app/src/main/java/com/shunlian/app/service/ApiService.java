@@ -30,6 +30,7 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -222,4 +223,10 @@ public interface ApiService {
      */
     @POST("store/delMark")
     Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
+
+    /**
+     * 购物车首页
+     */
+    @POST("cart/home")
+    Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
 }

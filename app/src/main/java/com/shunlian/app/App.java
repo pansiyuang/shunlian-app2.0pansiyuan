@@ -37,7 +37,7 @@ public class App extends Application {
 
     public static App mApp;
     private ActivityHelper mActivityHelper;
-
+    private static Context context;
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
     }
@@ -48,12 +48,16 @@ public class App extends Application {
         super.attachBaseContext(base);
     }
 
+    public static Context getContext(){
+        return context;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         mApp = this;
 
+        context = getApplicationContext();
         //注册侧滑返回生命周期回调
         mActivityHelper = new ActivityHelper();
         registerActivityLifecycleCallbacks(mActivityHelper);
