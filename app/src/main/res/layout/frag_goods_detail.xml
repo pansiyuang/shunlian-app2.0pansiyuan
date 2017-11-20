@@ -279,7 +279,6 @@
 
             <!--套餐详情-->
             <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_combo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/img_common_viewarrow_1"
@@ -298,7 +297,6 @@
                 android:background="@color/white_ash" />
 
             <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/img_common_viewarrow_1"

@@ -179,6 +179,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             }
         });
     }
+
     @Override
     protected void initData() {
         recyclerDialog = new RecyclerDialog(getActivity());
@@ -262,18 +263,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private void setState(int state){
     }
 
-    private void setCollectionState(int state){
-        GradientDrawable background = (GradientDrawable) mtv_collection.getBackground();
-        if (state == 1){
-            background.setColor(getResources().getColor(R.color.pink_color));
-            mtv_collection.setTextColor(Color.WHITE);
-            mtv_collection.setText(getString(R.string.already_collected));
-        }else {
-            background.setColor(getResources().getColor(R.color.transparent));
-            mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
-            mtv_collection.setText(getString(R.string.collection));
-        }
-    }
+
+
     /**
      * 优惠券
      * @param vouchers

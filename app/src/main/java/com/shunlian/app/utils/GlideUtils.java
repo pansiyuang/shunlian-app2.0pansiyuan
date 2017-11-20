@@ -2,16 +2,11 @@ package com.shunlian.app.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 
@@ -280,26 +275,6 @@ public class GlideUtils {
                 .thumbnail(Contants.THUMB_SIZE)
                 .into(imageView);
     }
-
-    /**
-     * 控件放置背景图片
-     */
-
-    public void loadImageWithView(Context context, final View view, String imgUrl, int viewWidth, int viewHeight) {
-        Glide.with(context)
-                .load(imgUrl)
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>(viewWidth, viewHeight) {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        Drawable drawable = new BitmapDrawable(resource);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            view.setBackground(drawable);
-                        }
-                    }
-                });
-    }
-
 
     /**
      * 恢复请求，一般在停止滚动的时候

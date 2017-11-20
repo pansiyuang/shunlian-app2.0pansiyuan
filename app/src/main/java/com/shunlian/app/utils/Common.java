@@ -31,7 +31,6 @@ import android.text.style.AbsoluteSizeSpan;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.App;
