@@ -36,6 +36,7 @@ import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -212,13 +213,17 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         Common.staticToast(message);
         switch (code) {
             // TODO: 2017/10/19
-            case 203:
+            case 203://未登录
                 String token = SharedPrefUtil.getSharedPrfString("token", "");
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
                 }else {
                     refreshToken(clone,emptyCode,failureCode);
                 }
+                break;
+            case 204://刷新token过期,让用户登录
+                SharedPrefUtil.clearSharedPreferences();
+                LoginAct.startAct(context);
                 break;
         }
     }

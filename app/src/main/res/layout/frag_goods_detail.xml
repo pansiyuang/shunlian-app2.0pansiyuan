@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <com.shunlian.app.widget.MyNestedScrollView
+        android:id="@+id/msv_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -730,7 +731,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <!--查看详情提示-->
-            <LinearLayout
+            <com.shunlian.app.widget.MyLinearLayout
                 android:id="@+id/ll_load_detail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -744,7 +745,7 @@
                     android:layout_weight="1"
                     android:layout_height="0.5dp"/>
 
-                <TextView
+                <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -761,20 +762,23 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="0.5dp"/>
-            </LinearLayout>
+            </com.shunlian.app.widget.MyLinearLayout>
 
             <!--优惠券-->
-            <RelativeLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_view_coupon"
+                android:paddingBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <!--详情-->
-            <RelativeLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_view_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.shunlian.app.widget.MyLinearLayout>
 
-    </ScrollView>
+    </com.shunlian.app.widget.MyNestedScrollView>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_footprint"

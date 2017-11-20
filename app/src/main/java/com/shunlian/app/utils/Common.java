@@ -28,6 +28,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -106,6 +107,21 @@ public class Common {
             str += "\u3000";
         }
         return str;
+    }
+
+    public static Boolean checkIsVisible(Context context, View view) {
+        // 如果已经加载了，判断广告view是否显示出来，然后曝光
+        int screenWidth = DeviceInfoUtil.getDeviceWidth(context);
+        int screenHeight = DeviceInfoUtil.getDeviceHeight(context);
+        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
+        int[] location = new int[2];
+        view.getLocationInWindow(location);
+        if (view.getLocalVisibleRect(rect)) {
+            return true;
+        } else {
+            //view已不在屏幕可见区域;
+            return false;
+        }
     }
 
     /**
