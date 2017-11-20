@@ -76,6 +76,5 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView {
 
     @Override
     public void OnShoppingCarEntity(ShoppingCarEntity shoppingCarEntity) {
-        LogUtil.httpLogW("购物车");
     }
 }
