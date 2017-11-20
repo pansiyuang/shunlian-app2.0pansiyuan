@@ -5,7 +5,7 @@
 
     <include
         android:id="@+id/layout_title"
-        layout="@layout/title_layout"></include>
+        layout="@layout/title_common_layout"></include>
 
 
     <android.support.v7.widget.RecyclerView
