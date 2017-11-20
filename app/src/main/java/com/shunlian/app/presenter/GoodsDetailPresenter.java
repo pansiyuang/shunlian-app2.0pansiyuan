@@ -11,7 +11,6 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,33 +48,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     super.onSuccess(entity);
                     GoodsDeatilEntity data = entity.data;
                     if (data != null) {
-                        ArrayList<String> pics = data.pics;
-                        if (pics != null && pics.size() > 0)
-                            iView.banner(pics);
-
-                        String title = data.title;
-                        String price = data.price;
-                        String market_price = data.market_price;
-                        String free_shipping = data.free_shipping;
-                        String area = data.area;
-                        GoodsDeatilEntity.GoodsData goods_data = data.goods_data;
-                        String sales = null;
-                        if (goods_data != null) {
-                            sales = goods_data.sales;
-                        }
-                        iView.goodsInfo(title,price,market_price,free_shipping,sales,area);
-
-                        iView.smallLabel(data.is_new,data.is_explosion,data.is_hot,data.is_recommend);
-                        iView.voucher(data.voucher);
-                        iView.shopInfo(data.store_info);
-                        iView.goodsInfo(title, price, market_price, free_shipping, sales, area);
-
                         iView.goodsDetailData(data);
                         iView.isFavorite(data.is_fav);
-                        iView.comboDetail(data.combo);
-                        iView.goodsParameter(data.attrs);
-                        iView.commentList(data.comments);
-                        iView.detail(data.detail);
                     }
 
 

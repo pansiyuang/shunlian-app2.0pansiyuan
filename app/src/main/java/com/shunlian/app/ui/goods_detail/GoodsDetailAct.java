@@ -31,9 +31,6 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 
 /**
@@ -174,25 +171,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
-    /**
-     * 轮播
-     * @param pics
-     */
-    @Override
-    public void banner(ArrayList<String> pics) {
-        goodsDeatilFrag.setBanner(pics);
-    }
-
-    /**
-     * 商品的标题和价格
-     * 是否包邮
-     * 销售量
-     * 发货地点
-     */
-    @Override
-    public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
-        goodsDeatilFrag.goodsInfo(title, price, market_price, free_shipping, sales, address);
-    }
 
     /**
      * 商品详情数据
@@ -202,43 +180,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
     }
 
-    @Override
-    public void attributeDialog() {
-
-    }
-
-    /**
-     *
-     * @param is_new 是否新品
-     * @param is_explosion 是否爆款
-     * @param is_hot 是否热卖
-     * @param is_recommend 是否推荐
-     */
-    @Override
-    public void smallLabel(String is_new, String is_explosion, String is_hot, String is_recommend) {
-        goodsDeatilFrag.smallLabel(is_new,is_explosion,is_hot,is_recommend);
-    }
-
-    /**
-     * 优惠券
-     *
-     * @param vouchers
-     */
-    @Override
-    public void voucher(ArrayList<GoodsDeatilEntity.Voucher> vouchers) {
-        goodsDeatilFrag.setVoucher(vouchers);
-    }
-
-    /**
-     * 店铺信息
-     *
-     * @param infos
-     */
-    @Override
-    public void shopInfo(GoodsDeatilEntity.StoreInfo infos) {
-        goodsDeatilFrag.setShopInfo(infos);
-        store_id = infos.store_id;
-    }
 
     /**
      * 是否喜爱该商品
@@ -252,46 +193,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }else {
             miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
         }
-    }
-
-    /**
-     * 套餐列表
-     *
-     * @param combos
-     */
-    @Override
-    public void comboDetail(List<GoodsDeatilEntity.Combo> combos) {
-        goodsDeatilFrag.setComboDetail(combos);
-    }
-
-    /**
-     * 商品参数列表
-     *
-     * @param attrses
-     */
-    @Override
-    public void goodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
-        goodsDeatilFrag.setGoodsParameter(attrses);
-    }
-
-    /**
-     * 评价列表
-     *
-     * @param commentses
-     */
-    @Override
-    public void commentList(List<GoodsDeatilEntity.Comments> commentses) {
-        goodsDeatilFrag.setCommentList(commentses);
-    }
-
-    /**
-     * 商品详情
-     *
-     * @param detail
-     */
-    @Override
-    public void detail(GoodsDeatilEntity.Detail detail) {
-        goodsDeatilFrag.setDetail(detail);
     }
 
     /**
