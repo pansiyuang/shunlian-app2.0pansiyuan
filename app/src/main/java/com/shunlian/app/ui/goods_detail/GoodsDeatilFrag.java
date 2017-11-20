@@ -35,9 +35,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     protected void initListener() {
         super.initListener();
 
-
         recy_view_root.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -81,5 +79,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     }
 
 
-
+    private void setState(int state){
+    }
 }

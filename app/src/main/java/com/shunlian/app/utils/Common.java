@@ -25,8 +25,13 @@ package com.shunlian.app.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.App;
@@ -117,5 +122,17 @@ public class Common {
             //view已不在屏幕可见区域;
             return false;
         }
+    }
+
+    /**
+     * 首个文字大写
+     */
+    public static void firstSmallText(TextView tv, String str, int size) {
+        if (TextUtils.isEmpty(str)) {
+            return;
+        }
+        SpannableString sp = new SpannableString(str);
+        sp.setSpan(new AbsoluteSizeSpan(size), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(sp, TextView.BufferType.SPANNABLE);
     }
 }
