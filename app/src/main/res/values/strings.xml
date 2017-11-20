@@ -83,7 +83,6 @@
     <string name="pull">满</string>
     <string name="reduce">减</string>
     <string name="goods_stock">库存%s件</string>
-    <string name="goods_pleaseselectparam">请选择库存</string>
     <string name="count">数量</string>
     <string name="goods_pleaseselectparam">请选择规格</string>
     <string name="combo_price">套餐价</string>
