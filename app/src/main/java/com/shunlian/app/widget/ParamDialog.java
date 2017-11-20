@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,16 +18,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,9 +57,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.tv_number)
     TextView tv_number;
 
-    @BindView(R.id.tv_param)
-    TextView tv_param;
-
     @BindView(R.id.btn_complete)
     Button btn_complete;
 
@@ -77,21 +69,19 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
     private LinearLayoutManager linearLayoutManager;
     private ParamItemAdapter paramItemAdapter;
+    private List<GoodsDeatilEntity.Specs.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
     private int recycleHeight;
     private int totalStock;
     private int currentCount = 1;
-    private List<GoodsDeatilEntity.Specs.Values> currentValues;
-    private Map<String, GoodsDeatilEntity.Specs.Values> valuesMap;
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
         this.goodsDeatilEntity = goods;
+        mCurrentValues = new ArrayList<>();
         this.specs = goods.specs;
         this.mSku = goods.sku;
-        currentValues = new ArrayList<>();
-        initMap(goods);
     }
 
     public ParamDialog(Context context, int themeResId) {
@@ -139,12 +129,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         iv_cancel.setOnClickListener(this);
     }
 
-    public void initMap(GoodsDeatilEntity goods) {
-        valuesMap = new HashMap<>();
-        for (GoodsDeatilEntity.Specs specs : goods.specs) {
-            valuesMap.put(specs.name, null);
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -153,6 +137,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 currentCount++;
                 if (currentCount >= totalStock) {
                     currentCount = totalStock;
+                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
@@ -160,11 +145,25 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 currentCount--;
                 if (currentCount <= 0) {
                     currentCount = 0;
+                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-                sortValuesList(valuesMap, true);
+
+                sortValues();
+                StringBuffer ids = new StringBuffer();
+
+                for (int i = 0; i < mCurrentValues.size(); i++) {
+                    ids.append(mCurrentValues.get(i).id);
+                    if (i != mCurrentValues.size() - 1) {
+                        ids.append("_");
+                    }
+                }
+                if (getSkuId(ids.toString()) != null && selectCallBack != null) {
+                    selectCallBack.onSelectComplete(getSkuId(ids.toString()), currentCount);
+                    dismiss();
+                }
                 break;
             case R.id.iv_cancel:
                 dismiss();
@@ -178,6 +177,11 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         public ParamItemAdapter(List<GoodsDeatilEntity.Specs> s) {
             this.spes = s;
+        }
+
+        public void setSpecs(List<GoodsDeatilEntity.Specs> spesList) {
+            spes = spesList;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -199,14 +203,12 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             paramTagAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int p) {
-                    String spesName = specs.get(position).name;
                     GoodsDeatilEntity.Specs.Values values = mValues.get(p);
-                    if (!values.isSelect()) {
-                        paramTagAdapter.itemSelected(p);
-                        if (!TextUtils.isEmpty(spesName)) {
-                            valuesMap.put(spesName, values);
-                            sortValuesList(valuesMap, false);
-                        }
+
+                    if (values.isSelect()) {
+                        paramTagAdapter.itemSelected(p, false);
+                    } else {
+                        paramTagAdapter.itemSelected(p, true);
                     }
                 }
             });
@@ -269,13 +271,27 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             return valuesList.size();
         }
 
-        public void itemSelected(int position) {
+        public void itemSelected(int position, boolean isSelect) {
             for (int i = 0; i < valuesList.size(); i++) {
                 valuesList.get(i).setSelect(false);
+                if (isIncludeValue(valuesList.get(i))) {
+                    mCurrentValues.remove(valuesList.get(i));
+                }
             }
+
             GoodsDeatilEntity.Specs.Values values = valuesList.get(position);
-            values.setSelect(true);
+            values.setSelect(isSelect);
             notifyDataSetChanged();
+
+            if (isSelect && !isIncludeValue(values)) {
+                //选中且当前item不存在
+                mCurrentValues.add(values);
+            }
+
+            if (!isSelect && isIncludeValue(values)) {
+                //反选且当前item存在
+                mCurrentValues.remove(values);
+            }
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
@@ -302,62 +318,43 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-    /**
-     * @param map        根据id大小排序
-     * @param isComplete
-     */
 
-    public void sortValuesList(Map<String, GoodsDeatilEntity.Specs.Values> map, boolean isComplete) {
-        StringBuffer ids = new StringBuffer();
-        currentValues.clear();
-
-        Iterator iter = map.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry entry = (Map.Entry) iter.next();
-            if (entry.getValue() == null) {
-                if (isComplete) {
-                    Common.staticToast("请选择" + entry.getKey());
-                }
-            } else {
-                currentValues.add((GoodsDeatilEntity.Specs.Values) entry.getValue());
+    private boolean isIncludeValue(GoodsDeatilEntity.Specs.Values values) {
+        boolean isInclude = false;
+        if (mCurrentValues == null || mCurrentValues.size() == 0) {
+            isInclude = false;
+        }
+        for (GoodsDeatilEntity.Specs.Values v : mCurrentValues) {
+            if (values.id.equals(v.id)) {
+                isInclude = true;
             }
         }
+        return isInclude;
+    }
 
-        if (currentValues == null && currentValues.size() == 0) {
-            return;
-        }
 
-        if (mSku == null && mSku.size() == 0) {
-            return;
-        }
-        Collections.sort(currentValues, new Comparator<GoodsDeatilEntity.Specs.Values>() {
-            @Override
-            public int compare(GoodsDeatilEntity.Specs.Values values, GoodsDeatilEntity.Specs.Values t1) {
-                return Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id));
+    private List<GoodsDeatilEntity.Specs.Values> sortValues() {
+        Collections.sort(mCurrentValues, new Comparator<GoodsDeatilEntity.Specs.Values>() {
+            public int compare(GoodsDeatilEntity.Specs.Values arg0, GoodsDeatilEntity.Specs.Values arg1) {
+                return Integer.valueOf(arg0.id).compareTo(Integer.valueOf(arg1.id));
             }
         });
-
-        //拼接ids
-        for (int i = 0; i < currentValues.size(); i++) {
-            ids.append(currentValues.get(i).id);
-            if (i != currentValues.size() - 1) {
-                ids.append("_");
-            }
-        }
-
-        for (GoodsDeatilEntity.Sku s : mSku) {
-            if (ids.toString().equals(s.specs) && selectCallBack != null) {
-                if (isComplete) {
-                    selectCallBack.onSelectComplete(s, currentCount);
-                } else {
-                    dia_tv_price.setText(s.market_price);
-                    tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
-                    tv_param.setText(s.name);
-                }
-                break;
-            }
-        }
+        return mCurrentValues;
     }
+
+    private GoodsDeatilEntity.Sku getSkuId(String ids) {
+        GoodsDeatilEntity.Sku s = null;
+        if (mSku == null || mSku.size() == 0) {
+            return null;
+        }
+        for (int i = 0; i < mSku.size(); i++) {
+            if (ids.equals(mSku.get(i).specs)) {
+                s = mSku.get(i);
+            }
+        }
+        return s;
+    }
+
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {
         this.selectCallBack = callBack;

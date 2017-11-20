@@ -28,10 +28,9 @@ public interface IGoodsDetailView extends IView {
 
 
     /**
-     * 商品参数对话框
+     * 商品详情数据
      */
-
-    void paramDialog(GoodsDeatilEntity entity);
+    void goodsDetailData(GoodsDeatilEntity entity);
 
     /**
      * 选择商品对话框
@@ -91,4 +90,10 @@ public interface IGoodsDetailView extends IView {
      * @param commentses
      */
     void commentList(List<GoodsDeatilEntity.Comments> commentses);
+
+    /**
+     *商品详情
+     * @param detail
+     */
+    void detail(GoodsDeatilEntity.Detail detail);
 }

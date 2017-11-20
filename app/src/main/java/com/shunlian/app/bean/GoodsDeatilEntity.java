@@ -102,7 +102,6 @@ public class GoodsDeatilEntity {
         public String quality_satisfy;     //质量满意度
         public String is_attention;     //1是已经收藏， 未登录就返回0
         public String store_id;     //店铺id
-
         public ArrayList<Item> hot;//店铺热销
         public ArrayList<Item> push;//店主推荐
 
@@ -127,6 +126,8 @@ public class GoodsDeatilEntity {
         public String denomination;
         public String use_condition;
         public String memo;
+        public String is_get; //1为已经领取 未登录就返回0
+        public String goods_scope;//ALL为全店 ASSIGN为指定
     }
 
 

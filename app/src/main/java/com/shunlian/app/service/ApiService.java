@@ -222,4 +222,5 @@ public interface ApiService {
      */
     @POST("store/delMark")
     Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
+
 }

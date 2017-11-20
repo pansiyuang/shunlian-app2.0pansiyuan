@@ -14,17 +14,18 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
@@ -58,6 +59,41 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mtv_buy_immediately)
     MyTextView mtv_buy_immediately;
 
+    @BindView(R.id.mll_share)
+    MyLinearLayout mll_share;
+
+    @BindView(R.id.miv_more)
+    MyImageView miv_more;
+
+    @BindView(R.id.miv_close_share)
+    MyImageView miv_close_share;
+
+    @BindView(R.id.mll_goods)
+    MyLinearLayout mll_goods;
+
+    @BindView(R.id.mtv_goods)
+    MyTextView mtv_goods;
+
+    @BindView(R.id.view_goods)
+    View view_goods;
+
+    @BindView(R.id.mll_detail)
+    MyLinearLayout mll_detail;
+
+    @BindView(R.id.mtv_detail)
+    MyTextView mtv_detail;
+
+    @BindView(R.id.view_detail)
+    View view_detail;
+
+    @BindView(R.id.mll_comment)
+    MyLinearLayout mll_comment;
+
+    @BindView(R.id.mtv_comment)
+    MyTextView mtv_comment;
+
+    @BindView(R.id.view_comment)
+    View view_comment;
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -80,13 +116,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initListener() {
         super.initListener();
         mrl_add_car.setOnClickListener(this);
+        miv_more.setOnClickListener(this);
+        miv_close_share.setOnClickListener(this);
+        mll_goods.setOnClickListener(this);
+        mll_detail.setOnClickListener(this);
+        mll_comment.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        GoodsDetailPresenter goodsDetailPresenter = new GoodsDetailPresenter(this, this, "54"); //63、54、148
+        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
         supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
@@ -126,9 +167,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
         goodsDeatilFrag.goodsInfo(title, price, market_price, free_shipping, sales, address);
     }
+
+    /**
+     * 商品详情数据
+     */
     @Override
-    public void paramDialog(GoodsDeatilEntity goodsDeatilEntity) {
-        goodsDeatilFrag.setParamDialog(goodsDeatilEntity);
+    public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
+        goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
     }
 
     @Override
@@ -190,7 +235,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void comboDetail(List<GoodsDeatilEntity.Combo> combos) {
-        LogUtil.httpLogW("comboDetail:" + combos.size());
         goodsDeatilFrag.setComboDetail(combos);
     }
 
@@ -215,6 +259,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
+     * 商品详情
+     *
+     * @param detail
+     */
+    @Override
+    public void detail(GoodsDeatilEntity.Detail detail) {
+        goodsDeatilFrag.setDetail(detail);
+    }
+
+    /**
      * 请求关注店铺
      */
     public void followStore(){
@@ -235,40 +289,94 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //        }
         switch (v.getId()){
             case R.id.mrl_add_car:
-                if (isStopAnimation){
-                    return;
-                }
-                isStopAnimation = true;
-                myImageView = new MyImageView(this);
-                myImageView.setWHProportion(50,50);
-                myImageView.setImageResource(R.mipmap.icon_login_logo);
-                rl_rootview.addView(myImageView);
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) myImageView.getLayoutParams();
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-                layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
-                layoutParams.bottomMargin = TransformUtil.dip2px(this, 6);
-                myImageView.setLayoutParams(layoutParams);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
-                alphaAnimation.setDuration(100);
-                alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        parabolaAnimation();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                myImageView.setAnimation(alphaAnimation);
+                addCartAnim();
+                break;
+            case R.id.miv_more:
+                moreAnim();
+                break;
+            case R.id.miv_close_share:
+                moreHideAnim();
+                break;
+            case R.id.mll_goods:
+                setTabBarStatue(0);
+                break;
+            case R.id.mll_detail:
+                setTabBarStatue(1);
+                break;
+            case R.id.mll_comment:
+                setTabBarStatue(2);
                 break;
         }
+    }
+
+    public void setTabBarStatue(int statue){
+        //statue == 0 商品
+        //statue == 1 详情
+        //statue == 2 评论
+        mtv_goods.setTextColor(statue == 0 ? getResources().getColor(R.color.pink_color)
+                : getResources().getColor(R.color.new_text));
+        view_goods.setVisibility(statue == 0 ? View.VISIBLE : View.INVISIBLE);
+
+        mtv_detail.setTextColor(statue == 1 ? getResources().getColor(R.color.pink_color)
+                : getResources().getColor(R.color.new_text));
+        view_detail.setVisibility(statue == 1 ? View.VISIBLE : View.INVISIBLE);
+
+        mtv_comment.setTextColor(statue == 2 ? getResources().getColor(R.color.pink_color)
+                : getResources().getColor(R.color.new_text));
+        view_comment.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void moreHideAnim() {
+        mll_share.setVisibility(View.GONE);
+        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
+                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1);
+
+        animation.setDuration(250);
+        mll_share.setAnimation(animation);
+    }
+
+    private void moreAnim() {
+        mll_share.setVisibility(View.VISIBLE);
+        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
+                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1,Animation.RELATIVE_TO_SELF,0);
+
+        animation.setDuration(250);
+        mll_share.setAnimation(animation);
+    }
+
+    private void addCartAnim() {
+        if (isStopAnimation){
+            return;
+        }
+        isStopAnimation = true;
+        myImageView = new MyImageView(this);
+        myImageView.setWHProportion(50,50);
+        myImageView.setImageResource(R.mipmap.icon_login_logo);
+        rl_rootview.addView(myImageView);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) myImageView.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
+        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        layoutParams.bottomMargin = TransformUtil.dip2px(this, 6);
+        myImageView.setLayoutParams(layoutParams);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        alphaAnimation.setDuration(100);
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                parabolaAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        myImageView.setAnimation(alphaAnimation);
     }
 
     /*
