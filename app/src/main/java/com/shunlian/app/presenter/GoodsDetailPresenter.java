@@ -149,6 +149,29 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         });
     }
 
+    public void addCart(String goods_id,String sku_id,String qty){
+        Map<String,String> map = new HashMap<>();
+        map.put("goods_id",goods_id);
+        map.put("sku_id",sku_id);
+        map.put("qty",qty);
+        sortAndMD5(map);
+        String stringEntry = null;
+        try {
+            stringEntry = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.addCart(entity.message);
+            }
+        });
+
+    }
     @Override
     public void attachView() {
 

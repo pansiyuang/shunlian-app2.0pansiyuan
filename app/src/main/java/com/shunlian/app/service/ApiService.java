@@ -223,4 +223,11 @@ public interface ApiService {
     @POST("store/delMark")
     Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
 
+    /**
+     * 添加购物车
+     * @param body
+     * @return
+     */
+    @POST("cart/add")
+    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
 }

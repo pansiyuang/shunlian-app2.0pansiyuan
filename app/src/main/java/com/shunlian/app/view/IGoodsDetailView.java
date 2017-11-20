@@ -96,4 +96,9 @@ public interface IGoodsDetailView extends IView {
      * @param detail
      */
     void detail(GoodsDeatilEntity.Detail detail);
+
+    /**
+     * 添加购物车
+     */
+    void addCart(String msg);
 }

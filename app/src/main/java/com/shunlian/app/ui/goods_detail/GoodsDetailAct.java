@@ -21,6 +21,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -94,6 +95,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.view_comment)
     View view_comment;
+    
+    @BindView(R.id.mll_title)
+    MyLinearLayout mll_title;
+    
+    @BindView(R.id.mll_item)
+    MyLinearLayout mll_item;
+
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -101,6 +109,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private MyImageView myImageView;
     private GoodsDetailPresenter goodsDetailPresenter;
     private String store_id;
+    private GoodsDeatilEntity.Sku sku;
+    private int goodsCount;
 
     public static void startAct(Context context){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -125,7 +135,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
+        immersionBar.statusBarView(R.id.top_view).fullScreen(true).init();
         setStatusBarFontDark();
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
         supportFragmentManager = getSupportFragmentManager();
@@ -138,6 +148,22 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rnview.setNumber(0);
     }
 
+    public void setBgColor(int position, int dt) {
+        float per = dt / 1000.0f;
+        System.out.println("values===" + per);
+        if (per >= 1) {
+            per = 1;
+        }
+        if (position >= 1){
+            immersionBar.statusBarView(R.id.top_view).statusBarColor(R.color.white).fullScreen(true).init();
+            setStatusBarFontDark();
+        }else {
+            immersionBar.statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .barAlpha(per)
+                    .addViewSupportTransformColor(mll_title, R.color.transparent, R.color.white).init();
+        }
+    }
     @Override
     public void showFailureView(int rquest_code) {
 
@@ -269,6 +295,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
+     * 添加购物车
+     *
+     * @param msg
+     */
+    @Override
+    public void addCart(String msg) {
+        addCartAnim();
+    }
+
+    /**
      * 请求关注店铺
      */
     public void followStore(){
@@ -289,7 +325,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //        }
         switch (v.getId()){
             case R.id.mrl_add_car:
-                addCartAnim();
+                if (sku == null){
+                    Common.staticToast("请选择商品规格");
+                }else {
+                    goodsDetailPresenter.addCart("148",sku.id,String.valueOf(goodsCount));
+                }
                 break;
             case R.id.miv_more:
                 moreAnim();
@@ -517,5 +557,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (rnview != null){
             rnview.clearAnimation();
         }
+    }
+
+    /**
+     * 选择商品信息
+     * @param sku
+     * @param count
+     */
+    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
+        this.sku = sku;
+        goodsCount = count;
     }
 }

@@ -4,8 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
+
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
 
     <!--底部按钮-->
     <com.shunlian.app.widget.MyLinearLayout
@@ -111,7 +115,6 @@
     <!--内容区-->
     <com.shunlian.app.widget.MyFrameLayout
         android:id="@+id/mfl_content"
-        android:layout_below="@+id/mll_title"
         android:layout_above="@+id/mll_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -261,9 +264,11 @@
     <!--title-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mll_title"
+        android:layout_below="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/transparent"
         app:ll_control_adapter="true"
         app:ll_control_height="88">
 
@@ -277,10 +282,12 @@
 
 
         <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mll_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:visibility="invisible"
             android:orientation="horizontal">
 
             <com.shunlian.app.widget.MyLinearLayout

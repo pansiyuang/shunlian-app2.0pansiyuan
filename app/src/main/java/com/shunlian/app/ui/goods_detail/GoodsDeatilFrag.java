@@ -25,6 +25,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @BindView(R.id.recy_view_root)
     RecyclerView recy_view_root;
     private LinearLayoutManager manager;
+    private int dt;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -43,7 +44,10 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
                     int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-                    System.out.println("firstVisibleItemPosition="+firstVisibleItemPosition);
+                    GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
+                    dt += dy;
+                    detailAct.setBgColor(firstVisibleItemPosition,dt);
+
                 }
             }
         });

@@ -45,39 +45,43 @@ import static com.shunlian.app.utils.Common.getResources;
 
 public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     /*
-        轮播和商品信息
+        轮播
      */
-    public static final int BANNER_TITLE_LAYOUT = 2;
+    public static final int BANNER_LAYOUT = 2;
+    /*
+    商品信息
+     */
+    public static final int TITLE_LAYOUT = 3;
     /*
     活动和优惠券
      */
-    public static final int ACTIVITY_COUPON_LAYOUT = 3;
+    public static final int ACTIVITY_COUPON_LAYOUT = 4;
     /*
      *参数和属性
      */
-    public static final int PARAM_ATTRS_LAYOUT = 4;
+    public static final int PARAM_ATTRS_LAYOUT = 5;
     /*
     评价
      */
-    public static final int COMMNT_LAYOUT = 5;
+    public static final int COMMNT_LAYOUT = 6;
     /*
     店铺信息
      */
-    public static final int STORE_GOODS_LAYOUT = 6;
+    public static final int STORE_GOODS_LAYOUT = 7;
     /*
     参看图文详情
      */
-    public static final int GOODS_DETAIL_DIVISION = 7;
+    public static final int GOODS_DETAIL_DIVISION = 8;
     /*
     优惠券
      */
-    public static final int COUPON_LAYOUT = 8;
+    public static final int COUPON_LAYOUT = 9;
     private final LayoutInflater mInflater;
     private GoodsDeatilEntity mGoodsEntity;
     private boolean isAttentionShop;
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
-    private static final int ITEM_DIFFERENT = 7;//不同条目数
+    private static final int ITEM_DIFFERENT = 8;//不同条目数
     private ParamDialog paramDialog;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
@@ -89,18 +93,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public int getItemViewType(int position) {
         if (position == 0){
-            return BANNER_TITLE_LAYOUT;
+            return BANNER_LAYOUT;
         }else if (position == 1){
-            return ACTIVITY_COUPON_LAYOUT;
+            return TITLE_LAYOUT;
         }else if (position == 2){
-            return PARAM_ATTRS_LAYOUT;
+            return ACTIVITY_COUPON_LAYOUT;
         }else if (position == 3){
-            return COMMNT_LAYOUT;
+            return PARAM_ATTRS_LAYOUT;
         }else if (position == 4){
-            return STORE_GOODS_LAYOUT;
+            return COMMNT_LAYOUT;
         }else if (position == 5){
-            return GOODS_DETAIL_DIVISION;
+            return STORE_GOODS_LAYOUT;
         }else if (position == 6){
+            return GOODS_DETAIL_DIVISION;
+        }else if (position == 7){
             return COUPON_LAYOUT;
         }else {
             return super.getItemViewType(position);
@@ -110,9 +116,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case BANNER_TITLE_LAYOUT:
-                View banner_title_layout = mInflater.inflate(R.layout.banner_title_layout, parent, false);
-                return new BannerTitleHolder(banner_title_layout);
+            case BANNER_LAYOUT:
+                View banner_layout = mInflater.inflate(R.layout.banner, parent, false);
+                return new BannerHolder(banner_layout);
+            case TITLE_LAYOUT:
+                View title_layout = mInflater.inflate(R.layout.title_layout, parent, false);
+                return new TitleHolder(title_layout);
             case ACTIVITY_COUPON_LAYOUT:
                 View activity_coupon_layout = mInflater.inflate(R.layout.activity_coupon_layout, parent, false);
                 return new ActivityCouponHolder(activity_coupon_layout);
@@ -145,8 +154,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         switch (itemViewType){
-            case BANNER_TITLE_LAYOUT:
+            case BANNER_LAYOUT:
                 handleBannerTitle(holder,position);
+                break;
+            case TITLE_LAYOUT:
+                handlerTitle(holder,position);
                 break;
             case ACTIVITY_COUPON_LAYOUT:
                 handlerActivityCoupon(holder,position);
@@ -353,16 +365,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     }
 
     /**
-     * 轮播和顶部商品信息
+     * 商品信息
      * @param holder
      * @param position
      */
-    private void handleBannerTitle(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BannerTitleHolder){
-            BannerTitleHolder mHolder = (BannerTitleHolder) holder;
-            if (mGoodsEntity.pics != null) {
-                mHolder.kanner.setBanner(mGoodsEntity.pics);
-            }
+    private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof TitleHolder){
+            TitleHolder mHolder = (TitleHolder) holder;
 
             GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
             infoDrawable.setColor(Color.parseColor("#FB0036"));
@@ -414,6 +423,19 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             }
         }
     }
+    /**
+     * 轮播和顶部商品信息
+     * @param holder
+     * @param position
+     */
+    private void handleBannerTitle(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof BannerHolder){
+            BannerHolder mHolder = (BannerHolder) holder;
+            if (mGoodsEntity.pics != null) {
+                mHolder.kanner.setBanner(mGoodsEntity.pics);
+            }
+        }
+    }
 
 
     private String getString(@StringRes int id){
@@ -460,9 +482,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         }
     }
 
-    public class BannerTitleHolder extends BaseRecyclerViewHolder{
-        @BindView(R.id.kanner)
-        Kanner kanner;
+    public class TitleHolder extends BaseRecyclerViewHolder{
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
@@ -497,7 +517,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         @BindView(R.id.mtv_recommend_goods)
         MyTextView mtv_recommend_goods;
 
-        public BannerTitleHolder(View itemView) {
+        public TitleHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public class BannerHolder extends BaseRecyclerViewHolder{
+        @BindView(R.id.kanner)
+        Kanner kanner;
+
+        public BannerHolder(View itemView) {
             super(itemView);
         }
     }
@@ -548,6 +577,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         @Override
         public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
             Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
+            if (context instanceof GoodsDetailAct){
+                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                goodsDetailAct.selectGoodsInfo(sku,count);
+            }
         }
     }
 
