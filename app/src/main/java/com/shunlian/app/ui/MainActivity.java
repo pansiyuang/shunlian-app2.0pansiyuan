@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         } else {
             LogUtil.httpLogW("shoppingCarClick() ");
-            shoppingCarFrag.getShoppingCarData();
+//            shoppingCarFrag.getShoppingCarData();
         }
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(shoppingCarFrag);

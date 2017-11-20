@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShoppingCarEntity extends BaseEntity {
+public class ShoppingCarEntity {
     public List<Enabled> enabled;
     public List<Disabled> disabled;
 
@@ -32,6 +32,7 @@ public class ShoppingCarEntity extends BaseEntity {
             public String sku;                   //sku信息
             public String price;                 //价格
             public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
+
         }
     }
 

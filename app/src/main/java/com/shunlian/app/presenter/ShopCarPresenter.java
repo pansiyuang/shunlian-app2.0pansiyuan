@@ -2,7 +2,6 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -20,8 +19,11 @@ import retrofit2.Call;
  */
 
 public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
+    private Context mContext;
+
     public ShopCarPresenter(Context context, IShoppingCarView iView) {
         super(context, iView);
+        this.mContext = context;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
 
     }
 
-    public void initShopData(){
+    public void initShopData() {
         initApi();
     }
 
@@ -52,12 +54,16 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
                     super.onSuccess(entity);
                     ShoppingCarEntity shoppingCarEntity = entity.data;
                     if (shoppingCarEntity != null) {
-                       iView.OnShoppingCarEntity(shoppingCarEntity);
+                        iView.OnShoppingCarEntity(shoppingCarEntity);
                     }
                 }
-            });
 
-        } catch (JsonProcessingException e) {
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

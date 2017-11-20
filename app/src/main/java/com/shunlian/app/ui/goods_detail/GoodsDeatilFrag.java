@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.goods_detail;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +12,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.HorItemDecoration;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -234,7 +232,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-                break;
             case R.id.tv_select_param:
                 if (paramDialog != null && !paramDialog.isShowing()) {
                     paramDialog.show();
