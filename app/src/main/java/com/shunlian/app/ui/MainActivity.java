@@ -2,56 +2,93 @@ package com.shunlian.app.ui;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.SimpleRecyclerAdapter;
-import com.shunlian.app.adapter.SimpleViewHolder;
-import com.shunlian.app.listener.OnItemClickListener;
-import com.shunlian.app.presenter.TestPresenter;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.ui.fragment.DiscoverFrag;
+import com.shunlian.app.ui.fragment.MainPageFrag;
+import com.shunlian.app.ui.fragment.PersonalCenterFrag;
+import com.shunlian.app.ui.fragment.ShoppingCarFrag;
+import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.DataUtil;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyRelativeLayout;
-import com.shunlian.app.widget.refresh.PullToRefreshView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R.id.fl_main)
+    MyFrameLayout fl_main;
+
+    @BindView(R.id.ll_tab_main_page)
+    LinearLayout ll_tab_main_page;
+
+    @BindView(R.id.miv_tab_main)
+    MyImageView miv_tab_main;
+
+    @BindView(R.id.tv_tab_main)
+    TextView tv_tab_main;
+
+    @BindView(R.id.ll_tab_sort)
+    LinearLayout ll_tab_sort;
+
+    @BindView(R.id.miv_tab_sort)
+    MyImageView miv_tab_sort;
+
+    @BindView(R.id.tv_tab_sort)
+    TextView tv_tab_sort;
+
+    @BindView(R.id.ll_tab_discover)
+    LinearLayout ll_tab_discover;
+
+    @BindView(R.id.miv_tab_discover)
+    MyImageView miv_tab_discover;
+
+    @BindView(R.id.tv_tab_discover)
+    TextView tv_tab_discover;
+
+    @BindView(R.id.ll_tab_shopping_car)
+    LinearLayout ll_tab_shopping_car;
+
+    @BindView(R.id.miv_shopping_car)
+    MyImageView miv_shopping_car;
+
+    @BindView(R.id.tv_shopping_car)
+    TextView tv_shopping_car;
+
+    @BindView(R.id.ll_tab_person_center)
+    LinearLayout ll_tab_person_center;
+
+    @BindView(R.id.miv_person_center)
+    MyImageView miv_person_center;
+
+    @BindView(R.id.tv_person_center)
+    TextView tv_person_center;
 
 
+    private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
+    private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
+
+    private MainPageFrag mainPageFrag;
+    private SortFrag sortFrag;
+    private DiscoverFrag discoverFrag;
+    private ShoppingCarFrag shoppingCarFrag;
+    private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
     private boolean isDoubleBack = false;
-
-    @BindView(R.id.ll_special)
-    MyRelativeLayout ll_special;
-
-    @BindView(R.id.special_miaosha)
-    MyImageView special_miaosha;
-
-    @BindView(R.id.special_qingliang)
-    MyImageView special_qingliang;
-
-    @BindView(R.id.special_man)
-    MyImageView special_man;
-
-    @BindView(R.id.special_woman)
-    MyImageView special_woman;
-
-    @BindView(R.id.recy_view)
-    RecyclerView recy_view;
-
-    @BindView(R.id.ll_layout)
-    PullToRefreshView ll_layout;
+    private FragmentManager fragmentManager;
+    private int pageIndex;
 
     /**
      * 布局id
@@ -70,71 +107,184 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
-        TestPresenter testPresenter = new TestPresenter(this, null);
-
-//        ll_special.setWHProportion(720,414);
-//        special_miaosha.setWHProportion(298,414);
-//        special_qingliang.setWHProportion(422,207);
-//        special_man.setWHProportion(211,207);
-//        special_woman.setWHProportion(211,207);
-
-//        List<String> items = DataUtil.getListString(40, "条目");
-        List<String> items = new ArrayList<>();
-        items.add("登录");
-        items.add("商品详情");
-        items.add("店铺");
-        items.addAll(DataUtil.getListString(40, "条目"));
-
-
-
-        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
-
-            @Override
-            public void convert(SimpleViewHolder holder, String s,int position) {
-                holder.addOnClickListener(android.R.id.text1);
-                holder.setText(android.R.id.text1,s);
-            }
-        };
-
-        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        recy_view.setLayoutManager(manager);
-        recy_view.setAdapter(simpleRecyclerAdapter);
-        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                switch (position){
-                    case 0:
-                        LoginAct.startAct(MainActivity.this);
-                        break;
-                    case 1:
-                        GoodsDetailAct.startAct(MainActivity.this);
-                        break;
-                    case 2:
-                        StoreAct.startAct(MainActivity.this);
-                        break;
-                }
-            }
-        });
-
-        ll_layout.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                ll_layout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ll_layout.setRefreshing(false);
-                    }
-                },3000);
-            }
-        });
-
+        fragmentManager = getSupportFragmentManager();
+        mainPageClick();
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        ll_tab_main_page.setOnClickListener(this);
+        ll_tab_sort.setOnClickListener(this);
+        ll_tab_discover.setOnClickListener(this);
+        ll_tab_shopping_car.setOnClickListener(this);
+        ll_tab_person_center.setOnClickListener(this);
+    }
 
+    public void switchContent(Fragment show) {
+        if (show != null) {
+            if (!show.isAdded()) {
+                fragmentManager.beginTransaction().remove(show).commitAllowingStateLoss();
+                fragmentManager.beginTransaction().add(R.id.fl_main, show).commitAllowingStateLoss();
+            } else {
+                fragmentManager.beginTransaction().show(show).commitAllowingStateLoss();
+            }
+
+            if (fragmentMap != null && fragmentMap.size() > 0) {
+                Set<String> keySet = fragmentMap.keySet();
+                Iterator<String> iterator = keySet.iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    BaseFragment baseFragment = fragmentMap.get(key);
+                    if (show != baseFragment) {
+                        if (baseFragment != null && baseFragment.isVisible()) {
+                            fragmentManager.beginTransaction().hide(baseFragment).commitAllowingStateLoss();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ll_tab_main_page:
+                mainPageClick();
+                break;
+            case R.id.ll_tab_sort:
+                sortClick();
+                break;
+            case R.id.ll_tab_discover:
+                discoverClick();
+                break;
+            case R.id.ll_tab_shopping_car:
+                shoppingCarClick();
+                break;
+            case R.id.ll_tab_person_center:
+                personCenterClick();
+                break;
+        }
+    }
+
+    public void mainPageClick() {
+        if (mainPageFrag == null) {
+            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
+            if (mainPageFrag == null) {
+                mainPageFrag = new MainPageFrag();
+                fragmentMap.put(flags[0], mainPageFrag);
+            }
+        }
+        switchContent(mainPageFrag);
+        pageIndex = 0;
+        chageTabItem(pageIndex);
+    }
+
+    public void sortClick() {
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (sortFrag == null) {
+            sortFrag = (SortFrag) fragmentMap.get(flags[1]);
+            if (sortFrag == null) {
+                sortFrag = new SortFrag();
+                fragmentMap.put(flags[1], sortFrag);
+            }
+        }
+        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+        switchContent(sortFrag);
+        pageIndex = 1;
+        chageTabItem(pageIndex);
+    }
+
+    public void discoverClick() {
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (discoverFrag == null) {
+            discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
+            if (discoverFrag == null) {
+                discoverFrag = new DiscoverFrag();
+                fragmentMap.put(flags[2], discoverFrag);
+            }
+        }
+        switchContent(discoverFrag);
+        pageIndex = 2;
+        chageTabItem(pageIndex);
+    }
+
+    public void shoppingCarClick() {
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (shoppingCarFrag == null) {
+            shoppingCarFrag = (ShoppingCarFrag) fragmentMap.get(flags[3]);
+            if (shoppingCarFrag == null) {
+                shoppingCarFrag = new ShoppingCarFrag();
+                fragmentMap.put(flags[3], shoppingCarFrag);
+            }
+        } else {
+            LogUtil.httpLogW("shoppingCarClick() ");
+            shoppingCarFrag.getShoppingCarData();
+        }
+        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+        switchContent(shoppingCarFrag);
+        pageIndex = 3;
+        chageTabItem(pageIndex);
+    }
+
+    public void personCenterClick() {
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (personalCenterFrag == null) {
+            personalCenterFrag = (PersonalCenterFrag) fragmentMap.get(flags[4]);
+            if (personalCenterFrag == null) {
+                personalCenterFrag = new PersonalCenterFrag();
+                fragmentMap.put(flags[4], personalCenterFrag);
+            }
+        }
+//        else {
+//            personalCenterFrag.initData();
+//        }
+
+        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+        switchContent(personalCenterFrag);
+        pageIndex = 4;
+        chageTabItem(pageIndex);
+    }
+
+    private void chageTabItem(int pageIndex) {
+        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
+        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
+        tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_n));
+        tv_tab_discover.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_n));
+        tv_shopping_car.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
+        tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
+
+        switch (pageIndex) {
+            case 0:
+                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
+                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 1:
+                miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
+                tv_tab_sort.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 2:
+                miv_tab_discover.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_3_h));
+                tv_tab_discover.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 3:
+                miv_shopping_car.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_4_h));
+                tv_shopping_car.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+            case 4:
+                miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_h));
+                tv_person_center.setTextColor(getResources().getColor(R.color.pink_color));
+                break;
+        }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -157,8 +307,10 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

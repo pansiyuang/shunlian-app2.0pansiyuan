@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">顺联动力</string>
     <string name="common_yuan">￥</string>
+
+    <!--主页tab-->
+    <string name="main_page">首页</string>
+    <string name="sort">分类</string>
+    <string name="discover_center">发现中心</string>
+    <string name="shopping_car">购物车</string>
+    <string name="person_center">个人中心</string>
+
     <!--注册-->
     <string name="RegisterOneAct_qsrtjrid">请输入推荐人ID</string>
     <string name="RegisterOneAct_qsrsjh">请输入手机号</string>
@@ -117,4 +125,20 @@
     <string name="combo_original_price">套餐原价%s</string>
     <string name="select_combo">选择套餐</string>
     <string name="goods_attribute">商品参数</string>
+    <string name="select_voucher">领取店铺优惠券</string>
+    <string name="voucher_full_use">满%s使用</string>
+    <string name="valid_date">有效期：%1$s-%2$s</string>
+    <string name="all_store_use">全店通用</string>
+    <string name="receive">领取</string>
+    <string name="hava_received">已领取</string>
+
+    <!--购物车-->
+    <string name="get_voucher">领劵</string>
+    <string name="edit">编辑</string>
+    <string name="to_merge">去凑单</string>
+    <string name="prefer">优惠</string>
+    <string name="change">修改</string>
+    <string name="gift">赠品</string>
+    <string name="balance_accounts">结算%s</string>
+    <string name="count_notice">仅剩%s件</string>
 </resources>

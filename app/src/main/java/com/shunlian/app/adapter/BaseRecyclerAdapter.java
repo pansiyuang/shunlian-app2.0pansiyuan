@@ -268,7 +268,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        unbind();
+//        unbind();
     }
 
     public void unbind(){

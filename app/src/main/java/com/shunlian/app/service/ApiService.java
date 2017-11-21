@@ -36,6 +36,7 @@ import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
+import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -270,4 +271,17 @@ public interface ApiService {
      */
     @GET("store/categories")
     Call<BaseEntity<StoreCategoriesEntity>> storeCategories(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加购物车
+     * @param body
+     * @return
+     */
+    @POST("cart/add")
+    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+    /**
+     * 购物车首页
+     */
+    @POST("cart/home")
+    Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AttributeAdapter;
 import com.shunlian.app.adapter.ComboAdapter;
+import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
 import java.util.List;
@@ -45,8 +46,10 @@ public class RecyclerDialog extends Dialog {
     private Context mContext;
     private List<GoodsDeatilEntity.Combo> mCombos;
     private List<GoodsDeatilEntity.Attrs> mAttributes;
+    private List<GoodsDeatilEntity.Voucher> mVourcheres;
     private ComboAdapter comboAdapter;
     private AttributeAdapter attributeAdapter;
+    private VoucherAdapter voucherAdapter;
     private int recycleHeight;
 
     public RecyclerDialog(Context context) {
@@ -112,5 +115,18 @@ public class RecyclerDialog extends Dialog {
         recycler_list.setAdapter(attributeAdapter);
 
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+    }
+
+    public void setVoucheres(List<GoodsDeatilEntity.Voucher> voucheres) {
+        this.mVourcheres = voucheres;
+        if (voucherAdapter == null) {
+            voucherAdapter = new VoucherAdapter(mContext, false, mVourcheres);
+        } else {
+            voucherAdapter.setData(mVourcheres);
+        }
+        dialog_title.setText(mContext.getResources().getText(R.string.select_voucher));
+        recycler_list.setAdapter(voucherAdapter);
+
+        layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
     }
 }
