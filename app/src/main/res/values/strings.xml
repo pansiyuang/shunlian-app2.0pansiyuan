@@ -61,6 +61,24 @@
     <string name="store_baokuan">爆款</string>
     <string name="store_remai">热卖</string>
     <string name="store_diaozha">吊炸</string>
+    <string name="store_baobeifenlei">宝贝分类</string>
+    <string name="store_dianpujianjie">店铺简介</string>
+    <string name="store_dianpufenlei">店铺分类</string>
+    <string name="store_kefu">客服</string>
+    <string name="store_haopinglv">商品好评率</string>
+    <string name="store_pingjia">商品评价</string>
+    <string name="store_fuwutaidu">服务态度</string>
+    <string name="store_wuliufuwu">物流服务</string>
+    <string name="store_lianximaijia">联系卖家</string>
+    <string name="store_fuwudianhua">服务电话</string>
+    <string name="store_fuwuweixin">服务微信</string>
+    <string name="store_dianpuerweima">店铺二维码</string>
+    <string name="store_baozhengjin">保证金</string>
+    <string name="store_kaidianshijian">开店时间</string>
+    <string name="store_yingyezhizhao">营业执照</string>
+    <string name="store_quanbu">全部</string>
+    <string name="store_chakanquanbu">查看全部</string>
+    <item name="tag_store_discount_menu" type="id"/>
 
 
     <!--商品详情-->

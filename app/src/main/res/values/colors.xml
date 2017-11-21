@@ -69,8 +69,7 @@
     <color name="btn_blue_hover">#1E86E4</color>
     <color name="btn_text">#FFFFFF</color>
     <color name="btn_text_hover">#CCFFFFFF</color>
-    - <!-- 蒙版
-  -->
+    - <!-- 蒙版-->
     <color name="colorMask">#66000000</color>
     <color name="text_btn">#FFFFFF</color>
     <color name="bg_gray">#F7F7F7</color>
@@ -110,5 +109,5 @@
     <color name="value_FC2F57">#FC2F57</color>
     <color name="value_11">#af111111</color>
     <color name="value_EFEEEE">#EFEEEE</color>
-
+    <color name="my_orange_red">#FB0030</color>
 </resources>

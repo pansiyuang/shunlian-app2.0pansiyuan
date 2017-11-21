@@ -1,64 +1,226 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shunlian.app.adapter.StoreFirstAdapter;
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
+import com.shunlian.app.bean.StoreNewGoodsListEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.view.StoreView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/10/23.
  */
 
 public class StorePresenter extends BasePresenter<StoreView> {
+    private final int count = 20;//获取数量
+    private String storeId;
+    private int babyPage = 1;//当前页数
+    private int discountPage = 1;//当前页数
+    private String babySort = "default";//评价类型
+    private int promotionId;//评价类型
+    private int babyAllPage = 0;
+    private int discountAllPage = 0;
+    private boolean babyIsLoading;
+    private boolean discountIsLoading;
+    private List<StoreGoodsListEntity.MData> babyDatas = new ArrayList<>();
+    private List<StorePromotionGoodsListEntity.Lists.Good.Data> discountDatas = new ArrayList<>();
+    private boolean isSecond;
 
-    public StorePresenter(Context context, StoreView iView) {
+    public StorePresenter(Context context, StoreView iView, String storeId) {
         super(context, iView);
+        this.storeId = storeId;
         initApi();
+    }
+
+
+    public void refreshBaby() {
+        if (!babyIsLoading && babyPage <= babyAllPage) {
+            babyIsLoading = true;
+            initBaby(storeId, babyPage, babySort, count);
+        }
+    }
+
+    public void refreshDiscount() {
+        if (!discountIsLoading && discountPage <= discountAllPage) {
+            discountIsLoading = true;
+            initDiscount(storeId, discountPage, promotionId, count);
+        }
+    }
+
+    public void resetBaby(String sort) {
+        babyPage = 1;
+        babySort = sort;
+        babyIsLoading = true;
+        babyDatas.clear();
+        initBaby(storeId, babyPage, babySort, count);
+    }
+
+    public void resetDiscount(int id) {
+        discountPage = 1;
+        promotionId = id;
+        discountIsLoading = true;
+        discountDatas.clear();
+        initDiscount(storeId, discountPage, promotionId, count);
     }
 
     @Override
     protected void initApi() {
-        Map<String,String> map = new HashMap<>();
-        map.put("storeId","26");
+        Map<String, String> map = new HashMap<>();
+        map.put("storeId", storeId);
         sortAndMD5(map);
 
         Call<BaseEntity<StoreIndexEntity>> baseEntityCall = getApiService().storeIndex(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>(){
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StoreIndexEntity> entity) {
                 super.onSuccess(entity);
                 StoreIndexEntity data = entity.data;
-                if (data != null){
-                    LogUtil.httpLogW("StoreIndexEntity:"+data);
+                if (data != null) {
+                    LogUtil.httpLogW("StoreIndexEntity:" + data);
                     iView.storeHeader(data.head);
-                    if (data.body!=null){
+                    if (data.body != null) {
                         typeOneHandle(data.body);
                     }
                 }
             }
         });
+    }
+
+    public void initBaby(String storeId, final int page, String sort, int pageSize) {
+        Map<String, String> map = new HashMap<>();
+        map.put("storeId", storeId);
+        map.put("page", String.valueOf(page));
+        map.put("sort", sort);
+        map.put("pageSize", String.valueOf(pageSize));
+        sortAndMD5(map);
+
+        Call<BaseEntity<StoreGoodsListEntity>> baseEntityCall = getApiService().storeGoodsList(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreGoodsListEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<StoreGoodsListEntity> entity) {
+                super.onSuccess(entity);
+                StoreGoodsListEntity data = entity.data;
+                if (data != null && data.datas != null && data.datas.size() > 0) {
+                    LogUtil.httpLogW("StoreGoodsListEntity:" + data);
+                    babyIsLoading = false;
+                    babyPage++;
+                    babyAllPage = Integer.parseInt(data.allPage);
+                    babyDatas.addAll(data.datas);
+                    iView.storeBaby(babyDatas, babyAllPage, babyPage);
+                }
+            }
+        });
+    }
+
+    public void initNew(String storeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("storeId", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<StoreNewGoodsListEntity>> baseEntityCall = getApiService().storeNewGoodsList(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreNewGoodsListEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<StoreNewGoodsListEntity> entity) {
+                super.onSuccess(entity);
+                StoreNewGoodsListEntity data = entity.data;
+                if (data != null) {
+                    LogUtil.httpLogW("StoreNewGoodsListEntity:" + data);
+                    storeNewHandle(data.data);
+                }
+            }
+        });
+    }
+
+    public void initDiscount(String storeId, int page, int promotionId, int pageSize) {
+        Map<String, String> map = new HashMap<>();
+        map.put("storeId", storeId);
+        map.put("page", String.valueOf(page));
+        map.put("promotionId", String.valueOf(promotionId));
+        map.put("pageSize", String.valueOf(pageSize));
+        sortAndMD5(map);
+
+        Call<BaseEntity<StorePromotionGoodsListEntity>> baseEntityCall = getApiService().storePromotionGoodsList(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StorePromotionGoodsListEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<StorePromotionGoodsListEntity> entity) {
+                super.onSuccess(entity);
+                StorePromotionGoodsListEntity data = entity.data;
+                if (data != null) {
+                    LogUtil.httpLogW("StorePromotionGoodsListEntity:" + data);
+                   if (!isSecond){
+                       iView.storeDiscountMenu(data.lable);
+                       isSecond=true;
+                   }
+                    discountIsLoading = false;
+                    discountPage++;
+                    discountAllPage = Integer.parseInt(data.list.goods.allPage);
+                    discountDatas.addAll(data.list.goods.data);
+                    iView.storeDiscount(data,discountDatas, discountAllPage, discountPage);
+                }
+            }
+        });
+    }
+
+    public void storeNewHandle(List<StoreNewGoodsListEntity.Data> dataList) {
+        List<StoreNewGoodsListEntity.Data> cbodys = new ArrayList<>();
+        cbodys.addAll(dataList);
+        int y = 0;
+        for (int b = 0; b < dataList.size(); b++) {
+            List<StoreNewGoodsListEntity.Data> bbodys = new ArrayList<>();
+            for (int c = 0; c < dataList.get(b).data.size(); c = c + 2) {
+                StoreNewGoodsListEntity.Data bbody = new StoreNewGoodsListEntity.Data();
+                StoreNewGoodsListEntity.Data.MData ldata = new StoreNewGoodsListEntity.Data.MData();
+                StoreNewGoodsListEntity.Data.MData rdata = new StoreNewGoodsListEntity.Data.MData();
+                if (c == 0) {
+                    bbody.day = dataList.get(b).day;
+                }
+                ldata.id = dataList.get(b).data.get(c).id;
+                ldata.title = dataList.get(b).data.get(c).title;
+                ldata.thumb = dataList.get(b).data.get(c).thumb;
+                ldata.price = dataList.get(b).data.get(c).price;
+                ldata.type = dataList.get(b).data.get(c).type;
+                ldata.store_id = dataList.get(b).data.get(c).store_id;
+                ldata.item_id = dataList.get(b).data.get(c).item_id;
+                ldata.market_price = dataList.get(b).data.get(c).market_price;
+                ldata.update_time = dataList.get(b).data.get(c).update_time;
+                ldata.whole_thumb = dataList.get(b).data.get(c).whole_thumb;
+                if ((c + 1) < dataList.get(b).data.size()) {
+                    rdata.id = dataList.get(b).data.get(c + 1).id;
+                    rdata.title = dataList.get(b).data.get(c + 1).title;
+                    rdata.thumb = dataList.get(b).data.get(c + 1).thumb;
+                    rdata.price = dataList.get(b).data.get(c + 1).price;
+                    rdata.type = dataList.get(b).data.get(c + 1).type;
+                    rdata.store_id = dataList.get(b).data.get(c + 1).store_id;
+                    rdata.item_id = dataList.get(b).data.get(c + 1).item_id;
+                    rdata.market_price = dataList.get(b).data.get(c + 1).market_price;
+                    rdata.update_time = dataList.get(b).data.get(c + 1).update_time;
+                    rdata.whole_thumb = dataList.get(b).data.get(c + 1).whole_thumb;
+                }
+                bbody.mDatal = ldata;
+                bbody.mDatar = rdata;
+                bbodys.add(bbody);
+                if (c >= dataList.get(b).data.size() - 2) {
+                    int x = b + y;
+                    cbodys.remove(x);
+                    cbodys.addAll(x, bbodys);
+                    y = y + bbodys.size() - 1;
+                    if (b >= dataList.size() - 1) {
+                        iView.storeNew(cbodys);
+                    }
+                }
+            }
+        }
     }
 
     public void typeTwoHandle(List<StoreIndexEntity.Body> cbodys) {
@@ -109,7 +271,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             }
                         }
                     }
-                }else {
+                } else {
                     iView.storeFirst(cbodys);
                 }
             }
@@ -183,6 +345,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
             }
         }
     }
+
     @Override
     public void attachView() {
 
