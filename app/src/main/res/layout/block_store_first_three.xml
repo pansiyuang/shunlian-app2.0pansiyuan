@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="63.5dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <View
+        android:id="@+id/view_lineOne"
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp"
+        android:background="@color/bg_gray"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/view_lineTwo"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_gray"
+        android:visibility="gone"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_three"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/my_gray_three"
+        android:text="热销爆款，99%的人都说好"/>
+</LinearLayout>

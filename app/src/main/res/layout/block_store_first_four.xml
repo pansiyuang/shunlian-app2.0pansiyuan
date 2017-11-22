@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <View
+        android:id="@+id/view_lineOne"
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp"
+        android:background="@color/bg_gray"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/view_lineTwo"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_gray"
+        android:visibility="gone"/>
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/my_gray_three"
+        android:text="HSTYLE——韩风快时尚女装品牌:HSTYLE目标客户为18-35岁的都市时尚人群，是韩风快时尚女装第一品牌，以款式多、更新快、性价比高的特色获得了都市时尚人群的青睐。"
+        android:gravity="center_vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+</LinearLayout>

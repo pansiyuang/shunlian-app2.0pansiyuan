@@ -30,6 +30,12 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.StoreCategoriesEntity;
+import com.shunlian.app.bean.StoreGoodsListEntity;
+import com.shunlian.app.bean.StoreIndexEntity;
+import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.bean.StoreNewGoodsListEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
@@ -223,6 +229,48 @@ public interface ApiService {
      */
     @POST("store/delMark")
     Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
+
+    /**
+     * 店铺首页
+     * @return
+     */
+    @GET("store/index")
+    Call<BaseEntity<StoreIndexEntity>> storeIndex(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺宝贝
+     * @return
+     */
+    @GET("store/goodsList")
+    Call<BaseEntity<StoreGoodsListEntity>> storeGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺促销
+     * @return
+     */
+    @GET("store/promotionGoodsList")
+    Call<BaseEntity<StorePromotionGoodsListEntity>> storePromotionGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺新品
+     * @return
+     */
+    @GET("store/newGoodsList")
+    Call<BaseEntity<StoreNewGoodsListEntity>> storeNewGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺简介
+     * @return
+     */
+    @GET("store/introduce")
+    Call<BaseEntity<StoreIntroduceEntity>> storeIntroduce(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺类目
+     * @return
+     */
+    @GET("store/categories")
+    Call<BaseEntity<StoreCategoriesEntity>> storeCategories(@QueryMap Map<String, String> map);
 
     /**
      * 添加购物车
