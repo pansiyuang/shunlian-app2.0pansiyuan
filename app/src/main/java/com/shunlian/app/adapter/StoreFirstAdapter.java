@@ -121,7 +121,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         oneHolder.mtv_one.setText(data.title);
                     }
                     oneHolder.mtv_descl.setText(data.ldata.title);
-                    oneHolder.mtv_numberl.setText(data.ldata.item_id);
+                    oneHolder.mtv_numberl.setText("已售null");
                     oneHolder.mtv_pricel.setText(data.ldata.price);
                     GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.ldata.whole_thumb);
 

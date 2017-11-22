@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ISendSmsView;
 
@@ -85,6 +86,7 @@ public class SendSmsPresenter extends BasePresenter<ISendSmsView> {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         LogUtil.httpLogW("response:" + response.body().string());
+                        Common.staticToast(response.body().string());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

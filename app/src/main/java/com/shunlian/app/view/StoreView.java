@@ -19,4 +19,6 @@ public interface StoreView extends IView {
     void storeNew(List<StoreNewGoodsListEntity.Data> storeNewGoodsListEntities);
     void storeHeader(StoreIndexEntity.Head head);
     void storeDiscountMenu(List<StorePromotionGoodsListEntity.Lable> datas);
+    void storeVoucher(List<StoreIndexEntity.Voucher> vouchers);
+    void storeFocus();
 }

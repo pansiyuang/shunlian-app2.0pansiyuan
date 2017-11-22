@@ -94,8 +94,8 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @Override
     public void introduceInfo(StoreIntroduceEntity storeIntroduceEntity) {
         mtv_storeName.setText(storeIntroduceEntity.store_name);
-        mtv_storeScore.setText("接口无字段");
-        mtv_number.setText(storeIntroduceEntity.store_collect);
+        mtv_storeScore.setText("店铺分null");
+        mtv_number.setText(storeIntroduceEntity.store_collect+"人");
         mtv_haopinglv.setText(storeIntroduceEntity.evaluate.praise_rate);
         mtv_dianhua.setText(storeIntroduceEntity.store_phone);
         mtv_weixin.setText(storeIntroduceEntity.store_wx);

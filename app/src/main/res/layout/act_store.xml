@@ -88,11 +88,11 @@
                             android:layout_width="60dp"
                             android:layout_height="23.5dp"
                             android:layout_alignParentRight="true"
-                            android:background="@mipmap/bg_shop_attention_n"
+                            android:background="@mipmap/bg_shop_attention_h"
                             android:gravity="right|center_vertical"
                             android:paddingRight="14dp"
                             android:text="关注"
-                            android:textColor="@color/white"
+                            android:textColor="@color/pink_color"
                             android:textSize="12sp" />
 
                         <com.shunlian.app.widget.MyTextView
