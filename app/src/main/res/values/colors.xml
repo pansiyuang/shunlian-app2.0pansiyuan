@@ -12,9 +12,9 @@
     <!-- title颜色-->
     <color name="my_line_gray">#DDDDDD</color>
     <color name="my_gray_zero">#f2f2f2</color>
-    - <!-- hint色-->
+    <!-- hint色-->
     <color name="my_gray_one">#AAAAAA</color>
-    - <!-- text色 -->
+    <!-- text色 -->
     <color name="my_gray_two">#666666</color>
     <color name="my_gray_three">#1c1b20</color>
     <color name="my_gray_four">#b7b7b7</color>
