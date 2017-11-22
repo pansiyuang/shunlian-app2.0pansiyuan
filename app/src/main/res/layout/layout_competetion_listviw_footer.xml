@@ -53,7 +53,7 @@
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="已无更多数据"
+        android:text="已经到底啦！"
         android:textColor="@color/my_gray_two"
         android:textSize="14dp"
         android:visibility="gone" />

@@ -8,8 +8,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -20,8 +24,10 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -30,6 +36,11 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
+import com.shunlian.mylibrary.ImmersionBar;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -39,8 +50,13 @@ import butterknife.BindView;
 
 public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetailView, View.OnClickListener {
 
-    private FragmentManager supportFragmentManager;
     private GoodsDeatilFrag goodsDeatilFrag;
+    public static final String FRAG_GOODS = GoodsDeatilFrag.class.getName();
+    public static final String FRAG_COMMENT = CommentFrag.class.getName();
+    public static final int GOODS_ID = 0;
+    public static final int COMMENT_ID = 1;
+    public static final int DETAIL_ID = 2;
+    public static int CURRENT_ID = GOODS_ID;
 
     @BindView(R.id.rnview)
     RollNumView rnview;
@@ -93,11 +109,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.view_comment)
     View view_comment;
     
-    @BindView(R.id.mll_title)
-    MyLinearLayout mll_title;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     
     @BindView(R.id.mll_item)
     MyLinearLayout mll_item;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
@@ -108,6 +127,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private String store_id;
     private GoodsDeatilEntity.Sku sku;
     private int goodsCount;
+    private int bannerHeight;
+    public int offset;
+    private Map<String,BaseFragment> fragments;
+    private CommentFrag commentFrag;
 
     public static void startAct(Context context){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -128,39 +151,129 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mll_goods.setOnClickListener(this);
         mll_detail.setOnClickListener(this);
         mll_comment.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
-        immersionBar.statusBarView(R.id.top_view).fullScreen(true).init();
-        setStatusBarFontDark();
-        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
-        supportFragmentManager = getSupportFragmentManager();
-        goodsDeatilFrag = new GoodsDeatilFrag();
-        supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
-
+        immersionBar.titleBar(toolbar,false)
+                .statusBarDarkFont(true, 0.2f)
+                .addTag(GoodsDetailAct.class.getName())
+                .init();
+        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+        offset = toolbarParams.height + ImmersionBar.getStatusBarHeight(this);
+        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "56");
+        fragments = new HashMap();
+        goodsFrag();
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
         rnview.setTextSize(10);
         rnview.setNumber(0);
+
+        bannerHeight = DeviceInfoUtil.getDeviceWidth(this) - offset;
     }
 
-    public void setBgColor(int position, int dt) {
-        float per = dt / 1000.0f;
-        System.out.println("values===" + per);
-        if (per >= 1) {
-            per = 1;
-        }
-        if (position >= 1){
-            immersionBar.statusBarView(R.id.top_view).statusBarColor(R.color.white).fullScreen(true).init();
-            setStatusBarFontDark();
+    public void goodsFrag(){
+        if (goodsDeatilFrag == null) {
+            goodsDeatilFrag = new GoodsDeatilFrag();
+            fragments.put(FRAG_GOODS,goodsDeatilFrag);
         }else {
-            immersionBar.statusBarColor(R.color.white)
-                    .statusBarDarkFont(true, 0.2f)
-                    .barAlpha(per)
-                    .addViewSupportTransformColor(mll_title, R.color.transparent, R.color.white).init();
+            goodsDeatilFrag = (GoodsDeatilFrag) fragments.get(FRAG_GOODS);
+        }
+        mll_goods.setVisibility(View.VISIBLE);
+        mll_goods.setEnabled(true);
+        mll_detail.setVisibility(View.VISIBLE);
+        mll_detail.setEnabled(true);
+        switchContent(goodsDeatilFrag);
+    }
+
+    public void commentFrag(){
+        if (commentFrag == null) {
+            commentFrag = new CommentFrag();
+            fragments.put(FRAG_COMMENT,commentFrag);
+        }else {
+            commentFrag = (CommentFrag) fragments.get(FRAG_COMMENT);
+        }
+        mll_goods.setVisibility(View.INVISIBLE);
+        mll_goods.setEnabled(false);
+        mll_detail.setVisibility(View.INVISIBLE);
+        mll_detail.setEnabled(false);
+        mtv_comment.setTextColor(getResources().getColor(R.color.new_text));
+        view_comment.setVisibility(View.INVISIBLE);
+        switchContent(commentFrag);
+    }
+
+    public void setBgColor(int position, int totalDy) {
+        ImmersionBar immersionBar = ImmersionBar.with(this)
+                .addViewSupportTransformColor(toolbar, R.color.white);
+        if (totalDy <= bannerHeight) {
+            float alpha = (float) totalDy / bannerHeight;
+            immersionBar.statusBarAlpha(alpha)
+                    .addTag(GoodsDetailAct.class.getName())
+                    .init();
+            mll_item.setAlpha(alpha);
+
+            float v = 1.0f - alpha * 2;
+            if (v <= 0){
+                v = alpha * 2 - 1;
+                setImg(2,1);
+            }else {
+                setImg(1,2);
+            }
+            miv_close.setAlpha(v);
+            miv_is_fav.setAlpha(v);
+            miv_more.setAlpha(v);
+        } else {
+            immersionBar.statusBarAlpha(1.0f)
+                    .addTag(GoodsDetailAct.class.getName())
+                    .init();
+            mll_item.setAlpha(1.0f);
         }
     }
+
+    /*
+    替换fragment内容
+     */
+    public void switchContent(Fragment show) {
+        if (show != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            if (!show.isAdded()) {
+                ft.add(R.id.mfl_content, show);
+            } else {
+                ft.show(show);
+            }
+
+            if (fragments != null && fragments.size() > 0) {
+                Iterator<String> keys = fragments.keySet().iterator();
+                while (keys.hasNext()){
+                    String next = keys.next();
+                    BaseFragment baseFragment = fragments.get(next);
+                    if (show != baseFragment) {
+                        if (baseFragment != null && baseFragment.isVisible()) {
+                            ft.hide(baseFragment);
+                        }
+                    }
+                }
+            }
+            ft.commit();
+        }
+    }
+
+    private void setImg(int status,int oldStatus){
+        if (status != oldStatus) {
+            if (status == 1) {
+                miv_close.setImageResource(R.mipmap.icon_more_fanhui);
+                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
+                miv_more.setImageResource(R.mipmap.icon_more_gengduo);
+            } else {
+                miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
+                miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+                miv_more.setImageResource(R.mipmap.icon_more_n);
+            }
+        }
+    }
+
+
     @Override
     public void showFailureView(int rquest_code) {
 
@@ -229,7 +342,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (sku == null){
                     Common.staticToast("请选择商品规格");
                 }else {
-                    goodsDetailPresenter.addCart("148",sku.id,String.valueOf(goodsCount));
+                    goodsDetailPresenter.addCart("56",sku.id,String.valueOf(goodsCount));
                 }
                 break;
             case R.id.miv_more:
@@ -239,35 +352,80 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 moreHideAnim();
                 break;
             case R.id.mll_goods:
-                setTabBarStatue(0);
+                if (mll_item.getAlpha() <= 0.2f){
+                    return;
+                }
+                setTabBarStatue(GOODS_ID);
+                mll_item.setAlpha(0);
+                immersionBar.statusBarAlpha(0f).init();
+                goodsDeatilFrag.setScrollPosition(0,offset);
                 break;
             case R.id.mll_detail:
-                setTabBarStatue(1);
+                if (mll_item.getAlpha() <= 0.2f){
+                    return;
+                }
+                setTabBarStatue(DETAIL_ID);
+                goodsDeatilFrag.setScrollPosition(2,offset);
                 break;
             case R.id.mll_comment:
-                setTabBarStatue(2);
+                if (mll_item.getAlpha() <= 0.2f){
+                    return;
+                }
+                setTabBarStatue(COMMENT_ID);
+                goodsDeatilFrag.setScrollPosition(1,offset);
+                setBgColor(0, bannerHeight);
+                break;
+            case R.id.miv_close:
+                backOrder();
                 break;
         }
     }
 
+    private void backOrder(){
+        BaseFragment baseFragment = fragments.get(FRAG_COMMENT);
+        if (baseFragment != null) {
+            boolean visible = baseFragment.isVisible();
+            if (visible) {
+                setTabBarStatue(CURRENT_ID);
+                goodsFrag();
+            } else {
+                finish();
+            }
+        }else {
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            backOrder();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void setTabBarStatue(int statue){
         //statue == 0 商品
-        //statue == 1 详情
-        //statue == 2 评论
+        //statue == 1 评价
+        //statue == 2 详情
+        CURRENT_ID = statue;
         mtv_goods.setTextColor(statue == 0 ? getResources().getColor(R.color.pink_color)
                 : getResources().getColor(R.color.new_text));
         view_goods.setVisibility(statue == 0 ? View.VISIBLE : View.INVISIBLE);
 
-        mtv_detail.setTextColor(statue == 1 ? getResources().getColor(R.color.pink_color)
+        mtv_comment.setTextColor(statue == 1 ? getResources().getColor(R.color.pink_color)
                 : getResources().getColor(R.color.new_text));
-        view_detail.setVisibility(statue == 1 ? View.VISIBLE : View.INVISIBLE);
+        view_comment.setVisibility(statue == 1 ? View.VISIBLE : View.INVISIBLE);
 
-        mtv_comment.setTextColor(statue == 2 ? getResources().getColor(R.color.pink_color)
+        mtv_detail.setTextColor(statue == 2 ? getResources().getColor(R.color.pink_color)
                 : getResources().getColor(R.color.new_text));
-        view_comment.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
+        view_detail.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
+
     }
 
     private void moreHideAnim() {
+        immersionBar.getTag(GoodsDetailAct.class.getName()).init();
         mll_share.setVisibility(View.GONE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1);
@@ -277,6 +435,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     private void moreAnim() {
+        immersionBar.statusBarColor(R.color.white).init();
         mll_share.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1,Animation.RELATIVE_TO_SELF,0);

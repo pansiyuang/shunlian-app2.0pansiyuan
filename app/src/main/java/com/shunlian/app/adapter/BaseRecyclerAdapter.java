@@ -1,6 +1,8 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -284,6 +286,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     public static List<Unbinder> unbinders = new ArrayList<>();
 
+    protected int getColor(@ColorRes int id){
+        return context.getResources().getColor(id);
+    }
+
+    protected String getString(@StringRes int id){
+        return context.getResources().getString(id);
+    }
     public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder{
 
         public BaseRecyclerViewHolder(View itemView) {

@@ -1,5 +1,6 @@
 package com.shunlian.app.widget;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +15,11 @@ import android.view.WindowManager;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.DataUtil;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.List;
 
@@ -39,22 +43,26 @@ public class FootprintDialog extends Dialog {
 
     @BindView(R.id.mrl_footprint_bg)
     MyRelativeLayout mrl_footprint_bg;
+    private Context context;
 
 
     public FootprintDialog(Context context) {
         this(context,R.style.MyDialogStyleRight);
+        this.context = context;
     }
 
 
     public FootprintDialog(Context context, int themeResId) {
         super(context, themeResId);
+        this.context = context;
         View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_footprint, null, false);
         setContentView(inflate);
         bind = ButterKnife.bind(this, inflate);
 
         Window window = getWindow();
         WindowManager.LayoutParams attributes = window.getAttributes();
-        attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
+        attributes.height = DeviceInfoUtil.getDeviceHeight(context) -
+                ImmersionBar.getStatusBarHeight((Activity) context);
         attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(attributes);
 
@@ -84,11 +92,17 @@ public class FootprintDialog extends Dialog {
     @Override
     public void dismiss() {
         super.dismiss();
-        if (bind != null){
-            bind.unbind();
-        }
+//        if (bind != null){
+//            bind.unbind();
+//        }
+        ImmersionBar.with((Activity) context).getTag(GoodsDetailAct.class.getName()).init();
     }
 
+    @Override
+    public void show() {
+        super.show();
+        ImmersionBar.with((Activity) context).statusBarColor(R.color.white).init();
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
