@@ -11,7 +11,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DataUtil;
-import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class CommentFrag extends BaseFragment {
     @Override
     protected void initData() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) recy_view.getLayoutParams();
-        layoutParams.topMargin = ((GoodsDetailAct)baseActivity).offset - ImmersionBar.getStatusBarHeight(baseActivity);
+        layoutParams.topMargin = ((GoodsDetailAct)baseActivity).offset;
         recy_view.setLayoutParams(layoutParams);
         List<String> iten = DataUtil.getListString(10, "iten");
         LinearLayoutManager manager = new LinearLayoutManager(baseActivity);

@@ -156,12 +156,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     protected void initData() {
-        immersionBar.titleBar(toolbar,false)
-                .statusBarDarkFont(true, 0.2f)
-                .addTag(GoodsDetailAct.class.getName())
-                .init();
+        defToolbar();
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-        offset = toolbarParams.height + ImmersionBar.getStatusBarHeight(this);
+        offset = toolbarParams.height;
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, "56");
         fragments = new HashMap();
         goodsFrag();
@@ -170,7 +167,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rnview.setTextSize(10);
         rnview.setNumber(0);
 
-        bannerHeight = DeviceInfoUtil.getDeviceWidth(this) - offset;
+        bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
+                - offset - ImmersionBar.getStatusBarHeight(this);
+        System.out.println("bannerHeight===="+DeviceInfoUtil.getDeviceWidth(this));
+    }
+    public void defToolbar(){
+        immersionBar.titleBar(toolbar,false)
+                .statusBarDarkFont(true, 0.2f)
+                .addTag(GoodsDetailAct.class.getName())
+                .init();
     }
 
     public void goodsFrag(){
@@ -207,6 +212,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         ImmersionBar immersionBar = ImmersionBar.with(this)
                 .addViewSupportTransformColor(toolbar, R.color.white);
         if (totalDy <= bannerHeight) {
+            if (totalDy <= 0){
+                totalDy = 0;
+            }
             float alpha = (float) totalDy / bannerHeight;
             immersionBar.statusBarAlpha(alpha)
                     .addTag(GoodsDetailAct.class.getName())
@@ -224,13 +232,20 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             miv_is_fav.setAlpha(v);
             miv_more.setAlpha(v);
         } else {
-            immersionBar.statusBarAlpha(1.0f)
-                    .addTag(GoodsDetailAct.class.getName())
-                    .init();
-            mll_item.setAlpha(1.0f);
+            setToolbar();
         }
     }
 
+    public void setToolbar(){
+        setImg(2,1);
+        immersionBar.statusBarAlpha(1.0f)
+                .addTag(GoodsDetailAct.class.getName())
+                .init();
+        mll_item.setAlpha(1.0f);
+        miv_close.setAlpha(1.0f);
+        miv_is_fav.setAlpha(1.0f);
+        miv_more.setAlpha(1.0f);
+    }
     /*
     替换fragment内容
      */
@@ -357,13 +372,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }
                 setTabBarStatue(GOODS_ID);
                 mll_item.setAlpha(0);
-                immersionBar.statusBarAlpha(0f).init();
+                immersionBar.statusBarAlpha(0f).addTag(GoodsDetailAct.class.getName()).init();
                 goodsDeatilFrag.setScrollPosition(0,offset);
                 break;
             case R.id.mll_detail:
                 if (mll_item.getAlpha() <= 0.2f){
                     return;
                 }
+                setToolbar();
                 setTabBarStatue(DETAIL_ID);
                 goodsDeatilFrag.setScrollPosition(2,offset);
                 break;
@@ -371,9 +387,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (mll_item.getAlpha() <= 0.2f){
                     return;
                 }
+                setToolbar();
                 setTabBarStatue(COMMENT_ID);
                 goodsDeatilFrag.setScrollPosition(1,offset);
-                setBgColor(0, bannerHeight);
                 break;
             case R.id.miv_close:
                 backOrder();

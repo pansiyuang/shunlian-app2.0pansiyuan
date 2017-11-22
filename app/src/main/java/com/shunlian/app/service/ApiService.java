@@ -284,4 +284,12 @@ public interface ApiService {
      */
     @POST("cart/home")
     Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
+
+    /**
+     * 商品详情页足迹
+     * @param body
+     * @return
+     */
+    @POST("member/footermark/getsidemark")
+    Call<BaseEntity<EmptyEntity>> footPrint(@Body RequestBody body);
 }

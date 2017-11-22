@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -95,13 +96,14 @@ public class FootprintDialog extends Dialog {
 //        if (bind != null){
 //            bind.unbind();
 //        }
-        ImmersionBar.with((Activity) context).getTag(GoodsDetailAct.class.getName()).init();
+        ((BaseActivity) context).immersionBar.getTag(GoodsDetailAct.class.getName()).init();
     }
 
     @Override
     public void show() {
         super.show();
-        ImmersionBar.with((Activity) context).statusBarColor(R.color.white).init();
+
+        ((BaseActivity) context).immersionBar.statusBarColor(R.color.white).init();
     }
 
     @Override
