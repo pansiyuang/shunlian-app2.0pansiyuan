@@ -12,9 +12,9 @@
     <!-- title颜色-->
     <color name="my_line_gray">#DDDDDD</color>
     <color name="my_gray_zero">#f2f2f2</color>
-    - <!-- hint色-->
+    <!-- hint色-->
     <color name="my_gray_one">#AAAAAA</color>
-    - <!-- text色 -->
+    <!-- text色 -->
     <color name="my_gray_two">#666666</color>
     <color name="my_gray_three">#1c1b20</color>
     <color name="my_gray_four">#b7b7b7</color>
@@ -33,7 +33,7 @@
     <color name="tv_update_time">#b7b4b4</color>
     <color name="my_blue">#99cbdf</color>
     <color name="share_text">#858585</color>
-    - <!-- 橘红色 -->
+    <!-- 橘红色 -->
     <color name="my_orange">#ff4c4c</color>
     <color name="my_dark_grey">#333333</color>
     <color name="my_pink">#f7788d</color>
@@ -70,14 +70,14 @@
     <color name="btn_blue_hover">#1E86E4</color>
     <color name="btn_text">#FFFFFF</color>
     <color name="btn_text_hover">#CCFFFFFF</color>
-    - <!-- 蒙版-->
+    <!-- 蒙版-->
     <color name="colorMask">#66000000</color>
     <color name="text_btn">#FFFFFF</color>
     <color name="bg_gray">#F7F7F7</color>
     <color name="bg_gray_two">#EEEEEE</color>
     <color name="bg_gray_three">#E8E8E8</color>
     <color name="bg_gray_four">#F4F4F4</color>
-    - <!-- 新版首页颜色值-->
+    <!-- 新版首页颜色值-->
     <color name="new_orange">#ff5b41</color>
     <color name="new_gray">#858585</color>
     <color name="new_blue">#2e85fb</color>
@@ -110,5 +110,7 @@
     <color name="value_FC2F57">#FC2F57</color>
     <color name="value_11">#af111111</color>
     <color name="value_EFEEEE">#EFEEEE</color>
-    <color name="my_orange_red">#FB0030</color>
+    <color name="value_FEF0F3">#FEF0F3</color>
 </resources>
+
+

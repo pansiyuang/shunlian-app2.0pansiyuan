@@ -10,6 +10,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.widget.FootprintDialog;
+import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
 
@@ -23,8 +25,12 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @BindView(R.id.recy_view_root)
     RecyclerView recy_view_root;
+
+    @BindView(R.id.miv_footprint)
+    MyImageView miv_footprint;
     private LinearLayoutManager manager;
-    private int dt;
+    private int totalDy;
+    private FootprintDialog footprintDialog;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -34,20 +40,44 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     protected void initListener() {
         super.initListener();
-
+        miv_footprint.setOnClickListener(this);
         recy_view_root.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                totalDy += dy;
                 if (manager != null){
                     int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
                     GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
-                    dt += dy;
-                    detailAct.setBgColor(firstVisibleItemPosition,dt);
-
+                    detailAct.setBgColor(firstVisibleItemPosition,totalDy);
+                    if (firstVisibleItemPosition < 3){
+                        detailAct.setTabBarStatue(GoodsDetailAct.GOODS_ID);
+                    }else if (firstVisibleItemPosition < 6){
+                        detailAct.setTabBarStatue(GoodsDetailAct.COMMENT_ID);
+                    }else {
+                        detailAct.setTabBarStatue(GoodsDetailAct.DETAIL_ID);
+                    }
                 }
             }
         });
+    }
+
+    public void setScrollPosition(int statue,int offset){
+        //statue == 0 商品
+        //statue == 1 评价
+        //statue == 2 详情
+        System.out.println(">>>>>>>>>>>>>>"+offset);
+        if (statue == 0){
+            totalDy = 0;
+            manager.scrollToPositionWithOffset(0,0);
+            manager.scrollToPositionWithOffset(0,offset);
+        }else if (statue == 1){
+            manager.scrollToPositionWithOffset(4,0);
+            manager.scrollToPositionWithOffset(4,offset);
+        }else{
+            manager.scrollToPositionWithOffset(6,0);
+            manager.scrollToPositionWithOffset(6,offset);
+        }
     }
 
     @Override
@@ -76,6 +106,14 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.miv_footprint:
+                if (footprintDialog == null) {
+                    footprintDialog = new FootprintDialog(baseActivity);
+                }
+                footprintDialog.show();
+                break;
+        }
     }
 
 

@@ -32,7 +32,9 @@ public class GoodsDeatilEntity {
     public ArrayList<Sku> sku;//属性组合列表
     public ArrayList<Specs> specs;
     public GoodsData goods_data;
-
+    public ArrayList<ActivityDetail> full_cut;//满减
+    public ArrayList<ActivityDetail> full_discount;//满折
+    public ArrayList<ActivityDetail> buy_gift;//买赠
 
 
     public ArrayList<Voucher> voucher;
@@ -42,6 +44,28 @@ public class GoodsDeatilEntity {
     public ArrayList<Combo> combo;
     public ArrayList<Attrs> attrs;
     public ArrayList<Comments> comments;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class ActivityDetail{
+        public String goods_id;//商品id
+        public String promotion_gift_id; //买赠活动id
+        public String promotion_title;     //买赠活动标题
+        public String gift_goodsid;    //赠送的商品id
+        public String promotion_discount_id; //满减活动id
+        public String qty_type_condition;   //打折条件 （10件）
+        public String qty_type_discount;   //折扣值 （6.5折）
+        public String title;   //满减活动标题
+        public String type;  //活动类型 MONEY 满减    QTY 满折
+        public String money_type_condition; //满减条件
+        public String money_type_discount; //减免额度
+        public String money_type_loop; //是否阶梯减免
+        public String start_time; //开始时间
+        public String end_time;//结束时间d
+        public String start_unixtime;//开始时间的unix时间戳
+        public String end_unixtime;// 结束时间的unix时间戳
+        public String for_goods; // 是否全部商品  ALL为全部  CUSTOM为指定
+        public String where_used;   //使用位置，1为通用 2为app
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Detail{
