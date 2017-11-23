@@ -2,6 +2,7 @@ package com.shunlian.app.utils;
 
 import java.io.IOException;
 
+import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -50,11 +51,14 @@ public class HttpRequestHeader implements Interceptor {
                 .addHeader("resolution", SharedPrefUtil.getSharedPrfString("resolution", "720x1184"))
                 .addHeader("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type", "OTHER"))//网络类型
                 .addHeader("X-Client-Ip", SharedPrefUtil.getSharedPrfString("DeviceIp", "192.168.1.1"))
-                .addHeader("token", SharedPrefUtil.getSharedPrfString("token", ""));
+                .addHeader("Token",SharedPrefUtil.getSharedPrfString("token", ""));
 //                .addHeader("Content-Type", "application/json");
         if (isRemoveContentType) {
             builder.removeHeader("Content-Type");
         }
+        Headers headers = chain.request().headers();
+        String s = headers.toString();
+        LogUtil.testLogW("okhttp",s);
         return chain.proceed(builder.build());
     }
 }

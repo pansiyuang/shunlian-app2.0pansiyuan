@@ -7,33 +7,31 @@
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:iv_control_width="173"
         app:iv_control_height="173"
-        app:iv_margin_top="17"
-        android:src="@mipmap/icon_login_logo"
-        />
+        app:iv_control_width="173"
+        app:iv_margin_top="17" />
 
     <com.shunlian.app.widget.MyTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:text="绝地逢生咖啡机看来"
-        android:textColor="@color/new_text"
-        android:textSize="11sp"
-        app:tv_control_adapter="true"
-        app:tv_margin_top="20"
-        />
-
-    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="￥48.6"
+        android:textColor="@color/new_text"
+        android:textSize="11sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="20" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
         android:textColor="@color/pink_color"
         android:textSize="11sp"
         app:tv_control_adapter="true"
-        app:tv_margin_top="20"/>
+        app:tv_margin_top="20" />
 
 </LinearLayout>

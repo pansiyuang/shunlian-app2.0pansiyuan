@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -131,6 +132,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public int offset;
     private Map<String,BaseFragment> fragments;
     private CommentFrag commentFrag;
+    private FootprintEntity mFootprintEntity;
+    private FootprintDialog footprintDialog;
 
     public static void startAct(Context context){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -306,6 +309,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
+        GoodsDeatilEntity.StoreInfo store_info = goodsDeatilEntity.store_info;
+        if (store_info != null){
+            store_id = store_info.store_id;
+        }
     }
 
 
@@ -331,6 +338,26 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void addCart(String msg) {
         addCartAnim();
+    }
+
+    /**
+     * 足迹列表
+     *
+     * @param footprintEntity
+     */
+    @Override
+    public void footprintList(FootprintEntity footprintEntity) {
+        mFootprintEntity = footprintEntity;
+    }
+
+    /*
+   显示足迹列表
+    */
+    public void showFootprintList() {
+        if (footprintDialog == null) {
+            footprintDialog = new FootprintDialog(this, mFootprintEntity);
+        }
+        footprintDialog.show();
     }
 
     /**
@@ -495,13 +522,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         myImageView.setAnimation(alphaAnimation);
     }
 
-    /*
-   显示足迹列表
-    */
-    public void showFootprintList() {
-        FootprintDialog dialog = new FootprintDialog(this);
-        dialog.show();
-    }
+
 
     private void parabolaAnimation() {
         int[] startPoint = new int[2];

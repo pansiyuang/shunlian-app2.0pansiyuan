@@ -15,14 +15,13 @@ import android.view.WindowManager;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.ImmersionBar;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,18 +43,22 @@ public class FootprintDialog extends Dialog {
 
     @BindView(R.id.mrl_footprint_bg)
     MyRelativeLayout mrl_footprint_bg;
+
+    @BindView(R.id.mll_empty)
+    MyLinearLayout mll_empty;
     private Context context;
+    private FootprintEntity mFootprintEntity;
 
 
-    public FootprintDialog(Context context) {
-        this(context,R.style.MyDialogStyleRight);
-        this.context = context;
+    public FootprintDialog(Context context, FootprintEntity footprintEntity) {
+        this(context,footprintEntity,R.style.MyDialogStyleRight);
     }
 
 
-    public FootprintDialog(Context context, int themeResId) {
+    public FootprintDialog(Context context,FootprintEntity footprintEntity, int themeResId) {
         super(context, themeResId);
         this.context = context;
+        mFootprintEntity = footprintEntity;
         View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_footprint, null, false);
         setContentView(inflate);
         bind = ButterKnife.bind(this, inflate);
@@ -75,19 +78,39 @@ public class FootprintDialog extends Dialog {
     }
 
     private void initData() {
-        List<String> fdasf = DataUtil.getListString(20, "fdasf");
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recy_view.setLayoutManager(linearLayoutManager);
-        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(getContext(),
-                R.layout.item_footprint,fdasf){
+        if (mFootprintEntity == null){
+            mll_empty.setVisibility(View.VISIBLE);
+            recy_view.setVisibility(View.GONE);
+            mbtn_clear.setVisibility(View.GONE);
+            return;
+        }
 
-            @Override
-            public void convert(SimpleViewHolder holder, String s, int position) {
+        if (mFootprintEntity.mark_data != null && mFootprintEntity.mark_data.size() > 0) {
+            mll_empty.setVisibility(View.GONE);
+            recy_view.setVisibility(View.VISIBLE);
+            mbtn_clear.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            recy_view.setLayoutManager(linearLayoutManager);
+            SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<FootprintEntity.MarkData>(getContext(),
+                    R.layout.item_footprint, mFootprintEntity.mark_data) {
 
-            }
-        };
+                @Override
+                public void convert(SimpleViewHolder holder, FootprintEntity.MarkData s, int position) {
+                    MyImageView miv_icon = holder.getView(R.id.miv_icon);
+                    MyTextView mtv_title = holder.getView(R.id.mtv_title);
+                    MyTextView mtv_price = holder.getView(R.id.mtv_price);
+                    GlideUtils.getInstance().loadImage(context,miv_icon,s.thumb);
+                    mtv_title.setText(s.title);
+                    mtv_price.setText(context.getResources().getString(R.string.rmb)+s.price);
+                }
+            };
 
-        recy_view.setAdapter(simpleRecyclerAdapter);
+            recy_view.setAdapter(simpleRecyclerAdapter);
+        }else {
+            mll_empty.setVisibility(View.VISIBLE);
+            recy_view.setVisibility(View.GONE);
+            mbtn_clear.setVisibility(View.GONE);
+        }
     }
 
     @Override

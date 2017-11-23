@@ -2,10 +2,9 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -14,7 +13,6 @@ import com.shunlian.app.view.IGoodsDetailView;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -38,27 +36,21 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
         sortAndMD5(map);
-        try {
-            String s = new ObjectMapper().writeValueAsString(map);
-            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
-            Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
-                @Override
-                public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
-                    super.onSuccess(entity);
-                    GoodsDeatilEntity data = entity.data;
-                    if (data != null) {
-                        iView.goodsDetailData(data);
-                        iView.isFavorite(data.is_fav);
-                    }
-
-
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
+                super.onSuccess(entity);
+                GoodsDeatilEntity data = entity.data;
+                if (data != null) {
+                    iView.goodsDetailData(data);
+                    iView.isFavorite(data.is_fav);
                 }
-            });
+            }
+        });
 
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        footprint();
     }
 
     /**
@@ -69,13 +61,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         Map<String,String> map = new HashMap<>();
         map.put("storeId",storeId);
         sortAndMD5(map);
-        String stringEntry = null;
-        try {
-            stringEntry = new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addMark(requestBody);
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
@@ -100,13 +86,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         Map<String,String> map = new HashMap<>();
         map.put("storeId",storeId);
         sortAndMD5(map);
-        String stringEntry = null;
-        try {
-            stringEntry = new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delMark(requestBody);
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
@@ -129,13 +109,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("sku_id",sku_id);
         map.put("qty",qty);
         sortAndMD5(map);
-        String stringEntry = null;
-        try {
-            stringEntry = new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
@@ -145,6 +119,21 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             }
         });
 
+    }
+
+    public void footprint(){
+        Map<String,String> map = new HashMap<>();
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<FootprintEntity>> baseEntityCall = getAddCookieApiService().footPrint(requestBody);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<FootprintEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<FootprintEntity> entity) {
+                super.onSuccess(entity);
+                FootprintEntity data = entity.data;
+                iView.footprintList(data);
+            }
+        });
     }
     @Override
     public void attachView() {

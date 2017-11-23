@@ -24,19 +24,20 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -291,5 +292,5 @@ public interface ApiService {
      * @return
      */
     @POST("member/footermark/getsidemark")
-    Call<BaseEntity<EmptyEntity>> footPrint(@Body RequestBody body);
+    Call<BaseEntity<FootprintEntity>> footPrint(@Body RequestBody body);
 }

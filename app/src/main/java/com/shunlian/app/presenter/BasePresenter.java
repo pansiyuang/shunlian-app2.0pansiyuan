@@ -69,11 +69,14 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     protected Context context;
     protected IV iView;
+    protected ObjectMapper objectMapper;
+    protected static int requestCount;//请求次数
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;
         this.iView = iView;
-
+        objectMapper = new ObjectMapper();
+        requestCount = 0;
     }
 
     /**
@@ -218,6 +221,10 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
                 }else {
+                    requestCount++;
+                    if (requestCount >= 5){
+                        return;
+                    }
                     refreshToken(clone,emptyCode,failureCode);
                 }
                 break;
@@ -311,5 +318,24 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             }
         }
         map.put("sign", getStringMD5(sign.toString()));
+    }
+
+    /**
+     * 将键值对格式成 RequestBody对象并返回
+     * @param map
+     * @return
+     */
+    public RequestBody getRequestBody(Map map){
+        String stringEntry = null;
+        try {
+            if (objectMapper == null){
+                objectMapper = new ObjectMapper();
+            }
+            stringEntry = objectMapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
+        return requestBody;
     }
 }

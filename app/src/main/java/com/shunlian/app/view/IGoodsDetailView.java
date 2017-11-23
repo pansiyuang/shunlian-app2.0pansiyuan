@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
 /**
@@ -23,4 +24,10 @@ public interface IGoodsDetailView extends IView {
      * 添加购物车
      */
     void addCart(String msg);
+
+    /**
+     *足迹列表
+     * @param footprintEntity
+     */
+    void footprintList(FootprintEntity footprintEntity);
 }

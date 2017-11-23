@@ -141,10 +141,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.miv_footprint:
-                if (footprintDialog == null) {
-                    footprintDialog = new FootprintDialog(baseActivity);
-                }
-                footprintDialog.show();
+                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) baseActivity;
+                goodsDetailAct.showFootprintList();
                 break;
         }
     }
