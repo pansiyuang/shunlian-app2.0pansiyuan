@@ -163,6 +163,10 @@
     <string name="prefer">优惠</string>
     <string name="change">修改</string>
     <string name="gift">赠品</string>
-    <string name="balance_accounts">结算%s</string>
+    <string name="balance_accounts">结算(%s)</string>
     <string name="count_notice">仅剩%s件</string>
+    <string name="del">删除</string>
+    <string name="already_discount"> 已优惠:¥%s</string>
+    <string name="total">合计：¥%s</string>
+    <string name="no_freight">不含运费</string>
 </resources>

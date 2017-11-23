@@ -6,12 +6,16 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -21,14 +25,20 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/20.
  */
 
-public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.Enabled.Goods> {
-    private List<ShoppingCarEntity.Enabled.Goods> mGoods;
+public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.Enabled.Promotion.Goods> {
+    private List<ShoppingCarEntity.Enabled.Promotion.Goods> mGoods;
     private Context mContext;
+    private boolean isEdit;
 
-    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<ShoppingCarEntity.Enabled.Goods> lists) {
+    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<ShoppingCarEntity.Enabled.Promotion.Goods> lists) {
         super(context, isShowFooter, lists);
         this.mGoods = lists;
         this.mContext = context;
+    }
+
+    public void setData(List<ShoppingCarEntity.Enabled.Promotion.Goods> data) {
+        this.mGoods = data;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -37,21 +47,59 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
         return enableViewHolder;
     }
 
+    public void setEdit(boolean edit) {
+        this.isEdit = edit;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int leftCount;
         EnableViewHolder enableViewHolder = (EnableViewHolder) holder;
-        ShoppingCarEntity.Enabled.Goods goods = mGoods.get(position);
+        ShoppingCarEntity.Enabled.Promotion.Goods goods = mGoods.get(position);
 
         GlideUtils.getInstance().loadImage(mContext, enableViewHolder.miv_goods, goods.thumb);
         enableViewHolder.tv_goods_title.setText(goods.title);
-        enableViewHolder.tv_goods_param.setText(goods.sku);
+
         if (!TextUtils.isEmpty(goods.left)) {
             leftCount = Integer.valueOf(goods.left);
-            if (leftCount > 0 && leftCount < 3) {
-//                enableViewHolder.tv_goods_notice.setText(  String.format(mContext.getResources().getText(R.string.count_notice),3));
+            if (leftCount > 0 && leftCount < 3) { //库存余量不足时,才显示数量
+                enableViewHolder.tv_goods_notice.setText(String.format(mContext.getResources().getString(R.string.count_notice), goods.stock));
+                enableViewHolder.tv_goods_notice.setVisibility(View.VISIBLE);
+            } else {
+                enableViewHolder.tv_goods_notice.setVisibility(View.GONE);
             }
+        } else {
+            enableViewHolder.tv_goods_notice.setVisibility(View.GONE);
         }
+        enableViewHolder.tv_goods_param.setText(goods.sku);
+        enableViewHolder.tv_goods_num.setText("x" + goods.qty);
+        enableViewHolder.tv_goods_attribute.setText(goods.sku);
+
+        if ("1".equals(goods.is_check)) {
+            enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+        } else {
+            enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+        }
+
+        if (!isEdit) {
+            enableViewHolder.rl_goods_param.setVisibility(View.VISIBLE);
+            enableViewHolder.tv_goods_num.setVisibility(View.VISIBLE);
+            enableViewHolder.ll_goods_edit.setVisibility(View.GONE);
+            enableViewHolder.tv_edit_del.setVisibility(View.GONE);
+        } else {
+            enableViewHolder.rl_goods_param.setVisibility(View.GONE);
+            enableViewHolder.tv_goods_num.setVisibility(View.GONE);
+            enableViewHolder.ll_goods_edit.setVisibility(View.VISIBLE);
+            enableViewHolder.tv_edit_del.setVisibility(View.VISIBLE);
+        }
+
+        enableViewHolder.tv_goods_attribute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public class EnableViewHolder extends BaseRecyclerViewHolder {
@@ -60,16 +108,36 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
 
         @BindView(R.id.miv_goods)
         MyImageView miv_goods;
+
         @BindView(R.id.tv_goods_title)
         TextView tv_goods_title;
+
         @BindView(R.id.tv_goods_param)
         TextView tv_goods_param;
+
         @BindView(R.id.tv_goods_notice)
         TextView tv_goods_notice;
+
         @BindView(R.id.tv_goods_price)
         TextView tv_goods_price;
+
+        @BindView(R.id.tv_goods_num)
+        TextView tv_goods_num;
+
         @BindView(R.id.tv_goods_count)
         TextView tv_goods_count;
+
+        @BindView(R.id.rl_goods_param)
+        RelativeLayout rl_goods_param;
+
+        @BindView(R.id.ll_goods_edit)
+        LinearLayout ll_goods_edit;
+
+        @BindView(R.id.tv_edit_del)
+        TextView tv_edit_del;
+
+        @BindView(R.id.tv_goods_attribute)
+        TextView tv_goods_attribute;
 
         public EnableViewHolder(View itemView) {
             super(itemView);

@@ -8,26 +8,117 @@
         layout="@layout/title_common_layout"></include>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_shoppingcar"
+    <ExpandableListView
+        android:id="@+id/expand_shoppingcar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/view_total"
+        android:layout_below="@+id/layout_title"
+        android:groupIndicator="@null"></ExpandableListView>
+
+    <View
+        android:id="@+id/view_total"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:layout_above="@+id/rl_total"
-        android:layout_below="@+id/layout_title"></android.support.v7.widget.RecyclerView>
+        android:background="@color/my_gray_seven" />
 
     <RelativeLayout
         android:id="@+id/rl_total"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp">
 
-        <Button
-            android:layout_width="105dp"
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_total_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_shoppingcar_selected_n" />
+
+        <RelativeLayout
+            android:id="@+id/rl_price"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:background="@color/pink_color"
-            android:gravity="center"
-            android:text="@string/balance_accounts"
-            android:textColor="@color/white" />
+            android:layout_toRightOf="@+id/miv_total_select">
+
+            <TextView
+                android:id="@+id/tv_edit_freight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_total_price"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_toLeftOf="@+id/tv_total_price"
+                android:text="@string/no_freight"
+                android:textColor="@color/new_gray"
+                android:textSize="11sp" />
+
+
+            <TextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_toLeftOf="@+id/btn_total_complete"
+                android:text="@string/total"
+                android:textColor="@color/pink_color"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_total_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/btn_total_complete"
+                android:text="@string/already_discount"
+                android:textColor="@color/new_text"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btn_total_complete"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@color/pink_color"
+                android:gravity="center"
+                android:text="@string/balance_accounts"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_total_edit"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_total_select"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_toal_collection"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/rounded_rectangle_lin_gray_4px"
+                android:text="@string/collection"
+                android:textColor="@color/new_gray"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_toal_del"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_rectangle_pink_4px"
+                android:text="@string/del"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

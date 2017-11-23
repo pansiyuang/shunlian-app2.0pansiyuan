@@ -110,10 +110,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.view_comment)
     View view_comment;
-    
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    
+
     @BindView(R.id.mll_item)
     MyLinearLayout mll_item;
 
@@ -171,6 +171,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
         fragments = new HashMap();
         goodsFrag();
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
+        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "63");//148
+        goodsDeatilFrag = new GoodsDeatilFrag();
+
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
         rnview.setTextSize(10);
