@@ -30,6 +30,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @BindView(R.id.miv_footprint)
     MyImageView miv_footprint;
+
+    @BindView(R.id.miv_top)
+    MyImageView miv_top;
     private LinearLayoutManager manager;
     private int totalDy;
     private FootprintDialog footprintDialog;
@@ -43,6 +46,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     protected void initListener() {
         super.initListener();
+        miv_top.setOnClickListener(this);
         miv_footprint.setOnClickListener(this);
         recy_view_root.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int[] detail = new int[2];
@@ -54,6 +58,11 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
                     int firstPosition = manager.findFirstVisibleItemPosition();
+                    if (firstPosition > 2){
+                        miv_top.setVisibility(View.VISIBLE);
+                    }else {
+                        miv_top.setVisibility(View.INVISIBLE);
+                    }
                     View firstView = manager.findViewByPosition(firstPosition);
                     if (firstView instanceof Kanner){
                         totalDy += dy;
@@ -62,7 +71,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                         detailAct.setToolbar();
                         totalDy = screenWidth;
                     }
-                    System.out.println("dy=="+dy+"  totalDy==="+totalDy);
+//                    System.out.println("dy=="+dy+"  totalDy==="+totalDy);
                     View viewComment = manager.findViewByPosition(4);
                     if (viewComment != null) {
                         comment[1] = 0;
@@ -139,10 +148,18 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        GoodsDetailAct goodsDetailAct = (GoodsDetailAct) baseActivity;
         switch (v.getId()){
             case R.id.miv_footprint:
-                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) baseActivity;
                 goodsDetailAct.showFootprintList();
+                break;
+            case R.id.miv_top:
+                if (miv_top.getVisibility() == View.INVISIBLE){
+                    return;
+                }
+                if (recy_view_root != null){
+                    goodsDetailAct.listTop();
+                }
                 break;
         }
     }

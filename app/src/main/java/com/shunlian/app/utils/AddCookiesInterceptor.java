@@ -39,7 +39,7 @@ public class AddCookiesInterceptor implements Interceptor {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         //添加cookie
         builder.addHeader("Cookie", cookie);
-        builder.addHeader("token", token);
+        builder.addHeader("Token", token);
         return chain.proceed(builder.build());
     }
 }

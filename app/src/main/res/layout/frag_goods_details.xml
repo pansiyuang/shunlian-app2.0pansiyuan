@@ -11,16 +11,30 @@
         android:layout_height="match_parent"/>
 
     <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_footprint"
+        android:id="@+id/miv_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/img_xiangqing_zuji"
+        android:src="@mipmap/img_xiangqing_zhiding"
+        android:visibility="invisible"
         app:iv_control_adapter="true"
         app:iv_control_height="83"
         app:iv_control_width="83"
         app:iv_margin_bottom="100"
         app:iv_margin_right="23" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_footprint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/miv_top"
+        android:src="@mipmap/img_xiangqing_zuji"
+        app:iv_control_adapter="true"
+        app:iv_control_height="83"
+        app:iv_control_width="83"
+        app:iv_margin_right="23"
+        />
 
 </com.shunlian.app.widget.MyRelativeLayout>

@@ -217,7 +217,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
 
                     mtv_price.setText(voucher.denomination);
                     mtv_name.setText(voucher.title);
-                    String format = "满%s元可用";
+                    String format = getString(R.string.full_yuan_available);
                     mtv_full_cut.setText(String.format(format,voucher.use_condition));
                     if("1".equals(voucher.is_get)){
                         mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_2);
@@ -294,8 +294,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             CommntHolder mHolder = (CommntHolder) holder;
 
             ArrayList<GoodsDeatilEntity.Comments> comments = mGoodsEntity.comments;
-            mHolder.mtv_comment_num.setText("好评(100)");
-            mHolder.mtv_haopinglv.setText("好评率98.6%");
+            mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment),"100"));
+            mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate),"95.9"));
             CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context,false,comments);
             mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
             commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -417,11 +417,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         GradientDrawable background = (GradientDrawable) mtv_title.getBackground();
         background.setColor(getResources().getColor(R.color.value_FEF0F3));
         if (state == 0) {
-            mtv_title.setText("满减");
+            mtv_title.setText(String.format(getString(R.string.full_cut),"",""));
         }else if (state == 1){
-            mtv_title.setText("满折");
+            mtv_title.setText(getString(R.string.full_discount));
         }else {
-            mtv_title.setText("买赠");
+            mtv_title.setText(getString(R.string.buy_gift));
         }
         MyLinearLayout mll_content = (MyLinearLayout) subView1.findViewById(R.id.mll_content);
         MyTextView textView = new MyTextView(context);
@@ -433,9 +433,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         StringBuilder sb = new StringBuilder();
         String format = null;
         if (state == 0) {
-            format = "满%S减%S";
+            format = getString(R.string.full_cut);
         }else if (state == 1){
-            format = "满%s打%s折";
+            format = getString(R.string.full_discount_);
         }else {
             format = "";
         }
@@ -451,11 +451,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             }else {
                 sb.append(ad.promotion_title);
             }
+            sb.append(",");
 
-            if (i < 1){
-                sb.append(",");
-            }
         }
+        sb.replace(sb.length()-1,sb.length(),"");
         textView.setText(sb);
         parent.addView(subView1);
     }
