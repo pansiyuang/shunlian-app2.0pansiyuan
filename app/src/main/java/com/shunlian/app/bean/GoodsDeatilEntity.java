@@ -3,6 +3,7 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -46,7 +47,7 @@ public class GoodsDeatilEntity {
     public ArrayList<Comments> comments;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ActivityDetail{
+    public static class ActivityDetail {
         public String goods_id;//商品id
         public String promotion_gift_id; //买赠活动id
         public String promotion_title;     //买赠活动标题
@@ -68,13 +69,13 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Detail{
+    public static class Detail {
         public String text;
         public ArrayList<String> pics;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Comments{
+    public static class Comments {
         public String id;
         public String star_level;
         public String addtime;
@@ -90,13 +91,13 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Attrs{
+    public static class Attrs {
         public String label;
         public String value;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Combo{
+    public static class Combo {
         public String combo_id;
         public String combo_thumb;
         public String combo_title;
@@ -106,16 +107,10 @@ public class GoodsDeatilEntity {
         public String max_old_combo_price;
 
         public ArrayList<Goods> goods;
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Goods{
-            public String goods_id;
-            public String thumb;
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class StoreInfo{
+    public static class StoreInfo {
         public String decoration_name;//店铺名字
         public String star; //星级
         public String quality_logo;  //是否有品质标志1是0否
@@ -155,7 +150,6 @@ public class GoodsDeatilEntity {
     }
 
 
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GoodsData {
         //销量
@@ -167,42 +161,83 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Sku {
-        public String id;
-        public String price;
-        public String market_price;
-        public String weight;
-        public String stock;
-        public String specs;
-        public String name;
-
+    public static class Goods {
+        public String cart_id;                  //是否被编辑
+        public String store_id;              //店铺id
+        public String store_name;            //店铺名字
+        public String goods_id;              //商品id
+        public String qty;                   //购物车数量
+        public String sku_id;                //购物中的sku_id
+        public String title;                 //商品title
+        public String stock;                 //商品库存
+        public String thumb;                 //商品封面图
+        public String is_check;              //是否选择
+        public String prom_type;             //活动类型
+        public GoodsInfo goods_info;
+        public String sku;                   //购物中的sku
+        public String price;                 //价格
+        public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
+        public List<AllProm> all_prom;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class GoodsInfo {
+        public String has_option;
+        public String price;
+        public String max_price;
+        public List<Specs> specs;
+        public List<Sku> sku;
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Specs {
         public String id;
         public String name;
         public String show_type;
-        public ArrayList<Values> values;
+        public List<Values> values;
+    }
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Values {
-            public String id;
-            public String name;
-            public String memo;
-            public String thumb;
-            private boolean isSelect;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Values {
+        public String id;
+        public String name;
+        public String memo;
+        public boolean isSelect;
 
-            public boolean isSelect() {
-                return isSelect;
-            }
+        public boolean isSelect() {
+            return isSelect;
+        }
 
-            public void setSelect(boolean select) {
-                isSelect = select;
-            }
+        public void setSelect(boolean select) {
+            isSelect = select;
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Sku {
+        public String id;
+        public String name;
+        public String price;
+        public String market_price;
+        public String weight;
+        public String stock;
+        public String specs;
+        public String thumb;
+    }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AllProm {
+        public String promotion_gift_id;
+        public String promotion_title;
+        public String gift_goodsid;
+        public String start_time;
+        public String end_time;
+        public String start_unixtime;
+        public String end_unixtime;
+        public String for_goods;
+        public String where_used;
+        public String gift_goodstitle;
+        public String prom_id;
+        public String prom_title;
+    }
 }

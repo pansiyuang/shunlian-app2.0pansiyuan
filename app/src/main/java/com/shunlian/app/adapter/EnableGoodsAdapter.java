@@ -11,11 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
-
-import org.w3c.dom.Text;
+import com.shunlian.app.widget.ParamDialog;
 
 import java.util.List;
 
@@ -25,20 +25,16 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/20.
  */
 
-public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.Enabled.Promotion.Goods> {
-    private List<ShoppingCarEntity.Enabled.Promotion.Goods> mGoods;
+public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
+    private List<GoodsDeatilEntity.Goods> mGoods;
     private Context mContext;
     private boolean isEdit;
+    private ParamDialog paramDialog;
 
-    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<ShoppingCarEntity.Enabled.Promotion.Goods> lists) {
+    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
         super(context, isShowFooter, lists);
         this.mGoods = lists;
         this.mContext = context;
-    }
-
-    public void setData(List<ShoppingCarEntity.Enabled.Promotion.Goods> data) {
-        this.mGoods = data;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -53,10 +49,10 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
     }
 
     @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
+    public void handleList(RecyclerView.ViewHolder holder, final int position) {
         int leftCount;
-        EnableViewHolder enableViewHolder = (EnableViewHolder) holder;
-        ShoppingCarEntity.Enabled.Promotion.Goods goods = mGoods.get(position);
+        final EnableViewHolder enableViewHolder = (EnableViewHolder) holder;
+        final GoodsDeatilEntity.Goods goods = mGoods.get(position);
 
         GlideUtils.getInstance().loadImage(mContext, enableViewHolder.miv_goods, goods.thumb);
         enableViewHolder.tv_goods_title.setText(goods.title);
@@ -94,10 +90,19 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
             enableViewHolder.tv_edit_del.setVisibility(View.VISIBLE);
         }
 
-        enableViewHolder.tv_goods_attribute.setOnClickListener(new View.OnClickListener() {
+        enableViewHolder.rl_goods_parm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (paramDialog == null) {
+                    paramDialog = new ParamDialog(mContext, goods);
+                }
+                paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
+                    @Override
+                    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+                        enableViewHolder.tv_goods_attribute.setText(sku.name);
+                    }
+                });
+                paramDialog.show();
             }
         });
     }
@@ -138,6 +143,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
 
         @BindView(R.id.tv_goods_attribute)
         TextView tv_goods_attribute;
+
+        @BindView(R.id.rl_goods_parm)
+        RelativeLayout rl_goods_parm;
 
         public EnableViewHolder(View itemView) {
             super(itemView);

@@ -79,10 +79,10 @@ public class ComboAdapter extends BaseRecyclerAdapter implements BaseRecyclerAda
         }
     }
 
-    public class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Combo.Goods> {
-        private List<GoodsDeatilEntity.Combo.Goods> goods;
+    public class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
+        private List<GoodsDeatilEntity.Goods> goods;
 
-        public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Combo.Goods> lists) {
+        public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
             super(context, isShowFooter, lists);
             this.goods = lists;
         }
