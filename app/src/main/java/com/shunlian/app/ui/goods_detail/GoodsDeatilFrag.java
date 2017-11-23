@@ -161,6 +161,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                     goodsDetailAct.listTop();
                 }
                 break;
+
         }
     }
 

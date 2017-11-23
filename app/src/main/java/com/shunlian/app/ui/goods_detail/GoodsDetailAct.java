@@ -690,5 +690,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
         this.sku = sku;
         goodsCount = count;
+
     }
 }
