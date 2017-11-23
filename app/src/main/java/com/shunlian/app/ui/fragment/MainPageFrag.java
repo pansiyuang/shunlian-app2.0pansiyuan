@@ -103,7 +103,7 @@ public class MainPageFrag extends BaseFragment {
                         LoginAct.startAct(baseContext);
                         break;
                     case 1:
-                        GoodsDetailAct.startAct(baseContext);
+                        GoodsDetailAct.startAct(baseContext,"56");
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);

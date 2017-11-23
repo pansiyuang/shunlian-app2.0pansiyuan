@@ -28,7 +28,7 @@
             android:drawableTop="@mipmap/icon_productdetails_tab_kefu"
             android:gravity="center"
             android:paddingTop="8dp"
-            android:text="客服"
+            android:text="@string/store_kefu"
             app:tv_control_adapter="true"
             android:textColor="@color/new_text"
             android:textSize="10sp"/>
@@ -43,7 +43,7 @@
             android:drawableTop="@mipmap/icon_productdetails_tab_dianpu"
             android:gravity="center"
             android:paddingTop="8dp"
-            android:text="店铺"
+            android:text="@string/shop"
             android:textColor="@color/new_text"
             android:textSize="10sp"
             />
@@ -63,7 +63,7 @@
                 android:drawableTop="@mipmap/icon_productdetails_tab_gouwuche"
                 android:gravity="center"
                 android:paddingTop="8dp"
-                android:text="购物车"
+                android:text="@string/shopping_cart"
                 android:textColor="@color/new_text"
                 android:textSize="10sp"
                 android:layout_centerInParent="true"/>
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="加入购物车"
+                android:text="@string/add_shopping_cart"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
@@ -103,7 +103,7 @@
             android:layout_weight="4"
             android:background="@color/pink_color"
             android:gravity="center"
-            android:text="立即购买"
+            android:text="@string/now_buy"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </com.shunlian.app.widget.MyLinearLayout>
@@ -155,7 +155,7 @@
                         android:id="@+id/mtv_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="商品"
+                        android:text="@string/goods"
                         android:textColor="@color/pink_color"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
@@ -182,7 +182,7 @@
                         android:id="@+id/mtv_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="评价"
+                        android:text="@string/comment"
                         android:textColor="@color/new_text"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
@@ -210,7 +210,7 @@
                         android:id="@+id/mtv_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="详情"
+                        android:text="@string/detail"
                         android:textColor="@color/new_text"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
@@ -248,6 +248,18 @@
 
         </com.shunlian.app.widget.MyLinearLayout>
     </android.support.v7.widget.Toolbar>
+
+    <!--遮罩-->
+    <ScrollView
+        android:id="@+id/sv_mask"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </ScrollView>
     <!--分享-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mll_share"
@@ -272,7 +284,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_wechat"
                 android:gravity="center"
-                android:text="微信"
+                android:text="@string/wechat"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -283,7 +295,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_share"
                 android:gravity="center"
-                android:text="图文分享"
+                android:text="@string/pic_text_share"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -294,7 +306,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_copy"
                 android:gravity="center"
-                android:text="复制链接"
+                android:text="@string/copy_link"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -320,7 +332,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_home"
                 android:gravity="center"
-                android:text="首页"
+                android:text="@string/main_page"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -331,7 +343,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_search"
                 android:gravity="center"
-                android:text="搜索"
+                android:text="@string/search"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -342,7 +354,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_message"
                 android:gravity="center"
-                android:text="消息"
+                android:text="@string/message"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -353,7 +365,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_zuji"
                 android:gravity="center"
-                android:text="我的足迹"
+                android:text="@string/my_footprint"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -364,7 +376,7 @@
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_shoucang"
                 android:gravity="center"
-                android:text="我的收藏"
+                android:text="@string/my_collection"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 

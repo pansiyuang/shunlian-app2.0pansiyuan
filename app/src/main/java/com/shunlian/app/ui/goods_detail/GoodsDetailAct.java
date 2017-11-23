@@ -20,6 +20,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
@@ -119,6 +120,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
+    @BindView(R.id.sv_mask)
+    ScrollView sv_mask;
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -134,9 +137,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private CommentFrag commentFrag;
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
+    private String goodsId;
 
-    public static void startAct(Context context){
+    public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
+        intent.putExtra("goodsId",goodsId);
         context.startActivity(intent);
     }
 
@@ -160,9 +165,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void initData() {
         defToolbar();
+        goodsId = getIntent().getStringExtra("goodsId");
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         offset = toolbarParams.height;
-        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "56");
+        goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
         fragments = new HashMap();
         goodsFrag();
         rnview.setMode(RollNumView.Mode.UP);
@@ -172,7 +178,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
-        System.out.println("bannerHeight===="+DeviceInfoUtil.getDeviceWidth(this));
     }
     public void defToolbar(){
         immersionBar.titleBar(toolbar,false)
@@ -382,9 +387,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switch (v.getId()){
             case R.id.mrl_add_car:
                 if (sku == null){
-                    Common.staticToast("请选择商品规格");
+                    Common.staticToast(getString(R.string.select_goods_Specifications));
                 }else {
-                    goodsDetailPresenter.addCart("56",sku.id,String.valueOf(goodsCount));
+                    goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
                 }
                 break;
             case R.id.miv_more:
@@ -397,10 +402,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (mll_item.getAlpha() <= 0.2f){
                     return;
                 }
-                setTabBarStatue(GOODS_ID);
-                mll_item.setAlpha(0);
-                immersionBar.statusBarAlpha(0f).addTag(GoodsDetailAct.class.getName()).init();
-                goodsDeatilFrag.setScrollPosition(0,offset);
+                listTop();
                 break;
             case R.id.mll_detail:
                 if (mll_item.getAlpha() <= 0.2f){
@@ -422,6 +424,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 backOrder();
                 break;
         }
+    }
+
+    public void listTop() {
+        setTabBarStatue(GOODS_ID);
+        mll_item.setAlpha(0);
+        immersionBar.statusBarAlpha(0f).addTag(GoodsDetailAct.class.getName()).init();
+        goodsDeatilFrag.setScrollPosition(0,offset);
     }
 
     private void backOrder(){
@@ -475,9 +484,26 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
         animation.setDuration(250);
         mll_share.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                sv_mask.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     private void moreAnim() {
+        sv_mask.setVisibility(View.VISIBLE);
         immersionBar.statusBarColor(R.color.white).init();
         mll_share.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,

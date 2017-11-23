@@ -131,6 +131,30 @@
     <string name="all_store_use">全店通用</string>
     <string name="receive">领取</string>
     <string name="hava_received">已领取</string>
+    <string name="shop">店铺</string>
+    <string name="shopping_cart">购物车</string>
+    <string name="add_shopping_cart">加入购物车</string>
+    <string name="now_buy">立即购买</string>
+    <string name="goods">商品</string>
+    <string name="comment">评价</string>
+    <string name="detail">详情</string>
+    <string name="wechat">微信</string>
+    <string name="pic_text_share">图文分享</string>
+    <string name="copy_link">复制链接</string>
+    <string name="search">搜索</string>
+    <string name="message">消息</string>
+    <string name="my_footprint">我的足迹</string>
+    <string name="my_collection">我的收藏</string>
+    <string name="select_goods_Specifications">请选择商品规格</string>
+    <string name="full_yuan_available">满%s元可用</string>
+    <string name="good_comment">好评(%s)</string>
+    <string name="praise_rate">好评率%s%%</string>
+    <string name="full_cut">满1%s减2%s</string>
+    <string name="full_discount">满折</string>
+    <string name="buy_gift">买赠</string>
+    <string name="full_discount_">满%s打%s折</string>
+    <string name="share">分享</string>
+    <string name="activity">活动</string>
 
     <!--购物车-->
     <string name="get_voucher">领劵</string>

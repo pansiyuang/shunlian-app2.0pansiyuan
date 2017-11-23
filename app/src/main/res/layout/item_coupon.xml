@@ -16,7 +16,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="14dp"
         android:maxLines="1"
-        android:text="160"
         android:textColor="@color/white"
         android:textSize="27sp" />
 
@@ -38,7 +37,6 @@
         android:layout_marginRight="37dp"
         android:layout_marginTop="9dp"
         android:maxLines="1"
-        android:text="优惠券"
         android:textColor="@color/white"
         android:textSize="13sp" />
 
@@ -51,7 +49,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="9dp"
         android:maxLines="1"
-        android:text="满2900元可用"
         android:textColor="@color/white"
         android:textSize="10sp" />
 
