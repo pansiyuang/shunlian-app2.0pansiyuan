@@ -171,10 +171,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
         fragments = new HashMap();
         goodsFrag();
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "63");//148
-        goodsDeatilFrag = new GoodsDeatilFrag();
 
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
@@ -695,6 +691,5 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
         this.sku = sku;
         goodsCount = count;
-
     }
 }
