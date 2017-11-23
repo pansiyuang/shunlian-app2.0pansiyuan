@@ -28,6 +28,8 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private LayoutInflater layoutInflater;
     private List<ShoppingCarEntity.Enabled> mStores;
+    private EnableGoodsAdapter goodsAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     public ShopCarStoreAdapter(Context context, List<ShoppingCarEntity.Enabled> enableds) {
         this.mContext = context;
@@ -137,9 +139,10 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         childViewHolder.tv_prefer.setText(promotion.title_label);
         childViewHolder.tv_discount.setText(promotion.prom_title);
 
-        EnableGoodsAdapter goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods);
+        linearLayoutManager = new LinearLayoutManager(mContext);
         childViewHolder.recycler_goods.setLayoutManager(linearLayoutManager);
+        childViewHolder.recycler_goods.setNestedScrollingEnabled(false);
         childViewHolder.recycler_goods.setAdapter(goodsAdapter);
 
         goodsAdapter.setEdit(mStores.get(i).isEdit);

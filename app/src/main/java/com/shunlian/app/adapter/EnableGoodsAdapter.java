@@ -36,6 +36,11 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<ShoppingCarEntity.En
         this.mContext = context;
     }
 
+    public void setData(List<ShoppingCarEntity.Enabled.Promotion.Goods> data) {
+        this.mGoods = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         EnableViewHolder enableViewHolder = new EnableViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_shoppingcar_goods, parent, false));

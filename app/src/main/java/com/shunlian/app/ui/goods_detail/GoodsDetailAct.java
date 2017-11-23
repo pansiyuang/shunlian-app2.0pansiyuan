@@ -686,4 +686,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.clearAnimation();
         }
     }
+
+    /**
+     * 选择商品信息
+     * @param sku
+     * @param count
+     */
+    public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
+        this.sku = sku;
+        goodsCount = count;
+    }
 }
