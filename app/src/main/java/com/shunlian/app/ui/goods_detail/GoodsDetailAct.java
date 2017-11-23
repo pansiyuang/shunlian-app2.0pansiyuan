@@ -127,7 +127,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "148");
+        goodsDetailPresenter = new GoodsDetailPresenter(this, this, "63");//148
         supportFragmentManager = getSupportFragmentManager();
         goodsDeatilFrag = new GoodsDeatilFrag();
         supportFragmentManager.beginTransaction().add(R.id.mfl_content, goodsDeatilFrag).commit();
