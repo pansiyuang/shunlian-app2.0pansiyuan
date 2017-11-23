@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mrl_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/img_youhuiquan_1"
+    app:rl_control_adapter="true"
+    app:rl_control_height="115"
+    app:rl_control_width="279">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="160"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="27"
+        app:tv_margin_top="38" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mtv_price"
+        android:text="@string/rmb"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_bottom="8"
+        app:tv_margin_left="11" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="优惠券"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="133"
+        app:tv_margin_top="18" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_full_cut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mtv_name"
+        android:layout_below="@+id/mtv_name"
+        android:maxLines="1"
+        android:text="满2900元可用"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="30" />
+
+</com.shunlian.app.widget.MyRelativeLayout>

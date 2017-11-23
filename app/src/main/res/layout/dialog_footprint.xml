@@ -48,6 +48,35 @@
             android:text="清空"
             android:textColor="@color/white"
             android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mll_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_zuji_icon"
+                app:iv_control_adapter="true"
+                app:iv_margin_top="56" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商城这么大，随便去看看吧"
+                android:textColor="@color/new_gray"
+                android:textSize="11sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_left="20"
+                app:tv_margin_right="20"
+                app:tv_margin_top="44" />
+        </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 
 </com.shunlian.app.widget.MyRelativeLayout>

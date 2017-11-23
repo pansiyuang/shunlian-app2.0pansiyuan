@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:orientation="horizontal">
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_evaluate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/store_pingjia"
+            android:textColor="@color/share_text"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_pinjiafen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="29dp"
+            android:text="4.92分"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_pingjia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="29dp"
+            android:text="高于同行89898"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+</LinearLayout>

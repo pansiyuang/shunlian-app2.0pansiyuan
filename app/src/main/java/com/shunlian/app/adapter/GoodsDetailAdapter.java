@@ -1,10 +1,8 @@
 package com.shunlian.app.adapter;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.StringRes;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +13,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -45,39 +44,43 @@ import static com.shunlian.app.utils.Common.getResources;
 
 public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     /*
-        轮播和商品信息
+        轮播
      */
-    public static final int BANNER_TITLE_LAYOUT = 2;
+    public static final int BANNER_LAYOUT = 2;
+    /*
+    商品信息
+     */
+    public static final int TITLE_LAYOUT = 3;
     /*
     活动和优惠券
      */
-    public static final int ACTIVITY_COUPON_LAYOUT = 3;
+    public static final int ACTIVITY_COUPON_LAYOUT = 4;
     /*
      *参数和属性
      */
-    public static final int PARAM_ATTRS_LAYOUT = 4;
+    public static final int PARAM_ATTRS_LAYOUT = 5;
     /*
     评价
      */
-    public static final int COMMNT_LAYOUT = 5;
+    public static final int COMMNT_LAYOUT = 6;
     /*
     店铺信息
      */
-    public static final int STORE_GOODS_LAYOUT = 6;
+    public static final int STORE_GOODS_LAYOUT = 7;
     /*
     参看图文详情
      */
-    public static final int GOODS_DETAIL_DIVISION = 7;
+    public static final int GOODS_DETAIL_DIVISION = 8;
     /*
     优惠券
      */
-    public static final int COUPON_LAYOUT = 8;
+    public static final int COUPON_LAYOUT = 9;
     private final LayoutInflater mInflater;
     private GoodsDeatilEntity mGoodsEntity;
     private boolean isAttentionShop;
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
-    private static final int ITEM_DIFFERENT = 7;//不同条目数
+    private static final int ITEM_DIFFERENT = 8;//不同条目数
     private ParamDialog paramDialog;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
@@ -89,18 +92,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public int getItemViewType(int position) {
         if (position == 0){
-            return BANNER_TITLE_LAYOUT;
+            return BANNER_LAYOUT;
         }else if (position == 1){
-            return ACTIVITY_COUPON_LAYOUT;
+            return TITLE_LAYOUT;
         }else if (position == 2){
-            return PARAM_ATTRS_LAYOUT;
+            return ACTIVITY_COUPON_LAYOUT;
         }else if (position == 3){
-            return COMMNT_LAYOUT;
+            return PARAM_ATTRS_LAYOUT;
         }else if (position == 4){
-            return STORE_GOODS_LAYOUT;
+            return COMMNT_LAYOUT;
         }else if (position == 5){
-            return GOODS_DETAIL_DIVISION;
+            return STORE_GOODS_LAYOUT;
         }else if (position == 6){
+            return GOODS_DETAIL_DIVISION;
+        }else if (position == 7){
             return COUPON_LAYOUT;
         }else {
             return super.getItemViewType(position);
@@ -110,9 +115,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case BANNER_TITLE_LAYOUT:
-                View banner_title_layout = mInflater.inflate(R.layout.banner_title_layout, parent, false);
-                return new BannerTitleHolder(banner_title_layout);
+            case BANNER_LAYOUT:
+                View banner_layout = mInflater.inflate(R.layout.banner, parent, false);
+                return new BannerHolder(banner_layout);
+            case TITLE_LAYOUT:
+                View title_layout = mInflater.inflate(R.layout.title_layout, parent, false);
+                return new TitleHolder(title_layout);
             case ACTIVITY_COUPON_LAYOUT:
                 View activity_coupon_layout = mInflater.inflate(R.layout.activity_coupon_layout, parent, false);
                 return new ActivityCouponHolder(activity_coupon_layout);
@@ -145,8 +153,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         switch (itemViewType){
-            case BANNER_TITLE_LAYOUT:
+            case BANNER_LAYOUT:
                 handleBannerTitle(holder,position);
+                break;
+            case TITLE_LAYOUT:
+                handlerTitle(holder,position);
                 break;
             case ACTIVITY_COUPON_LAYOUT:
                 handlerActivityCoupon(holder,position);
@@ -298,7 +309,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
 
     private void valueAnimator(final View view) {
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(300);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -310,7 +321,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
                 }
             }
         });
+
         valueAnimator.start();
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                super.onAnimationEnd(animation);
+                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                goodsDetailAct.commentFrag();
+            }
+        });
     }
 
     /**
@@ -349,20 +369,104 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             }else {
                 mHolder.mll_ling_Coupon.setVisibility(View.GONE);
             }
+            mHolder.mll_act_detail.removeAllViews();
+            if (isEmpty(mGoodsEntity.full_cut)
+                    && isEmpty(mGoodsEntity.full_discount)
+                    && isEmpty(mGoodsEntity.buy_gift)){
+                mHolder.mrl_activity.setVisibility(View.GONE);
+            }else {
+                mHolder.mrl_activity.setVisibility(View.VISIBLE);
+            }
+            if (mGoodsEntity.full_cut != null && mGoodsEntity.full_cut.size() > 0){
+               setActivityInfo(mHolder.mll_act_detail,0,mGoodsEntity.full_cut);
+            }
+
+
+            if (mGoodsEntity.full_discount != null && mGoodsEntity.full_discount.size() > 0){
+                setActivityInfo(mHolder.mll_act_detail,1,mGoodsEntity.full_discount);
+            }
+
+            if (mGoodsEntity.buy_gift != null && mGoodsEntity.buy_gift.size() > 0){
+                setActivityInfo(mHolder.mll_act_detail,2,mGoodsEntity.buy_gift);
+            }
+
         }
     }
 
+    private boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
     /**
-     * 轮播和顶部商品信息
+     *
+     * @param parent
+     * @param state 0 = 满减   1 = 满折   2 = 买赠
+     * @param detailList
+     */
+    private void setActivityInfo(ViewGroup parent,int state,
+                                 List<GoodsDeatilEntity.ActivityDetail> detailList){
+        View subView1 = mInflater.inflate(R.layout.activity_layout, parent, false);
+        MyTextView mtv_title = (MyTextView) subView1.findViewById(R.id.mtv_title);
+        GradientDrawable background = (GradientDrawable) mtv_title.getBackground();
+        background.setColor(getResources().getColor(R.color.value_FEF0F3));
+        if (state == 0) {
+            mtv_title.setText("满减");
+        }else if (state == 1){
+            mtv_title.setText("满折");
+        }else {
+            mtv_title.setText("买赠");
+        }
+        MyLinearLayout mll_content = (MyLinearLayout) subView1.findViewById(R.id.mll_content);
+        MyTextView textView = new MyTextView(context);
+        textView.setTextSize(12);
+        textView.setTextColor(getResources().getColor(R.color.text_param_value));
+        int padding = TransformUtil.dip2px(context, 4);
+        textView.setPadding(padding, padding, padding, padding);
+        mll_content.addView(textView);
+        StringBuilder sb = new StringBuilder();
+        String format = null;
+        if (state == 0) {
+            format = "满%S减%S";
+        }else if (state == 1){
+            format = "满%s打%s折";
+        }else {
+            format = "";
+        }
+
+        for (int i = 0; i < detailList.size(); i++) {
+            if (i > 1)
+                break;
+            GoodsDeatilEntity.ActivityDetail ad = detailList.get(i);
+            if (state == 0) {
+                sb.append(String.format(format,ad.money_type_condition,ad.money_type_discount));
+            }else if (state == 1){
+                sb.append(String.format(format,ad.qty_type_condition,ad.qty_type_discount));
+            }else {
+                sb.append(ad.promotion_title);
+            }
+
+            if (i < 1){
+                sb.append(",");
+            }
+        }
+        textView.setText(sb);
+        parent.addView(subView1);
+    }
+    /**
+     * 商品信息
      * @param holder
      * @param position
      */
-    private void handleBannerTitle(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BannerTitleHolder){
-            BannerTitleHolder mHolder = (BannerTitleHolder) holder;
-            if (mGoodsEntity.pics != null) {
-                mHolder.kanner.setBanner(mGoodsEntity.pics);
-            }
+    private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof TitleHolder){
+            TitleHolder mHolder = (TitleHolder) holder;
 
             GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
             infoDrawable.setColor(Color.parseColor("#FB0036"));
@@ -414,10 +518,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             }
         }
     }
-
-
-    private String getString(@StringRes int id){
-        return context.getResources().getString(id);
+    /**
+     * 轮播和顶部商品信息
+     * @param holder
+     * @param position
+     */
+    private void handleBannerTitle(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof BannerHolder){
+            BannerHolder mHolder = (BannerHolder) holder;
+            if (mGoodsEntity.pics != null) {
+                mHolder.kanner.setBanner(mGoodsEntity.pics);
+            }
+        }
     }
 
     /**
@@ -454,15 +566,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         MyImageView miv_pic;
         public PicListHolder(View itemView) {
             super(itemView);
-            ViewGroup.LayoutParams layoutParams = miv_pic.getLayoutParams();
-            layoutParams.width = DeviceInfoUtil.getDeviceWidth(context);
-            miv_pic.setLayoutParams(layoutParams);
+            miv_pic.setWHProportion(720,332);
         }
     }
 
-    public class BannerTitleHolder extends BaseRecyclerViewHolder{
-        @BindView(R.id.kanner)
-        Kanner kanner;
+    public class TitleHolder extends BaseRecyclerViewHolder{
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
@@ -497,7 +605,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         @BindView(R.id.mtv_recommend_goods)
         MyTextView mtv_recommend_goods;
 
-        public BannerTitleHolder(View itemView) {
+        public TitleHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public class BannerHolder extends BaseRecyclerViewHolder{
+        @BindView(R.id.kanner)
+        Kanner kanner;
+
+        public BannerHolder(View itemView) {
             super(itemView);
         }
     }
@@ -509,6 +626,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
 
         @BindView(R.id.mll_ling_Coupon)
         MyLinearLayout mll_ling_Coupon;
+
+        @BindView(R.id.mll_act_detail)
+        MyLinearLayout mll_act_detail;
+
+        @BindView(R.id.mrl_activity)
+        MyRelativeLayout mrl_activity;
         public ActivityCouponHolder(View itemView) {
             super(itemView);
         }
@@ -548,11 +671,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         @Override
         public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
             Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
+            if (context instanceof GoodsDetailAct){
+                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                goodsDetailAct.selectGoodsInfo(sku,count);
+            }
         }
     }
 
 
-    public class CommntHolder extends BaseRecyclerViewHolder{
+    public class CommntHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_comment_num)
         MyTextView mtv_comment_num;
@@ -567,6 +694,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
             LinearLayoutManager manager1 = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+
         }
     }
 

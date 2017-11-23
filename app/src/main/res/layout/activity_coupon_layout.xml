@@ -43,12 +43,46 @@
             android:src="@mipmap/img_common_viewarrow_1"/>
     </com.shunlian.app.widget.MyLinearLayout>
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_gray_two" />
     <!--活动-->
-    <com.shunlian.app.widget.MyLinearLayout
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"></com.shunlian.app.widget.MyLinearLayout>
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:rl_control_adapter="true"
+        app:rl_margin_left="23"
+        app:rl_margin_right="23"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动"
+            android:textSize="12sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/new_text"
+            />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mll_act_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:ll_control_adapter="true"
+            app:ll_margin_left="16"
+            android:layout_alignTop="@+id/mtv_activity"
+            android:layout_toRightOf="@+id/mtv_activity">
+
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+    </com.shunlian.app.widget.MyRelativeLayout>
 
     <View
         android:layout_width="match_parent"

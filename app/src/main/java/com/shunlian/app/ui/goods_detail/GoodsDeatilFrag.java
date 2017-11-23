@@ -10,11 +10,12 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.widget.ParamDialog;
-import com.shunlian.app.widget.RecyclerDialog;
+import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.widget.FootprintDialog;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -26,15 +27,13 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @BindView(R.id.recy_view_root)
     RecyclerView recy_view_root;
-    private LinearLayoutManager manager;
 
-    private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
-    private GoodsDeatilEntity.StoreInfo infos;
-    private ParamDialog paramDialog;
-    private RecyclerDialog recyclerDialog;
-    private List<GoodsDeatilEntity.Combo> mCurrentCombos;
-    private List<GoodsDeatilEntity.Attrs> mCurrentAttributes;
-    private List<GoodsDeatilEntity.Voucher> mCurrentVouchers;
+    @BindView(R.id.miv_footprint)
+    MyImageView miv_footprint;
+    private LinearLayoutManager manager;
+    private int totalDy;
+    private FootprintDialog footprintDialog;
+    private int screenWidth;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -44,40 +43,81 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     @Override
     protected void initListener() {
         super.initListener();
-
+        miv_footprint.setOnClickListener(this);
         recy_view_root.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int[] detail = new int[2];
+            int[] comment = new int[2];
+            GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
+            int offset = detailAct.offset;
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
-                    int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-                    System.out.println("firstVisibleItemPosition="+firstVisibleItemPosition);
+                    int firstPosition = manager.findFirstVisibleItemPosition();
+                    View firstView = manager.findViewByPosition(firstPosition);
+                    if (firstView instanceof Kanner){
+                        totalDy += dy;
+                        detailAct.setBgColor(firstPosition,totalDy);
+                    }else {
+                        detailAct.setToolbar();
+                        totalDy = screenWidth;
+                    }
+                    System.out.println("dy=="+dy+"  totalDy==="+totalDy);
+                    View viewComment = manager.findViewByPosition(4);
+                    if (viewComment != null) {
+                        comment[1] = 0;
+                        viewComment.getLocationInWindow(comment);
+                    }
+                    View viewDetail = manager.findViewByPosition(6);
+                    if (viewDetail != null) {
+                        detail[1] = 0;
+                        viewDetail.getLocationInWindow(detail);
+                    }
+//                    System.out.println("detail=="+detail[1]+"  comment==="+comment[1]);
+                    if (iscCallScrollPosition){
+                        iscCallScrollPosition = false;
+                        return;
+                    }else {
+                        if ((comment[1] < 0 && detail[1] < offset) || firstPosition >= 6) {
+                            detailAct.setTabBarStatue(GoodsDetailAct.DETAIL_ID);
+                        } else if ((detail[1] > offset && comment[1] < offset) || firstPosition >= 4) {
+                            detailAct.setTabBarStatue(GoodsDetailAct.COMMENT_ID);
+                        } else {
+                            detailAct.setTabBarStatue(GoodsDetailAct.GOODS_ID);
+                        }
+                    }
                 }
             }
         });
     }
 
+    private boolean iscCallScrollPosition = false;
+
+    public void setScrollPosition(int statue,int offset){
+        //statue == 0 商品
+        //statue == 1 评价
+        //statue == 2 详情
+        iscCallScrollPosition = true;
+        if (statue == 0){
+            totalDy = 0;
+            manager.scrollToPositionWithOffset(0,0);
+            manager.scrollToPositionWithOffset(0,offset);
+        }else if (statue == 1){
+            totalDy = screenWidth;
+            manager.scrollToPositionWithOffset(4,0);
+            manager.scrollToPositionWithOffset(4,offset);
+        }else{
+            totalDy = screenWidth;
+            manager.scrollToPositionWithOffset(6,0);
+            manager.scrollToPositionWithOffset(6,offset);
+        }
+    }
+
     @Override
     protected void initData() {
-        recyclerDialog = new RecyclerDialog(getActivity());
+        screenWidth = DeviceInfoUtil.getDeviceWidth(baseActivity);
     }
 
-    /**
-     * 轮播
-     * @param pics
-     */
-    public void setBanner(ArrayList<String> pics) {
-
-    }
-
-    /**
-     * 商品的标题和价格
-     * 是否包邮
-     * 销售量
-     * 发货地点
-     */
-    public void goodsInfo(String title, String price, String market_price, String free_shipping, String sales, String address) {
-    }
     /**
      * 商品详情数据
      */
@@ -95,98 +135,17 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         recy_view_root.setAdapter(new GoodsDetailAdapter(baseActivity, false,goodsDeatilEntity,pics));
 
     }
-    /**
-     *
-     * @param is_new 是否新品
-     * @param is_explosion 是否爆款
-     * @param is_hot 是否热卖
-     * @param is_recommend 是否推荐
-     */
-    public void smallLabel(String is_new, String is_explosion, String is_hot, String is_recommend) {
-
-    }
 
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.tv_select_param:
-//                if (paramDialog != null && !paramDialog.isShowing()) {
-//                    paramDialog.show();
-//                }
-//                break;
-//            case R.id.mtv_combo:
-//                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
-//                    recyclerDialog.setCombos(mCurrentCombos);
-//                    recyclerDialog.show();
-//                }
-//                break;
-//            case R.id.mtv_attribute:
-//                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
-//                    recyclerDialog.setAttributes(mCurrentAttributes);
-//                    recyclerDialog.show();
-//                }
-//                break;
-//            case R.id.mll_ling_Coupon:
-//                if (recyclerDialog != null && !recyclerDialog.isShowing()) {
-//                    recyclerDialog.setVoucheres(mCurrentVouchers);
-//                    recyclerDialog.show();
-//                }
-//                break;
-//        }
+        switch (v.getId()){
+            case R.id.miv_footprint:
+                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) baseActivity;
+                goodsDetailAct.showFootprintList();
+                break;
+        }
     }
-
-
-    private void setState(int state){
-    }
-
-
-
-    /**
-     * 优惠券
-     * @param vouchers
-     */
-    public void setVoucher(ArrayList<GoodsDeatilEntity.Voucher> vouchers) {
-        mCurrentVouchers = vouchers;
-    }
-
-    /**
-     * 店铺信息
-     * @param infos
-     */
-    public void setShopInfo(GoodsDeatilEntity.StoreInfo infos) {
-    }
-
-    /**
-     * 套餐列表
-     * @param combos
-     */
-    public void setComboDetail(List<GoodsDeatilEntity.Combo> combos) {
-        this.mCurrentCombos = combos;
-    }
-
-    /**
-     * 商品参数列表
-     * @param attrses
-     */
-    public void setGoodsParameter(List<GoodsDeatilEntity.Attrs> attrses) {
-        this.mCurrentAttributes = attrses;
-    }
-
-    /**
-     * 评价列表
-     * @param commentses
-     */
-    public void setCommentList(List<GoodsDeatilEntity.Comments> commentses) {
-    }
-
-    /**
-     * 商品详情
-     * @param detail
-     */
-    public void setDetail(GoodsDeatilEntity.Detail detail) {
-    }
-
 
 
 }

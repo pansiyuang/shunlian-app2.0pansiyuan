@@ -24,6 +24,7 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
@@ -31,6 +32,12 @@ import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.bean.StoreCategoriesEntity;
+import com.shunlian.app.bean.StoreGoodsListEntity;
+import com.shunlian.app.bean.StoreIndexEntity;
+import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.bean.StoreNewGoodsListEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -225,8 +232,65 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> delMark(@Body RequestBody body);
 
     /**
+     * 店铺首页
+     * @return
+     */
+    @GET("store/index")
+    Call<BaseEntity<StoreIndexEntity>> storeIndex(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺宝贝
+     * @return
+     */
+    @GET("store/goodsList")
+    Call<BaseEntity<StoreGoodsListEntity>> storeGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺促销
+     * @return
+     */
+    @GET("store/promotionGoodsList")
+    Call<BaseEntity<StorePromotionGoodsListEntity>> storePromotionGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺新品
+     * @return
+     */
+    @GET("store/newGoodsList")
+    Call<BaseEntity<StoreNewGoodsListEntity>> storeNewGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺简介
+     * @return
+     */
+    @GET("store/introduce")
+    Call<BaseEntity<StoreIntroduceEntity>> storeIntroduce(@QueryMap Map<String, String> map);
+
+    /**
+     * 店铺类目
+     * @return
+     */
+    @GET("store/categories")
+    Call<BaseEntity<StoreCategoriesEntity>> storeCategories(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加购物车
+     * @param body
+     * @return
+     */
+    @POST("cart/add")
+    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+    /**
      * 购物车首页
      */
     @POST("cart/home")
     Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
+
+    /**
+     * 商品详情页足迹
+     * @param body
+     * @return
+     */
+    @POST("member/footermark/getsidemark")
+    Call<BaseEntity<FootprintEntity>> footPrint(@Body RequestBody body);
 }
