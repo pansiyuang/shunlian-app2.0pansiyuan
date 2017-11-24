@@ -14,11 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.ActivityMoreAdapter;
 import com.shunlian.app.adapter.AttributeAdapter;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ComboAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,6 +56,10 @@ public class RecyclerDialog extends Dialog {
     private AttributeAdapter attributeAdapter;
     private VoucherAdapter voucherAdapter;
     private int recycleHeight;
+    private ActivityMoreAdapter moreAdapter;
+    private int fullCut = 0;
+    private int fullDiscount = 0;
+    private int buyGift = 0;
 
     public RecyclerDialog(Context context) {
         this(context, R.style.MyDialogStyleBottom);
@@ -79,7 +88,6 @@ public class RecyclerDialog extends Dialog {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recycler_list.setLayoutManager(linearLayoutManager);
         recycler_list.setLayoutParams(params);
-
 
         miv_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +134,52 @@ public class RecyclerDialog extends Dialog {
         }
         dialog_title.setText(mContext.getResources().getText(R.string.select_voucher));
         recycler_list.setAdapter(voucherAdapter);
-
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
+        voucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // TODO: 2017/11/24 跳转到套餐详情 
+            }
+        });
+    }
+
+    public void setActivity(List<GoodsDeatilEntity.ActivityDetail> full_cut,
+                            List<GoodsDeatilEntity.ActivityDetail> full_discount,
+                            List<GoodsDeatilEntity.ActivityDetail> buy_gift){
+       
+        if (full_cut != null && full_cut.size() > 0) {
+            fullCut = full_cut.size();
+        }
+        if (full_discount != null && full_discount.size() > 0) {
+            fullDiscount = full_discount.size();
+        }
+        if (buy_gift != null && buy_gift.size() > 0) {
+            buyGift = buy_gift.size();
+        }
+        List<GoodsDeatilEntity.ActivityDetail> allActs = new ArrayList<>();
+        allActs.addAll(full_cut);
+        allActs.addAll(full_discount);
+        allActs.addAll(buy_gift);
+        if (moreAdapter == null) {
+            moreAdapter = new ActivityMoreAdapter(mContext,false,allActs,fullCut,fullDiscount,buyGift);
+            int px = TransformUtil.dip2px(mContext, 20);
+            recycler_list.addItemDecoration(new VerticalItemDecoration(px,0,0));
+        }else {
+
+        }
+        dialog_title.setText(mContext.getResources().getText(R.string.shop_promotion_activity));
+        recycler_list.setAdapter(moreAdapter);
+        moreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (position < fullCut){
+                    //满减
+                }else if (position < fullCut + fullDiscount){
+                    //打折
+                }else {
+                    //买赠
+                }
+            }
+        });
     }
 }

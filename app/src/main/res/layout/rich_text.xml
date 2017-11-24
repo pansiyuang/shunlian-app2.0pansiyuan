@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mtv_rich_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/new_text"
+    android:textSize="12sp"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    />
