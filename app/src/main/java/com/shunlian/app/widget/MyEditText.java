@@ -2,13 +2,13 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
  * Created by Administrator on 2017/10/24.
  */
 
-public class MyEditText extends EditText {
+public class MyEditText extends AppCompatEditText {
     private String hintContent;
     private Context mContext;
     private boolean aBoolean;

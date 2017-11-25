@@ -43,7 +43,7 @@ import static com.shunlian.app.utils.Common.getResources;
  * Created by Administrator on 2017/11/17.
  */
 
-public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
+public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements ParamDialog.OnSelectCallBack {
     /*
         轮播
      */
@@ -86,7 +86,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
     private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
     private static final int ITEM_DIFFERENT = 9;//不同条目数
-    private ParamDialog paramDialog;
+    public ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
@@ -94,6 +94,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         mInflater = LayoutInflater.from(context);
         mGoodsEntity = entity;
         recyclerDialog = new RecyclerDialog(context);
+        paramDialog = new ParamDialog(context,mGoodsEntity);
+        paramDialog.setOnSelectCallBack(this);
     }
 
     @Override
@@ -609,6 +611,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         }
     }
 
+    @Override
+    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+//        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
+        if (context instanceof GoodsDetailAct){
+            GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+            goodsDetailAct.selectGoodsInfo(sku,count);
+        }
+    }
+
 
     public class PicListHolder extends BaseRecyclerViewHolder{
 
@@ -733,14 +744,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
         }
     }
 
-    public class ParamAttrsHolder extends BaseRecyclerViewHolder implements View.OnClickListener, ParamDialog.OnSelectCallBack {
+    public class ParamAttrsHolder extends BaseRecyclerViewHolder implements View.OnClickListener{
 
         @BindView(R.id.tv_select_param)
         MyTextView tv_select_param;
 
         @BindView(R.id.mtv_params)
         MyTextView mtv_params;
-        private ParamDialog paramDialog;
 
         public ParamAttrsHolder(View itemView) {
             super(itemView);
@@ -759,7 +769,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
                 case R.id.tv_select_param:
                     if (paramDialog == null) {
                         paramDialog = new ParamDialog(context, mGoodsEntity);
-                        paramDialog.setOnSelectCallBack(this);
+                        paramDialog.setOnSelectCallBack(GoodsDetailAdapter.this);
                     }
                     if (paramDialog != null && !paramDialog.isShowing()) {
                         paramDialog.show();
@@ -774,15 +784,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> {
                         recyclerDialog.show();
                     }
                     break;
-            }
-        }
-
-        @Override
-        public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-            Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
-            if (context instanceof GoodsDetailAct){
-                GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
-                goodsDetailAct.selectGoodsInfo(sku,count);
             }
         }
     }

@@ -20,6 +20,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ComboAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 
@@ -110,6 +111,15 @@ public class RecyclerDialog extends Dialog {
         recycler_list.setAdapter(comboAdapter);
 
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
+        comboAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ComboDetailAct.startAct(mContext);
+                if (isShowing()) {
+                    dismiss();
+                }
+            }
+        });
     }
 
     public void setAttributes(List<GoodsDeatilEntity.Attrs> attributes) {
@@ -138,7 +148,7 @@ public class RecyclerDialog extends Dialog {
         voucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                // TODO: 2017/11/24 跳转到套餐详情 
+                // TODO: 2017/11/24 跳转优惠券
             }
         });
     }
