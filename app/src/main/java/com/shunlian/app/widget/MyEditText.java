@@ -31,6 +31,7 @@ public class MyEditText extends AppCompatEditText {
     private int margin_top;
     private int margin_bottom;
     private int margin_right;
+    private int hintTextSize;
 
     public MyEditText(Context context) {
         this(context,null);
@@ -55,6 +56,7 @@ public class MyEditText extends AppCompatEditText {
         margin_top = a.getInteger(R.styleable.MyEditText_et_margin_top, 0);
         margin_right = a.getInteger(R.styleable.MyEditText_et_margin_right, 0);
         margin_bottom = a.getInteger(R.styleable.MyEditText_et_margin_bottom, 0);
+        hintTextSize = a.getInteger(R.styleable.MyEditText_hintTextSize, 14);
         a.recycle();
         setHintSize(hintContent);
     }
@@ -77,7 +79,7 @@ public class MyEditText extends AppCompatEditText {
             return;
         }
         SpannableString ss = new SpannableString(content);
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12));
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, hintTextSize));
         ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         setHint(ss);
     }

@@ -85,6 +85,7 @@
         <attr name="et_margin_top" format="integer" />
         <attr name="et_margin_bottom" format="integer" />
         <attr name="hintText" format="string" />
+        <attr name="hintTextSize" format="integer" />
     </declare-styleable>
 
     <!--轮播图Kanner3控件-->
