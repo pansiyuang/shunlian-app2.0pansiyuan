@@ -39,7 +39,8 @@
             android:layout_alignTop="@+id/miv_goods"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/miv_goods"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_goods_title"
@@ -124,7 +125,7 @@
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,6 +163,19 @@
                     android:textColor="@color/my_gray_one"
                     android:textSize="15sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_edit_param"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_goods_title"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="淡粉色，30ml"
+                android:textColor="@color/share_text"
+                android:textSize="12sp"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_goods_parm"

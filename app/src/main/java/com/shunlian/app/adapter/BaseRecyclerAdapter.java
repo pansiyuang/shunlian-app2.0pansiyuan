@@ -293,7 +293,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     protected String getString(@StringRes int id){
         return context.getResources().getString(id);
     }
-    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class BaseRecyclerViewHolder extends RecyclerView.ViewHolder{
 
         public BaseRecyclerViewHolder(View itemView) {
             super(itemView);

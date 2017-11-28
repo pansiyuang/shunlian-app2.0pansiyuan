@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -29,12 +30,18 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private List<GoodsDeatilEntity.Goods> mGoods;
     private Context mContext;
     private boolean isEdit;
+    private boolean isEditAll;
     private ParamDialog paramDialog;
+    private OnGoodsChangeListener onGoodsChangeListener;
 
     public EnableGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
         super(context, isShowFooter, lists);
         this.mGoods = lists;
         this.mContext = context;
+    }
+
+    public void setData(List<GoodsDeatilEntity.Goods> list) {
+        this.mGoods = list;
     }
 
     @Override
@@ -48,34 +55,76 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         notifyDataSetChanged();
     }
 
+    public void setEditAll(boolean editAll) {
+        this.isEditAll = editAll;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
-        int leftCount;
+        final int stock;//库存量
         final EnableViewHolder enableViewHolder = (EnableViewHolder) holder;
         final GoodsDeatilEntity.Goods goods = mGoods.get(position);
 
         GlideUtils.getInstance().loadImage(mContext, enableViewHolder.miv_goods, goods.thumb);
         enableViewHolder.tv_goods_title.setText(goods.title);
 
-        if (!TextUtils.isEmpty(goods.left)) {
-            leftCount = Integer.valueOf(goods.left);
-            if (leftCount > 0 && leftCount < 3) { //库存余量不足时,才显示数量
-                enableViewHolder.tv_goods_notice.setText(String.format(mContext.getResources().getString(R.string.count_notice), goods.stock));
-                enableViewHolder.tv_goods_notice.setVisibility(View.VISIBLE);
-            } else {
-                enableViewHolder.tv_goods_notice.setVisibility(View.GONE);
-            }
-        } else {
+        if (TextUtils.isEmpty(goods.left) || "null".equals(goods.left)) {
             enableViewHolder.tv_goods_notice.setVisibility(View.GONE);
+        } else {
+            enableViewHolder.tv_goods_notice.setText(String.format(mContext.getResources().getString(R.string.count_notice), goods.left));
+            enableViewHolder.tv_goods_notice.setVisibility(View.VISIBLE);
         }
+        stock = Integer.valueOf(goods.stock);
         enableViewHolder.tv_goods_param.setText(goods.sku);
-        enableViewHolder.tv_goods_num.setText("x" + goods.qty);
+        enableViewHolder.tv_edit_param.setText(goods.sku);
         enableViewHolder.tv_goods_attribute.setText(goods.sku);
+        enableViewHolder.tv_goods_num.setText("x" + goods.qty);
+        enableViewHolder.tv_goods_count.setText(goods.qty);
+        enableViewHolder.tv_goods_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int count = Integer.valueOf(goods.qty) + 1;
+                if (count > stock) {
+                    return;
+                }
+                enableViewHolder.tv_goods_count.setText(String.valueOf(count));
+                onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
+            }
+        });
+
+        enableViewHolder.tv_goods_min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int count = Integer.valueOf(goods.qty) - 1;
+                if (count <= 0) {
+                    return;
+                }
+                enableViewHolder.tv_goods_count.setText(String.valueOf(count));
+                if (onGoodsChangeListener != null) {
+                    onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
+                }
+            }
+        });
+
+        enableViewHolder.miv_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("1".equals(goods.is_check)) {
+                    goods.is_check = "0";
+                } else {
+                    goods.is_check = "1";
+                }
+                if (onGoodsChangeListener != null) {
+                    onGoodsChangeListener.OnChangeCheck(goods.cart_id, goods.is_check);
+                }
+            }
+        });
 
         if ("1".equals(goods.is_check)) {
-            enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
-        } else {
             enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+        } else {
+            enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
 
         if (!isEdit) {
@@ -84,10 +133,17 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             enableViewHolder.ll_goods_edit.setVisibility(View.GONE);
             enableViewHolder.tv_edit_del.setVisibility(View.GONE);
         } else {
-            enableViewHolder.rl_goods_param.setVisibility(View.GONE);
             enableViewHolder.tv_goods_num.setVisibility(View.GONE);
             enableViewHolder.ll_goods_edit.setVisibility(View.VISIBLE);
+            enableViewHolder.tv_edit_param.setVisibility(View.GONE);
             enableViewHolder.tv_edit_del.setVisibility(View.VISIBLE);
+            if (!isEditAll) {
+                enableViewHolder.tv_edit_param.setVisibility(View.GONE);
+                enableViewHolder.rl_goods_parm.setVisibility(View.VISIBLE);
+            } else {
+                enableViewHolder.tv_edit_param.setVisibility(View.VISIBLE);
+                enableViewHolder.rl_goods_parm.setVisibility(View.GONE);
+            }
         }
 
         enableViewHolder.rl_goods_parm.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +156,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                     @Override
                     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
                         enableViewHolder.tv_goods_attribute.setText(sku.name);
+                        if (onGoodsChangeListener != null) {
+                            onGoodsChangeListener.OnChangeSku(goods.cart_id, sku.id);
+                        }
                     }
                 });
                 paramDialog.show();
@@ -147,8 +206,29 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @BindView(R.id.rl_goods_parm)
         RelativeLayout rl_goods_parm;
 
+        @BindView(R.id.tv_edit_param)
+        TextView tv_edit_param;
+
+        @BindView(R.id.tv_goods_add)
+        TextView tv_goods_add;
+
+        @BindView(R.id.tv_goods_min)
+        TextView tv_goods_min;
+
         public EnableViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnGoodsChangeListener(OnGoodsChangeListener listener) {
+        this.onGoodsChangeListener = listener;
+    }
+
+    public interface OnGoodsChangeListener {
+        void OnChangeCount(String goodsId, int count);
+
+        void OnChangeSku(String goodsId, String skuId);
+
+        void OnChangeCheck(String goodsId, String isCheck);
     }
 }

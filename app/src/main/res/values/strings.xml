@@ -2,6 +2,10 @@
     <string name="app_name">顺联动力</string>
     <string name="common_yuan">￥</string>
 
+    <item name="type_header" type="integer" />
+    <item name="type_footer" type="integer" />
+    <item name="type_child" type="integer" />
+
     <!--主页tab-->
     <string name="main_page">首页</string>
     <string name="sort">分类</string>
@@ -86,7 +90,7 @@
     <string name="store_yingyezhizhao">营业执照</string>
     <string name="store_quanbu">全部</string>
     <string name="store_chakanquanbu">查看全部</string>
-    <item name="tag_store_discount_menu" type="id"/>
+    <item name="tag_store_discount_menu" type="id" />
 
 
     <!--商品详情-->
@@ -169,4 +173,8 @@
     <string name="already_discount"> 已优惠:¥%s</string>
     <string name="total">合计：¥%s</string>
     <string name="no_freight">不含运费</string>
+    <string name="goods_sell_out">宝贝已卖完</string>
+    <string name="goods_off_shelf">宝贝已下架</string>
+    <string name="clear_disable_goods">清空失效宝贝</string>
+    <string name="disable_goods">失效宝贝</string>
 </resources>
