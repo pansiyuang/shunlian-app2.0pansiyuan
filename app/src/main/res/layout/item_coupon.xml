@@ -36,7 +36,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="37dp"
         android:layout_marginTop="9dp"
-        android:maxLines="1"
+        android:singleLine="true"
+        android:maxEms="3"
+        android:ellipsize="end"
         android:textColor="@color/white"
         android:textSize="13sp" />
 
@@ -45,10 +47,12 @@
         android:id="@+id/mtv_full_cut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mtv_name"
+        android:layout_alignLeft="@id/mtv_name"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="9dp"
-        android:maxLines="1"
+        android:singleLine="true"
+        android:maxEms="5"
+        android:ellipsize="end"
         android:textColor="@color/white"
         android:textSize="10sp" />
 

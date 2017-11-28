@@ -47,7 +47,7 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Vo
             voucherViewHolder.mtv_name.setText(voucher.title);
             String format = "满%s元可用";
             voucherViewHolder.mtv_full_cut.setText(String.format(format, voucher.use_condition));
-            if ("1".equals(voucher.is_get)) {
+            if ("0".equals(voucher.is_get)) {
                 voucherViewHolder.mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_2);
             } else {
                 voucherViewHolder.mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_1);
