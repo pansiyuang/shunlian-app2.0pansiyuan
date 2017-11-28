@@ -160,7 +160,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param <T>
      */
     protected <T>void getNetData(final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
-        getNetData(0,0,tCall,callback);
+        getNetData(0,0,false,tCall,callback);
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
-    protected <T> void  getNetData(final int emptyCode,final int failureCode,final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
+    protected <T> void  getNetData(final int emptyCode, final int failureCode, final boolean isLoading, final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
 
@@ -196,7 +196,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 }else {
                     callback.onErrorCode(body.code,body.message);
                     //请求错误
-                    handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode);
+                    handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode,isLoading);
                 }
             }
 
@@ -212,7 +212,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         });
     }
 
-    private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode) {
+    private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
         Common.staticToast(message);
         switch (code) {
             // TODO: 2017/10/19
@@ -225,7 +225,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     if (requestCount >= 5){
                         return;
                     }
-                    refreshToken(clone,emptyCode,failureCode);
+                    refreshToken(clone,emptyCode,failureCode,isLoading);
                 }
                 break;
             case 204://刷新token过期,让用户登录
@@ -236,7 +236,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
 
-    private <T> void refreshToken(final Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode){
+    private <T> void refreshToken(final Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading){
         String refresh_token = SharedPrefUtil.getSharedPrfString("refresh_token", "");
         String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
         Map<String,String> map = new HashMap<>();
@@ -251,7 +251,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
         Call<BaseEntity<RefreshTokenEntity>> baseEntityCall = getAddCookieApiService().refreshToken(requestBody);
-        getNetData(emptyCode,failureCode,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefreshTokenEntity>>(){
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefreshTokenEntity>>(){
             @Override
             public void onSuccess(BaseEntity<RefreshTokenEntity> entity) {
                 super.onSuccess(entity);
@@ -259,7 +259,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 if (data != null) {
                     SharedPrefUtil.saveSharedPrfString("token", data.token);
                     SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
-                    getNetData(emptyCode,failureCode,clone,new SimpleNetDataCallback<BaseEntity<T>>());
+                    getNetData(emptyCode,failureCode,isLoading,clone,new SimpleNetDataCallback<BaseEntity<T>>());
                 }
             }
         });
