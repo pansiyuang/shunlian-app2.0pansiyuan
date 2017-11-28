@@ -118,9 +118,12 @@ public class MyTextView extends TextView {
         int[] realWH = TransformUtil.countRealWH(getContext(), width, height);
         int real_w = realWH[0];
         int real_h = realWH[1];
-
-        layoutParams.width = real_w;
-        layoutParams.height = real_h;
+        if (layoutParams == null){
+            layoutParams = new ViewGroup.LayoutParams(real_w,real_h);
+        }else {
+            layoutParams.width = real_w;
+            layoutParams.height = real_h;
+        }
         setLayoutParams(layoutParams);
     }
 }

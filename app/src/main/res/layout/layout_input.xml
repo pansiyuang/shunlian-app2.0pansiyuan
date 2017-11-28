@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
+            android:padding="6dp"
             android:layout_marginBottom="25dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp">
@@ -45,6 +46,7 @@
                 android:drawableBottom = "@drawable/edittext_line"
                 android:drawablePadding ="10dp"
                 android:gravity="start|center_vertical"
+                android:layout_alignParentBottom="true"
                 />
 
             <com.shunlian.app.widget.MyTextView
@@ -56,8 +58,7 @@
                 android:padding="5dp"
                 android:text="@string/RegisterOneAct_sjxztjr"
                 android:textColor="@color/new_text"
-                android:layout_marginTop="5dp"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
         </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -85,9 +86,8 @@
                 android:gravity="start|center_vertical"
                 android:textColor="@color/new_text"
                 android:textColorHint="@color/color_value_6c"
-                android:textCursorDrawable="@drawable/edit_cursor"
-                android:textSize="20sp" />
-            android:digits="0123456789"/>
+                android:textCursorDrawable="@drawable/edit_cursor"/>
+
 
             <View
                 android:layout_width="match_parent"
@@ -103,6 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/et_phone"
             android:layout_marginLeft="25dp"
+            android:padding="6dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="15dp">
 
@@ -124,7 +125,6 @@
                 app:iv_control_adapter="true"
                 app:iv_control_height="60"
                 app:iv_control_width="144"
-                app:iv_margin_top="15"
                 android:layout_alignParentRight="true"/>
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>

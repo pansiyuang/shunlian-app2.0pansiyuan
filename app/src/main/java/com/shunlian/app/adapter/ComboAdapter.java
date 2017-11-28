@@ -23,7 +23,7 @@ import static com.shunlian.app.utils.Common.firstSmallText;
  * Created by Administrator on 2017/11/15.
  */
 
-public class ComboAdapter extends BaseRecyclerAdapter implements BaseRecyclerAdapter.OnItemClickListener {
+public class ComboAdapter extends BaseRecyclerAdapter {
     private Context context;
     private List<GoodsDeatilEntity.Combo> combos;
 
@@ -54,16 +54,20 @@ public class ComboAdapter extends BaseRecyclerAdapter implements BaseRecyclerAda
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
-        viewHolder.recycler_combo.setAdapter(new ComboPicAdapter(context, false, combo.goods));
+        ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, false, combo.goods);
+        viewHolder.recycler_combo.setAdapter(comboPicAdapter);
+        comboPicAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (listener != null){
+                    listener.onItemClick(view,position);
+                }
+            }
+        });
+
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        //跳转详情界面
-        GoodsDeatilEntity.Combo combo = combos.get(position);
-    }
-
-    public class ComboViewHolder extends BaseRecyclerViewHolder {
+    public class ComboViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_combo_price)
         TextView tv_combo_price;
@@ -76,13 +80,21 @@ public class ComboAdapter extends BaseRecyclerAdapter implements BaseRecyclerAda
 
         public ComboViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 
-    public class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Combo.Goods> {
-        private List<GoodsDeatilEntity.Combo.Goods> goods;
+    public class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
+        private List<GoodsDeatilEntity.Goods> goods;
 
-        public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Combo.Goods> lists) {
+        public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
             super(context, isShowFooter, lists);
             this.goods = lists;
         }
@@ -99,12 +111,20 @@ public class ComboAdapter extends BaseRecyclerAdapter implements BaseRecyclerAda
             GlideUtils.getInstance().loadImage(context, mHoler.miv_combo, goods.get(position).thumb);
         }
 
-        public class PicViewHolder extends BaseRecyclerViewHolder {
+        public class PicViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
             @BindView(R.id.miv_combo)
             MyImageView miv_combo;
 
             public PicViewHolder(View itemView) {
                 super(itemView);
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
             }
         }
     }

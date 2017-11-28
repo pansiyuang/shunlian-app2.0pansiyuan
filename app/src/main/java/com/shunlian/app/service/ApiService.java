@@ -24,12 +24,14 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
@@ -291,4 +293,12 @@ public interface ApiService {
      */
     @POST("cart/home")
     Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
+
+    /**
+     * 商品详情页足迹
+     * @param body
+     * @return
+     */
+    @POST("member/footermark/getsidemark")
+    Call<BaseEntity<FootprintEntity>> footPrint(@Body RequestBody body);
 }

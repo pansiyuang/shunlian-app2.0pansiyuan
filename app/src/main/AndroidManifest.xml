@@ -95,6 +95,13 @@
         <activity android:name=".ui.store.StoreSortAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.goods_detail.ComboDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:name=".ui.confirm_order.ConfirmOrderAct" />
     </application>
 
 </manifest>

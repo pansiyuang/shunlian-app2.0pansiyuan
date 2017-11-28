@@ -124,17 +124,21 @@ public class MyRelativeLayout extends RelativeLayout {
 
     /**
      * 设置控件大小，宽高都为像素
+     *
      * @param width
      * @param height
      */
-    public void setWHProportion(int width,int height){
+    public void setWHProportion(int width, int height) {
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
-        int[] realWH = TransformUtil.countRealWH(getContext(),width, height);
+        int[] realWH = TransformUtil.countRealWH(getContext(), width, height);
         int real_w = realWH[0];
         int real_h = realWH[1];
-
-        layoutParams.width = real_w;
-        layoutParams.height = real_h;
+        if (layoutParams == null){
+            layoutParams = new ViewGroup.LayoutParams(real_w,real_h);
+        }else {
+            layoutParams.width = real_w;
+            layoutParams.height = real_h;
+        }
         setLayoutParams(layoutParams);
     }
 

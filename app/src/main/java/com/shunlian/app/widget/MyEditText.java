@@ -2,13 +2,13 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
  * Created by Administrator on 2017/10/24.
  */
 
-public class MyEditText extends EditText {
+public class MyEditText extends AppCompatEditText {
     private String hintContent;
     private Context mContext;
     private boolean aBoolean;
@@ -31,6 +31,7 @@ public class MyEditText extends EditText {
     private int margin_top;
     private int margin_bottom;
     private int margin_right;
+    private int hintTextSize;
 
     public MyEditText(Context context) {
         this(context,null);
@@ -55,6 +56,7 @@ public class MyEditText extends EditText {
         margin_top = a.getInteger(R.styleable.MyEditText_et_margin_top, 0);
         margin_right = a.getInteger(R.styleable.MyEditText_et_margin_right, 0);
         margin_bottom = a.getInteger(R.styleable.MyEditText_et_margin_bottom, 0);
+        hintTextSize = a.getInteger(R.styleable.MyEditText_hintTextSize, 14);
         a.recycle();
         setHintSize(hintContent);
     }
@@ -77,7 +79,7 @@ public class MyEditText extends EditText {
             return;
         }
         SpannableString ss = new SpannableString(content);
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, 12));
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(TransformUtil.sp2px(mContext, hintTextSize));
         ss.setSpan(ass, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         setHint(ss);
     }
@@ -144,9 +146,12 @@ public class MyEditText extends EditText {
         int[] realWH = TransformUtil.countRealWH(getContext(), width, height);
         int real_w = realWH[0];
         int real_h = realWH[1];
-
-        layoutParams.width = real_w;
-        layoutParams.height = real_h;
+        if (layoutParams == null){
+            layoutParams = new ViewGroup.LayoutParams(real_w,real_h);
+        }else {
+            layoutParams.width = real_w;
+            layoutParams.height = real_h;
+        }
         setLayoutParams(layoutParams);
     }
 }

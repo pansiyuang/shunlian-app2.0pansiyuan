@@ -12,27 +12,35 @@ import java.util.List;
 public class ShoppingCarEntity {
     public List<Enabled> enabled;
     public List<Disabled> disabled;
+    public String total_amount;
+    public String total_count;
+    public String total_reduce;
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Enabled {
         public String store_name;                 //店铺名字
         public String store_id;                   //店铺id
-        public List<Goods> goods;                 //店铺商品
+        public List<Voucher> store_voucher;       //店铺优惠券
+        public String all_check;                  //是否选择
+        public boolean isEdit;                    //编辑
+        public List<Promotion> promotion;         //是否选择
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Goods {
-            public String id;                    //购物车id
-            public String store_id;              //店铺id
-            public String store_name;            //店铺名字
-            public String goods_id;              //商品id
-            public String qty;                   //购物车数量
-            public String sku_id;                //购物中的sku_id
-            public String title;                 //商品title
-            public String thumb;                 //商品封面图
-            public String sku;                   //sku信息
-            public String price;                 //价格
-            public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
+        public static class Voucher {
 
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Promotion {
+            public String prom_id;               //活动id
+            public String prom_label;            //活动label
+            public String prom_type;             //活动类型
+            public List<GoodsDeatilEntity.Goods> goods;            //活动商品
+            public String hint;                  //活动内容
+            public String title_label;           //优惠
+            public String prom_title;            //优惠标题
+            public String prom_reduce;
         }
     }
 

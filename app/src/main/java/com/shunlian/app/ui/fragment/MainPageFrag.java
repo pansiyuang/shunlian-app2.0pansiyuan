@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -79,6 +80,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("商品详情");
         items.add("店铺");
         items.add("购物车");
+        items.add("确认订单");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -103,10 +105,13 @@ public class MainPageFrag extends BaseFragment {
                         LoginAct.startAct(baseContext);
                         break;
                     case 1:
-                        GoodsDetailAct.startAct(baseContext);
+                        GoodsDetailAct.startAct(baseContext,"56");
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);
+                        break;
+                    case 4:
+                        ConfirmOrderAct.startAct(baseContext);
                         break;
                 }
             }

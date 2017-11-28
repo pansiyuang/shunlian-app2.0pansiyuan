@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/value_FEFDEB"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_order_address"
+            app:iv_control_adapter="true"
+            app:iv_margin_left="24" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/miv_address"
+            android:ellipsize="end"
+            android:maxLength="12"
+            android:maxLines="1"
+            android:text="阿拉斯加的企阿拉斯加的企阿拉斯加的企"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="24" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:text="13007562706"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="24"
+            app:tv_margin_right="70" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mtv_nickname"
+            android:layout_toRightOf="@+id/miv_address"
+            android:text="收货地址：浙江省杭州市滨江区江陵路1916号星耀城二期29楼"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="24"
+            app:tv_margin_right="70"
+            app:tv_margin_top="20" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_common_viewarrow_1"
+            app:iv_control_adapter="true"
+            app:iv_margin_right="30" />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@mipmap/img_order_line" />
+
+</com.shunlian.app.widget.MyLinearLayout>

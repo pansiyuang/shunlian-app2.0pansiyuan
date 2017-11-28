@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:rl_control_adapter="true"
+    app:rl_margin_left="20"
+    app:rl_margin_right="20">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_goods_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iv_control_adapter="true"
+        app:iv_control_height="156"
+        app:iv_control_width="156" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_goods_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/miv_goods_pic"
+        android:maxLines="2"
+        android:text="黑色的发货速度大数据时代开始的好看是公司的技大数据货时代开始"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="20"
+        app:tv_margin_top="10" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_goods_info"
+        android:layout_toRightOf="@+id/miv_goods_pic"
+        android:background="@color/white_ash"
+        android:paddingBottom="7dp"
+        android:paddingLeft="6dp"
+        android:paddingTop="7dp"
+        android:text="请选择"
+        android:textColor="@color/my_gray_one"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="20"
+        app:tv_margin_top="25" />
+</com.shunlian.app.widget.MyRelativeLayout>

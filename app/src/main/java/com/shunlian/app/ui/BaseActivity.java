@@ -53,7 +53,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
-    protected ImmersionBar immersionBar;
+    public ImmersionBar immersionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

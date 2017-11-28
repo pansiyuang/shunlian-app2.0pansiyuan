@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_inva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="失效宝贝"
+        android:textColor="@color/new_text"
+        android:textSize="14sp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="10dp"
+        />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_gray_two"/>
+
+    <include layout="@layout/item_appoint_goods"/>
+</com.shunlian.app.widget.MyLinearLayout>

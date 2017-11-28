@@ -17,13 +17,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,22 +75,36 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private List<GoodsDeatilEntity.Sku> mSku;
     private GoodsDeatilEntity goodsDeatilEntity;
     private Context mContext;
+    private GoodsDeatilEntity.Goods mGoods;
     private LinearLayoutManager linearLayoutManager;
     private ParamItemAdapter paramItemAdapter;
-    private List<GoodsDeatilEntity.Specs.Values> mCurrentValues;
+    private List<GoodsDeatilEntity.Values> mCurrentValues;
     private OnSelectCallBack selectCallBack;
     private int recycleHeight;
     private int totalStock;
     private int currentCount = 1;
+    private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
         this.goodsDeatilEntity = goods;
-        mCurrentValues = new ArrayList<>();
         this.specs = goods.specs;
         this.mSku = goods.sku;
+        mCurrentValues = new ArrayList<>();
+        initMap();
     }
+
+    public ParamDialog(Context context, GoodsDeatilEntity.Goods goods) {
+        this(context, R.style.MyDialogStyleBottom);
+        this.mContext = context;
+        this.mGoods = goods;
+        this.specs = goods.goods_info.specs;
+        this.mSku = goods.goods_info.sku;
+        mCurrentValues = new ArrayList<>();
+        initMap();
+    }
+
 
     public ParamDialog(Context context, int themeResId) {
         super(context, themeResId);
@@ -115,10 +137,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     }
 
     public void initViews() {
-        dia_tv_price.setText("¥" + goodsDeatilEntity.price);
-        totalStock = Integer.valueOf(goodsDeatilEntity.stock);
-        tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
-        GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
+        if (goodsDeatilEntity != null) {
+            dia_tv_price.setText("¥" + goodsDeatilEntity.price);
+            totalStock = Integer.valueOf(goodsDeatilEntity.stock);
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
+            GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
+        }
+        if (mGoods != null) {
+            dia_tv_price.setText("¥" + mGoods.price);
+            totalStock = Integer.valueOf(mGoods.stock);
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), mGoods.stock));
+            GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
+        }
     }
 
 
@@ -129,6 +159,14 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         iv_cancel.setOnClickListener(this);
     }
 
+    public void initMap() {
+        if (specs != null && specs.size() != 0) {
+            linkedHashMap = new LinkedHashMap<>();
+            for (int i = 0; i < specs.size(); i++) {
+                linkedHashMap.put(specs.get(i).name, null);
+            }
+        }
+    }
 
     @Override
     public void onClick(View view) {
@@ -150,20 +188,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-
-                sortValues();
-                StringBuffer ids = new StringBuffer();
-
-                for (int i = 0; i < mCurrentValues.size(); i++) {
-                    ids.append(mCurrentValues.get(i).id);
-                    if (i != mCurrentValues.size() - 1) {
-                        ids.append("_");
-                    }
-                }
-                if (getSkuId(ids.toString()) != null && selectCallBack != null) {
-                    selectCallBack.onSelectComplete(getSkuId(ids.toString()), currentCount);
-                    dismiss();
-                }
+                checkLinkmap();
                 break;
             case R.id.iv_cancel:
                 dismiss();
@@ -179,10 +204,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             this.spes = s;
         }
 
-        public void setSpecs(List<GoodsDeatilEntity.Specs> spesList) {
-            spes = spesList;
-            notifyDataSetChanged();
-        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -192,27 +213,29 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            final List<GoodsDeatilEntity.Specs.Values> mValues = specs.get(position).values;
+            final GoodsDeatilEntity.Specs mSpecs = specs.get(position);
+            final List<GoodsDeatilEntity.Values> mValues = mSpecs.values;
 
             holder.tv_param_type.setText(specs.get(position).name);
             gridLayoutManager = new GridLayoutManager(mContext, 4);
             holder.recycler_param.setLayoutManager(gridLayoutManager);
-            final ParamTagAdapter paramTagAdapter = new ParamTagAdapter(mValues, specs.get(position).show_type);
+            final ParamTagAdapter paramTagAdapter = new ParamTagAdapter(mContext, false, mValues);
             holder.recycler_param.setAdapter(paramTagAdapter);
-
-            paramTagAdapter.setOnItemClickListener(new OnItemClickListener() {
+            holder.recycler_param.addItemDecoration(new GridSpacingItemDecoration(4, 26, false));
+            paramTagAdapter.setOnItemTagClickListener(new OnItemTagClickListener() {
                 @Override
-                public void onItemClick(View view, int p) {
-                    GoodsDeatilEntity.Specs.Values values = mValues.get(p);
-
-                    if (values.isSelect()) {
-                        paramTagAdapter.itemSelected(p, false);
-                    } else {
-                        paramTagAdapter.itemSelected(p, true);
+                public void onItemTagClick(View view, int position) {
+                    GoodsDeatilEntity.Values values = mValues.get(position);
+                    if (!values.isSelect()) {
+                        paramTagAdapter.itemSelected(position, true);
+                        if (linkedHashMap != null) {
+                            linkedHashMap.put(mSpecs.name, values);
+                        }
                     }
                 }
             });
         }
+
 
         @Override
         public int getItemCount() {
@@ -233,16 +256,17 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-    public class ParamTagAdapter extends RecyclerView.Adapter<ParamTagAdapter.ViewHolder> implements View.OnClickListener {
+    public class ParamTagAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Values> implements View.OnClickListener {
 
-        private List<GoodsDeatilEntity.Specs.Values> valuesList;
+        private List<GoodsDeatilEntity.Values> valuesList;
         private String showType;
-        private OnItemClickListener mOnItemClickListener = null;
+        private OnItemTagClickListener mOnItemClickListener = null;
 
-        public ParamTagAdapter(List<GoodsDeatilEntity.Specs.Values> values, String type) {
-            this.showType = type;
-            this.valuesList = values;
+        public ParamTagAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Values> lists) {
+            super(context, isShowFooter, lists);
+            this.valuesList = lists;
         }
+
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -254,7 +278,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_tag, parent, false);
+            ViewHolder vh = new ViewHolder(view);
+            view.setOnClickListener(this);
+            return vh;
+        }
+
+        @Override
+        public void handleList(RecyclerView.ViewHolder viewHolder, int position) {
+            ViewHolder holder = (ViewHolder) viewHolder;
             holder.tv_tag.setText(valuesList.get(position).name);
             holder.itemView.setTag(position);
             if (valuesList.get(position).isSelect()) {
@@ -274,27 +307,14 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         public void itemSelected(int position, boolean isSelect) {
             for (int i = 0; i < valuesList.size(); i++) {
                 valuesList.get(i).setSelect(false);
-                if (isIncludeValue(valuesList.get(i))) {
-                    mCurrentValues.remove(valuesList.get(i));
-                }
             }
 
-            GoodsDeatilEntity.Specs.Values values = valuesList.get(position);
+            GoodsDeatilEntity.Values values = valuesList.get(position);
             values.setSelect(isSelect);
             notifyDataSetChanged();
-
-            if (isSelect && !isIncludeValue(values)) {
-                //选中且当前item不存在
-                mCurrentValues.add(values);
-            }
-
-            if (!isSelect && isIncludeValue(values)) {
-                //反选且当前item存在
-                mCurrentValues.remove(values);
-            }
         }
 
-        public void setOnItemClickListener(OnItemClickListener listener) {
+        public void setOnItemTagClickListener(OnItemTagClickListener listener) {
             this.mOnItemClickListener = listener;
         }
 
@@ -302,7 +322,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         public void onClick(View view) {
             if (mOnItemClickListener != null) {
                 //注意这里使用getTag方法获取position
-                mOnItemClickListener.onItemClick(view, (int) view.getTag());
+                mOnItemClickListener.onItemTagClick(view, (int) view.getTag());
             }
         }
 
@@ -318,50 +338,65 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-
-    private boolean isIncludeValue(GoodsDeatilEntity.Specs.Values values) {
-        boolean isInclude = false;
-        if (mCurrentValues == null || mCurrentValues.size() == 0) {
-            isInclude = false;
+    /**
+     * 检查是否点击所有的item
+     */
+    public void checkLinkmap() {
+        if (linkedHashMap == null) {
+            return;
         }
-        for (GoodsDeatilEntity.Specs.Values v : mCurrentValues) {
-            if (values.id.equals(v.id)) {
-                isInclude = true;
+        mCurrentValues.clear();
+        //检查某项是否点击了
+        Iterator it = linkedHashMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            if (e.getValue() == null) {
+                Common.staticToast("请选择" + e.getKey());
+                return;
             }
+            mCurrentValues.add((GoodsDeatilEntity.Values) e.getValue());
         }
-        return isInclude;
-    }
-
-
-    private List<GoodsDeatilEntity.Specs.Values> sortValues() {
-        Collections.sort(mCurrentValues, new Comparator<GoodsDeatilEntity.Specs.Values>() {
-            public int compare(GoodsDeatilEntity.Specs.Values arg0, GoodsDeatilEntity.Specs.Values arg1) {
-                return Integer.valueOf(arg0.id).compareTo(Integer.valueOf(arg1.id));
+        // 按升序排序
+        Collections.sort(mCurrentValues, new Comparator<GoodsDeatilEntity.Values>() {
+            @Override
+            public int compare(GoodsDeatilEntity.Values values, GoodsDeatilEntity.Values t1) {
+                return Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id));
             }
         });
-        return mCurrentValues;
-    }
 
-    private GoodsDeatilEntity.Sku getSkuId(String ids) {
-        GoodsDeatilEntity.Sku s = null;
-        if (mSku == null || mSku.size() == 0) {
-            return null;
-        }
-        for (int i = 0; i < mSku.size(); i++) {
-            if (ids.equals(mSku.get(i).specs)) {
-                s = mSku.get(i);
+        //拼接id字符 按下划线拼接
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < mCurrentValues.size(); i++) {
+            result.append(mCurrentValues.get(i).id);
+            if (i != mCurrentValues.size() - 1) {
+                result.append("_");
             }
         }
-        return s;
-    }
+        LogUtil.httpLogW("result:" + result.toString());
+        //从sku中遍历获取sku
+        GoodsDeatilEntity.Sku s = null;
+        if (mSku == null || mSku.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < mSku.size(); i++) {
+            if (result.toString().equals(mSku.get(i).specs)) {
+                s = mSku.get(i);
+                break;
+            }
+        }
 
+        if (s != null && selectCallBack != null) {
+            selectCallBack.onSelectComplete(s, currentCount);
+            dismiss();
+        }
+    }
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {
         this.selectCallBack = callBack;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    public interface OnItemTagClickListener {
+        void onItemTagClick(View view, int position);
     }
 
     public interface OnSelectCallBack {

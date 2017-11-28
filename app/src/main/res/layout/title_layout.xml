@@ -23,7 +23,6 @@
             android:textColor="@color/new_text"
             android:textSize="15sp"
             android:maxLines="2"
-            android:text="附近的快乐撒就发啦了但是会计法律框架房你疯了肯定撒开了家电视剧法兰克福家里"
             app:tv_control_adapter="true"
             app:tv_control_height="68"
             app:tv_control_width="593" />
@@ -40,7 +39,6 @@
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
             app:tv_margin_top="4"
-            android:text="颠婆要看"
             />
         <View
             android:layout_width="0.5dp"
@@ -67,7 +65,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/miv_fenxiang"
             android:paddingTop="5dp"
-            android:text="分享"
+            android:text="@string/share"
             android:textColor="@color/new_gray"
             android:textSize="8sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
@@ -93,7 +91,6 @@
             android:id="@+id/mtv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="980"
             android:textColor="@color/pink_color"
             android:textSize="21sp" />
 
