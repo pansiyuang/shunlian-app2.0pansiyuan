@@ -9,6 +9,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.ConfirmOrderAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DataUtil;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 
 import butterknife.BindView;
 
@@ -37,6 +39,9 @@ public class ConfirmOrderAct extends BaseActivity {
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
+        int space = TransformUtil.dip2px(this, 10);
+        recy_view.addItemDecoration(new VerticalItemDecoration(space,
+                0,0,getResources().getColor(R.color.white_ash)));
         recy_view.setAdapter(new ConfirmOrderAdapter(this,false, DataUtil.getListString(10,"df")));
     }
 }

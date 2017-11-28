@@ -1,14 +1,23 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.DataUtil;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.widget.DiscountListDialog;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/25.
@@ -27,6 +36,8 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
     public int getItemViewType(int position) {
         if (position == 0){
             return ITEM_ADDRESS;
+        }else if (position + 1  == getItemCount()){
+            return item_invalid;
         }else {
             return super.getItemViewType(position);
         }
@@ -44,6 +55,10 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
                 View head_address = LayoutInflater.from(context)
                         .inflate(R.layout.head_address, parent, false);
                 return new AddressHolder(head_address);
+            case item_invalid:
+                View invalid_layout = LayoutInflater.from(context)
+                        .inflate(R.layout.only_recycler_layout, parent, false);
+                return new InvalidGoodsHolder(invalid_layout);
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -52,7 +67,42 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
+        int itemViewType = getItemViewType(position);
+        switch (itemViewType){
+            case ITEM_ADDRESS:
+                break;
+            case item_invalid:
+                handlerInvalidGoods(holder,position);
+                break;
+            default:
+                super.onBindViewHolder(holder, position);
+                break;
+        }
+    }
+
+    private void handlerInvalidGoods(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof InvalidGoodsHolder){
+            InvalidGoodsHolder mHolder = (InvalidGoodsHolder) holder;
+            final int padding = TransformUtil.dip2px(context, 10);
+            SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter<String>(context,
+                    R.layout.item_invalid_goods,DataUtil.getListString(5,"ss")) {
+
+                @Override
+                public void convert(SimpleViewHolder holder, String s, int position) {
+                    if (position == 0){
+                        holder.getView(R.id.mtv_inva).setVisibility(View.VISIBLE);
+                        holder.getView(R.id.line).setVisibility(View.VISIBLE);
+                    }else {
+                        holder.getView(R.id.mtv_inva).setVisibility(View.GONE);
+                        holder.getView(R.id.line).setVisibility(View.GONE);
+                    }
+                    MyRelativeLayout mrl_rootview = holder.getView(R.id.mrl_rootview);
+
+                    mrl_rootview.setPadding(padding,padding,padding,0);
+                }
+            };
+            mHolder.recy_view.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -64,7 +114,12 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-
+        if (holder instanceof BuyGoodsHolder){
+            BuyGoodsHolder mHolder = (BuyGoodsHolder) holder;
+            mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
+                    false,
+                    DataUtil.getListString(5,"dfa")));
+        }
     }
 
     public class AddressHolder extends BaseRecyclerViewHolder{
@@ -75,10 +130,51 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
     }
 
 
-    public class BuyGoodsHolder extends BaseRecyclerViewHolder{
+    public class BuyGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.recy_view)
+        RecyclerView recy_view;
+
+        @BindView(R.id.mllayout_discount)
+        MyLinearLayout mllayout_discount;
 
         public BuyGoodsHolder(View itemView) {
             super(itemView);
+            recy_view.setNestedScrollingEnabled(false);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recy_view.setLayoutManager(manager);
+            int space = TransformUtil.dip2px(context, 20);
+            recy_view.addItemDecoration(new VerticalItemDecoration(space,space / 2,0));
+            recy_view.setFocusable(false);
+
+            mllayout_discount.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.mllayout_discount:
+                    DiscountListDialog dialog = new DiscountListDialog(context);
+                    dialog.setGoodsDiscount();
+                    dialog.show();
+                    break;
+            }
+        }
+    }
+
+    public class InvalidGoodsHolder extends BaseRecyclerViewHolder{
+
+        protected final RecyclerView recy_view;
+
+        public InvalidGoodsHolder(View itemView) {
+            super(itemView);
+            recy_view = (RecyclerView) itemView;
+            recy_view.setFocusable(true);
+            recy_view.setNestedScrollingEnabled(false);
+            LinearLayoutManager manager  = new LinearLayoutManager(context);
+            recy_view.setLayoutManager(manager);
+            int space = TransformUtil.dip2px(context, 10);
+            recy_view.addItemDecoration(new VerticalItemDecoration(space,0,0));
         }
     }
 }

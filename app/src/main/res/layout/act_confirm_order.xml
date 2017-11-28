@@ -7,6 +7,7 @@
     <!--title-->
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrl_title"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -45,6 +46,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:background="@color/white"
             app:ll_control_adapter="true"
             app:ll_control_height="100"
             app:ll_margin_top="1">
@@ -89,6 +91,7 @@
     <!--content-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/mrl_bottom"

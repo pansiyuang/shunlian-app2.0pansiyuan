@@ -153,7 +153,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 View goods_detail_division = mInflater.inflate(R.layout.goods_detail_division, parent, false);
                 return new GoodsDetailDivisionHolder(goods_detail_division);
             case COUPON_LAYOUT:
-                View coupon_layout = mInflater.inflate(R.layout.coupon_layout, parent, false);
+                View coupon_layout = mInflater.inflate(R.layout.only_recycler_layout, parent, false);
                 return new CouponHolder(coupon_layout);
             case RICH_TEXT_LAYOUT:
                 View rich_text_layout = mInflater.inflate(R.layout.rich_text, parent, false);
