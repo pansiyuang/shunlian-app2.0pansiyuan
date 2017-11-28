@@ -49,16 +49,17 @@ import butterknife.Unbinder;
 
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
-    protected final Context context;
-    protected final List<T> lists;
     private static final int ITEM_LIST = 0;
     private static final int ITEM_FOOTER = 1;
+    public static List<Unbinder> unbinders = new ArrayList<>();
+    protected final Context context;
+    protected final List<T> lists;
     private final boolean isShowFooter;//是否显示脚布局
+    protected OnItemClickListener listener;
+    protected BaseFooterHolder baseFooterHolder;
     private int currentPage;//分页时当前显示页数
     private int allPage;//总页
-    protected OnItemClickListener listener;
     private OnReloadListener reloadListener;
-    protected BaseFooterHolder baseFooterHolder;
     private boolean isLoadFailure;
 
     public BaseRecyclerAdapter(Context context, boolean isShowFooter, List<T> lists) {
@@ -80,13 +81,14 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
                     return baseFooterHolder;
             }
             return null;
-        }else{
+        } else {
             return getRecyclerHolder(parent);
         }
     }
 
     /**
      * 设置baseFooterHolder  layoutparams
+     *
      * @param baseFooterHolder
      */
     public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
@@ -95,11 +97,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     /**
      * 子类需要实现的holder
-     * @return
+     *
      * @param parent
+     * @return
      */
     protected abstract RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent);
-
 
     @Override
     public int getItemViewType(int position) {
@@ -109,7 +111,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             } else {
                 return ITEM_LIST;
             }
-        }else {
+        } else {
             return super.getItemViewType(position);
         }
     }
@@ -123,19 +125,23 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
                     handleList(holder, position);
                     break;
                 case ITEM_FOOTER:
-                        BaseFooterHolder footerHolder = (BaseFooterHolder) holder;
-                        handleFooter(footerHolder, position);
+                    BaseFooterHolder footerHolder = (BaseFooterHolder) holder;
+                    handleFooter(footerHolder, position);
+                    break;
+                default:
+                    handleList(holder, position);
                     break;
             }
-        }else {
+        } else {
             handleList(holder, position);
         }
     }
 
     /**
      * 设置页数
+     *
      * @param currentPage 当前页
-     * @param allpage 总页
+     * @param allpage     总页
      */
     public void setPageLoading(int currentPage, int allpage) {
         this.currentPage = currentPage;
@@ -157,7 +163,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
      * @param position
      */
     public void handleFooter(BaseFooterHolder holder, int position) {
-        if (isLoadFailure){
+        if (isLoadFailure) {
             againLoading();
             isLoadFailure = false;
         }
@@ -171,12 +177,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
 
-
     @Override
     public int getItemCount() {
         if (isShowFooter) {
-            return lists.size()+1;
-        }else{
+            return lists.size() + 1;
+        } else {
             return lists.size();
         }
     }
@@ -186,21 +191,74 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
      */
     public void loadFailure() {
         isLoadFailure = true;
-        if (baseFooterHolder != null){
+        if (baseFooterHolder != null) {
             baseFooterHolder.layout_load_error.setVisibility(View.VISIBLE);
             baseFooterHolder.layout_no_more.setVisibility(View.GONE);
             baseFooterHolder.setNormalVisibility(View.GONE);
         }
     }
 
-    public void againLoading(){
-        if (baseFooterHolder != null){
+    public void againLoading() {
+        if (baseFooterHolder != null) {
             baseFooterHolder.layout_load_error.setVisibility(View.GONE);
             baseFooterHolder.layout_no_more.setVisibility(View.GONE);
             baseFooterHolder.setNormalVisibility(View.VISIBLE);
         }
     }
 
+    /**
+     * 设置条目点击
+     *
+     * @param listener
+     */
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * 设置从新加载监听
+     *
+     * @param reloadListener
+     */
+    public void setOnReloadListener(OnReloadListener reloadListener) {
+        this.reloadListener = reloadListener;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+//        unbind();
+    }
+
+    public void unbind() {
+        if (unbinders != null && unbinders.size() > 0) {
+            for (Unbinder bind : unbinders) {
+                if (bind != null) {
+                    bind.unbind();
+                }
+            }
+            unbinders.clear();
+        }
+    }
+
+    protected int getColor(@ColorRes int id) {
+        return context.getResources().getColor(id);
+    }
+
+    protected String getString(@StringRes int id) {
+        return context.getResources().getString(id);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public interface OnReloadListener {
+        /**
+         * 重新加载
+         */
+        void onReload();
+    }
 
     public class BaseFooterHolder extends RecyclerView.ViewHolder {
         public final RelativeLayout layout_normal;
@@ -222,7 +280,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             layout_load_error.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (reloadListener != null){
+                    if (reloadListener != null) {
                         reloadListener.onReload();
                         isLoadFailure = false;
                         againLoading();
@@ -231,69 +289,18 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             });
         }
 
-        public void setNormalVisibility(int visibility){
-            if (visibility == View.GONE){
+        public void setNormalVisibility(int visibility) {
+            if (visibility == View.GONE) {
                 layout_normal.setVisibility(View.GONE);
                 spinKitView.unscheduleDrawable(circle);
-            }else if (visibility == View.VISIBLE){
+            } else if (visibility == View.VISIBLE) {
                 layout_normal.setVisibility(View.VISIBLE);
                 spinKitView.onWindowFocusChanged(true);
             }
         }
     }
 
-    /**
-     * 设置条目点击
-     * @param listener
-     */
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener = listener;
-    }
-    public interface OnItemClickListener{
-        void onItemClick(View view, int position);
-    }
-
-    /**
-     * 设置从新加载监听
-     * @param reloadListener
-     */
-    public void setOnReloadListener(OnReloadListener reloadListener){
-        this.reloadListener = reloadListener;
-    }
-    public interface OnReloadListener{
-        /**
-         * 重新加载
-         */
-        void onReload();
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-//        unbind();
-    }
-
-    public void unbind(){
-        if (unbinders != null && unbinders.size() > 0){
-            for (Unbinder bind: unbinders) {
-                if (bind != null){
-                    bind.unbind();
-                }
-            }
-            unbinders.clear();
-        }
-    }
-
-    public static List<Unbinder> unbinders = new ArrayList<>();
-
-    protected int getColor(@ColorRes int id){
-        return context.getResources().getColor(id);
-    }
-
-    protected String getString(@StringRes int id){
-        return context.getResources().getString(id);
-    }
-    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder{
+    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder {
 
         public BaseRecyclerViewHolder(View itemView) {
             super(itemView);

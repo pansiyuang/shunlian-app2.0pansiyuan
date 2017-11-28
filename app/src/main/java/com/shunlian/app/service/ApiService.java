@@ -37,6 +37,8 @@ import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -251,6 +253,11 @@ public interface ApiService {
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListEntity>> storePromotionGoodsList(@QueryMap Map<String, String> map);
 
+    @GET("store/promotionGoodsList")
+    Call<BaseEntity<StorePromotionGoodsListOneEntity>> storePromotionGoodsListOne(@QueryMap Map<String, String> map);
+
+    @GET("store/promotionGoodsList")
+    Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
     /**
      * 店铺新品
      * @return

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="5dp">
     <View
         android:id="@+id/view_line"
         android:layout_width="match_parent"
@@ -28,12 +29,12 @@
     </com.shunlian.app.widget.MyLinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="262.5dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="0dp"
-            android:layout_height="257.5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@color/white"
@@ -47,7 +48,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descl"
                 android:layout_width="match_parent"
-                android:layout_height="26.5dp"
+                android:layout_height="wrap_content"
                 android:text="一二三四五六七八九十一二三四五六七八九十"
                 android:lines="2"
                 android:ellipsize="end"
@@ -61,7 +62,8 @@
                 android:layout_height="20dp"
                 android:paddingLeft="5.5dp"
                 android:paddingRight="5.5dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="14.5dp">
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_yuanl"
                     android:layout_width="wrap_content"
@@ -93,7 +95,7 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_oner"
             android:layout_width="0dp"
-            android:layout_height="257.5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/white"
             android:orientation="vertical"
@@ -107,7 +109,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descr"
                 android:layout_width="match_parent"
-                android:layout_height="26.5dp"
+                android:layout_height="wrap_content"
                 android:text="一二三四五六七八九十一二三四五六七八九十"
                 android:lines="2"
                 android:ellipsize="end"
@@ -121,7 +123,8 @@
                 android:layout_height="20dp"
                 android:paddingLeft="5.5dp"
                 android:paddingRight="5.5dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="14.5dp">
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_yuanr"
                     android:layout_width="wrap_content"
