@@ -13,8 +13,9 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.StoreBabyAdapter;
-import com.shunlian.app.adapter.StoreDiscountAdapter;
 import com.shunlian.app.adapter.StoreDiscountMenuAdapter;
+import com.shunlian.app.adapter.StoreDiscountOneAdapter;
+import com.shunlian.app.adapter.StoreDiscountTwoAdapter;
 import com.shunlian.app.adapter.StoreFirstAdapter;
 import com.shunlian.app.adapter.StoreNewAdapter;
 import com.shunlian.app.adapter.StoreVoucherAdapter;
@@ -22,8 +23,11 @@ import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
+import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.LogUtil;
@@ -115,6 +119,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.rv_discount)
     RecyclerView rv_discount;
 
+    @BindView(R.id.rv_discounts)
+    RecyclerView rv_discounts;
+
     @BindView(R.id.rv_discountMenu)
     RecyclerView rv_discountMenu;
 
@@ -180,7 +187,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
-    private StoreDiscountAdapter storeDiscountAdapter;
+    private StoreDiscountTwoAdapter storeDiscountTwoAdapter;
+    private StoreDiscountOneAdapter storeDiscountOneAdapter;
     private StoreDiscountMenuAdapter storeDiscountMenuAdapter;
     private StoreVoucherAdapter storeVoucherAdapter;
     private GridLayoutManager babyManager, discountManager;
@@ -255,7 +263,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                     int lastPosition = discountManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == discountManager.getItemCount()) {
                         if (storePresenter != null) {
-                            storePresenter.refreshDiscount();
+                            storePresenter.refreshDiscountOne();
                         }
                     }
                 }
@@ -329,7 +337,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 mllayout_discount.setVisibility(View.VISIBLE);
                 rv_new.setVisibility(View.GONE);
                 if (!initDiscount) {
-                    storePresenter.initDiscount(storeId, 1, 0, 30);
+                    storePresenter.initDiscount(storeId);
                     initDiscount = true;
                 }
                 break;
@@ -408,7 +416,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void onClick(View v) {
         storeMenu(v);
-        babyMenu(v);
+        if (rv_baby.getScrollState() == 0) {
+            babyMenu(v);
+        }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
                 StoreIntroduceAct.startAct(this, storeId);
@@ -456,21 +466,19 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Override
-    public void storeDiscount(StorePromotionGoodsListEntity storePromotionGoodsListEntity,
-                              List<StorePromotionGoodsListEntity.Lists.Good.Data> datas, int allPage, int page) {
-
-        if (storeDiscountAdapter == null) {
-            storeDiscountAdapter = new StoreDiscountAdapter(this, true, datas);
-            discountManager = new GridLayoutManager(this, 2);
+    public void storeDiscountOne(List<StorePromotionGoodsListOneEntity.MData> mDatas, int allPage, int page) {
+        rv_discount.setVisibility(View.VISIBLE);
+        rv_discounts.setVisibility(View.GONE);
+        if (storeDiscountOneAdapter == null) {
+            storeDiscountOneAdapter = new StoreDiscountOneAdapter(this, true, mDatas);
+            discountManager = new GridLayoutManager(this, 1);
             rv_discount.setLayoutManager(discountManager);
-            rv_discount.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(this, 5), TransformUtil.dip2px(this, 5), true));
-            rv_discount.setAdapter(storeDiscountAdapter);
+            rv_discount.setAdapter(storeDiscountOneAdapter);
         } else {
-            storeDiscountAdapter.notifyDataSetChanged();
+            storeDiscountOneAdapter.notifyDataSetChanged();
         }
-        storeDiscountAdapter.setPageLoading(page, allPage);
+        storeDiscountOneAdapter.setPageLoading(page, allPage);
     }
-
 
     @Override
     public void storeNew(List<StoreNewGoodsListEntity.Data> datas) {
@@ -515,9 +523,15 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeDiscountMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    LogUtil.augusLogW("yxfhhah");
-                    storeDiscountMenuAdapter.selectPosition = position;
-                    storeDiscountMenuAdapter.notifyDataSetChanged();
+                    if (rv_discount.getScrollState()==0){
+                        storeDiscountMenuAdapter.selectPosition = position;
+                        storeDiscountMenuAdapter.notifyDataSetChanged();
+                        if ("combo".equals(view.getTag(R.id.tag_store_discount_menu_type).toString())) {
+                            storePresenter.initDiscountTwo(storeId, Integer.parseInt(view.getTag(R.id.tag_store_discount_menu_id).toString()), view.getTag(R.id.tag_store_discount_menu_type).toString());
+                        } else {
+                            storePresenter.resetDiscountOne(Integer.parseInt(view.getTag(R.id.tag_store_discount_menu_id).toString()), view.getTag(R.id.tag_store_discount_menu_type).toString());
+                        }
+                    }
                 }
             });
         } else {
@@ -547,6 +561,19 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
+        }
+    }
+
+    @Override
+    public void storeDiscountTwo(List<StorePromotionGoodsListTwoEntity.Lists.Good> mDatas) {
+        rv_discount.setVisibility(View.GONE);
+        rv_discounts.setVisibility(View.VISIBLE);
+        if (storeDiscountTwoAdapter == null) {
+            storeDiscountTwoAdapter = new StoreDiscountTwoAdapter(this, false, mDatas);
+            rv_discounts.setLayoutManager(new LinearLayoutManager(this));
+            rv_discounts.setAdapter(storeDiscountTwoAdapter);
+        } else {
+            storeDiscountOneAdapter.notifyDataSetChanged();
         }
     }
 

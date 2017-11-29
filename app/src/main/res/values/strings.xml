@@ -86,7 +86,10 @@
     <string name="store_yingyezhizhao">营业执照</string>
     <string name="store_quanbu">全部</string>
     <string name="store_chakanquanbu">查看全部</string>
-    <item name="tag_store_discount_menu" type="id"/>
+    <string name="store_taocanjia">套餐价</string>
+    <string name="store_zengpin">赠品</string>
+    <item name="tag_store_discount_menu_id" type="id"/>
+    <item name="tag_store_discount_menu_type" type="id"/>
 
 
     <!--商品详情-->
