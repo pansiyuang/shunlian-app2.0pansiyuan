@@ -26,7 +26,8 @@ import butterknife.BindView;
 public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
 
     public static final int ITEM_ADDRESS = 2;//地址条目
-    public static final int item_invalid = 3;//失效商品
+    public static final int ITEM_INVALID = 3;//失效商品
+    public static final int ITEM_STATION = 4;//占位条目
 
     public ConfirmOrderAdapter(Context context, boolean isShowFooter, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -34,10 +35,13 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
 
     @Override
     public int getItemViewType(int position) {
+        System.out.println("===position===="+position);
         if (position == 0){
             return ITEM_ADDRESS;
         }else if (position + 1  == getItemCount()){
-            return item_invalid;
+            return ITEM_STATION;
+        }else if (position + 2 == getItemCount()){
+            return ITEM_INVALID;
         }else {
             return super.getItemViewType(position);
         }
@@ -45,7 +49,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 1;
+        return super.getItemCount() + 3;
     }
 
     @Override
@@ -55,10 +59,14 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
                 View head_address = LayoutInflater.from(context)
                         .inflate(R.layout.head_address, parent, false);
                 return new AddressHolder(head_address);
-            case item_invalid:
+            case ITEM_INVALID:
                 View invalid_layout = LayoutInflater.from(context)
                         .inflate(R.layout.only_recycler_layout, parent, false);
                 return new InvalidGoodsHolder(invalid_layout);
+            case ITEM_STATION:
+                View station_layout = LayoutInflater.from(context)
+                        .inflate(android.R.layout.simple_list_item_1, parent, false);
+                return new StationHolder(station_layout);
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -71,7 +79,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
         switch (itemViewType){
             case ITEM_ADDRESS:
                 break;
-            case item_invalid:
+            case ITEM_INVALID:
                 handlerInvalidGoods(holder,position);
                 break;
             default:
@@ -118,7 +126,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
             BuyGoodsHolder mHolder = (BuyGoodsHolder) holder;
             mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
                     false,
-                    DataUtil.getListString(5,"dfa")));
+                    DataUtil.getListString(2,"dfa")));
         }
     }
 
@@ -175,6 +183,17 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<String> {
             recy_view.setLayoutManager(manager);
             int space = TransformUtil.dip2px(context, 10);
             recy_view.addItemDecoration(new VerticalItemDecoration(space,0,0));
+        }
+    }
+
+    public class StationHolder extends BaseRecyclerViewHolder{
+
+        public StationHolder(View itemView) {
+            super(itemView);
+            ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.width = TransformUtil.dip2px(context,41);
+            itemView.setLayoutParams(layoutParams);
         }
     }
 }

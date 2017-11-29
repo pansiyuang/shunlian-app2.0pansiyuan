@@ -96,4 +96,20 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/mrl_bottom"
         android:layout_below="@+id/mrl_title" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mrl_bottom"
+        android:background="@color/value_FEFDEB"
+        android:maxLines="2"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7.5dp"
+        android:text="送至：浙江省 杭州市 滨江区 江陵路1916号星耀城二期29楼705浙江顺联网络科技有限公司"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        android:visibility="gone" />
 </com.shunlian.app.widget.MyRelativeLayout>

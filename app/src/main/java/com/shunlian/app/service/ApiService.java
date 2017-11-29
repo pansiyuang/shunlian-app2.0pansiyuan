@@ -38,7 +38,6 @@ import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
@@ -301,4 +300,12 @@ public interface ApiService {
      */
     @POST("member/footermark/getsidemark")
     Call<BaseEntity<FootprintEntity>> footPrint(@Body RequestBody body);
+
+    /**
+     * 立即购买
+     * @param body
+     * @return
+     */
+    @POST("order/buy")
+    Call<BaseEntity<EmptyEntity>> orderBuy(@Body RequestBody body);
 }

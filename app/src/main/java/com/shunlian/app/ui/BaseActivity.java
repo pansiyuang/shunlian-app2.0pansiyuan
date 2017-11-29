@@ -86,6 +86,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void updateUI(boolean isShow) {
                 showPopup(isShow);
+//                Uri packageURI = Uri.parse("package:" + getPackageName());
+//                Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+////                Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+//                startActivity(intent);
             }
         });
     }
