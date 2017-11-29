@@ -15,12 +15,11 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DisabledGoodsAdapter;
 import com.shunlian.app.adapter.ShopCarStoreAdapter;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
-import com.shunlian.app.presenter.CarEditPresenter;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.view.IEditCarView;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -36,7 +35,7 @@ import butterknife.Unbinder;
  * 购物车界面
  */
 
-public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, IEditCarView, View.OnClickListener, ShopCarStoreAdapter.OnEnableChangeListener {
+public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, View.OnClickListener, ShopCarStoreAdapter.OnEnableChangeListener {
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
@@ -74,11 +73,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
     private View rootView;
     private View footView;
     private ShopCarPresenter shopCarPresenter;
-    private CarEditPresenter carEditPresenter;
     private ShopCarStoreAdapter shopCarStoreAdapter;
     private ShoppingCarEntity mCarEntity;
     private Unbinder mUnbinder;
     private FooterHolderView footerHolderView;
+    private String isCheckAll; //用来记录是否全选了
+    private String orderGoodsIds; //提交订单的id
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -103,7 +103,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
     protected void initData() {
         editMap = new HashMap<>();
         shopCarPresenter = new ShopCarPresenter(baseContext, this);
-        carEditPresenter = new CarEditPresenter(baseContext, this);
         shopCarPresenter.initShopData();
     }
 
@@ -112,6 +111,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
         super.initListener();
         tv_title_right.setOnClickListener(this);
         btn_total_complete.setOnClickListener(this);
+        miv_total_select.setOnClickListener(this);
         footerHolderView.tv_clear_disable.setOnClickListener(this);
     }
 
@@ -168,6 +168,13 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
         footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
 
         footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
+
+        isCheckAll = getCheckAll();
+        if ("1".equals(isCheckAll)) {
+            miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        } else {
+            miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
     }
 
 
@@ -192,6 +199,13 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
                 break;
             case R.id.tv_clear_disable:
                 break;
+            case R.id.miv_total_select:
+                if ("1".equals(isCheckAll)) {
+                    shopCarPresenter.checkCartGoods("0", "0");
+                } else {
+                    shopCarPresenter.checkCartGoods("0", "1"); //storeId= 0为设置全选接口传参
+                }
+                break;
         }
     }
 
@@ -208,17 +222,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
 
     @Override
     public void OnChangeCount(String goodsId, int count) {
-        carEditPresenter.editCar(goodsId, String.valueOf(count), null, null, null);
+        shopCarPresenter.editCar(goodsId, String.valueOf(count), null, null, null);
     }
 
     @Override
     public void OnChangeSku(String goodsId, String skuId) {
-        carEditPresenter.editCar(goodsId, null, skuId, null, null);
+        shopCarPresenter.editCar(goodsId, null, skuId, null, null);
     }
 
     @Override
     public void OnChangeCheck(String goodsId, String isCheck) {
-        carEditPresenter.editCar(goodsId, null, null, null, isCheck);
+        shopCarPresenter.editCar(goodsId, null, null, null, isCheck);
     }
 
     @Override
@@ -229,12 +243,25 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+        shopCarPresenter.getVoucher(voucher.voucher_id);
+    }
+
+    @Override
+    public void OnChangePromotion(String goodsId, String promoId) {
+        shopCarPresenter.editCar(goodsId, null, null, promoId, null);
+    }
+
+    @Override
+    public void OnStoreCheck(String storeId, String isSelect) {
+        shopCarPresenter.checkCartGoods(storeId, isSelect);
     }
 
     @Override
     public void OnEditEntity(ShoppingCarEntity shoppingCarEntity) {
-        LogUtil.httpLogW("OnEditEntity");
         this.mCarEntity = shoppingCarEntity;
         String totalPrice = getString(R.string.total);
         tv_total_price.setText(String.format(totalPrice, mCarEntity.total_amount));
@@ -246,6 +273,19 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
         btn_total_complete.setText(String.format(totalCount, mCarEntity.total_count));
 
         shopCarStoreAdapter.setEnables(mCarEntity.enabled, editMap);
+        shopCarStoreAdapter.notifyDataSetChanged();
+
+        isCheckAll = getCheckAll();
+        if ("1".equals(isCheckAll)) {
+            miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        } else {
+            miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
+    }
+
+    @Override
+    public void OnGetVoucher(GoodsDeatilEntity.Voucher voucher) {
+
     }
 
     public class FooterHolderView {
@@ -258,6 +298,18 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, I
         public FooterHolderView(View view) {
             mUnbinder = ButterKnife.bind(this, view);
         }
+    }
+
+    public String getCheckAll() {
+        if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {
+            return "0";
+        }
+        for (int i = 0; i < mCarEntity.enabled.size(); i++) {
+            if ("0".equals(mCarEntity.enabled.get(i).all_check)) {
+                return "0";
+            }
+        }
+        return "1";
     }
 
     @Override

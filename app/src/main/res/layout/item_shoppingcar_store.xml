@@ -9,7 +9,7 @@
         android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
@@ -19,14 +19,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/white"
-        android:paddingLeft="10dp">
+        android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_store_select"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:padding="10dp"
             android:src="@mipmap/img_shoppingcar_selected_n" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12.5dp"
+            android:layout_marginLeft="2.5dp"
             android:layout_toRightOf="@+id/miv_store_select"
             android:drawableLeft="@mipmap/img_shoppingcar_shop"
             android:drawablePadding="4dp"

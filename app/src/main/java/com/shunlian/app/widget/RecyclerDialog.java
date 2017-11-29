@@ -30,7 +30,7 @@ import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
  * Created by Administrator on 2017/11/10.
  */
 
-public class RecyclerDialog extends Dialog {
+public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSelectCallBack {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -51,6 +51,7 @@ public class RecyclerDialog extends Dialog {
     private AttributeAdapter attributeAdapter;
     private VoucherAdapter voucherAdapter;
     private int recycleHeight;
+    private OnVoucherCallBack mCallBack;
 
     public RecyclerDialog(Context context) {
         this(context, R.style.MyDialogStyleBottom);
@@ -67,19 +68,17 @@ public class RecyclerDialog extends Dialog {
 
     private void initViews() {
         //设置当前dialog宽高
+        recycleHeight = getDeviceHeight(mContext) * 3 / 5;
         Window win = getWindow();
         WindowManager.LayoutParams lp = win.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = recycleHeight;
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
 
-        recycleHeight = getDeviceHeight(mContext) * 1 / 2;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        recycler_list.setNestedScrollingEnabled(false);
         recycler_list.setLayoutManager(linearLayoutManager);
-        recycler_list.setLayoutParams(params);
-
 
         miv_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +125,22 @@ public class RecyclerDialog extends Dialog {
         }
         dialog_title.setText(mContext.getResources().getText(R.string.select_voucher));
         recycler_list.setAdapter(voucherAdapter);
-
+        voucherAdapter.setOnVoucherSelectCallBack(this);
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
+    }
+
+    @Override
+    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+        if (mCallBack != null) {
+            mCallBack.OnVoucherSelect(voucher);
+        }
+    }
+
+    public void setOnVoucherCallBack(OnVoucherCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnVoucherCallBack {
+        void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
     }
 }

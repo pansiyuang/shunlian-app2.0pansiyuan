@@ -24,6 +24,7 @@ import static com.shunlian.app.utils.Common.firstSmallText;
 public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Voucher> {
     private List<GoodsDeatilEntity.Voucher> mData;
     private Context mContext;
+    private OnVoucherSelectCallBack mCallBack;
 
     public VoucherAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Voucher> lists) {
         super(context, isShowFooter, lists);
@@ -43,8 +44,8 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        GoodsDeatilEntity.Voucher voucher = mData.get(position);
-        VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
+        final GoodsDeatilEntity.Voucher voucher = mData.get(position);
+        final VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
         firstSmallText(voucherViewHolder.tv_voucher_price, price, 26);
 
@@ -66,6 +67,14 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
+        voucherViewHolder.tv_draw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallBack != null) {
+                    mCallBack.OnVoucherSelect(voucher);
+                }
+            }
+        });
     }
 
     public class VoucherViewHolder extends BaseRecyclerViewHolder {
@@ -92,5 +101,13 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         public VoucherViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnVoucherSelectCallBack(OnVoucherSelectCallBack callBack) {
+        this.mCallBack = callBack;
+    }
+
+    public interface OnVoucherSelectCallBack {
+        void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
     }
 }

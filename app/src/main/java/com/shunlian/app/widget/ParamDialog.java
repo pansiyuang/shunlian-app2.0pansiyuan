@@ -188,7 +188,12 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-                checkLinkmap();
+                GoodsDeatilEntity.Sku s = checkLinkmap(true);
+
+                if (s != null && selectCallBack != null) {
+                    selectCallBack.onSelectComplete(s, currentCount);
+                    dismiss();
+                }
                 break;
             case R.id.iv_cancel:
                 dismiss();
@@ -230,6 +235,14 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                         paramTagAdapter.itemSelected(position, true);
                         if (linkedHashMap != null) {
                             linkedHashMap.put(mSpecs.name, values);
+                        }
+                        if (checkLinkmap(false) != null) {
+                            GoodsDeatilEntity.Sku s = checkLinkmap(false);
+
+                            GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
+                            dia_tv_price.setText("¥" + s.price);
+                            totalStock = Integer.valueOf(s.stock);
+                            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
                         }
                     }
                 }
@@ -338,12 +351,13 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         }
     }
 
+
     /**
      * 检查是否点击所有的item
      */
-    public void checkLinkmap() {
+    public GoodsDeatilEntity.Sku checkLinkmap(boolean isComplete) {
         if (linkedHashMap == null) {
-            return;
+            return null;
         }
         mCurrentValues.clear();
         //检查某项是否点击了
@@ -351,8 +365,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
             if (e.getValue() == null) {
-                Common.staticToast("请选择" + e.getKey());
-                return;
+                if (isComplete) {
+                    Common.staticToast("请选择" + e.getKey());
+                }
+                return null;
             }
             mCurrentValues.add((GoodsDeatilEntity.Values) e.getValue());
         }
@@ -372,23 +388,16 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 result.append("_");
             }
         }
-        LogUtil.httpLogW("result:" + result.toString());
         //从sku中遍历获取sku
-        GoodsDeatilEntity.Sku s = null;
         if (mSku == null || mSku.size() == 0) {
-            return;
+            return null;
         }
         for (int i = 0; i < mSku.size(); i++) {
             if (result.toString().equals(mSku.get(i).specs)) {
-                s = mSku.get(i);
-                break;
+                return mSku.get(i);
             }
         }
-
-        if (s != null && selectCallBack != null) {
-            selectCallBack.onSelectComplete(s, currentCount);
-            dismiss();
-        }
+        return null;
     }
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {

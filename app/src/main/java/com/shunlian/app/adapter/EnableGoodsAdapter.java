@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.ChangePreferDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
 
@@ -28,20 +28,21 @@ import butterknife.BindView;
 
 public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
     private List<GoodsDeatilEntity.Goods> mGoods;
+    private ShoppingCarEntity.Enabled.Promotion mPromotion;
+    private String promotionTitle;
     private Context mContext;
     private boolean isEdit;
     private boolean isEditAll;
+    private ChangePreferDialog preferDialog;
     private ParamDialog paramDialog;
     private OnGoodsChangeListener onGoodsChangeListener;
 
-    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
+    public EnableGoodsAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, ShoppingCarEntity.Enabled.Promotion promotion) {
         super(context, isShowFooter, lists);
         this.mGoods = lists;
+        this.mPromotion = promotion;
         this.mContext = context;
-    }
-
-    public void setData(List<GoodsDeatilEntity.Goods> list) {
-        this.mGoods = list;
+        this.promotionTitle = mPromotion.prom_title;
     }
 
     @Override
@@ -78,6 +79,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         stock = Integer.valueOf(goods.stock);
         enableViewHolder.tv_goods_param.setText(goods.sku);
         enableViewHolder.tv_edit_param.setText(goods.sku);
+        enableViewHolder.tv_discount.setText(promotionTitle);
         enableViewHolder.tv_goods_attribute.setText(goods.sku);
         enableViewHolder.tv_goods_num.setText("x" + goods.qty);
         enableViewHolder.tv_goods_count.setText(goods.qty);
@@ -127,7 +129,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             enableViewHolder.miv_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
 
-        if (!isEdit) {
+        if (!isEdit) { //编辑状态
             enableViewHolder.rl_goods_param.setVisibility(View.VISIBLE);
             enableViewHolder.tv_goods_num.setVisibility(View.VISIBLE);
             enableViewHolder.ll_goods_edit.setVisibility(View.GONE);
@@ -137,7 +139,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             enableViewHolder.ll_goods_edit.setVisibility(View.VISIBLE);
             enableViewHolder.tv_edit_param.setVisibility(View.GONE);
             enableViewHolder.tv_edit_del.setVisibility(View.VISIBLE);
-            if (!isEditAll) {
+            if (!isEditAll) {  //编辑所有商品
                 enableViewHolder.tv_edit_param.setVisibility(View.GONE);
                 enableViewHolder.rl_goods_parm.setVisibility(View.VISIBLE);
             } else {
@@ -155,13 +157,38 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
                     @Override
                     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-                        enableViewHolder.tv_goods_attribute.setText(sku.name);
                         if (onGoodsChangeListener != null) {
                             onGoodsChangeListener.OnChangeSku(goods.cart_id, sku.id);
                         }
                     }
                 });
                 paramDialog.show();
+            }
+        });
+
+        if (goods.all_prom == null || goods.all_prom.size() == 0) {
+            enableViewHolder.rl_prefer.setEnabled(false);
+            enableViewHolder.tv_edit_promo.setVisibility(View.INVISIBLE);
+        } else {
+            enableViewHolder.rl_prefer.setEnabled(true);
+            enableViewHolder.tv_edit_promo.setVisibility(View.VISIBLE);
+        }
+
+        enableViewHolder.rl_prefer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (preferDialog == null) {
+                    preferDialog = new ChangePreferDialog(mContext, goods.all_prom);
+                }
+                preferDialog.setOnPreferSelectCallBack(new ChangePreferDialog.OnPreferSelectCallBack() {
+                    @Override
+                    public void onSelect(GoodsDeatilEntity.AllProm allProm) {
+                        if (onGoodsChangeListener != null) {
+                            onGoodsChangeListener.OnChangePromotion(goods.cart_id, allProm.prom_id);
+                        }
+                    }
+                });
+                preferDialog.show();
             }
         });
     }
@@ -215,6 +242,18 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @BindView(R.id.tv_goods_min)
         TextView tv_goods_min;
 
+        @BindView(R.id.rl_prefer)
+        RelativeLayout rl_prefer;
+
+        @BindView(R.id.tv_prefer)
+        TextView tv_prefer;
+
+        @BindView(R.id.tv_discount)
+        TextView tv_discount;
+
+        @BindView(R.id.tv_edit_promo)
+        TextView tv_edit_promo;
+
         public EnableViewHolder(View itemView) {
             super(itemView);
         }
@@ -230,5 +269,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         void OnChangeSku(String goodsId, String skuId);
 
         void OnChangeCheck(String goodsId, String isCheck);
+
+        void OnChangePromotion(String goods, String promoId);
     }
 }

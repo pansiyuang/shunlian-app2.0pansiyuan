@@ -21,16 +21,12 @@ public class ShoppingCarEntity {
     public static class Enabled {
         public String store_name;                 //店铺名字
         public String store_id;                   //店铺id
-        public List<Voucher> store_voucher;       //店铺优惠券
+        public List<GoodsDeatilEntity.Voucher> store_voucher;       //店铺优惠券
         public String all_check;                  //是否选择  1是已经勾选  0是未勾选
         public boolean isEditGood;                    //编辑
         public boolean isEditAll;                 //编辑所有项目
         public List<Promotion> promotion;         //是否选择
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Voucher {
-
-        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Promotion {
