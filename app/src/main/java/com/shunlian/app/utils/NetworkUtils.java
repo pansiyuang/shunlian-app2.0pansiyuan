@@ -28,7 +28,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
 /**
  * Created by zhang on 2017/4/21 17 : 08.
@@ -190,7 +189,7 @@ public class NetworkUtils {
                     }
                 }
             }
-            Toast.makeText(activity, "网络连接失败，请检查您的网络", Toast.LENGTH_SHORT).show();
+            Common.staticToast("网络连接失败，请检查您的网络");
         }
         return false;
     }
