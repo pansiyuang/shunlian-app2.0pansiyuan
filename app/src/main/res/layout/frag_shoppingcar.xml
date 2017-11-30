@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_ash">
 
     <include
         android:id="@+id/layout_title"
@@ -28,13 +29,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="10dp">
+        android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_total_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
             android:layout_centerVertical="true"
+            android:padding="10dp"
             android:src="@mipmap/img_shoppingcar_selected_n" />
 
         <RelativeLayout

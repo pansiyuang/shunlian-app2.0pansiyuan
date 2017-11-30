@@ -308,4 +308,31 @@ public interface ApiService {
      */
     @POST("order/buy")
     Call<BaseEntity<EmptyEntity>> orderBuy(@Body RequestBody body);
+
+    /**
+     * 修改购物车
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/edit")
+    Call<BaseEntity<ShoppingCarEntity>> carEdit(@Body RequestBody body);
+
+    /**
+     * 购物车多选
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/checkcartgoods")
+    Call<BaseEntity<ShoppingCarEntity>> checkCartGoods(@Body RequestBody body);
+
+    /**
+     * 优惠券领取
+     *
+     * @param body
+     * @return
+     */
+    @POST("/voucher/getVoucher")
+    Call<BaseEntity<GoodsDeatilEntity.Voucher>> getVoucher(@Body RequestBody body);
 }

@@ -11,9 +11,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.RecyclerDialog;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,11 +34,19 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     private List<ShoppingCarEntity.Enabled> mStores;
     private EnableGoodsAdapter goodsAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private OnEnableChangeListener mListener;
+    private HashMap<String, Boolean> mMap;
+    private RecyclerDialog recyclerDialog;
 
     public ShopCarStoreAdapter(Context context, List<ShoppingCarEntity.Enabled> enableds) {
         this.mContext = context;
         layoutInflater = LayoutInflater.from(mContext);
         this.mStores = enableds;
+    }
+
+    public void setEnables(List<ShoppingCarEntity.Enabled> datas, HashMap<String, Boolean> mLink) {
+        this.mStores = datas;
+        this.mMap = mLink;
     }
 
     //  获得父类的
@@ -91,11 +103,17 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             parentViewHolder = (ParentViewHolder) view.getTag();
         }
 
+        if (i == 0) {//第0项不显示分割线
+            parentViewHolder.view_line.setVisibility(View.GONE);
+        } else {
+            parentViewHolder.view_line.setVisibility(View.VISIBLE);
+        }
+
         final ShoppingCarEntity.Enabled enabled = mStores.get(i);
         if ("1".equals(enabled.all_check)) {
-            parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
-        } else {
             parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+        } else {
+            parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
         parentViewHolder.tv_store.setText(enabled.store_name);
 
@@ -105,18 +123,68 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
                 //领劵
             }
         });
+        if (mMap != null && mMap.size() != 0 && mMap.containsKey(enabled.store_id)) {
+            enabled.isEditGood = mMap.get(enabled.store_id);
+        }
+        if (enabled.isEditAll) {
+            parentViewHolder.tv_edit.setVisibility(View.GONE);
+        } else {
+            parentViewHolder.tv_edit.setVisibility(View.VISIBLE);
+        }
+
+        if (!enabled.isEditGood) { //完成
+            parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.edit));
+        } else { //编辑
+            parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.RegisterTwoAct_finish));
+        }
+
         parentViewHolder.tv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String str = mContext.getResources().getString(R.string.edit);
-                if (!enabled.isEdit) { //完成
+                if (!enabled.isEditGood) { //完成
                     parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.RegisterTwoAct_finish));
-                    enabled.isEdit = true;
+                    enabled.isEditGood = true;
                 } else { //编辑
-                    parentViewHolder.tv_edit.setText(str);
-                    enabled.isEdit = false;
+                    parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.edit));
+                    enabled.isEditGood = false;
                 }
-                notifyDataSetChanged();
+                if (mListener != null) {
+                    mListener.OnChangeEdit(enabled.store_id, enabled.isEditGood);
+                }
+            }
+        });
+
+        parentViewHolder.miv_store_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("1".equals(enabled.all_check)) {
+                    enabled.all_check = "0";
+                    parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+                } else {
+                    enabled.all_check = "1";
+                    parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                }
+                if (mListener != null) {
+                    mListener.OnStoreCheck(enabled.store_id, enabled.all_check);
+                }
+            }
+        });
+        parentViewHolder.tv_get_voucher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (recyclerDialog == null) {
+                    recyclerDialog = new RecyclerDialog(mContext);
+                }
+                recyclerDialog.setVoucheres(enabled.store_voucher);
+                recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
+                    @Override
+                    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+                        if (mListener != null) {
+                            mListener.OnVoucherSelect(voucher);
+                        }
+                    }
+                });
+                recyclerDialog.show();
             }
         });
         return view;
@@ -126,6 +194,8 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         ChildViewHolder childViewHolder;
+        ShoppingCarEntity.Enabled enabled = mStores.get(i);
+        ShoppingCarEntity.Enabled.Promotion promotion = enabled.promotion.get(i1);
         if (view == null) {
             view = layoutInflater.inflate(R.layout.item_shoppingcar_promotion, viewGroup, false);
             childViewHolder = new ChildViewHolder(view);
@@ -133,19 +203,47 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) view.getTag();
         }
-        ShoppingCarEntity.Enabled.Promotion promotion = mStores.get(i).promotion.get(i1);
+
         childViewHolder.tv_full_min.setText(promotion.prom_label);
         childViewHolder.tv_content.setText(promotion.hint);
-        childViewHolder.tv_prefer.setText(promotion.title_label);
-        childViewHolder.tv_discount.setText(promotion.prom_title);
 
-        goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods);
+        goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods, promotion);
         linearLayoutManager = new LinearLayoutManager(mContext);
         childViewHolder.recycler_goods.setLayoutManager(linearLayoutManager);
         childViewHolder.recycler_goods.setNestedScrollingEnabled(false);
         childViewHolder.recycler_goods.setAdapter(goodsAdapter);
+        goodsAdapter.setOnGoodsChangeListener(new EnableGoodsAdapter.OnGoodsChangeListener() {
+            @Override
+            public void OnChangeCount(String goodsId, int count) {
+                if (mListener != null) {
+                    mListener.OnChangeCount(goodsId, count);
+                }
+            }
 
-        goodsAdapter.setEdit(mStores.get(i).isEdit);
+            @Override
+            public void OnChangeSku(String goodsId, String skuId) {
+                if (mListener != null) {
+                    mListener.OnChangeSku(goodsId, skuId);
+                }
+            }
+
+            @Override
+            public void OnChangeCheck(String goodsId, String isCheck) {
+                if (mListener != null) {
+                    mListener.OnChangeCheck(goodsId, isCheck);
+                }
+            }
+
+            @Override
+            public void OnChangePromotion(String goods, String promoId) {
+                if (mListener != null) {
+                    mListener.OnChangePromotion(goods, promoId);
+                }
+            }
+        });
+
+        goodsAdapter.setEdit(enabled.isEditGood);
+        goodsAdapter.setEditAll(enabled.isEditAll);
         return view;
     }
 
@@ -168,6 +266,9 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.tv_edit)
         TextView tv_edit;
 
+        @BindView(R.id.view_line)
+        View view_line;
+
         public ParentViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
         }
@@ -186,17 +287,30 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.recycler_goods)
         RecyclerView recycler_goods;
 
-        @BindView(R.id.tv_prefer)
-        TextView tv_prefer;
-
-        @BindView(R.id.tv_discount)
-        TextView tv_discount;
-
-        @BindView(R.id.rl_prefer)
-        RelativeLayout rl_prefer;
 
         public ChildViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public void setOnEnableChangeListener(OnEnableChangeListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnEnableChangeListener {
+
+        void OnChangeCount(String goodsId, int count);
+
+        void OnChangeSku(String goodsId, String skuId);
+
+        void OnChangeCheck(String goodsId, String isCheck);
+
+        void OnChangeEdit(String storeId, boolean isEdit);
+
+        void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
+
+        void OnChangePromotion(String goodsId, String promoId);
+
+        void OnStoreCheck(String storeId, String isSelect);
     }
 }
