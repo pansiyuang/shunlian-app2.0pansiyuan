@@ -79,6 +79,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("商品详情");
         items.add("店铺");
         items.add("购物车");
+        items.add("确认订单");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -107,6 +108,8 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);
+                        break;
+                    case 4:
                         break;
                 }
             }

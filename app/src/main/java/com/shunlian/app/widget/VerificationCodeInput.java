@@ -63,6 +63,7 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
 
             editText.setOnKeyListener(this);
             editText.setTag(i);
+            editText.setTextSize(20);
             editText.setTextColor(Color.BLACK);
             editText.setLayoutParams(layoutParams);
             editText.setGravity(Gravity.CENTER);

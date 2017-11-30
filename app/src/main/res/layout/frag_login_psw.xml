@@ -24,7 +24,6 @@
         android:maxLength="16"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:textSize="20sp"
         android:gravity="start|center_vertical"
         app:hintText="@string/LoginPswFrg_qsrsjh" />
 
@@ -49,7 +48,6 @@
             android:layout_toLeftOf="@+id/iv_hidden_psw"
             android:inputType="textPassword"
             android:maxLength="16"
-            android:textSize="20sp"
             android:gravity="start|center_vertical"
             app:hintText="@string/LoginPswFrg_qsrmm" />
 

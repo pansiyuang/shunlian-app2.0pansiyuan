@@ -7,6 +7,7 @@
     <color name="shape1">#5d8df7</color>
     <color name="shape2">#5EB9F8</color>
     <color name="shape3">#5CC2F8</color>
+    <color name="bg_toast">#a6000000</color>
 
 
     <!-- title颜色-->
@@ -112,6 +113,9 @@
     <color name="value_EFEEEE">#EFEEEE</color>
     <color name="value_FEF0F3">#FEF0F3</color>
     <color name="my_orange_red">#FB0030</color>
+    <color name="value_FEFDEB">#FEFDEB</color>
+    <color name="value_FA">#FAFAFA</color>
+    <color name="value_65alp">#92000000</color>
 </resources>
 
 

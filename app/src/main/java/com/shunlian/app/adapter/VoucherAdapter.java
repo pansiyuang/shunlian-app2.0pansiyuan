@@ -77,7 +77,7 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         });
     }
 
-    public class VoucherViewHolder extends BaseRecyclerViewHolder {
+    public class VoucherViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.ll_voucher)
         RelativeLayout ll_voucher;
@@ -100,6 +100,14 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
         public VoucherViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 

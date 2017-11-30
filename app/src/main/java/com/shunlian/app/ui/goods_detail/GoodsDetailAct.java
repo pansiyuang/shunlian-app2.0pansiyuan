@@ -28,7 +28,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.SideslipBaseActivity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -138,6 +138,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
+    private int num;
+    private boolean isAddcart = false;//是否加入购物车
+    private boolean isNowBuy = false;//是否立即购买
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -160,6 +163,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mll_detail.setOnClickListener(this);
         mll_comment.setOnClickListener(this);
         miv_close.setOnClickListener(this);
+        mtv_buy_immediately.setOnClickListener(this);
     }
 
     @Override
@@ -379,7 +383,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void delFollowStore(){
         goodsDetailPresenter.delFollowStore(store_id);
     }
-    private int num;
+
     @Override
     public void onClick(View v) {
 //        if (FastClickListener.isClickable(this)){
@@ -387,8 +391,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //        }
         switch (v.getId()){
             case R.id.mrl_add_car:
+                isAddcart = true;
                 if (sku == null){
-                    Common.staticToast(getString(R.string.select_goods_Specifications));
+                    goodsDeatilFrag.showParamDialog();
                 }else {
                     goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
                 }
@@ -423,6 +428,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
             case R.id.miv_close:
                 backOrder();
+                break;
+            case R.id.mtv_buy_immediately:
+                isNowBuy = true;
+                if (sku == null){
+                    goodsDeatilFrag.showParamDialog();
+                }else {
+                    ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+                }
                 break;
         }
     }
@@ -691,5 +704,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
         this.sku = sku;
         goodsCount = count;
+        if (isAddcart){
+            isAddcart = false;
+            goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
+        }
+
+        if (isNowBuy){
+            isNowBuy = false;
+            ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+        }
     }
 }

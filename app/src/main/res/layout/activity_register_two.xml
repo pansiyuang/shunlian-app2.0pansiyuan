@@ -91,7 +91,6 @@
                 android:layout_marginRight="25dp"
                 android:layout_marginTop="50dp"
                 android:text="1234"
-                android:textSize="40sp"
                 ver:box="4"
                 ver:padding="10dp" />
 
@@ -103,12 +102,14 @@
                 <com.shunlian.app.widget.MyEditText
                     android:id="@+id/et_pwd"
                     style="@style/editText_attribute"
+                    ver:hintTextSize="15"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="25dp"
                     android:layout_marginTop="25dp"
                     android:drawableBottom="@drawable/edittext_line"
                     android:drawablePadding="10dp"
                     ver:hintText="@string/RegisterTwoAct_qsrxmm"
+                    android:textSize="20sp"
                     android:inputType="textPassword"
                     android:gravity="start|center_vertical"
                     android:maxLength="16"/>
@@ -137,6 +138,7 @@
                 <com.shunlian.app.widget.MyEditText
                     android:id="@+id/et_rpwd"
                     style="@style/editText_attribute"
+                    ver:hintTextSize="15"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="25dp"
                     android:layout_marginTop="25dp"
@@ -144,6 +146,7 @@
                     android:drawablePadding="10dp"
                     ver:hintText="@string/RegisterTwoAct_qcxsrxmm"
                     android:inputType="textPassword"
+                    android:textSize="20sp"
                     android:gravity="start|center_vertical"
                     android:maxLength="16"/>
 
@@ -172,7 +175,8 @@
                 android:layout_marginTop="25dp"
                 android:drawableBottom="@drawable/edittext_line"
                 android:drawablePadding="10dp"
-                android:textSize="15sp"
+                android:textSize="20sp"
+                ver:hintTextSize="15"
                 android:gravity="start|center_vertical"
                 ver:hintText="@string/RegisterTwoAct_qsrndnc"/>
 

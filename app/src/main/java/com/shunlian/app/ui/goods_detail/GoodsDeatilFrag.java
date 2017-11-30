@@ -11,8 +11,8 @@ import com.shunlian.app.adapter.GoodsDetailAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     MyImageView miv_top;
     private LinearLayoutManager manager;
     private int totalDy;
-    private FootprintDialog footprintDialog;
     private int screenWidth;
+    private GoodsDetailAdapter goodsDetailAdapter;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -141,10 +141,22 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         pool.setMaxRecycledViews(0,5);
 
         ArrayList<String> pics = goodsDeatilEntity.detail.pics;
-        recy_view_root.setAdapter(new GoodsDetailAdapter(baseActivity, false,goodsDeatilEntity,pics));
+        goodsDetailAdapter = new GoodsDetailAdapter(baseActivity, false, goodsDeatilEntity, pics);
+        recy_view_root.setAdapter(goodsDetailAdapter);
 
     }
 
+    /**
+     * 显示属性选择框
+     */
+    public void showParamDialog(){
+        if (goodsDetailAdapter != null){
+            ParamDialog paramDialog = goodsDetailAdapter.paramDialog;
+            if (paramDialog != null){
+                paramDialog.show();
+            }
+        }
+    }
 
     @Override
     public void onClick(View v) {

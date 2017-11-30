@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--title-->
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_title"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="确认订单"
+            android:textColor="@color/new_text"
+            android:textSize="18sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <!--bottom-->
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:rl_control_adapter="true"
+        app:rl_control_height="100">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray_two" />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            app:ll_control_adapter="true"
+            app:ll_control_height="100"
+            app:ll_margin_top="1">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计："
+                android:textColor="@color/new_text"
+                android:textSize="14sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_left="20" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="￥1447.5"
+                android:textColor="@color/pink_color"
+                android:textSize="14sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_left="30" />
+
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="去支付"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:tv_control_adapter="true"
+            app:tv_control_height="100"
+            app:tv_control_width="210" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <!--content-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mrl_bottom"
+        android:layout_below="@+id/mrl_title" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mrl_bottom"
+        android:background="@color/value_FEFDEB"
+        android:maxLines="2"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7.5dp"
+        android:text="送至：浙江省 杭州市 滨江区 江陵路1916号星耀城二期29楼705浙江顺联网络科技有限公司"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        android:visibility="gone" />
+</com.shunlian.app.widget.MyRelativeLayout>

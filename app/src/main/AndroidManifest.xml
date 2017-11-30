@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
@@ -95,6 +96,13 @@
         <activity android:name=".ui.store.StoreSortAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.goods_detail.ComboDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:name=".ui.confirm_order.ConfirmOrderAct" />
     </application>
 
 </manifest>

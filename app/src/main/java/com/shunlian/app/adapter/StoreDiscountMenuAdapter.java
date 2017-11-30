@@ -41,7 +41,8 @@ public class StoreDiscountMenuAdapter extends BaseRecyclerAdapter<StorePromotion
             TwoHolder twoHolder = (TwoHolder) holder;
             StorePromotionGoodsListEntity.Lable data = datas.get(position);
             twoHolder.mtv_name.setText(data.name);
-            twoHolder.view.setTag(R.id.tag_store_discount_menu,data.promotionId);
+            twoHolder.view.setTag(R.id.tag_store_discount_menu_id,data.promotionId);
+            twoHolder.view.setTag(R.id.tag_store_discount_menu_type,data.type);
             if (selectPosition==position){
                 LogUtil.augusLogW("yxfdf--"+position);
                 twoHolder.mtv_name.setTextColor(context.getResources().getColor(R.color.white));

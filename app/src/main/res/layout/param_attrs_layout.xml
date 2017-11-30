@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_params"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableRight="@mipmap/img_common_viewarrow_1"
