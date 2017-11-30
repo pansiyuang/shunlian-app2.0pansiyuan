@@ -2,6 +2,7 @@ package com.shunlian.app.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,13 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +81,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private Unbinder mUnbinder;
     private FooterHolderView footerHolderView;
     private String isCheckAll; //用来记录是否全选了
-    private String orderGoodsIds; //提交订单的id
+    private List<String> orderIdList;
+    private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -175,6 +179,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         } else {
             miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
+
+        orderIdList = mCarEntity.checked_cartId;
     }
 
 
@@ -196,6 +202,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 shopCarStoreAdapter.notifyDataSetChanged();
                 break;
             case R.id.btn_total_complete:
+                orderGoodsIds.setLength(0);
+                if (orderIdList != null && orderIdList.size() != 0) {
+                    for (int i = 0; i < orderIdList.size(); i++) {
+                        orderGoodsIds.append(orderIdList.get(i));
+                        if (i != orderIdList.size() - 1) {
+                            orderGoodsIds.append(",");
+                        }
+                    }
+                    LogUtil.httpLogW("orderGoodsIds.toString():" + orderGoodsIds.toString());
+                    ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString());
+                }
                 break;
             case R.id.tv_clear_disable:
                 break;
@@ -281,6 +298,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         } else {
             miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
+        orderIdList = mCarEntity.checked_cartId;
     }
 
     @Override
