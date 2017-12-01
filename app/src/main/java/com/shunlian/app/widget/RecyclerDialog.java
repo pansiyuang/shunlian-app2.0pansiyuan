@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -157,7 +156,7 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
     public void setActivity(List<GoodsDeatilEntity.ActivityDetail> full_cut,
                             List<GoodsDeatilEntity.ActivityDetail> full_discount,
                             List<GoodsDeatilEntity.ActivityDetail> buy_gift){
-
+        layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         if (full_cut != null && full_cut.size() > 0) {
             fullCut = full_cut.size();
         }
@@ -192,6 +191,11 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
                 }
             }
         });
+    }
+
+    public void setPromotionDetail(){
+        layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+
     }
 
     @Override

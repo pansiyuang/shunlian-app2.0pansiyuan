@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -307,7 +308,7 @@ public interface ApiService {
      * @return
      */
     @POST("order/buy")
-    Call<BaseEntity<EmptyEntity>> orderBuy(@Body RequestBody body);
+    Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
 
     /**
      * 修改购物车
@@ -335,4 +336,12 @@ public interface ApiService {
      */
     @POST("/voucher/getVoucher")
     Call<BaseEntity<GoodsDeatilEntity.Voucher>> getVoucher(@Body RequestBody body);
+
+    /**
+     * 购物车进入确认订单页
+     * @param body
+     * @return
+     */
+    @POST("order/confirm")
+    Call<BaseEntity<ConfirmOrderEntity>> orderConfirm(@Body RequestBody body);
 }

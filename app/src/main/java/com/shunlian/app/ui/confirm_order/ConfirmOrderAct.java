@@ -9,13 +9,16 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ConfirmOrderAdapter;
+import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyTextView;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -81,19 +84,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
         String sku_id = intent.getStringExtra("sku_id");
         ConfirmOrderPresenter confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
         if (!TextUtils.isEmpty(cart_ids)){
-
+            confirmOrderPresenter.orderConfirm(cart_ids,"110105");
         }else {
             confirmOrderPresenter.orderBuy(goods_id,qty,sku_id);
         }
-
-
-
-        manager = new LinearLayoutManager(this);
-        recy_view.setLayoutManager(manager);
-        int space = TransformUtil.dip2px(this, 10);
-        recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getResources().getColor(R.color.white_ash)));
-        recy_view.setAdapter(new ConfirmOrderAdapter(this,false, DataUtil.getListString(3,"df")));
     }
 
     @Override
@@ -104,5 +98,22 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     @Override
     public void showDataEmptyView(int rquest_code) {
 
+    }
+
+    /**
+     * 订单页所有商品
+     *
+     * @param enabled
+     * @param disabled
+     */
+    @Override
+    public void confirmOrderAllGoods(List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled) {
+        manager = new LinearLayoutManager(this);
+        recy_view.setLayoutManager(manager);
+        int space = TransformUtil.dip2px(this, 10);
+        recy_view.addItemDecoration(new VerticalItemDecoration(space,
+                0,0,getResources().getColor(R.color.white_ash)));
+        ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled,disabled);
+        recy_view.setAdapter(df);
     }
 }

@@ -118,7 +118,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }else if (position == 7){
             return COUPON_LAYOUT;
         }else if (position == 8){
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 return super.getItemViewType(position);
             }else {
@@ -166,7 +170,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     @Override
     public int getItemCount() {
-        String text = mGoodsEntity.detail.text;
+        GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+        String text = null;
+        if (detail != null){
+            text = detail.text;
+        }
         if (TextUtils.isEmpty(text)){
             return super.getItemCount() + ITEM_DIFFERENT - 1;
         }else {
@@ -221,7 +229,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof RichTextHolder){
             RichTextHolder mHolder = (RichTextHolder) holder;
             MyTextView textView = (MyTextView) mHolder.itemView;
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 textView.setVisibility(View.GONE);
             }else {
@@ -601,7 +613,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof PicListHolder){
             PicListHolder mHolder = (PicListHolder) holder;
             String s = null;
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 s = lists.get(position - ITEM_DIFFERENT + 1);
             }else {

@@ -72,24 +72,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         initListener();
         initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkBroadcast = new NetworkBroadcast();
-        registerReceiver(networkBroadcast, filter);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkBroadcast = new NetworkBroadcast();
+        registerReceiver(networkBroadcast, filter);
         networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
 
             @Override
             public void updateUI(boolean isShow) {
                 showPopup(isShow);
-//                Uri packageURI = Uri.parse("package:" + getPackageName());
-//                Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
-////                Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
-//                startActivity(intent);
             }
         });
     }

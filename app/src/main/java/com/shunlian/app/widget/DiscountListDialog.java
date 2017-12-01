@@ -15,9 +15,11 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
-import com.shunlian.app.utils.DataUtil;
+import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +43,7 @@ public class DiscountListDialog extends Dialog {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
     private int recycleHeight;
+    private int currentPosition = 0;
 
 
     public DiscountListDialog(Context context) {
@@ -82,22 +85,38 @@ public class DiscountListDialog extends Dialog {
         });
     }
 
-    public void setGoodsDiscount(){
+    public void setGoodsDiscount(List<ConfirmOrderEntity.Voucher> vouchers){
         mtv_title.setText("商品优惠券");
-        int space = TransformUtil.dip2px(mContext, 0.5f);
-        recycler_list.addItemDecoration(new VerticalItemDecoration(space,0,0,
-                mContext.getResources().getColor(R.color.bg_gray_two)));
-        SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<String>(mContext,
-                android.R.layout.simple_list_item_1, DataUtil.getListString(5,"ff")) {
+        ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
+        voucher.title = "不使用优惠券";
+        voucher.voucher_id = "no_0";
+        vouchers.add(voucher);
+        final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.Voucher>(mContext,
+                R.layout.item_changeprefer, vouchers) {
 
             @Override
-            public void convert(SimpleViewHolder holder, String s, int position) {
-                TextView view = holder.getView(android.R.id.text1);
-                view.setText(s);
+            public void convert(SimpleViewHolder holder, ConfirmOrderEntity.Voucher s, int position) {
+                TextView tv_prefer = holder.getView(R.id.tv_prefer);
+                tv_prefer.setText(s.title);
+                MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
+                holder.addOnClickListener(R.id.miv_prefer_select);
+                if (currentPosition == position) {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                } else {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+                }
             }
         };
         int space1 = TransformUtil.dip2px(mContext, 10);
         recycler_list.setPadding(space1,0,space1,0);
         recycler_list.setAdapter(recyclerAdapter);
+
+        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                currentPosition = position;
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
