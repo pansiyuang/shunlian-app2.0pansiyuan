@@ -99,7 +99,7 @@ public class DiscountListDialog extends Dialog {
                 TextView tv_prefer = holder.getView(R.id.tv_prefer);
                 tv_prefer.setText(s.title);
                 MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
-                holder.addOnClickListener(R.id.miv_prefer_select);
+                holder.addOnClickListener(R.id.rl_item);
                 if (currentPosition == position) {
                     miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
                 } else {
