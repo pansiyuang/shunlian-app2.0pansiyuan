@@ -15,6 +15,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.banner.StoreKanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,7 +237,17 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE7:
                 if (holder instanceof SevenHolder) {
                     SevenHolder sevenHolder = (SevenHolder) holder;
-
+                    List<StoreIndexEntity.Body.Datas> mdatas=datas.get(position).data;
+                    if (0==position){
+                        sevenHolder.view_lineOne.setVisibility(View.VISIBLE);
+                        sevenHolder.view_lineTwo.setVisibility(View.GONE);
+                    }else {
+                        sevenHolder.view_lineOne.setVisibility(View.GONE);
+                        sevenHolder.view_lineTwo.setVisibility(View.VISIBLE);
+                    }
+                   if (mdatas!=null&&mdatas.size()>0){
+                       sevenHolder.storeKanner.setBanners(mdatas,sevenHolder.mtv_number,sevenHolder.mtv_seven);
+                   }
                 }
                 break;
             case TYPE8:
@@ -376,11 +387,17 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     }
 
     class SevenHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_seven;
+        private StoreKanner storeKanner;
+        private MyTextView mtv_seven,mtv_number;
+        private View view_lineOne,view_lineTwo;
 
         SevenHolder(View itemView) {
             super(itemView);
+            storeKanner = (StoreKanner) itemView.findViewById(R.id.storeKanner);
             mtv_seven = (MyTextView) itemView.findViewById(R.id.mtv_seven);
+            mtv_number = (MyTextView) itemView.findViewById(R.id.mtv_number);
+            view_lineOne = itemView.findViewById(R.id.view_lineOne);
+            view_lineTwo = itemView.findViewById(R.id.view_lineTwo);
         }
     }
 
