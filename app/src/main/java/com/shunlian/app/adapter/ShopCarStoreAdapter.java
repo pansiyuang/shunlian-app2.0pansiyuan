@@ -52,12 +52,18 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     //  获得父类的
     @Override
     public int getGroupCount() {
+        if (mStores == null || mStores.size() == 0) {
+            return 0;
+        }
         return mStores.size();
     }
 
     //  获得父项的数量
     @Override
     public int getChildrenCount(int i) {
+        if (mStores.get(i).promotion == null || mStores.get(i).promotion.size() == 0) {
+            return 0;
+        }
         return mStores.get(i).promotion.size();
     }
 
@@ -240,7 +246,17 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
                     mListener.OnChangePromotion(goods, promoId);
                 }
             }
+
+            @Override
+            public void OnGoodsDel(String goodsId) {
+                if (mListener != null) {
+                    mListener.OnGoodsDel(goodsId);
+                }
+            }
         });
+        if (mMap != null && mMap.size() != 0 && mMap.containsKey(enabled.store_id)) {
+            enabled.isEditGood = mMap.get(enabled.store_id);
+        }
 
         goodsAdapter.setEdit(enabled.isEditGood);
         goodsAdapter.setEditAll(enabled.isEditAll);
@@ -306,6 +322,8 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         void OnChangeCheck(String goodsId, String isCheck);
 
         void OnChangeEdit(String storeId, boolean isEdit);
+
+        void OnGoodsDel(String goodsId);
 
         void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
 

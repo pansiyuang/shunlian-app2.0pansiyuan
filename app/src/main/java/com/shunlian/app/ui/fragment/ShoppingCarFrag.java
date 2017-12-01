@@ -69,6 +69,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @BindView(R.id.btn_total_complete)
     Button btn_total_complete;
 
+    @BindView(R.id.tv_toal_favorite)
+    TextView tv_toal_favorite;
+
+    @BindView(R.id.tv_toal_del)
+    TextView tv_toal_del;
+
     @BindView(R.id.expand_shoppingcar)
     ExpandableListView expand_shoppingcar;
 
@@ -81,8 +87,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private Unbinder mUnbinder;
     private FooterHolderView footerHolderView;
     private String isCheckAll; //用来记录是否全选了
-    private List<String> orderIdList;
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
+    private String disGoodsIds;//失效订单的id
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -100,7 +106,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         tv_title_right.setVisibility(View.VISIBLE);
         footerHolderView = new FooterHolderView(footView);
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
-        expand_shoppingcar.addFooterView(footView);
     }
 
     @Override
@@ -116,7 +121,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         tv_title_right.setOnClickListener(this);
         btn_total_complete.setOnClickListener(this);
         miv_total_select.setOnClickListener(this);
-        footerHolderView.tv_clear_disable.setOnClickListener(this);
+        tv_toal_favorite.setOnClickListener(this);
+        tv_toal_del.setOnClickListener(this);
     }
 
     public void getShoppingCarData() {
@@ -174,13 +180,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
 
         isCheckAll = getCheckAll();
+        disGoodsIds = mCarEntity.disabled_ids;
         if ("1".equals(isCheckAll)) {
             miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
         } else {
             miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
 
-        orderIdList = mCarEntity.checked_cartId;
+        getOrderIds(mCarEntity.checked_cartId);//拼接商品id
+        if (mCarEntity.disabled != null && mCarEntity.disabled.size() != 0) {
+            expand_shoppingcar.addFooterView(footView);
+        }
     }
 
 
@@ -201,20 +211,23 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 }
                 shopCarStoreAdapter.notifyDataSetChanged();
                 break;
-            case R.id.btn_total_complete:
-                orderGoodsIds.setLength(0);
-                if (orderIdList != null && orderIdList.size() != 0) {
-                    for (int i = 0; i < orderIdList.size(); i++) {
-                        orderGoodsIds.append(orderIdList.get(i));
-                        if (i != orderIdList.size() - 1) {
-                            orderGoodsIds.append(",");
-                        }
-                    }
-                    LogUtil.httpLogW("orderGoodsIds.toString():" + orderGoodsIds.toString());
-                    ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString());
+            case R.id.tv_toal_del:
+                if (TextUtils.isEmpty(orderGoodsIds.toString())) {
+                    return;
                 }
+                shopCarPresenter.cartRemove(orderGoodsIds.toString());
                 break;
-            case R.id.tv_clear_disable:
+            case R.id.tv_toal_favorite://收藏
+                if (TextUtils.isEmpty(orderGoodsIds.toString())) {
+                    return;
+                }
+                shopCarPresenter.removetofav(orderGoodsIds.toString());
+                break;
+            case R.id.btn_total_complete: //结算
+                if (TextUtils.isEmpty(orderGoodsIds.toString())) {
+                    return;
+                }
+                ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString());
                 break;
             case R.id.miv_total_select:
                 if ("1".equals(isCheckAll)) {
@@ -237,21 +250,25 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
     }
 
+    //修改商品数量
     @Override
     public void OnChangeCount(String goodsId, int count) {
         shopCarPresenter.editCar(goodsId, String.valueOf(count), null, null, null);
     }
 
+    //修改商品属性
     @Override
     public void OnChangeSku(String goodsId, String skuId) {
         shopCarPresenter.editCar(goodsId, null, skuId, null, null);
     }
 
+    //修改商品选择
     @Override
     public void OnChangeCheck(String goodsId, String isCheck) {
         shopCarPresenter.editCar(goodsId, null, null, null, isCheck);
     }
 
+    //修改商品编辑
     @Override
     public void OnChangeEdit(String storeId, boolean isEdit) {
         try {
@@ -263,15 +280,23 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     @Override
+    public void OnGoodsDel(String goodsId) {
+        shopCarPresenter.cartRemove(goodsId);
+    }
+
+    //商品选择优惠卷
+    @Override
     public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
         shopCarPresenter.getVoucher(voucher.voucher_id);
     }
 
+    //商品选择活动
     @Override
     public void OnChangePromotion(String goodsId, String promoId) {
         shopCarPresenter.editCar(goodsId, null, null, promoId, null);
     }
 
+    //店铺勾选
     @Override
     public void OnStoreCheck(String storeId, String isSelect) {
         shopCarPresenter.checkCartGoods(storeId, isSelect);
@@ -298,7 +323,19 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         } else {
             miv_total_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
-        orderIdList = mCarEntity.checked_cartId;
+
+        getOrderIds(mCarEntity.checked_cartId);//拼接商品id
+        disGoodsIds = mCarEntity.disabled_ids;
+
+        if (mCarEntity.disabled == null || mCarEntity.disabled.size() == 0) {
+            if (expand_shoppingcar.getFooterViewsCount() == 1) {
+                expand_shoppingcar.removeFooterView(footView);
+            }
+        } else {
+            if (expand_shoppingcar.getFooterViewsCount() == 0) {
+                expand_shoppingcar.addFooterView(footView);
+            }
+        }
     }
 
     @Override
@@ -306,15 +343,41 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     }
 
-    public class FooterHolderView {
+    public void getOrderIds(List<String> orderList) {
+        orderGoodsIds.setLength(0);
+        if (orderList != null && orderList.size() != 0) {
+            for (int i = 0; i < orderList.size(); i++) {
+                orderGoodsIds.append(orderList.get(i));
+                if (i != orderList.size() - 1) {
+                    orderGoodsIds.append(",");
+                }
+            }
+        }
+    }
+
+    public class FooterHolderView implements View.OnClickListener {
         @BindView(R.id.tv_clear_disable)
         TextView tv_clear_disable;
 
         @BindView(R.id.recycle_disable)
         RecyclerView recycle_disable;
 
+
         public FooterHolderView(View view) {
             mUnbinder = ButterKnife.bind(this, view);
+            tv_clear_disable.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_clear_disable:
+                    if (TextUtils.isEmpty(disGoodsIds)) {
+                        return;
+                    }
+                    shopCarPresenter.cartRemove(disGoodsIds);
+                    break;
+            }
         }
     }
 

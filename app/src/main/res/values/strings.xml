@@ -181,4 +181,5 @@
     <string name="disable_goods">失效宝贝</string>
     <string name="change_prefer">修改优惠</string>
     <string name="close">关闭</string>
+    <string name="move_to_collection">移入收藏</string>
 </resources>

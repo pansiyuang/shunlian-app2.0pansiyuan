@@ -14,4 +14,5 @@ public interface IShoppingCarView extends IView {
     void OnEditEntity(ShoppingCarEntity shoppingCarEntity);
 
     void OnGetVoucher(GoodsDeatilEntity.Voucher voucher);
+
 }
