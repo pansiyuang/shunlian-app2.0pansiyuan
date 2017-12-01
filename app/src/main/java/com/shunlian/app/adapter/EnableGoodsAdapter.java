@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.ChangePreferDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
@@ -88,6 +90,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             public void onClick(View v) {
                 int count = Integer.valueOf(goods.qty) + 1;
                 if (count > stock) {
+                    Common.staticToast("不能超出库存数量");
                     return;
                 }
                 enableViewHolder.tv_goods_count.setText(String.valueOf(count));
@@ -191,6 +194,14 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 preferDialog.show();
             }
         });
+        enableViewHolder.tv_edit_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onGoodsChangeListener != null) {
+                    onGoodsChangeListener.OnGoodsDel(goods.cart_id);
+                }
+            }
+        });
     }
 
     public class EnableViewHolder extends BaseRecyclerViewHolder {
@@ -271,5 +282,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         void OnChangeCheck(String goodsId, String isCheck);
 
         void OnChangePromotion(String goods, String promoId);
+
+        void OnGoodsDel(String goodsId);
     }
 }

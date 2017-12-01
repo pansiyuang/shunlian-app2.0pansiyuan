@@ -16,6 +16,7 @@ public class ShoppingCarEntity {
     public String total_count;
     public String total_reduce;
     public List<String> checked_cartId;
+    public String disabled_ids;
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/view_total"
         android:layout_below="@+id/layout_title"
+        android:divider="@null"
         android:groupIndicator="@null"></ExpandableListView>
 
     <View
@@ -103,21 +104,25 @@
             android:paddingRight="10dp"
             android:visibility="gone">
 
-            <Button
-                android:id="@+id/btn_toal_collection"
-                android:layout_width="60dp"
+            <TextView
+                android:id="@+id/tv_toal_favorite"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/rounded_rectangle_lin_gray_4px"
-                android:text="@string/collection"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/move_to_collection"
                 android:textColor="@color/new_gray"
                 android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/btn_toal_del"
+            <TextView
+                android:id="@+id/tv_toal_del"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_rectangle_pink_4px"
+                android:gravity="center"
                 android:text="@string/del"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
