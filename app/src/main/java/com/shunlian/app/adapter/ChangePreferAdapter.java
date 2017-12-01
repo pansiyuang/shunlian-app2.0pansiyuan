@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -50,7 +51,7 @@ public class ChangePreferAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.A
             changeViewHolder.miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
 
-        changeViewHolder.miv_prefer_select.setOnClickListener(new View.OnClickListener() {
+        changeViewHolder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(allProm.prom_id) && !allProm.isSelect) {
@@ -82,6 +83,9 @@ public class ChangePreferAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.A
 
         @BindView(R.id.tv_prefer)
         TextView tv_prefer;
+
+        @BindView(R.id.rl_item)
+        RelativeLayout rl_item;
 
         public ChangeViewHolder(View itemView) {
             super(itemView);
