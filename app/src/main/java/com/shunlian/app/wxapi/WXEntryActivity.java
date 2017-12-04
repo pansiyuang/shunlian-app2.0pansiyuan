@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -62,10 +61,10 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION) {
             initGet();
         } else if (wxSdkVersion == 0) {
-            Toast.makeText(this, "请先安装微信", Toast.LENGTH_LONG).show();
+            Common.staticToast("请先安装微信");
             finish();
         } else {
-            Toast.makeText(this, "当前微信版本过低，请更新后再试", Toast.LENGTH_LONG).show();
+            Common.staticToast("当前微信版本过低，请更新后再试");
             finish();
         }
     }
@@ -146,7 +145,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 //                    initApi();
 //                    MyHttpUtil.settingBindWeixin(this, settingBindWeixinCallBack, code, deviceId);
                 } else {
-                    Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
+                    Common.staticToast("分享成功");
                     finish();
                 }
                 break;
@@ -162,7 +161,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         }
 
         if (baseResp.errCode != BaseResp.ErrCode.ERR_OK) {
-            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+            Common.staticToast(getString(result));
             finish();
         }
     }

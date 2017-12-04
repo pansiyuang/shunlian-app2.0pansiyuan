@@ -1,7 +1,9 @@
 package com.shunlian.app.ui;
 
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.broadcast.NetDialog;
+import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -54,6 +58,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;
     public ImmersionBar immersionBar;
+    private NetworkBroadcast networkBroadcast;
+    private static NetDialog netDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +72,35 @@ public abstract class BaseActivity extends AppCompatActivity {
         initListener();
         initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkBroadcast = new NetworkBroadcast();
+        registerReceiver(networkBroadcast, filter);
+        networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
+
+            @Override
+            public void updateUI(boolean isShow) {
+                showPopup(isShow);
+            }
+        });
+    }
+
+    public void showPopup(boolean isShow){
+        netDialog = NetDialog.getInstance(this);
+        if (isShow) {
+            if (!netDialog.isShowing())
+                netDialog.show();
+        }else {
+            if (netDialog.isShowing()){
+                netDialog.dismiss();
+            }
+        }
     }
 
     private void finishAct() {
@@ -237,6 +272,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         if (immersionBar != null){
             immersionBar.destroy();
+        }
+        if (networkBroadcast != null){
+            unregisterReceiver(networkBroadcast);
         }
     }
 }

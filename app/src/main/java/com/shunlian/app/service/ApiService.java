@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -38,7 +39,6 @@ import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
@@ -142,6 +142,7 @@ public interface ApiService {
 
     /**
      * 发送短信验证码
+     *
      * @param requestBody
      * @return
      */
@@ -150,6 +151,7 @@ public interface ApiService {
 
     /**
      * 登录
+     *
      * @param requestBody
      * @return
      */
@@ -158,6 +160,7 @@ public interface ApiService {
 
     /**
      * 验证验证码
+     *
      * @param requestBody
      * @return
      */
@@ -166,6 +169,7 @@ public interface ApiService {
 
     /**
      * 刷新token
+     *
      * @param requestBody
      * @return
      */
@@ -207,6 +211,7 @@ public interface ApiService {
 
     /**
      * 检验手机号是否注册
+     *
      * @param map
      * @return
      */
@@ -215,6 +220,7 @@ public interface ApiService {
 
     /**
      * 商品详情
+     *
      * @return
      */
     @POST("goods/detail")
@@ -222,6 +228,7 @@ public interface ApiService {
 
     /**
      * 关注店铺
+     *
      * @return
      */
     @POST("store/addMark")
@@ -229,6 +236,7 @@ public interface ApiService {
 
     /**
      * 取消关注店铺
+     *
      * @return
      */
     @POST("store/delMark")
@@ -236,6 +244,7 @@ public interface ApiService {
 
     /**
      * 店铺首页
+     *
      * @return
      */
     @GET("store/index")
@@ -243,6 +252,7 @@ public interface ApiService {
 
     /**
      * 店铺宝贝
+     *
      * @return
      */
     @GET("store/goodsList")
@@ -250,6 +260,7 @@ public interface ApiService {
 
     /**
      * 店铺促销
+     *
      * @return
      */
     @GET("store/promotionGoodsList")
@@ -262,6 +273,7 @@ public interface ApiService {
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
     /**
      * 店铺新品
+     *
      * @return
      */
     @GET("store/newGoodsList")
@@ -269,6 +281,7 @@ public interface ApiService {
 
     /**
      * 店铺简介
+     *
      * @return
      */
     @GET("store/introduce")
@@ -276,6 +289,7 @@ public interface ApiService {
 
     /**
      * 店铺类目
+     *
      * @return
      */
     @GET("store/categories")
@@ -283,11 +297,13 @@ public interface ApiService {
 
     /**
      * 添加购物车
+     *
      * @param body
      * @return
      */
     @POST("cart/add")
     Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+
     /**
      * 购物车首页
      */
@@ -296,9 +312,101 @@ public interface ApiService {
 
     /**
      * 商品详情页足迹
+     *
      * @param body
      * @return
      */
     @POST("member/footermark/getsidemark")
     Call<BaseEntity<FootprintEntity>> footPrint(@Body RequestBody body);
+
+    /**
+     * 立即购买
+     *
+     * @param body
+     * @return
+     */
+    @POST("order/buy")
+    Call<BaseEntity<ConfirmOrderEntity>> orderBuy(@Body RequestBody body);
+
+    /**
+     * 修改购物车
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/edit")
+    Call<BaseEntity<ShoppingCarEntity>> carEdit(@Body RequestBody body);
+
+    /**
+     * 购物车多选
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/checkcartgoods")
+    Call<BaseEntity<ShoppingCarEntity>> checkCartGoods(@Body RequestBody body);
+
+    /**
+     * 优惠券领取
+     *
+     * @param body
+     * @return
+     */
+    @POST("/voucher/getVoucher")
+    Call<BaseEntity<GoodsDeatilEntity.Voucher>> getVoucher(@Body RequestBody body);
+
+
+    /**
+     * 购物车商品转入收藏夹
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/removetofav")
+    Call<BaseEntity<ShoppingCarEntity>> removetofav(@Body RequestBody body);
+
+    /**
+     * 购物车删除商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/remove")
+    Call<BaseEntity<ShoppingCarEntity>> cartRemove(@Body RequestBody body);
+
+
+    /**
+     * 购物车店铺全选删除
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/multyremove")
+    Call<BaseEntity<ShoppingCarEntity>> multyremove(@Body RequestBody body);
+
+    /**
+     * 收藏商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/goodsfavorite/add")
+    Call<BaseEntity<EmptyEntity>> addFavorite(@Body RequestBody body);
+
+    /**
+     * 取消收藏商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/goodsfavorite/remove")
+    Call<BaseEntity<String>> removeFavorite(@Body RequestBody body);
+
+    /**
+     * 购物车进入确认订单页
+     * @param body
+     * @return
+     */
+    @POST("order/confirm")
+    Call<BaseEntity<ConfirmOrderEntity>> orderConfirm(@Body RequestBody body);
 }

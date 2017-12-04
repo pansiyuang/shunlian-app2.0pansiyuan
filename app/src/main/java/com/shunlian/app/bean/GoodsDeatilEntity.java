@@ -239,5 +239,17 @@ public class GoodsDeatilEntity {
         public String gift_goodstitle;
         public String prom_id;
         public String prom_title;
+        public boolean isSelect;
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Promotion {
+        public String prom_id;               //活动id
+        public String prom_label;            //活动label
+        public String prom_type;             //活动类型
+        public List<GoodsDeatilEntity.Goods> goods;            //活动商品
+        public String hint;                  //活动内容
+        public String title_label;           //优惠
+        public String prom_title;            //优惠标题
+        public String prom_reduce;
     }
 }

@@ -88,7 +88,9 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:background">@drawable/rounded_corner_dialog</item>
     </style>
+
 
 
     <style name="AnimBottom">

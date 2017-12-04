@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
 
@@ -14,6 +15,7 @@
         android:paddingTop="15dp">
 
         <LinearLayout
+            android:id="@+id/ll_combo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom">
@@ -46,13 +48,54 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_discounted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:gravity="center_vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_tag_selected"
+                android:padding="3dp"
+                android:text="@string/combo_price"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/tv_market_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="3dp"
+                android:text="购物满199元减10元"
+                android:textColor="@color/new_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_already_discounted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已优惠¥10"
+            android:textColor="@color/new_text"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="40"
+            app:tv_margin_top="25" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_combo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
             android:overScrollMode="never"
-            android:layout_marginTop="15dp"></android.support.v7.widget.RecyclerView>
+            android:layout_marginTop="15dp"/>
     </LinearLayout>
 
     <View

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_merge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="10dp">
 
         <TextView
@@ -54,55 +54,4 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-
-
-    <RelativeLayout
-        android:id="@+id/rl_prefer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/tv_prefer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="29.5dp"
-            android:background="@drawable/shape_line_black"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:text="@string/prefer"
-            android:textColor="@color/new_text"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/tv_discount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="9dp"
-            android:layout_toRightOf="@+id/tv_prefer"
-            android:text="购满500元可打8折"
-            android:textColor="@color/new_text"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:drawablePadding="5dp"
-            android:drawableRight="@mipmap/img_common_viewarrow_1"
-            android:gravity="center"
-            android:text="@string/change"
-            android:textColor="@color/new_gray"
-            android:textSize="12sp" />
-    </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="39.5dp"
-        android:background="@color/light_gray_three" />
 </LinearLayout>

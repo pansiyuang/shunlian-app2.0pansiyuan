@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="7.5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="29dp"
+    android:paddingTop="7.5dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon_disable"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="11.5dp"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/tv_disable_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/new_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_disable_param"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_disable_title"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/new_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_disable_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+    </RelativeLayout>
+</LinearLayout>

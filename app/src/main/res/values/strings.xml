@@ -86,6 +86,7 @@
     <string name="store_yingyezhizhao">营业执照</string>
     <string name="store_quanbu">全部</string>
     <string name="store_chakanquanbu">查看全部</string>
+    <item name="tag_store_discount_menu" type="id" />
     <string name="store_taocanjia">套餐价</string>
     <string name="store_zengpin">赠品</string>
     <item name="tag_store_discount_menu_id" type="id"/>
@@ -159,6 +160,7 @@
     <string name="share">分享</string>
     <string name="activity">活动</string>
     <string name="shop_promotion_activity">店铺促销活动</string>
+    <string name="selection">选择</string>
 
     <!--购物车-->
     <string name="get_voucher">领劵</string>
@@ -173,4 +175,11 @@
     <string name="already_discount"> 已优惠:¥%s</string>
     <string name="total">合计：¥%s</string>
     <string name="no_freight">不含运费</string>
+    <string name="goods_sell_out">宝贝已卖完</string>
+    <string name="goods_off_shelf">宝贝已下架</string>
+    <string name="clear_disable_goods">清空失效宝贝</string>
+    <string name="disable_goods">失效宝贝</string>
+    <string name="change_prefer">修改优惠</string>
+    <string name="close">关闭</string>
+    <string name="move_to_collection">移入收藏</string>
 </resources>

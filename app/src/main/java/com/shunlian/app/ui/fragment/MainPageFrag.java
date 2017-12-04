@@ -12,7 +12,6 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -111,7 +110,6 @@ public class MainPageFrag extends BaseFragment {
                         StoreAct.startAct(baseContext);
                         break;
                     case 4:
-                        ConfirmOrderAct.startAct(baseContext);
                         break;
                 }
             }

@@ -88,6 +88,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private static final int ITEM_DIFFERENT = 9;//不同条目数
     public ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
+    private MyTextView tv_select_param;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -117,7 +118,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }else if (position == 7){
             return COUPON_LAYOUT;
         }else if (position == 8){
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 return super.getItemViewType(position);
             }else {
@@ -165,7 +170,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     @Override
     public int getItemCount() {
-        String text = mGoodsEntity.detail.text;
+        GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+        String text = null;
+        if (detail != null){
+            text = detail.text;
+        }
         if (TextUtils.isEmpty(text)){
             return super.getItemCount() + ITEM_DIFFERENT - 1;
         }else {
@@ -220,7 +229,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof RichTextHolder){
             RichTextHolder mHolder = (RichTextHolder) holder;
             MyTextView textView = (MyTextView) mHolder.itemView;
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 textView.setVisibility(View.GONE);
             }else {
@@ -600,7 +613,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof PicListHolder){
             PicListHolder mHolder = (PicListHolder) holder;
             String s = null;
-            String text = mGoodsEntity.detail.text;
+            GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+            String text = null;
+            if (detail != null){
+                text = detail.text;
+            }
             if (TextUtils.isEmpty(text)){
                 s = lists.get(position - ITEM_DIFFERENT + 1);
             }else {
@@ -614,6 +631,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
+        if (tv_select_param != null)
+            tv_select_param.setText(getString(R.string.selection)+"  "+sku.name);
+
         if (context instanceof GoodsDetailAct){
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
             goodsDetailAct.selectGoodsInfo(sku,count);
@@ -746,14 +766,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
     public class ParamAttrsHolder extends BaseRecyclerViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.tv_select_param)
-        MyTextView tv_select_param;
-
         @BindView(R.id.mtv_params)
         MyTextView mtv_params;
 
+        @BindView(R.id.tv_select_param)
+        MyTextView tv_select_param;
+
         public ParamAttrsHolder(View itemView) {
             super(itemView);
+            GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             mtv_params.setOnClickListener(this);
         }
