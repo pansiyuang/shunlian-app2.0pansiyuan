@@ -52,16 +52,17 @@
             android:id="@+id/ll_discounted"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_discount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:background="@drawable/shape_tag_selected"
-                android:padding="3dp"
-                android:text="@string/combo_price"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -74,7 +75,7 @@
                 android:padding="3dp"
                 android:text="购物满199元减10元"
                 android:textColor="@color/new_gray"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <com.shunlian.app.widget.MyTextView
@@ -84,10 +85,10 @@
             android:text="已优惠¥10"
             android:textColor="@color/new_text"
             android:textSize="12sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:tv_control_adapter="true"
-            app:tv_margin_left="40"
-            app:tv_margin_top="25" />
+            app:tv_margin_left="20"
+            app:tv_margin_top="20" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_combo"
@@ -99,6 +100,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/white_ash" />

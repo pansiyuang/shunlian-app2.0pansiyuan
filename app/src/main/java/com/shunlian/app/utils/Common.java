@@ -27,6 +27,8 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.Gravity;
@@ -40,6 +42,7 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.widget.MyTextView;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 /**
@@ -50,6 +53,8 @@ public class Common {
 
     private static Toast toast;
     private static MyTextView mtv_toast;
+    private static AbsoluteSizeSpan sizeSpan;
+    private static SpannableStringBuilder ssb;
 
     /**
      * 获取全局上下文
@@ -149,5 +154,69 @@ public class Common {
         SpannableString sp = new SpannableString(str);
         sp.setSpan(new AbsoluteSizeSpan(size), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.setText(sp, TextView.BufferType.SPANNABLE);
+    }
+
+    /**
+     * 格式化float 四舍五入保留两位小数
+     * @param f
+     * @return
+     */
+    public static float formatFloat(float f) {
+        BigDecimal b = new BigDecimal(f);
+        float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        return f1;
+    }
+
+    /**
+     * 格式化float 四舍五入保留两位小数
+     * @param f
+     * @return
+     */
+    public static float formatFloat(String f){
+        float v = Float.parseFloat(f);
+        return formatFloat(v);
+    }
+
+    /**
+     * 格式化float 四舍五入保留两位小数
+     * @param
+     * @return
+     */
+    public static float formatFloat(float f1,float f2){
+        return formatFloat(f1 - f2);
+    }
+
+    /**
+     * 格式化float 四舍五入保留两位小数
+     * @param
+     * @return
+     */
+    public static float formatFloat(String f1,String f2){
+        float v1 = Float.parseFloat(f1);
+        float v2 = Float.parseFloat(f2);
+        return formatFloat(v1 - v2);
+    }
+
+    /**
+     * 将点后面的字变小
+     * @param source
+     * @param textSize 需要变小的文字大小
+     * @return
+     */
+    public static SpannableStringBuilder dotAfterSmall(String source,int textSize){
+        if (TextUtils.isEmpty(source)){
+            return null;
+        }
+        if (sizeSpan == null)
+            sizeSpan = new AbsoluteSizeSpan(textSize,true);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int start = source.indexOf(".") + 1;
+        if (start > 0) {
+            ssb.setSpan(sizeSpan, start, source.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
     }
 }

@@ -13,6 +13,7 @@ import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
@@ -34,7 +35,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
 
     @BindView(R.id.mtv_address)
     MyTextView mtv_address;
+
+    @BindView(R.id.mtv_total_price)
+    MyTextView mtv_total_price;
     private LinearLayoutManager manager;
+    private String mTotalPrice;
 
     public static void startAct(Context context,String cart_ids){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -107,13 +112,48 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
      * @param disabled
      */
     @Override
-    public void confirmOrderAllGoods(List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled) {
-        manager = new LinearLayoutManager(this);
-        recy_view.setLayoutManager(manager);
-        int space = TransformUtil.dip2px(this, 10);
-        recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getResources().getColor(R.color.white_ash)));
-        ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled,disabled);
-        recy_view.setAdapter(df);
+    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled) {
+        if (enabled != null && enabled.size() > 0) {
+            manager = new LinearLayoutManager(this);
+            recy_view.setLayoutManager(manager);
+            int space = TransformUtil.dip2px(this, 10);
+            recy_view.addItemDecoration(new VerticalItemDecoration(space,
+                    0, 0, getResources().getColor(R.color.white_ash)));
+            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled, disabled);
+            recy_view.setAdapter(df);
+
+            df.setSelectVoucherListener(new ConfirmOrderAdapter.ISelectVoucherListener() {
+                @Override
+                public void onSelectVoucher(ConfirmOrderEntity.Voucher voucher) {
+                    float currentPrice = Float.parseFloat(mTotalPrice);
+                    for (int i = 0; i < enabled.size(); i++) {
+                        ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
+                        int selectVoucherId = enabled1.selectVoucherId;
+                        if (selectVoucherId >= 0) {
+                            ConfirmOrderEntity.Voucher voucher1 = enabled1.voucher.get(selectVoucherId);
+                            float discount = Float.parseFloat(voucher1.denomination);
+                            currentPrice -= discount;
+                        } else {
+                            continue;
+                        }
+                    }
+                    mtv_total_price.setText(Common.dotAfterSmall(getResources()
+                            .getString(R.string.rmb) + Common.formatFloat(currentPrice),11));
+                }
+            });
+        }
+    }
+
+    /**
+     * 商品总价和总数量
+     *
+     * @param count
+     * @param price
+     */
+    @Override
+    public void goodsTotalPrice(String count, String price) {
+        mTotalPrice = price;
+        mtv_total_price.setText(Common.dotAfterSmall(getResources()
+                .getString(R.string.rmb)+price,11));
     }
 }

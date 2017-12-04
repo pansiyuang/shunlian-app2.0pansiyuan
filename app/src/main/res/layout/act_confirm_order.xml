@@ -62,6 +62,7 @@
 
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

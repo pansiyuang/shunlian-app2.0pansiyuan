@@ -19,4 +19,11 @@ public interface IConfirmOrderView extends IView{
     void confirmOrderAllGoods(List<ConfirmOrderEntity.Enabled> enabled,
                               List<GoodsDeatilEntity.Goods> disabled);
 
+    /**
+     * 商品总价和总数量
+     * @param count
+     * @param price
+     */
+    void goodsTotalPrice(String count,String price);
+
 }
