@@ -160,6 +160,7 @@
     <string name="share">分享</string>
     <string name="activity">活动</string>
     <string name="shop_promotion_activity">店铺促销活动</string>
+    <string name="selection">选择</string>
 
     <!--购物车-->
     <string name="get_voucher">领劵</string>

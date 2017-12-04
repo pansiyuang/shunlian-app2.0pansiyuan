@@ -48,6 +48,7 @@ public class NetDialog extends Dialog {
         lp.y = y;
         lp.gravity = Gravity.TOP;
         lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+//        lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
 //        lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |       //该flags描述的是窗口的模式，是否可以触摸，可以聚焦等
 //                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         lp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;

@@ -140,7 +140,14 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         recy_view_root.setRecycledViewPool(pool);
         pool.setMaxRecycledViews(0,5);
 
-        ArrayList<String> pics = goodsDeatilEntity.detail.pics;
+        GoodsDeatilEntity.Detail detail = goodsDeatilEntity.detail;
+        ArrayList<String> pics = null;
+        if (detail != null && detail.pics != null){
+            pics = detail.pics;
+        }else {
+            pics = new ArrayList<>();
+        }
+
         goodsDetailAdapter = new GoodsDetailAdapter(baseActivity, false, goodsDeatilEntity, pics);
         recy_view_root.setAdapter(goodsDetailAdapter);
 
