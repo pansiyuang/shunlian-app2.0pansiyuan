@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -40,7 +41,7 @@ public class AppointGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.G
         GlideUtils.getInstance().loadImage(context,mHolder.miv_goods,goods.thumb);
         mHolder.mtv_count.setText("x"+goods.qty);
         mHolder.mtv_title.setText(goods.title);
-        mHolder.mtv_price.setText(goods.price);
+        mHolder.mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+goods.price,11));
         mHolder.mtv_attribute.setText(goods.sku);
     }
 

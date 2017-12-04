@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -19,6 +20,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.RecyclerDialog;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     public static final int ITEM_INVALID = 3;//失效商品
     public static final int ITEM_STATION = 4;//占位条目
     private List<GoodsDeatilEntity.Goods> disabled;
+    private ISelectVoucherListener mListener;
 
     public ConfirmOrderAdapter(Context context, boolean isShowFooter,
                                List<ConfirmOrderEntity.Enabled> lists,
@@ -49,16 +52,28 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             return ITEM_ADDRESS;
         }else if (position + 1  == getItemCount()){
             return ITEM_STATION;
-        }else if (position + 2 == getItemCount()){
+        }else if (position + 2 == getItemCount() && isHasInvalid()){
             return ITEM_INVALID;
         }else {
             return super.getItemViewType(position);
         }
     }
 
+    /**
+     * 是否有失效商品
+     * @return
+     */
+    private boolean isHasInvalid(){
+        return disabled != null && disabled.size() > 0;
+    }
+
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 3;
+        if (isHasInvalid()){
+            return super.getItemCount() + 3;
+        }else {
+            return super.getItemCount() + 2;
+        }
     }
 
     @Override
@@ -119,7 +134,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     MyTextView mtv_title = holder.getView(R.id.mtv_title);
                     mtv_title.setText(s.title);
                     MyTextView mtv_price = holder.getView(R.id.mtv_price);
-                    mtv_price.setText(s.price);
+                    mtv_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+s.price,11));
                     MyTextView mtv_attribute = holder.getView(R.id.mtv_attribute);
                     mtv_attribute.setText(s.sku);
                     MyTextView mtv_count = holder.getView(R.id.mtv_count);
@@ -159,8 +174,30 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             }else {
                 mHolder.recy_view.setVisibility(View.GONE);
             }
-
-
+            List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
+            if (voucher != null && voucher.size() > 0) {
+                ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
+                mHolder.mtv_discount.setText(voucher1.title);
+                if (mListener != null){
+                    mListener.onSelectVoucher(voucher1);
+                }
+                float v = Common.formatFloat(enabled.sub_total, voucher1.denomination);
+                mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+v,11));
+                mHolder.mllayout_discount.setVisibility(View.VISIBLE);
+            }else {
+                enabled.selectVoucherId = -1;
+                mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+enabled.sub_total,11));
+                mHolder.mllayout_discount.setVisibility(View.GONE);
+            }
+            List<ConfirmOrderEntity.PromotionInfo> promotion_info = enabled.promotion_info;
+            if (promotion_info != null && promotion_info.size() > 0){
+                mHolder.mtv_promotion.setText(enabled.promotion_total_hint);
+                mHolder.mll_promotion.setVisibility(View.VISIBLE);
+            }else {
+                mHolder.mll_promotion.setVisibility(View.GONE);
+            }
+            String format = "共计%s件商品";
+            mHolder.mtv_goods_count.setText(String.format(format,enabled.sub_count));
         }
     }
 
@@ -189,6 +226,20 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         @BindView(R.id.mtv_shippingFree)
         MyTextView mtv_shippingFree;
 
+        @BindView(R.id.mtv_discount)
+        MyTextView mtv_discount;
+
+        @BindView(R.id.mll_promotion)
+        MyLinearLayout mll_promotion;
+
+        @BindView(R.id.mtv_promotion)
+        MyTextView mtv_promotion;
+
+        @BindView(R.id.mtv_goods_count)
+        MyTextView mtv_goods_count;
+
+        @BindView(R.id.mtv_goods_price)
+        MyTextView mtv_goods_price;
         public BuyGoodsHolder(View itemView) {
             super(itemView);
             recy_view.setNestedScrollingEnabled(false);
@@ -200,21 +251,41 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
             mllayout_discount.setOnClickListener(this);
             met_leav_msg.setOnClickListener(this);
+            mll_promotion.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             switch (v.getId()){
                 case R.id.mllayout_discount:
-                    System.out.println("===="+getAdapterPosition());
-                    DiscountListDialog dialog = new DiscountListDialog(context);
-                    dialog.setGoodsDiscount(lists.get(getAdapterPosition()-1).voucher);
-                    dialog.show();
+                    DiscountListDialog discountDialog = new DiscountListDialog(context);
+                    discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1));
+                    discountDialog.setSelectListener(new DiscountListDialog.ISelectListener() {
+                        @Override
+                        public void onSelect(ConfirmOrderEntity.Voucher voucher) {
+                            mtv_discount.setText(voucher.title);
+                            ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
+                            String sub_total = enabled.sub_total;
+                            float total = Float.parseFloat(sub_total);
+                            float discount = Float.parseFloat(voucher.denomination);
+                            mtv_goods_price.setText(getString(R.string.rmb)+ Common.formatFloat(total,discount));
+                            enabled.selectVoucherId = enabled.voucher.indexOf(voucher);
+                            if (mListener != null){
+                                mListener.onSelectVoucher(voucher);
+                            }
+                        }
+                    });
+                    discountDialog.show();
                     break;
                 case R.id.met_leav_msg:
                     met_leav_msg.requestFocus();
                     met_leav_msg.setFocusable(true);
                     met_leav_msg.setFocusableInTouchMode(true);
+                    break;
+                case R.id.mll_promotion:
+                    RecyclerDialog recyclerDialog = new RecyclerDialog(context);
+                    recyclerDialog.setPromotionDetail(lists.get(getAdapterPosition() - 1).promotion_info);
+                    recyclerDialog.show();
                     break;
             }
         }
@@ -245,5 +316,19 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             layoutParams.width = TransformUtil.dip2px(context,41);
             itemView.setLayoutParams(layoutParams);
         }
+    }
+
+    /**
+     * 注册选择优惠券监听
+     * @param listener
+     */
+    public void setSelectVoucherListener(ISelectVoucherListener listener){
+
+        mListener = listener;
+    }
+
+    public interface ISelectVoucherListener{
+
+        void onSelectVoucher(ConfirmOrderEntity.Voucher voucher);
     }
 }

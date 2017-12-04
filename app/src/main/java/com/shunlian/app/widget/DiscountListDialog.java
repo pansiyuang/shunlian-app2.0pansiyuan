@@ -44,6 +44,8 @@ public class DiscountListDialog extends Dialog {
     MyTextView mtv_title;
     private int recycleHeight;
     private int currentPosition = 0;
+    private ISelectListener listener;
+    private List<ConfirmOrderEntity.Voucher> mVouchers;
 
 
     public DiscountListDialog(Context context) {
@@ -78,6 +80,9 @@ public class DiscountListDialog extends Dialog {
         mtv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (listener != null){
+                    listener.onSelect(mVouchers.get(currentPosition));
+                }
                 if (isShowing()) {
                     dismiss();
                 }
@@ -85,14 +90,20 @@ public class DiscountListDialog extends Dialog {
         });
     }
 
-    public void setGoodsDiscount(List<ConfirmOrderEntity.Voucher> vouchers){
+    public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled){
+        mVouchers = enabled.voucher;
         mtv_title.setText("商品优惠券");
-        ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
-        voucher.title = "不使用优惠券";
-        voucher.voucher_id = "no_0";
-        vouchers.add(voucher);
+        currentPosition = enabled.selectVoucherId;
+        ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
+        if (!"no_0".equals(voucher1.voucher_id)){
+            ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
+            voucher.title = "不使用优惠券";
+            voucher.voucher_id = "no_0";
+            voucher.denomination = "0";
+            mVouchers.add(voucher);
+        }
         final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.Voucher>(mContext,
-                R.layout.item_changeprefer, vouchers) {
+                R.layout.item_changeprefer, mVouchers) {
 
             @Override
             public void convert(SimpleViewHolder holder, ConfirmOrderEntity.Voucher s, int position) {
@@ -118,5 +129,14 @@ public class DiscountListDialog extends Dialog {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void setSelectListener(ISelectListener listener){
+
+        this.listener = listener;
+    }
+
+    public interface ISelectListener{
+        void onSelect(ConfirmOrderEntity.Voucher voucher);
     }
 }

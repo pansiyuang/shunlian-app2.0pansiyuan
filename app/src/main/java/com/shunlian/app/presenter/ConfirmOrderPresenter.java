@@ -59,7 +59,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                System.out.println(entity.data.toString());
+                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled);
+                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
             }
         });
     }
@@ -82,6 +83,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
                 iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled);
+                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
             }
         });
     }

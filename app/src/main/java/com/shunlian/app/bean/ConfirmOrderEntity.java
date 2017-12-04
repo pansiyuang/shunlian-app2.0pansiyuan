@@ -14,6 +14,10 @@ public class ConfirmOrderEntity {
     public List<GoodsDeatilEntity.Goods> disabled;
     public String disabled_ids;
     public String total_shipping_fee;
+    public String total_amount;//商品总额
+    public String total_count;// 商品总数
+    public String total_reduce;//总减免
+    public String pay_amount;//最终的价格（需要客户端减去选取的优惠券）
     public Address address;
 
     @Override
@@ -35,6 +39,10 @@ public class ConfirmOrderEntity {
         public List<Voucher> voucher;
         public List<GoodsDeatilEntity.Goods> goods;
         public String shippingFee;
+        public String promotion_total_hint;
+        public String sub_total;
+        public String sub_count;
+        public int selectVoucherId;//选择优惠券id，默认是0
 
         @Override
         public String toString() {
@@ -56,7 +64,7 @@ public class ConfirmOrderEntity {
         public String prom_title;
         public String prom_hint;
         public String prom_reduce;
-
+        public List<Goods> goods;
         @Override
         public String toString() {
             return "PromotionInfo{" +
@@ -93,5 +101,11 @@ public class ConfirmOrderEntity {
         public String title;
         public String voucher_id;
         public String denomination;
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Goods{
+        public String title;
+        public String thumb;
+        public String price;
     }
 }

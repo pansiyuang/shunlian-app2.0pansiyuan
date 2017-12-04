@@ -17,7 +17,9 @@ import com.shunlian.app.adapter.ActivityMoreAdapter;
 import com.shunlian.app.adapter.AttributeAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ComboAdapter;
+import com.shunlian.app.adapter.PromotionAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
+import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.utils.TransformUtil;
@@ -193,9 +195,15 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         });
     }
 
-    public void setPromotionDetail(){
+    /**
+     * 促销详情
+     * @param infos
+     */
+    public void setPromotionDetail(List<ConfirmOrderEntity.PromotionInfo> infos){
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-
+        dialog_title.setText("促销详情");
+        PromotionAdapter adapter = new PromotionAdapter(mContext,false,infos);
+        recycler_list.setAdapter(adapter);
     }
 
     @Override
