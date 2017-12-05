@@ -8,28 +8,26 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.StoreIndexEntity;
-import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/16.
  */
 
-public class StoreVoucherAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Voucher> {
-    private List<StoreIndexEntity.Voucher> mData;
+public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Voucher> {
+    private List<GoodsDeatilEntity.Voucher> mData;
     private Context mContext;
 
-    public StoreVoucherAdapter(Context context, boolean isShowFooter, List<StoreIndexEntity.Voucher> lists) {
+    public StoreVoucherAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Voucher> lists) {
         super(context, isShowFooter, lists);
         this.mContext = context;
         this.mData = lists;
     }
 
-    public void setData(List<StoreIndexEntity.Voucher> vouchers) {
+    public void setData(List<GoodsDeatilEntity.Voucher> vouchers) {
         this.mData = vouchers;
     }
 
@@ -42,7 +40,7 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Vo
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VoucherViewHolder) {
             VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
-            StoreIndexEntity.Voucher voucher = mData.get(position);
+            GoodsDeatilEntity.Voucher voucher = mData.get(position);
             voucherViewHolder.mtv_price.setText(voucher.denomination);
             voucherViewHolder.mtv_name.setText(voucher.title);
             String format = "满%s元可用";
@@ -57,14 +55,14 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Vo
 
     public class VoucherViewHolder extends BaseRecyclerViewHolder {
         private MyTextView mtv_price, mtv_name, mtv_full_cut;
-        private MyRelativeLayout mrl_bg;
+        private MyLinearLayout mrl_bg;
 
         public VoucherViewHolder(View itemView) {
             super(itemView);
             mtv_price = (MyTextView) itemView.findViewById(R.id.mtv_price);
             mtv_name = (MyTextView) itemView.findViewById(R.id.mtv_name);
             mtv_full_cut = (MyTextView) itemView.findViewById(R.id.mtv_full_cut);
-            mrl_bg = (MyRelativeLayout) itemView.findViewById(R.id.mrl_bg);
+            mrl_bg = (MyLinearLayout) itemView.findViewById(R.id.mrl_bg);
         }
     }
 }

@@ -12,7 +12,7 @@ public class StoreIndexEntity {
     public String decoration_id;
     public String block_id;
     public Head head;
-    public List<Voucher> voucher;
+    public List<GoodsDeatilEntity.Voucher> voucher;
     public List<Body> body;
     public String baseUrl;
 
