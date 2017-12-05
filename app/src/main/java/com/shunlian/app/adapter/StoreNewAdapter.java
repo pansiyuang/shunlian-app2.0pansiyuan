@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -42,7 +43,7 @@ public class StoreNewAdapter extends BaseRecyclerAdapter<StoreNewGoodsListEntity
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof OneHolder) {
             OneHolder oneHolder = (OneHolder) holder;
-            StoreNewGoodsListEntity.Data data=datas.get(position);
+            final StoreNewGoodsListEntity.Data data=datas.get(position);
             if (TextUtils.isEmpty(data.day)){
                 oneHolder.mllayout_title.setVisibility(View.GONE);
                 oneHolder.view_line.setVisibility(View.GONE);
@@ -70,13 +71,25 @@ public class StoreNewAdapter extends BaseRecyclerAdapter<StoreNewGoodsListEntity
                 oneHolder.mtv_pricers.setText(context.getResources().getString(R.string.common_yuan)+data.mDatar.market_price);
                 GlideUtils.getInstance().loadImage(context,oneHolder.miv_oner,data.mDatar.whole_thumb);
             }
+            oneHolder.mllayout_onel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GoodsDetailAct.startAct(context,data.mDatal.id);
+                }
+            });
+            oneHolder.mllayout_oner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GoodsDetailAct.startAct(context,data.mDatar.id);
+                }
+            });
         }
     }
 
     class OneHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_descl,mtv_pricel,mtv_pricer,mtv_date,mtv_descr,mtv_pricels,mtv_pricers;
         private MyImageView miv_onel,miv_oner;
-        private MyLinearLayout mllayout_title,mllayout_oner;
+        private MyLinearLayout mllayout_title,mllayout_oner,mllayout_onel;
         private View view_line;
 
 
@@ -93,6 +106,7 @@ public class StoreNewAdapter extends BaseRecyclerAdapter<StoreNewGoodsListEntity
             mtv_date = (MyTextView) itemView.findViewById(R.id.mtv_date);
             mllayout_title = (MyLinearLayout) itemView.findViewById(R.id.mllayout_title);
             mllayout_oner = (MyLinearLayout) itemView.findViewById(R.id.mllayout_oner);
+            mllayout_onel = (MyLinearLayout) itemView.findViewById(R.id.mllayout_onel);
             view_line =itemView.findViewById(R.id.view_line);
         }
     }

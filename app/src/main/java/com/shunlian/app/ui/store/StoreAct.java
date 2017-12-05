@@ -27,6 +27,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
@@ -452,13 +453,19 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Override
-    public void storeBaby(List<StoreGoodsListEntity.MData> mDataList, int allPage, int page) {
+    public void storeBaby(final List<StoreGoodsListEntity.MData> mDataList, int allPage, final int page) {
         if (storeBabyAdapter == null) {
             storeBabyAdapter = new StoreBabyAdapter(this, true, mDataList);
             babyManager = new GridLayoutManager(this, 2);
             rv_baby.setLayoutManager(babyManager);
             rv_baby.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(this, 5), TransformUtil.dip2px(this, 5), true));
             rv_baby.setAdapter(storeBabyAdapter);
+            storeBabyAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(StoreAct.this,mDataList.get(position).id);
+                }
+            });
         } else {
             storeBabyAdapter.notifyDataSetChanged();
         }

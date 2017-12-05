@@ -25,10 +25,11 @@
         android:text="热销商品"
         android:gravity="center_vertical"
         android:paddingLeft="9.5dp"/>
-    <LinearLayout
+    <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="155dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/mllayout_two">
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_two"
             android:layout_width="130dp"
@@ -129,5 +130,5 @@
                 android:layout_marginBottom="5dp"/>
         </com.shunlian.app.widget.MyRelativeLayout>
 
-    </LinearLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
 </LinearLayout>

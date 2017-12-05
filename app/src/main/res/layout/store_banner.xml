@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <View
-        android:id="@+id/view_lineOne"
-        android:layout_width="match_parent"
-        android:layout_height="2.5dp"
-        android:background="@color/bg_gray"
-        android:visibility="gone"/>
-    <View
-        android:id="@+id/view_lineTwo"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/bg_gray"
-        android:visibility="gone"/>
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    android:layout_height="173dp">
 
     <com.shunlian.app.widget.banner.StoreKanner
         android:id="@+id/storeKanner"
@@ -51,5 +35,4 @@
         android:text="2/3"
         android:textColor="@color/white_ash"
         android:textSize="11sp" />
-    </com.shunlian.app.widget.MyRelativeLayout>
-</com.shunlian.app.widget.MyLinearLayout>
+</RelativeLayout>
