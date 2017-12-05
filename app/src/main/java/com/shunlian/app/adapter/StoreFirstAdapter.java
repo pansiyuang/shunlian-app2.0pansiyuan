@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreIndexEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -102,7 +103,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             case TYPE1:
                 if (holder instanceof OneHolder) {
                     OneHolder oneHolder = (OneHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
+                    final StoreIndexEntity.Body data=datas.get(position);
                     if (TextUtils.isEmpty(data.title)){
                         oneHolder.view_lineOne.setVisibility(View.GONE);
                         oneHolder.view_lineTwo.setVisibility(View.GONE);
@@ -132,14 +133,24 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         oneHolder.mtv_pricer.setText(data.rdata.price);
                         GlideUtils.getInstance().loadImage(context,oneHolder.miv_oner,data.rdata.whole_thumb);
                     }
-//                    BlockStoreFirstOneAdapter blockStoreFirstOneAdapter = new BlockStoreFirstOneAdapter(context, false,data.data);
-//                    oneHolder.rv_one.setAdapter(blockStoreFirstOneAdapter);
+                    oneHolder.mllayout_onel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            GoodsDetailAct.startAct(context,data.ldata.id);
+                        }
+                    });
+                    oneHolder.mllayout_oner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            GoodsDetailAct.startAct(context,data.rdata.id);
+                        }
+                    });
                 }
                 break;
             case TYPE2:
                 if (holder instanceof TwoHolder) {
                     TwoHolder twoHolder = (TwoHolder) holder;
-                    StoreIndexEntity.Body data=datas.get(position);
+                    final StoreIndexEntity.Body data=datas.get(position);
                     if (TextUtils.isEmpty(data.title)){
                         twoHolder.view_lineOne.setVisibility(View.GONE);
                         twoHolder.view_lineTwo.setVisibility(View.GONE);
@@ -155,12 +166,16 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         twoHolder.mtv_two.setVisibility(View.VISIBLE);
                         twoHolder.mtv_two.setText(data.title);
                     }
+                    twoHolder.mllayout_two.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            GoodsDetailAct.startAct(context,data.ldata.id);
+                        }
+                    });
                     twoHolder.mtv_desc.setText(data.ldata.title);
-                    twoHolder.mtv_number.setText(data.ldata.item_id);
+                    twoHolder.mtv_number.setText("已售null");
                     twoHolder.mtv_price.setText(data.ldata.price);
                     GlideUtils.getInstance().loadImage(context,twoHolder.miv_two,data.ldata.whole_thumb);
-//                    BlockStoreFirstTwoAdapter blockStoreFirstTwoAdapter = new BlockStoreFirstTwoAdapter(context, false,data.data);
-//                    twoHolder.rv_two.setAdapter(blockStoreFirstTwoAdapter);
                 }
                 break;
             case TYPE3:
@@ -283,8 +298,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
         private MyTextView mtv_one,mtv_descl,mtv_pricel,mtv_numberl,mtv_descr,mtv_pricer,mtv_numberr;
         private View view_lineOne,view_lineTwo;
         private MyImageView miv_onel,miv_oner;
-        private MyLinearLayout mllayout_oner;
-//        private RecyclerView rv_one;
+        private MyLinearLayout mllayout_oner,mllayout_onel;
+
 
         OneHolder(View itemView) {
             super(itemView);
@@ -300,9 +315,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mtv_pricer = (MyTextView) itemView.findViewById(R.id.mtv_pricer);
             mtv_numberr = (MyTextView) itemView.findViewById(R.id.mtv_numberr);
             mllayout_oner = (MyLinearLayout) itemView.findViewById(R.id.mllayout_oner);
-//            rv_one = (RecyclerView) itemView.findViewById(R.id.rv_one);
-//            GridLayoutManager manager = new GridLayoutManager(itemView.getContext(), 2);
-//            rv_one.setLayoutManager(manager);
+            mllayout_onel = (MyLinearLayout) itemView.findViewById(R.id.mllayout_onel);
 
         }
     }
@@ -311,7 +324,8 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
         private MyTextView mtv_two,mtv_desc,mtv_price,mtv_number;
         private View view_lineOne,view_lineTwo;
         private MyImageView miv_two;
-//        private RecyclerView rv_two;
+        private MyLinearLayout mllayout_two;
+
 
         TwoHolder(View itemView) {
             super(itemView);
@@ -322,9 +336,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             view_lineOne = itemView.findViewById(R.id.view_lineOne);
             view_lineTwo = itemView.findViewById(R.id.view_lineTwo);
             miv_two = (MyImageView) itemView.findViewById(R.id.miv_two);
-//            rv_two = (RecyclerView) itemView.findViewById(R.id.rv_two);
-//            LinearLayoutManager manager = new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, false);
-//            rv_two.setLayoutManager(manager);
+            mllayout_two = (MyLinearLayout) itemView.findViewById(R.id.mllayout_two);
         }
     }
 

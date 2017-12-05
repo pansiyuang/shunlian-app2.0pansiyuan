@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IRegisterOneView;
 
 import java.io.IOException;
@@ -109,6 +110,7 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
                 public void onSuccess(BaseEntity<String> entity) {
                     super.onSuccess(entity);
                     iView.smsCode(entity.data);
+                    LogUtil.augusLogW("duanxin--"+entity.data);
                 }
 
                 @Override

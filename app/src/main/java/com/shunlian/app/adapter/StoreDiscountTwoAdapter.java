@@ -1,18 +1,14 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
-import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -46,13 +42,17 @@ public class StoreDiscountTwoAdapter extends BaseRecyclerAdapter<StorePromotionG
             twoHolder.mtv_title.setText(mData.title);
             twoHolder.mtv_marketPrice.setText(mData.old_price);
             twoHolder.mtv_original.setText(mData.price);
-            twoHolder.rv_combo.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-            twoHolder.rv_combo.setAdapter(new StoreDiscountTwoAdapters(context,false,mData.data));
+            twoHolder.rv_combo.setVisibility(View.GONE);
+            if (mData.data != null && mData.data.size() > 0) {
+                twoHolder.rv_combo.setVisibility(View.VISIBLE);
+                twoHolder.rv_combo.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                twoHolder.rv_combo.setAdapter(new StoreDiscountTwoAdapters(context, false, mData.data));
+            }
         }
     }
 
     class TwoHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_title,mtv_marketPrice,mtv_original;
+        private MyTextView mtv_title, mtv_marketPrice, mtv_original;
         private RecyclerView rv_combo;
 
         TwoHolder(View itemView) {

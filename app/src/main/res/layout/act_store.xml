@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray"
-    android:fitsSystemWindows="true">
+    android:background="@color/bg_gray">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/store_coorLayout"
@@ -19,24 +18,25 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/store_ctLayout"
                 android:layout_width="match_parent"
-                android:layout_height="172.5dp"
+                android:layout_height="192.5dp"
                 android:background="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="99dp"
+                    android:layout_height="119dp"
                     android:layout_gravity="bottom"
                     app:layout_collapseMode="pin" />
 
                 <com.shunlian.app.widget.MyRelativeLayout
                     android:id="@+id/mrlayout_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="117.5dp"
+                    android:layout_height="137.5dp"
                     android:background="@mipmap/test">
 
                     <com.shunlian.app.widget.MyImageView
@@ -48,7 +48,7 @@
                         android:id="@+id/mrlayout_store"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="68.5dp">
+                        android:layout_marginTop="88.5dp">
 
                         <com.shunlian.app.widget.MyImageView
                             android:id="@+id/miv_storeLogo"
@@ -445,7 +445,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5.5dp"
-        android:paddingTop="5.5dp">
+        android:paddingTop="5.5dp"
+        android:layout_marginTop="20dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"

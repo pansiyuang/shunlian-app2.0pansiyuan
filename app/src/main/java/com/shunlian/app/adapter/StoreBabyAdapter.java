@@ -71,7 +71,7 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
         }
     }
 
-    class OneHolder extends RecyclerView.ViewHolder {
+    class OneHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private MyTextView mtv_descl,mtv_pricel,mtv_pricer;
         private MyImageView miv_onel;
 
@@ -82,6 +82,14 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
             mtv_descl = (MyTextView) itemView.findViewById(R.id.mtv_descl);
             mtv_pricel = (MyTextView) itemView.findViewById(R.id.mtv_pricel);
             mtv_pricer = (MyTextView) itemView.findViewById(R.id.mtv_pricer);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.onItemClick(view,getAdapterPosition());
+            }
         }
     }
 

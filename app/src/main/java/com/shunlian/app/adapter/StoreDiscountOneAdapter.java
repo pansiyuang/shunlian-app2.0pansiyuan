@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -93,7 +94,7 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
             case TYPE3:
                 if (holder instanceof ThreeHolder) {
                     ThreeHolder threeHolder = (ThreeHolder) holder;
-                    StorePromotionGoodsListOneEntity.MData mData = mDatas.get(position);
+                    final StorePromotionGoodsListOneEntity.MData mData = mDatas.get(position);
                     threeHolder.mtv_descl.setText(mData.ldata.title);
                     threeHolder.mtv_pricel.setText(mData.ldata.price);
                     threeHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
@@ -121,6 +122,18 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
                         threeHolder.mllayout_r.setVisibility(View.VISIBLE);
                         threeHolder.mtv_zengr.setText(mData.rdata.giftGoodsName);
                     }
+                    threeHolder.mllayout_onel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            GoodsDetailAct.startAct(context,mData.ldata.id);
+                        }
+                    });
+                    threeHolder.mllayout_oner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            GoodsDetailAct.startAct(context,mData.rdata.id);
+                        }
+                    });
                 }
                 break;
             case TYPE2:
@@ -136,7 +149,7 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
     class ThreeHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_zengl,mtv_zengr,mtv_descl, mtv_pricel, mtv_pricer, mtv_descr, mtv_pricels, mtv_pricers;
         private MyImageView miv_onel, miv_oner;
-        private MyLinearLayout mllayout_oner,mllayout_l,mllayout_r;
+        private MyLinearLayout mllayout_oner,mllayout_l,mllayout_r,mllayout_onel;
 
 
         ThreeHolder(View itemView) {
@@ -154,6 +167,7 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
             mllayout_oner = (MyLinearLayout) itemView.findViewById(R.id.mllayout_oner);
             mllayout_l = (MyLinearLayout) itemView.findViewById(R.id.mllayout_l);
             mllayout_r = (MyLinearLayout) itemView.findViewById(R.id.mllayout_r);
+            mllayout_onel = (MyLinearLayout) itemView.findViewById(R.id.mllayout_onel);
         }
     }
 
