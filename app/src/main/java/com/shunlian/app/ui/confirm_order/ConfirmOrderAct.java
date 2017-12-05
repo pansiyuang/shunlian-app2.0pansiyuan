@@ -40,6 +40,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     MyTextView mtv_total_price;
     private LinearLayoutManager manager;
     private String mTotalPrice;
+    private boolean isOrderBuy = false;//是否直接购买
+    private String detail_address;
 
     public static void startAct(Context context,String cart_ids){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -89,8 +91,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
         String sku_id = intent.getStringExtra("sku_id");
         ConfirmOrderPresenter confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
         if (!TextUtils.isEmpty(cart_ids)){
+            isOrderBuy = false;
             confirmOrderPresenter.orderConfirm(cart_ids,"110105");
         }else {
+            isOrderBuy = true;
             confirmOrderPresenter.orderBuy(goods_id,qty,sku_id);
         }
     }
@@ -112,23 +116,40 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
      * @param disabled
      */
     @Override
-    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled) {
+    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled,ConfirmOrderEntity.Address address) {
+        if (address != null){
+            detail_address = address.detail_address;
+            mtv_address.setText("送至："+detail_address);
+        }else {
+            mtv_address.setText("请添加您的收货地址");
+        }
         if (enabled != null && enabled.size() > 0) {
             manager = new LinearLayoutManager(this);
             recy_view.setLayoutManager(manager);
             int space = TransformUtil.dip2px(this, 10);
             recy_view.addItemDecoration(new VerticalItemDecoration(space,
                     0, 0, getResources().getColor(R.color.white_ash)));
-            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled, disabled);
+            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled, disabled,address,isOrderBuy);
             recy_view.setAdapter(df);
 
             df.setSelectVoucherListener(new ConfirmOrderAdapter.ISelectVoucherListener() {
                 @Override
-                public void onSelectVoucher(ConfirmOrderEntity.Voucher voucher) {
+                public void onSelectVoucher(int position) {
                     float currentPrice = Float.parseFloat(mTotalPrice);
                     for (int i = 0; i < enabled.size(); i++) {
                         ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
                         int selectVoucherId = enabled1.selectVoucherId;
+                        if (isOrderBuy) {
+                            int selectPromotionId = enabled1.selectPromotionId;
+                            if (selectPromotionId >= 0 && enabled1.promotion_info != null
+                                    && enabled1.promotion_info.size() > 0){
+                                ConfirmOrderEntity.PromotionInfo promotionInfo = enabled1.
+                                        promotion_info.get(selectPromotionId);
+                                String prom_reduce = promotionInfo.prom_reduce;
+                                float v = Common.formatFloat(prom_reduce);
+                                currentPrice -= v;
+                            }
+                        }
                         if (selectVoucherId >= 0) {
                             ConfirmOrderEntity.Voucher voucher1 = enabled1.voucher.get(selectVoucherId);
                             float discount = Float.parseFloat(voucher1.denomination);

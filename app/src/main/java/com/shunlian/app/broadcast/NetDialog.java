@@ -21,20 +21,20 @@ import com.shunlian.app.widget.MyLinearLayout;
 
 public class NetDialog extends Dialog {
 
-    private static NetDialog netDialog;
+//    private static NetDialog netDialog;
 
-    public static synchronized NetDialog getInstance(Context context) {
-        if (netDialog == null) {
-            netDialog = new NetDialog(context);
-        }
-        return netDialog;
-    }
+//    public static synchronized NetDialog getInstance(Context context) {
+//        if (netDialog == null) {
+//            netDialog = new NetDialog(context);
+//        }
+//        return netDialog;
+//    }
 
-    private NetDialog(@NonNull Context context) {
+    public NetDialog(@NonNull Context context) {
         this(context, R.style.Mydialog);
     }
 
-    private NetDialog(@NonNull final Context context, int themeResId) {
+    public NetDialog(@NonNull final Context context, int themeResId) {
         super(context, themeResId);
         setContentView(R.layout.popup_network);
         int height = TransformUtil.dip2px(context, 40);
@@ -47,7 +47,7 @@ public class NetDialog extends Dialog {
         lp.x = 0;
         lp.y = y;
         lp.gravity = Gravity.TOP;
-        lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+//        lp.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 //        lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
 //        lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |       //该flags描述的是窗口的模式，是否可以触摸，可以聚焦等
 //                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
@@ -66,5 +66,14 @@ public class NetDialog extends Dialog {
                 }
             }
         });
+    }
+
+    @Override
+    public void show() {
+        try {
+            super.show();
+        }catch (WindowManager.BadTokenException e){
+            dismiss();
+        }
     }
 }

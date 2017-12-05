@@ -81,15 +81,17 @@ public class DiscountListDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 if (listener != null){
-                    listener.onSelect(mVouchers.get(currentPosition));
+                    listener.onSelect(currentPosition);
                 }
-                if (isShowing()) {
-                    dismiss();
-                }
+                dismiss();
             }
         });
     }
 
+    /**
+     * 优惠券
+     * @param enabled
+     */
     public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled){
         mVouchers = enabled.voucher;
         mtv_title.setText("商品优惠券");
@@ -131,12 +133,46 @@ public class DiscountListDialog extends Dialog {
         });
     }
 
-    public void setSelectListener(ISelectListener listener){
+    /**
+     * 促销
+     * @param enabled
+     */
+    public void setPromotion(ConfirmOrderEntity.Enabled  enabled){
+        mtv_title.setText("促销");
+        currentPosition = enabled.selectPromotionId;
+        final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.PromotionInfo>(mContext,
+                R.layout.item_changeprefer, enabled.promotion_info) {
 
+            @Override
+            public void convert(SimpleViewHolder holder, ConfirmOrderEntity.PromotionInfo s, int position) {
+                TextView tv_prefer = holder.getView(R.id.tv_prefer);
+                tv_prefer.setText(s.prom_title);
+                MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
+                holder.addOnClickListener(R.id.rl_item);
+                if (currentPosition == position) {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                } else {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+                }
+            }
+        };
+        int space1 = TransformUtil.dip2px(mContext, 10);
+        recycler_list.setPadding(space1,0,space1,0);
+        recycler_list.setAdapter(recyclerAdapter);
+
+        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                currentPosition = position;
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    public void setSelectListener(ISelectListener listener){
         this.listener = listener;
     }
 
     public interface ISelectListener{
-        void onSelect(ConfirmOrderEntity.Voucher voucher);
+        void onSelect(int position);
     }
 }

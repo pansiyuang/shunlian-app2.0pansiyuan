@@ -4,7 +4,7 @@
     android:layout_height="77.5dp">
 
 
-    <com.example.administrator.imagegray.ProgressView
+    <com.shunlian.app.widget.ProgressView
         android:id="@+id/loading_progress"
         android:layout_width="58dp"
         android:layout_height="58dp"

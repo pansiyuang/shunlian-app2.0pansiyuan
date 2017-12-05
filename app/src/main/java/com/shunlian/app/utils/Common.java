@@ -22,6 +22,7 @@ package com.shunlian.app.utils;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -43,6 +44,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.widget.MyTextView;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -173,7 +175,10 @@ public class Common {
      * @return
      */
     public static float formatFloat(String f){
-        float v = Float.parseFloat(f);
+        float v = 0;
+        if (!TextUtils.isEmpty(f)){
+            v = Float.parseFloat(f);
+        }
         return formatFloat(v);
     }
 
@@ -192,8 +197,14 @@ public class Common {
      * @return
      */
     public static float formatFloat(String f1,String f2){
-        float v1 = Float.parseFloat(f1);
-        float v2 = Float.parseFloat(f2);
+        float v1 = 0;
+        if (!TextUtils.isEmpty(f1)){
+            v1 = Float.parseFloat(f1);
+        }
+        float v2 = 0;
+        if (!TextUtils.isEmpty(f2)){
+            v2 = Float.parseFloat(f2);
+        }
         return formatFloat(v1 - v2);
     }
 
@@ -218,5 +229,28 @@ public class Common {
             ssb.setSpan(sizeSpan, start, source.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
+    }
+
+    /**
+     * 判断应用是否在运行
+     * @param context
+     * @return
+     */
+    public static boolean isRun(Context context){
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
+        boolean isAppRunning = false;
+        String MY_PKG_NAME = "com.ad";
+        //100表示取的最大的任务数，info.topActivity表示当前正在运行的Activity，info.baseActivity表系统后台有此进程在运行
+        for (ActivityManager.RunningTaskInfo info : list) {
+            if (info.topActivity.getPackageName().equals(MY_PKG_NAME) || info.baseActivity.getPackageName().equals(MY_PKG_NAME)) {
+                isAppRunning = true;
+//                Log.i("ActivityService isRun()",info.topActivity.getPackageName() + " info.baseActivity.getPackageName()="+info.baseActivity.getPackageName());
+                break;
+            }
+        }
+
+//        Log.i("ActivityService isRun()", "com.ad 程序   ...isAppRunning......"+isAppRunning);
+        return isAppRunning;
     }
 }

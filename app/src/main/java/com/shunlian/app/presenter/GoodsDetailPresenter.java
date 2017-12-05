@@ -38,7 +38,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
+        getNetData(0,0,true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
                 super.onSuccess(entity);
@@ -63,7 +63,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addMark(requestBody);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -88,7 +88,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delMark(requestBody);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -111,7 +111,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);

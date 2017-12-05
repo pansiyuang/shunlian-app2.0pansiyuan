@@ -55,11 +55,11 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<ConfirmOrderEntity>> baseEntityCall = getAddCookieApiService().orderBuy(requestBody);
 
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled);
+                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
             }
         });
@@ -78,11 +78,11 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
 
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<ConfirmOrderEntity>> baseEntityCall = getAddCookieApiService().orderConfirm(requestBody);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled);
+                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
             }
         });
