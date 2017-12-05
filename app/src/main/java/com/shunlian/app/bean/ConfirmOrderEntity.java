@@ -43,6 +43,7 @@ public class ConfirmOrderEntity {
         public String sub_total;
         public String sub_count;
         public int selectVoucherId;//选择优惠券id，默认是0
+        public int selectPromotionId = -1;//选择促销活动id，默认是0
 
         @Override
         public String toString() {
@@ -83,7 +84,7 @@ public class ConfirmOrderEntity {
         public String district_id;
         public String realname;
         public String mobile;
-        public String address;
+        public String detail_address;
 
         @Override
         public String toString() {
@@ -92,7 +93,7 @@ public class ConfirmOrderEntity {
                     ", district_id='" + district_id + '\'' +
                     ", realname='" + realname + '\'' +
                     ", mobile='" + mobile + '\'' +
-                    ", address='" + address + '\'' +
+                    ", address='" + detail_address + '\'' +
                     '}';
         }
     }
