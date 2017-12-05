@@ -201,7 +201,7 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
      */
     public void setPromotionDetail(List<ConfirmOrderEntity.PromotionInfo> infos){
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        dialog_title.setText("促销详情");
+        dialog_title.setText(mContext.getResources().getString(R.string.promotional_details));
         PromotionAdapter adapter = new PromotionAdapter(mContext,false,infos);
         recycler_list.setAdapter(adapter);
     }

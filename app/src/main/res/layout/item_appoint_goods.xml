@@ -10,7 +10,6 @@
         android:id="@+id/miv_goods"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_login_logo"
         app:iv_control_adapter="true"
         app:iv_control_height="160"
         app:iv_control_width="160" />
@@ -21,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="¥ 179.5"
         android:textColor="@color/new_text"
         android:textSize="14sp" />
 
@@ -32,7 +30,6 @@
         android:layout_toLeftOf="@+id/mtv_price"
         android:layout_toRightOf="@+id/miv_goods"
         android:maxLines="2"
-        android:text="美颜秘笈专柜变色磨砂唇膏粉漾魅惑润唇蜜口红保湿滋润"
         android:textColor="@color/new_text"
         android:textSize="13sp"
         app:tv_control_adapter="true"
@@ -47,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mtv_title"
         android:layout_toRightOf="@+id/miv_goods"
-        android:text="颜色:紫红"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"
@@ -61,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/mtv_price"
-        android:text="x1"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"

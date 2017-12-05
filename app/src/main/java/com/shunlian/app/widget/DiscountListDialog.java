@@ -94,12 +94,12 @@ public class DiscountListDialog extends Dialog {
      */
     public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled){
         mVouchers = enabled.voucher;
-        mtv_title.setText("商品优惠券");
+        mtv_title.setText(mContext.getResources().getString(R.string.goods_voucher));
         currentPosition = enabled.selectVoucherId;
         ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
         if (!"no_0".equals(voucher1.voucher_id)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
-            voucher.title = "不使用优惠券";
+            voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
             voucher.voucher_id = "no_0";
             voucher.denomination = "0";
             mVouchers.add(voucher);
@@ -138,7 +138,7 @@ public class DiscountListDialog extends Dialog {
      * @param enabled
      */
     public void setPromotion(ConfirmOrderEntity.Enabled  enabled){
-        mtv_title.setText("促销");
+        mtv_title.setText(mContext.getResources().getString(R.string.store_discount));
         currentPosition = enabled.selectPromotionId;
         final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.PromotionInfo>(mContext,
                 R.layout.item_changeprefer, enabled.promotion_info) {
