@@ -11,6 +11,7 @@ import android.graphics.PathMeasure;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,6 +142,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private int num;
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
+    private String favId;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -164,6 +166,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mll_comment.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         mtv_buy_immediately.setOnClickListener(this);
+        miv_is_fav.setOnClickListener(this);
     }
 
     @Override
@@ -291,11 +294,20 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (status != oldStatus) {
             if (status == 1) {
                 miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
+                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
+                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
+                }else {
+                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
+                }
                 miv_more.setImageResource(R.mipmap.icon_more_gengduo);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-                miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
+                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+                }else {
+                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
+                }
+
                 miv_more.setImageResource(R.mipmap.icon_more_n);
             }
         }
@@ -333,11 +345,30 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void isFavorite(String is_fav) {
-        if ("1".equals(is_fav)){
-            miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
+        favId = is_fav;
+        if (goodsDeatilFrag != null){
+            int item = goodsDeatilFrag.currentFirstItem;
+            if (item > 0){
+                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)){
+                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+                }else {
+                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
+                }
+            }else {
+                if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)){
+                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
+                }else {
+                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
+                }
+            }
         }else {
-            miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
+            if (TextUtils.isEmpty(is_fav) || "0".equals(is_fav)){
+                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
+            }else {
+                miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
+            }
         }
+
     }
 
     /**
@@ -358,16 +389,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void footprintList(FootprintEntity footprintEntity) {
         mFootprintEntity = footprintEntity;
+        if (footprintDialog == null) {
+            footprintDialog = new FootprintDialog(this, mFootprintEntity);
+        }
+        footprintDialog.show();
     }
 
     /*
    显示足迹列表
     */
     public void showFootprintList() {
-        if (footprintDialog == null) {
-            footprintDialog = new FootprintDialog(this, mFootprintEntity);
-        }
-        footprintDialog.show();
+        if (mFootprintEntity == null)
+            goodsDetailPresenter.footprint();
     }
 
     /**
@@ -435,6 +468,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     goodsDeatilFrag.showParamDialog();
                 }else {
                     ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+                }
+                break;
+            case R.id.miv_is_fav:
+                if (TextUtils.isEmpty(favId) || "0".equals(favId)){
+                    goodsDetailPresenter.goodsFavAdd(goodsId);
+                }else {
+                    goodsDetailPresenter.goodsFavRemove(favId);
                 }
                 break;
         }
