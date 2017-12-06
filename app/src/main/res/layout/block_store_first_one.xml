@@ -35,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="270dp"
             android:layout_weight="1"
+            android:id="@+id/mllayout_onel"
             android:orientation="vertical"
             android:paddingRight="2.5dp">
             <com.shunlian.app.widget.MyImageView

@@ -3,6 +3,7 @@ package com.shunlian.app.widget.banner;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
@@ -17,14 +18,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -68,6 +72,10 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
     /** title */
     protected TextView tv_title;
+
+    private MyTextView titleOne,titleTwo;
+
+    private List<StoreIndexEntity.Body.Datas> mDatas;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -215,6 +223,10 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     public void onTitleSlect(TextView tv, int position) {
     }
 
+    public void textChange(int currentPositon){
+        titleOne.setText(currentPositon+"/"+mDatas.size());
+        titleTwo.setText(mDatas.get(currentPositon-1).description);
+    }
     /** set data source list */
     public void setBanner(List<E> list) {
         this.list = list;
@@ -227,6 +239,23 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         startScroll();
     }
 
+    public void setBanners(List<E> list,MyTextView mtv_one,MyTextView mtv_two) {
+        this.list = list;
+        mDatas= (List<StoreIndexEntity.Body.Datas>) list;
+        titleOne=mtv_one;
+        titleOne.setVisibility(VISIBLE);
+        titleTwo=mtv_two;
+        if (mDatas != null && mDatas.size() == 1){
+            removeAllViews();
+            MyImageView myImageView = new MyImageView(getContext());
+            myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            GlideUtils.getInstance().loadImage(getContext(),myImageView,mDatas.get(0).whole_thumb);
+            titleOne.setVisibility(GONE);
+            titleTwo.setText(mDatas.get(0).description);
+            addView(myImageView,0,lp_vp);
+        }
+        startScroll();
+    }
     /** set scroll delay before start scroll,unit second,default 5 seconds */
     public T setDelay(long delay) {
         this.delay = delay;
@@ -342,6 +371,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             currentPositon = position % list.size();
 
             setCurrentIndicator(currentPositon);
+            if (mDatas!=null&&mDatas.size()>1){
+                textChange(currentPositon+1);
+            }
             onTitleSlect(tv_title, currentPositon);
             ll_bottom_bar.setVisibility(currentPositon == list.size() - 1 && !isBarShowWhenLast ? GONE : VISIBLE);
 
@@ -364,7 +396,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         if (list == null) {
             throw new IllegalStateException("Data source is empty,you must setBanner(List<E> list) before startScroll()");
         }
-
+        if (mDatas!=null&&mDatas.size()>1){
+            textChange(currentPositon+1);
+        }
         onTitleSlect(tv_title, currentPositon);
         setViewPager();
         //create indicator

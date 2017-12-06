@@ -19,6 +19,7 @@ import com.shunlian.app.adapter.StoreDiscountTwoAdapter;
 import com.shunlian.app.adapter.StoreFirstAdapter;
 import com.shunlian.app.adapter.StoreNewAdapter;
 import com.shunlian.app.adapter.StoreVoucherAdapter;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
@@ -27,9 +28,10 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
@@ -452,13 +454,19 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Override
-    public void storeBaby(List<StoreGoodsListEntity.MData> mDataList, int allPage, int page) {
+    public void storeBaby(final List<StoreGoodsListEntity.MData> mDataList, int allPage, final int page) {
         if (storeBabyAdapter == null) {
             storeBabyAdapter = new StoreBabyAdapter(this, true, mDataList);
             babyManager = new GridLayoutManager(this, 2);
             rv_baby.setLayoutManager(babyManager);
             rv_baby.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(this, 5), TransformUtil.dip2px(this, 5), true));
             rv_baby.setAdapter(storeBabyAdapter);
+            storeBabyAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(StoreAct.this,mDataList.get(position).id);
+                }
+            });
         } else {
             storeBabyAdapter.notifyDataSetChanged();
         }
@@ -540,11 +548,13 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Override
-    public void storeVoucher(List<StoreIndexEntity.Voucher> vouchers) {
+    public void storeVoucher(List<GoodsDeatilEntity.Voucher> vouchers) {
         if (storeVoucherAdapter == null) {
             storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
             LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             rv_firstVouch.setLayoutManager(firstManager);
+            int space = TransformUtil.dip2px(this, 10);
+            rv_firstVouch.addItemDecoration(new HorItemDecoration(space,space / 2,space / 2));
             rv_firstVouch.setAdapter(storeVoucherAdapter);
         } else {
             storeVoucherAdapter.notifyDataSetChanged();

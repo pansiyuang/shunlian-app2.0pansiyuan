@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mrl_bg"
-    android:layout_width="145dp"
-    android:layout_height="60dp"
-    android:layout_marginBottom="12.5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginTop="12.5dp"
-    android:background="@mipmap/img_youhuiquan_2">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/img_youhuiquan_2"
+    app:ll_control_adapter="true"
+    app:ll_control_height="120"
+    app:ll_control_width="290"
+    app:ll_margin_bottom="25"
+    app:ll_margin_top="25">
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_price"
+    <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="14dp"
-        android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="27sp" />
+        android:layout_height="match_parent"
+        app:rl_control_adapter="true"
+        app:rl_control_height="120"
+        app:rl_control_width="130">
 
-    <com.shunlian.app.widget.MyTextView
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="120"
+            android:textColor="@color/white"
+            android:textSize="27sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rmb"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="11"
+            app:tv_margin_top="55" />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5.5dp"
-        android:gravity="bottom"
-        android:text="@string/rmb"
-        android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:ll_control_adapter="true"
+        app:ll_control_height="120"
+        app:ll_control_width="160">
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="37dp"
-        android:layout_marginTop="9dp"
-        android:singleLine="true"
-        android:maxEms="3"
-        android:ellipsize="end"
-        android:textColor="@color/white"
-        android:textSize="13sp" />
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="3"
+            android:maxLines="1"
+            android:text="优惠券"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="10"
+            app:tv_margin_top="18" />
 
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_full_cut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/mtv_name"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="9dp"
-        android:singleLine="true"
-        android:maxEms="5"
-        android:ellipsize="end"
-        android:textColor="@color/white"
-        android:textSize="10sp" />
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_full_cut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="满2900元可用"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="10"
+            app:tv_margin_top="20" />
+    </com.shunlian.app.widget.MyLinearLayout>
 
-</com.shunlian.app.widget.MyRelativeLayout>
+
+</com.shunlian.app.widget.MyLinearLayout>

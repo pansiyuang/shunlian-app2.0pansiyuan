@@ -43,6 +43,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
+import com.shunlian.app.widget.HttpDialog;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -71,6 +72,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected IV iView;
     protected ObjectMapper objectMapper;
     protected static int requestCount;//请求次数
+    private HttpDialog httpDialog;
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;
@@ -170,6 +172,17 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
+    protected <T>void getNetData(boolean isLoading,final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
+        getNetData(0,0,isLoading,tCall,callback);
+    }
+
+    /**
+     * 请求网络数据
+     *
+     * @param tCall
+     * @param callback
+     * @param <T>
+     */
     protected <T> void  getNetData(final int emptyCode, final int failureCode, final boolean isLoading, final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
@@ -177,9 +190,16 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         if (!NetworkUtils.isNetworkAvailable((Activity) context)){
             return;
         }
+        if (isLoading) {
+            httpDialog = new HttpDialog(context);
+            httpDialog.show();
+        }
         tCall.enqueue(new Callback<BaseEntity<T>>() {
             @Override
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
+                if (httpDialog != null){
+                    httpDialog.dismiss();
+                }
                 BaseEntity<T> body = response.body();
                 LogUtil.longW("onResponse============" + body.toString());
                 if (body.code == 1000) {//请求成功
@@ -202,6 +222,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
             @Override
             public void onFailure(Call<BaseEntity<T>> call, Throwable t) {
+                if (httpDialog != null){
+                    httpDialog.dismiss();
+                }
                 if (t != null)
                     t.printStackTrace();
                 callback.onFailure();

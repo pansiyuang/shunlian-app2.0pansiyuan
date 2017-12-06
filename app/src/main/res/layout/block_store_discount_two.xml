@@ -6,6 +6,7 @@
     android:paddingBottom="5dp">
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_onel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="2.5dp"

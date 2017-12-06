@@ -61,8 +61,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder unbinder;
     public ImmersionBar immersionBar;
     private NetworkBroadcast networkBroadcast;
-    private static NetDialog netDialog;
     private Resources resources;
+    private NetDialog netDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showPopup(boolean isShow){
-        netDialog = NetDialog.getInstance(this);
+        netDialog = new NetDialog(this);
         if (isShow) {
             if (!netDialog.isShowing())
                 netDialog.show();
@@ -306,6 +306,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         if (networkBroadcast != null){
             unregisterReceiver(networkBroadcast);
+        }
+        if (netDialog != null && netDialog.isShowing()){
+            netDialog.dismiss();
         }
     }
 }

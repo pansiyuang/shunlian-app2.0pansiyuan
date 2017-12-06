@@ -44,6 +44,8 @@ public class DiscountListDialog extends Dialog {
     MyTextView mtv_title;
     private int recycleHeight;
     private int currentPosition = 0;
+    private ISelectListener listener;
+    private List<ConfirmOrderEntity.Voucher> mVouchers;
 
 
     public DiscountListDialog(Context context) {
@@ -78,21 +80,32 @@ public class DiscountListDialog extends Dialog {
         mtv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isShowing()) {
-                    dismiss();
+                if (listener != null){
+                    listener.onSelect(currentPosition);
                 }
+                dismiss();
             }
         });
     }
 
-    public void setGoodsDiscount(List<ConfirmOrderEntity.Voucher> vouchers){
-        mtv_title.setText("商品优惠券");
-        ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
-        voucher.title = "不使用优惠券";
-        voucher.voucher_id = "no_0";
-        vouchers.add(voucher);
+    /**
+     * 优惠券
+     * @param enabled
+     */
+    public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled){
+        mVouchers = enabled.voucher;
+        mtv_title.setText(mContext.getResources().getString(R.string.goods_voucher));
+        currentPosition = enabled.selectVoucherId;
+        ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
+        if (!"no_0".equals(voucher1.voucher_id)){
+            ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
+            voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
+            voucher.voucher_id = "no_0";
+            voucher.denomination = "0";
+            mVouchers.add(voucher);
+        }
         final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.Voucher>(mContext,
-                R.layout.item_changeprefer, vouchers) {
+                R.layout.item_changeprefer, mVouchers) {
 
             @Override
             public void convert(SimpleViewHolder holder, ConfirmOrderEntity.Voucher s, int position) {
@@ -118,5 +131,48 @@ public class DiscountListDialog extends Dialog {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    /**
+     * 促销
+     * @param enabled
+     */
+    public void setPromotion(ConfirmOrderEntity.Enabled  enabled){
+        mtv_title.setText(mContext.getResources().getString(R.string.store_discount));
+        currentPosition = enabled.selectPromotionId;
+        final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.PromotionInfo>(mContext,
+                R.layout.item_changeprefer, enabled.promotion_info) {
+
+            @Override
+            public void convert(SimpleViewHolder holder, ConfirmOrderEntity.PromotionInfo s, int position) {
+                TextView tv_prefer = holder.getView(R.id.tv_prefer);
+                tv_prefer.setText(s.prom_title);
+                MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
+                holder.addOnClickListener(R.id.rl_item);
+                if (currentPosition == position) {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                } else {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+                }
+            }
+        };
+        int space1 = TransformUtil.dip2px(mContext, 10);
+        recycler_list.setPadding(space1,0,space1,0);
+        recycler_list.setAdapter(recyclerAdapter);
+
+        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                currentPosition = position;
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    public void setSelectListener(ISelectListener listener){
+        this.listener = listener;
+    }
+
+    public interface ISelectListener{
+        void onSelect(int position);
     }
 }

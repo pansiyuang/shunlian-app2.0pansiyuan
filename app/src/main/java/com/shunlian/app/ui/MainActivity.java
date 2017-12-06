@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
@@ -303,10 +302,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } catch (ActivityNotFoundException e) {
                     finish();
                 }finally {
-                    NetDialog instance = NetDialog.getInstance(this);
-                    if (instance.isShowing()){
-                        instance.dismiss();
-                    }
                 }
             }
             return true;

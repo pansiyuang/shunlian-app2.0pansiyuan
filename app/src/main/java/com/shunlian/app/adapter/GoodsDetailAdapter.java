@@ -263,28 +263,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
             ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             //详情优惠券
-
-            SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter<GoodsDeatilEntity.Voucher>
-                    (context,R.layout.item_coupon,vouchers){
-
-                @Override
-                public void convert(SimpleViewHolder holder, GoodsDeatilEntity.Voucher voucher, int position) {
-                    MyTextView mtv_price = holder.getView(R.id.mtv_price);
-                    MyTextView mtv_name = holder.getView(R.id.mtv_name);
-                    MyTextView mtv_full_cut = holder.getView(R.id.mtv_full_cut);
-                    MyRelativeLayout mrl_bg = holder.getView(R.id.mrl_bg);
-
-                    mtv_price.setText(voucher.denomination);
-                    mtv_name.setText(voucher.title);
-                    String format = getString(R.string.full_yuan_available);
-                    mtv_full_cut.setText(String.format(format,voucher.use_condition));
-                    if("1".equals(voucher.is_get)){
-                        mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_2);
-                    }else {
-                        mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_1);
-                    }
-                }
-            };
+            StoreVoucherAdapter adapter = new StoreVoucherAdapter(context,false,vouchers);
             recy_view_coupon.setAdapter(adapter);
         }
     }
@@ -983,7 +962,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view_coupon.setLayoutManager(manager);
             recy_view_coupon.setNestedScrollingEnabled(false);
             int space = TransformUtil.dip2px(context, 10);
-            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,space,space));
+            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,space/2,space/2));
         }
     }
 

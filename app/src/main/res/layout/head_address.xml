@@ -30,7 +30,8 @@
             android:ellipsize="end"
             android:maxLength="12"
             android:maxLines="1"
-            android:text="阿拉斯加的企阿拉斯加的企阿拉斯加的企"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
             app:tv_control_adapter="true"
             app:tv_margin_left="24" />
 
@@ -40,7 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:maxLines="1"
-            android:text="13007562706"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
             app:tv_control_adapter="true"
             app:tv_margin_left="24"
             app:tv_margin_right="70" />
@@ -52,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mtv_nickname"
             android:layout_toRightOf="@+id/miv_address"
-            android:text="收货地址：浙江省杭州市滨江区江陵路1916号星耀城二期29楼"
+            android:textColor="@color/new_text"
+            android:textSize="12sp"
             app:tv_control_adapter="true"
             app:tv_margin_left="24"
             app:tv_margin_right="70"
@@ -67,6 +70,20 @@
             app:iv_control_adapter="true"
             app:iv_margin_right="30" />
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_add_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_address"
+            android:textSize="15sp"
+            android:textColor="@color/new_text"
+            android:layout_toRightOf="@+id/miv_address"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            />
     </com.shunlian.app.widget.MyRelativeLayout>
 
 

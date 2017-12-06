@@ -36,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/mllayout_onel"
             android:orientation="vertical"
             android:background="@color/white"
             android:layout_marginRight="2.5dp">

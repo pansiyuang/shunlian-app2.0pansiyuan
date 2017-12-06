@@ -48,7 +48,7 @@
             android:name=".ui.login.LoginAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.register.SelectRecommendAct"
             android:exported="false"
@@ -90,15 +90,18 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".ui.store.StoreIntroduceAct"
+        <activity
+            android:name=".ui.store.StoreIntroduceAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.store.StoreSortAct"
+        <activity
+            android:name=".ui.store.StoreSortAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.goods_detail.ComboDetailAct"
+        <activity
+            android:name=".ui.goods_detail.ComboDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:exported="false"
             android:screenOrientation="portrait"
@@ -107,6 +110,8 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:name=".ui.order_address.OrderListActivity" />
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
     </application>
 
 </manifest>
