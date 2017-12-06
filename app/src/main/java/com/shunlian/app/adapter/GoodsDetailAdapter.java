@@ -962,7 +962,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view_coupon.setLayoutManager(manager);
             recy_view_coupon.setNestedScrollingEnabled(false);
             int space = TransformUtil.dip2px(context, 10);
-            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,0,0));
+            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,space/2,space/2));
         }
     }
 

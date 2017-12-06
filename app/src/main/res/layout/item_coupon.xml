@@ -9,8 +9,6 @@
     app:ll_control_height="120"
     app:ll_control_width="290"
     app:ll_margin_bottom="25"
-    app:ll_margin_left="10"
-    app:ll_margin_right="10"
     app:ll_margin_top="25">
 
     <com.shunlian.app.widget.MyRelativeLayout

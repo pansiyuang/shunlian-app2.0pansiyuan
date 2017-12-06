@@ -554,7 +554,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             rv_firstVouch.setLayoutManager(firstManager);
             int space = TransformUtil.dip2px(this, 10);
-            rv_firstVouch.addItemDecoration(new HorItemDecoration(space,0,0));
+            rv_firstVouch.addItemDecoration(new HorItemDecoration(space,space / 2,space / 2));
             rv_firstVouch.setAdapter(storeVoucherAdapter);
         } else {
             storeVoucherAdapter.notifyDataSetChanged();

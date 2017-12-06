@@ -72,23 +72,4 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
             }
         }
     }
-
-    //绘制纵向 item 分割线
-    private void drawVertical(Canvas canvas, RecyclerView parent) {
-        final int top = parent.getPaddingTop();
-        final int bottom = parent.getMeasuredHeight() - parent.getPaddingBottom();
-        final int childSize = parent.getChildCount();
-        for (int i = 0; i < childSize; i++) {
-            if (i == 0){
-                continue;
-            }
-            final View child = parent.getChildAt(i);
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final int left = child.getRight() + layoutParams.rightMargin;
-            final int right = left + space;
-            if (mPaint != null) {
-                canvas.drawRect(left, top, right, bottom, mPaint);
-            }
-        }
-    }
 }
