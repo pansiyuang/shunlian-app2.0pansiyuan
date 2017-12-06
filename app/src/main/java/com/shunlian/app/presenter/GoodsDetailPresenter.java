@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -49,8 +50,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 }
             }
         });
-
-        footprint();
+        commentList(goods_id,"ALL","10","20");
     }
 
     /**
@@ -132,6 +132,69 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 FootprintEntity data = entity.data;
                 iView.footprintList(data);
+            }
+        });
+    }
+
+    /**
+     * 添加收藏
+     * @param goods_id
+     */
+    public void goodsFavAdd(String goods_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavorite(requestBody);
+        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.isFavorite(entity.data.fid);
+                Common.staticToast(entity.message);
+            }
+        });
+    }
+
+    /**
+     * 移除收藏
+     * @param ids
+     */
+    public void goodsFavRemove(String ids){
+        Map<String,String> map = new HashMap<>();
+        map.put("ids",ids);
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavoriteRemove(requestBody);
+        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.isFavorite(entity.data.fid);
+                Common.staticToast(entity.message);
+            }
+        });
+    }
+
+    /**
+     * 评价列表
+     * @param goods_id
+     * @param type
+     * @param page
+     * @param pageSize
+     */
+    public void commentList(String goods_id,String type,String page,String pageSize){
+        Map<String,String> map = new HashMap<>();
+        map.put("goods_id",goods_id);
+        map.put("type",type);
+        map.put("page",page);
+        map.put("pageSize",pageSize);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().commentList(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
             }
         });
     }
