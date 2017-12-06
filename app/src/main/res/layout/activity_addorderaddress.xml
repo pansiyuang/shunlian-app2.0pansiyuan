@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/cargo_receiver"
+                android:text="@string/address_shouhuoren"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/phone_number"
+                android:text="@string/address_shoujihao"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/province_city"
+                android:text="@string/address_shenshiqu"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/detail_address"
+                android:text="@string/address_xiangxidizhi"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 

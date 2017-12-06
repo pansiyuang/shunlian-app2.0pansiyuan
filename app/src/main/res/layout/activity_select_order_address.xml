@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include
@@ -21,7 +22,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@color/pink_color"
-        android:text="@string/add_order_address"
+        android:text="@string/address_add"
         android:textColor="@color/white"
         android:textSize="15sp"></Button>
 </RelativeLayout>

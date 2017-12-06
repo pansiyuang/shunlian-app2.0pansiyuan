@@ -107,9 +107,12 @@
             android:screenOrientation="portrait"
             android:name=".ui.confirm_order.ConfirmOrderAct" />
         <activity
+            android:name=".ui.order_address.OrderListActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:name=".ui.order_address.OrderListActivity" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order_address.AddressManageActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
     </application>
