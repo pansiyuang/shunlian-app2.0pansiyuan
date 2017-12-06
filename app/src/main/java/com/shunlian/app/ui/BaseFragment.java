@@ -2,6 +2,8 @@ package com.shunlian.app.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,11 +48,12 @@ public abstract class BaseFragment extends Fragment {
     protected Activity baseActivity;
     protected Context baseContext;
     private Unbinder bind;
-
+    private Resources resources;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         baseContext = getActivity();
+        resources = baseContext.getResources();
         View layoutId = getLayoutId(inflater, container);
         return layoutId;
     }
@@ -144,6 +147,33 @@ public abstract class BaseFragment extends Fragment {
                 editText[i].requestFocus();
             }
         }
+    }
+
+    /**
+     * 获取文字资源
+     *
+     * @param stringResouce
+     */
+    protected String getStringResouce(int stringResouce) {
+        return resources.getString(stringResouce);
+    }
+
+    /**
+     * 获取颜色资源
+     *
+     *  @param colorResouce
+     */
+    protected int getColorResouce(int colorResouce) {
+        return resources.getColor(colorResouce);
+    }
+
+    /**
+     * 获取图片资源
+     *
+     *  @param drawableResouce
+     */
+    protected Drawable getDrawableResouce(int drawableResouce) {
+        return resources.getDrawable(drawableResouce);
     }
 
     @Override

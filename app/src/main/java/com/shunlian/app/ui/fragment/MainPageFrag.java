@@ -14,6 +14,7 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.order_address.OrderListActivity;
 import com.shunlian.app.ui.receive_adress.AddAdressAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
@@ -81,9 +82,9 @@ public class MainPageFrag extends BaseFragment {
         items.add("店铺");
         items.add("购物车");
         items.add("确认订单");
+        items.add("选择收获地址");
         items.add("收货地址");
         items.addAll(DataUtil.getListString(40, "条目"));
-
 
 
         SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(baseContext, android.R.layout.simple_list_item_1, items) {
@@ -91,22 +92,23 @@ public class MainPageFrag extends BaseFragment {
             @Override
             public void convert(SimpleViewHolder holder, String s, int position) {
                 holder.addOnClickListener(android.R.id.text1);
-                holder.setText(android.R.id.text1,s);
+                holder.setText(android.R.id.text1, s);
             }
         };
 
-        LinearLayoutManager manager = new LinearLayoutManager(baseContext,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false);
         recy_view.setLayoutManager(manager);
         recy_view.setAdapter(simpleRecyclerAdapter);
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         LoginAct.startAct(baseContext);
                         break;
                     case 1:
-                        GoodsDetailAct.startAct(baseContext,"134");
+                        GoodsDetailAct.startAct(baseContext, "56");
+//                        GoodsDetailAct.startAct(baseContext,"134");
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);
@@ -114,6 +116,9 @@ public class MainPageFrag extends BaseFragment {
                     case 4:
                         break;
                     case 5:
+                        OrderListActivity.startAct(baseContext);
+                        break;
+                    case 6:
                         AddAdressAct.startAct(baseContext,"");
                         break;
                 }
@@ -128,7 +133,7 @@ public class MainPageFrag extends BaseFragment {
                     public void run() {
                         ll_layout.setRefreshing(false);
                     }
-                },3000);
+                }, 3000);
             }
         });
 

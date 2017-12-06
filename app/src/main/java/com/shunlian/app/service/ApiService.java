@@ -22,6 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
@@ -435,4 +436,13 @@ public interface ApiService {
      */
     @POST("member/address/add")
     Call<BaseEntity<EmptyEntity>> addressAdd(@Body RequestBody body);
+
+    /**
+     * 收货地址列表
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/address/all")
+    Call<BaseEntity<AddressDataEntity>> allAddress(@Body RequestBody body);
 }

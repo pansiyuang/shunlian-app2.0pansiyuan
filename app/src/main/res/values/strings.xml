@@ -92,14 +92,7 @@
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
-    <!--收货地址-->
-    <string name="address_add">新增收货地址</string>
-    <string name="address_shouhuoren">收货人</string>
-    <string name="address_shoujihao">手机号码</string>
-    <string name="address_shenshiqu">省市区</string>
-    <string name="address_xiangxidizhi">详细地址</string>
-    <string name="address_sheweimoren">设为默认地址</string>
-    <string name="address_save">保存</string>
+
 
     <!--商品详情-->
     <string name="rmb">￥</string>
@@ -208,4 +201,27 @@
     <string name="voucher">优惠券</string>
     <string name="buyer_message">给卖家留言：</string>
     <string name="subtotal">小计:</string>
+
+    <!--收获地址-->
+    <string name="cargo_receiver">收货人</string>
+    <string name="phone_number">手机号码</string>
+    <string name="province_city">省市区</string>
+    <string name="detail_address">详细地址</string>
+    <string name="location">定位</string>
+    <string name="input_hint_name">请输入收货人姓名</string>
+    <string name="input_hint_phone_number">请输入手机号码</string>
+    <string name="input_hint_click_select">点击选择</string>
+    <string name="input_hint_detail_address">请输入详细地址（5-120字）</string>
+    <string name="add_order_address">新增收获地址</string>
+    <string name="select_order_address">选择收获地址</string>
+
+    <!--收货地址-->
+    <string name="address_add">新增收货地址</string>
+    <string name="address_shouhuoren">收货人</string>
+    <string name="address_shoujihao">手机号码</string>
+    <string name="address_shenshiqu">省市区</string>
+    <string name="address_xiangxidizhi">详细地址</string>
+    <string name="address_sheweimoren">设为默认地址</string>
+    <string name="address_save">保存</string>
+
 </resources>

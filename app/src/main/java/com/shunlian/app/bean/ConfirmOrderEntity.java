@@ -81,21 +81,17 @@ public class ConfirmOrderEntity {
     public static class Address{
 
         public String id;
-        public String district_id;
         public String realname;
         public String mobile;
+        public String province;
+        public String city;
+        public String area;
+        public String address;
+        public String district_addr;
+        public String isdefault;
+        public List<String> district_ids;
         public String detail_address;
 
-        @Override
-        public String toString() {
-            return "Address{" +
-                    "id='" + id + '\'' +
-                    ", district_id='" + district_id + '\'' +
-                    ", realname='" + realname + '\'' +
-                    ", mobile='" + mobile + '\'' +
-                    ", address='" + detail_address + '\'' +
-                    '}';
-        }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Voucher{
