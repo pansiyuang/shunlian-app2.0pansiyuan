@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.order_address;
+package com.shunlian.app.ui.receive_adress;
 
 import android.content.Context;
 import android.content.Intent;

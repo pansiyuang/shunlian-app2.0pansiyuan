@@ -14,7 +14,7 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.order_address.OrderListActivity;
+import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.ui.receive_adress.AddAdressAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
@@ -83,7 +83,6 @@ public class MainPageFrag extends BaseFragment {
         items.add("购物车");
         items.add("确认订单");
         items.add("选择收获地址");
-        items.add("收货地址");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -116,10 +115,7 @@ public class MainPageFrag extends BaseFragment {
                     case 4:
                         break;
                     case 5:
-                        OrderListActivity.startAct(baseContext);
-                        break;
-                    case 6:
-                        AddAdressAct.startAct(baseContext,"");
+                        AddressListActivity.startAct(baseContext);
                         break;
                 }
             }

@@ -26,7 +26,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/5.
  */
 
-public class OrderListActivity extends BaseActivity implements View.OnClickListener, IOrderAddressView, BaseRecyclerAdapter.OnItemClickListener {
+public class AddressListActivity extends BaseActivity implements View.OnClickListener, IOrderAddressView, BaseRecyclerAdapter.OnItemClickListener {
     @BindView(R.id.tv_title)
     TextView tv_title;
 
@@ -43,7 +43,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private AddressAdapter addressAdapter;
 
     public static void startAct(Context context) {
-        Intent intent = new Intent(context, OrderListActivity.class);
+        Intent intent = new Intent(context, AddressListActivity.class);
         context.startActivity(intent);
     }
 
@@ -74,6 +74,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
+                AddAdressAct.startAct(this,"");
                 break;
             case R.id.tv_title_right:
                 AddressManageActivity.startAct(this);
