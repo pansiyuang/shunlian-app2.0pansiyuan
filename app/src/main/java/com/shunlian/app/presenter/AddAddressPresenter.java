@@ -1,25 +1,17 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
+import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.StoreGoodsListEntity;
-import com.shunlian.app.bean.StoreIndexEntity;
-import com.shunlian.app.bean.StoreNewGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.AddAddressView;
-import com.shunlian.app.view.StoreView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +23,6 @@ import chihane.jdaddressselector.DataProvider;
 import chihane.jdaddressselector.ISelectAble;
 import chihane.jdaddressselector.SelectedListener;
 import chihane.jdaddressselector.Selector;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -40,40 +31,63 @@ import retrofit2.Call;
  */
 
 public class AddAddressPresenter extends BasePresenter<AddAddressView> {
-    private ArrayList<DistrictAllEntity.Province> provinces;
+    private List<DistrictAllEntity.Province> provinces;
     private String one, two;
-    private BottomDialog dialog ;
+    private BottomDialog dialog;
     private Context context;
 
     public AddAddressPresenter(Context context, AddAddressView iView) {
         super(context, iView);
-        this.context=context;
-        initApi();
+        this.context = context;
     }
 
     @Override
     protected void initApi() {
+
+    }
+
+    public void saveAddress(String realname,String mobile,String address,String isdefault,String district_ids){
         Map<String, String> map = new HashMap<>();
+        map.put("realname", realname);
+        map.put("mobile", mobile);
+        map.put("address", address);
+        map.put("isdefault", isdefault);
+        map.put("district_ids", district_ids);
         sortAndMD5(map);
 
-        Call<BaseEntity<DistrictAllEntity>> baseEntityCall = getApiService().districtAll(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<DistrictAllEntity>>() {
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addressAdd(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<DistrictAllEntity> entity) {
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                DistrictAllEntity data = entity.data;
+                Common.staticToast(entity.message);
+                iView.saveAddressCallback();
+            }
+        });
+    }
+    public void initGps(String lng, String lat) {
+        Map<String, String> map = new HashMap<>();
+        map.put("lng", lng);
+        map.put("lat", lat);
+        sortAndMD5(map);
+
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<DistrictGetlocationEntity>> baseEntityCall = getAddCookieApiService().districtGetlocation(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<DistrictGetlocationEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<DistrictGetlocationEntity> entity) {
+                super.onSuccess(entity);
+                DistrictGetlocationEntity data = entity.data;
                 if (data != null) {
-                    LogUtil.httpLogW("DistrictAllEntity:" + data);
-                    iView.storeHeader(data.head);
-                    iView.storeVoucher(data.voucher);
-                    if (data.body != null) {
-                        typeOneHandle(data.body);
-                    }
+                    LogUtil.httpLogW("DistrictGetlocationEntity:" + data);
+                    iView.getGps(data);
                 }
             }
         });
     }
-    public void setData(ArrayList<ISelectAble> data, final String name, final int id) {
+
+    private void setData(ArrayList<ISelectAble> data, final String name, final int id) {
         data.add(new ISelectAble() {
             @Override
             public String getName() {
@@ -92,6 +106,7 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
         });
 
     }
+
     private ArrayList<ISelectAble> getDatas(int flag, String one, String two) {
         ArrayList<ISelectAble> data = new ArrayList<>();
         switch (flag) {
@@ -99,8 +114,8 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
                 for (int j = 0; j < provinces.size(); j++) {
                     if (one.equals(provinces.get(j).id)) {
                         for (int m = 0; m < provinces.get(j).children.size(); m++) {
-                            DistrictAllEntity.Province.City city=provinces.get(j).children.get(m);
-                            setData(data,city.name, Integer.parseInt(city.id));
+                            DistrictAllEntity.Province.City city = provinces.get(j).children.get(m);
+                            setData(data, city.name, Integer.parseInt(city.id));
                             if (m >= provinces.get(j).children.size() - 1) {
                                 return data;
                             }
@@ -113,11 +128,11 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
                 for (int j = 0; j < provinces.size(); j++) {
                     if (one.equals(provinces.get(j).id)) {
                         for (int m = 0; m < provinces.get(j).children.size(); m++) {
-                            if (two.equals(provinces.get(j).children.get(m).id)){
-                                for (int n = 0; n < provinces.get(j).children.get(m).children.size(); n++){
-                                    DistrictAllEntity.Province.City.County county=provinces.get(j).children.get(m).children.get(n);
-                                    setData(data,county.name, Integer.parseInt(county.id));
-                                    if (n>= provinces.get(j).children.get(m).children.size() - 1) {
+                            if (two.equals(provinces.get(j).children.get(m).id)) {
+                                for (int n = 0; n < provinces.get(j).children.get(m).children.size(); n++) {
+                                    DistrictAllEntity.Province.City.County county = provinces.get(j).children.get(m).children.get(n);
+                                    setData(data, county.name, Integer.parseInt(county.id));
+                                    if (n >= provinces.get(j).children.get(m).children.size() - 1) {
                                         return data;
                                     }
                                 }
@@ -129,8 +144,8 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
                 break;
             default:
                 for (int j = 0; j < provinces.size(); j++) {
-                    setData(data,provinces.get(j).name, Integer.parseInt(provinces.get(j).id));
-                    if (j>=provinces.size()-1){
+                    setData(data, provinces.get(j).name, Integer.parseInt(provinces.get(j).id));
+                    if (j >= provinces.size() - 1) {
                         return data;
                     }
                 }
@@ -138,6 +153,7 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
         }
         return data;
     }
+
     private void showDialog() {
         Selector selector = new Selector(context, 3);
 
@@ -165,25 +181,54 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
         selector.setSelectedListener(new SelectedListener() {
             @Override
             public void onAddressSelected(ArrayList<ISelectAble> selectAbles) {
-                String result = "";
-                for (ISelectAble selectAble : selectAbles) {
-                    result += selectAble.getName() + " ";
+                String district_ids = "", district = "";
+                for (int m = 0; m < selectAbles.size(); m++) {
+                    if (m >= selectAbles.size()-1) {
+                        district_ids += selectAbles.get(m).getId();
+                        district += selectAbles.get(m).getName();
+                        iView.getDistrict(district, district_ids);
+                        dialog.dismiss();
+                        LogUtil.augusLogW("test"+district);
+                    } else {
+                        district_ids += selectAbles.get(m).getId() + ",";
+                        district += selectAbles.get(m).getName() + " ";
+                        LogUtil.augusLogW("test"+district);
+                    }
                 }
-                dialog.dismiss();
-                Common.staticToast(context,result);
-                Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         });
-        if (dialog==null){
-            dialog = new BottomDialog(this);
-        }else {
-            dialog.init(this, selector);
-            dialog.show();
+        if (dialog == null) {
+            dialog = new BottomDialog(context);
         }
-
+        dialog.init(context, selector);
+        dialog.show();
     }
-    public void initDistrict(){
 
+    public void initDistrict() {
+        if (provinces == null || provinces.size() <= 0) {
+            Map<String, String> map = new HashMap<>();
+            sortAndMD5(map);
+
+            Call<BaseEntity<DistrictAllEntity>> baseEntityCall = getApiService().districtAll(map);
+            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<DistrictAllEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<DistrictAllEntity> entity) {
+                    super.onSuccess(entity);
+                    DistrictAllEntity data = entity.data;
+                    if (data != null) {
+                        LogUtil.httpLogW("DistrictAllEntity:" + data);
+                        if (data.district_all != null && data.district_all.size() > 0) {
+                            provinces = data.district_all;
+                            showDialog();
+                        } else {
+                            Common.staticToast("地址库初始失败...");
+                        }
+                    }
+                }
+            });
+        } else {
+            showDialog();
+        }
     }
 
     @Override

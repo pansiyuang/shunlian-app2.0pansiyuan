@@ -418,7 +418,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("store/newGoodsList")
+    @GET("district/all")
     Call<BaseEntity<DistrictAllEntity>> districtAll(@QueryMap Map<String, String> map);
 
     /**

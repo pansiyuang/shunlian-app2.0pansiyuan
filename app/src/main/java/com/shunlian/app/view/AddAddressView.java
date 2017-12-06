@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
@@ -14,5 +15,7 @@ import java.util.List;
  */
 
 public interface AddAddressView extends IView {
-    void initDistrict();
+    void getGps(DistrictGetlocationEntity districtGetlocationEntity);
+    void getDistrict(String district,String district_ids);
+    void saveAddressCallback();
 }

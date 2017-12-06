@@ -192,30 +192,29 @@
         </LinearLayout>
         <com.shunlian.app.widget.MyRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:background="@color/white"
-            android:paddingBottom="15dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="15dp">
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/address_sheweimoren"
                 android:textColor="@color/new_text"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_centerVertical="true"/>
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="52dp"
+                android:layout_height="26dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/icon_address_position" />
+                android:src="@mipmap/btn_address_setaddress_n"/>
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 
