@@ -37,6 +37,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     private int totalDy;
     private int screenWidth;
     private GoodsDetailAdapter goodsDetailAdapter;
+    public int currentFirstItem;//当前第一个条目
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -58,6 +59,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
                     int firstPosition = manager.findFirstVisibleItemPosition();
+                    currentFirstItem = firstPosition;
                     if (firstPosition > 2){
                         miv_top.setVisibility(View.VISIBLE);
                     }else {

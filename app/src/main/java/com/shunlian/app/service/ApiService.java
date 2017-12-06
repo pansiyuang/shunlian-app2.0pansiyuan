@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
@@ -409,4 +410,28 @@ public interface ApiService {
      */
     @POST("order/confirm")
     Call<BaseEntity<ConfirmOrderEntity>> orderConfirm(@Body RequestBody body);
+
+    /**
+     * 收藏商品
+     * @param body
+     * @return
+     */
+    @POST("member/goodsfavorite/add")
+    Call<BaseEntity<CommonEntity>> goodsfavorite(@Body RequestBody body);
+
+    /**
+     * 移除收藏
+     * @param body
+     * @return
+     */
+    @POST("member/goodsfavorite/remove")
+    Call<BaseEntity<CommonEntity>> goodsfavoriteRemove(@Body RequestBody body);
+
+    /**
+     * 评价列表
+     * @param map
+     * @return
+     */
+    @GET("comment/list")
+    Call<BaseEntity<EmptyEntity>> commentList(@QueryMap Map<String,String> map);
 }
