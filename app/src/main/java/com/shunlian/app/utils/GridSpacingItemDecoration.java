@@ -1,6 +1,7 @@
 package com.shunlian.app.utils;
 
 import android.graphics.Rect;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -23,8 +24,15 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         this.includeEdge = includeEdge;
     }
 
+    public GridSpacingItemDecoration(int spacing, boolean includeEdge) {
+        this.spacing = spacing;
+        this.includeEdge = includeEdge;
+    }
+
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+        spanCount = layoutManager.getSpanCount();
         int position = parent.getChildAdapterPosition(view); // item position
         int column = position % spanCount; // item column
 

@@ -9,9 +9,10 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommentAdapter;
+import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.DataUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,6 +26,10 @@ public class CommentFrag extends BaseFragment {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+    private List<CommentListEntity.Data> commentlists = new ArrayList<>();
+    private LinearLayoutManager manager;
+    private CommentAdapter commentAdapter;
+
     /**
      * 设置布局id
      *
@@ -46,10 +51,21 @@ public class CommentFrag extends BaseFragment {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) recy_view.getLayoutParams();
         layoutParams.topMargin = ((GoodsDetailAct)baseActivity).offset;
         recy_view.setLayoutParams(layoutParams);
-        List<String> iten = DataUtil.getListString(10, "iten");
-        LinearLayoutManager manager = new LinearLayoutManager(baseActivity);
+        manager = new LinearLayoutManager(baseActivity);
         recy_view.setLayoutManager(manager);
-        CommentAdapter commentAdapter = new CommentAdapter(baseActivity,false,iten);
+        commentAdapter = new CommentAdapter(baseActivity,false,commentlists);
         recy_view.setAdapter(commentAdapter);
+    }
+
+    /**
+     * 评价列表
+     * @param entity
+     */
+    public void setCommentList(CommentListEntity entity){
+        List<CommentListEntity.Label> label = entity.label;
+        CommentListEntity.ListData list = entity.list;
+        commentlists.addAll(list.data);
+        commentAdapter.setLabel(label);
+        commentAdapter.notifyDataSetChanged();
     }
 }

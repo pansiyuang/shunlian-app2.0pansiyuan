@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -249,6 +250,21 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         return context.getResources().getString(id);
     }
 
+    protected boolean isEmpty(CharSequence character){
+        return TextUtils.isEmpty(character);
+    }
+
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }

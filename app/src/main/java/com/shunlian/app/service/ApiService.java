@@ -24,6 +24,7 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -434,7 +435,7 @@ public interface ApiService {
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<EmptyEntity>> commentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
 
     /**
      * 收货地址列表

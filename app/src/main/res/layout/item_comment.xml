@@ -16,11 +16,13 @@
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.circle.CircleImageView
+            android:id="@+id/civ_head"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@mipmap/icon_login_logo" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我的名字就是帅"
@@ -30,6 +32,7 @@
             app:tv_margin_left="14" />
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_vip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/v0"
@@ -37,6 +40,7 @@
             app:iv_margin_left="10" />
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_medal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/img_jingyingdaoshi"
@@ -45,6 +49,7 @@
 
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,6 +62,7 @@
     </com.shunlian.app.widget.MyLinearLayout>
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -68,11 +74,13 @@
         app:tv_margin_top="28" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_append_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -84,6 +92,7 @@
         app:tv_margin_top="37" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_content1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -95,11 +104,13 @@
         app:tv_margin_top="20" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_attribute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -119,6 +130,7 @@
         app:ll_margin_top="24">
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_buy_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -129,6 +141,7 @@
 
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_zan_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -138,6 +151,7 @@
             android:textSize="12sp" />
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_zan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/img_pingjia_zan_n"
@@ -147,5 +161,37 @@
             app:iv_margin_left="14" />
     </com.shunlian.app.widget.MyLinearLayout>
 
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rl_control_adapter="true"
+        app:rl_margin_top="16">
 
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sanjiao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_sanjiao" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/img_sanjiao" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/miv_sanjiao"
+            android:background="@color/white_ash"
+            android:paddingBottom="8dp"
+            android:paddingLeft="6.5dp"
+            android:paddingRight="6.5dp"
+            android:paddingTop="8dp"
+            android:text="不知道你问的是MissDior Cherie系列中的哪一款不知道你问的是系列中的哪一款不知道你问的是系列中的哪一款。"
+            android:textColor="@color/my_gray_two"
+            android:textSize="13sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyLinearLayout>

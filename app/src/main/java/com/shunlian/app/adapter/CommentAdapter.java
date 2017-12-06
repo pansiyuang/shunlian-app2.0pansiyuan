@@ -1,14 +1,26 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.bean.PicAdapter;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
 import com.shunlian.app.widget.flowlayout.TagFlowLayout;
@@ -21,11 +33,12 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/21.
  */
 
-public class CommentAdapter extends BaseRecyclerAdapter<String> {
+public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> {
 
     public static final int HEAD = 2;
+    private List<CommentListEntity.Label> mLabel;
 
-    public CommentAdapter(Context context, boolean isShowFooter, List<String> lists) {
+    public CommentAdapter(Context context, boolean isShowFooter, List<CommentListEntity.Data> lists) {
         super(context, isShowFooter, lists);
     }
 
@@ -58,15 +71,17 @@ public class CommentAdapter extends BaseRecyclerAdapter<String> {
     private void handlerHead(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeadHolder){
             final HeadHolder mHolder = (HeadHolder) holder;
-            String[] item = {"全部(8)","追加(100)","有图评价(1920)","好评(2582)","中评(200)","差评(520)"};
-            final TagAdapter tagAdapter = new TagAdapter<String>(item) {
+            if (mLabel == null){
+                return;
+            }
+            final TagAdapter tagAdapter = new TagAdapter<CommentListEntity.Label>(mLabel) {
 
                 @Override
-                public View getView(FlowLayout parent, int position, String s) {
+                public View getView(FlowLayout parent, int position, CommentListEntity.Label s) {
                     MyTextView textView = (MyTextView) LayoutInflater.from(context)
                             .inflate(R.layout.comment_class, mHolder.gv_section, false);
                     GradientDrawable background = (GradientDrawable) textView.getBackground();
-                    textView.setText(s);
+                    textView.setText(s.name+"("+s.count+")");
                     if (position == selectId){
                         textView.setTextColor(getColor(R.color.white));
                         background.setColor(getColor(R.color.pink_color));
@@ -110,6 +125,15 @@ public class CommentAdapter extends BaseRecyclerAdapter<String> {
         }
     }
 
+    @Override
+    public int getItemCount() {
+        if (isEmpty(mLabel)){
+            return super.getItemCount();
+        }else {
+            return super.getItemCount() + 1;
+        }
+    }
+
     /**
      * 处理列表
      *
@@ -118,13 +142,140 @@ public class CommentAdapter extends BaseRecyclerAdapter<String> {
      */
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof CommentHolder){
+            CommentHolder mHolder = (CommentHolder) holder;
+            CommentListEntity.Data data = lists.get(position - 1);
+            if (isEmpty(data.content)){
+                mHolder.mtv_content.setVisibility(View.GONE);
+            }else {
+                mHolder.mtv_content.setVisibility(View.VISIBLE);
+                mHolder.mtv_content.setText(data.content);
+            }
 
+            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,data.avatar);
+            Bitmap bitmap = TransformUtil.convertVIP(context, data.level);
+            mHolder.miv_vip.setImageBitmap(bitmap);
+//            GlideUtils.getInstance().loadImage(context,mHolder.miv_medal,data.member_role);
+            mHolder.mtv_nickname.setText(data.nickname);
+            mHolder.mtv_time.setText(data.add_time);
+            mHolder.mtv_attribute.setText(data.goods_option);
+            mHolder.mtv_zan_count.setText(data.praise_total);
+            mHolder.mtv_buy_time.setText(data.buy_time);
+            if (data.is_praise){
+                mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
+                mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
+            }else {
+                mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
+                mHolder.mtv_zan_count.setTextColor(getColor(R.color.line_btn));
+            }
+            if (!isEmpty(data.reply)){
+                mHolder.mtv_content1.setVisibility(View.VISIBLE);
+                mHolder.mtv_content1.setText(data.reply);
+            }else {
+                mHolder.mtv_content1.setVisibility(View.GONE);
+            }
+
+            if (isEmpty(data.reply)){
+                mHolder.mrl_reply.setVisibility(View.GONE);
+            }else {
+                mHolder.mrl_reply.setVisibility(View.VISIBLE);
+                SpannableStringBuilder spannableStringBuilder = Common.changeColor("商家回复: " + data.reply, "商家回复: ", getColor(R.color.pink_color));
+                mHolder.mtv_reply.setText(spannableStringBuilder);
+            }
+
+            if (isEmpty(data.append_time)){
+                mHolder.mtv_append_comment.setVisibility(View.GONE);
+            }else {
+                mHolder.mtv_append_comment.setVisibility(View.VISIBLE);
+                mHolder.mtv_append_comment.setText(data.append_time);
+            }
+
+
+            List<String> pics = data.pics;
+            if (isEmpty(pics)){
+                mHolder.recy_view.setVisibility(View.GONE);
+            }else {
+                mHolder.recy_view.setVisibility(View.VISIBLE);
+                PicAdapter picAdapter = new PicAdapter(context,false,pics);
+                mHolder.recy_view.setAdapter(picAdapter);
+            }
+
+
+            List<String> append_pics = data.append_pics;
+            if (isEmpty(append_pics)){
+                mHolder.recy_view1.setVisibility(View.GONE);
+            }else {
+                mHolder.recy_view1.setVisibility(View.VISIBLE);
+                PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
+                mHolder.recy_view1.setAdapter(picAdapter);
+            }
+        }
+    }
+
+    public void setLabel(List<CommentListEntity.Label> label) {
+        mLabel = label;
     }
 
     public class CommentHolder extends BaseRecyclerViewHolder{
 
+        @BindView(R.id.civ_head)
+        CircleImageView civ_head;
+
+        @BindView(R.id.mtv_nickname)
+        MyTextView mtv_nickname;
+
+        @BindView(R.id.miv_vip)
+        MyImageView miv_vip;
+
+        @BindView(R.id.mtv_time)
+        MyTextView mtv_time;
+
+        @BindView(R.id.mtv_content)
+        MyTextView mtv_content;
+
+        @BindView(R.id.mtv_content1)
+        MyTextView mtv_content1;
+
+        @BindView(R.id.mtv_attribute)
+        MyTextView mtv_attribute;
+
+        @BindView(R.id.mtv_buy_time)
+        MyTextView mtv_buy_time;
+
+        @BindView(R.id.mtv_zan_count)
+        MyTextView mtv_zan_count;
+
+        @BindView(R.id.miv_zan)
+        MyImageView miv_zan;
+
+        @BindView(R.id.mtv_append_comment)
+        MyTextView mtv_append_comment;
+
+        @BindView(R.id.mrl_reply)
+        MyRelativeLayout mrl_reply;
+
+        @BindView(R.id.mtv_reply)
+        MyTextView mtv_reply;
+
+        @BindView(R.id.recy_view)
+        RecyclerView recy_view;
+
+        @BindView(R.id.recy_view1)
+        RecyclerView recy_view1;
+
+        @BindView(R.id.miv_medal)
+        MyImageView miv_medal;
         public CommentHolder(View itemView) {
             super(itemView);
+            miv_vip.setWHProportion(23,23);
+            GridLayoutManager manager = new GridLayoutManager(context,3);
+            recy_view.setLayoutManager(manager);
+            recy_view.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,5),false));
+
+
+            GridLayoutManager manager1 = new GridLayoutManager(context,3);
+            recy_view1.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,5),false));
+            recy_view1.setLayoutManager(manager1);
         }
     }
 
