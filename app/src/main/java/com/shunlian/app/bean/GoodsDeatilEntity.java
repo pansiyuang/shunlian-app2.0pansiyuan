@@ -138,6 +138,7 @@ public class GoodsDeatilEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Voucher {
         public String voucher_id;
+        public String id;
         public String store_id;
         public String title;
         public String start_time;

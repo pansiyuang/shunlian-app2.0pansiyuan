@@ -3,7 +3,6 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +132,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.mtv_phone.setVisibility(View.VISIBLE);
                 mHolder.mtv_nickname.setText(mAddress.realname);
                 mHolder.mtv_phone.setText(mAddress.mobile);
-                mHolder.mtv_address.setText("收货地址："+mAddress.detail_address);
+                mHolder.mtv_address.setText(String.format(getString(R.string.address),mAddress.detail_address));
             }
         }
     }
@@ -164,7 +163,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     MyTextView mtv_attribute = holder.getView(R.id.mtv_attribute);
                     mtv_attribute.setText(s.sku);
                     MyTextView mtv_count = holder.getView(R.id.mtv_count);
-                    mtv_count.setText("x"+s.qty);
+                    mtv_count.setText(String.format(getString(R.string.x),s.qty));
                     MyImageView miv_goods = holder.getView(R.id.miv_goods);
                     GlideUtils.getInstance().loadImage(context,miv_goods,s.thumb);
                 }
@@ -188,9 +187,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             mHolder.mtv_store_name.setText(enabled.store_name);
             String shippingFee = enabled.shippingFee;
             if ("0".equals(shippingFee)){
-                mHolder.mtv_shippingFree.setText("包邮");
+                mHolder.mtv_shippingFree.setText(getString(R.string.free_shipping));
             }else {
-                mHolder.mtv_shippingFree.setText("快递￥"+shippingFee);
+                mHolder.mtv_shippingFree.setText(String.format(getString(R.string.express),shippingFee));
             }
             List<GoodsDeatilEntity.Goods> goods = enabled.goods;
             if (goods != null && goods.size() > 0) {
@@ -207,7 +206,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
                 }
-                float v = Common.formatFloat(enabled.sub_total, voucher1.denomination);
+                String v = Common.formatFloat(enabled.sub_total, voucher1.denomination);
                 mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+v,11));
                 mHolder.mllayout_discount.setVisibility(View.VISIBLE);
             }else {
@@ -226,8 +225,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             }else {
                 mHolder.mll_promotion.setVisibility(View.GONE);
             }
-            String format = "共计%s件商品";
-            mHolder.mtv_goods_count.setText(String.format(format,enabled.sub_count));
+            mHolder.mtv_goods_count.setText(String.format(getString(R.string.all_goods),enabled.sub_count));
         }
     }
 
@@ -308,12 +306,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                             mtv_discount.setText(voucher.title);
                             ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
                             String sub_total = enabled.sub_total;
-                            float total = 0;
-                            if (!TextUtils.isEmpty(sub_total)){
-                                 total = Float.parseFloat(sub_total);
-                            }
-                            float discount = Float.parseFloat(voucher.denomination);
-                            mtv_goods_price.setText(getString(R.string.rmb)+ Common.formatFloat(total,discount));
+                            mtv_goods_price.setText(getString(R.string.rmb)+ Common.formatFloat(sub_total,voucher.denomination));
                             enabled.selectVoucherId = position;
                             if (mListener != null){
                                 mListener.onSelectVoucher(position);

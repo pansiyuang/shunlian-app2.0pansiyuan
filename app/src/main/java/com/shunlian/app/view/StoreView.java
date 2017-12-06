@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
@@ -20,7 +21,7 @@ public interface StoreView extends IView {
     void storeNew(List<StoreNewGoodsListEntity.Data> storeNewGoodsListEntities);
     void storeHeader(StoreIndexEntity.Head head);
     void storeDiscountMenu(List<StorePromotionGoodsListEntity.Lable> datas);
-    void storeVoucher(List<StoreIndexEntity.Voucher> vouchers);
+    void storeVoucher(List<GoodsDeatilEntity.Voucher> vouchers);
     void storeFocus();
     void storeDiscountTwo(List<StorePromotionGoodsListTwoEntity.Lists.Good> mDatas);
 }

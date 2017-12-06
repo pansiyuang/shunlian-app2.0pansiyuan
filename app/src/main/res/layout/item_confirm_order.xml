@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
+    <!--店铺名-->
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="美颜秘笈官方旗舰店"
             android:textColor="@color/new_text"
             android:textSize="14sp"
             app:tv_control_adapter="true"
@@ -67,7 +66,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="配送方式"
+            android:text="@string/distribution_mode"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
@@ -107,7 +106,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="促销"
+            android:text="@string/store_discount"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
@@ -153,7 +152,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="优惠券"
+            android:text="@string/voucher"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
@@ -185,7 +184,7 @@
         app:et_control_adapter="true"
         app:et_margin_left="20"
         app:et_margin_right="20"
-        android:hint="给卖家留言："
+        android:hint="@string/buyer_message"
         android:textColorHint="@color/new_gray"
         android:textColor="@color/new_gray"
         android:textSize="14sp"
@@ -207,14 +206,13 @@
             android:id="@+id/mtv_goods_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="共计2件商品"
             android:textColor="@color/new_text"
             android:textSize="14sp"/>
 
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="小计:"
+            android:text="@string/subtotal"
             android:textSize="14sp"
             android:textColor="@color/new_text"
             app:tv_control_adapter="true"
@@ -227,7 +225,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/pink_color"
             android:textSize="14sp"
-            android:text="￥ 425"
             app:tv_control_adapter="true"
             app:tv_margin_left="25"
             app:tv_margin_right="20"/>

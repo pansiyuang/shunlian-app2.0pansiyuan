@@ -43,7 +43,7 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.widget.MyTextView;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -163,10 +163,10 @@ public class Common {
      * @param f
      * @return
      */
-    public static float formatFloat(float f) {
-        BigDecimal b = new BigDecimal(f);
-        float f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        return f1;
+    public static String formatFloat(float f) {
+        DecimalFormat decimalFormat=new DecimalFormat(".00");
+        String format = decimalFormat.format(f);
+        return format;
     }
 
     /**
@@ -174,7 +174,7 @@ public class Common {
      * @param f
      * @return
      */
-    public static float formatFloat(String f){
+    public static String formatFloat(String f){
         float v = 0;
         if (!TextUtils.isEmpty(f)){
             v = Float.parseFloat(f);
@@ -187,7 +187,7 @@ public class Common {
      * @param
      * @return
      */
-    public static float formatFloat(float f1,float f2){
+    public static String formatFloat(float f1,float f2){
         return formatFloat(f1 - f2);
     }
 
@@ -196,7 +196,7 @@ public class Common {
      * @param
      * @return
      */
-    public static float formatFloat(String f1,String f2){
+    public static String formatFloat(String f1,String f2){
         float v1 = 0;
         if (!TextUtils.isEmpty(f1)){
             v1 = Float.parseFloat(f1);

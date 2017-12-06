@@ -190,4 +190,22 @@
     <string name="change_prefer">修改优惠</string>
     <string name="close">关闭</string>
     <string name="move_to_collection">移入收藏</string>
+
+    <!--确认订单-->
+    <string name="Confirmation_of_order">确认订单</string>
+    <string name="confirmation_total">合计：</string>
+    <string name="go_pay">去支付</string>
+    <string name="send_to">送至：%s</string>
+    <string name="add_address">请添加您的收货地址</string>
+    <string name="address">收货地址：%s</string>
+    <string name="x">x %s</string>
+    <string name="express">快递￥%s</string>
+    <string name="all_goods">共计%s件商品</string>
+    <string name="goods_voucher">商品优惠券</string>
+    <string name="not_use_voucher">不使用优惠券</string>
+    <string name="promotional_details">促销详情</string>
+    <string name="distribution_mode">配送方式</string>
+    <string name="voucher">优惠券</string>
+    <string name="buyer_message">给卖家留言：</string>
+    <string name="subtotal">小计:</string>
 </resources>

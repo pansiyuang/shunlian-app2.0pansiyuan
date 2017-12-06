@@ -119,9 +119,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled,ConfirmOrderEntity.Address address) {
         if (address != null){
             detail_address = address.detail_address;
-            mtv_address.setText("送至："+detail_address);
+            mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
         }else {
-            mtv_address.setText("请添加您的收货地址");
+            mtv_address.setText(getResources().getString(R.string.add_address));
         }
         if (enabled != null && enabled.size() > 0) {
             manager = new LinearLayoutManager(this);
@@ -146,7 +146,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
                                 ConfirmOrderEntity.PromotionInfo promotionInfo = enabled1.
                                         promotion_info.get(selectPromotionId);
                                 String prom_reduce = promotionInfo.prom_reduce;
-                                float v = Common.formatFloat(prom_reduce);
+                                float v = Float.parseFloat(prom_reduce);
                                 currentPrice -= v;
                             }
                         }
