@@ -24,6 +24,8 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.DistrictAllEntity;
+import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -409,4 +411,28 @@ public interface ApiService {
      */
     @POST("order/confirm")
     Call<BaseEntity<ConfirmOrderEntity>> orderConfirm(@Body RequestBody body);
+
+    /**
+     * 省市区数据
+     * @param map
+     * @return
+     */
+    @GET("store/newGoodsList")
+    Call<BaseEntity<DistrictAllEntity>> districtAll(@QueryMap Map<String, String> map);
+
+    /**
+     * 根据经纬度获取省市区
+     * @param body
+     * @return
+     */
+    @POST("district/getlocation")
+    Call<BaseEntity<DistrictGetlocationEntity>> districtGetlocation(@Body RequestBody body);
+
+    /**
+     * 添加收货地址
+     * @param body
+     * @return
+     */
+    @POST("member/address/add")
+    Call<BaseEntity<EmptyEntity>> addressAdd(@Body RequestBody body);
 }
