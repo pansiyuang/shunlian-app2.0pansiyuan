@@ -57,7 +57,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        tv_title.setText(getString(R.string.manage));
+        tv_title.setText(getString(R.string.select_order_address));
         tv_title_right.setVisibility(View.VISIBLE);
         tv_title_right.setText(getString(R.string.manage));
         orderAddressPresenter = new OrderAddressPresenter(this, this);
@@ -90,6 +90,16 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         recycler_address.setAdapter(addressAdapter);
         recycler_address.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 0.5f), 0, 0, getColorResouce(R.color.bg_gray_two)));
         addressAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void delAddressSuccess() {
+
+    }
+
+    @Override
+    public void delAddressFail() {
+
     }
 
     @Override

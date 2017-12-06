@@ -10,4 +10,8 @@ import java.util.List;
 
 public interface IOrderAddressView extends IView {
     void orderList(List<ConfirmOrderEntity.Address> addressList);
+
+    void delAddressSuccess();
+
+    void delAddressFail();
 }

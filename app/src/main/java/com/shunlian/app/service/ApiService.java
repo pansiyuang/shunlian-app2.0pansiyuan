@@ -444,4 +444,13 @@ public interface ApiService {
      */
     @POST("/member/address/all")
     Call<BaseEntity<AddressDataEntity>> allAddress(@Body RequestBody body);
+
+    /**
+     * 删除收货地址
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/address/remove")
+    Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
 }

@@ -21,6 +21,7 @@ import butterknife.BindView;
  */
 
 public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.Address> {
+    private OnAddressDelListener mListener;
 
     public AddressManageAdapter(Context context, boolean isShowFooter, List<ConfirmOrderEntity.Address> lists) {
         super(context, isShowFooter, lists);
@@ -68,7 +69,9 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         viewHolder.tv_manage_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //删除
+                if (mListener != null) {
+                    mListener.addressDel(address.id);
+                }
             }
         });
     }
@@ -102,5 +105,13 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         public ViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnAddressDelListener(OnAddressDelListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnAddressDelListener {
+        void addressDel(String addressId);
     }
 }
