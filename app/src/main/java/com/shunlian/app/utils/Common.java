@@ -22,10 +22,16 @@ package com.shunlian.app.utils;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -58,6 +64,47 @@ public class Common {
     private static AbsoluteSizeSpan sizeSpan;
     private static SpannableStringBuilder ssb;
 
+    //获取经纬度
+    public static Location getGPS(Activity activity){
+        // 获取位置管理服务
+        LocationManager locationManager;
+        String serviceName = Context.LOCATION_SERVICE;
+        locationManager = (LocationManager) activity.getSystemService(serviceName);
+
+        // 查找到服务信息
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
+
+//        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
+
+        Location location = null;
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // 通过GPS获取位置
+            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+            if(location == null){
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
+                    //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                }
+            }
+            return location;
+        }
+        else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
+            //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            return location;
+        } else{
+            Common.staticToast("请打开GPS定位...");
+            Intent intent=new Intent(Settings.ACTION_SETTINGS);
+            activity.startActivityForResult(intent,0);
+            return null;
+        }
+    }
     /**
      * 获取全局上下文
      *
