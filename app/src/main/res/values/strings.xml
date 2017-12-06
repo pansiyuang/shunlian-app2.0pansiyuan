@@ -89,8 +89,8 @@
     <item name="tag_store_discount_menu" type="id" />
     <string name="store_taocanjia">套餐价</string>
     <string name="store_zengpin">赠品</string>
-    <item name="tag_store_discount_menu_id" type="id"/>
-    <item name="tag_store_discount_menu_type" type="id"/>
+    <item name="tag_store_discount_menu_id" type="id" />
+    <item name="tag_store_discount_menu_type" type="id" />
 
 
     <!--商品详情-->
@@ -182,4 +182,18 @@
     <string name="change_prefer">修改优惠</string>
     <string name="close">关闭</string>
     <string name="move_to_collection">移入收藏</string>
+
+    <!--收获地址-->
+    <string name="cargo_receiver">收货人</string>
+    <string name="phone_number">手机号码</string>
+    <string name="province_city">省市区</string>
+    <string name="detail_address">详细地址</string>
+    <string name="location">定位</string>
+    <string name="input_hint_name">请输入收货人姓名</string>
+    <string name="input_hint_phone_number">请输入手机号码</string>
+    <string name="input_hint_click_select">点击选择</string>
+    <string name="input_hint_detail_address">请输入详细地址（5-120字）</string>
+    <string name="add_order_address">新增收获地址</string>
+    <string name="select_order_address">选择收获地址</string>
+
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/title_common_layout"></include>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_select_address"
+        android:layout_below="@+id/layout_title"></android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/btn_select_address"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/pink_color"
+        android:text="@string/add_order_address"
+        android:textColor="@color/white"
+        android:textSize="15sp"></Button>
+</RelativeLayout>

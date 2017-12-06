@@ -3,6 +3,8 @@ package com.shunlian.app.ui;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,6 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ImmersionBar immersionBar;
     private NetworkBroadcast networkBroadcast;
     private static NetDialog netDialog;
+    private Resources resources;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         immersionBar = ImmersionBar.with(this);
         immersionBar.init();
         setContentView(getLayoutId());
+        resources = getResources();
         unbinder = ButterKnife.bind(this);
         finishAct();
         initListener();
@@ -262,6 +266,33 @@ public abstract class BaseActivity extends AppCompatActivity {
                 editText[i].requestFocus();
             }
         }
+    }
+
+    /**
+     * 获取文字资源
+     *
+     * @param stringResouce
+     */
+    protected String getStringResouce(int stringResouce) {
+        return resources.getString(stringResouce);
+    }
+
+    /**
+     * 获取颜色资源
+     *
+     *  @param colorResouce
+     */
+    protected int getColorResouce(int colorResouce) {
+        return resources.getColor(colorResouce);
+    }
+
+    /**
+     * 获取图片资源
+     *
+     *  @param drawableResouce
+     */
+    protected Drawable getDrawableResouce(int drawableResouce) {
+        return resources.getDrawable(drawableResouce);
     }
 
     @Override

@@ -22,6 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -271,6 +272,7 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
+
     /**
      * 店铺新品
      *
@@ -404,9 +406,19 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
+     *
      * @param body
      * @return
      */
     @POST("order/confirm")
     Call<BaseEntity<ConfirmOrderEntity>> orderConfirm(@Body RequestBody body);
+
+    /**
+     * 收货地址列表
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/address/all")
+    Call<BaseEntity<AddressDataEntity>> allAddress(@Body RequestBody body);
 }
