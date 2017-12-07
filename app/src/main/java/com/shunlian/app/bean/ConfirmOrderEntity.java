@@ -92,6 +92,7 @@ public class ConfirmOrderEntity {
         public String isdefault;
         public List<String> district_ids;
         public String detail_address;
+        public String district_id;
         public boolean isSelect;
 
     }

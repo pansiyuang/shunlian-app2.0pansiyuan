@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.confirm_order;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
+    private String addressId;
+    private String cart_ids;
+    private String goods_id;
+    private String qty;
+    private String sku_id;
+    private ConfirmOrderPresenter confirmOrderPresenter;
 
     public static void startAct(Context context,String cart_ids){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -85,17 +92,17 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         Intent intent = getIntent();
-        String cart_ids = intent.getStringExtra("cart_ids");
-        String goods_id = intent.getStringExtra("goods_id");
-        String qty = intent.getStringExtra("qty");
-        String sku_id = intent.getStringExtra("sku_id");
-        ConfirmOrderPresenter confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
+        cart_ids = intent.getStringExtra("cart_ids");
+        goods_id = intent.getStringExtra("goods_id");
+        qty = intent.getStringExtra("qty");
+        sku_id = intent.getStringExtra("sku_id");
+        confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
         if (!TextUtils.isEmpty(cart_ids)){
             isOrderBuy = false;
-            confirmOrderPresenter.orderConfirm(cart_ids,"110105");
+            confirmOrderPresenter.orderConfirm(cart_ids,null);
         }else {
             isOrderBuy = true;
-            confirmOrderPresenter.orderBuy(goods_id,qty,sku_id);
+            confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
         }
     }
 
@@ -176,5 +183,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
         mTotalPrice = price;
         mtv_total_price.setText(Common.dotAfterSmall(getResources()
                 .getString(R.string.rmb)+price,11));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && Activity.RESULT_OK == resultCode){
+            addressId = data.getStringExtra("addressId");
+            if (!TextUtils.isEmpty(cart_ids)){
+                isOrderBuy = false;
+                confirmOrderPresenter.orderConfirm(cart_ids,addressId);
+            }else {
+                isOrderBuy = true;
+                confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
+            }
+        }
     }
 }
