@@ -1,7 +1,11 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,9 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.utils.CenterAlignImageSpan;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -33,21 +40,51 @@ public class AddressAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.Addre
         return viewHolder;
     }
 
+    public void OnItemSelect(int position) {
+        ConfirmOrderEntity.Address address = addressList.get(position);
+        for (int i = 0; i < addressList.size(); i++) {
+            addressList.get(i).isSelect = false;
+        }
+        address.isSelect = true;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
         ConfirmOrderEntity.Address address = addressList.get(position);
         viewHolder.tv_address_name.setText(address.realname);
         viewHolder.tv_address_phone.setText(address.mobile);
-        viewHolder.tv_address_detail.setText(address.detail_address);
         if ("1".equals(address.isdefault)) {
-            viewHolder.iv_address_select.setImageDrawable(context.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+            addImageSpan(true, ((ViewHolder) holder).tv_address_detail, address.detail_address);
         } else {
-            viewHolder.iv_address_select.setImageDrawable(context.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+            addImageSpan(false, ((ViewHolder) holder).tv_address_detail, address.detail_address);
+        }
+        if (address.isSelect) {
+            viewHolder.iv_address_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        } else {
+            viewHolder.iv_address_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
     }
 
-    public class ViewHolder extends BaseRecyclerViewHolder {
+    /**
+     * 图片
+     */
+    private void addImageSpan(boolean isDefault, TextView textView, String address) {
+        textView.setText("");
+        if (isDefault) {
+            SpannableString spanString = new SpannableString("图 " + address);
+            Drawable d = getDrawable(R.mipmap.img_address_address_n);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            CenterAlignImageSpan span = new CenterAlignImageSpan(d);
+            spanString.setSpan(span, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textView.append(spanString);
+        } else {
+            textView.setText(address);
+        }
+    }
+
+    public class ViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_address_name)
         TextView tv_address_name;
 
@@ -62,6 +99,14 @@ public class AddressAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.Addre
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 }

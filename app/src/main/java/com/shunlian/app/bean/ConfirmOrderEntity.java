@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class ConfirmOrderEntity {
         }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Address{
+    public static class Address implements Serializable{
 
         public String id;
         public String realname;
@@ -91,6 +92,7 @@ public class ConfirmOrderEntity {
         public String isdefault;
         public List<String> district_ids;
         public String detail_address;
+        public boolean isSelect;
 
     }
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -14,7 +14,8 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.order_address.OrderListActivity;
+import com.shunlian.app.ui.receive_adress.AddressListActivity;
+import com.shunlian.app.ui.receive_adress.AddAdressAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -28,7 +29,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- * <p>
+ *
  * 首页页面
  */
 
@@ -114,7 +115,7 @@ public class MainPageFrag extends BaseFragment {
                     case 4:
                         break;
                     case 5:
-                        OrderListActivity.startAct(baseContext);
+                        AddressListActivity.startAct(baseContext);
                         break;
                 }
             }

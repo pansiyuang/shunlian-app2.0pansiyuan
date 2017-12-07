@@ -1,7 +1,9 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -265,6 +267,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             return false;
         }
     }
+    protected Drawable getDrawable(@DrawableRes int id){
+        return context.getResources().getDrawable(id);
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
