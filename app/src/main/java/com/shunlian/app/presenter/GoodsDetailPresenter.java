@@ -27,6 +27,13 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
 
     private String goods_id;
+    private int page = 1;//当前页
+    public static final int COMMENT_FAILURE_CODE = 400;//评论网络请求失败码
+    public static final int COMMENT_EMPTY_CODE = 420;//评论数据为空码
+    public static final int pageSize = 20;//评价每页数量
+    private boolean isLoading = false;
+    private String type = "ALL";
+    private int allPage;//总页数
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -185,15 +192,15 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param pageSize
      * @param id
      */
-    public void commentList(int emptyCode,int failureCode,boolean isLoading,
-                            String goods_id, String type, String page, String pageSize, String id){
+    public void commentList(int emptyCode, int failureCode, final boolean isLoading,
+                            String goods_id, String type, final String page, String pageSize, String id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("type",type);
         map.put("page",page);
         map.put("pageSize",pageSize);
         if (!TextUtils.isEmpty(id)) {
-            map.put("id", "1");
+            map.put("id", id);
         }
         sortAndMD5(map);
         Call<BaseEntity<CommentListEntity>> baseEntityCall = getApiService().commentList(map);
@@ -201,10 +208,40 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<CommentListEntity> entity) {
                 super.onSuccess(entity);
+                GoodsDetailPresenter.this.isLoading = false;
+                CommentListEntity.ListData list = entity.data.list;
+                GoodsDetailPresenter.this.page = Integer.parseInt(list.page);
+                GoodsDetailPresenter.this.allPage = Integer.parseInt(list.allPage);
                 iView.commentListData(entity.data);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                GoodsDetailPresenter.this.isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                GoodsDetailPresenter.this.isLoading = false;
             }
         });
     }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading){
+            isLoading = true;
+            if (page <= allPage){
+                GoodsDetailPresenter.this.page++;
+                commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
+                        goods_id,type,String.valueOf(page),String.valueOf(pageSize),null);
+            }
+        }
+    }
+
     @Override
     public void attachView() {
 
@@ -213,5 +250,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     @Override
     public void detachView() {
 
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
