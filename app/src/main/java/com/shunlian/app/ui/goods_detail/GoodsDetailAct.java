@@ -144,6 +144,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
     private String favId;
+    private final String pageSize = "20";//评价每页数量
+    public static final int COMMENT_FAILURE_CODE = 400;//评论网络请求失败码
+    public static final int COMMENT_EMPTY_CODE = 420;//评论数据为空码
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -223,7 +226,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mtv_comment.setTextColor(getResources().getColor(R.color.new_text));
         view_comment.setVisibility(View.INVISIBLE);
         switchContent(commentFrag);
-        goodsDetailPresenter.commentList(goodsId,"ALL","1","20",id);
+        goodsDetailPresenter.commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,true,goodsId,"ALL","1",pageSize,id);
     }
 
     public void setBgColor(int position, int totalDy) {
@@ -318,7 +321,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void showFailureView(int rquest_code) {
+        if (rquest_code == COMMENT_FAILURE_CODE){
 
+        }
     }
 
     @Override
@@ -404,7 +409,21 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void commentListData(CommentListEntity entity) {
-        commentFrag.setCommentList(entity);
+        if ("1".equals(entity.list.page)) {
+            commentFrag.setCommentList(entity);
+        }else {
+            commentFrag.setCommentMoreList(entity);
+        }
+    }
+
+    /**
+     * 评价分页数据
+     * @param type
+     * @param page
+     */
+    public void requestCommentPageData(String type,String page){
+        goodsDetailPresenter.commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,true,
+                goodsId,type,page,pageSize,null);
     }
 
     /*

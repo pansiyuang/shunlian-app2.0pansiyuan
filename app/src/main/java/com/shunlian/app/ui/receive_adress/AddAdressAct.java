@@ -2,7 +2,6 @@ package com.shunlian.app.ui.receive_adress;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Location;
 import android.view.View;
 import android.widget.EditText;
@@ -150,6 +149,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void saveAddressCallback() {
         finish();
-        AddressListActivity.startAct(this);
+        AddressListActivity.startAct(this,null);
     }
 }

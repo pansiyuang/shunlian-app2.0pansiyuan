@@ -37,6 +37,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
     public static final int HEAD = 2;
     private List<CommentListEntity.Label> mLabel;
+    private ICommentTypeListener mCommentTypeListener;
 
     public CommentAdapter(Context context, boolean isShowFooter, List<CommentListEntity.Data> lists) {
         super(context, isShowFooter, lists);
@@ -98,6 +99,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 public boolean onTagClick(View view, int position, FlowLayout parent) {
                     selectId = position;
                     tagAdapter.notifyDataChanged();
+                    if (mCommentTypeListener != null){
+                        CommentListEntity.Label label = mLabel.get(position);
+                        mCommentTypeListener.onCommentType(label.type);
+                    }
                     return true;
                 }
             });
@@ -286,5 +291,17 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         public HeadHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    /**
+     * 评论类型监听
+     * @param listener
+     */
+    public void setCommentTypeListener(ICommentTypeListener listener){
+        mCommentTypeListener = listener;
+    }
+
+    public interface ICommentTypeListener{
+        void onCommentType(String type);
     }
 }

@@ -334,6 +334,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         for (int i = 0; i < strs.size(); i++) {
             String key = strs.get(i);
             String value = map.get(key);
+            if (TextUtils.isEmpty(value)){
+                value = "";
+            }
             sign.append(key + "=" + value);
             sign.append("&");
             if (i == strs.size() - 1) {
