@@ -42,8 +42,9 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     private OrderAddressPresenter orderAddressPresenter;
     private AddressAdapter addressAdapter;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,String addressId) {
         Intent intent = new Intent(context, AddressListActivity.class);
+        intent.putExtra("addressId",addressId);
         context.startActivity(intent);
     }
 
@@ -56,7 +57,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        tv_title.setText(getString(R.string.manage));
+        tv_title.setText(getString(R.string.select_order_address));
         tv_title_right.setVisibility(View.VISIBLE);
         tv_title_right.setText(getString(R.string.manage));
         orderAddressPresenter = new OrderAddressPresenter(this, this);
@@ -74,7 +75,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
-                AddAdressAct.startAct(this,"");
+                AddAdressAct.startAct(this,null);
                 break;
             case R.id.tv_title_right:
                 AddressManageActivity.startAct(this);
@@ -90,6 +91,16 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
         recycler_address.setAdapter(addressAdapter);
         recycler_address.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 0.5f), 0, 0, getColorResouce(R.color.bg_gray_two)));
         addressAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void delAddressSuccess(String addressId) {
+
+    }
+
+    @Override
+    public void delAddressFail() {
+
     }
 
     @Override

@@ -218,5 +218,7 @@
     <string name="manage">管理</string>
     <string name="address_manage">管理收获地址</string>
     <string name="address_default">默认地址</string>
+    <string name="del_fail">删除失败</string>
+    <string name="del_success">删除成功</string>
 
 </resources>
