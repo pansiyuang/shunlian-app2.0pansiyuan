@@ -37,6 +37,7 @@ public class CommentFrag extends BaseFragment {
     private GoodsDetailPresenter goodsDetailPresenter;
     private String mCommentId;
     private String goodsId;
+    private boolean isClickHead;
 
     /**
      * 设置布局id
@@ -86,6 +87,7 @@ public class CommentFrag extends BaseFragment {
         commentAdapter.setCommentTypeListener(new CommentAdapter.ICommentTypeListener() {
             @Override
             public void onCommentType(String type) {
+                isClickHead = true;
                 CommentFrag.this.type = type;
                 goodsDetailPresenter.setType(type);
                 requestCommentPageData(type,"1");
@@ -95,7 +97,9 @@ public class CommentFrag extends BaseFragment {
         commentAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
             @Override
             public void onReload() {
-
+                if (goodsDetailPresenter != null){
+                    goodsDetailPresenter.onRefresh();
+                }
             }
         });
     }
@@ -107,11 +111,17 @@ public class CommentFrag extends BaseFragment {
     public void setCommentList(CommentListEntity entity){
         List<CommentListEntity.Label> label = entity.label;
         CommentListEntity.ListData list = entity.list;
-        int page = Integer.parseInt(list.page);
+        int page = Integer.parseInt(list.page) + 1;
         this.allPage = Integer.parseInt(list.allPage);
         commentlists.clear();
         commentlists.addAll(list.data);
-        commentAdapter.setLabel(label);
+        boolean isClear = false;
+        if (!isClickHead){
+            isClear = true;
+        }else {
+            isClear = false;
+        }
+        commentAdapter.setLabel(label,isClear);
         commentAdapter.setPageLoading(page,allPage);
         commentAdapter.notifyDataSetChanged();
     }
@@ -122,7 +132,7 @@ public class CommentFrag extends BaseFragment {
      */
     public void setCommentMoreList(CommentListEntity entity){
         CommentListEntity.ListData list = entity.list;
-        int page = Integer.parseInt(list.page);
+        int page = Integer.parseInt(list.page) + 1;
         this.allPage = Integer.parseInt(list.allPage);
         int size = commentlists.size();
         commentlists.addAll(list.data);
@@ -144,6 +154,9 @@ public class CommentFrag extends BaseFragment {
     public void setPresenter(GoodsDetailPresenter goodsDetailPresenter, String id) {
         this.goodsDetailPresenter = goodsDetailPresenter;
         mCommentId = id;
+        isClickHead = false;
+        if (recy_view != null)
+            recy_view.scrollToPosition(0);
     }
 
     /**

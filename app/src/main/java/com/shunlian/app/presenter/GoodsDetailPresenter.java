@@ -210,7 +210,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 GoodsDetailPresenter.this.isLoading = false;
                 CommentListEntity.ListData list = entity.data.list;
-                GoodsDetailPresenter.this.page = Integer.parseInt(list.page);
+                GoodsDetailPresenter.this.page = Integer.parseInt(list.page)+1;
                 GoodsDetailPresenter.this.allPage = Integer.parseInt(list.allPage);
                 iView.commentListData(entity.data);
             }
@@ -235,7 +235,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         if (!isLoading){
             isLoading = true;
             if (page <= allPage){
-                GoodsDetailPresenter.this.page++;
                 commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
                         goods_id,type,String.valueOf(page),String.valueOf(pageSize),null);
             }
