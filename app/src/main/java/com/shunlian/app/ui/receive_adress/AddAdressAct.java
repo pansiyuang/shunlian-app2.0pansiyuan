@@ -48,6 +48,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     private boolean isDefault;
 
 
+
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, AddAdressAct.class);
         intent.putExtra("storeId", storeId);//店铺id
@@ -78,6 +79,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_address:
+                tv_address.setHint("可定位获取");
                 addAddressPresenter.initDistrict();
                 break;
             case R.id.mtv_save:
@@ -106,16 +108,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
         }
-    }
-
-    @Override
-    public void showFailureView(int rquest_code) {
-
-    }
-
-    @Override
-    public void showDataEmptyView(int rquest_code) {
-
     }
 
     @Override
@@ -149,5 +141,15 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     public void saveAddressCallback() {
         finish();
         AddressListActivity.startAct(this);
+    }
+
+    @Override
+    public void showFailureView(int rquest_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int rquest_code) {
+
     }
 }

@@ -63,9 +63,10 @@ public class Common {
     private static MyTextView mtv_toast;
     private static AbsoluteSizeSpan sizeSpan;
     private static SpannableStringBuilder ssb;
+    private static PromptDialog promptDialog;
 
     //获取经纬度
-    public static Location getGPS(Activity activity){
+    public static Location getGPS(final Activity activity){
         // 获取位置管理服务
         LocationManager locationManager;
         String serviceName = Context.LOCATION_SERVICE;
@@ -99,9 +100,22 @@ public class Common {
             //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             return location;
         } else{
-            Common.staticToast("请打开GPS定位...");
-            Intent intent=new Intent(Settings.ACTION_SETTINGS);
-            activity.startActivityForResult(intent,0);
+            promptDialog = new PromptDialog(activity);
+            promptDialog.setTvSureColor(R.color.new_text);
+            promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
+            promptDialog.setSureAndCancleListener("无法获取您的位置信息，请在设置中打开定位功能.", "去开启", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    promptDialog.dismiss();
+                }
+            }, "取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    promptDialog.dismiss();
+                }
+            }).show();
+
             return null;
         }
     }
