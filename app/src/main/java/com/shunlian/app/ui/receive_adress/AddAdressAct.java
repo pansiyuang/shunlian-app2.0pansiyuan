@@ -3,9 +3,11 @@ package com.shunlian.app.ui.receive_adress;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -44,10 +46,15 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.mtv_save)
     MyTextView mtv_save;
 
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
+    @BindView(R.id.mtv_delete)
+    MyTextView mtv_delete;
+
     private AddAddressPresenter addAddressPresenter;
-    private String district_ids;
+    private String district_ids, addressId;
     private boolean isDefault;
-    private ConfirmOrderEntity.Address address;
 
     public static void startAct(Context context, ConfirmOrderEntity.Address address) {
         Intent intent = new Intent(context, AddAdressAct.class);
@@ -62,13 +69,26 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        mtv_delete.setVisibility(View.GONE);
+        mtv_title.setText(getStringResouce(R.string.address_add));
         if (getIntent().getSerializableExtra("address") != null) {
             //必须用getExtras
-            address = (ConfirmOrderEntity.Address) getIntent().getSerializableExtra("address");
+            ConfirmOrderEntity.Address address = (ConfirmOrderEntity.Address) getIntent().getSerializableExtra("address");
             et_realname.setText(address.realname);
             et_mobile.setText(address.mobile);
             et_address.setText(address.address);
-            tv_address.setText(address.district_addr);
+            mtv_delete.setVisibility(View.VISIBLE);
+            mtv_title.setText("编辑收货地址");
+            if (!"1".equals(address.isdefault)) {
+                miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_n));
+                isDefault = false;
+            } else {
+                miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_h));
+                isDefault = true;
+            }
+            tv_address.setText(address.province + " " + address.city + " " + address.area);
+            addressId = address.id;
+            district_ids="";
             for (int m = 0; m < address.district_ids.size(); m++) {
                 if (m >= address.district_ids.size() - 1) {
                     district_ids += address.district_ids.get(m);
@@ -97,6 +117,9 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                 tv_address.setHint("可定位获取");
                 addAddressPresenter.initDistrict();
                 break;
+            case R.id.mtv_delete:
+                addAddressPresenter.addressRemove(addressId);
+                break;
             case R.id.mtv_save:
                 String isDefaults;
                 if (isDefault) {
@@ -104,7 +127,22 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                 } else {
                     isDefaults = "0";
                 }
-                addAddressPresenter.saveAddress(et_realname.getText().toString(), et_mobile.getText().toString(), et_address.getText().toString(), isDefaults, district_ids);
+                if (et_realname.getText().toString().isEmpty()) {
+                    Common.staticToast("请先输入收货人姓名");
+                } else if (et_mobile.getText().toString().isEmpty()) {
+                    Common.staticToast("请输入收货人电话");
+                } else if (TextUtils.isEmpty(district_ids)) {
+                    Common.staticToast("请选择省、市、区");
+                } else if (et_address.getText().toString().isEmpty()) {
+                    Common.staticToast("请输入详细地址");
+                } else {
+                    if (TextUtils.isEmpty(addressId)) {
+                        addAddressPresenter.saveAddress(et_realname.getText().toString(), et_mobile.getText().toString(), et_address.getText().toString(), isDefaults, district_ids);
+                    } else {
+                        addAddressPresenter.addressEdit(addressId, et_realname.getText().toString(), et_mobile.getText().toString(), et_address.getText().toString(), isDefaults, district_ids);
+                    }
+                 }
+
                 break;
             case R.id.miv_default:
                 if (isDefault) {

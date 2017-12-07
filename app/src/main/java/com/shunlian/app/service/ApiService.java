@@ -464,6 +464,15 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> addressAdd(@Body RequestBody body);
 
     /**
+     * 编辑收货地址
+     * @param body
+     * @return
+     */
+    @POST("member/address/edit")
+    Call<BaseEntity<EmptyEntity>> addressEdit(@Body RequestBody body);
+
+
+    /**
      * 收货地址列表
      *
      * @param body

@@ -113,6 +113,7 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
+                AddAdressAct.startAct(this,null);
                 break;
         }
     }

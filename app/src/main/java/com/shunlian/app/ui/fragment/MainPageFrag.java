@@ -115,7 +115,7 @@ public class MainPageFrag extends BaseFragment {
                     case 4:
                         break;
                     case 5:
-                        AddressListActivity.startAct(baseContext);
+                        AddressListActivity.startAct(baseContext,"");
                         break;
                 }
             }
