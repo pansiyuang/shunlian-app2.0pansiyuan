@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -50,7 +51,9 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
         map.put("goods_id",goods_id);
         map.put("qty",qty);
         map.put("sku_id",sku_id);
-        map.put("address_id",address_id);
+        if (!TextUtils.isEmpty(address_id)) {
+            map.put("address_id", address_id);
+        }
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);
@@ -74,7 +77,9 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
     public void orderConfirm(String cart_ids,String address_id){
         Map<String,String> map = new HashMap<>();
         map.put("cart_ids",cart_ids);
-        map.put("address_id",address_id);
+        if (!TextUtils.isEmpty(address_id)) {
+            map.put("address_id", address_id);
+        }
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);

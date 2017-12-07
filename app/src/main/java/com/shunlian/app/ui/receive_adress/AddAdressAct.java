@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -205,5 +204,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void showDataEmptyView(int rquest_code) {
 
+        AddressListActivity.startAct(this,null);
     }
 }

@@ -14,8 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.utils.load.Circle;
-import com.shunlian.app.utils.load.SpinKitView;
+import com.shunlian.app.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -286,14 +285,15 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public final RelativeLayout layout_normal;
         public final TextView layout_load_error;
         public final TextView layout_no_more;
-        public final SpinKitView spinKitView;
-        public final Circle circle;
+        public final ProgressView spinKitView;
+//        public final Circle circle;
 
         public BaseFooterHolder(View itemView) {
             super(itemView);
-            spinKitView = (SpinKitView) itemView.findViewById(R.id.progressBar);
-            circle = new Circle();
-            spinKitView.setIndeterminateDrawable(circle);
+            spinKitView = (ProgressView) itemView.findViewById(R.id.progressBar);
+            spinKitView.startAnimation();
+//            circle = new Circle();
+//            spinKitView.setIndeterminateDrawable(circle);
             layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
             layout_load_error = (TextView) itemView.findViewById(R.id.layout_load_error);
             layout_load_error.setVisibility(View.GONE);
@@ -314,10 +314,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public void setNormalVisibility(int visibility) {
             if (visibility == View.GONE) {
                 layout_normal.setVisibility(View.GONE);
-                spinKitView.unscheduleDrawable(circle);
+//                spinKitView.unscheduleDrawable(circle);
             } else if (visibility == View.VISIBLE) {
                 layout_normal.setVisibility(View.VISIBLE);
-                spinKitView.onWindowFocusChanged(true);
+//                spinKitView.onWindowFocusChanged(true);
             }
         }
     }
