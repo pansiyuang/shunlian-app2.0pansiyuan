@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
@@ -208,7 +209,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switchContent(goodsDeatilFrag);
     }
 
-    public void commentFrag(){
+    public void commentFrag(String id){
         if (commentFrag == null) {
             commentFrag = new CommentFrag();
             fragments.put(FRAG_COMMENT,commentFrag);
@@ -222,6 +223,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mtv_comment.setTextColor(getResources().getColor(R.color.new_text));
         view_comment.setVisibility(View.INVISIBLE);
         switchContent(commentFrag);
+        goodsDetailPresenter.commentList(goodsId,"ALL","1","20",id);
     }
 
     public void setBgColor(int position, int totalDy) {
@@ -393,6 +395,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             footprintDialog = new FootprintDialog(this, mFootprintEntity);
         }
         footprintDialog.show();
+    }
+
+    /**
+     * 评价列表数据
+     *
+     * @param entity
+     */
+    @Override
+    public void commentListData(CommentListEntity entity) {
+        commentFrag.setCommentList(entity);
     }
 
     /*

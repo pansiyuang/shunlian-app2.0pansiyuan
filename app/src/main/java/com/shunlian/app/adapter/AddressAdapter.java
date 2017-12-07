@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.utils.CenterAlignImageSpan;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;

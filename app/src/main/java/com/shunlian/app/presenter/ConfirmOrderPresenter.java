@@ -45,11 +45,12 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
      * @param qty
      * @param sku_id
      */
-    public void orderBuy(String goods_id,String qty,String sku_id){
+    public void orderBuy(String goods_id,String qty,String sku_id,String address_id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("qty",qty);
         map.put("sku_id",sku_id);
+        map.put("address_id",address_id);
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);

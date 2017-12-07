@@ -1,8 +1,10 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
@@ -50,7 +52,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 }
             }
         });
-        commentList(goods_id,"ALL","10","20");
     }
 
     /**
@@ -182,19 +183,24 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param type
      * @param page
      * @param pageSize
+     * @param id
      */
-    public void commentList(String goods_id,String type,String page,String pageSize){
+    public void commentList(String goods_id, String type, String page, String pageSize, String id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("type",type);
         map.put("page",page);
         map.put("pageSize",pageSize);
+        if (!TextUtils.isEmpty(id)) {
+            map.put("id", "1");
+        }
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().commentList(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        Call<BaseEntity<CommentListEntity>> baseEntityCall = getApiService().commentList(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommentListEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommentListEntity> entity) {
                 super.onSuccess(entity);
+                iView.commentListData(entity.data);
             }
         });
     }

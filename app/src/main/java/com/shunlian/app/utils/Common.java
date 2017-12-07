@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.support.annotation.ColorInt;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -38,6 +39,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,7 @@ public class Common {
     private static AbsoluteSizeSpan sizeSpan;
     private static SpannableStringBuilder ssb;
     private static PromptDialog promptDialog;
+    private static ForegroundColorSpan colorSpan;
 
     //获取经纬度
     public static Location getGPS(final Activity activity){
@@ -288,6 +291,30 @@ public class Common {
         int start = source.indexOf(".") + 1;
         if (start > 0) {
             ssb.setSpan(sizeSpan, start, source.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 更改源字符串的颜色
+     * @param source 源字符串
+     * @param changeStr 需要改变颜色的问题
+     * @param color 变化的颜色
+     * @return
+     */
+    public static SpannableStringBuilder changeColor(String source, String changeStr, @ColorInt int color){
+        if (colorSpan == null)
+            colorSpan = new ForegroundColorSpan(color);
+
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int i = source.indexOf(changeStr);
+        if (i == -1){
+            return ssb;
+        }else {
+            ssb.setSpan(colorSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
     }

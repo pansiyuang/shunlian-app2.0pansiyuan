@@ -331,7 +331,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof CommntHolder){
             CommntHolder mHolder = (CommntHolder) holder;
 
-            ArrayList<GoodsDeatilEntity.Comments> comments = mGoodsEntity.comments;
+            final ArrayList<GoodsDeatilEntity.Comments> comments = mGoodsEntity.comments;
             mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment),"100"));
             mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate),"95.9"));
             CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context,false,comments);
@@ -339,13 +339,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    valueAnimator(view);
+                    GoodsDeatilEntity.Comments comments1 = comments.get(position);
+                    valueAnimator(view,comments1.id);
                 }
             });
         }
     }
 
-    private void valueAnimator(final View view) {
+    private void valueAnimator(final View view, final String id) {
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
         valueAnimator.setDuration(300);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -366,7 +367,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
                 super.onAnimationEnd(animation);
                 GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
-                goodsDetailAct.commentFrag();
+                goodsDetailAct.commentFrag(id);
             }
         });
     }
@@ -428,18 +429,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 setActivityInfo(mHolder.mll_act_detail,2,mGoodsEntity.buy_gift);
             }
 
-        }
-    }
-
-    private boolean isEmpty(List list){
-        if (list == null){
-            return true;
-        }
-
-        if (list.size() == 0){
-            return true;
-        }else {
-            return false;
         }
     }
     /**
@@ -801,10 +790,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         RecyclerView recy_cardview;
         public CommntHolder(View itemView) {
             super(itemView);
+            mtv_comment_num.setOnClickListener(this);
+            mtv_haopinglv.setOnClickListener(this);
             LinearLayoutManager manager1 = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
-            itemView.setOnClickListener(this);
         }
 
         /**
@@ -814,7 +804,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
          */
         @Override
         public void onClick(View v) {
-
+            GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+            goodsDetailAct.commentFrag(null);
         }
     }
 

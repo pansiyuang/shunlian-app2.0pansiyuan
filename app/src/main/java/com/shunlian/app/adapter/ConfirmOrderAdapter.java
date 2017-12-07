@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -229,7 +230,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         }
     }
 
-    public class AddressHolder extends BaseRecyclerViewHolder{
+    public class AddressHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_nickname)
         MyTextView mtv_nickname;
@@ -244,6 +245,20 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         MyTextView mtv_add_address;
         public AddressHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (mAddress != null)
+                AddressListActivity.startAct(context,mAddress.id);
+            else
+                AddressListActivity.startAct(context,null);
         }
     }
 
