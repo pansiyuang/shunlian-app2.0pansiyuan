@@ -67,7 +67,6 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
         currentAddressId = getIntent().getStringExtra("addressId");
         orderAddressPresenter = new OrderAddressPresenter(this, this);
-        orderAddressPresenter.getAddressList();
     }
 
     @Override
@@ -75,6 +74,12 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
         super.initListener();
         btn_select_address.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        orderAddressPresenter.getAddressList();
     }
 
     @Override
@@ -127,8 +132,12 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onItemClick(View view, int position) {
         ConfirmOrderEntity.Address address = addList.get(position);
+        if(TextUtils.isEmpty(address.id)){
+           return;
+        }
         Intent intent = new Intent();
         intent.putExtra("addressId", address.id);
         setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

@@ -113,9 +113,6 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 4:
                         break;
-                    case 5:
-                        AddressListActivity.startAct(baseContext,"");
-                        break;
                 }
             }
         });

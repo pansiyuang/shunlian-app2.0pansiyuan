@@ -41,7 +41,6 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     private AddressManageAdapter manageAdapter;
     private List<ConfirmOrderEntity.Address> addList;
 
-
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AddressManageActivity.class);
         context.startActivity(intent);
