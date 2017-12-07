@@ -2,7 +2,6 @@ package com.shunlian.app.ui.receive_adress;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Location;
 import android.view.View;
 import android.widget.EditText;
@@ -48,7 +47,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     private AddAddressPresenter addAddressPresenter;
     private String district_ids;
     private boolean isDefault;
-
+    private ConfirmOrderEntity.Address address;
 
     public static void startAct(Context context, ConfirmOrderEntity.Address address) {
         Intent intent = new Intent(context, AddAdressAct.class);
@@ -63,6 +62,21 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        if (getIntent().getSerializableExtra("address") != null) {
+            //必须用getExtras
+            address = (ConfirmOrderEntity.Address) getIntent().getSerializableExtra("address");
+            et_realname.setText(address.realname);
+            et_mobile.setText(address.mobile);
+            et_address.setText(address.address);
+            tv_address.setText(address.district_addr);
+            for (int m = 0; m < address.district_ids.size(); m++) {
+                if (m >= address.district_ids.size() - 1) {
+                    district_ids += address.district_ids.get(m);
+                } else {
+                    district_ids += address.district_ids.get(m) + ",";
+                }
+            }
+        }
         addAddressPresenter = new AddAddressPresenter(this, this);
     }
 
@@ -85,20 +99,20 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.mtv_save:
                 String isDefaults;
-                if (isDefault){
-                    isDefaults="1";
-                }else {
-                    isDefaults="0";
+                if (isDefault) {
+                    isDefaults = "1";
+                } else {
+                    isDefaults = "0";
                 }
-                addAddressPresenter.saveAddress(et_realname.getText().toString(),et_mobile.getText().toString(),et_address.getText().toString(),isDefaults,district_ids);
+                addAddressPresenter.saveAddress(et_realname.getText().toString(), et_mobile.getText().toString(), et_address.getText().toString(), isDefaults, district_ids);
                 break;
             case R.id.miv_default:
-                if (isDefault){
+                if (isDefault) {
                     miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_n));
-                    isDefault=false;
-                }else {
+                    isDefault = false;
+                } else {
                     miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_h));
-                    isDefault=true;
+                    isDefault = true;
                 }
                 break;
             case R.id.mtv_locate:
@@ -111,15 +125,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    @Override
-    public void showFailureView(int rquest_code) {
-
-    }
-
-    @Override
-    public void showDataEmptyView(int rquest_code) {
-
-    }
 
     @Override
     public void getGps(DistrictGetlocationEntity districtGetlocationEntity) {
@@ -151,7 +156,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void saveAddressCallback() {
         finish();
-        AddressListActivity.startAct(this);
+        AddressListActivity.startAct(this, "");
     }
 
     @Override
