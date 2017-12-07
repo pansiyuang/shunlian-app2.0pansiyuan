@@ -1,9 +1,11 @@
 package com.shunlian.app.ui.receive_adress;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,11 +43,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     private OrderAddressPresenter orderAddressPresenter;
     private AddressAdapter addressAdapter;
+    private List<ConfirmOrderEntity.Address> addList;
+    private String currentAddressId;
 
-    public static void startAct(Context context,String addressId) {
+    public static void startAct(Context context, String addressId) {
         Intent intent = new Intent(context, AddressListActivity.class);
-        intent.putExtra("addressId",addressId);
-        context.startActivity(intent);
+        intent.putExtra("addressId", addressId);
+        ((Activity) context).startActivityForResult(intent, 100);
     }
 
     @Override
@@ -60,8 +64,9 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
         tv_title.setText(getString(R.string.select_order_address));
         tv_title_right.setVisibility(View.VISIBLE);
         tv_title_right.setText(getString(R.string.manage));
+
+        currentAddressId = getIntent().getStringExtra("addressId");
         orderAddressPresenter = new OrderAddressPresenter(this, this);
-        orderAddressPresenter.getAddressList();
     }
 
     @Override
@@ -72,10 +77,16 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        orderAddressPresenter.getAddressList();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
-                AddAdressAct.startAct(this,null);
+                AddAdressAct.startAct(this, null);
                 break;
             case R.id.tv_title_right:
                 AddressManageActivity.startAct(this);
@@ -85,12 +96,17 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void orderList(List<ConfirmOrderEntity.Address> addressList) {
-        addressAdapter = new AddressAdapter(this, false, addressList);
+        this.addList = addressList;
+        addressAdapter = new AddressAdapter(this, false, addList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycler_address.setLayoutManager(manager);
         recycler_address.setAdapter(addressAdapter);
         recycler_address.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 0.5f), 0, 0, getColorResouce(R.color.bg_gray_two)));
         addressAdapter.setOnItemClickListener(this);
+
+        if (!TextUtils.isEmpty(currentAddressId)) {
+            addressAdapter.OnItemSelect(currentAddressId);
+        }
     }
 
     @Override
@@ -100,6 +116,11 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void delAddressFail() {
+
+    }
+
+    @Override
+    public void editAddressSuccess() {
 
     }
 
@@ -115,6 +136,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(View view, int position) {
-        addressAdapter.OnItemSelect(position);
+        ConfirmOrderEntity.Address address = addList.get(position);
+        if(TextUtils.isEmpty(address.id)){
+           return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra("addressId", address.id);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

@@ -46,6 +46,43 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
 
     }
 
+    public void addressEdit(String address_id,String realname,String mobile,String address,String isdefault,String district_ids){
+        Map<String, String> map = new HashMap<>();
+        map.put("realname", realname);
+        map.put("mobile", mobile);
+        map.put("address", address);
+        map.put("isdefault", isdefault);
+        map.put("district_ids", district_ids);
+        map.put("address_id", address_id);
+        sortAndMD5(map);
+
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addressEdit(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+                iView.saveAddressCallback();
+            }
+        });
+    }
+    public void addressRemove(String address_id){
+        Map<String, String> map = new HashMap<>();
+        map.put("address_id", address_id);
+        sortAndMD5(map);
+
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delAddress(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+                iView.saveAddressCallback();
+            }
+        });
+    }
     public void saveAddress(String realname,String mobile,String address,String isdefault,String district_ids){
         Map<String, String> map = new HashMap<>();
         map.put("realname", realname);

@@ -106,12 +106,10 @@ public class ProgressView extends View {
         valueAnimator.start();
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
+    public void releaseAnimation() {
         if (valueAnimator != null) {
             valueAnimator.removeAllUpdateListeners();
             valueAnimator.cancel();
         }
-        super.onDetachedFromWindow();
     }
 }

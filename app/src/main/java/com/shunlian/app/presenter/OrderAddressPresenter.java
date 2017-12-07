@@ -8,6 +8,7 @@ import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderAddressView;
 
@@ -84,5 +85,26 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addressDefault(String address_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("isdefault", "1");
+        map.put("address_id", address_id);
+        sortAndMD5(map);
+
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addressEdit(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                if (entity.code == 1000) {
+                    iView.editAddressSuccess();
+                } else {
+                    iView.delAddressFail();
+                }
+            }
+        });
     }
 }
