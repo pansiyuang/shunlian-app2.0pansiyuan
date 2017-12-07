@@ -150,6 +150,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void saveAddressCallback() {
         finish();
-        AddressListActivity.startAct(this);
+        AddressListActivity.startAct(this,null);
     }
 }

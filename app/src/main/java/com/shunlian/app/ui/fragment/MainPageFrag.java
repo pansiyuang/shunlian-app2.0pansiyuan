@@ -106,8 +106,8 @@ public class MainPageFrag extends BaseFragment {
                         LoginAct.startAct(baseContext);
                         break;
                     case 1:
-                        GoodsDetailAct.startAct(baseContext, "56");
-//                        GoodsDetailAct.startAct(baseContext,"134");
+//                        GoodsDetailAct.startAct(baseContext, "56");
+                        GoodsDetailAct.startAct(baseContext,"134");
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);
@@ -115,7 +115,7 @@ public class MainPageFrag extends BaseFragment {
                     case 4:
                         break;
                     case 5:
-                        AddressListActivity.startAct(baseContext);
+                        AddressListActivity.startAct(baseContext,"");
                         break;
                 }
             }
