@@ -62,7 +62,7 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
         }
     }
 
-    public void delAddress(String addressId) {
+    public void delAddress(final String addressId) {
         Map<String, String> map = new HashMap<>();
         map.put("address_id", addressId);
         sortAndMD5(map);
@@ -75,7 +75,7 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     super.onSuccess(entity);
                     if (entity.code == 1000) {
-                        iView.delAddressSuccess();
+                        iView.delAddressSuccess(addressId);
                     } else {
                         iView.delAddressFail();
                     }

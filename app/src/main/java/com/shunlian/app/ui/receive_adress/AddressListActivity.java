@@ -42,8 +42,9 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     private OrderAddressPresenter orderAddressPresenter;
     private AddressAdapter addressAdapter;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,String addressId) {
         Intent intent = new Intent(context, AddressListActivity.class);
+        intent.putExtra("addressId",addressId);
         context.startActivity(intent);
     }
 
@@ -74,7 +75,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
-                AddAdressAct.startAct(this,"");
+                AddAdressAct.startAct(this,null);
                 break;
             case R.id.tv_title_right:
                 AddressManageActivity.startAct(this);
@@ -93,7 +94,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void delAddressSuccess() {
+    public void delAddressSuccess(String addressId) {
 
     }
 

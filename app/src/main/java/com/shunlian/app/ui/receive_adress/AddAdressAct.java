@@ -2,12 +2,14 @@ package com.shunlian.app.ui.receive_adress;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Location;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.presenter.AddAddressPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -48,9 +50,9 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     private boolean isDefault;
 
 
-    public static void startAct(Context context, String storeId) {
+    public static void startAct(Context context, ConfirmOrderEntity.Address address) {
         Intent intent = new Intent(context, AddAdressAct.class);
-        intent.putExtra("storeId", storeId);//店铺id
+        intent.putExtra("address", address);//地址实体类
         context.startActivity(intent);
     }
 

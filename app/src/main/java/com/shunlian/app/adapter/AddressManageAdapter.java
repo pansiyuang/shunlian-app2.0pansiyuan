@@ -63,14 +63,16 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         viewHolder.tv_manage_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //编辑
+                if (mListener != null) {
+                    mListener.addressEdit(position);
+                }
             }
         });
         viewHolder.tv_manage_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.addressDel(address.id);
+                    mListener.addressDel(position);
                 }
             }
         });
@@ -112,6 +114,8 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
     }
 
     public interface OnAddressDelListener {
-        void addressDel(String addressId);
+        void addressDel(int position);
+
+        void addressEdit(int position);
     }
 }

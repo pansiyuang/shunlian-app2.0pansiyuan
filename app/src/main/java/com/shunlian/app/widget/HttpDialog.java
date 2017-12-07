@@ -51,8 +51,12 @@ public class HttpDialog extends Dialog {
     public void dismiss() {
         long dt = System.currentTimeMillis() - startTime;
         if (dt >= min_show_tile){
-            super.dismiss();
 
+            try {
+                super.dismiss();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }else {
             mHandler.sendEmptyMessageDelayed(0,min_show_tile - dt);
         }
@@ -65,6 +69,8 @@ public class HttpDialog extends Dialog {
         try {
             super.show();
         }catch (WindowManager.BadTokenException e){
+            e.printStackTrace();
+        }catch (IllegalArgumentException e){
             e.printStackTrace();
         }
 

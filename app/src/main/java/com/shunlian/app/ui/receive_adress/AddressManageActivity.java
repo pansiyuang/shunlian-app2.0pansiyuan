@@ -39,6 +39,7 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
 
     private OrderAddressPresenter orderAddressPresenter;
     private AddressManageAdapter manageAdapter;
+    private List<ConfirmOrderEntity.Address> addList;
 
 
     public static void startAct(Context context) {
@@ -68,7 +69,8 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void orderList(List<ConfirmOrderEntity.Address> addressList) {
-        manageAdapter = new AddressManageAdapter(this, false, addressList);
+        addList = addressList;
+        manageAdapter = new AddressManageAdapter(this, false, addList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler_address.setLayoutManager(layoutManager);
         recycler_address.setAdapter(manageAdapter);
@@ -79,9 +81,17 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void delAddressSuccess() {
-        Common.staticToast(getString(R.string.del_success));
-        manageAdapter.notifyDataSetChanged();
+    public void delAddressSuccess(String addressId) {
+        if (addList == null && addList.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < addList.size(); i++) {
+            if (addressId.equals(addList.get(i).id)) {
+                addList.remove(i);
+                manageAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     @Override
@@ -108,7 +118,14 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void addressDel(String addressId) {
+    public void addressDel(int position) {
+        ConfirmOrderEntity.Address address = addList.get(position);
+        String addressId = address.id;
         orderAddressPresenter.delAddress(addressId);
+    }
+
+    @Override
+    public void addressEdit(int position) {
+            AddAdressAct.startAct(this,addList.get(position));
     }
 }
