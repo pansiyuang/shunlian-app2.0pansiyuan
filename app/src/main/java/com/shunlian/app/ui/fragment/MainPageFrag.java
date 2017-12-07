@@ -15,7 +15,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
-import com.shunlian.app.ui.receive_adress.AddAdressAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -106,8 +105,8 @@ public class MainPageFrag extends BaseFragment {
                         LoginAct.startAct(baseContext);
                         break;
                     case 1:
-//                        GoodsDetailAct.startAct(baseContext, "56");
-                        GoodsDetailAct.startAct(baseContext,"134");
+                        GoodsDetailAct.startAct(baseContext, "56");
+//                        GoodsDetailAct.startAct(baseContext,"134");
                         break;
                     case 2:
                         StoreAct.startAct(baseContext);

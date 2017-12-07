@@ -185,7 +185,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param pageSize
      * @param id
      */
-    public void commentList(String goods_id, String type, String page, String pageSize, String id){
+    public void commentList(int emptyCode,int failureCode,boolean isLoading,
+                            String goods_id, String type, String page, String pageSize, String id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("type",type);
@@ -196,7 +197,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         }
         sortAndMD5(map);
         Call<BaseEntity<CommentListEntity>> baseEntityCall = getApiService().commentList(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommentListEntity>>(){
+        getNetData(emptyCode,failureCode,isLoading,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommentListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommentListEntity> entity) {
                 super.onSuccess(entity);
