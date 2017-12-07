@@ -18,7 +18,7 @@ public class HttpDialog extends Dialog {
     private ProgressView mProgressBar;
     private long startTime;
     private static final long min_show_tile = 1000;//最少显示时间(毫秒)
-    public Handler mHandler = new Handler(){
+    public Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -50,15 +50,15 @@ public class HttpDialog extends Dialog {
     @Override
     public void dismiss() {
         long dt = System.currentTimeMillis() - startTime;
-        if (dt >= min_show_tile){
+        if (dt >= min_show_tile) {
 
             try {
                 super.dismiss();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-        }else {
-            mHandler.sendEmptyMessageDelayed(0,min_show_tile - dt);
+        } else {
+            mHandler.sendEmptyMessageDelayed(0, min_show_tile - dt);
         }
 
     }
@@ -68,11 +68,19 @@ public class HttpDialog extends Dialog {
         startTime = System.currentTimeMillis();
         try {
             super.show();
-        }catch (WindowManager.BadTokenException e){
+        } catch (WindowManager.BadTokenException e) {
             e.printStackTrace();
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        if (mProgressBar != null) {
+            mProgressBar.releaseAnimation();
+        }
+        super.onDetachedFromWindow();
     }
 }

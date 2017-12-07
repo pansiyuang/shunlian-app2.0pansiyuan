@@ -120,6 +120,11 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
+    public void editAddressSuccess() {
+
+    }
+
+    @Override
     public void showFailureView(int rquest_code) {
 
     }

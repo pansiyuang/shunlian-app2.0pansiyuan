@@ -14,4 +14,7 @@ public interface IOrderAddressView extends IView {
     void delAddressSuccess(String addressId);
 
     void delAddressFail();
+
+    void editAddressSuccess();
+
 }

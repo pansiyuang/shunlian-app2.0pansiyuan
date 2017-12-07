@@ -14,6 +14,7 @@ import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.presenter.OrderAddressPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IOrderAddressView;
@@ -40,6 +41,8 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     private OrderAddressPresenter orderAddressPresenter;
     private AddressManageAdapter manageAdapter;
     private List<ConfirmOrderEntity.Address> addList;
+    private PromptDialog promptDialog;
+    private String currentAddressId;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AddressManageActivity.class);
@@ -64,6 +67,22 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     protected void initListener() {
         super.initListener();
         btn_select_address.setOnClickListener(this);
+
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.del_address_title),
+                getStringResouce(R.string.SelectRecommendAct_sure),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        orderAddressPresenter.delAddress(currentAddressId);
+                    }
+                }, getStringResouce(R.string.errcode_cancel),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                });
     }
 
     @Override
@@ -91,11 +110,19 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
                 break;
             }
         }
+        if (promptDialog != null) {
+            promptDialog.dismiss();
+        }
     }
 
     @Override
     public void delAddressFail() {
         Common.staticToast(getString(R.string.del_fail));
+    }
+
+    @Override
+    public void editAddressSuccess() {
+        manageAdapter.setAddressDefault(currentAddressId);
     }
 
     @Override
@@ -112,7 +139,7 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_select_address:
-                AddAdressAct.startAct(this,null);
+                AddAdressAct.startAct(this, null);
                 break;
         }
     }
@@ -120,12 +147,21 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     @Override
     public void addressDel(int position) {
         ConfirmOrderEntity.Address address = addList.get(position);
-        String addressId = address.id;
-        orderAddressPresenter.delAddress(addressId);
+        currentAddressId = address.id;
+        if (promptDialog != null) {
+            promptDialog.show();
+        }
     }
 
     @Override
     public void addressEdit(int position) {
-            AddAdressAct.startAct(this,addList.get(position));
+        AddAdressAct.startAct(this, addList.get(position));
+    }
+
+    @Override
+    public void addressDefault(int position) {
+        ConfirmOrderEntity.Address address = addList.get(position);
+        currentAddressId = address.id;
+        orderAddressPresenter.addressDefault(address.id);
     }
 }
