@@ -10,6 +10,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.shunlian.app.utils.LogUtil;
+
 /**
  * Created by Administrator on 2017/12/1.
  */
@@ -17,14 +19,15 @@ import android.view.View;
 public class ProgressView extends View {
     private final int bottomColor = Color.parseColor("#CCCCCC");
     private final int pinkColor = Color.parseColor("#FB0030");
+
     private final int anmiDuation = 1500; //动画时间
 
-    private final int ringWidth = 4; //环的宽度;
+    private final int ringWidth = 3; //环的宽度;
 
     private int angle = 360;
     private Paint bottomPaint; //底色画笔
     private Paint animPaint; //动画画笔
-    private boolean isGay = true;
+    private boolean isGay = false;
     private ValueAnimator valueAnimator;
 
     public ProgressView(Context context) {
@@ -51,6 +54,8 @@ public class ProgressView extends View {
         animPaint.setStyle(Paint.Style.STROKE);
         animPaint.setStrokeWidth(ringWidth);
         animPaint.setColor(pinkColor);
+
+
     }
 
     @Override
@@ -60,7 +65,21 @@ public class ProgressView extends View {
         canvas.rotate(-90);
         RectF rectF = new RectF(0 - (getWidth() / 2f) + (ringWidth / 2f), 0 - (getWidth() / 2f) + (ringWidth / 2f), (getWidth() / 2f) - (ringWidth / 2f), (getHeight() / 2f) - (ringWidth / 2f));
         canvas.drawArc(rectF, 0, 360, false, bottomPaint);
-        canvas.drawArc(rectF, 0, angle, false, animPaint);
+
+        if (isGay) {
+            canvas.drawArc(rectF, 360, angle - 360, false, animPaint);
+        } else {
+            canvas.drawArc(rectF, 0, angle, false, animPaint);
+        }
+
+
+    }
+
+    public boolean isRunning() {
+        if (valueAnimator != null && valueAnimator.isRunning()) {
+            return true;
+        }
+        return false;
     }
 
     public void startAnimation() {
@@ -83,20 +102,13 @@ public class ProgressView extends View {
 
             @Override
             public void onAnimationRepeat(Animator animator) {
-                if (isGay) {
-                    bottomPaint.setColor(pinkColor);
-                    animPaint.setColor(bottomColor);
-                    isGay = false;
-                } else {
-                    bottomPaint.setColor(bottomColor);
-                    animPaint.setColor(pinkColor);
-                    isGay = true;
-                }
+                isGay = !isGay;
             }
         });
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                LogUtil.httpLogW("value:" + angle);
                 angle = (int) valueAnimator.getAnimatedValue();
                 postInvalidate();
             }
@@ -104,6 +116,12 @@ public class ProgressView extends View {
         valueAnimator.setDuration(anmiDuation);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.start();
+    }
+
+    public void stopAnimation() {
+        if (valueAnimator != null) {
+            valueAnimator.end();
+        }
     }
 
     public void releaseAnimation() {
