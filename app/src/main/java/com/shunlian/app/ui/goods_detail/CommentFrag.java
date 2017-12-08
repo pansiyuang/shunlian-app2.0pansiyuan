@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 
 import java.util.ArrayList;
@@ -30,8 +32,12 @@ public class CommentFrag extends BaseFragment {
     private LinearLayoutManager manager;
     private CommentAdapter commentAdapter;
     private String type = "ALL";
-    private int page = 1;
-    private boolean isLoading = false;
+    public static final int pageSize = 20;//评价每页数量
+    private int allPage;//总页数
+    private GoodsDetailPresenter goodsDetailPresenter;
+    private String mCommentId;
+    private String goodsId;
+    private boolean isClickHead;
 
     /**
      * 设置布局id
@@ -50,15 +56,15 @@ public class CommentFrag extends BaseFragment {
     protected void initListener() {
         super.initListener();
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (manager != null){
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (!isLoading && lastPosition + 1 == manager.getItemCount()){
-                        isLoading = true;
-                        detailAct.requestCommentPageData(type,String.valueOf(page));
+                    if (lastPosition + 1 == manager.getItemCount()){
+                        if (goodsDetailPresenter != null){
+                            goodsDetailPresenter.onRefresh();
+                        }
                     }
                 }
             }
@@ -70,17 +76,30 @@ public class CommentFrag extends BaseFragment {
      */
     @Override
     protected void initData() {
+        goodsId = getArguments().getString("goodsId");
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) recy_view.getLayoutParams();
         layoutParams.topMargin = ((GoodsDetailAct)baseActivity).offset;
         recy_view.setLayoutParams(layoutParams);
         manager = new LinearLayoutManager(baseActivity);
         recy_view.setLayoutManager(manager);
-        commentAdapter = new CommentAdapter(baseActivity,false,commentlists);
+        commentAdapter = new CommentAdapter(baseActivity,true,commentlists);
         recy_view.setAdapter(commentAdapter);
         commentAdapter.setCommentTypeListener(new CommentAdapter.ICommentTypeListener() {
             @Override
             public void onCommentType(String type) {
+                isClickHead = true;
                 CommentFrag.this.type = type;
+                goodsDetailPresenter.setType(type);
+                requestCommentPageData(type,"1");
+            }
+        });
+
+        commentAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+            @Override
+            public void onReload() {
+                if (goodsDetailPresenter != null){
+                    goodsDetailPresenter.onRefresh();
+                }
             }
         });
     }
@@ -92,10 +111,18 @@ public class CommentFrag extends BaseFragment {
     public void setCommentList(CommentListEntity entity){
         List<CommentListEntity.Label> label = entity.label;
         CommentListEntity.ListData list = entity.list;
-        this.page = Integer.parseInt(list.page) + 1;
+        int page = Integer.parseInt(list.page) + 1;
+        this.allPage = Integer.parseInt(list.allPage);
         commentlists.clear();
         commentlists.addAll(list.data);
-        commentAdapter.setLabel(label);
+        boolean isClear = false;
+        if (!isClickHead){
+            isClear = true;
+        }else {
+            isClear = false;
+        }
+        commentAdapter.setLabel(label,isClear);
+        commentAdapter.setPageLoading(page,allPage);
         commentAdapter.notifyDataSetChanged();
     }
 
@@ -104,13 +131,42 @@ public class CommentFrag extends BaseFragment {
      * @param entity
      */
     public void setCommentMoreList(CommentListEntity entity){
-        isLoading = false;
         CommentListEntity.ListData list = entity.list;
-        this.page = Integer.parseInt(list.page) + 1;
+        int page = Integer.parseInt(list.page) + 1;
+        this.allPage = Integer.parseInt(list.allPage);
         int size = commentlists.size();
         commentlists.addAll(list.data);
-        commentAdapter.notifyItemRangeInserted(size - 1,commentlists.size() - size);
+        commentAdapter.setPageLoading(page,allPage);
+        if (size > 10){
+            commentAdapter.notifyItemRangeChanged(size,pageSize);
+        }else {
+            commentAdapter.notifyDataSetChanged();
+        }
+
     }
 
-//    public void
+    public void loadFailure(){
+        if (commentAdapter != null){
+            commentAdapter.loadFailure();
+        }
+    }
+
+    public void setPresenter(GoodsDetailPresenter goodsDetailPresenter, String id) {
+        this.goodsDetailPresenter = goodsDetailPresenter;
+        mCommentId = id;
+        isClickHead = false;
+        if (recy_view != null)
+            recy_view.scrollToPosition(0);
+    }
+
+    /**
+     * 评价分页数据
+     * @param type
+     * @param page
+     */
+    public void requestCommentPageData(String type,String page){
+        goodsDetailPresenter.commentList(GoodsDetailPresenter.COMMENT_EMPTY_CODE,
+                GoodsDetailPresenter.COMMENT_FAILURE_CODE,false,
+                goodsId,type,page,String.valueOf(pageSize),null);
+    }
 }

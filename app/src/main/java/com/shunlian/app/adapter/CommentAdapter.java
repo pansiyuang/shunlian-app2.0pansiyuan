@@ -38,6 +38,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     public static final int HEAD = 2;
     private List<CommentListEntity.Label> mLabel;
     private ICommentTypeListener mCommentTypeListener;
+    private int selectId = 0;
 
     public CommentAdapter(Context context, boolean isShowFooter, List<CommentListEntity.Data> lists) {
         super(context, isShowFooter, lists);
@@ -108,7 +109,6 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             });
         }
     }
-    private int selectId = 0;
     /**
      * 子类需要实现的holder
      *
@@ -217,8 +217,11 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         }
     }
 
-    public void setLabel(List<CommentListEntity.Label> label) {
+    public void setLabel(List<CommentListEntity.Label> label,boolean isClear) {
         mLabel = label;
+        if (isClear){
+            selectId = 0;
+        }
     }
 
     public class CommentHolder extends BaseRecyclerViewHolder{

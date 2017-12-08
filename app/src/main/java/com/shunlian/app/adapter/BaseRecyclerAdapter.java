@@ -315,9 +315,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             if (visibility == View.GONE) {
                 layout_normal.setVisibility(View.GONE);
 //                spinKitView.unscheduleDrawable(circle);
+                spinKitView.releaseAnimation();
             } else if (visibility == View.VISIBLE) {
                 layout_normal.setVisibility(View.VISIBLE);
 //                spinKitView.onWindowFocusChanged(true);
+                spinKitView.startAnimation();
             }
         }
     }
