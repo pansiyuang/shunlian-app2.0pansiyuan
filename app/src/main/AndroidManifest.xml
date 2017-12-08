@@ -118,6 +118,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
+        <activity android:name="pay.PayListActivity"
+            android:exported="false"
+            android:theme="@style/pay"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

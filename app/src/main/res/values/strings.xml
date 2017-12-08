@@ -220,5 +220,6 @@
     <string name="address_default">默认地址</string>
     <string name="del_fail">删除失败</string>
     <string name="del_success">删除成功</string>
+    <string name="del_address_title">确认删除此条地址信息吗？</string>
 
 </resources>

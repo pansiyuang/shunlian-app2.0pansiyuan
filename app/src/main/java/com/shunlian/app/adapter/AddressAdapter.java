@@ -37,12 +37,14 @@ public class AddressAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.Addre
         return viewHolder;
     }
 
-    public void OnItemSelect(int position) {
-        ConfirmOrderEntity.Address address = addressList.get(position);
+    public void OnItemSelect(String addressId) {
         for (int i = 0; i < addressList.size(); i++) {
-            addressList.get(i).isSelect = false;
+            if (addressId.equals(addressList.get(i).id)) {
+                addressList.get(i).isSelect = true;
+            } else {
+                addressList.get(i).isSelect = false;
+            }
         }
-        address.isSelect = true;
         notifyDataSetChanged();
     }
 

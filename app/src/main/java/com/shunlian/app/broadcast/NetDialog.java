@@ -31,7 +31,7 @@ public class NetDialog extends Dialog {
 //    }
 
     public NetDialog(@NonNull Context context) {
-        this(context, R.style.Mydialog);
+        this(context, R.style.wx);
     }
 
     public NetDialog(@NonNull final Context context, int themeResId) {

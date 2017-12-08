@@ -3,6 +3,7 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class ConfirmOrderEntity {
     public String total_reduce;//总减免
     public String pay_amount;//最终的价格（需要客户端减去选取的优惠券）
     public Address address;
+    public ArrayList<PayTypes> pay_types;
 
     @Override
     public String toString() {
@@ -107,5 +109,12 @@ public class ConfirmOrderEntity {
         public String title;
         public String thumb;
         public String price;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PayTypes implements Serializable {
+        public String code;
+        public String name;
+        public String pic;
     }
 }

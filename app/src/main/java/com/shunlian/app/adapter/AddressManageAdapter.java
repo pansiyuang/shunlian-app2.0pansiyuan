@@ -32,6 +32,17 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_address_manage, parent, false));
     }
 
+    public void setAddressDefault(String addressId) {
+        for (int i = 0; i < lists.size(); i++) {
+            if (addressId.equals(lists.get(i).id)) {
+                lists.get(i).isdefault = "1";
+            } else {
+                lists.get(i).isdefault = "0";
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
@@ -53,11 +64,9 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         viewHolder.ll_default.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < lists.size(); i++) {
-                    lists.get(i).isdefault = "0";
+                if (mListener != null) {
+                    mListener.addressDefault(position);
                 }
-                lists.get(position).isdefault = "1";
-                notifyDataSetChanged();
             }
         });
         viewHolder.tv_manage_edit.setOnClickListener(new View.OnClickListener() {
@@ -117,5 +126,7 @@ public class AddressManageAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity
         void addressDel(int position);
 
         void addressEdit(int position);
+
+        void addressDefault(int position);
     }
 }
