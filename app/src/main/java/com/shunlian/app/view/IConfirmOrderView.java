@@ -3,6 +3,7 @@ package com.shunlian.app.view;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,5 +26,11 @@ public interface IConfirmOrderView extends IView{
      * @param price
      */
     void goodsTotalPrice(String count,String price);
+
+    /**
+     * 支付列表
+     * @param payTypes
+     */
+    void payList(ArrayList<ConfirmOrderEntity.PayTypes> payTypes);
 
 }

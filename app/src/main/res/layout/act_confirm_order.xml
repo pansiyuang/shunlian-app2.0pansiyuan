@@ -75,6 +75,7 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_go_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

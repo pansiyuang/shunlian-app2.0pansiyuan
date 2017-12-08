@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_pay_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_login_wechat"
+            app:iv_control_adapter="true"
+            app:iv_control_height="50"
+            app:iv_control_width="50"
+            app:iv_margin_left="25" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_pay_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="支付宝支付"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="35" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_common_viewarrow_1"
+            app:iv_control_adapter="true"
+            app:iv_margin_right="20" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/light_gray_three" />
+</LinearLayout>

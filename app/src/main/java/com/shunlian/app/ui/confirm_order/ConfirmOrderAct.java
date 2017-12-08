@@ -20,16 +20,18 @@ import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 /**
  * Created by Administrator on 2017/11/25.
  * 确认订单
  */
 
-public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
+public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, View.OnClickListener {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -39,6 +41,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
 
     @BindView(R.id.mtv_total_price)
     MyTextView mtv_total_price;
+
+    @BindView(R.id.mtv_go_pay)
+    MyTextView mtv_go_pay;
+
+
     private LinearLayoutManager manager;
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
@@ -49,6 +56,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     private String qty;
     private String sku_id;
     private ConfirmOrderPresenter confirmOrderPresenter;
+    private ArrayList<ConfirmOrderEntity.PayTypes> mPayTypes;
 
     public static void startAct(Context context,String cart_ids){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -71,6 +79,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
     @Override
     protected void initListener() {
         super.initListener();
+        mtv_go_pay.setOnClickListener(this);
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -185,6 +194,16 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
                 .getString(R.string.rmb)+price,11));
     }
 
+    /**
+     * 支付列表
+     *
+     * @param payTypes
+     */
+    @Override
+    public void payList(ArrayList<ConfirmOrderEntity.PayTypes> payTypes) {
+        mPayTypes = payTypes;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -197,6 +216,20 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView {
                 isOrderBuy = true;
                 confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
             }
+        }
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.mtv_go_pay:
+                PayListActivity.startAct(this,mPayTypes);
+                break;
         }
     }
 }

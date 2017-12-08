@@ -65,6 +65,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
+                iView.payList(entity.data.pay_types);
             }
         });
     }
@@ -90,6 +91,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
+                iView.payList(entity.data.pay_types);
             }
         });
     }
