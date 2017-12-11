@@ -2,24 +2,46 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    signingConfigs {
+        ShunLianPower {
+            List<String> lists = new File('C:/Augus/file/signState.txt').readLines()
+            String alias = lists.get(0)
+            String pwd = lists.get(1)
+            storeFile file('C:/Augus/file/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
+    }
     compileSdkVersion 25
-    buildToolsVersion '27.0.1'
-
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
-        applicationId "com.shunlian.app"
+        applicationId "com.shunlian.apps"
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 14
-        versionName "555"
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.ShunLianPower
     }
+
     buildTypes {
         release {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.ShunLianPower
+        }
+        debug {
+            signingConfig signingConfigs.ShunLianPower
         }
     }
     packagingOptions {
