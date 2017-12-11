@@ -101,6 +101,7 @@
     <string name="recommend_goods">推荐</string>
     <string name="coupons">领券</string>
     <string name="package_details">套餐详情</string>
+    <string name="look_package_details">套餐 查看套餐</string>
     <string name="product_parameter">产品参数</string>
     <string name="select_size_color">选择  尺码  颜色分类</string>
     <string name="_7_days_no_reason_to_return">7天无理由退货</string>

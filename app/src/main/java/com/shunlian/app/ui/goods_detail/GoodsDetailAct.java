@@ -125,6 +125,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.sv_mask)
     ScrollView sv_mask;
+
+    @BindView(R.id.mll_bottom)
+    MyLinearLayout mll_bottom;
+
+    @BindView(R.id.line)
+    View line;
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -145,6 +151,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
     private String favId;
+    public int bottomListHeight;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -188,6 +195,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
+        mll_bottom.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomListHeight = mll_bottom.getMeasuredHeight();
+            }
+        });
+
     }
     public void defToolbar(){
         immersionBar.titleBar(toolbar,false)
@@ -256,6 +270,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             miv_close.setAlpha(v);
             miv_is_fav.setAlpha(v);
             miv_more.setAlpha(v);
+            if (alpha < 1.0f)
+                line.setVisibility(View.INVISIBLE);
+            else
+                line.setVisibility(View.VISIBLE);
         } else {
             setToolbar();
         }
@@ -270,6 +288,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         miv_close.setAlpha(1.0f);
         miv_is_fav.setAlpha(1.0f);
         miv_more.setAlpha(1.0f);
+        line.setVisibility(View.VISIBLE);
     }
     /*
     替换fragment内容

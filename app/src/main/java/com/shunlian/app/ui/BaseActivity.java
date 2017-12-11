@@ -26,6 +26,7 @@ import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -297,6 +298,23 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected Drawable getDrawableResouce(int drawableResouce) {
         return resources.getDrawable(drawableResouce);
+    }
+
+    /**
+     * 判断集合内容是否为空
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
