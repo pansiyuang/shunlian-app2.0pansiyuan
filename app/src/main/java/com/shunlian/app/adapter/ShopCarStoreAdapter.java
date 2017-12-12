@@ -201,7 +201,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         ChildViewHolder childViewHolder;
         ShoppingCarEntity.Enabled enabled = mStores.get(i);
-        ShoppingCarEntity.Enabled.Promotion promotion = enabled.promotion.get(i1);
+        final ShoppingCarEntity.Enabled.Promotion promotion = enabled.promotion.get(i1);
         if (view == null) {
             view = layoutInflater.inflate(R.layout.item_shoppingcar_promotion, viewGroup, false);
             childViewHolder = new ChildViewHolder(view);
@@ -218,6 +218,14 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         childViewHolder.recycler_goods.setLayoutManager(linearLayoutManager);
         childViewHolder.recycler_goods.setNestedScrollingEnabled(false);
         childViewHolder.recycler_goods.setAdapter(goodsAdapter);
+        childViewHolder.tv_meger_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.OnMegerOrder(promotion.need_more);
+                }
+            }
+        });
         goodsAdapter.setOnGoodsChangeListener(new EnableGoodsAdapter.OnGoodsChangeListener() {
             @Override
             public void OnChangeCount(String goodsId, int count) {
@@ -279,11 +287,11 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.tv_get_voucher)
         TextView tv_get_voucher;
 
-        @BindView(R.id.tv_edit)
-        TextView tv_edit;
-
         @BindView(R.id.view_line)
         View view_line;
+
+        @BindView(R.id.tv_edit)
+        TextView tv_edit;
 
         public ParentViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
@@ -302,6 +310,9 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
 
         @BindView(R.id.recycler_goods)
         RecyclerView recycler_goods;
+
+        @BindView(R.id.tv_meger_order)
+        TextView tv_meger_order;
 
 
         public ChildViewHolder(View itemView) {
@@ -330,5 +341,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         void OnChangePromotion(String goodsId, String promoId);
 
         void OnStoreCheck(String storeId, String isSelect);
+
+        void OnMegerOrder(String needId);
     }
 }

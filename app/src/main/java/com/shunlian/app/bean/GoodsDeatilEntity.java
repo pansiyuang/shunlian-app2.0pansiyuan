@@ -169,6 +169,7 @@ public class GoodsDeatilEntity {
         public String goods_id;              //商品id
         public String qty;                   //购物车数量
         public String sku_id;                //购物中的sku_id
+        public String goods_title;           //商品title
         public String title;                 //商品title
         public String stock;                 //商品库存
         public String thumb;                 //商品封面图
@@ -179,6 +180,9 @@ public class GoodsDeatilEntity {
         public String price;                 //价格
         public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
         public List<AllProm> all_prom;
+        public String cate_id;
+        public String cate_name;
+        public String sales;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -242,6 +246,7 @@ public class GoodsDeatilEntity {
         public String prom_title;
         public boolean isSelect;
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Promotion {
         public String prom_id;               //活动id

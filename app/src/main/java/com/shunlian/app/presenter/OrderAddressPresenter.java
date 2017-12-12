@@ -48,7 +48,7 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<AddressDataEntity>> baseEntityCall = getAddCookieApiService().allAddress(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<AddressDataEntity>>() {
+            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<AddressDataEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<AddressDataEntity> entity) {
                     super.onSuccess(entity);
@@ -71,7 +71,7 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delAddress(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     super.onSuccess(entity);

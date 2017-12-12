@@ -65,6 +65,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.tv_number)
     TextView tv_number;
 
+    @BindView(R.id.tv_param)
+    TextView tv_param;
+
     @BindView(R.id.btn_complete)
     Button btn_complete;
 
@@ -82,6 +85,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private OnSelectCallBack selectCallBack;
     private int recycleHeight;
     private int totalStock;
+    private String hasOption = "0";//是否有参数
     private int currentCount = 1;
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
 
@@ -101,6 +105,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         this.mGoods = goods;
         this.specs = goods.goods_info.specs;
         this.mSku = goods.goods_info.sku;
+        this.hasOption = goods.goods_info.has_option;
+        LogUtil.httpLogW("hasOption:" + hasOption);
         mCurrentValues = new ArrayList<>();
         initMap();
     }
@@ -128,12 +134,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
 
-        paramItemAdapter = new ParamItemAdapter(specs);
-        linearLayoutManager = new LinearLayoutManager(mContext);
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
-        recycler_param.setLayoutManager(linearLayoutManager);
         recycler_param.setLayoutParams(params);
-        recycler_param.setAdapter(paramItemAdapter);
+
+        if (specs == null || specs.size() == 0) {
+            recycler_param.setVisibility(View.INVISIBLE);
+        } else {
+            paramItemAdapter = new ParamItemAdapter(specs);
+            linearLayoutManager = new LinearLayoutManager(mContext);
+            recycler_param.setLayoutManager(linearLayoutManager);
+            recycler_param.setAdapter(paramItemAdapter);
+        }
     }
 
     public void initViews() {
@@ -188,10 +200,14 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-                GoodsDeatilEntity.Sku s = checkLinkmap(true);
-
-                if (s != null && selectCallBack != null) {
-                    selectCallBack.onSelectComplete(s, currentCount);
+                if ("1".equals(hasOption) && selectCallBack != null) {
+                    GoodsDeatilEntity.Sku s = checkLinkmap(true);
+                    if (s != null && selectCallBack != null) {
+                        selectCallBack.onSelectComplete(s, currentCount);
+                        dismiss();
+                    }
+                } else {
+                    selectCallBack.onSelectComplete(null, currentCount);
                     dismiss();
                 }
                 break;
@@ -243,6 +259,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                             dia_tv_price.setText("¥" + s.price);
                             totalStock = Integer.valueOf(s.stock);
                             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
+                            tv_param.setText(s.name);
                         }
                     }
                 }

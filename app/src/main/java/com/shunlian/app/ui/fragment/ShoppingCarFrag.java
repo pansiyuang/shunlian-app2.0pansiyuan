@@ -21,6 +21,7 @@ import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
@@ -300,6 +301,11 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnStoreCheck(String storeId, String isSelect) {
         shopCarPresenter.checkCartGoods(storeId, isSelect);
+    }
+
+    @Override
+    public void OnMegerOrder(String needId) {
+        MegerOrderActivity.startAct(baseContext,needId);
     }
 
     @Override

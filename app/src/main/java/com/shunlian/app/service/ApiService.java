@@ -24,6 +24,7 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -32,6 +33,7 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
@@ -276,6 +278,7 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
+
     /**
      * 店铺新品
      *
@@ -307,7 +310,7 @@ public interface ApiService {
      * @return
      */
     @POST("cart/add")
-    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+    Call<BaseEntity<CateEntity>> addCart(@Body RequestBody body);
 
     /**
      * 购物车首页
@@ -409,6 +412,7 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
+     *
      * @param body
      * @return
      */
@@ -417,6 +421,7 @@ public interface ApiService {
 
     /**
      * 收藏商品
+     *
      * @param body
      * @return
      */
@@ -425,6 +430,7 @@ public interface ApiService {
 
     /**
      * 移除收藏
+     *
      * @param body
      * @return
      */
@@ -433,14 +439,16 @@ public interface ApiService {
 
     /**
      * 评价列表
+     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
 
     /**
      * 省市区数据
+     *
      * @param map
      * @return
      */
@@ -449,6 +457,7 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
+     *
      * @param body
      * @return
      */
@@ -457,6 +466,7 @@ public interface ApiService {
 
     /**
      * 添加收货地址
+     *
      * @param body
      * @return
      */
@@ -465,6 +475,7 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
+     *
      * @param body
      * @return
      */
@@ -489,4 +500,31 @@ public interface ApiService {
      */
     @POST("/member/address/remove")
     Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
+
+    /**
+     * 凑单界面商店类目
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/getjoingoodsstorecates")
+    Call<BaseEntity<CateEntity>> megerGoodsCates(@Body RequestBody body);
+
+    /**
+     * 凑单
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/joingoods")
+    Call<BaseEntity<JoinGoodsEntity>> getRecommmendGoods(@Body RequestBody body);
+
+    /**
+     * 获取商品sku信息
+     *
+     * @param body
+     * @return
+     */
+    @POST("/goods/getgoodssku")
+    Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> getGoodsSku(@Body RequestBody body);
 }

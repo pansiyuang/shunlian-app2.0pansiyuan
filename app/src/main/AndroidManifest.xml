@@ -117,6 +117,11 @@
             android:name=".ui.receive_adress.AddressManageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.confirm_order.MegerOrderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
     </application>
 
