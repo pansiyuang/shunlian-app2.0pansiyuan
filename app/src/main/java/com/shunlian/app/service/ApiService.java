@@ -34,6 +34,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
+import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
@@ -489,4 +490,12 @@ public interface ApiService {
      */
     @POST("/member/address/remove")
     Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
+
+    /**
+     * 我的评价列表
+     * @param map
+     * @return
+     */
+    @GET("member/comment/list")
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
 }

@@ -8,10 +8,13 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MyCommentAdapter;
+import com.shunlian.app.bean.MyCommentListEntity;
+import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.view.IMyCommentListView;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
@@ -21,16 +24,10 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/11.
  */
 
-public class MyCommentAct extends BaseActivity {
+public class MyCommentAct extends BaseActivity implements IMyCommentListView{
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
-
-//    @BindView(R.id.mllayout_all)
-//    MyLinearLayout mllayout_all;
-//
-//    @BindView(R.id.mllayout_append)
-//    MyLinearLayout mllayout_append;
 
     @BindView(R.id.mtv_comment_all)
     MyTextView mtv_comment_all;
@@ -45,6 +42,8 @@ public class MyCommentAct extends BaseActivity {
     View view_comment_append;
     private int pink_color;
     private int new_text;
+    private MyCommentListPresenter presenter;
+    private int currentPage = MyCommentListPresenter.ALL;
 
 
     public static void startAct(Context context) {
@@ -71,6 +70,8 @@ public class MyCommentAct extends BaseActivity {
         pink_color = getResources().getColor(R.color.pink_color);
         new_text = getResources().getColor(R.color.new_text);
 
+        presenter = new MyCommentListPresenter(this,this);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
 
@@ -78,23 +79,21 @@ public class MyCommentAct extends BaseActivity {
         recy_view.addItemDecoration(new VerticalItemDecoration(space, 0,
                 0, getResources().getColor(R.color.white_ash)));
 
-        MyCommentAdapter adapter = new MyCommentAdapter(this, false,
-                DataUtil.getListString(20, "fff"));
-
-        recy_view.setAdapter(adapter);
     }
 
     @OnClick(R.id.mllayout_all)
     public void allComment() {
+        currentPage = MyCommentListPresenter.ALL;
         classState(1);
-
+        presenter.myCommentListAll();
     }
 
 
     @OnClick(R.id.mllayout_append)
     public void appendComment() {
+        currentPage = MyCommentListPresenter.APPEND;
         classState(2);
-
+        presenter.myCommentListAppend();
     }
 
     private void classState(int state) {
@@ -104,5 +103,42 @@ public class MyCommentAct extends BaseActivity {
 
         mtv_comment_append.setTextColor(state == 2 ? pink_color : new_text);
         view_comment_append.setVisibility(state == 2 ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    /**
+     * 评价列表
+     *
+     * @param entity
+     */
+    @Override
+    public void commentList(MyCommentListEntity entity) {
+        if (currentPage == MyCommentListPresenter.ALL) {
+            MyCommentAdapter adapter = new MyCommentAdapter(this, false,
+                    DataUtil.getListString(20, "fff"));
+
+            recy_view.setAdapter(adapter);
+        }else {
+
+        }
     }
 }

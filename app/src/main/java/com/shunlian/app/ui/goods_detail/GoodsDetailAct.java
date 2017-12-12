@@ -470,7 +470,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switch (v.getId()){
             case R.id.mrl_add_car:
                 isAddcart = true;
-                if (sku == null){
+                if (goodsCount == 0){
                     goodsDeatilFrag.showParamDialog();
                 }else {
                     goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
@@ -509,7 +509,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 break;
             case R.id.mtv_buy_immediately:
                 isNowBuy = true;
-                if (sku == null){
+                if (goodsCount == 0){
                     goodsDeatilFrag.showParamDialog();
                 }else {
                     ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
