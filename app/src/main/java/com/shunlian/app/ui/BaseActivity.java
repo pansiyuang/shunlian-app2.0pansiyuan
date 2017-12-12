@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -315,6 +316,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }else {
             return false;
         }
+    }
+
+    protected boolean isEmpty(CharSequence sequence){
+        return TextUtils.isEmpty(sequence);
     }
 
     @Override
