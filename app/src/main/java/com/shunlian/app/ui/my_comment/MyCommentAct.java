@@ -7,15 +7,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MyCommentAdapter;
-import com.shunlian.app.bean.MyCommentListEntity;
+import com.shunlian.app.adapter.WaitAppendCommentAdapter;
+import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMyCommentListView;
 import com.shunlian.app.widget.MyTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,7 +28,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/11.
  */
 
-public class MyCommentAct extends BaseActivity implements IMyCommentListView{
+public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -43,8 +47,11 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
     private int pink_color;
     private int new_text;
     private MyCommentListPresenter presenter;
-    private int currentPage = MyCommentListPresenter.ALL;
-
+    private int currentPageStatus = MyCommentListPresenter.ALL;
+    private List<CommentListEntity.Data> lists = new ArrayList<>();
+    private MyCommentAdapter allAdapter;
+    private LinearLayoutManager manager;
+    private WaitAppendCommentAdapter waitAdapter;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyCommentAct.class));
@@ -60,6 +67,26 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
         return R.layout.act_my_comment;
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (presenter != null) {
+                            presenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * 初始化数据
      */
@@ -70,9 +97,9 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
         pink_color = getResources().getColor(R.color.pink_color);
         new_text = getResources().getColor(R.color.new_text);
 
-        presenter = new MyCommentListPresenter(this,this);
+        presenter = new MyCommentListPresenter(this, this);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
 
         int space = TransformUtil.dip2px(this, 7.5f);
@@ -83,7 +110,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
 
     @OnClick(R.id.mllayout_all)
     public void allComment() {
-        currentPage = MyCommentListPresenter.ALL;
+        currentPageStatus = MyCommentListPresenter.ALL;
         classState(1);
         presenter.myCommentListAll();
     }
@@ -91,7 +118,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
 
     @OnClick(R.id.mllayout_append)
     public void appendComment() {
-        currentPage = MyCommentListPresenter.APPEND;
+        currentPageStatus = MyCommentListPresenter.APPEND;
         classState(2);
         presenter.myCommentListAppend();
     }
@@ -112,7 +139,15 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
      */
     @Override
     public void showFailureView(int request_code) {
-
+        if (request_code == MyCommentListPresenter.ALL_COMMENT_CODE) {
+            if (allAdapter != null) {
+                allAdapter.loadFailure();
+            }
+        } else {
+            if (waitAdapter != null) {
+                waitAdapter.loadFailure();
+            }
+        }
     }
 
     /**
@@ -128,17 +163,86 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView{
     /**
      * 评价列表
      *
-     * @param entity
+     * @param lists
      */
     @Override
-    public void commentList(MyCommentListEntity entity) {
-        if (currentPage == MyCommentListPresenter.ALL) {
-            MyCommentAdapter adapter = new MyCommentAdapter(this, false,
-                    DataUtil.getListString(20, "fff"));
+    public void commentList(List<CommentListEntity.Data> lists, int currentPage, int allPage) {
+        if (currentPage == 1) {
+            this.lists.clear();
+            if (currentPageStatus == MyCommentListPresenter.ALL) {
+                waitAdapter = null;
+            } else {
+                allAdapter = null;
+            }
+        }
+        this.lists.addAll(lists);
+        if (currentPageStatus == MyCommentListPresenter.ALL) {
+            allComment(currentPage, allPage);
+        } else {
+            appendComment(currentPage, allPage);
+        }
 
-            recy_view.setAdapter(adapter);
-        }else {
+    }
 
+    private void appendComment(int currentPage, int allPage) {
+        if (waitAdapter == null) {
+            waitAdapter = new WaitAppendCommentAdapter(this, true, this.lists);
+            waitAdapter.setPageLoading(currentPage, allPage);
+            recy_view.setAdapter(waitAdapter);
+            waitAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (presenter != null) {
+                        presenter.onRefresh();
+                    }
+                }
+            });
+
+            waitAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    CommentListEntity.Data data = lists.get(position);
+                    CommentDetailAct.startAct(MyCommentAct.this, data);
+                }
+            });
+        } else {
+            waitAdapter.setPageLoading(currentPage, allPage);
+            waitAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void allComment(int currentPage, int allPage) {
+        if (allAdapter == null) {
+            allAdapter = new MyCommentAdapter(this, true, this.lists);
+            allAdapter.setPageLoading(currentPage, allPage);
+            recy_view.setAdapter(allAdapter);
+            allAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (presenter != null) {
+                        presenter.onRefresh();
+                    }
+                }
+            });
+
+            allAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    CommentListEntity.Data data = lists.get(position);
+                    CommentDetailAct.startAct(MyCommentAct.this, data);
+                }
+            });
+        } else {
+            allAdapter.setPageLoading(currentPage, allPage);
+            allAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.detachView();
         }
     }
 }

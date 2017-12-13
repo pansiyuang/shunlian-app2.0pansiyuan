@@ -27,11 +27,13 @@
         app:ll_margin_top="32">
 
         <com.shunlian.app.widget.CommentRank
+            android:id="@+id/comment_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_append_comment_staus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edge_frame_r3"
@@ -46,6 +48,7 @@
 
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
@@ -57,6 +60,8 @@
         app:tv_margin_top="32" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -64,6 +69,7 @@
         android:layout_marginTop="21dp" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_append_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="用户8天后追加"
@@ -74,6 +80,7 @@
         app:tv_margin_top="44" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_append_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
@@ -85,56 +92,16 @@
         app:tv_margin_top="32" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view_append"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="21dp" />
 
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/value_f8"
-        app:rl_control_adapter="true"
-        app:rl_margin_left="20"
-        app:rl_margin_right="20"
-        app:rl_margin_top="43">
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_goods_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:iv_control_adapter="true"
-            app:iv_control_height="193"
-            app:iv_control_width="193" />
-
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_goods_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/miv_goods_pic"
-            android:text="施华蔻系列黄金果油系列（长发易分叉发质专用）"
-            android:textColor="@color/new_text"
-            android:textSize="14sp"
-            app:tv_control_adapter="true"
-            app:tv_margin_left="23"
-            app:tv_margin_top="35" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mtv_goods_detail"
-            android:layout_toRightOf="@+id/miv_goods_pic"
-            android:text="￥98.00"
-            android:textColor="@color/new_text"
-            android:textSize="14sp"
-            app:tv_control_adapter="true"
-            app:tv_margin_left="23"
-            app:tv_margin_top="40" />
-
-    </com.shunlian.app.widget.MyRelativeLayout>
-
+    <!--商品信息-->
+   <include layout="@layout/item_goods_info"/>
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
@@ -147,6 +114,7 @@
         app:ll_margin_top="44">
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_comment_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -162,6 +130,7 @@
             android:textSize="13sp" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_zan_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2689"
@@ -170,6 +139,7 @@
     </com.shunlian.app.widget.MyLinearLayout>
 
     <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_reply_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
@@ -200,6 +170,7 @@
             app:tv_margin_top="30" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mtv_reply"
