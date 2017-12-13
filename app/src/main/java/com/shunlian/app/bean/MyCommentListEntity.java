@@ -14,6 +14,8 @@ public class MyCommentListEntity {
     public String page;
     public String page_size;
     public String max_page;
+    public String nickname;
+    public String avatar;
 
     public List<CommentListEntity.Data> list;
 }

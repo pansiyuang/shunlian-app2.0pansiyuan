@@ -78,11 +78,12 @@
         android:paddingTop="12dp">
 
         <com.shunlian.app.widget.circle.CircleImageView
+            android:id="@+id/civ_head"
             android:layout_width="29dp"
-            android:layout_height="29dp"
-            android:src="@mipmap/icon_login_logo" />
+            android:layout_height="29dp"/>
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5.5dp"

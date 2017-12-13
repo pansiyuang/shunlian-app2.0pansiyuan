@@ -88,6 +88,7 @@ public class MyCommentListPresenter extends BasePresenter<IMyCommentListView> {
                         MyCommentListEntity data = entity.data;
                         allPage = Integer.parseInt(data.max_page);
                         currentPage = Integer.parseInt(data.page);
+                        iView.setNicknameAndAvatar(data.nickname,data.avatar);
                         iView.commentList(data.list, Integer.parseInt(data.page), allPage);
                     }
 
