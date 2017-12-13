@@ -36,6 +36,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
+import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
@@ -278,7 +279,6 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
-
     /**
      * 店铺新品
      *
@@ -412,7 +412,6 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
-     *
      * @param body
      * @return
      */
@@ -421,7 +420,6 @@ public interface ApiService {
 
     /**
      * 收藏商品
-     *
      * @param body
      * @return
      */
@@ -430,7 +428,6 @@ public interface ApiService {
 
     /**
      * 移除收藏
-     *
      * @param body
      * @return
      */
@@ -439,16 +436,14 @@ public interface ApiService {
 
     /**
      * 评价列表
-     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
 
     /**
      * 省市区数据
-     *
      * @param map
      * @return
      */
@@ -457,7 +452,6 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
-     *
      * @param body
      * @return
      */
@@ -466,7 +460,6 @@ public interface ApiService {
 
     /**
      * 添加收货地址
-     *
      * @param body
      * @return
      */
@@ -475,7 +468,6 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
-     *
      * @param body
      * @return
      */
@@ -527,4 +519,12 @@ public interface ApiService {
      */
     @POST("/goods/getgoodssku")
     Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> getGoodsSku(@Body RequestBody body);
+
+    /**
+     * 我的评价列表
+     * @param map
+     * @return
+     */
+    @GET("member/comment/list")
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
 }

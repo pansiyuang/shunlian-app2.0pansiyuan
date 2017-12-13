@@ -79,6 +79,10 @@ public class CommentListEntity {
         public List<String> pics;
         public List<String> append_pics;
 
+        public String is_change;//是否可改为好评  0不能改好评    1可以改好评
+        public String is_append;//追评状态  0不能追评   1可以追评 2已经追评
+        public String append_note;//追评于多长时间前
+
         @Override
         public String toString() {
             return "Data{" +

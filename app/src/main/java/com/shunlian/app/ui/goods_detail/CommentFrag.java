@@ -82,26 +82,7 @@ public class CommentFrag extends BaseFragment {
         recy_view.setLayoutParams(layoutParams);
         manager = new LinearLayoutManager(baseActivity);
         recy_view.setLayoutManager(manager);
-        commentAdapter = new CommentAdapter(baseActivity,true,commentlists);
-        recy_view.setAdapter(commentAdapter);
-        commentAdapter.setCommentTypeListener(new CommentAdapter.ICommentTypeListener() {
-            @Override
-            public void onCommentType(String type) {
-                isClickHead = true;
-                CommentFrag.this.type = type;
-                goodsDetailPresenter.setType(type);
-                requestCommentPageData(type,"1");
-            }
-        });
 
-        commentAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-            @Override
-            public void onReload() {
-                if (goodsDetailPresenter != null){
-                    goodsDetailPresenter.onRefresh();
-                }
-            }
-        });
     }
 
     /**
@@ -111,6 +92,28 @@ public class CommentFrag extends BaseFragment {
     public void setCommentList(CommentListEntity entity){
         List<CommentListEntity.Label> label = entity.label;
         CommentListEntity.ListData list = entity.list;
+        if (commentAdapter == null){
+            commentAdapter = new CommentAdapter(baseActivity,!isEmpty(list.data),commentlists);
+            recy_view.setAdapter(commentAdapter);
+            commentAdapter.setCommentTypeListener(new CommentAdapter.ICommentTypeListener() {
+                @Override
+                public void onCommentType(String type) {
+                    isClickHead = true;
+                    CommentFrag.this.type = type;
+                    goodsDetailPresenter.setType(type);
+                    requestCommentPageData(type,"1");
+                }
+            });
+
+            commentAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (goodsDetailPresenter != null){
+                        goodsDetailPresenter.onRefresh();
+                    }
+                }
+            });
+        }
         int page = Integer.parseInt(list.page) + 1;
         this.allPage = Integer.parseInt(list.allPage);
         commentlists.clear();

@@ -117,21 +117,20 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="42.5dp"
         android:background="@color/white"
         app:contentInsetStart="0dp">
 
-        <com.shunlian.app.widget.MyLinearLayout
+        <com.shunlian.app.widget.MyRelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
+                android:paddingLeft="12dp"
                 android:src="@mipmap/icon_more_fanhui" />
 
 
@@ -142,6 +141,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:alpha="0"
+                android:layout_centerInParent="true"
                 android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyLinearLayout
@@ -159,13 +159,13 @@
                         android:textColor="@color/pink_color"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
-                        app:tv_margin_top="20" />
+                        app:tv_margin_top="14" />
 
                     <View
                         android:id="@+id/view_goods"
                         android:layout_width="38.5dp"
                         android:layout_height="2dp"
-                        android:layout_marginTop="13dp"
+                        android:layout_marginTop="12dp"
                         android:background="@color/pink_color" />
                 </com.shunlian.app.widget.MyLinearLayout>
 
@@ -186,13 +186,13 @@
                         android:textColor="@color/new_text"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
-                        app:tv_margin_top="20" />
+                        app:tv_margin_top="14" />
 
                     <View
                         android:id="@+id/view_comment"
                         android:layout_width="38.5dp"
                         android:layout_height="2dp"
-                        android:layout_marginTop="13dp"
+                        android:layout_marginTop="12dp"
                         android:background="@color/pink_color"
                         android:visibility="invisible" />
                 </com.shunlian.app.widget.MyLinearLayout>
@@ -214,13 +214,13 @@
                         android:textColor="@color/new_text"
                         android:textSize="15sp"
                         app:tv_control_adapter="true"
-                        app:tv_margin_top="20" />
+                        app:tv_margin_top="14" />
 
                     <View
                         android:id="@+id/view_detail"
                         android:layout_width="38.5dp"
                         android:layout_height="2dp"
-                        android:layout_marginTop="13dp"
+                        android:layout_marginTop="12dp"
                         android:background="@color/pink_color"
                         android:visibility="invisible" />
                 </com.shunlian.app.widget.MyLinearLayout>
@@ -233,8 +233,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/icon_more_souchag_n"
+                android:layout_toLeftOf="@+id/miv_more"
                 app:iv_control_adapter="true"
-                app:iv_margin_right="32" />
+                app:iv_margin_right="23" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_more"
@@ -243,10 +244,17 @@
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/icon_more_gengduo"
                 app:iv_control_adapter="true"
-                app:iv_margin_right="38" />
+                android:layout_alignParentRight="true"
+                app:iv_margin_right="23" />
 
-
-        </com.shunlian.app.widget.MyLinearLayout>
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:background="@color/light_gray_three"/>
+        </com.shunlian.app.widget.MyRelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <!--遮罩-->

@@ -24,6 +24,10 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.ButterKnife;
@@ -62,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ImmersionBar immersionBar;
     private NetworkBroadcast networkBroadcast;
     private Resources resources;
-    private NetDialog netDialog;
+    public static Map<Integer,NetDialog> dialogLists = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,14 +100,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showPopup(boolean isShow){
-        netDialog = new NetDialog(this);
+        boolean b = dialogLists.containsKey(this.hashCode());
+        if (!b){
+            NetDialog netDialog = new NetDialog(this);
+            dialogLists.put(this.hashCode(),netDialog);
+        }
         if (isShow) {
-            if (!netDialog.isShowing())
-                netDialog.show();
+            dialogLists.get(this.hashCode()).show();
         }else {
-            if (netDialog.isShowing()){
-                netDialog.dismiss();
-            }
+            dismissDialog(true);
         }
     }
 
@@ -295,6 +300,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         return resources.getDrawable(drawableResouce);
     }
 
+    /**
+     * 判断集合内容是否为空
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (unbinder != null) {
@@ -307,8 +329,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (networkBroadcast != null){
             unregisterReceiver(networkBroadcast);
         }
-        if (netDialog != null && netDialog.isShowing()){
-            netDialog.dismiss();
+        dismissDialog(false);
+    }
+
+    private void dismissDialog(boolean isClearAll) {
+        if (!isClearAll){
+            NetDialog netDialog = dialogLists.get(hashCode());
+            if (netDialog != null && netDialog.isShowing()){
+                netDialog.dismiss();
+                netDialog = null;
+            }
+            return;
+        }
+        if (dialogLists != null && dialogLists.size() > 0){
+            Iterator<Integer> iterator = dialogLists.keySet().iterator();
+            while (iterator.hasNext()){
+                Integer next = iterator.next();
+                NetDialog netDialog = dialogLists.get(next);
+                if (netDialog != null && netDialog.isShowing()){
+                    netDialog.dismiss();
+                }
+                netDialog = null;
+            }
+            dialogLists.clear();
         }
     }
 }
