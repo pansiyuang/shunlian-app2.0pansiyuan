@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -88,7 +90,15 @@ public class WaitAppendCommentAdapter extends BaseRecyclerAdapter<CommentListEnt
 
         @OnClick(R.id.mtv_append_comment_staus)
         public void appendComment(){
-            // TODO: 2017/12/12  
+            CommentListEntity.Data data = lists.get(getAdapterPosition());
+            ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+
+        }
+
+        @OnClick(R.id.mrl_goods)
+        public void jumpGoodsDetail(){
+            CommentListEntity.Data data = lists.get(getAdapterPosition());
+            GoodsDetailAct.startAct(context,data.goods_id);
         }
         /**
          * Called when a view has been clicked.

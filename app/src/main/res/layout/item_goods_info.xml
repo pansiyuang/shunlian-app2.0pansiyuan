@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mrl_goods"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/value_f8"

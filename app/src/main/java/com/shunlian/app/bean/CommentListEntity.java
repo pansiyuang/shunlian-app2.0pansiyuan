@@ -86,6 +86,7 @@ public class CommentListEntity {
         public String thumb;//商品封面图
         public String title;//商品名称
         public String price;//商品价格
+        public String goods_id;//商品id
 
         @Override
         public String toString() {

@@ -3,7 +3,6 @@ package com.shunlian.app.widget.banner;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
@@ -233,6 +232,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         if (list != null && list.size() == 1){
             removeAllViews();
             MyImageView myImageView = new MyImageView(getContext());
+            myImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             GlideUtils.getInstance().loadImage(getContext(),myImageView,(String) list.get(0));
             addView(myImageView,0,lp_vp);
         }
