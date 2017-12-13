@@ -1,4 +1,4 @@
-package chihane.jdaddressselector.widget;
+package chihane.shunlian.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

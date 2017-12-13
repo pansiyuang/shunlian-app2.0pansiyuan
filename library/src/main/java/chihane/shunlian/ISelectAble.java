@@ -1,4 +1,4 @@
-package chihane.jdaddressselector;
+package chihane.shunlian;
 
 /**
  * Created by dun on 17/2/9.

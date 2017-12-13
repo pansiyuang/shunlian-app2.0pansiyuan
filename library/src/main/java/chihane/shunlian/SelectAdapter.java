@@ -1,4 +1,4 @@
-package chihane.jdaddressselector;
+package chihane.shunlian;
 
 import android.view.LayoutInflater;
 import android.view.View;

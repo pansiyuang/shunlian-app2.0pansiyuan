@@ -1,4 +1,4 @@
-package chihane.jdaddressselector;
+package chihane.shunlian;
 
 import android.app.Dialog;
 import android.content.Context;

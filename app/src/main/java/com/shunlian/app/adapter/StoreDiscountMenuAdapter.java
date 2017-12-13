@@ -39,7 +39,9 @@ public class StoreDiscountMenuAdapter extends BaseRecyclerAdapter<StorePromotion
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TwoHolder) {
             TwoHolder twoHolder = (TwoHolder) holder;
+
             StorePromotionGoodsListEntity.Lable data = datas.get(position);
+//            StorePromotionGoodsListEntity.Lable data = lists.get(position);
             twoHolder.mtv_name.setText(data.name);
             twoHolder.view.setTag(R.id.tag_store_discount_menu_id,data.promotionId);
             twoHolder.view.setTag(R.id.tag_store_discount_menu_type,data.type);
