@@ -10,8 +10,18 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
-        android:paddingRight="30dp"
+        android:paddingRight="16dp"
         android:src="@mipmap/icon_common_back_black" />
+
+    <TextView
+        android:id="@+id/tv_title_left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="14.5dp"
+        android:gravity="center"
+        android:textColor="@color/new_text"
+        android:layout_toRightOf="@+id/miv_close"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tv_title"

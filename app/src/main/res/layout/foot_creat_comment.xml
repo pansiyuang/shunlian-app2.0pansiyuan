@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="65.5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="16.7dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/img_shoppingcar_shop"
+        android:drawablePadding="9dp"
+        android:gravity="center_vertical"
+        android:text="@string/store_score"
+        android:textColor="@color/new_text"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25.5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logistics_service"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.FiveStarBar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ratingBar_logistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="22.5dp"
+            app:srb_borderColor="#DDDDDD"
+            app:srb_drawBorderEnabled="false"
+            app:srb_fillColor="#FFBB1F"
+            app:srb_pressedBorderColor="#F5C149"
+            app:srb_pressedFillColor="#F5C149"
+            app:srb_starBackgroundColor="#DDDDDD"
+            app:srb_starBorderWidth="1"
+            app:srb_starSize="16.5dp"
+            app:srb_starsSeparation="16dp"
+            app:srb_stepSize="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logistics_service"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.FiveStarBar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ratingBar_attitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="22.5dp"
+            app:srb_borderColor="#DDDDDD"
+            app:srb_drawBorderEnabled="false"
+            app:srb_fillColor="#FFBB1F"
+            app:srb_pressedBorderColor="#F5C149"
+            app:srb_pressedFillColor="#F5C149"
+            app:srb_starBackgroundColor="#DDDDDD"
+            app:srb_starBorderWidth="1"
+            app:srb_starSize="16.5dp"
+            app:srb_starsSeparation="16dp"
+            app:srb_stepSize="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/consistent_description"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.FiveStarBar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ratingBar_consistent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="22.5dp"
+            app:srb_borderColor="#DDDDDD"
+            app:srb_drawBorderEnabled="false"
+            app:srb_fillColor="#FFBB1F"
+            app:srb_pressedBorderColor="#F5C149"
+            app:srb_pressedFillColor="#F5C149"
+            app:srb_starBackgroundColor="#DDDDDD"
+            app:srb_starBorderWidth="1"
+            app:srb_starSize="16.5dp"
+            app:srb_starsSeparation="16dp"
+            app:srb_stepSize="1" />
+    </LinearLayout>
 </LinearLayout>

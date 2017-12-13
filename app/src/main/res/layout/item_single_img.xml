@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="73dp"
+    android:layout_height="73dp"
+    android:orientation="vertical"
+    >
 
-</LinearLayout>
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_img"
+        android:layout_width="73dp"
+        android:layout_height="73dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/img_tupian" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_img_del"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/img_shanchu" />
+</RelativeLayout>
