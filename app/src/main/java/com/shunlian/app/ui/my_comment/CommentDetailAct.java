@@ -30,10 +30,6 @@ import butterknife.BindView;
 
 public class CommentDetailAct extends BaseActivity {
 
-
-    private int pink_color;
-    private int new_text;
-
     @BindView(R.id.mtv_append)
     MyTextView mtv_append;
 
@@ -115,9 +111,6 @@ public class CommentDetailAct extends BaseActivity {
         setStatusBarFontDark();
         
         data = (CommentListEntity.Data) getIntent().getSerializableExtra("data");
-
-        pink_color = getResources().getColor(R.color.pink_color);
-        new_text = getResources().getColor(R.color.new_text);
 
         String is_change = data.is_change;//是否可改为好评  0不能改好评    1可以改好评
         if ("1".equals(is_change)){

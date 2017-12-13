@@ -224,4 +224,14 @@
     <string name="del_success">删除成功</string>
     <string name="del_address_title">确认删除此条地址信息吗？</string>
 
+    <!--我的评价-->
+    <string name="my_comment">我的评价</string>
+    <string name="all_comment">全部评价</string>
+    <string name="append_comment">等待追评</string>
+    <string name="comment_detail">评价详情</string>
+    <string name="comment_detail1">评价详情：</string>
+    <string name="append_comment_write">写追评</string>
+    <string name="zan_count">点赞数：</string>
+    <string name="seller_reply">商家回复</string>
+    <string name="already_comment">已追评</string>
 </resources>
