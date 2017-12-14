@@ -102,9 +102,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     protected void initViews() {
         super.initViews();
         miv_close.setVisibility(View.GONE);
+        tv_title_right.setVisibility(View.VISIBLE);
         tv_title.setText(baseContext.getResources().getText(R.string.shopping_car));
         tv_title_right.setText(baseContext.getResources().getText(R.string.edit));
-        tv_title_right.setVisibility(View.VISIBLE);
         footerHolderView = new FooterHolderView(footView);
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
     }
@@ -161,6 +161,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         //默认展开
         if (mCarEntity.enabled != null && mCarEntity.enabled.size() != 0) {
+
             for (int i = 0; i < mCarEntity.enabled.size(); i++) {
                 expand_shoppingcar.expandGroup(i);
                 editMap.put(mCarEntity.enabled.get(i).store_id, false);
@@ -241,7 +242,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void setEditMode(boolean edit) {
-        if (mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {
+        if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {
             return;
         }
         for (ShoppingCarEntity.Enabled enable : mCarEntity.enabled) {
@@ -305,7 +306,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void OnMegerOrder(String needId) {
-        MegerOrderActivity.startAct(baseContext,needId);
+        MegerOrderActivity.startAct(baseContext, needId);
     }
 
     @Override

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -31,11 +33,11 @@ import butterknife.BindView;
 
 public class MegerOrderActivity extends BaseActivity implements IMegerView, ParamDialog.OnSelectCallBack {
 
-    @BindView(R.id.edt_search)
-    EditText edt_search;
+    @BindView(R.id.tv_search)
+    TextView tv_search;
 
     @BindView(R.id.rl_more)
-    LinearLayout rl_more;
+    RelativeLayout rl_more;
 
     @BindView(R.id.miv_more)
     MyImageView miv_more;
@@ -120,6 +122,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
 
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
         tv_meger_min.setText(cateEntity.hint);
+        setCateCount(cateEntity.sub_count);
     }
 
     @Override
@@ -137,8 +140,27 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     public void addCart(CateEntity cateEntity) {
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
         tv_meger_min.setText(cateEntity.hint);
+
+        setCateCount(cateEntity.sub_count);
     }
 
+    public void setCateCount(String cateStr) {
+        int count;
+        if (isEmpty(cateStr)) {
+            tv_number.setVisibility(View.GONE);
+        } else {
+            count = Integer.valueOf(cateStr);
+            if (count <= 0) {
+                tv_number.setVisibility(View.GONE);
+            } else if (count > 0 && count <= 99) {
+                tv_number.setVisibility(View.VISIBLE);
+                tv_number.setText(cateStr);
+            } else {
+                tv_number.setVisibility(View.VISIBLE);
+                tv_number.setText("99+");
+            }
+        }
+    }
 
     public void getGoodsInfo(GoodsDeatilEntity.Goods goods) {
         currentGoods = goods;

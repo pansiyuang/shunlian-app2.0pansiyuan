@@ -204,6 +204,7 @@
     <string name="voucher">优惠券</string>
     <string name="buyer_message">给卖家留言：</string>
     <string name="subtotal">小计:</string>
+    <string name="your_footmark">您的足迹</string>
 
     <!--收获地址-->
     <string name="location">定位</string>

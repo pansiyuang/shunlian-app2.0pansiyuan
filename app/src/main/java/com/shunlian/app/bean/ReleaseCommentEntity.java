@@ -1,11 +1,13 @@
 package com.shunlian.app.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/12/13.
  * 发布评论实体类
  */
 
-public class ReleaseCommentEntity {
+public class ReleaseCommentEntity implements Serializable{
 
     public String order;
     public String pic;

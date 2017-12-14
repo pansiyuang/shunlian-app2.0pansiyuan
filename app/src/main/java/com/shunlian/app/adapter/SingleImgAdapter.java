@@ -1,15 +1,14 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -58,6 +57,7 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<String> {
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
             case FOOTER:
+                handFoot(holder);
                 break;
             default:
                 super.onBindViewHolder(holder, position);
@@ -79,13 +79,26 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<String> {
             ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
             imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
             GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position));
-        } else {
-            DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
-            delImagViewHolder.miv_img_del.setVisibility(View.GONE);
-            delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
         }
     }
 
+
+    public void handFoot(RecyclerView.ViewHolder holder) {
+        if (holder instanceof DelImagViewHolder) {
+            DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
+            delImagViewHolder.miv_img_del.setVisibility(View.GONE);
+            delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
+
+            ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
+                        ((CreatCommentActivity) context).openAlbum();
+                    }
+                }
+            });
+        }
+    }
 
     public class ImagViewHolder extends BaseRecyclerViewHolder {
 

@@ -10,7 +10,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -90,9 +92,10 @@ public class WaitAppendCommentAdapter extends BaseRecyclerAdapter<CommentListEnt
 
         @OnClick(R.id.mtv_append_comment_staus)
         public void appendComment(){
+            LogUtil.httpLogW("appendComment()");
             CommentListEntity.Data data = lists.get(getAdapterPosition());
             ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
-
+            CreatCommentActivity.startAct(context,entity,CreatCommentActivity.APPEND_COMMENT);
         }
 
         @OnClick(R.id.mrl_goods)

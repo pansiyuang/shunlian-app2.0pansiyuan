@@ -38,6 +38,7 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
+import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -56,6 +57,7 @@ import com.shunlian.app.bean.WXLoginEntity;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -279,6 +281,7 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
+
     /**
      * 店铺新品
      *
@@ -412,6 +415,7 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
+     *
      * @param body
      * @return
      */
@@ -420,6 +424,7 @@ public interface ApiService {
 
     /**
      * 收藏商品
+     *
      * @param body
      * @return
      */
@@ -428,6 +433,7 @@ public interface ApiService {
 
     /**
      * 移除收藏
+     *
      * @param body
      * @return
      */
@@ -436,14 +442,16 @@ public interface ApiService {
 
     /**
      * 评价列表
+     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
 
     /**
      * 省市区数据
+     *
      * @param map
      * @return
      */
@@ -452,6 +460,7 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
+     *
      * @param body
      * @return
      */
@@ -460,6 +469,7 @@ public interface ApiService {
 
     /**
      * 添加收货地址
+     *
      * @param body
      * @return
      */
@@ -468,6 +478,7 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
+     *
      * @param body
      * @return
      */
@@ -522,9 +533,36 @@ public interface ApiService {
 
     /**
      * 我的评价列表
+     *
      * @param map
      * @return
      */
     @GET("member/comment/list")
-    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 上传图片
+     */
+    @Multipart
+    @POST("https://v20-test.shunliandongli.com/uploads/uploadotherimage")
+    Call<BaseEntity<UploadCmtPicEntity>> uploadPic(@Part MultipartBody.Part file);
+
+    /**
+     * 添加评价
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/append")
+    Call<BaseEntity<EmptyEntity>> appendComment(@Body RequestBody body);
+
+    /**
+     * 订单物流详情
+     *
+     * @param body
+     * @return
+     */
+    @GET("/order/logistics")
+    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@Body RequestBody body);
 }

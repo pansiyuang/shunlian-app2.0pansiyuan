@@ -109,7 +109,7 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
                 @Override
                 public void onSuccess(BaseEntity<String> entity) {
                     super.onSuccess(entity);
-                    iView.smsCode(entity.data);
+                    iView.smsCode(entity.message);
                     LogUtil.augusLogW("duanxin--"+entity.data);
                 }
 

@@ -83,7 +83,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("购物车");
         items.add("确认订单");
         items.add("我的评价");
-        items.add("发布评价");
+        items.add("订单物流详情");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -119,7 +119,7 @@ public class MainPageFrag extends BaseFragment {
                         MyCommentAct.startAct(baseActivity);
                         break;
                     case 6:
-                        CreatCommentActivity.startAct(baseActivity);
+//                        CreatCommentActivity.startAct(baseActivity);
                         break;
                 }
             }

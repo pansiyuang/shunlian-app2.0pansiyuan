@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
@@ -124,6 +125,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void smsCode(String smsCode) {
+        Common.staticToast(smsCode);
         String currentPhoneNum = edt_account.getText().toString();
         String verifiCode = edt_verifi.getText().toString();
         InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum, verifiCode);

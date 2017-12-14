@@ -8,58 +8,62 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="33dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingTop="2dp"
         android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:src="@mipmap/icon_common_back_black" />
 
-        <EditText
-            android:id="@+id/edt_search"
+        <TextView
+            android:id="@+id/tv_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="33dp"
             android:layout_toLeftOf="@+id/rl_more"
             android:layout_toRightOf="@+id/miv_close"
             android:background="@drawable/rounded_corner_search"
             android:drawableLeft="@mipmap/icon_common_search_gray"
             android:drawablePadding="6.5dp"
+            android:gravity="center_vertical"
             android:hint="@string/search_goods"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/share_text"
+            android:textColor="@color/share_text"
             android:textSize="14dp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/rl_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="20dp">
+            android:layout_width="60dp"
+            android:layout_height="33dp"
+            android:layout_alignParentRight="true">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"
                 android:src="@mipmap/icon_common_more_black" />
 
             <TextView
                 android:id="@+id/tv_number"
                 android:layout_width="wrap_content"
                 android:layout_height="12dp"
-                android:layout_above="@+id/miv_more"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/rounded_corner_pink_12px"
-                android:text="9+"
-                android:textSize="9sp"
-                android:visibility="gone" />
-        </LinearLayout>
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:textSize="9sp" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <com.shunlian.app.widget.PagerSlidingTabStrip
