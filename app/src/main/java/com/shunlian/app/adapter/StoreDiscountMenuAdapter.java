@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
