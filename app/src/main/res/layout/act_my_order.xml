@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我的订单"
+            android:textColor="@color/new_text"
+            android:textSize="18dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="9.5dp"
+                android:src="@mipmap/icon_more_n" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_rectangle_12px"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/rl_more"
+            android:src="@mipmap/icon_more_search" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+        <!--全部-->
+        <LinearLayout
+            android:id="@+id/ll_all"
+            style="@style/ll_my_order">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_all"
+                style="@style/mtv_my_order"
+                android:text="全部"
+                android:textColor="@color/pink_color" />
+
+            <View
+                android:id="@+id/view_all"
+                style="@style/view_my_order"
+                android:visibility="visible" />
+        </LinearLayout>
+        <!--待付款-->
+        <LinearLayout
+            android:id="@+id/ll_wait_pay"
+            style="@style/ll_my_order">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_wait_pay"
+                style="@style/mtv_my_order"
+                android:text="待付款"
+                android:textColor="@color/new_text" />
+
+            <View
+                android:id="@+id/view_wait_pay"
+                style="@style/view_my_order" />
+
+        </LinearLayout>
+        <!--待发货-->
+        <LinearLayout
+            android:id="@+id/ll_wait_send"
+            style="@style/ll_my_order">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_wait_send"
+                style="@style/mtv_my_order"
+                android:text="待发货"
+                android:textColor="@color/new_text" />
+
+            <View
+                android:id="@+id/view_wait_send"
+                style="@style/view_my_order" />
+
+        </LinearLayout>
+        <!--待收货-->
+        <LinearLayout
+            android:id="@+id/ll_wait_receive"
+            style="@style/ll_my_order">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_wait_receive"
+                style="@style/mtv_my_order"
+                android:text="待收货"
+                android:textColor="@color/new_text" />
+
+            <View
+                android:id="@+id/view_wait_receive"
+                style="@style/view_my_order" />
+
+        </LinearLayout>
+        <!--待评价-->
+        <LinearLayout
+            android:id="@+id/ll_wait_comment"
+            style="@style/ll_my_order">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_wait_comment"
+                style="@style/mtv_my_order"
+                android:text="待评价"
+                android:textColor="@color/new_text" />
+
+            <View
+                android:id="@+id/view_wait_comment"
+                style="@style/view_my_order" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
+
+</LinearLayout>

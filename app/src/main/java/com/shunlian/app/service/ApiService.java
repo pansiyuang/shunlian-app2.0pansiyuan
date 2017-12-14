@@ -36,6 +36,7 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
+import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -498,4 +499,12 @@ public interface ApiService {
      */
     @GET("member/comment/list")
     Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 订单列表
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/orderlist")
+    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 }
