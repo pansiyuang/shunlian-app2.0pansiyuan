@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -174,6 +176,23 @@ public abstract class BaseFragment extends Fragment {
      */
     protected Drawable getDrawableResouce(int drawableResouce) {
         return resources.getDrawable(drawableResouce);
+    }
+
+    /**
+     * 判断集合内容是否为空
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class CommentListEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Data{
+    public static class Data implements Serializable{
         public String comment_id;
         public String star_level;
         public String praise_total;
@@ -78,6 +79,14 @@ public class CommentListEntity {
         public boolean is_praise;
         public List<String> pics;
         public List<String> append_pics;
+
+        public String is_change;//是否可改为好评  0不能改好评    1可以改好评
+        public String is_append;//追评状态  0不能追评   1可以追评 2已经追评
+        public String append_note;//追评于多长时间前
+        public String thumb;//商品封面图
+        public String title;//商品名称
+        public String price;//商品价格
+        public String goods_id;//商品id
 
         @Override
         public String toString() {

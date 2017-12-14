@@ -13,14 +13,18 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.PicAdapter;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
 import com.shunlian.app.widget.flowlayout.TagFlowLayout;
@@ -39,7 +43,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     private List<CommentListEntity.Label> mLabel;
     private ICommentTypeListener mCommentTypeListener;
     private int selectId = 0;
-
+    private View mHeadView;
     public CommentAdapter(Context context, boolean isShowFooter, List<CommentListEntity.Data> lists) {
         super(context, isShowFooter, lists);
     }
@@ -133,9 +137,18 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     @Override
     public int getItemCount() {
         if (isEmpty(mLabel)){
-            return super.getItemCount();
+            if (isEmpty(lists)){
+                return super.getItemCount() + 1;
+            }else {
+                return super.getItemCount();
+            }
         }else {
-            return super.getItemCount() + 1;
+            if (isEmpty(lists)){
+                return super.getItemCount() + 2;
+            }else {
+                return super.getItemCount() + 1;
+            }
+
         }
     }
 
@@ -149,7 +162,15 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CommentHolder){
             CommentHolder mHolder = (CommentHolder) holder;
+            if (isEmpty(lists)){
+                mHolder.mll_item.setVisibility(View.GONE);
+                mHolder.nei_empty.setVisibility(View.VISIBLE);
+                mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
+                        .setText("该商品还没有评价").setButtonText("");
+                return;
+            }
             CommentListEntity.Data data = lists.get(position - 1);
+
             if (isEmpty(data.content)){
                 mHolder.mtv_content.setVisibility(View.GONE);
             }else {
@@ -273,6 +294,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
         @BindView(R.id.miv_medal)
         MyImageView miv_medal;
+
+        @BindView(R.id.mll_item)
+        MyLinearLayout mll_item;
+
+        @BindView(R.id.nei_empty)
+        NetAndEmptyInterface nei_empty;
         public CommentHolder(View itemView) {
             super(itemView);
             miv_vip.setWHProportion(23,23);
@@ -284,6 +311,18 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             GridLayoutManager manager1 = new GridLayoutManager(context,3);
             recy_view1.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,5),false));
             recy_view1.setLayoutManager(manager1);
+
+            mHeadView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int measuredHeight = mHeadView.getMeasuredHeight();
+                    GoodsDetailAct act = (GoodsDetailAct) context;
+                    ViewGroup.LayoutParams layoutParams = nei_empty.getLayoutParams();
+                    layoutParams.height = DeviceInfoUtil.getDeviceHeight(context) - measuredHeight - act.bottomListHeight;
+                    nei_empty.setLayoutParams(layoutParams);
+                }
+            });
+
         }
     }
 
@@ -291,8 +330,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
         @BindView(R.id.gv_section)
         TagFlowLayout gv_section;
+
         public HeadHolder(View itemView) {
             super(itemView);
+            mHeadView = itemView;
         }
     }
 

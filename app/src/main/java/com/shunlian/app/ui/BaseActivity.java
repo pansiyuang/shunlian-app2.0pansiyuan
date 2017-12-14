@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -26,6 +27,7 @@ import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -297,6 +299,27 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected Drawable getDrawableResouce(int drawableResouce) {
         return resources.getDrawable(drawableResouce);
+    }
+
+    /**
+     * 判断集合内容是否为空
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    protected boolean isEmpty(CharSequence sequence){
+        return TextUtils.isEmpty(sequence);
     }
 
     @Override

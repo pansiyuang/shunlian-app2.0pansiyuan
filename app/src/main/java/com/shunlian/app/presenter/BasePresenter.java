@@ -73,6 +73,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected ObjectMapper objectMapper;
     protected static int requestCount;//请求次数
     private HttpDialog httpDialog;
+    protected boolean isLoading = false;//是否正在加载
+    protected int currentPage = 1;//当前页
+    protected int allPage;//总页数
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;

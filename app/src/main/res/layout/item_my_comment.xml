@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_detail1"
+        android:textColor="@color/new_text"
+        android:textSize="15sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="16"
+        app:tv_margin_top="34" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:ll_control_adapter="true"
+        app:ll_margin_top="32">
+
+        <com.shunlian.app.widget.CommentRank
+            android:id="@+id/comment_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_append_comment_staus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edge_frame_r3"
+            android:paddingBottom="5dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="5dp"
+            android:text="@string/append_comment_write"
+            android:textColor="@color/pink_color"
+            android:textSize="13sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/new_text"
+        android:textSize="15sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="32" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="21dp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_append_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/pink_color"
+        android:textSize="14sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="20"
+        app:tv_margin_top="44" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_append_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/new_text"
+        android:textSize="15sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="32" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view_append"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="21dp" />
+
+    <!--商品信息-->
+   <include layout="@layout/item_goods_info"/>
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_margin_bottom="44"
+        app:ll_margin_left="20"
+        app:ll_margin_right="20"
+        app:ll_margin_top="44">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/line_btn"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zan_count"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_zan_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink_color"
+            android:textSize="13sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_reply_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sanjiao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_sanjiao_up" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignBottom="@+id/miv_sanjiao"
+            android:layout_toRightOf="@+id/miv_sanjiao"
+            android:background="@color/light_gray_three" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/miv_sanjiao"
+            android:text="@string/seller_reply"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_top="30" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reply_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mtv_reply"
+            android:textColor="@color/my_gray_two"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_bottom="44"
+            app:tv_margin_top="25" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+</LinearLayout>

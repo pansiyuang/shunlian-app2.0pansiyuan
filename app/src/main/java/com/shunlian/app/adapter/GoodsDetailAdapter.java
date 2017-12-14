@@ -454,8 +454,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyTextView textView = new MyTextView(context);
         textView.setTextSize(12);
         textView.setTextColor(getResources().getColor(R.color.text_param_value));
-        int padding = TransformUtil.dip2px(context, 4);
-        textView.setPadding(padding, padding, padding, padding);
+//        int padding = TransformUtil.dip2px(context, 4);
+//        textView.setPadding(padding, padding, padding, padding);
         mll_content.addView(textView);
         StringBuilder sb = new StringBuilder();
         String format = null;

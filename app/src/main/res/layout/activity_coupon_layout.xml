@@ -65,7 +65,6 @@
             android:layout_height="wrap_content"
             android:text="@string/activity"
             android:textSize="12sp"
-            android:layout_centerVertical="true"
             android:textColor="@color/new_text"
             />
 
@@ -76,7 +75,6 @@
             android:orientation="vertical"
             app:ll_control_adapter="true"
             app:ll_margin_left="16"
-            android:layout_alignTop="@+id/mtv_activity"
             android:layout_toRightOf="@+id/mtv_activity">
 
 
@@ -97,7 +95,7 @@
         android:drawableRight="@mipmap/img_common_viewarrow_1"
         android:paddingBottom="15dp"
         android:paddingTop="17.5dp"
-        android:text="@string/package_details"
+        android:text="@string/look_package_details"
         android:textColor="@color/new_text"
         android:textSize="12sp"
         app:tv_control_adapter="true"

@@ -46,12 +46,10 @@
     <!--商家承诺-->
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:ll_control_adapter="true"
-        app:ll_margin_top="23"
-        app:ll_margin_bottom="25"
         app:ll_margin_left="23">
 
         <com.shunlian.app.widget.MyImageView
