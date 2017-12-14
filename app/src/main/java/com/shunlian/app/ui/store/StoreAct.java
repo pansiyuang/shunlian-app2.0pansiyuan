@@ -185,7 +185,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
-    private String storeId = "26";
+    private String storeId = "53";
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;

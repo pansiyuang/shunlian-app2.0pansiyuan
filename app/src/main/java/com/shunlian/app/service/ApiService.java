@@ -31,6 +31,7 @@ import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
@@ -44,6 +45,7 @@ import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.bean.StoreLicenseEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
@@ -493,12 +495,29 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
 
     /**
+     * 获取系统消息数量
+     *
+     * @param body
+     * @return
+     */
+    @POST("user/getusernewsnum")
+    Call<BaseEntity<GetusernewsnumEntity>> getusernewsnum(@Body RequestBody body);
+
+    /**
      * 我的评价列表
      * @param map
      * @return
      */
     @GET("member/comment/list")
     Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 查看营业执照
+     * @param body
+     * @return
+     */
+    @POST("store/businessLicense")
+    Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
     /**
      * 订单列表

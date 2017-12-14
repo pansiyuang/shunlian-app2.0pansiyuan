@@ -117,16 +117,21 @@
             android:name=".ui.receive_adress.AddressManageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
-        <activity android:name="pay.PayListActivity"
-            android:exported="false"
-            android:theme="@style/pay"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.my_comment.MyCommentAct"
+        <activity android:name=".ui.receive_adress.AddAdressAct" />
+        <activity
+            android:name="pay.PayListActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.my_comment.CommentDetailAct"
+            android:theme="@style/pay" />
+        <activity
+            android:name=".ui.my_comment.MyCommentAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my_comment.CommentDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.store.StoreLicenseAct"
             android:exported="false"
             android:screenOrientation="portrait"
             />
@@ -134,6 +139,7 @@
             android:exported="false"
             android:screenOrientation="portrait"
             />
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
