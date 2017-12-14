@@ -90,6 +90,7 @@
     <item name="tag_store_discount_menu" type="id" />
     <string name="store_taocanjia">套餐价</string>
     <string name="store_zengpin">赠品</string>
+    <string name="store_kanzhizhao">*输入验证码查看执照信息</string>
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 

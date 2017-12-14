@@ -44,6 +44,7 @@ import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.bean.StoreLicenseEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
@@ -498,7 +499,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/user/getusernewsnum")
+    @POST("user/getusernewsnum")
     Call<BaseEntity<GetusernewsnumEntity>> getusernewsnum(@Body RequestBody body);
 
     /**
@@ -508,4 +509,12 @@ public interface ApiService {
      */
     @GET("member/comment/list")
     Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 查看营业执照
+     * @param body
+     * @return
+     */
+    @POST("store/businessLicense")
+    Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 }

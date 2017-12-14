@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.shunlian.app.ui.store.StoreLicenseAct">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="9dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/store_yingyezhizhao"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="18sp" />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp">
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/iv_verifi"
+                android:layout_width="72dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+            <EditText
+                android:id="@+id/edt_verifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/iv_verifi"
+                android:background="@null"
+                android:gravity="start|center_vertical"
+                android:hint="@string/LoginPswFrg_qsryzm"
+                android:maxLength="4"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/new_text"
+                android:textColorHint="@color/color_value_6c"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="22.5dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/iv_verifi"
+                android:background="@color/light_gray_two" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray_two" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="9.5dp"
+            android:text="@string/store_kanzhizhao"
+            android:textColor="@color/share_text"
+            android:textSize="11sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_sure"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="49.5dp"
+            android:background="@drawable/bg_store_sure"
+            android:gravity="center"
+            android:text="@string/SelectRecommendAct_sure"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:visibility="gone" />
+</com.shunlian.app.widget.MyLinearLayout>
