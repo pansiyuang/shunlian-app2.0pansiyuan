@@ -34,6 +34,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         super(context, isShowFooter, lists);
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
+        if (context == null){
+            context = Common.getApplicationContext();
+        }
         strokeWidth = TransformUtil.dip2px(context, 0.5f);
     }
 
@@ -47,6 +50,23 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_order, parent, false);
         return new OrderListHolder(view);
+    }
+
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText("您已经没有更多订单了");
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
     /**

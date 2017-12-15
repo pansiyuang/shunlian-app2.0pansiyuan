@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="40dp"
     android:background="@color/white">
 
     <!--正在加载-->
     <RelativeLayout
         android:id="@+id/layout_normal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="horizontal"
@@ -25,6 +25,7 @@
             android:padding="10dp"/>
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -39,7 +40,7 @@
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/layout_load_error"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="加载失败, 点击重试"
         android:textColor="@color/share_text"
@@ -50,7 +51,7 @@
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/layout_no_more"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="已经到底啦！"

@@ -11,9 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     private static final int ITEM_LIST = 0;
     private static final int ITEM_FOOTER = 1;
     public static List<Unbinder> unbinders = new ArrayList<>();
-    protected final Context context;
+    protected Context context;
     protected final List<T> lists;
     private final boolean isShowFooter;//是否显示脚布局
     protected OnItemClickListener listener;
@@ -244,10 +245,16 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     }
 
     protected int getColor(@ColorRes int id) {
+        if (context == null){
+            context = Common.getApplicationContext();
+        }
         return context.getResources().getColor(id);
     }
 
     protected String getString(@StringRes int id) {
+        if (context == null){
+            context = Common.getApplicationContext();
+        }
         return context.getResources().getString(id);
     }
 
@@ -267,6 +274,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
     protected Drawable getDrawable(@DrawableRes int id){
+        if (context == null){
+            context = Common.getApplicationContext();
+        }
         return context.getResources().getDrawable(id);
     }
 
@@ -283,8 +293,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     public class BaseFooterHolder extends RecyclerView.ViewHolder {
         public final RelativeLayout layout_normal;
-        public final TextView layout_load_error;
-        public final TextView layout_no_more;
+        public final MyTextView layout_load_error;
+        public final MyTextView layout_no_more;
+        public final MyTextView mtv_loading;
         public final ProgressView spinKitView;
 //        public final Circle circle;
 
@@ -295,9 +306,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 //            circle = new Circle();
 //            spinKitView.setIndeterminateDrawable(circle);
             layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
-            layout_load_error = (TextView) itemView.findViewById(R.id.layout_load_error);
+            layout_load_error = (MyTextView) itemView.findViewById(R.id.layout_load_error);
             layout_load_error.setVisibility(View.GONE);
-            layout_no_more = (TextView) itemView.findViewById(R.id.layout_no_more);
+            layout_no_more = (MyTextView) itemView.findViewById(R.id.layout_no_more);
+            mtv_loading = (MyTextView) itemView.findViewById(R.id.mtv_loading);
 
             layout_load_error.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -31,6 +31,23 @@ public class MyOrderEntity {
         public String is_edit_praise;
         public String qty;
         public List<OrderGoodsBean> order_goods;
+
+        @Override
+        public String toString() {
+            return "Orders{" +
+                    "id='" + id + '\'' +
+                    ", total_amount='" + total_amount + '\'' +
+                    ", store_name='" + store_name + '\'' +
+                    ", shipping_fee='" + shipping_fee + '\'' +
+                    ", store_id='" + store_id + '\'' +
+                    ", status_text='" + status_text + '\'' +
+                    ", is_append='" + is_append + '\'' +
+                    ", status='" + status + '\'' +
+                    ", is_edit_praise='" + is_edit_praise + '\'' +
+                    ", qty='" + qty + '\'' +
+                    ", order_goods=" + order_goods +
+                    '}';
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
