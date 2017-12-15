@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="7.5dp"
+        android:visibility="gone"
+        android:background="@color/white_ash" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="接着评下去"
+        android:textColor="@color/new_text"
+        android:textSize="14sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_bottom="20"
+        app:tv_margin_top="40" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_control_height="116"
+        app:ll_control_width="720"
+        app:ll_margin_left="20"
+        app:ll_margin_right="20"
+        app:ll_margin_top="20">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_login_logo"
+            app:iv_control_adapter="true"
+            app:iv_control_height="116"
+            app:iv_control_width="116" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white_ash"
+            android:gravity="center|left"
+            android:paddingLeft="12.5dp"
+            android:paddingRight="10dp"
+            android:text="施华蔻系列黄金果油系列（长发易分叉发质专金果油金果油金果油金果油"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_go_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="去评价"
+            android:textColor="@color/white"
+            app:tv_control_adapter="true"
+            app:tv_control_height="116"
+            app:tv_control_width="116" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:id="@+id/line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:visibility="gone"
+        android:background="@color/white" />
+</LinearLayout>

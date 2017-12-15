@@ -526,4 +526,11 @@ public interface ApiService {
      */
     @GET("personalcenter/orderlist")
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
+
+    /**
+     * 待评价和待追评混合列表
+     * @return
+     */
+    @GET("member/comment/mixed_list")
+    Call<BaseEntity<EmptyEntity>> mixed_list();
 }
