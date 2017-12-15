@@ -18,6 +18,7 @@ import com.shunlian.app.presenter.MegerPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.fragment.RecommendFrag;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMegerView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PagerSlidingTabStrip;

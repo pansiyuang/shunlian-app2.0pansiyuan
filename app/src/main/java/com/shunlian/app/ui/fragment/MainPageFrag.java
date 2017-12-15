@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- *
+ * <p>
  * 首页页面
  */
 
@@ -122,6 +123,10 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 6:
                         MyOrderAct.startAct(baseActivity);
+                        break;
+                    case 7:
+//                        OrderLogisticsActivity.startAct(baseActivity, "5");
+                        OrderLogisticsActivity.startAct(baseActivity, "4");
                         break;
                 }
             }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.ITraceView;
@@ -41,10 +42,9 @@ public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
 
     public void orderLogistics(String orderStr) {
         Map<String, String> map = new HashMap<>();
-        map.put("order_sn", orderStr);
+        map.put("order_id", String.valueOf(orderStr));
         sortAndMD5(map);
-        RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getAddCookieApiService().orderLogistics(requestBody);
+        Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getApiService().orderLogistics(map);
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderLogisticsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<OrderLogisticsEntity> entity) {

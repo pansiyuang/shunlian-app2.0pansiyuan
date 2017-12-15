@@ -314,7 +314,7 @@ public interface ApiService {
      * @return
      */
     @POST("cart/add")
-    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+    Call<BaseEntity<CateEntity>> addCart(@Body RequestBody body);
 
     /**
      * 购物车首页
@@ -578,9 +578,8 @@ public interface ApiService {
     /**
      * 订单物流详情
      *
-     * @param body
      * @return
      */
-    @GET("/order/logistics")
-    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@Body RequestBody body);
+    @GET("/personalcenter/traces")
+    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@QueryMap Map<String,String> map);
 }

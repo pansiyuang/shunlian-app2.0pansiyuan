@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.confirm_order;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -33,6 +35,13 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
 
     public OrderLogisticsPresenter orderLogisticsPresenter;
     public TraceAdapter traceAdapter;
+    private String currentOrder;
+
+    public static void startAct(Context context, String orderStr) {
+        Intent intent = new Intent(context, OrderLogisticsActivity.class);
+        intent.putExtra("order", orderStr);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -45,8 +54,13 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
         setStatusBarFontDark();
 
         rl_title_more.setVisibility(View.VISIBLE);
-        orderLogisticsPresenter = new OrderLogisticsPresenter(this, this);
-        orderLogisticsPresenter.orderLogistics("170516Q63646267424");
+
+        currentOrder = getIntent().getStringExtra("order");
+
+        if (!isEmpty(currentOrder)) {
+            orderLogisticsPresenter = new OrderLogisticsPresenter(this, this);
+            orderLogisticsPresenter.orderLogistics(currentOrder);
+        }
     }
 
     @Override
@@ -61,9 +75,10 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
 
     @Override
     public void getLogistics(OrderLogisticsEntity logisticsEntity) {
-        traceAdapter = new TraceAdapter(this, false, logisticsEntity.traces);
+        traceAdapter = new TraceAdapter(this, false, logisticsEntity.traces, logisticsEntity);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_order_logistics.setLayoutManager(linearLayoutManager);
+        recycler_order_logistics.setNestedScrollingEnabled(false);
         recycler_order_logistics.setAdapter(traceAdapter);
     }
 }

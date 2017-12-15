@@ -42,10 +42,12 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/rl_order_icon"
             android:textColor="@color/pink_color"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_order_logistics_phone"
+            android:id="@+id/tv_order_logistics_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_order_status"
@@ -58,10 +60,22 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_order_logistics_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_order_status"
+            android:layout_marginTop="7.5dp"
+            android:layout_toRightOf="@+id/tv_order_logistics_company"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/tv_order_official_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_order_logistics_phone"
+            android:layout_below="@+id/tv_order_logistics_num"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="7.5dp"
             android:layout_toRightOf="@+id/rl_order_icon"
