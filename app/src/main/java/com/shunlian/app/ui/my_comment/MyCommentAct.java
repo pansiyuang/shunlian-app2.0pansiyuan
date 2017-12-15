@@ -13,10 +13,12 @@ import com.shunlian.app.adapter.WaitAppendCommentAdapter;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMyCommentListView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,12 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     @BindView(R.id.view_comment_append)
     View view_comment_append;
+
+    @BindView(R.id.civ_head)
+    CircleImageView civ_head;
+
+    @BindView(R.id.mtv_nickname)
+    MyTextView mtv_nickname;
     private int pink_color;
     private int new_text;
     private MyCommentListPresenter presenter;
@@ -52,6 +60,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     private MyCommentAdapter allAdapter;
     private LinearLayoutManager manager;
     private WaitAppendCommentAdapter waitAdapter;
+    private String nickname;
+    private String avatar;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyCommentAct.class));
@@ -184,6 +194,19 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     }
 
+    /**
+     * 设置昵称和头像
+     * @param nickname
+     * @param avatar
+     */
+    @Override
+    public void setNicknameAndAvatar(String nickname, String avatar) {
+        this.nickname = nickname;
+        this.avatar = avatar;
+        GlideUtils.getInstance().loadImage(this,civ_head,avatar);
+        mtv_nickname.setText(nickname);
+    }
+
     private void appendComment(int currentPage, int allPage) {
         if (waitAdapter == null) {
             waitAdapter = new WaitAppendCommentAdapter(this, true, this.lists);
@@ -202,7 +225,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
                 @Override
                 public void onItemClick(View view, int position) {
                     CommentListEntity.Data data = lists.get(position);
-                    CommentDetailAct.startAct(MyCommentAct.this, data);
+                    CommentDetailAct.startAct(MyCommentAct.this, data,nickname,avatar);
                 }
             });
         } else {
@@ -229,7 +252,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
                 @Override
                 public void onItemClick(View view, int position) {
                     CommentListEntity.Data data = lists.get(position);
-                    CommentDetailAct.startAct(MyCommentAct.this, data);
+                    CommentDetailAct.startAct(MyCommentAct.this, data,nickname,avatar);
                 }
             });
         } else {

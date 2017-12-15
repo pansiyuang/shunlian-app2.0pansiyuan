@@ -1,4 +1,4 @@
-package chihane.jdaddressselector;
+package chihane.shunlian;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -8,9 +8,7 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;

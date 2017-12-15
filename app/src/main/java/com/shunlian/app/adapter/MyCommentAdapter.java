@@ -71,10 +71,10 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
         if ("1".equals(is_append)) {
             GradientDrawable background = (GradientDrawable) mHolder.mtv_append_comment_staus.getBackground();
             background.setColor(getColor(R.color.white));
-            mHolder.mtv_append_comment_staus.setText("写追评");
+            mHolder.mtv_append_comment_staus.setText(getString(R.string.append_comment_write));
             mHolder.mtv_append_comment_staus.setEnabled(true);
         } else if ("2".equals(is_append)) {
-            mHolder.mtv_append_comment_staus.setText("已追评");
+            mHolder.mtv_append_comment_staus.setText(getString(R.string.already_comment));
             mHolder.mtv_append_comment_staus.setEnabled(false);
             GradientDrawable background = (GradientDrawable) mHolder.mtv_append_comment_staus.getBackground();
             background.setColor(getColor(R.color.pink_color));

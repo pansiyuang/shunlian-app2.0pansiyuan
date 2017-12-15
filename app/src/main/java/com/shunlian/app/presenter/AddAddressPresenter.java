@@ -1,8 +1,6 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
-import android.location.Location;
-import android.util.Log;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
@@ -18,11 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import chihane.jdaddressselector.BottomDialog;
-import chihane.jdaddressselector.DataProvider;
-import chihane.jdaddressselector.ISelectAble;
-import chihane.jdaddressselector.SelectedListener;
-import chihane.jdaddressselector.Selector;
+import chihane.shunlian.BottomDialog;
+import chihane.shunlian.DataProvider;
+import chihane.shunlian.ISelectAble;
+import chihane.shunlian.SelectedListener;
+import chihane.shunlian.Selector;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 

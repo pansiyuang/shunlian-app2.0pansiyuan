@@ -9,18 +9,16 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreEvaluateAdapter;
-import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.StoreIntroduceView;
 import com.shunlian.app.widget.MyRelativeLayout;
-
-import java.util.List;
+import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
-public class StoreIntroduceAct extends BaseActivity implements View.OnClickListener,StoreIntroduceView {
+public class StoreIntroduceAct extends BaseActivity implements View.OnClickListener, StoreIntroduceView {
     @BindView(R.id.mtv_storeName)
     TextView mtv_storeName;
 
@@ -48,17 +46,23 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.rv_haopin)
     RecyclerView rv_haopin;
 
+    @BindView(R.id.mtv_attention)
+    MyTextView mtv_attention;
+
+    @BindView(R.id.mrlayout_yingye)
+    MyRelativeLayout mrlayout_yingye;
 
 
-
-    private String storeId;
+    private boolean isFocus;
+    private String storeId,seller_id;
     private StoreIntroducePresenter storeIntroducePresenter;
 
-    public static void startAct(Context context,String storeId) {
+    public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreIntroduceAct.class);
         intent.putExtra("storeId", storeId);//店铺id
         context.startActivity(intent);
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_store_introduce;
@@ -66,19 +70,31 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.mtv_attention:
+                if (isFocus) {
+                    storeIntroducePresenter.delFollowStore(storeId);
+                } else {
+                    storeIntroducePresenter.followStore(storeId);
+                }
+                break;
+            case R.id.mrlayout_yingye:
+                StoreLicenseAct.startAct(this,seller_id);
+                break;
+        }
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-
+        mtv_attention.setOnClickListener(this);
+        mrlayout_yingye.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         storeId = getIntent().getStringExtra("storeId");
-        storeIntroducePresenter=new StoreIntroducePresenter(this,this,storeId);
+        storeIntroducePresenter = new StoreIntroducePresenter(this, this, storeId);
     }
 
     @Override
@@ -93,9 +109,19 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void introduceInfo(StoreIntroduceEntity storeIntroduceEntity) {
+//        if ("false".equals(storeIntroduceEntity.)) {
+//            mtv_attention.setTextColor(getResources().getColor(R.color.white));
+//            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+//            isFocus = false;
+//        } else {
+//            mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+//            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+//            isFocus = true;
+//        }
+        seller_id=storeIntroduceEntity.seller_id;
         mtv_storeName.setText(storeIntroduceEntity.store_name);
         mtv_storeScore.setText("店铺分null");
-        mtv_number.setText(storeIntroduceEntity.store_collect+"人");
+        mtv_number.setText(storeIntroduceEntity.store_collect + "人");
         mtv_haopinglv.setText(storeIntroduceEntity.evaluate.praise_rate);
         mtv_dianhua.setText(storeIntroduceEntity.store_phone);
         mtv_weixin.setText(storeIntroduceEntity.store_wx);
@@ -103,6 +129,19 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         mtv_kaidian.setText(storeIntroduceEntity.store_time);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_haopin.setLayoutManager(manager);
-        rv_haopin.setAdapter(new StoreEvaluateAdapter(this,false,storeIntroduceEntity.evaluate.pj));
+        rv_haopin.setAdapter(new StoreEvaluateAdapter(this, false, storeIntroduceEntity.evaluate.pj));
+    }
+
+    @Override
+    public void storeFocus() {
+        if (isFocus) {
+            mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+            isFocus = false;
+        } else {
+            mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+            isFocus = true;
+        }
     }
 }

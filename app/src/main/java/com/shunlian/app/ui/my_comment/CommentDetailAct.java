@@ -12,6 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.PicAdapter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -19,20 +20,18 @@ import com.shunlian.app.widget.CommentRank;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/12/11.
  */
 
 public class CommentDetailAct extends BaseActivity {
-
-
-    private int pink_color;
-    private int new_text;
 
     @BindView(R.id.mtv_append)
     MyTextView mtv_append;
@@ -82,11 +81,20 @@ public class CommentDetailAct extends BaseActivity {
 
     @BindView(R.id.mrl_reply_content)
     MyRelativeLayout mrl_reply_content;
+
+    @BindView(R.id.civ_head)
+    CircleImageView civ_head;
+
+    @BindView(R.id.mtv_nickname)
+    MyTextView mtv_nickname;
+
     private CommentListEntity.Data data;
 
-    public static void startAct(Context context, CommentListEntity.Data data) {
+    public static void startAct(Context context, CommentListEntity.Data data,String nickname,String avatar) {
         Intent intent = new Intent(context, CommentDetailAct.class);
         intent.putExtra("data",data);
+        intent.putExtra("nickname",nickname);
+        intent.putExtra("avatar",avatar);
         context.startActivity(intent);
     }
 
@@ -113,11 +121,14 @@ public class CommentDetailAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        
-        data = (CommentListEntity.Data) getIntent().getSerializableExtra("data");
 
-        pink_color = getResources().getColor(R.color.pink_color);
-        new_text = getResources().getColor(R.color.new_text);
+        Intent intent = getIntent();
+        data = (CommentListEntity.Data) intent.getSerializableExtra("data");
+        String nickname = intent.getStringExtra("nickname");
+        String avatar = intent.getStringExtra("avatar");
+
+        mtv_nickname.setText(nickname);
+        GlideUtils.getInstance().loadImage(this,civ_head,avatar);
 
         String is_change = data.is_change;//是否可改为好评  0不能改好评    1可以改好评
         if ("1".equals(is_change)){
@@ -219,6 +230,10 @@ public class CommentDetailAct extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.mrl_goods)
+    public void jumpGoodsDetail(){
+        GoodsDetailAct.startAct(this,data.goods_id);
+    }
 
     @Override
     protected void onDestroy() {

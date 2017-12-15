@@ -125,9 +125,13 @@
         <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
         <activity android:name="pay.PayListActivity"
             android:exported="false"
-            android:theme="@style/pay"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.my_comment.MyCommentAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/pay" />
+        <activity
+            android:name=".ui.my_comment.MyCommentAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.store.StoreLicenseAct"
             android:exported="false"
             android:screenOrientation="portrait"
             />
@@ -139,6 +143,7 @@
             android:exported="false"
             android:screenOrientation="portrait"
             />
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.confirm_order.OrderLogisticsActivity"
             android:exported="false"

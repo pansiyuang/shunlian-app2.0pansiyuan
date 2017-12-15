@@ -90,6 +90,7 @@
     <item name="tag_store_discount_menu" type="id" />
     <string name="store_taocanjia">套餐价</string>
     <string name="store_zengpin">赠品</string>
+    <string name="store_kanzhizhao">*输入验证码查看执照信息</string>
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
@@ -227,7 +228,16 @@
     <string name="del_success">删除成功</string>
     <string name="del_address_title">确认删除此条地址信息吗？</string>
 
-    <!--评论-->
+    <!--我的评价-->
+    <string name="my_comment">我的评价</string>
+    <string name="all_comment">全部评价</string>
+    <string name="append_comment">等待追评</string>
+    <string name="comment_detail">评价详情</string>
+    <string name="comment_detail1">评价详情：</string>
+    <string name="append_comment_write">写追评</string>
+    <string name="zan_count">点赞数：</string>
+    <string name="seller_reply">商家回复</string>
+    <string name="already_comment">已追评</string>
     <string name="comment_high">好评</string>
     <string name="comment_middle">中评</string>
     <string name="comment_low">差评</string>

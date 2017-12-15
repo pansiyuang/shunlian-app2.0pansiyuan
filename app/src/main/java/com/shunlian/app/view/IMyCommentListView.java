@@ -15,4 +15,11 @@ public interface IMyCommentListView extends IView {
      * @param lists
      */
     void commentList(List<CommentListEntity.Data> lists,int currentPage,int allPage);
+
+    /**
+     * 设置昵称和头像
+     * @param nickname
+     * @param avatar
+     */
+    void setNicknameAndAvatar(String nickname,String avatar);
 }

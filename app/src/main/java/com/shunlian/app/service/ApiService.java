@@ -32,6 +32,7 @@ import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -39,6 +40,7 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
+import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -46,6 +48,7 @@ import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.bean.StoreLicenseEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
@@ -57,7 +60,6 @@ import com.shunlian.app.bean.WXLoginEntity;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -281,7 +283,6 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
-
     /**
      * 店铺新品
      *
@@ -313,7 +314,7 @@ public interface ApiService {
      * @return
      */
     @POST("cart/add")
-    Call<BaseEntity<CateEntity>> addCart(@Body RequestBody body);
+    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
 
     /**
      * 购物车首页
@@ -415,7 +416,6 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
-     *
      * @param body
      * @return
      */
@@ -424,7 +424,6 @@ public interface ApiService {
 
     /**
      * 收藏商品
-     *
      * @param body
      * @return
      */
@@ -433,7 +432,6 @@ public interface ApiService {
 
     /**
      * 移除收藏
-     *
      * @param body
      * @return
      */
@@ -442,16 +440,14 @@ public interface ApiService {
 
     /**
      * 评价列表
-     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
 
     /**
      * 省市区数据
-     *
      * @param map
      * @return
      */
@@ -460,7 +456,6 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
-     *
      * @param body
      * @return
      */
@@ -469,7 +464,6 @@ public interface ApiService {
 
     /**
      * 添加收货地址
-     *
      * @param body
      * @return
      */
@@ -478,7 +472,6 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
-     *
      * @param body
      * @return
      */
@@ -532,13 +525,38 @@ public interface ApiService {
     Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> getGoodsSku(@Body RequestBody body);
 
     /**
+     * 获取系统消息数量
+     *
+     * @param body
+     * @return
+     */
+    @POST("user/getusernewsnum")
+    Call<BaseEntity<GetusernewsnumEntity>> getusernewsnum(@Body RequestBody body);
+
+    /**
      * 我的评价列表
      *
      * @param map
      * @return
      */
     @GET("member/comment/list")
-    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 查看营业执照
+     * @param body
+     * @return
+     */
+    @POST("store/businessLicense")
+    Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
+
+    /**
+     * 订单列表
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/orderlist")
+    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 
 
     /**

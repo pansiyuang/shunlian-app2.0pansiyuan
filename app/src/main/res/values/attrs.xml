@@ -177,12 +177,11 @@
         </attr>
     </declare-styleable>
 
-    <!--新版首页，导航条下划线控件-->
+    <!--导航条下划线控件-->
     <declare-styleable name="PagerSlidingTabStrip">
         <attr name="slidingBlock" format="reference|color" />
         <attr name="allowWidthFull" format="boolean" />
         <attr name="disableViewPager" format="boolean" />
         <attr name="allowAlignment" format="boolean" />
     </declare-styleable>
-
 </resources>
