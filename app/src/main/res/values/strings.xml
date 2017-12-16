@@ -235,4 +235,17 @@
     <string name="zan_count">点赞数：</string>
     <string name="seller_reply">商家回复</string>
     <string name="already_comment">已追评</string>
+
+    <!--订单详情-->
+    <string name="order_xiangqing">订单详情</string>
+    <string name="order_fuzhi">复制</string>
+    <string name="order_zongjia">订单总价</string>
+    <string name="order_yunfei">运费</string>
+    <string name="order_cuxiao">促销</string>
+    <string name="order_youhuiquan">优惠券</string>
+    <string name="order_shifu">实付金额</string>
+    <string name="order_lianxishangjia">联系商家</string>
+    <string name="order_quxiaodingdan">取消订单</string>
+    <string name="order_fukuan">付款</string>
+    <string name="order_wuliu">查看物流</string>
 </resources>

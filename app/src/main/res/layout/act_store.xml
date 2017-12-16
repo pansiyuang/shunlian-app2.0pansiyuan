@@ -521,7 +521,7 @@
                 android:layout_width="16dp"
                 android:layout_height="12dp"
                 android:layout_alignParentRight="true"
-                android:background="@mipmap/bg_common_more"
+                android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
                 android:text="9+"
                 android:textColor="@color/white"

@@ -10,9 +10,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
@@ -106,9 +106,9 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.confirm_order.ConfirmOrderAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:name=".ui.confirm_order.ConfirmOrderAct" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.receive_adress.AddressListActivity"
             android:exported="false"
@@ -131,15 +131,16 @@
             android:name=".ui.my_comment.CommentDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.store.StoreLicenseAct"
+        <activity
+            android:name=".ui.store.StoreLicenseAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.order.MyOrderAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order.MyOrderAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        android:screenOrientation="portrait"/>
+        <activity android:name=".ui.order.OrderDetailAct"></activity>
     </application>
 
 </manifest>
