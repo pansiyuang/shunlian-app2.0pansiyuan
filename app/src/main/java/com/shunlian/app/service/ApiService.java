@@ -53,6 +53,7 @@ import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -283,6 +284,7 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
+
     /**
      * 店铺新品
      *
@@ -416,6 +418,7 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
+     *
      * @param body
      * @return
      */
@@ -424,6 +427,7 @@ public interface ApiService {
 
     /**
      * 收藏商品
+     *
      * @param body
      * @return
      */
@@ -432,6 +436,7 @@ public interface ApiService {
 
     /**
      * 移除收藏
+     *
      * @param body
      * @return
      */
@@ -440,14 +445,16 @@ public interface ApiService {
 
     /**
      * 评价列表
+     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
 
     /**
      * 省市区数据
+     *
      * @param map
      * @return
      */
@@ -456,6 +463,7 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
+     *
      * @param body
      * @return
      */
@@ -464,6 +472,7 @@ public interface ApiService {
 
     /**
      * 添加收货地址
+     *
      * @param body
      * @return
      */
@@ -472,6 +481,7 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
+     *
      * @param body
      * @return
      */
@@ -540,10 +550,11 @@ public interface ApiService {
      * @return
      */
     @GET("member/comment/list")
-    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String, String> map);
 
     /**
      * 查看营业执照
+     *
      * @param body
      * @return
      */
@@ -552,11 +563,12 @@ public interface ApiService {
 
     /**
      * 订单列表
+     *
      * @param map
      * @return
      */
     @GET("personalcenter/orderlist")
-    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String, String> map);
 
 
     /**
@@ -581,5 +593,21 @@ public interface ApiService {
      * @return
      */
     @GET("/personalcenter/traces")
-    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@QueryMap Map<String,String> map);
+    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@QueryMap Map<String, String> map);
+
+    /**
+     * 订单搜索历史
+     *
+     * @return
+     */
+    @GET("/personalcenter/searchhistory")
+    Call<BaseEntity<TagEntity>> searchHistory(@QueryMap Map<String, String> map);
+
+    /**
+     * 清空历史搜索记录
+     *
+     * @return
+     */
+    @GET("/personalcenter/delhistory")
+    Call<BaseEntity<EmptyEntity>> delHistory(@QueryMap Map<String, String> map);
 }

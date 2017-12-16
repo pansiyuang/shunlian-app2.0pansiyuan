@@ -24,12 +24,12 @@ public abstract class TagAdapter<T>
         mTagDatas = new ArrayList<T>(Arrays.asList(datas));
     }
 
-    interface OnDataChangedListener
+    public interface OnDataChangedListener
     {
         void onChanged();
     }
 
-    void setOnDataChangedListener(OnDataChangedListener listener)
+    public void setOnDataChangedListener(OnDataChangedListener listener)
     {
         mOnDataChangedListener = listener;
     }
@@ -52,7 +52,7 @@ public abstract class TagAdapter<T>
         notifyDataChanged();
     }
 
-    HashSet<Integer> getPreCheckedList()
+    public HashSet<Integer> getPreCheckedList()
     {
         return mCheckedPosList;
     }

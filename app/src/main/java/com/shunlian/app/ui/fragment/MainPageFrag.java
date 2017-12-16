@@ -13,6 +13,7 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
@@ -87,6 +88,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("我的评价");
         items.add("我的订单");
         items.add("订单物流详情");
+        items.add("订单搜索历史");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -127,6 +129,8 @@ public class MainPageFrag extends BaseFragment {
                     case 7:
 //                        OrderLogisticsActivity.startAct(baseActivity, "5");
                         OrderLogisticsActivity.startAct(baseActivity, "4");
+                    case 8:
+                        SearchOrderActivity.startAct(baseActivity);
                         break;
                 }
             }
