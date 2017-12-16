@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -69,14 +70,5 @@ public class OrderHistoryPresenter extends BasePresenter<ITagView> {
                 }
             }
         });
-    }
-
-    public void searchOrder(String page, String pageSize, String status, String keyword) {
-        Map<String, String> map = new HashMap<>();
-        map.put("page",page);
-        map.put("page_size",pageSize);
-        map.put("status",status);
-        map.put("key_word",keyword);
-        sortAndMD5(map);
     }
 }

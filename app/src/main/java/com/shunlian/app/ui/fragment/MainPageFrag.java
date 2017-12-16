@@ -131,6 +131,7 @@ public class MainPageFrag extends BaseFragment {
                     case 7:
 //                        OrderLogisticsActivity.startAct(baseActivity, "5");
                         OrderLogisticsActivity.startAct(baseActivity, "4");
+                        break;
                     case 8:
                         SearchOrderActivity.startAct(baseActivity);
                         break;
