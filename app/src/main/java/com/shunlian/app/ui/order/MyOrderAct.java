@@ -7,11 +7,8 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MyOrderAdapter;
-import com.shunlian.app.bean.MyOrderEntity;
-import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/13.
  */
 
-public class MyOrderAct extends BaseActivity implements IOrderListView {
+public class MyOrderAct extends BaseActivity {
 
 
     @BindView(R.id.viewpager)
@@ -61,14 +58,7 @@ public class MyOrderAct extends BaseActivity implements IOrderListView {
     View view_wait_comment;
     private int pink_color;
     private int new_text;
-    private OrderListPresenter presenter;
     private List<BaseFragment> fragments;
-    public static final int ALL = 0;
-    public static final int PAY = 1;
-    public static final int SEND = 2;
-    public static final int RECEIVE = 3;
-    public static final int COMMENT = 4;
-    private int currentPage = ALL;//当前所在页面
 
 
     public static void startAct(Context context) {
@@ -90,39 +80,16 @@ public class MyOrderAct extends BaseActivity implements IOrderListView {
         super.initListener();
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrollStateChanged(int state) {
+            }
 
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageSelected(int position) {
-                System.out.println("onPageSelected============"+position);
                 setStatus(position + 1);
-                currentPage = position;
-                if (presenter != null){
-                    switch (position){
-                        case 0:
-                            presenter.orderListAll();
-                            break;
-                        case 1:
-                            presenter.orderListPay();
-                            break;
-                        case 2:
-                            presenter.orderListSend();
-                            break;
-                        case 3:
-                            presenter.orderListReceive();
-                            break;
-                        case 4:
-                            presenter.orderListComment();
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -137,15 +104,10 @@ public class MyOrderAct extends BaseActivity implements IOrderListView {
         pink_color = getResources().getColor(R.color.pink_color);
         new_text = getResources().getColor(R.color.new_text);
         fragments = new ArrayList<>();
-        fragments.add(new AllFrag());
-        fragments.add(new PayFrag());
-        fragments.add(new SendFrag());
-        fragments.add(new ReceiveFrag());
-        fragments.add(new CommentFrag());
-
+        for (int i = 0; i < 5; i++) {
+            fragments.add(AllFrag.getInstance(i));
+        }
         viewpager.setAdapter(new MyOrderAdapter(getSupportFragmentManager(), fragments));
-
-        presenter = new OrderListPresenter(this,this);
 
 
     }
@@ -215,53 +177,5 @@ public class MyOrderAct extends BaseActivity implements IOrderListView {
 
         mtv_wait_comment.setTextColor(status == 5 ? pink_color : new_text);
         view_wait_comment.setVisibility(status == 5 ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    /**
-     * 显示网络请求失败的界面
-     *
-     * @param request_code
-     */
-    @Override
-    public void showFailureView(int request_code) {
-
-    }
-
-    /**
-     * 显示空数据界面
-     *
-     * @param request_code
-     */
-    @Override
-    public void showDataEmptyView(int request_code) {
-
-    }
-
-    /**
-     * 订单列表
-     *
-     * @param orders
-     * @param page
-     * @param allPage
-     */
-    @Override
-    public void orderList(List<MyOrderEntity.Orders> orders, int page, int allPage) {
-        switch (currentPage){
-            case ALL:
-                ((AllFrag)fragments.get(0)).setOrderList(orders,page,allPage);
-                break;
-            case PAY:
-                ((PayFrag)fragments.get(1)).setOrderList(orders,page,allPage);
-                break;
-            case SEND:
-                ((SendFrag)fragments.get(2)).setOrderList(orders,page,allPage);
-                break;
-            case RECEIVE:
-                ((ReceiveFrag)fragments.get(3)).setOrderList(orders,page,allPage);
-                break;
-            case COMMENT:
-                ((CommentFrag)fragments.get(4)).setOrderList(orders,page,allPage);
-                break;
-        }
     }
 }

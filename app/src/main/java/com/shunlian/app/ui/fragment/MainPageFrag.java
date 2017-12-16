@@ -17,6 +17,7 @@ import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
+import com.shunlian.app.ui.my_comment.CommentSuccessAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- * <p>
+ *
  * 首页页面
  */
 
@@ -84,7 +85,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("商品详情");
         items.add("店铺");
         items.add("购物车");
-        items.add("确认订单");
+        items.add("评价成功");
         items.add("我的评价");
         items.add("我的订单");
         items.add("订单物流详情");
@@ -119,6 +120,7 @@ public class MainPageFrag extends BaseFragment {
                         StoreAct.startAct(baseContext);
                         break;
                     case 4:
+                        CommentSuccessAct.startAct(baseActivity);
                         break;
                     case 5:
                         MyCommentAct.startAct(baseActivity);

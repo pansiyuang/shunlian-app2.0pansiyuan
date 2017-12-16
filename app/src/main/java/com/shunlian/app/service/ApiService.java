@@ -284,7 +284,6 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
-
     /**
      * 店铺新品
      *
@@ -418,7 +417,6 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
-     *
      * @param body
      * @return
      */
@@ -427,7 +425,6 @@ public interface ApiService {
 
     /**
      * 收藏商品
-     *
      * @param body
      * @return
      */
@@ -436,7 +433,6 @@ public interface ApiService {
 
     /**
      * 移除收藏
-     *
      * @param body
      * @return
      */
@@ -445,16 +441,14 @@ public interface ApiService {
 
     /**
      * 评价列表
-     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
 
     /**
      * 省市区数据
-     *
      * @param map
      * @return
      */
@@ -463,7 +457,6 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
-     *
      * @param body
      * @return
      */
@@ -472,7 +465,6 @@ public interface ApiService {
 
     /**
      * 添加收货地址
-     *
      * @param body
      * @return
      */
@@ -481,7 +473,6 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
-     *
      * @param body
      * @return
      */
@@ -545,16 +536,14 @@ public interface ApiService {
 
     /**
      * 我的评价列表
-     *
      * @param map
      * @return
      */
     @GET("member/comment/list")
-    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
 
     /**
      * 查看营业执照
-     *
      * @param body
      * @return
      */
@@ -563,7 +552,6 @@ public interface ApiService {
 
     /**
      * 订单列表
-     *
      * @param map
      * @return
      */
@@ -610,4 +598,11 @@ public interface ApiService {
      */
     @GET("/personalcenter/delhistory")
     Call<BaseEntity<EmptyEntity>> delHistory(@QueryMap Map<String, String> map);
+
+    /**
+     * 待评价和待追评混合列表
+     * @return
+     */
+    @GET("member/comment/mixed_list")
+    Call<BaseEntity<EmptyEntity>> mixed_list();
 }

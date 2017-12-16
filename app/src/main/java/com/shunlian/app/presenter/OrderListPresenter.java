@@ -19,20 +19,18 @@ import retrofit2.Call;
 public class OrderListPresenter extends BasePresenter<IOrderListView> {
 
     public static final int PAGE_SIZE = 10;
-    private int page = 1;
-    private int allPage = 1;
-
     public static final String all = "all";//全部
     public static final String pay = "0";//待支付
     public static final String send = "1";//待发货
     public static final String receive = "2";//待收货
     public static final String comment = "3";//待评价
     private String status = all;
+    public static final int LOAD_CODE = 100;//加载更多的code
+    public static final int OTHER_CODE = 200;//其他code
 
 
     public OrderListPresenter(Context context, IOrderListView iView) {
         super(context, iView);
-        initApi();
     }
 
     /**
@@ -48,7 +46,9 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
      */
     @Override
     public void detachView() {
-
+        isLoading = false;
+        currentPage = 1;
+        allPage = 1;
     }
 
     /**
@@ -56,33 +56,32 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
      */
     @Override
     protected void initApi() {
-        status = all;
-        orderList(100,100,true,status,1);
+        orderListAll();
     }
 
     public void orderListAll(){
         status = all;
-        orderList(100,100,true,status,1);
+        orderList(OTHER_CODE,OTHER_CODE,true,status,1);
     }
 
     public void orderListPay(){
         status = pay;
-        orderList(100,100,true,status,1);
+        orderList(OTHER_CODE,OTHER_CODE,true,status,1);
     }
 
     public void orderListSend(){
         status = send;
-        orderList(100,100,true,status,1);
+        orderList(OTHER_CODE,OTHER_CODE,true,status,1);
     }
 
     public void orderListReceive(){
         status = receive;
-        orderList(100,100,true,status,1);
+        orderList(OTHER_CODE,OTHER_CODE,true,status,1);
     }
 
     public void orderListComment(){
         status = comment;
-        orderList(100,100,true,status,1);
+        orderList(OTHER_CODE,OTHER_CODE,true,status,1);
     }
 
     public void orderList(int empty, int failure, boolean isShow, String status, final int page){
@@ -96,12 +95,38 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
             @Override
             public void onSuccess(BaseEntity<MyOrderEntity> entity) {
                 super.onSuccess(entity);
+                isLoading = false;
                 MyOrderEntity data = entity.data;
+
                 allPage = Integer.parseInt(data.total_page);
-                int page = Integer.parseInt(data.page);
-                OrderListPresenter.this.page = page + 1;
-                iView.orderList(data.orders,page,allPage);
+                currentPage = Integer.parseInt(data.page);
+
+                iView.orderList(data.orders,currentPage,allPage);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading){
+            isLoading = true;
+            if (currentPage <= allPage){
+                currentPage ++;
+                orderList(LOAD_CODE,LOAD_CODE,false,status,currentPage);
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMyCommentListView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,9 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
     private int pink_color;
     private int new_text;
     private MyCommentListPresenter presenter;
@@ -192,6 +196,13 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             appendComment(currentPage, allPage);
         }
 
+        if (isEmpty(this.lists)){
+            nei_empty.setVisibility(View.VISIBLE);
+            nei_empty.setImageResource(R.mipmap.img_empty_common)
+                    .setText("您还没有需要追评的商品").setButtonText("");
+        }else {
+            nei_empty.setVisibility(View.GONE);
+        }
     }
 
     /**
