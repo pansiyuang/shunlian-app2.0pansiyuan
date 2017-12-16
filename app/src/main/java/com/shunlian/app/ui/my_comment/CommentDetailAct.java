@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.PicAdapter;
+import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
@@ -22,6 +25,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,6 +76,9 @@ public class CommentDetailAct extends BaseActivity {
 
     @BindView(R.id.mtv_zan_count)
     MyTextView mtv_zan_count;
+
+    @BindView(R.id.mtv_zan_count1)
+    MyTextView mtv_zan_count1;
 
     @BindView(R.id.mtv_reply_content)
     MyTextView mtv_reply_content;
@@ -130,6 +137,8 @@ public class CommentDetailAct extends BaseActivity {
         mtv_nickname.setText(nickname);
         GlideUtils.getInstance().loadImage(this,civ_head,avatar);
 
+        mtv_append_comment_staus.setVisibility(View.GONE);
+
         String is_change = data.is_change;//是否可改为好评  0不能改好评    1可以改好评
         if ("1".equals(is_change)){
             mtv_good_comment.setVisibility(View.VISIBLE);
@@ -153,13 +162,15 @@ public class CommentDetailAct extends BaseActivity {
 
         GridLayoutManager manager = new GridLayoutManager(this,3);
         recy_view.setLayoutManager(manager);
+        recy_view.setNestedScrollingEnabled(false);
         recy_view.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this,5),false));
 
 
         GridLayoutManager manager1 = new GridLayoutManager(this,3);
-        recy_view_append.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this,5),false));
         recy_view_append.setLayoutManager(manager1);
-        
+        recy_view_append.setNestedScrollingEnabled(false);
+        recy_view_append.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this,5),false));
+
         setContent();
     }
 
@@ -201,6 +212,7 @@ public class CommentDetailAct extends BaseActivity {
         mtv_price.setText(getString(R.string.rmb)+data.price);
         mtv_comment_time.setText(data.add_time);
         mtv_zan_count.setText(data.praise_total);
+        mtv_zan_count1.setText(data.praise_total);
 
         String reply = data.reply;
         if (isEmpty(reply)){
@@ -210,23 +222,43 @@ public class CommentDetailAct extends BaseActivity {
             mtv_reply_content.setText(reply);
         }
 
-        List<String> pics = data.pics;
+        final List<String> pics = data.pics;
         if (isEmpty(pics)){
             recy_view.setVisibility(View.GONE);
         }else {
             recy_view.setVisibility(View.VISIBLE);
             PicAdapter picAdapter = new PicAdapter(this,false,pics);
             recy_view.setAdapter(picAdapter);
+            picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) pics;
+                    bigImgEntity.index = position;
+                    bigImgEntity.desc = data.content;
+                    LookBigImgAct.startAct(CommentDetailAct.this, bigImgEntity);
+                }
+            });
         }
 
 
-        List<String> append_pics = data.append_pics;
+        final List<String> append_pics = data.append_pics;
         if (isEmpty(append_pics)){
             recy_view_append.setVisibility(View.GONE);
         }else {
             recy_view_append.setVisibility(View.VISIBLE);
             PicAdapter picAdapter = new PicAdapter(this,false,append_pics);
             recy_view_append.setAdapter(picAdapter);
+            picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) append_pics;
+                    bigImgEntity.index = position;
+                    bigImgEntity.desc = data.append;
+                    LookBigImgAct.startAct(CommentDetailAct.this, bigImgEntity);
+                }
+            });
         }
     }
 
@@ -234,6 +266,17 @@ public class CommentDetailAct extends BaseActivity {
     public void jumpGoodsDetail(){
         GoodsDetailAct.startAct(this,data.goods_id);
     }
+
+    @OnClick(R.id.mtv_append)
+    public void appendComment(){
+        ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+    }
+
+    @OnClick(R.id.mtv_good_comment)
+    public void goodComment(){
+        ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+    }
+
 
     @Override
     protected void onDestroy() {

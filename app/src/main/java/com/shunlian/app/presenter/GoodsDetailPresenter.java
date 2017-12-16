@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -118,10 +119,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("qty",qty);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        Call<BaseEntity<CateEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CateEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CateEntity> entity) {
                 super.onSuccess(entity);
                 iView.addCart(entity.message);
             }

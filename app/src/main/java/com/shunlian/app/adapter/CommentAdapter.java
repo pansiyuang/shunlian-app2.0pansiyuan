@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.PicAdapter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -29,6 +31,7 @@ import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
 import com.shunlian.app.widget.flowlayout.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -169,7 +172,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                         .setText("该商品还没有评价").setButtonText("");
                 return;
             }
-            CommentListEntity.Data data = lists.get(position - 1);
+            final CommentListEntity.Data data = lists.get(position - 1);
 
             if (isEmpty(data.content)){
                 mHolder.mtv_content.setVisibility(View.GONE);
@@ -217,23 +220,43 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             }
 
 
-            List<String> pics = data.pics;
+            final List<String> pics = data.pics;
             if (isEmpty(pics)){
                 mHolder.recy_view.setVisibility(View.GONE);
             }else {
                 mHolder.recy_view.setVisibility(View.VISIBLE);
                 PicAdapter picAdapter = new PicAdapter(context,false,pics);
                 mHolder.recy_view.setAdapter(picAdapter);
+                picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) pics;
+                        bigImgEntity.index = position;
+                        bigImgEntity.desc = data.content;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
 
 
-            List<String> append_pics = data.append_pics;
+            final List<String> append_pics = data.append_pics;
             if (isEmpty(append_pics)){
                 mHolder.recy_view1.setVisibility(View.GONE);
             }else {
                 mHolder.recy_view1.setVisibility(View.VISIBLE);
                 PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
                 mHolder.recy_view1.setAdapter(picAdapter);
+                picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) append_pics;
+                        bigImgEntity.index = position;
+                        bigImgEntity.desc = data.append;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
         }
     }

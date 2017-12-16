@@ -36,9 +36,9 @@ import android.view.View;
 
 public class HorItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int space;
-    private int leftMargin;
-    private int rightMargin;
+    private int space; //item中间间距
+    private int leftMargin;//第一个item距左边的边距
+    private int rightMargin;//最后一个item距右边的边距
     private Paint mPaint;
 
     public HorItemDecoration(int space,int leftMargin,int rightMargin){

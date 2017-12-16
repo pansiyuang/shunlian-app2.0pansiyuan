@@ -184,7 +184,9 @@
     <string name="disable_goods">失效宝贝</string>
     <string name="change_prefer">修改优惠</string>
     <string name="close">关闭</string>
+    <string name="go_to_shopcar">去购物车</string>
     <string name="move_to_collection">移入收藏</string>
+    <string name="search_goods">搜索促销商品</string>
 
     <!--确认订单-->
     <string name="Confirmation_of_order">确认订单</string>
@@ -203,6 +205,9 @@
     <string name="voucher">优惠券</string>
     <string name="buyer_message">给卖家留言：</string>
     <string name="subtotal">小计:</string>
+    <string name="your_footmark">您的足迹</string>
+    <string name="search_history">搜索历史</string>
+    <string name="search_all_order">搜索所有订单</string>
 
     <!--收获地址-->
     <string name="location">定位</string>
@@ -235,6 +240,13 @@
     <string name="zan_count">点赞数：</string>
     <string name="seller_reply">商家回复</string>
     <string name="already_comment">已追评</string>
+    <string name="comment_high">好评</string>
+    <string name="comment_middle">中评</string>
+    <string name="comment_low">差评</string>
+    <string name="store_score">店铺评分</string>
+    <string name="logistics_service">物流服务：</string>
+    <string name="consistent_description">描述相符：</string>
+    <string name="comment_release">发布</string>
 
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>

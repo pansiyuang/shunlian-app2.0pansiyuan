@@ -108,7 +108,6 @@ public class ProgressView extends View {
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                LogUtil.httpLogW("value:" + angle);
                 angle = (int) valueAnimator.getAnimatedValue();
                 postInvalidate();
             }

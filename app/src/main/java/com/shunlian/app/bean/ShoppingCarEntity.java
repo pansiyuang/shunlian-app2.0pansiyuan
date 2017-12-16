@@ -39,6 +39,7 @@ public class ShoppingCarEntity {
             public String hint;                  //活动内容
             public String title_label;           //优惠
             public String prom_title;            //优惠标题
+            public String need_more;
             public String prom_reduce;
         }
     }

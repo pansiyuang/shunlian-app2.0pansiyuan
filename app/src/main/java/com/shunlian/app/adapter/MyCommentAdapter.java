@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.PicAdapter;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -21,6 +23,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,7 +60,7 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MyCommentHolder mHolder = (MyCommentHolder) holder;
-        CommentListEntity.Data data = lists.get(position);
+        final CommentListEntity.Data data = lists.get(position);
 
         if ("5".equals(data.star_level)) {//好评
             mHolder.comment_rank.praiseRank();
@@ -73,16 +76,18 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
             background.setColor(getColor(R.color.white));
             mHolder.mtv_append_comment_staus.setText(getString(R.string.append_comment_write));
             mHolder.mtv_append_comment_staus.setEnabled(true);
+            mHolder.mtv_append_comment_staus.setTextColor(getColor(R.color.pink_color));
         } else if ("2".equals(is_append)) {
             mHolder.mtv_append_comment_staus.setText(getString(R.string.already_comment));
             mHolder.mtv_append_comment_staus.setEnabled(false);
             GradientDrawable background = (GradientDrawable) mHolder.mtv_append_comment_staus.getBackground();
             background.setColor(getColor(R.color.pink_color));
+            mHolder.mtv_append_comment_staus.setTextColor(getColor(R.color.white));
         } else {
             mHolder.mtv_append_comment_staus.setVisibility(View.GONE);
         }
 
-        String content = data.content;
+        final String content = data.content;
         if (isEmpty(content)){//评价内容
             mHolder.mtv_content.setVisibility(View.GONE);
         }else {
@@ -120,23 +125,43 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
             mHolder.mtv_reply_content.setText(reply);
         }
 
-        List<String> pics = data.pics;
+        final List<String> pics = data.pics;
         if (isEmpty(pics)){
             mHolder.recy_view.setVisibility(View.GONE);
         }else {
             mHolder.recy_view.setVisibility(View.VISIBLE);
             PicAdapter picAdapter = new PicAdapter(context,false,pics);
             mHolder.recy_view.setAdapter(picAdapter);
+            picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) pics;
+                    bigImgEntity.index = position;
+                    bigImgEntity.desc = data.content;
+                    LookBigImgAct.startAct(context, bigImgEntity);
+                }
+            });
         }
 
 
-        List<String> append_pics = data.append_pics;
+        final List<String> append_pics = data.append_pics;
         if (isEmpty(append_pics)){
             mHolder.recy_view_append.setVisibility(View.GONE);
         }else {
             mHolder.recy_view_append.setVisibility(View.VISIBLE);
             PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
             mHolder.recy_view_append.setAdapter(picAdapter);
+            picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) append_pics;
+                    bigImgEntity.index = position;
+                    bigImgEntity.desc = data.append;
+                    LookBigImgAct.startAct(context, bigImgEntity);
+                }
+            });
         }
     }
 

@@ -85,6 +85,8 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_goods_attribute.setText(goods.sku);
         enableViewHolder.tv_goods_num.setText("x" + goods.qty);
         enableViewHolder.tv_goods_count.setText(goods.qty);
+        enableViewHolder.tv_goods_price.setText(goods.price);
+//        enableViewHolder.tv_prefer.setText(goods.title_label);
         enableViewHolder.tv_goods_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

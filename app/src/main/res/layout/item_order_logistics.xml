@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_logistics"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_logistics"
+        android:layout_width="14dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ll_logistics_detail"
+        android:layout_alignTop="@+id/ll_logistics_detail"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_logistics"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_wuliu_active" />
+
+        <View
+            android:id="@+id/view_logistics_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="@color/my_line_gray"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_logistics_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16.5dp"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@+id/ll_logistics"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_logistics_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="【杭州市】已签收，签收人是本人感谢使用申通快递，期待再次为您服务！"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_logistics_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:text="2017-07-11 19:30"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_logistics_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:drawableRight="@mipmap/icon_common_arrowdowns"
+            android:paddingBottom="15dp"
+            android:text="查看更多物流信息"
+            android:textColor="@color/share_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

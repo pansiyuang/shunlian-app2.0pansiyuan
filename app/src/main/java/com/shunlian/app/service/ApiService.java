@@ -24,6 +24,7 @@ package com.shunlian.app.service;
 
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
@@ -33,10 +34,12 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
+import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
@@ -51,6 +54,7 @@ import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadCmtPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
@@ -312,7 +316,7 @@ public interface ApiService {
      * @return
      */
     @POST("cart/add")
-    Call<BaseEntity<EmptyEntity>> addCart(@Body RequestBody body);
+    Call<BaseEntity<CateEntity>> addCart(@Body RequestBody body);
 
     /**
      * 购物车首页
@@ -496,6 +500,33 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
 
     /**
+     * 凑单界面商店类目
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/getjoingoodsstorecates")
+    Call<BaseEntity<CateEntity>> megerGoodsCates(@Body RequestBody body);
+
+    /**
+     * 凑单
+     *
+     * @param body
+     * @return
+     */
+    @POST("/cart/joingoods")
+    Call<BaseEntity<JoinGoodsEntity>> getRecommmendGoods(@Body RequestBody body);
+
+    /**
+     * 获取商品sku信息
+     *
+     * @param body
+     * @return
+     */
+    @POST("/goods/getgoodssku")
+    Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> getGoodsSku(@Body RequestBody body);
+
+    /**
      * 获取系统消息数量
      *
      * @param body
@@ -520,12 +551,54 @@ public interface ApiService {
     @POST("store/businessLicense")
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
+
+
     /**
-     * 订单列表
-     * @param map
+     * 上传图片
+     */
+    @Multipart
+    @POST("https://v20-test.shunliandongli.com/uploads/uploadotherimage")
+    Call<BaseEntity<UploadCmtPicEntity>> uploadPic(@Part MultipartBody.Part file);
+
+    /**
+     * 添加评价
+     *
+     * @param body
      * @return
      */
-    @GET("personalcenter/orderlist")
+    @POST("/member/comment/append")
+    Call<BaseEntity<EmptyEntity>> appendComment(@Body RequestBody body);
+
+    /**
+     * 订单物流详情
+     *
+     * @return
+     */
+    @GET("/personalcenter/traces")
+    Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@QueryMap Map<String, String> map);
+
+    /**
+     * 订单搜索历史
+     *
+     * @return
+     */
+    @GET("/personalcenter/searchhistory")
+    Call<BaseEntity<TagEntity>> searchHistory(@QueryMap Map<String, String> map);
+
+    /**
+     * 清空历史搜索记录
+     *
+     * @return
+     */
+    @GET("/personalcenter/delhistory")
+    Call<BaseEntity<EmptyEntity>> delHistory(@QueryMap Map<String, String> map);
+
+    /**
+     * 待评价和待追评混合列表
+     * @return
+     */
+    @GET("member/comment/mixed_list")
+    Call<BaseEntity<EmptyEntity>> mixed_list();
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 
 

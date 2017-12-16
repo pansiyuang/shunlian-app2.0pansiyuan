@@ -50,7 +50,7 @@ public class PicAdapter extends BaseRecyclerAdapter<String> {
         GlideUtils.getInstance().loadImage(context,mHolder.miv_pic, lists.get(position));
     }
 
-    public class PicHolder extends BaseRecyclerViewHolder {
+    public class PicHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.miv_pic)
         MyImageView miv_pic;
@@ -58,6 +58,18 @@ public class PicAdapter extends BaseRecyclerAdapter<String> {
         public PicHolder(View itemView) {
             super(itemView);
             miv_pic.setWHProportion(220,220);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

@@ -52,9 +52,9 @@
                 android:background="@drawable/rounded_rectangle_12px"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:visibility="gone"
                 android:textColor="@color/white"
-                android:textSize="8.5sp" />
+                android:textSize="8.5sp"
+                android:visibility="gone" />
         </RelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 
@@ -80,15 +80,15 @@
         <com.shunlian.app.widget.circle.CircleImageView
             android:id="@+id/civ_head"
             android:layout_width="29dp"
-            android:layout_height="29dp"/>
+            android:layout_height="29dp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginLeft="5.5dp"
             android:textColor="@color/new_text"
-            android:layout_marginLeft="5.5dp"/>
+            android:textSize="14sp" />
     </com.shunlian.app.widget.MyLinearLayout>
 
     <View
@@ -173,4 +173,10 @@
         android:layout_below="@+id/line2"
         android:overScrollMode="never" />
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_below="@+id/line2" />
 </com.shunlian.app.widget.MyRelativeLayout>
