@@ -14,6 +14,7 @@ import com.shunlian.app.adapter.OrderGoodAdapter;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
@@ -87,7 +88,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
 
     private OrderDetailPresenter orderDetailPresenter;
-    private String storeId, orderId;
+    private String storeId, orderId="54";
 
     public static void startAct(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailAct.class);
@@ -104,16 +105,11 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initData() {
         if (!TextUtils.isEmpty(getIntent().getStringExtra("orderId"))) {
-            storeId = getIntent().getStringExtra("orderId");
+            orderId = getIntent().getStringExtra("orderId");
         }
-        orderDetailPresenter = new OrderDetailPresenter(this, this, "54");
-    }
-
-    @Override
-    public void setOrder(OrderdetailEntity orderdetailEntity) {
         //设置圆角背景
-        GradientDrawable goodBackground = (GradientDrawable) mtv_copy.getBackground();
-        goodBackground.setColor(getColorResouce(R.color.white));//设置填充色
+        GradientDrawable copyBackground = (GradientDrawable) mtv_copy.getBackground();
+        copyBackground.setColor(getColorResouce(R.color.white));//设置填充色
 //        float[] floats={30,30,30,30,30,30,30,30};//每两个数值代表一个角，左上，右上，右下，左下
 //        goodBackground.setCornerRadii(floats);
 //        goodBackground.setCornerRadius(30);//数值近似px
@@ -121,6 +117,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         //设置边线,但是圆角的弧度不能统一，不建议使用
 //        goodBackground.setStroke(10,Color.parseColor("#858585"));
 
+        GradientDrawable wuliuBackground = (GradientDrawable) mtv_wuliu.getBackground();
+        wuliuBackground.setColor(getColorResouce(R.color.white));
+
+        orderDetailPresenter = new OrderDetailPresenter(this, this, orderId);
+    }
+
+    @Override
+    public void setOrder(OrderdetailEntity orderdetailEntity) {
         mtv_state.setText(orderdetailEntity.notice_status.status_text);
         mtv_time.setText(orderdetailEntity.notice_status.status_small);
         mtv_number.setText("订单号：" + orderdetailEntity.order_sn);
@@ -175,7 +179,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 StoreAct.startAct(this, storeId);
                 break;
             case R.id.mtv_wuliu:
-                StoreAct.startAct(this, storeId);
+                OrderLogisticsActivity.startAct(this, orderId);
                 break;
         }
     }

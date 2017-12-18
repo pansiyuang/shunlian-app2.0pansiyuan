@@ -123,7 +123,8 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.receive_adress.AddAdressAct"></activity>
-        <activity android:name="pay.PayListActivity"
+        <activity
+            android:name="pay.PayListActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/pay" />
@@ -131,24 +132,25 @@
             android:name=".ui.my_comment.MyCommentAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.store.StoreLicenseAct"
+        <activity
+            android:name=".ui.store.StoreLicenseAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_comment.CreatCommentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.my_comment.CommentDetailAct"
+        <activity
+            android:name=".ui.my_comment.CommentDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.MyOrderAct"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.confirm_order.OrderLogisticsActivity"
+        <activity
+            android:name=".ui.confirm_order.OrderLogisticsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -162,12 +164,18 @@
             android:name=".ui.my_comment.LookBigImgAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my_comment.CommentSuccessAct"
+        <activity
+            android:name=".ui.my_comment.CommentSuccessAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.order.OrderDetailAct"
-        android:exported="false"
-        android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order.OrderDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.confirm_order.PaySuccessAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
