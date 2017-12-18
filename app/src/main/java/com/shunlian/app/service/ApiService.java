@@ -615,6 +615,7 @@ public interface ApiService {
      * @param map
      * @return
      */
+    @GET("personalcenter/orderlist")
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 
 
