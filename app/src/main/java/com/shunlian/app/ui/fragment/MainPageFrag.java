@@ -13,10 +13,10 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.confirm_order.PaySuccessAct;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.my_comment.CommentSuccessAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
@@ -34,7 +34,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- *
+ * <p>
  * 首页页面
  */
 
@@ -92,6 +92,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单详情");
         items.add("订单物流详情");
         items.add("订单搜索历史");
+        items.add("支付成功");
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -119,7 +120,7 @@ public class MainPageFrag extends BaseFragment {
 //                        GoodsDetailAct.startAct(baseContext,"134");
                         break;
                     case 2:
-                        StoreAct.startAct(baseContext,"");
+                        StoreAct.startAct(baseContext, "");
                         break;
                     case 4:
                         CommentSuccessAct.startAct(baseActivity);
@@ -131,7 +132,7 @@ public class MainPageFrag extends BaseFragment {
                         MyOrderAct.startAct(baseActivity);
                         break;
                     case 7:
-                        OrderDetailAct.startAct(baseActivity,"");
+                        OrderDetailAct.startAct(baseActivity, "");
                         break;
                     case 8:
 //                        OrderLogisticsActivity.startAct(baseActivity, "5");
@@ -139,6 +140,9 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 9:
                         SearchOrderActivity.startAct(baseActivity);
+                        break;
+                    case 10:
+                        PaySuccessAct.startAct(baseActivity,"");
                         break;
                 }
             }

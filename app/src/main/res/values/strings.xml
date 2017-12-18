@@ -94,6 +94,10 @@
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
+    <!--支付成功-->
+    <string name="pay_chakandingdan">查看订单</string>
+    <string name="pay_dianpushouye">店铺首页</string>
+    <string name="pay_nikeneng">你可能还想买</string>
 
     <!--商品详情-->
     <string name="rmb">￥</string>
