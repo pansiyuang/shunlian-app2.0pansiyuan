@@ -270,11 +270,13 @@ public class CommentDetailAct extends BaseActivity {
     @OnClick(R.id.mtv_append)
     public void appendComment(){
         ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+        CreatCommentActivity.startAct(this,entity,CreatCommentActivity.APPEND_COMMENT);
     }
 
     @OnClick(R.id.mtv_good_comment)
     public void goodComment(){
         ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+        CreatCommentActivity.startAct(this,entity,CreatCommentActivity.CHANGE_COMMENT);
     }
 
 

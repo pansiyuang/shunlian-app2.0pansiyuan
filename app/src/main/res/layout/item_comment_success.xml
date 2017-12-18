@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <View
@@ -26,6 +25,7 @@
         app:tv_margin_top="40" />
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mll_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -50,12 +50,12 @@
             android:id="@+id/mtv_content"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/white_ash"
             android:gravity="center|left"
             android:paddingLeft="12.5dp"
             android:paddingRight="10dp"
-            android:text="施华蔻系列黄金果油系列（长发易分叉发质专金果油金果油金果油金果油"
+            app:tv_control_adapter="true"
+            app:tv_control_width="450"
             android:textColor="@color/new_text"
             android:textSize="13sp" />
 
@@ -79,4 +79,10 @@
         android:layout_height="29dp"
         android:visibility="gone"
         android:background="@color/white" />
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
