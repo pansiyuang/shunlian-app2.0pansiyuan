@@ -56,7 +56,7 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
         mHolder.mtv_count.setText(String.format(getString(R.string.x),orderGoodsBean.qty));
     }
 
-    public class OrderGoodsHolder extends BaseRecyclerViewHolder{
+    public class OrderGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.miv_goods_pic)
         MyImageView miv_goods_pic;
@@ -76,9 +76,21 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
         @BindView(R.id.mtv_count)
         MyTextView mtv_count;
 
-
         public OrderGoodsHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

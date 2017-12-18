@@ -8,12 +8,15 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -76,7 +79,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
      * @param position
      */
     @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
+    public void handleList(RecyclerView.ViewHolder holder, final int position) {
         OrderListHolder mHolder = (OrderListHolder) holder;
         MyOrderEntity.Orders orders = lists.get(position);
         mHolder.mtv_storeName.setText(orders.store_name);
@@ -92,6 +95,14 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
 
         OrderGoodsAdapter adapter = new OrderGoodsAdapter(context,orders.order_goods);
         mHolder.recy_view.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int posi) {
+                if (listener != null){
+                    listener.onItemClick(view,position);
+                }
+            }
+        });
     }
 
     private void setShowStatus(OrderListHolder mHolder, String status, String is_append) {
@@ -195,7 +206,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
     }
 
 
-    public class OrderListHolder extends BaseRecyclerViewHolder{
+    public class OrderListHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_storeName)
         MyTextView mtv_storeName;
@@ -224,16 +235,80 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         @BindView(R.id.mtv_title3)
         MyTextView mtv_title3;
 
+        @BindView(R.id.ll_rootView)
+        LinearLayout ll_rootView;
 
+        @BindView(R.id.mllayout_store)
+        MyLinearLayout mllayout_store;
 
         public OrderListHolder(View itemView) {
             super(itemView);
+            ll_rootView.setOnClickListener(this);
+            mllayout_store.setOnClickListener(this);
+            mtv_status.setOnClickListener(this);
+            mtv_title1.setOnClickListener(this);
+            mtv_title2.setOnClickListener(this);
+            mtv_title3.setOnClickListener(this);
+
 
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recy_view.setLayoutManager(manager);
 
             int space = TransformUtil.dip2px(context, 15);
             recy_view.addItemDecoration(new VerticalItemDecoration(space,0,0));
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            CharSequence text = null;
+            switch (v.getId()){
+                case R.id.ll_rootView:
+                case R.id.mtv_status:
+                    if (listener != null){
+                        listener.onItemClick(v,getAdapterPosition());
+                    }
+                    break;
+                case R.id.mllayout_store:
+                    Common.staticToast("进入店铺");
+                    break;
+                case R.id.mtv_title1:
+                    text = mtv_title1.getText();
+                    if ("联系商家".equals(text)){
+//                        Common.staticToast(text.toString());
+                    }else if ("提醒发货".equals(text)){
+//                        Common.staticToast(text.toString());
+                    }else if ("延长收货".equals(text)){
+                    }
+                    Common.staticToast(text.toString());
+                    break;
+                case R.id.mtv_title2:
+                    text = mtv_title2.getText();
+                    if ("取消订单".equals(text)){
+
+                    }else if ("查看物流".equals(text)){
+                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                        OrderLogisticsActivity.startAct(context,orders.id);
+                    }
+                    Common.staticToast(text.toString());
+                    break;
+                case R.id.mtv_title3:
+                    text = mtv_title3.getText();
+                    if ("付款".equals(text)){
+
+                    }else if ("确认收货".equals(text)){
+
+                    }else if ("评价".equals(text)){
+                        
+                    }else if ("追评".equals(text)){
+                    }
+                        Common.staticToast(text.toString());
+                    break;
+            }
         }
     }
 }
