@@ -570,6 +570,15 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> appendComment(@Body RequestBody body);
 
     /**
+     * 修好好评
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/change")
+    Call<BaseEntity<EmptyEntity>> changeComment(@Body RequestBody body);
+
+    /**
      * 订单物流详情
      *
      * @return
@@ -599,6 +608,13 @@ public interface ApiService {
      */
     @GET("member/comment/mixed_list")
     Call<BaseEntity<EmptyEntity>> mixed_list();
+
+    /**
+     * 个人订单列表
+     * @param map
+     * @return
+     */
+    @GET("/personalcenter/orderlist")
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 
 

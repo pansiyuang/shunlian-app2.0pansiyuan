@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -147,10 +147,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.order.MyOrderAct"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.confirm_order.OrderLogisticsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -158,6 +154,7 @@
         <activity
             android:name=".ui.confirm_order.SearchOrderActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
@@ -166,6 +163,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_comment.CommentSuccessAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.confirm_order.SearchOrderResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

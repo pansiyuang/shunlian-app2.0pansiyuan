@@ -139,7 +139,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
-            LogUtil.httpLogW("imagePath:" + imagePath);
 
             commentPresenter.uploadPic(imagePath);
             c.close();
@@ -166,6 +165,10 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     if (!isEmpty(currentContent)) {
                         commentPresenter.appendComment(commentEntity.comment_id, currentContent, "");
                     }
+                } else if (currentType == CHANGE_COMMENT) {
+                    if (!isEmpty(currentContent)) {
+                        commentPresenter.changeComment(commentEntity.comment_id, currentContent, "");
+                    }
                 }
                 break;
 
@@ -174,16 +177,29 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
     @Override
     public void OnComment(String content) {
+        LogUtil.httpLogW("content:" + content);
         currentContent = content;
     }
 
     @Override
     public void appendCommentSuccess() {
+        Common.staticToast("追评成功");
         finish();
     }
 
     @Override
     public void appendCommentFail(String error) {
         Common.staticToast(error);
+    }
+
+    @Override
+    public void changeCommentSuccess() {
+        Common.staticToast("修改好评成功");
+        finish();
+    }
+
+    @Override
+    public void changeCommtFail(String errorstr) {
+        Common.staticToast(errorstr);
     }
 }

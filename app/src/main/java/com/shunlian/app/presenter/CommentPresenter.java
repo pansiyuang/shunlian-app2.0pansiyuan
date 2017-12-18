@@ -98,4 +98,37 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             e.printStackTrace();
         }
     }
+    public void changeComment(String commentId, String content, String images) {
+        Map<String, String> map = new HashMap<>();
+        map.put("comment_id", commentId);
+        map.put("content", content);
+        if (!TextUtils.isEmpty(images)) {
+            map.put("images", images);
+        }
+        sortAndMD5(map);
+        try {
+            String s = new ObjectMapper().writeValueAsString(map);
+            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
+            Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().changeComment(requestBody);
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                    if (entity.code == 1000) {
+                        iView.changeCommentSuccess();
+                    } else {
+                        iView.changeCommtFail(entity.message);
+                    }
+                    super.onSuccess(entity);
+                }
+
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -9,4 +9,8 @@ public interface ICommentView extends IView {
     void appendCommentSuccess();
 
     void appendCommentFail(String error);
+
+    void changeCommentSuccess();
+
+    void changeCommtFail(String errorstr);
 }
