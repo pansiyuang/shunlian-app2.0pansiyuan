@@ -54,6 +54,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentType;
     private String currentContent;
     private CommentPresenter commentPresenter;
+    List<String> paths = new ArrayList<>();
 
     public static void startAct(Context context, List<ReleaseCommentEntity> list, int type) {
         Intent intent = new Intent(context, CreatCommentActivity.class);
@@ -139,8 +140,8 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
-
-            commentPresenter.uploadPic(imagePath);
+            paths.add(imagePath);
+            commentPresenter.uploadPic(paths);
             c.close();
         }
         super.onActivityResult(requestCode, resultCode, data);

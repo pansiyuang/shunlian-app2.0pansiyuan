@@ -15,7 +15,9 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ICommentView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -52,12 +54,15 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
 
     }
 
-    public void uploadPic(String picPath) {
-        File file = new File(picPath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-        Call<BaseEntity<UploadCmtPicEntity>> call = getAddCookieApiService().uploadPic(body);
+    public void uploadPic(List<String> filePath) {
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (String path : filePath) {
+            File file = new File(path);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+            parts.add(part);
+        }
+        Call<BaseEntity<UploadCmtPicEntity>> call = getAddCookieApiService().uploadPic(parts);
         getNetData(true, call, new SimpleNetDataCallback<BaseEntity<UploadCmtPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadCmtPicEntity> entity) {
@@ -98,6 +103,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             e.printStackTrace();
         }
     }
+
     public void changeComment(String commentId, String content, String images) {
         Map<String, String> map = new HashMap<>();
         map.put("comment_id", commentId);

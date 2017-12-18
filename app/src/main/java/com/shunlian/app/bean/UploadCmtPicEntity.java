@@ -22,20 +22,17 @@ package com.shunlian.app.bean;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import java.util.List;
+
 /**
  * Created by zhang on 2017/4/17 12 : 01.
  */
 
 public class UploadCmtPicEntity {
 
-    public String next_step;
-    public String msg;
-
-    @Override
-    public String toString() {
-        return "UploadCmtPicEntity{" +
-                "cmt_pic='" + next_step + '\'' +
-                ", msg='" + msg + '\'' +
-                '}';
-    }
+    public String domain;
+    public List<String> relativePath;
+    public List<String> newFileName;
+    public List<String> fileType;
+    public List<String> fileSize;
 }

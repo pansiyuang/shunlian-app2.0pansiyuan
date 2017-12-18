@@ -558,7 +558,7 @@ public interface ApiService {
      */
     @Multipart
     @POST("https://v20-test.shunliandongli.com/uploads/uploadotherimage")
-    Call<BaseEntity<UploadCmtPicEntity>> uploadPic(@Part MultipartBody.Part file);
+    Call<BaseEntity<UploadCmtPicEntity>> uploadPic(@Part() List<MultipartBody.Part> parts);
 
     /**
      * 添加评价
