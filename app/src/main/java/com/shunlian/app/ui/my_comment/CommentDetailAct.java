@@ -31,6 +31,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.shunlian.app.ui.my_comment.CreatCommentActivity.APPEND_COMMENT;
+import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CHANGE_COMMENT;
+
 /**
  * Created by Administrator on 2017/12/11.
  */
@@ -269,12 +272,14 @@ public class CommentDetailAct extends BaseActivity {
 
     @OnClick(R.id.mtv_append)
     public void appendComment(){
-        ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+        ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb, data.title, data.price, data.comment_id);
+        CreatCommentActivity.startAct(this, entity, APPEND_COMMENT);
     }
 
     @OnClick(R.id.mtv_good_comment)
     public void goodComment(){
         ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+        CreatCommentActivity.startAct(this, entity, CHANGE_COMMENT);
     }
 
 
