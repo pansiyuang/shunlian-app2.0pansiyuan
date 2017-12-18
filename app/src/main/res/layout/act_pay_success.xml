@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.shunlian.app.ui.order.OrderDetailAct">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@mipmap/bg_pay_success">
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_title"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="20dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_close"
+                android:layout_width="9dp"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_common_back_white" />
+
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingRight="8dp">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_dot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="4dp"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_common_more_white" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="16dp"
+                    android:layout_height="12dp"
+                    android:layout_above="@id/miv_dot"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/bg_message_more_white"
+                    android:gravity="center"
+                    android:text="9+"
+                    android:textColor="@color/pink_color"
+                    android:textSize="9sp" />
+            </RelativeLayout>
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_paysuccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mrlayout_title"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/img_pay_success"
+            android:layout_marginTop="-20dp"/>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/miv_paysuccess"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_yuan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/common_yuan"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="456.9890"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/mllayout_price"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/pay_chakandingdan"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/pay_dianpushouye"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="13dp"
+        android:text="@string/pay_nikeneng"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_goods"/>
+</com.shunlian.app.widget.MyLinearLayout>

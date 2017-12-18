@@ -112,14 +112,14 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
             viewHolder.recycler_comment.setNestedScrollingEnabled(false);
             viewHolder.recycler_comment.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(context, 4), 0, 0));
 
-            if (commentType == APPEND_COMMENT) {
+            if (commentType == APPEND_COMMENT || commentType == CHANGE_COMMENT) {
                 viewHolder.ll_comment_score.setVisibility(View.GONE);
             } else {
                 viewHolder.ll_comment_score.setVisibility(View.VISIBLE);
             }
 
             if (position == 0) {
-                if (commentType == APPEND_COMMENT) {
+                if (commentType == APPEND_COMMENT || commentType == CHANGE_COMMENT) {
                     viewHolder.edt_comment.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

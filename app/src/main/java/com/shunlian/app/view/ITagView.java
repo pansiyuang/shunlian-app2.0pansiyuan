@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.TagEntity;
 
 /**
@@ -13,4 +14,5 @@ public interface ITagView extends IView {
     void delSuccess();
 
     void delFail(String errorStr);
+
 }
