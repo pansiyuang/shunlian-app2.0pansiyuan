@@ -50,7 +50,7 @@
                 android:layout_above="@id/miv_dot"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="1dp"
-                android:background="@mipmap/bg_common_more"
+                android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
                 android:text="9+"
                 android:textColor="@color/white"

@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.shunlian.app.R;
@@ -196,8 +197,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private GridLayoutManager babyManager, discountManager;
     private boolean isFocus;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
+        intent.putExtra("storeId",storeId);
         context.startActivity(intent);
     }
 
@@ -276,6 +278,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     protected void initData() {
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("storeId"))){
+            storeId=getIntent().getStringExtra("storeId");
+        }
         storePresenter = new StorePresenter(this, this, storeId);
     }
 

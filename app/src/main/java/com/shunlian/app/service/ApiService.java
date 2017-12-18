@@ -41,6 +41,7 @@ import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -550,13 +551,6 @@ public interface ApiService {
     @POST("store/businessLicense")
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
-    /**
-     * 订单列表
-     * @param map
-     * @return
-     */
-    @GET("personalcenter/orderlist")
-    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String, String> map);
 
 
     /**
@@ -605,4 +599,15 @@ public interface ApiService {
      */
     @GET("member/comment/mixed_list")
     Call<BaseEntity<EmptyEntity>> mixed_list();
+    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
+
+
+    /**
+     * 订单详情
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/orderdetail")
+    Call<BaseEntity<OrderdetailEntity>> orderdetail(@QueryMap Map<String,String> map);
+
 }

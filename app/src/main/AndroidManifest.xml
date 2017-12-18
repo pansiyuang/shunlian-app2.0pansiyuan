@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -140,9 +140,10 @@
             android:name=".ui.my_comment.CreatCommentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my_comment.CommentDetailAct"
+
+        <activity android:name=".ui.my_comment.CommentDetailAct"
             android:exported="false"
+            android:screenOrientation="portrait" />
             android:screenOrientation="portrait" />
 
         <activity
@@ -154,11 +155,13 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
+
         <activity
             android:name=".ui.confirm_order.SearchOrderActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.my_comment.LookBigImgAct"
             android:exported="false"
@@ -171,6 +174,9 @@
             android:name=".ui.confirm_order.SearchOrderResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.order.OrderDetailAct"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
