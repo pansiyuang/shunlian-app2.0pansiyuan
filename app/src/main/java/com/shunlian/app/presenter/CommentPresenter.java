@@ -55,7 +55,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
     public void uploadPic(String picPath) {
         File file = new File(picPath);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
         Call<BaseEntity<UploadCmtPicEntity>> call = getAddCookieApiService().uploadPic(body);
         getNetData(true, call, new SimpleNetDataCallback<BaseEntity<UploadCmtPicEntity>>() {
