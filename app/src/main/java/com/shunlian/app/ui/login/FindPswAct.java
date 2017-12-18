@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterTwoAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;

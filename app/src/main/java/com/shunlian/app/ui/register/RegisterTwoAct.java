@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
@@ -107,11 +108,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(String content) {
                 mCode = content;
-                if (!smsCode.equals(content)){
-                    Common.staticToast(getString(R.string.RegisterTwoAct_shyzmcw));
-                }else {
+//                if (!smsCode.equals(content)){
+//                    Common.staticToast(getString(R.string.RegisterTwoAct_shyzmcw));
+//                }else {
                     setEdittextFocusable(true,et_pwd);
-                }
+//                }
             }
         });
 
@@ -339,10 +340,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                     Common.staticToast(getString(R.string.RegisterTwoAct_mmbnwk));
                     return;
                 }
-                if (TextUtils.isEmpty(nickname)){
+                if (TextUtils.isEmpty(nickname)&&!TYPE_FIND_PSW.equals(currentType)){
                     Common.staticToast(getString(R.string.RegisterTwoAct_qsznc));
                     return;
                 }
+                LogUtil.httpLogW("TYPE_FIND_PSW："+TYPE_FIND_PSW);
                 if (TYPE_FIND_PSW.equals(currentType)) {
                     registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
