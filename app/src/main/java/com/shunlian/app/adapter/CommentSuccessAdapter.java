@@ -109,14 +109,14 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mHolder.mll_content.setVisibility(View.GONE);
             mHolder.line_bottom.setVisibility(View.GONE);
             mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
-                    .setText("您还没有需要追评的商品").setButtonText("");
+                    .setText(getString(R.string.no_comment_goods)).setButtonText("");
             return;
         }
         CommentSuccessEntity.Comment comment = lists.get(position - 1);
 
         if (position == 1 && mCommentSize != 0) {
             mHolder.line.setVisibility(View.GONE);
-            mHolder.mtv_title.setText("接着评下去");
+            mHolder.mtv_title.setText(getString(R.string.comment_next));
             mHolder.line_bottom.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
@@ -127,7 +127,7 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mHolder.mtv_title.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
-            mHolder.mtv_go_comment.setText("去评价");
+            mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
 
         } else if (position == mCommentSize) {
             mHolder.line.setVisibility(View.GONE);
@@ -135,7 +135,7 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mHolder.mtv_title.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
-            mHolder.mtv_go_comment.setText("去评价");
+            mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
         } else if (position == mCommentSize + 1) {
             if (mCommentSize == 0){
                 mHolder.line.setVisibility(View.GONE);
@@ -143,17 +143,17 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
                 mHolder.line.setVisibility(View.VISIBLE);
             }
             mHolder.line_bottom.setVisibility(View.GONE);
-            mHolder.mtv_title.setText("这些商品可追加");
+            mHolder.mtv_title.setText(getString(R.string.this_append_comment));
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.value_FEEAEA));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
-            mHolder.mtv_go_comment.setText("去追评");
+            mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
         } else {
             mHolder.line.setVisibility(View.GONE);
             mHolder.line_bottom.setVisibility(View.GONE);
             mHolder.mtv_title.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.value_FEEAEA));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
-            mHolder.mtv_go_comment.setText("去追评");
+            mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
         }
 
         mHolder.mtv_content.setText(comment.title);

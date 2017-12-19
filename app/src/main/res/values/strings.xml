@@ -237,10 +237,11 @@
     <!--我的评价-->
     <string name="my_comment">我的评价</string>
     <string name="all_comment">全部评价</string>
-    <string name="append_comment">等待追评</string>
+    <string name="wait_append_comment">等待追评</string>
     <string name="comment_detail">评价详情</string>
     <string name="comment_detail1">评价详情：</string>
     <string name="append_comment_write">写追评</string>
+    <string name="revise_the_praise">改为好评</string>
     <string name="zan_count">点赞数：</string>
     <string name="seller_reply">商家回复</string>
     <string name="already_comment">已追评</string>
@@ -251,6 +252,13 @@
     <string name="logistics_service">物流服务：</string>
     <string name="consistent_description">描述相符：</string>
     <string name="comment_release">发布</string>
+    <string name="comment_success">评价成功</string>
+    <string name="append_comment_title">以下商品您还没有进行追评，赶紧追评一下吧</string>
+    <string name="comment_next">接着评下去</string>
+    <string name="no_comment_goods">您还没有需要追评的商品</string>
+    <string name="go_comment">去评价</string>
+    <string name="go_append_comment">去追评</string>
+    <string name="this_append_comment">这些商品可追加</string>
 
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>
@@ -264,4 +272,21 @@
     <string name="order_quxiaodingdan">取消订单</string>
     <string name="order_fukuan">付款</string>
     <string name="order_wuliu">查看物流</string>
+
+    <!--我的订单-->
+    <string name="my_order">我的订单</string>
+    <string name="all">全部</string>
+    <string name="wait_pay">待付款</string>
+    <string name="wait_send">待发货</string>
+    <string name="wait_receive">待收货</string>
+    <string name="wait_comment">待评价</string>
+    <string name="no_order_info">暂无订单信息</string>
+    <string name="no_more_order">您已经没有更多订单了</string>
+    <string name="freight">（含运费￥%s）</string>
+    <string name="contact_seller">联系商家</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="remind_send">提醒发货</string>
+    <string name="extend_the_collection">延长收货</string>
+    <string name="confirm_goods">确认收货</string>
+    <string name="append_comment">追评</string>
 </resources>

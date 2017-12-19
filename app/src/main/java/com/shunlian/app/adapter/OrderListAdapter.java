@@ -12,13 +12,17 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.my_comment.CreatCommentActivity;
+import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,12 +36,14 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
     private final int pink_color;
     private final int new_gray;
     private final int strokeWidth;
+    private AllFrag mAllFrag;
 
-    public OrderListAdapter(Context context, boolean isShowFooter, List<MyOrderEntity.Orders> lists) {
+    public OrderListAdapter(Context context, boolean isShowFooter, List<MyOrderEntity.Orders> lists, AllFrag allFrag) {
         super(context, isShowFooter, lists);
+        mAllFrag = allFrag;
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
-        if (context == null){
+        if (context == null) {
             context = Common.getApplicationContext();
         }
         strokeWidth = TransformUtil.dip2px(context, 0.5f);
@@ -66,7 +72,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setText("您已经没有更多订单了");
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_order));
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
@@ -85,21 +91,21 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         mHolder.mtv_storeName.setText(orders.store_name);
         mHolder.mtv_status.setText(orders.status_text);
         String format = getString(R.string.all_goods);
-        mHolder.mtv_goods_count.setText(String.format(format,orders.qty));
+        mHolder.mtv_goods_count.setText(String.format(format, orders.qty));
         SpannableStringBuilder ssb = Common.dotAfterSmall(getString(R.string.rmb) + orders.total_amount, 11);
         mHolder.mtv_total_price.setText(ssb);
-        String formatFreight = "（含运费￥%s）";
-        mHolder.mtv_freight.setText(String.format(formatFreight,orders.shipping_fee));
+        String formatFreight = getString(R.string.freight);
+        mHolder.mtv_freight.setText(String.format(formatFreight, orders.shipping_fee));
 
-        setShowStatus(mHolder,orders.status,orders.is_append);
+        setShowStatus(mHolder, orders.status, orders.is_append);
 
-        OrderGoodsAdapter adapter = new OrderGoodsAdapter(context,orders.order_goods);
+        OrderGoodsAdapter adapter = new OrderGoodsAdapter(context, orders.order_goods);
         mHolder.recy_view.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int posi) {
-                if (listener != null){
-                    listener.onItemClick(view,position);
+                if (listener != null) {
+                    listener.onItemClick(view, position);
                 }
             }
         });
@@ -110,13 +116,13 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         GradientDrawable t1Dackground;
         GradientDrawable t2Dackground;
         GradientDrawable t3Dackground;
-        switch (status){
+        switch (status) {
             case "-1":
                 mHolder.mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
-                t1Dackground.setStroke(strokeWidth,new_gray);
+                t1Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title1.setTextColor(new_gray);
-                mHolder.mtv_title1.setText("联系商家");
+                mHolder.mtv_title1.setText(getString(R.string.contact_seller));
 
                 mHolder.mtv_title2.setVisibility(View.GONE);
                 mHolder.mtv_title3.setVisibility(View.GONE);
@@ -124,28 +130,28 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             case "0":
                 mHolder.mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
-                t1Dackground.setStroke(strokeWidth,new_gray);
+                t1Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title1.setTextColor(new_gray);
-                mHolder.mtv_title1.setText("联系商家");
+                mHolder.mtv_title1.setText(getString(R.string.contact_seller));
 
                 mHolder.mtv_title2.setVisibility(View.VISIBLE);
                 t2Dackground = (GradientDrawable) mHolder.mtv_title2.getBackground();
-                t2Dackground.setStroke(strokeWidth,new_gray);
+                t2Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title2.setTextColor(new_gray);
-                mHolder.mtv_title2.setText("取消订单");
+                mHolder.mtv_title2.setText(getString(R.string.cancel_order));
 
                 mHolder.mtv_title3.setVisibility(View.VISIBLE);
                 t3Dackground = (GradientDrawable) mHolder.mtv_title3.getBackground();
-                t3Dackground.setStroke(strokeWidth,pink_color);
+                t3Dackground.setStroke(strokeWidth, pink_color);
                 mHolder.mtv_title3.setTextColor(pink_color);
-                mHolder.mtv_title3.setText("付款");
+                mHolder.mtv_title3.setText(getString(R.string.order_fukuan));
                 break;
             case "1":
                 mHolder.mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
-                t1Dackground.setStroke(strokeWidth,new_gray);
+                t1Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title1.setTextColor(new_gray);
-                mHolder.mtv_title1.setText("提醒发货");
+                mHolder.mtv_title1.setText(getString(R.string.remind_send));
 
                 mHolder.mtv_title2.setVisibility(View.GONE);
                 mHolder.mtv_title3.setVisibility(View.GONE);
@@ -153,52 +159,52 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             case "2":
                 mHolder.mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
-                t1Dackground.setStroke(strokeWidth,new_gray);
+                t1Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title1.setTextColor(new_gray);
-                mHolder.mtv_title1.setText("延长收货");
+                mHolder.mtv_title1.setText(getString(R.string.extend_the_collection));
 
                 mHolder.mtv_title2.setVisibility(View.VISIBLE);
                 t2Dackground = (GradientDrawable) mHolder.mtv_title2.getBackground();
-                t2Dackground.setStroke(strokeWidth,new_gray);
+                t2Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title2.setTextColor(new_gray);
-                mHolder.mtv_title2.setText("查看物流");
+                mHolder.mtv_title2.setText(getString(R.string.order_wuliu));
 
                 mHolder.mtv_title3.setVisibility(View.VISIBLE);
                 t3Dackground = (GradientDrawable) mHolder.mtv_title3.getBackground();
-                t3Dackground.setStroke(strokeWidth,pink_color);
+                t3Dackground.setStroke(strokeWidth, pink_color);
                 mHolder.mtv_title3.setTextColor(pink_color);
-                mHolder.mtv_title3.setText("确认收货");
+                mHolder.mtv_title3.setText(getString(R.string.confirm_goods));
                 break;
             case "3":
                 mHolder.mtv_title1.setVisibility(View.GONE);
 
                 mHolder.mtv_title2.setVisibility(View.VISIBLE);
                 t2Dackground = (GradientDrawable) mHolder.mtv_title2.getBackground();
-                t2Dackground.setStroke(strokeWidth,new_gray);
+                t2Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title2.setTextColor(new_gray);
-                mHolder.mtv_title2.setText("查看物流");
+                mHolder.mtv_title2.setText(getString(R.string.order_wuliu));
 
                 mHolder.mtv_title3.setVisibility(View.VISIBLE);
                 t3Dackground = (GradientDrawable) mHolder.mtv_title3.getBackground();
-                t3Dackground.setStroke(strokeWidth,pink_color);
+                t3Dackground.setStroke(strokeWidth, pink_color);
                 mHolder.mtv_title3.setTextColor(pink_color);
-                mHolder.mtv_title3.setText("评价");
+                mHolder.mtv_title3.setText(getString(R.string.comment));
                 break;
             case "4":
                 mHolder.mtv_title1.setVisibility(View.GONE);
 
                 t2Dackground = (GradientDrawable) mHolder.mtv_title2.getBackground();
-                t2Dackground.setStroke(strokeWidth,new_gray);
+                t2Dackground.setStroke(strokeWidth, new_gray);
                 mHolder.mtv_title2.setTextColor(new_gray);
-                mHolder.mtv_title2.setText("查看物流");
+                mHolder.mtv_title2.setText(getString(R.string.order_wuliu));
 
-                if ("1".equals(is_append)){
+                if ("1".equals(is_append)) {
                     mHolder.mtv_title3.setVisibility(View.VISIBLE);
                     t3Dackground = (GradientDrawable) mHolder.mtv_title3.getBackground();
-                    t3Dackground.setStroke(strokeWidth,pink_color);
+                    t3Dackground.setStroke(strokeWidth, pink_color);
                     mHolder.mtv_title3.setTextColor(pink_color);
-                    mHolder.mtv_title3.setText("追评");
-                }else {
+                    mHolder.mtv_title3.setText(getString(R.string.append_comment));
+                } else {
                     mHolder.mtv_title3.setVisibility(View.GONE);
                 }
                 break;
@@ -255,7 +261,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             recy_view.setLayoutManager(manager);
 
             int space = TransformUtil.dip2px(context, 15);
-            recy_view.addItemDecoration(new VerticalItemDecoration(space,0,0));
+            recy_view.addItemDecoration(new VerticalItemDecoration(space, 0, 0));
         }
 
         /**
@@ -266,11 +272,12 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         @Override
         public void onClick(View v) {
             CharSequence text = null;
-            switch (v.getId()){
+            MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+            switch (v.getId()) {
                 case R.id.ll_rootView:
                 case R.id.mtv_status:
-                    if (listener != null){
-                        listener.onItemClick(v,getAdapterPosition());
+                    if (listener != null) {
+                        listener.onItemClick(v, getAdapterPosition());
                     }
                     break;
                 case R.id.mllayout_store:
@@ -278,35 +285,57 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     break;
                 case R.id.mtv_title1:
                     text = mtv_title1.getText();
-                    if ("联系商家".equals(text)){
-//                        Common.staticToast(text.toString());
-                    }else if ("提醒发货".equals(text)){
-//                        Common.staticToast(text.toString());
-                    }else if ("延长收货".equals(text)){
+                    if (getString(R.string.contact_seller).equals(text)) {//联系商家
+
+                    } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
+                        mAllFrag.remindseller(orders.id);
+                    } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
+                        mAllFrag.postpone(orders.id);
                     }
-                    Common.staticToast(text.toString());
+
                     break;
                 case R.id.mtv_title2:
                     text = mtv_title2.getText();
-                    if ("取消订单".equals(text)){
-
-                    }else if ("查看物流".equals(text)){
-                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-                        OrderLogisticsActivity.startAct(context,orders.id);
+                    if (getString(R.string.cancel_order).equals(text)) {//取消订单
+                        mAllFrag.cancleOrder(orders.id);
+                    } else if (getString(R.string.order_wuliu).equals(text)) {
+//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                        OrderLogisticsActivity.startAct(context, orders.id);
                     }
-                    Common.staticToast(text.toString());
                     break;
                 case R.id.mtv_title3:
                     text = mtv_title3.getText();
-                    if ("付款".equals(text)){
+                    if (getString(R.string.order_fukuan).equals(text)) {//付款
 
-                    }else if ("确认收货".equals(text)){
+                    } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
-                    }else if ("评价".equals(text)){
-                        
-                    }else if ("追评".equals(text)){
+                    } else if (getString(R.string.comment).equals(text)) {
+
+//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                        List<ReleaseCommentEntity> entities = new ArrayList<>();
+                        List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
+                        for (int i = 0; i < order_goods.size(); i++) {
+                            MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
+                            ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.id,
+                                    bean.thumb, bean.title, bean.price, bean.goods_id);
+                            entities.add(entity);
+                        }
+                        CreatCommentActivity.startAct(context, entities, CreatCommentActivity.CREAT_COMMENT);
+
+                    } else if (getString(R.string.append_comment).equals(text)) {
+
+//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                        List<ReleaseCommentEntity> entities = new ArrayList<>();
+                        List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
+                        for (int i = 0; i < order_goods.size(); i++) {
+                            MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
+                            ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb,
+                                    bean.title, bean.price, bean.comment_id);
+                            entities.add(entity);
+                        }
+                        CreatCommentActivity.startAct(context, entities, CreatCommentActivity.APPEND_COMMENT);
+
                     }
-                        Common.staticToast(text.toString());
                     break;
             }
         }

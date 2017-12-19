@@ -38,10 +38,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     private OrderListPresenter mPresenter;
     private int id;
 
-    public static AllFrag getInstance(int id){
+    public static AllFrag getInstance(int id) {
         AllFrag allFrag = new AllFrag();
         Bundle bundle = new Bundle();
-        bundle.putInt("id",id);
+        bundle.putInt("id", id);
         allFrag.setArguments(bundle);
         return allFrag;
     }
@@ -55,7 +55,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.frag_order_list,container,false);
+        return inflater.inflate(R.layout.frag_order_list, container, false);
     }
 
     @Override
@@ -66,10 +66,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null){
+                if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
-                        if (mPresenter != null){
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (mPresenter != null) {
                             mPresenter.onRefresh();
                         }
                     }
@@ -93,10 +93,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     public void fetchData() {
         adapter = null;
         recy_view.scrollToPosition(0);
-        if (ordersLists != null){
+        if (ordersLists != null) {
             ordersLists.clear();
         }
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.detachView();
         }
         requestData(id);
@@ -132,17 +132,17 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     public void orderList(List<MyOrderEntity.Orders> orders, int page, int allPage) {
-        if (orders != null){
+        if (orders != null) {
             ordersLists.addAll(orders);
         }
         if (adapter == null) {
-            adapter = new OrderListAdapter(baseActivity, true, ordersLists);
+            adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
             recy_view.setAdapter(adapter);
-            adapter.setPageLoading(page,allPage);
+            adapter.setPageLoading(page, allPage);
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
-                    if (mPresenter != null){
+                    if (mPresenter != null) {
                         mPresenter.onRefresh();
                     }
                 }
@@ -155,13 +155,13 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                     OrderDetailAct.startAct(baseActivity, orders1.id);
                 }
             });
-        }else {
-            adapter.setPageLoading(page,allPage);
+        } else {
+            adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
-        if (isEmpty(ordersLists)){
+        if (isEmpty(ordersLists)) {
             empty();
-        }else {
+        } else {
             recy_view.setVisibility(View.VISIBLE);
             nei_empty.setVisibility(View.GONE);
         }
@@ -174,16 +174,16 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     public void showFailureView(int request_code) {
-        if (request_code == OrderListPresenter.LOAD_CODE){
-            if (adapter != null){
+        if (request_code == OrderListPresenter.LOAD_CODE) {
+            if (adapter != null) {
                 adapter.loadFailure();
             }
-        }else if (request_code == OrderListPresenter.OTHER_CODE){
+        } else if (request_code == OrderListPresenter.OTHER_CODE) {
             recy_view.setVisibility(View.GONE);
             nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mPresenter != null){
+                    if (mPresenter != null) {
                         requestData(id);
                     }
                 }
@@ -199,15 +199,45 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     public void showDataEmptyView(int request_code) {
-        if (request_code == OrderListPresenter.OTHER_CODE){
+        if (request_code == OrderListPresenter.OTHER_CODE) {
             empty();
         }
     }
 
-    private void empty(){
+    private void empty() {
         recy_view.setVisibility(View.GONE);
         nei_empty.setVisibility(View.VISIBLE);
         nei_empty.setImageResource(R.mipmap.img_empty_dingdan)
-                .setText("暂无订单信息").setButtonText("");
+                .setText(getString(R.string.no_order_info)).setButtonText("");
+    }
+
+    /**
+     * 取消订单
+     * @param order_id
+     */
+    public void cancleOrder(String order_id) {
+        if (mPresenter != null){
+            mPresenter.cancleOrder(order_id);
+        }
+    }
+
+    /**
+     * 提醒发货
+     * @param order_id
+     */
+    public void remindseller(String order_id) {
+        if (mPresenter != null){
+            mPresenter.remindseller(order_id);
+        }
+    }
+
+    /**
+     * 延长收货
+     * @param order_id
+     */
+    public void postpone(String order_id) {
+        if (mPresenter != null){
+            mPresenter.postpone(order_id);
+        }
     }
 }

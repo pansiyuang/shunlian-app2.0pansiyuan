@@ -41,6 +41,8 @@
         <com.shunlian.app.widget.MyImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitStart"
             android:src="@mipmap/img_common_viewarrow"
             app:iv_control_adapter="true"
             app:iv_margin_left="10" />
@@ -50,7 +52,6 @@
             android:id="@+id/mtv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:textColor="@color/pink_color"
             android:textSize="13sp" />
