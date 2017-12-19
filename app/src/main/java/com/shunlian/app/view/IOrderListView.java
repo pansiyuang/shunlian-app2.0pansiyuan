@@ -17,4 +17,15 @@ public interface IOrderListView extends IView {
      * @param allPage
      */
     void orderList(List<MyOrderEntity.Orders> orders,int page,int allPage);
+
+    /**
+     * 通知刷新列表
+     */
+    void notifRefreshList(int status);
+
+    /**
+     * 刷新订单
+     * @param orders
+     */
+    void refreshOrder(MyOrderEntity.Orders orders);
 }

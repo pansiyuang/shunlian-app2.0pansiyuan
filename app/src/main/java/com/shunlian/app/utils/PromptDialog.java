@@ -3,11 +3,13 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.widget.MyTextView;
 
 /**
  * Created by MBENBEN on 2016/8/13 10 : 46.
@@ -20,6 +22,7 @@ public class PromptDialog {
     private TextView tvSure;
     private TextView tvCancle;
     private TextView tvMessage;
+    private MyTextView mtv_describe;
 
     public PromptDialog(Activity ctx) {
         this.ctx = ctx;
@@ -33,6 +36,7 @@ public class PromptDialog {
         tvSure = (TextView) logoutDialog.findViewById(R.id.tv_sure);
         tvCancle = (TextView) logoutDialog.findViewById(R.id.tv_cancel);
         tvMessage = (TextView) logoutDialog.findViewById(R.id.tv_message);
+        mtv_describe = (MyTextView) logoutDialog.findViewById(R.id.mtv_describe);
     }
 
     public void setTvSureText(CharSequence text) {
@@ -60,6 +64,17 @@ public class PromptDialog {
     public void setTvMessage(CharSequence text) {
         if (tvMessage != null) {
             tvMessage.setText(text);
+        }
+    }
+
+    public void setTvDescribe(CharSequence text){
+        if (mtv_describe != null){
+            if (TextUtils.isEmpty(text)){
+                mtv_describe.setVisibility(View.GONE);
+                return;
+            }
+            mtv_describe.setVisibility(View.VISIBLE);
+            mtv_describe.setText(text);
         }
     }
 
@@ -113,6 +128,22 @@ public class PromptDialog {
                                                  CharSequence tvCancleText, View.OnClickListener cancleListener) {
         setTvMessage(titel);
         setTvSureText(tvSureText);
+        if (tvSure != null) {
+            tvSure.setOnClickListener(sureListener);
+        }
+        setTvCancleText(tvCancleText);
+        if (tvCancle != null) {
+            tvCancle.setOnClickListener(cancleListener);
+        }
+        return this;
+    }
+
+    public PromptDialog setSureAndCancleListener(CharSequence titel,CharSequence describe, CharSequence tvSureText,
+                                                 View.OnClickListener sureListener,
+                                                 CharSequence tvCancleText, View.OnClickListener cancleListener) {
+        setTvMessage(titel);
+        setTvSureText(tvSureText);
+        setTvDescribe(describe);
         if (tvSure != null) {
             tvSure.setOnClickListener(sureListener);
         }

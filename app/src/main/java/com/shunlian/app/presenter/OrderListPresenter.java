@@ -3,9 +3,10 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IOrderListView;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
     private String status = all;
     public static final int LOAD_CODE = 100;//加载更多的code
     public static final int OTHER_CODE = 200;//其他code
+    public static final int CANCLE_ORDER = 10;//取消订单状态
 
 
     public OrderListPresenter(Context context, IOrderListView iView) {
@@ -135,15 +137,21 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
     /**
      * 取消订单
      */
-    public void cancleOrder(String order_id){
+    public void cancleOrder(String order_id,int reason){
         Map<String,String> map = new HashMap<>();
         map.put("order_id",order_id);
+        map.put("reason",String.valueOf(reason));
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().cancleOrder(getRequestBody(map));
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().cancleOrder(getRequestBody(map));
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null){
+                    Common.staticToast(data.message);
+                }
+                iView.notifRefreshList(CANCLE_ORDER);
             }
         });
     }
@@ -156,11 +164,15 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
         Map<String,String> map = new HashMap<>();
         map.put("order_id",order_id);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().remindseller(getRequestBody(map));
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().remindseller(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null){
+                    Common.staticToast(data.message);
+                }
             }
         });
     }
@@ -173,11 +185,33 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
         Map<String,String> map = new HashMap<>();
         map.put("order_id",order_id);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().postpone(getRequestBody(map));
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().postpone(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null){
+                    Common.staticToast(data.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * 刷新某个订单
+     * @param order_id
+     */
+    public void refreshOrder(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<MyOrderEntity.Orders>> baseEntityCall = getApiService().refreshOrder(map);
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<MyOrderEntity.Orders>>(){
+            @Override
+            public void onSuccess(BaseEntity<MyOrderEntity.Orders> entity) {
+                super.onSuccess(entity);
+                iView.refreshOrder(entity.data);
             }
         });
     }

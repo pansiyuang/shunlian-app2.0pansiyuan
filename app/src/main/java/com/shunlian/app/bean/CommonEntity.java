@@ -8,4 +8,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonEntity {
     public String fid;//商品收藏id
+    public String message;
 }

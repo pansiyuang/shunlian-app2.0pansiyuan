@@ -77,12 +77,19 @@ public abstract class BaseLazyFragment extends BaseFragment {
             isDataInitiated = true;
             return true;
         }
+        //禁止懒加载
+        if (isViewInitiated && isVisibleToUser && isDataInitiated && !forceUpdate){
+            refreshData();
+        }
         return false;
     }
 
     public abstract void fetchData();
 
-
+    /**
+     *刷新数据，即禁止Fragment懒加载
+     */
+    public void refreshData(){}
 
     /**
      * 视图销毁的时候讲Fragment是否初始化的状态变为false

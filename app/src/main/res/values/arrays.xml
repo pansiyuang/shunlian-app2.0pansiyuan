@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="select_reason">
+        <item>我不想买了</item>
+        <item>信息填写错误</item>
+        <item>商家缺货</item>
+        <item>其它原因</item>
+    </string-array>
+</resources>

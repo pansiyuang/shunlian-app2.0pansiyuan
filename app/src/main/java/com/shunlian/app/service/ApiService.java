@@ -633,7 +633,7 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/cancelorder")
-    Call<BaseEntity<EmptyEntity>> cancleOrder(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> cancleOrder(@Body RequestBody body);
 
     /**
      * 提醒发货
@@ -641,7 +641,7 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/remindseller")
-    Call<BaseEntity<EmptyEntity>> remindseller(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> remindseller(@Body RequestBody body);
 
     /**
      * 延长发货
@@ -649,5 +649,15 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/postpone")
-    Call<BaseEntity<EmptyEntity>> postpone(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> postpone(@Body RequestBody body);
+
+    /**
+     * 刷新订单
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/partorderlist")
+    Call<BaseEntity<MyOrderEntity.Orders>> refreshOrder(@QueryMap Map<String,String> map);
+
+//    Call
 }

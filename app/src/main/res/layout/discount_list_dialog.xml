@@ -6,16 +6,32 @@
     android:orientation="vertical">
 
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="16dp"
-        android:text="商品优惠券"
-        android:textColor="@color/new_text"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="16dp"
+            android:text="商品优惠券"
+            android:textColor="@color/new_text"
+            android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:src="@mipmap/icon_login_delet" />
+    </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
