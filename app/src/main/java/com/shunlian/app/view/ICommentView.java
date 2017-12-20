@@ -6,6 +6,8 @@ package com.shunlian.app.view;
 
 public interface ICommentView extends IView {
 
+    void uploadProgress(int progress, String tag);
+
     void appendCommentSuccess();
 
     void appendCommentFail(String error);

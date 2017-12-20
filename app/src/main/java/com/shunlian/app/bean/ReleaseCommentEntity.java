@@ -1,6 +1,7 @@
 package com.shunlian.app.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/13.
@@ -15,6 +16,7 @@ public class ReleaseCommentEntity implements Serializable{
     public String price;
     public String goodsId;
     public String comment_id;
+    public List<ImageEntity> imgs;
 
     public ReleaseCommentEntity(String pic, String title, String price, String comment_id) {
         this.pic = pic;

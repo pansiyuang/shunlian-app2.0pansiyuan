@@ -22,14 +22,16 @@ package com.shunlian.app.bean;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * Created by zhang on 2017/4/17 12 : 01.
  */
-
-public class UploadCmtPicEntity {
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UploadPicEntity {
     public String domain;
     public List<String> relativePath;
     public List<String> newFileName;

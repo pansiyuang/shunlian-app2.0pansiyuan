@@ -17,4 +17,12 @@
         android:layout_alignParentRight="true"
         android:scaleType="centerCrop"
         android:src="@mipmap/img_shanchu" />
+
+    <ProgressBar
+        android:id="@+id/pgb_img"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
 </RelativeLayout>

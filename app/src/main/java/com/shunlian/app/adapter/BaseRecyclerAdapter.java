@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
@@ -121,6 +122,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        LogUtil.httpLogW("isShowFooter:"+isShowFooter+"======"+this.hashCode());
         if (isShowFooter) {
             int itemViewType = getItemViewType(position);
             switch (itemViewType) {

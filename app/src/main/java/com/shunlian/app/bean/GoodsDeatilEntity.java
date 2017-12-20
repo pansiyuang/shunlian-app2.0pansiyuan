@@ -23,7 +23,7 @@ public class GoodsDeatilEntity {
     public String thumb;
     public String is_fav;
     public ArrayList<String> pics;
-
+    public String has_option;
 
     public String is_new; //是否新品
     public String is_explosion;//是否爆款
