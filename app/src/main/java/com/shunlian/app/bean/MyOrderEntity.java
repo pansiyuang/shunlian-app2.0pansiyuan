@@ -57,9 +57,10 @@ public class MyOrderEntity {
         public String thumb;
         public String qty;
         public String market_price;
-        public double price;
+        public String price;
         public String sku_desc;
         public String offered;
+        public String comment_id;
 
     }
 }

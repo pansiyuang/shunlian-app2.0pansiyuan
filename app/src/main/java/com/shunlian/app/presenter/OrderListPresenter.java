@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IOrderListView;
@@ -128,5 +129,56 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
                 orderList(LOAD_CODE,LOAD_CODE,false,status,currentPage);
             }
         }
+    }
+
+
+    /**
+     * 取消订单
+     */
+    public void cancleOrder(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().cancleOrder(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+            }
+        });
+    }
+
+    /**
+     * 提醒发货
+     * @param order_id
+     */
+    public void remindseller(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().remindseller(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+            }
+        });
+    }
+
+    /**
+     * 延长收货
+     * @param order_id
+     */
+    public void postpone(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().postpone(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+            }
+        });
     }
 }

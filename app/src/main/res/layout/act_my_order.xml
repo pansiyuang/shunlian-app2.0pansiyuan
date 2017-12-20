@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="我的订单"
+            android:text="@string/my_order"
             android:textColor="@color/new_text"
             android:textSize="18dp" />
 
@@ -80,7 +80,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_all"
                 style="@style/mtv_my_order"
-                android:text="全部"
+                android:text="@string/all"
                 android:textColor="@color/pink_color" />
 
             <View
@@ -96,7 +96,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_wait_pay"
                 style="@style/mtv_my_order"
-                android:text="待付款"
+                android:text="@string/wait_pay"
                 android:textColor="@color/new_text" />
 
             <View
@@ -112,7 +112,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_wait_send"
                 style="@style/mtv_my_order"
-                android:text="待发货"
+                android:text="@string/wait_send"
                 android:textColor="@color/new_text" />
 
             <View
@@ -128,7 +128,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_wait_receive"
                 style="@style/mtv_my_order"
-                android:text="待收货"
+                android:text="@string/wait_receive"
                 android:textColor="@color/new_text" />
 
             <View
@@ -144,7 +144,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_wait_comment"
                 style="@style/mtv_my_order"
-                android:text="待评价"
+                android:text="@string/wait_comment"
                 android:textColor="@color/new_text" />
 
             <View

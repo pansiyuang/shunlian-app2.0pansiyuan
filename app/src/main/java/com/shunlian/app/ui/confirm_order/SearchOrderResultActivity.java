@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,8 +13,6 @@ import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.presenter.SearchOrderResultPresent;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ISearchResultView;
 
 import butterknife.BindView;
@@ -75,7 +72,7 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
 
     @Override
     public void getSearchResult(MyOrderEntity myOrderEntity) {
-        adapter = new OrderListAdapter(this, false, myOrderEntity.orders);
+        adapter = new OrderListAdapter(this, false, myOrderEntity.orders,null);
         recycler_result.setLayoutManager(linearLayoutManage);
         recycler_result.setAdapter(adapter);
     }

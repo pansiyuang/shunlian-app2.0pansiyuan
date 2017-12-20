@@ -627,4 +627,27 @@ public interface ApiService {
     @GET("personalcenter/orderdetail")
     Call<BaseEntity<OrderdetailEntity>> orderdetail(@QueryMap Map<String,String> map);
 
+    /**
+     * 取消订单
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/cancelorder")
+    Call<BaseEntity<EmptyEntity>> cancleOrder(@Body RequestBody body);
+
+    /**
+     * 提醒发货
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/remindseller")
+    Call<BaseEntity<EmptyEntity>> remindseller(@Body RequestBody body);
+
+    /**
+     * 延长发货
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/postpone")
+    Call<BaseEntity<EmptyEntity>> postpone(@Body RequestBody body);
 }

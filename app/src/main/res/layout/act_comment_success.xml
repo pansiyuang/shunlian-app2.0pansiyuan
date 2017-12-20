@@ -22,7 +22,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="评价成功"
+            android:text="@string/comment_success"
             android:textColor="@color/new_text"
             android:textSize="15sp" />
     </com.shunlian.app.widget.MyLinearLayout>
