@@ -1,46 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--评论-->
+<?xml version="1.0" encoding="utf-8"?><!--评论-->
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_comment_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="23"
+        app:tv_margin_top="30" />
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_comment_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/new_text"
-            android:textSize="12sp"
-            app:tv_control_adapter="true"
-            app:tv_margin_left="23"
-            app:tv_margin_top="30" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_haopinglv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:drawablePadding="3dp"
-            android:drawableRight="@mipmap/img_common_viewarrow_1"
-            android:textColor="@color/pink_color"
-            android:textSize="12sp"
-            app:tv_control_adapter="true"
-            app:tv_margin_right="23"
-            app:tv_margin_top="30" />
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_haopinglv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="3dp"
+        android:drawableRight="@mipmap/img_common_viewarrow_1"
+        android:textColor="@color/pink_color"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_right="23"
+        app:tv_margin_top="30" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recy_cardview"
-            android:layout_below="@+id/mtv_haopinglv"
-            android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_haopinglv"
+        android:overScrollMode="never"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="7.2dp"
-            android:layout_below="@+id/recy_cardview"
-            android:background="@color/white_ash" />
-    </com.shunlian.app.widget.MyRelativeLayout>
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_haopinglv"
+        android:background="@color/white"
+        android:paddingBottom="30dp"
+        android:paddingTop="15dp"
+        android:visibility="gone"
+        android:src="@mipmap/img_pingjia_quesheng" />
+
+    <View
+        android:id="@+id/view_line1"
+        android:layout_width="match_parent"
+        android:layout_height="7.2dp"
+        android:layout_below="@+id/recy_cardview"
+        android:background="@color/white_ash" />
+
+    <View
+        android:id="@+id/view_line2"
+        android:layout_width="match_parent"
+        android:layout_height="7.2dp"
+        android:visibility="gone"
+        android:layout_below="@+id/miv_empty"
+        android:background="@color/white_ash" />
+</com.shunlian.app.widget.MyRelativeLayout>
 

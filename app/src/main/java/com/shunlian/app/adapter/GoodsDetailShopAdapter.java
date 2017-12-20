@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -42,7 +44,9 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         GoodsDeatilEntity.StoreInfo.Item item = lists.get(position);
         GlideUtils.getInstance().loadImage(context,mHoler.miv_shop_head,item.thumb);
         mHoler.mtv_title.setText(item.title);
-        mHoler.mtv_price.setText("￥"+item.price);
+        SpannableStringBuilder spannableStringBuilder = Common.
+                changeTextSize(getString(R.string.rmb).concat(item.price), getString(R.string.rmb), 12);
+        mHoler.mtv_price.setText(spannableStringBuilder);
     }
 
     public class GoodsDetailShopHolder extends BaseRecyclerViewHolder{

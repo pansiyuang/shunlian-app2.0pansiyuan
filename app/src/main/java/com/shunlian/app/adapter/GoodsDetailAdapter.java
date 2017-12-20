@@ -18,6 +18,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
@@ -332,21 +333,36 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             CommntHolder mHolder = (CommntHolder) holder;
 
             final ArrayList<GoodsDeatilEntity.Comments> comments = mGoodsEntity.comments;
-            mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment),"100"));
-            mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate),"95.9"));
-            CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context,false,comments);
-            mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
-            commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    if (position >= comments.size()){
-                        valueAnimator(view, null);
-                    }else {
-                        GoodsDeatilEntity.Comments comments1 = comments.get(position);
-                        valueAnimator(view, comments1.id);
+            GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
+            String comments_num = goods_data.comments_num;
+            String star_rate =  isEmpty(goods_data.star_rate) ? "0" : goods_data.star_rate;
+            mHolder.mtv_comment_num.setText(String.format(getString(R.string.good_comment),comments_num));
+            mHolder.mtv_haopinglv.setText(String.format(getString(R.string.praise_rate),star_rate));
+
+            if (isEmpty(comments)){
+                mHolder.recy_cardview.setVisibility(View.GONE);
+                mHolder.view_line1.setVisibility(View.GONE);
+                mHolder.view_line2.setVisibility(View.VISIBLE);
+                mHolder.miv_empty.setVisibility(View.VISIBLE);
+            }else {
+                mHolder.view_line1.setVisibility(View.VISIBLE);
+                mHolder.recy_cardview.setVisibility(View.VISIBLE);
+                mHolder.miv_empty.setVisibility(View.GONE);
+                mHolder.view_line2.setVisibility(View.GONE);
+                CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context, false, comments);
+                mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
+                commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (position >= comments.size()) {
+                            valueAnimator(view, null);
+                        } else {
+                            GoodsDeatilEntity.Comments comments1 = comments.get(position);
+                            valueAnimator(view, comments1.id);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -386,6 +402,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             ActivityCouponHolder mHolder = (ActivityCouponHolder) holder;
             ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             if (vouchers != null && vouchers.size() > 0){
+                mHolder.view_coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_ling_Coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_Coupon.removeAllViews();
                 for (int i = 0; i < vouchers.size(); i++) {
@@ -401,7 +418,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         background.setColor(Color.WHITE);
                         int padding = TransformUtil.dip2px(context, 4);
                         textView.setPadding(padding, padding, padding, padding);
-                        textView.setText(getString(R.string.pull) + voucher.use_condition + getString(R.string.reduce) + voucher.denomination);
+                        textView.setText(getString(R.string.pull).concat(voucher.use_condition)
+                                .concat(getString(R.string.reduce)).concat(voucher.denomination));
                         mHolder.mll_Coupon.addView(textView);
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
                         layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
@@ -410,6 +428,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 }
 
             }else {
+                mHolder.view_coupon.setVisibility(View.GONE);
                 mHolder.mll_ling_Coupon.setVisibility(View.GONE);
             }
             mHolder.mll_act_detail.removeAllViews();
@@ -417,7 +436,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     && isEmpty(mGoodsEntity.full_discount)
                     && isEmpty(mGoodsEntity.buy_gift)){
                 mHolder.mrl_activity.setVisibility(View.GONE);
+                mHolder.view_activity.setVisibility(View.GONE);
             }else {
+                mHolder.view_activity.setVisibility(View.VISIBLE);
                 mHolder.mrl_activity.setVisibility(View.VISIBLE);
             }
             if (mGoodsEntity.full_cut != null && mGoodsEntity.full_cut.size() > 0){
@@ -433,6 +454,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 setActivityInfo(mHolder.mll_act_detail,2,mGoodsEntity.buy_gift);
             }
 
+            if (isEmpty(mGoodsEntity.combo)){
+                mHolder.mtv_combo.setVisibility(View.GONE);
+                mHolder.view_combo.setVisibility(View.GONE);
+            }else {
+                mHolder.view_combo.setVisibility(View.VISIBLE);
+                mHolder.mtv_combo.setVisibility(View.VISIBLE);
+            }
         }
     }
     /**
@@ -498,12 +526,23 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof TitleHolder){
             TitleHolder mHolder = (TitleHolder) holder;
 
-            GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
-            infoDrawable.setColor(Color.parseColor("#FB0036"));
-            mHolder.mtv_title.setText(Common.getPlaceholder(4) + mGoodsEntity.title);
-            mHolder.mtv_discount_info.setText("店铺优惠");
+
+            int pref_length = 0;
+            String is_preferential = mGoodsEntity.is_preferential;
+            if (!isEmpty(is_preferential)){
+                GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
+                infoDrawable.setColor(Color.parseColor("#FB0036"));
+                mHolder.mtv_discount_info.setText(is_preferential);
+                mHolder.mtv_discount_info.setVisibility(View.VISIBLE);
+                pref_length = is_preferential.length();
+            }else {
+                mHolder.mtv_discount_info.setVisibility(View.GONE);
+                pref_length = 0;
+            }
+            mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+
             mHolder.mtv_price.setText(mGoodsEntity.price);
-            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb) + mGoodsEntity.market_price);
+            mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
             if ("0".equals(mGoodsEntity.free_shipping)) {
                 mHolder.mtv_free_shipping.setText(getString(R.string.no_mail));
             } else {
@@ -511,8 +550,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
             GoodsDeatilEntity.GoodsData goods_data = mGoodsEntity.goods_data;
             if (goods_data != null)
-                mHolder.mtv_sales.setText(getString(R.string.sold) +
-                        goods_data.sales + getString(R.string.piece));
+                mHolder.mtv_sales.setText(String.format(getString(R.string.sold),goods_data.sales));
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
             if ("1".equals(mGoodsEntity.is_new)){
@@ -604,7 +642,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
         if (tv_select_param != null)
-            tv_select_param.setText(getString(R.string.selection)+"  "+sku.name);
+            tv_select_param.setText(getString(R.string.selection).concat("  ").concat(sku.name));
 
         if (context instanceof GoodsDetailAct){
             GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
@@ -688,6 +726,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_combo)
         MyTextView mtv_combo;
+
+        @BindView(R.id.view_coupon)
+        View view_coupon;
+
+        @BindView(R.id.view_activity)
+        View view_activity;
+
+        @BindView(R.id.view_combo)
+        View view_combo;
 
         public ActivityCouponHolder(View itemView) {
             super(itemView);
@@ -792,9 +839,19 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.recy_cardview)
         RecyclerView recy_cardview;
+
+        @BindView(R.id.miv_empty)
+        MyImageView miv_empty;
+
+        @BindView(R.id.view_line1)
+        View view_line1;
+
+        @BindView(R.id.view_line2)
+        View view_line2;
         public CommntHolder(View itemView) {
             super(itemView);
             mtv_comment_num.setOnClickListener(this);
+            miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
             LinearLayoutManager manager1 = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
@@ -867,6 +924,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_collection.setOnClickListener(this);
             mll_self_hot.setOnClickListener(this);
             mll_self_push.setOnClickListener(this);
+            miv_shop_head.setOnClickListener(this);
+            mtv_store_name.setOnClickListener(this);
+            mtv_quality_goods.setOnClickListener(this);
+            ratingBar1.setOnClickListener(this);
         }
 
         public void setCollectionState(int state){
@@ -889,6 +950,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
          */
         @Override
         public void onClick(View v) {
+            GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             switch (v.getId()){
                 case R.id.mtv_collection:
                     if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
@@ -907,13 +969,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     break;
                 case R.id.mll_self_hot:
                     setState(1);
-                    GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
                     setStoreOtherGoods(recy_view,store_info.hot);
                     break;
                 case R.id.mll_self_push:
-                    GoodsDeatilEntity.StoreInfo store_info1 = mGoodsEntity.store_info;
                     setState(2);
-                    setStoreOtherGoods(recy_view,store_info1.push);
+                    setStoreOtherGoods(recy_view,store_info.push);
+                    break;
+                case R.id.ratingBar1:
+                case R.id.miv_shop_head:
+                case R.id.mtv_store_name:
+                case R.id.mtv_quality_goods:
+                    StoreAct.startAct(context, store_info.store_id);
                     break;
             }
         }

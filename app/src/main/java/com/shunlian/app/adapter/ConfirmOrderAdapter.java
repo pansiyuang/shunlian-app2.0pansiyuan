@@ -223,8 +223,10 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     mHolder.mtv_promotion.setText(enabled.promotion_total_hint);
                 }
                 mHolder.mll_promotion.setVisibility(View.VISIBLE);
+                mHolder.line_activity.setVisibility(View.VISIBLE);
             }else {
                 mHolder.mll_promotion.setVisibility(View.GONE);
+                mHolder.line_activity.setVisibility(View.GONE);
             }
             mHolder.mtv_goods_count.setText(String.format(getString(R.string.all_goods),enabled.sub_count));
         }
@@ -294,6 +296,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
         @BindView(R.id.mtv_goods_price)
         MyTextView mtv_goods_price;
+
+        @BindView(R.id.line_activity)
+        View line_activity;
+
+
         public BuyGoodsHolder(View itemView) {
             super(itemView);
             recy_view.setNestedScrollingEnabled(false);

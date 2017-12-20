@@ -32,7 +32,9 @@ import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -48,6 +50,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -147,11 +150,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
-    private int num;
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
     private String favId;
     public int bottomListHeight;
+    private int num;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -191,7 +194,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
         rnview.setTextSize(10);
-        rnview.setNumber(0);
 
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
@@ -363,6 +365,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
         GoodsDeatilEntity.StoreInfo store_info = goodsDeatilEntity.store_info;
+        //购物车角标数字
+        String member_cart_count = isEmpty(goodsDeatilEntity.member_cart_count) ?
+                "0" : goodsDeatilEntity.member_cart_count;
+
+        num = Integer.parseInt(member_cart_count);
+        rnview.setNumber(num);
+        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
         }
@@ -757,6 +766,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             @Override
             public void onAnimationEnd(Animator animation) {
                 num++;
+                LogUtil.zhLogW("num======"+num);
                 if (rnview != null) {
                     rnview.setNumber(num - 1);
                     rnview.setTargetNumber(num);
@@ -804,5 +814,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             isNowBuy = false;
             ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
         }
+    }
+
+    @OnClick(R.id.mtv_store)
+    public void jumpStore(){
+        StoreAct.startAct(this, store_id);
     }
 }

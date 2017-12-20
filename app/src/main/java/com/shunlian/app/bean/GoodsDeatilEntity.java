@@ -25,6 +25,8 @@ public class GoodsDeatilEntity {
     public ArrayList<String> pics;
     public String has_option;
 
+    public String is_preferential;//店铺优惠  没有值的时候为空字符串
+    public String member_cart_count;//详情页用户购物车角标数字
     public String is_new; //是否新品
     public String is_explosion;//是否爆款
     public String is_hot;//是否热卖
@@ -159,6 +161,8 @@ public class GoodsDeatilEntity {
         public String views;
         //好评率
         public String star_rate;
+        //该商品评论数
+        public String comments_num;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

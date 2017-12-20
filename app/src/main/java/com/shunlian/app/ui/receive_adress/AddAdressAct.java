@@ -68,6 +68,8 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         mtv_delete.setVisibility(View.GONE);
         mtv_title.setText(getStringResouce(R.string.address_add));
         if (getIntent().getSerializableExtra("address") != null) {
