@@ -30,6 +30,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
     public static final int LOAD_CODE = 100;//加载更多的code
     public static final int OTHER_CODE = 200;//其他code
     public static final int CANCLE_ORDER = 10;//取消订单状态
+    public static final int CONFIRM_RECEIPT = 20;//确认收货
 
 
     public OrderListPresenter(Context context, IOrderListView iView) {
@@ -194,6 +195,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
+                iView.notifRefreshList(CANCLE_ORDER);
             }
         });
     }
@@ -212,6 +214,28 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
             public void onSuccess(BaseEntity<MyOrderEntity.Orders> entity) {
                 super.onSuccess(entity);
                 iView.refreshOrder(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 确认收货
+     * @param order_id
+     */
+    public void confirmreceipt(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().confirmreceipt(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null){
+                    Common.staticToast(data.message);
+                }
+                iView.notifRefreshList(CONFIRM_RECEIPT);
             }
         });
     }

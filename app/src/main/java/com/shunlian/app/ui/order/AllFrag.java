@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -177,6 +178,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
             adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
+        emptyPage();
+    }
+
+    private void emptyPage() {
         if (isEmpty(ordersLists)) {
             empty();
         } else {
@@ -192,9 +197,13 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     public void notifRefreshList(int status) {
-        if (status == OrderListPresenter.CANCLE_ORDER){
-            String id = ordersLists.get(refreshPosition).id;
-            refreshOrder(id);
+//        if (status == OrderListPresenter.CANCLE_ORDER){
+//        }
+        String id = ordersLists.get(refreshPosition).id;
+        refreshOrder(id);
+        if (status == OrderListPresenter.CONFIRM_RECEIPT){
+            // TODO: 2017/12/20 确认收货界面 
+            SuccessfulTradeAct.startAct(baseActivity);
         }
     }
 
@@ -233,7 +242,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                 }
             }
         }
-
+        emptyPage();
     }
 
     /**
@@ -310,9 +319,23 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         }
     }
 
+    /**
+     * 刷新指定订单
+     * @param order_id
+     */
     public void refreshOrder(String order_id){
         if (mPresenter != null){
             mPresenter.refreshOrder(order_id);
+        }
+    }
+
+    /**
+     * 确认收货
+     * @param order_id
+     */
+    public void confirmreceipt(String order_id){
+        if (mPresenter != null){
+            mPresenter.confirmreceipt(order_id);
         }
     }
 }

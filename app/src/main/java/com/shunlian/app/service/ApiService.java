@@ -659,5 +659,9 @@ public interface ApiService {
     @GET("personalcenter/partorderlist")
     Call<BaseEntity<MyOrderEntity.Orders>> refreshOrder(@QueryMap Map<String,String> map);
 
-//    Call
+    /**
+     *确认收货
+     */
+    @POST("personalcenter/confirmreceipt")
+    Call<BaseEntity<CommonEntity>> confirmreceipt(@Body RequestBody body);
 }

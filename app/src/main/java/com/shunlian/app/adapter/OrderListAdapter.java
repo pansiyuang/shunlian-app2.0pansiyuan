@@ -325,6 +325,8 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
 
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
+                        confirmreceipt(orders);
+
                     } else if (getString(R.string.comment).equals(text)) {//评价
 
                         //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
@@ -354,6 +356,28 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     }
                     break;
             }
+        }
+
+        /**
+         * 确认收货
+         * @param orders
+         */
+        public void confirmreceipt(final MyOrderEntity.Orders orders) {
+            final PromptDialog promptDialog = new PromptDialog((Activity) context);
+            promptDialog.setSureAndCancleListener("要确认收货吗？", "确认收货后卖家将收到您的货款", "确认收货", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAllFrag != null){
+                        mAllFrag.confirmreceipt(orders.id);
+                    }
+                    promptDialog.dismiss();
+                }
+            }, "取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    promptDialog.dismiss();
+                }
+            }).show();
         }
 
         /*
