@@ -13,14 +13,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,21 +39,35 @@ import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CREAT_COMMENT;
 
 public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntity> {
 
-    private static final int FOOTER = 2;
-    private List<String> imgList;
+    private static final int FOOTER_COMMENT = 3;
     private int commentType;
     private OnCommentContentCallBack mCallBack;
+    private HashMap<Integer, SingleImgAdapter> mAdapters;
+
+    public void addImages(List<ImageEntity> pathes, int position) {
+        if (mAdapters.size() != 0) {
+            SingleImgAdapter imgAdapter = mAdapters.get(position);
+            imgAdapter.addImages(pathes);
+        }
+    }
+
+    public void updateProgress(int p1, String tag, int progress) {
+        if (mAdapters.size() != 0) {
+            SingleImgAdapter imgAdapter = mAdapters.get(p1);
+            imgAdapter.updateItemProgress(tag, progress);
+        }
+    }
 
     public CreatCommentAdapter(Context context, boolean isShowFooter, List<ReleaseCommentEntity> lists, int type) {
         super(context, isShowFooter, lists);
-        imgList = new ArrayList<>();
         this.commentType = type;
+        mAdapters = new HashMap<>();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case FOOTER:
+            case FOOTER_COMMENT:
                 View inflate = LayoutInflater.from(context).inflate(R.layout.foot_creat_comment, parent, false);
                 return new FootViewHolder(inflate);
             default:
@@ -61,7 +79,7 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
     public int getItemViewType(int position) {
         if (commentType == CREAT_COMMENT) {
             if (position + 1 == getItemCount())
-                return FOOTER;
+                return FOOTER_COMMENT;
             else
                 return super.getItemViewType(position);
         } else {
@@ -81,7 +99,7 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
-            case FOOTER:
+            case FOOTER_COMMENT:
                 handleFoot(holder);
                 break;
             default:
@@ -105,12 +123,23 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
             viewHolder.tv_comment_title.setText(data.title);
             viewHolder.tv_comment_price.setText(getString(R.string.common_yuan) + data.price);
 
-            SingleImgAdapter singleImgAdapter = new SingleImgAdapter(context, false, imgList);
-            viewHolder.recycler_comment.setAdapter(singleImgAdapter);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            viewHolder.recycler_comment.setLayoutManager(linearLayoutManager);
-            viewHolder.recycler_comment.setNestedScrollingEnabled(false);
-            viewHolder.recycler_comment.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(context, 4), 0, 0));
+            if (mAdapters.size() == 0) {
+                SingleImgAdapter singleImgAdapter;
+                if (data.imgs == null) {
+                    List<ImageEntity> list = new ArrayList<>();
+                    singleImgAdapter = new SingleImgAdapter(context, false, list, position);
+                    LogUtil.httpLogW("singleImgAdapter:" + singleImgAdapter.hashCode());
+                } else {
+                    singleImgAdapter = new SingleImgAdapter(context, false, data.imgs, position);
+                    LogUtil.httpLogW("singleImgAdapter:" + singleImgAdapter.hashCode());
+                }
+                viewHolder.recycler_comment.setAdapter(singleImgAdapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                viewHolder.recycler_comment.setLayoutManager(linearLayoutManager);
+                viewHolder.recycler_comment.setNestedScrollingEnabled(false);
+                viewHolder.recycler_comment.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(context, 4), 0, 0));
+                mAdapters.put(position, singleImgAdapter);
+            }
 
             if (commentType == APPEND_COMMENT || commentType == CHANGE_COMMENT) {
                 viewHolder.ll_comment_score.setVisibility(View.GONE);

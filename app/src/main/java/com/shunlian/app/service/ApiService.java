@@ -56,7 +56,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.TagEntity;
-import com.shunlian.app.bean.UploadCmtPicEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
 
@@ -72,6 +72,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -119,11 +120,11 @@ public interface ApiService {
 
     @Multipart
     @POST("My/comment.uploadCmtPic.json")
-    Call<BaseEntity<UploadCmtPicEntity>> uploadPic1(@Query("ordersn") String ordersn, @Part MultipartBody.Part files);
+    Call<BaseEntity<UploadPicEntity>> uploadPic1(@Query("ordersn") String ordersn, @Part MultipartBody.Part files);
 
     @Multipart
     @POST("My/Sign.step2.json")
-    Call<BaseEntity<UploadCmtPicEntity>> uploadPics(@Part List<MultipartBody.Part> files);
+    Call<BaseEntity<UploadPicEntity>> uploadPics(@Part List<MultipartBody.Part> files);
 
     /**
      * 2.0正式接口
@@ -553,13 +554,12 @@ public interface ApiService {
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
 
-
     /**
      * 上传图片
      */
     @Multipart
     @POST("https://v20-test.shunliandongli.com/uploads/uploadotherimage")
-    Call<BaseEntity<UploadCmtPicEntity>> uploadPic(@Part MultipartBody.Part file);
+    Call<BaseEntity<UploadPicEntity>> uploadPic(@PartMap Map<String, RequestBody> params, @Part("path_name") RequestBody path_name);
 
     /**
      * 添加评价

@@ -95,6 +95,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         this.goodsDeatilEntity = goods;
         this.specs = goods.specs;
         this.mSku = goods.sku;
+        this.hasOption = goods.has_option;
         mCurrentValues = new ArrayList<>();
         initMap();
     }
@@ -106,7 +107,6 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         this.specs = goods.goods_info.specs;
         this.mSku = goods.goods_info.sku;
         this.hasOption = goods.goods_info.has_option;
-        LogUtil.httpLogW("hasOption:" + hasOption);
         mCurrentValues = new ArrayList<>();
         initMap();
     }

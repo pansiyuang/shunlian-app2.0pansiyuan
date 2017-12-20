@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +16,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CreatCommentAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.presenter.CommentPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -54,6 +58,8 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentType;
     private String currentContent;
     private CommentPresenter commentPresenter;
+    private int currentPosition;
+    private List<ImageEntity> paths = new ArrayList<>();
 
     public static void startAct(Context context, List<ReleaseCommentEntity> list, int type) {
         Intent intent = new Intent(context, CreatCommentActivity.class);
@@ -124,7 +130,8 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         super.initListener();
     }
 
-    public void openAlbum() {
+    public void openAlbum(int position) {
+        currentPosition = position;
         Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
         albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(albumIntent, 100);
@@ -139,8 +146,10 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
-
-            commentPresenter.uploadPic(imagePath);
+            paths.clear();
+            paths.add(new ImageEntity(imagePath));
+            creatCommentAdapter.addImages(paths, currentPosition);
+            commentPresenter.uploadPic(paths, "comment");
             c.close();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -171,7 +180,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     }
                 }
                 break;
-
         }
     }
 
@@ -179,6 +187,14 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public void OnComment(String content) {
         LogUtil.httpLogW("content:" + content);
         currentContent = content;
+    }
+
+    @Override
+    public void uploadProgress(int progress, String tag) {
+        Message message = mHandler.obtainMessage();
+        message.arg1 = progress;
+        message.obj = tag;
+        mHandler.sendMessage(message);
     }
 
     @Override
@@ -202,4 +218,13 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public void changeCommtFail(String errorstr) {
         Common.staticToast(errorstr);
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int progress = msg.arg1;
+            String tag = String.valueOf(msg.obj);
+            creatCommentAdapter.updateProgress(currentPosition, tag, progress);
+        }
+    };
 }

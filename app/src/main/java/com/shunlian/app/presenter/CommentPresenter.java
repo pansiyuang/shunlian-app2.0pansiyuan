@@ -1,31 +1,27 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.JoinGoodsEntity;
-import com.shunlian.app.bean.UploadCmtPicEntity;
+import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.upload.ProgressListener;
+import com.shunlian.app.utils.upload.UploadFileRequestBody;
 import com.shunlian.app.view.ICommentView;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Flowable;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/12/13.
@@ -52,15 +48,30 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
 
     }
 
-    public void uploadPic(String picPath) {
-        File file = new File(picPath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    public void uploadPic(List<ImageEntity> filePath, String uploadPath) {
+        Map<String, RequestBody> params = new HashMap<>();
+        for (int i = 0; i < filePath.size(); i++) {
+            File file = new File(filePath.get(i).imgPath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            LogUtil.httpLogW("file:" + file.getName());
+            UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
+                @Override
+                public void onProgress(int progress, String tag) {
+                    iView.uploadProgress(progress, tag);
+                }
 
-        Call<BaseEntity<UploadCmtPicEntity>> call = getAddCookieApiService().uploadPic(body);
-        getNetData(true, call, new SimpleNetDataCallback<BaseEntity<UploadCmtPicEntity>>() {
+                @Override
+                public void onDetailProgress(long written, long total, String tag) {
+
+                }
+            }, filePath.get(i).imgPath);
+            params.put("file\"; filename=\"" + file.getName(), uploadFileRequestBody);
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(params, body);
+        getNetData(call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<UploadCmtPicEntity> entity) {
+            public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
             }
         });
@@ -98,6 +109,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             e.printStackTrace();
         }
     }
+
     public void changeComment(String commentId, String content, String images) {
         Map<String, String> map = new HashMap<>();
         map.put("comment_id", commentId);
