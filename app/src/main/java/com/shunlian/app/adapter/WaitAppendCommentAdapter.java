@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +89,8 @@ public class WaitAppendCommentAdapter extends BaseRecyclerAdapter<CommentListEnt
         public WaitAppendCommentHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            GradientDrawable background = (GradientDrawable) mtv_append_comment_staus.getBackground();
+            background.setColor(getColor(R.color.value_f8));
         }
 
         @OnClick(R.id.mtv_append_comment_staus)

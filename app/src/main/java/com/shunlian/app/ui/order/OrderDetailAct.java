@@ -143,6 +143,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         storeId = orderdetailEntity.store_id;
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_goods.setLayoutManager(manager);
+        rv_goods.setNestedScrollingEnabled(false);
         rv_goods.setAdapter(new OrderGoodAdapter(this, orderdetailEntity.order_goods));
     }
 

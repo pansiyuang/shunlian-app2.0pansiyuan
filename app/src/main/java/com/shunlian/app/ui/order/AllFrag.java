@@ -147,6 +147,14 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                     }
                 }
             });
+
+            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    MyOrderEntity.Orders orders1 = ordersLists.get(position);
+                    OrderDetailAct.startAct(baseActivity, orders1.id);
+                }
+            });
         }else {
             adapter.setPageLoading(page,allPage);
             adapter.notifyDataSetChanged();

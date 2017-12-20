@@ -9,6 +9,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.MyOrderAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
@@ -56,6 +59,10 @@ public class MyOrderAct extends BaseActivity {
 
     @BindView(R.id.view_wait_comment)
     View view_wait_comment;
+
+    @BindView(R.id.miv_search)
+    MyImageView miv_search;
+
     private int pink_color;
     private int new_text;
     private List<BaseFragment> fragments;
@@ -101,6 +108,8 @@ public class MyOrderAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        int width = TransformUtil.dip2px(this, 10);
+        TransformUtil.expandViewTouchDelegate(miv_search,width,width,width,width);
         pink_color = getResources().getColor(R.color.pink_color);
         new_text = getResources().getColor(R.color.new_text);
         fragments = new ArrayList<>();
@@ -177,5 +186,10 @@ public class MyOrderAct extends BaseActivity {
 
         mtv_wait_comment.setTextColor(status == 5 ? pink_color : new_text);
         view_wait_comment.setVisibility(status == 5 ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @OnClick(R.id.miv_search)
+    public void search(){
+        SearchOrderActivity.startAct(this);
     }
 }

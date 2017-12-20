@@ -26,6 +26,7 @@ import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
@@ -39,8 +40,8 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
-import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
@@ -607,14 +608,14 @@ public interface ApiService {
      * @return
      */
     @GET("member/comment/mixed_list")
-    Call<BaseEntity<EmptyEntity>> mixed_list();
+    Call<BaseEntity<CommentSuccessEntity>> mixed_list(@QueryMap Map<String,String> map);
 
     /**
-     * 个人订单列表
+     *我的订单列表
      * @param map
      * @return
      */
-    @GET("/personalcenter/orderlist")
+    @GET("personalcenter/orderlist")
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
 
 
