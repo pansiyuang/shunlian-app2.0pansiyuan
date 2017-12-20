@@ -339,8 +339,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDeatilEntity.Comments comments1 = comments.get(position);
-                    valueAnimator(view,comments1.id);
+                    if (position >= comments.size()){
+                        valueAnimator(view, null);
+                    }else {
+                        GoodsDeatilEntity.Comments comments1 = comments.get(position);
+                        valueAnimator(view, comments1.id);
+                    }
                 }
             });
         }

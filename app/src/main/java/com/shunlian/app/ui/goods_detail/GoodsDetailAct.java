@@ -444,8 +444,14 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
    显示足迹列表
     */
     public void showFootprintList() {
-        if (mFootprintEntity == null)
+        if (mFootprintEntity == null) {
             goodsDetailPresenter.footprint();
+        }else {
+            if (footprintDialog == null) {
+                footprintDialog = new FootprintDialog(this, mFootprintEntity);
+            }
+            footprintDialog.show();
+        }
     }
 
     /**

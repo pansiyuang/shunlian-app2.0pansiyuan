@@ -202,7 +202,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         String id = ordersLists.get(refreshPosition).id;
         refreshOrder(id);
         if (status == OrderListPresenter.CONFIRM_RECEIPT){
-            // TODO: 2017/12/20 确认收货界面 
+            // TODO: 2017/12/20 确认收货界面
             SuccessfulTradeAct.startAct(baseActivity);
         }
     }
