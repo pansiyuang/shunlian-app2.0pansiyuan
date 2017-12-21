@@ -40,7 +40,6 @@ import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -69,8 +68,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.rnview)
     RollNumView rnview;
 
-    @BindView(R.id.mrl_add_car)
-    MyRelativeLayout mrl_add_car;
+    @BindView(R.id.mtv_add_car)
+    MyTextView mtv_add_car;
 
     @BindView(R.id.rl_rootview)
     RelativeLayout rl_rootview;
@@ -170,7 +169,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void initListener() {
         super.initListener();
-        mrl_add_car.setOnClickListener(this);
+        mtv_add_car.setOnClickListener(this);
         miv_more.setOnClickListener(this);
         miv_close_share.setOnClickListener(this);
         mll_goods.setOnClickListener(this);
@@ -194,6 +193,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
         rnview.setTextSize(10);
+        rnview.setVisibility(View.GONE);
 
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
@@ -370,7 +370,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 "0" : goodsDeatilEntity.member_cart_count;
 
         num = Integer.parseInt(member_cart_count);
-        rnview.setNumber(num);
+        if (num == 0){
+            rnview.setVisibility(View.GONE);
+        }else {
+            rnview.setVisibility(View.VISIBLE);
+            rnview.setNumber(num);
+        }
+
         LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
@@ -483,7 +489,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //            return;
 //        }
         switch (v.getId()){
-            case R.id.mrl_add_car:
+            case R.id.mtv_add_car:
                 isAddcart = true;
                 if (goodsCount == 0){
                     goodsDeatilFrag.showParamDialog();
@@ -768,6 +774,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 num++;
                 LogUtil.zhLogW("num======"+num);
                 if (rnview != null) {
+                    rnview.setVisibility(View.VISIBLE);
                     rnview.setNumber(num - 1);
                     rnview.setTargetNumber(num);
                 }

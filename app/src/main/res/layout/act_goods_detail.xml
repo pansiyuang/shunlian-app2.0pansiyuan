@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true"
         android:paddingTop="0.5dp"
         app:ll_control_adapter="true"
-        app:ll_control_height="86">
+        app:ll_control_height="88">
 
 
         <com.shunlian.app.widget.MyTextView
@@ -74,28 +74,22 @@
                 android:id="@+id/rnview"
                 android:layout_alignRight="@+id/mtv_car"
                 android:layout_marginTop="1dp"
+                android:visibility="gone"
                 android:layout_width="14dp"
                 android:layout_height="14dp" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
-
-        <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/mrl_add_car"
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_add_car"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_weight="3"
+            android:gravity="center"
             android:background="@color/my_black_one"
-            android:layout_weight="3">
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/add_shopping_cart"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </com.shunlian.app.widget.MyRelativeLayout>
-
-
+            android:text="@string/add_shopping_cart"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_buy_immediately"
