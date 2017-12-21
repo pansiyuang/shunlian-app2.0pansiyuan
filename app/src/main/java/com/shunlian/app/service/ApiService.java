@@ -43,6 +43,7 @@ import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
+import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -664,4 +665,12 @@ public interface ApiService {
      */
     @POST("personalcenter/confirmreceipt")
     Call<BaseEntity<CommonEntity>> confirmreceipt(@Body RequestBody body);
+
+    /**
+     * 获取支付列表
+     * @param map
+     * @return
+     */
+    @GET("order/getavailablepaymethod")
+    Call<BaseEntity<PayListEntity>> methodlist(@QueryMap Map<String,String> map);
 }

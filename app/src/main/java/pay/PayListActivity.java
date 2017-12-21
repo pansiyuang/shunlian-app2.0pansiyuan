@@ -8,12 +8,14 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.PayListAdapter;
-import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.presenter.PayListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.MyImageView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -21,7 +23,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/7.
  */
 
-public class PayListActivity extends BaseActivity implements View.OnClickListener {
+public class PayListActivity extends BaseActivity implements View.OnClickListener,IPayListView {
 
 
     @BindView(R.id.miv_close)
@@ -29,12 +31,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
     @BindView(R.id.recy_pay)
     RecyclerView recy_pay;
-    private ArrayList<ConfirmOrderEntity.PayTypes> lists;
+    private PayListPresenter payListPresenter;
 
-
-    public static void startAct(Context context, ArrayList<ConfirmOrderEntity.PayTypes> lists){
+    public static void startAct(Context context){
         Intent intent = new Intent(context, PayListActivity.class);
-        intent.putExtra("list",lists);
         context.startActivity(intent);
     }
     /**
@@ -58,12 +58,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     protected void initData() {
-        lists = (ArrayList<ConfirmOrderEntity.PayTypes>) getIntent().getSerializableExtra("list");
-
+        payListPresenter = new PayListPresenter(this,this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
-        PayListAdapter adapter = new PayListAdapter(this,false,lists);
-        recy_pay.setAdapter(adapter);
     }
 
     /**
@@ -89,5 +86,36 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 }).show();
                 break;
         }
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    /**
+     * 支付列表
+     *
+     * @param payTypes
+     */
+    @Override
+    public void payList(List<PayListEntity.PayTypes> payTypes) {
+        PayListAdapter adapter = new PayListAdapter(this,false,payTypes);
+        recy_pay.setAdapter(adapter);
     }
 }
