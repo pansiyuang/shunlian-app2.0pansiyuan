@@ -27,6 +27,7 @@ public class OrderdetailEntity {
     public String create_time;
     public String is_append;
     public String is_edit_praise;
+    public String is_postpone;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Notice {
@@ -65,6 +66,7 @@ public class OrderdetailEntity {
     public static class Good {
         public String title;
         public String thumb;
+        public String comment_id;
         public String sku_desc;
         public String qty;
         public String market_price;
