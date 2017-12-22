@@ -250,6 +250,7 @@
     <string name="comment_low">差评</string>
     <string name="store_score">店铺评分</string>
     <string name="logistics_service">物流服务：</string>
+    <string name="lattitude_service">服务态度：</string>
     <string name="consistent_description">描述相符：</string>
     <string name="comment_release">发布</string>
     <string name="comment_success">评价成功</string>

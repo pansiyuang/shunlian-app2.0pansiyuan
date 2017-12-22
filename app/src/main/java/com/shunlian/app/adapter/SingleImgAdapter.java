@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -26,10 +28,20 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
 
     private static final int FOOTER_IMG = 2;
     private int parentPosition;
+    private int screenWidth;
+    private int picWidth;
 
     public SingleImgAdapter(Context context, boolean isShowFooter, List<ImageEntity> lists, int position) {
         super(context, isShowFooter, lists);
         this.parentPosition = position;
+        screenWidth = DeviceInfoUtil.getDeviceWidth(context);
+        picWidth = (screenWidth - TransformUtil.dip2px(context, 20 + 4 * 5)) / 5;
+    }
+
+    public void setData(List<ImageEntity> list) {
+        lists.clear();
+        lists.addAll(list);
+        notifyDataSetChanged();
     }
 
     public void addImages(List<ImageEntity> imageEntities) {
@@ -83,37 +95,10 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
             case FOOTER_IMG:
-                if (holder instanceof DelImagViewHolder) {
-                    DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
-                    delImagViewHolder.miv_img_del.setVisibility(View.GONE);
-                    delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
-
-                    ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
-                                ((CreatCommentActivity) context).openAlbum(parentPosition);
-                            }
-                        }
-                    });
-                }
+                handFoot(holder);
                 break;
             default:
-                if (holder instanceof ImagViewHolder) {
-                    LogUtil.httpLogW("handleList:");
-                    ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
-                    imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
-                    GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position).imgPath);
-                    ImageEntity imageEntity = lists.get(position);
-
-                    LogUtil.httpLogW("progress111111111111111:" + imageEntity.progress);
-                    if (imageEntity.progress > 0 && imageEntity.progress < 100) {
-                        imagViewHolder.pgb_img.setVisibility(View.VISIBLE);
-                        imagViewHolder.pgb_img.setProgress(imageEntity.progress);
-                    } else if (imageEntity.progress >= 100) {
-                        imagViewHolder.pgb_img.setVisibility(View.GONE);
-                    }
-                }
+                handleList(holder, position);
                 break;
         }
     }
@@ -128,39 +113,37 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-//        if (holder instanceof ImagViewHolder) {
-//            LogUtil.httpLogW("handleList:");
-//            ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
-//            imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
-//            GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position).imgPath);
-//            ImageEntity imageEntity = lists.get(position);
-//
-//            LogUtil.httpLogW("progress111111111111111:" + imageEntity.progress);
-//            if (imageEntity.progress > 0 && imageEntity.progress < 100) {
-//                imagViewHolder.pgb_img.setVisibility(View.VISIBLE);
-//                imagViewHolder.pgb_img.setProgress(imageEntity.progress);
-//            } else if (imageEntity.progress >= 100) {
-//                imagViewHolder.pgb_img.setVisibility(View.GONE);
-//            }
-//        }
+        if (holder instanceof ImagViewHolder) {
+            ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
+            imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position).imgPath);
+            ImageEntity imageEntity = lists.get(position);
+
+            if (imageEntity.progress > 0 && imageEntity.progress < 100) {
+                imagViewHolder.pgb_img.setVisibility(View.VISIBLE);
+                imagViewHolder.pgb_img.setProgress(imageEntity.progress);
+            } else if (imageEntity.progress >= 100) {
+                imagViewHolder.pgb_img.setVisibility(View.GONE);
+            }
+        }
     }
 
 
     public void handFoot(RecyclerView.ViewHolder holder) {
-//        if (holder instanceof DelImagViewHolder) {
-//            DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
-//            delImagViewHolder.miv_img_del.setVisibility(View.GONE);
-//            delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
-//
-//            ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
-//                        ((CreatCommentActivity) context).openAlbum(parentPosition);
-//                    }
-//                }
-//            });
-//        }
+        if (holder instanceof DelImagViewHolder) {
+            DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
+            delImagViewHolder.miv_img_del.setVisibility(View.GONE);
+            delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
+
+            ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
+                        ((CreatCommentActivity) context).openAlbum(parentPosition);
+                    }
+                }
+            });
+        }
     }
 
     public class ImagViewHolder extends BaseRecyclerViewHolder {
@@ -174,9 +157,14 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
         @BindView(R.id.pgb_img)
         ProgressBar pgb_img;
 
+        @BindView(R.id.layout_img)
+        RelativeLayout layout_img;
+
 
         public ImagViewHolder(View itemView) {
             super(itemView);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(picWidth, picWidth);
+            layout_img.setLayoutParams(layoutParams);
         }
     }
 
@@ -191,8 +179,14 @@ public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
         @BindView(R.id.pgb_img)
         ProgressBar pgb_img;
 
+        @BindView(R.id.layout_img)
+        RelativeLayout layout_img;
+
         public DelImagViewHolder(View itemView) {
             super(itemView);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(picWidth, picWidth);
+            layout_img.setLayoutParams(layoutParams);
         }
     }
+
 }

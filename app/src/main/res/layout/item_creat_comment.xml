@@ -66,48 +66,77 @@
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_comment_high"
+        <LinearLayout
+            android:id="@+id/ll_comment_high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/icon_haoping_h"
-            android:drawablePadding="8.5dp"
             android:gravity="center"
             android:paddingBottom="14dp"
             android:paddingLeft="18dp"
-            android:paddingTop="14dp"
-            android:text="@string/comment_high"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:paddingTop="14dp">
 
-        <TextView
-            android:id="@+id/tv_comment_middle"
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_comment_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_haoping_h" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8.5dp"
+                android:text="@string/comment_high"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_comment_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/icon_zhongping_n"
-            android:drawablePadding="8.5dp"
             android:gravity="center"
             android:paddingBottom="14dp"
-            android:paddingLeft="13dp"
-            android:paddingTop="14dp"
-            android:text="@string/comment_middle"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:paddingLeft="18dp"
+            android:paddingTop="14dp">
 
-        <TextView
-            android:id="@+id/tv_comment_low"
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_comment_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_zhongping_n" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8.5dp"
+                android:text="@string/comment_middle"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_comment_low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/icon_chaping_n"
-            android:drawablePadding="8.5dp"
             android:gravity="center"
             android:paddingBottom="14dp"
-            android:paddingLeft="13dp"
-            android:paddingRight="13dp"
-            android:paddingTop="14dp"
-            android:text="@string/comment_high"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:paddingLeft="18dp"
+            android:paddingTop="14dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_comment_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_chaping_n" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8.5dp"
+                android:text="@string/comment_low"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <EditText

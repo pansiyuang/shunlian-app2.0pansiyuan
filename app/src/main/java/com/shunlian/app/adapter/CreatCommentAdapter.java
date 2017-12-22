@@ -1,7 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +15,8 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
-import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.FiveStarBar;
@@ -41,22 +40,24 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
 
     private static final int FOOTER_COMMENT = 3;
     private int commentType;
-    private OnCommentContentCallBack mCallBack;
+    private OnCommentChangeCallBack mCallBack;
     private HashMap<Integer, SingleImgAdapter> mAdapters;
+    private int parentIndex;
 
     public void addImages(List<ImageEntity> pathes, int position) {
         if (mAdapters.size() != 0) {
             SingleImgAdapter imgAdapter = mAdapters.get(position);
+            parentIndex = position;
             imgAdapter.addImages(pathes);
         }
     }
 
-    public void updateProgress(int p1, String tag, int progress) {
-        if (mAdapters.size() != 0) {
-            SingleImgAdapter imgAdapter = mAdapters.get(p1);
-            imgAdapter.updateItemProgress(tag, progress);
-        }
-    }
+//    public void updateProgress(int p1, String tag, int progress) {
+//        if (mAdapters.size() != 0) {
+//            SingleImgAdapter imgAdapter = mAdapters.get(p1);
+//            imgAdapter.updateItemProgress(tag, progress);
+//        }
+//    }
 
     public CreatCommentAdapter(Context context, boolean isShowFooter, List<ReleaseCommentEntity> lists, int type) {
         super(context, isShowFooter, lists);
@@ -115,30 +116,31 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
     }
 
     @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
+    public void handleList(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof CommentViewHolder) {
-            CommentViewHolder viewHolder = (CommentViewHolder) holder;
-            ReleaseCommentEntity data = lists.get(position);
+            final CommentViewHolder viewHolder = (CommentViewHolder) holder;
+            final ReleaseCommentEntity data = lists.get(position);
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_comment_icon, data.pic);
             viewHolder.tv_comment_title.setText(data.title);
             viewHolder.tv_comment_price.setText(getString(R.string.common_yuan) + data.price);
 
-            if (mAdapters.size() == 0) {
-                SingleImgAdapter singleImgAdapter;
-                if (data.imgs == null) {
-                    List<ImageEntity> list = new ArrayList<>();
-                    singleImgAdapter = new SingleImgAdapter(context, false, list, position);
-                    LogUtil.httpLogW("singleImgAdapter:" + singleImgAdapter.hashCode());
-                } else {
-                    singleImgAdapter = new SingleImgAdapter(context, false, data.imgs, position);
-                    LogUtil.httpLogW("singleImgAdapter:" + singleImgAdapter.hashCode());
-                }
+            SingleImgAdapter singleImgAdapter;
+
+            if (mAdapters.size() < lists.size()) {
+                List<ImageEntity> list = new ArrayList<>();
+                singleImgAdapter = new SingleImgAdapter(context, false, list, position);
                 viewHolder.recycler_comment.setAdapter(singleImgAdapter);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                viewHolder.recycler_comment.setLayoutManager(linearLayoutManager);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
+                viewHolder.recycler_comment.setLayoutManager(gridLayoutManager);
                 viewHolder.recycler_comment.setNestedScrollingEnabled(false);
-                viewHolder.recycler_comment.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(context, 4), 0, 0));
+                viewHolder.recycler_comment.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context, 4), false));
                 mAdapters.put(position, singleImgAdapter);
+            } else {
+                if (data.imgs == null) {
+                    ((SingleImgAdapter) viewHolder.recycler_comment.getAdapter()).setData(new ArrayList<ImageEntity>());
+                } else {
+                    ((SingleImgAdapter) viewHolder.recycler_comment.getAdapter()).setData(data.imgs);
+                }
             }
 
             if (commentType == APPEND_COMMENT || commentType == CHANGE_COMMENT) {
@@ -147,37 +149,115 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
                 viewHolder.ll_comment_score.setVisibility(View.VISIBLE);
             }
 
-            if (position == 0) {
-                if (commentType == APPEND_COMMENT || commentType == CHANGE_COMMENT) {
-                    viewHolder.edt_comment.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            if (mCallBack != null) {
-                                mCallBack.OnComment(s.toString());
-                            }
-                        }
-                    });
-                }
+            viewHolder.recycler_comment.setTag(position);
+            if (viewHolder.edt_comment.getTag() instanceof TextWatcher) {
+                viewHolder.edt_comment.removeTextChangedListener((TextWatcher) viewHolder.edt_comment.getTag());
             }
+            viewHolder.edt_comment.setText(data.content);
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    data.content = viewHolder.edt_comment.getText().toString();
+                    if (mCallBack != null) {
+                        mCallBack.OnComment(viewHolder.edt_comment.getText().toString(), position);
+                    }
+                }
+            };
+            viewHolder.edt_comment.addTextChangedListener(textWatcher);
+            viewHolder.edt_comment.setTag(textWatcher);
+
+            if (isEmpty(data.starLevel)) {
+                data.starLevel = "10";
+            }
+
+            changeStatus(viewHolder, data.starLevel, position);
+
+            viewHolder.ll_comment_high.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeStatus(viewHolder, "10", position);
+                }
+            });
+
+            viewHolder.ll_comment_middle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeStatus(viewHolder, "6", position);
+                }
+            });
+
+            viewHolder.ll_comment_low.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeStatus(viewHolder, "2", position);
+                }
+            });
         }
     }
+
+    private void changeStatus(CommentViewHolder viewHolder, String type, int position) {
+        viewHolder.miv_comment_high.setImageDrawable(getDrawable(R.mipmap.icon_haoping_n));
+        viewHolder.miv_comment_middle.setImageDrawable(getDrawable(R.mipmap.icon_zhongping_n));
+        viewHolder.miv_comment_low.setImageDrawable(getDrawable(R.mipmap.icon_chaping_n));
+        switch (type) {
+            case "2":
+                viewHolder.miv_comment_low.setImageDrawable(getDrawable(R.mipmap.icon_chaping_h));
+                break;
+            case "6":
+                viewHolder.miv_comment_middle.setImageDrawable(getDrawable(R.mipmap.icon_zhongping_h));
+                break;
+            case "10":
+                viewHolder.miv_comment_high.setImageDrawable(getDrawable(R.mipmap.icon_haoping_h));
+                break;
+        }
+        if (mCallBack != null) {
+            lists.get(position).starLevel = String.valueOf(type);
+            mCallBack.OnCommentLevel(String.valueOf(type), position);
+        }
+    }
+
 
     public void handleFoot(RecyclerView.ViewHolder holder) {
         if (holder instanceof FootViewHolder) {
+            FootViewHolder viewHolder = (FootViewHolder) holder;
+            viewHolder.ratingBar_logistics.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
+                    if (mCallBack != null) {
+                        mCallBack.OnLogisticsStar(rating);
+                    }
+                }
+            });
+            viewHolder.ratingBar_attitude.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
+                    if (mCallBack != null) {
+                        mCallBack.OnAttitudeStar(rating);
+                    }
+                }
+            });
+            viewHolder.ratingBar_consistent.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
+                    if (mCallBack != null) {
+                        mCallBack.OnConsistent(rating);
+                    }
+                }
+            });
         }
     }
 
-    public class CommentViewHolder extends BaseRecyclerViewHolder {
+    public class CommentViewHolder extends BaseRecyclerViewHolder implements TextWatcher {
         @BindView(R.id.miv_comment_icon)
         MyImageView miv_comment_icon;
 
@@ -187,14 +267,23 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
         @BindView(R.id.tv_comment_price)
         TextView tv_comment_price;
 
-        @BindView(R.id.tv_comment_high)
-        TextView tv_comment_high;
+        @BindView(R.id.ll_comment_high)
+        LinearLayout ll_comment_high;
 
-        @BindView(R.id.tv_comment_middle)
-        TextView tv_comment_middle;
+        @BindView(R.id.ll_comment_middle)
+        LinearLayout ll_comment_middle;
 
-        @BindView(R.id.tv_comment_low)
-        TextView tv_comment_low;
+        @BindView(R.id.ll_comment_low)
+        LinearLayout ll_comment_low;
+
+        @BindView(R.id.miv_comment_high)
+        MyImageView miv_comment_high;
+
+        @BindView(R.id.miv_comment_middle)
+        MyImageView miv_comment_middle;
+
+        @BindView(R.id.miv_comment_low)
+        MyImageView miv_comment_low;
 
         @BindView(R.id.recycler_comment)
         RecyclerView recycler_comment;
@@ -207,6 +296,23 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+
+            edt_comment.addTextChangedListener(this);
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
         }
     }
 
@@ -226,11 +332,19 @@ public class CreatCommentAdapter extends BaseRecyclerAdapter<ReleaseCommentEntit
         }
     }
 
-    public void setOnCommentContentCallBack(OnCommentContentCallBack callBack) {
+    public void setOnCommentChangeCallBack(OnCommentChangeCallBack callBack) {
         this.mCallBack = callBack;
     }
 
-    public interface OnCommentContentCallBack {
-        void OnComment(String content);
+    public interface OnCommentChangeCallBack {
+        void OnComment(String content, int position);
+
+        void OnCommentLevel(String level, int position);
+
+        void OnLogisticsStar(float logistics);
+
+        void OnAttitudeStar(float attitude);
+
+        void OnConsistent(float consistent);
     }
 }

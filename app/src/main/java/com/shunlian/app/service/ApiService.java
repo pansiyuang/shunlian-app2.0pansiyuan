@@ -562,7 +562,16 @@ public interface ApiService {
     Call<BaseEntity<UploadPicEntity>> uploadPic(@PartMap Map<String, RequestBody> params, @Part("path_name") RequestBody path_name);
 
     /**
-     * 添加评价
+     * 新增评价
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/add")
+    Call<BaseEntity<EmptyEntity>> addComment(@Body RequestBody body);
+
+    /**
+     * 追加评价
      *
      * @param body
      * @return
