@@ -5,7 +5,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:visibility="gone"
+        android:background="@color/white_ash" />
+
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_combo_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -21,10 +29,13 @@
         android:background="@color/value_EFEEEE" />
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_price_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
         app:ll_control_adapter="true"
+        app:ll_margin_left="20"
+        app:ll_margin_bottom="8"
         app:ll_margin_top="30">
 
         <TextView
@@ -43,7 +54,7 @@
             android:layout_marginLeft="9dp"
             android:padding="3dp"
             android:textColor="@color/my_orange_red"
-            android:textSize="14.5sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:id="@+id/tv_market_price"

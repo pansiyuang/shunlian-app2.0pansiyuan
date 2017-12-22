@@ -32,13 +32,14 @@ import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -48,6 +49,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/8.
@@ -66,8 +68,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.rnview)
     RollNumView rnview;
 
-    @BindView(R.id.mrl_add_car)
-    MyRelativeLayout mrl_add_car;
+    @BindView(R.id.mtv_add_car)
+    MyTextView mtv_add_car;
 
     @BindView(R.id.rl_rootview)
     RelativeLayout rl_rootview;
@@ -147,11 +149,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
-    private int num;
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
     private String favId;
     public int bottomListHeight;
+    private int num;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -167,7 +169,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void initListener() {
         super.initListener();
-        mrl_add_car.setOnClickListener(this);
+        mtv_add_car.setOnClickListener(this);
         miv_more.setOnClickListener(this);
         miv_close_share.setOnClickListener(this);
         mll_goods.setOnClickListener(this);
@@ -191,7 +193,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rnview.setMode(RollNumView.Mode.UP);
         rnview.setTextColor(Color.WHITE);
         rnview.setTextSize(10);
-        rnview.setNumber(0);
+        rnview.setVisibility(View.GONE);
 
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
@@ -363,6 +365,19 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
         GoodsDeatilEntity.StoreInfo store_info = goodsDeatilEntity.store_info;
+        //购物车角标数字
+        String member_cart_count = isEmpty(goodsDeatilEntity.member_cart_count) ?
+                "0" : goodsDeatilEntity.member_cart_count;
+
+        num = Integer.parseInt(member_cart_count);
+        if (num == 0){
+            rnview.setVisibility(View.GONE);
+        }else {
+            rnview.setVisibility(View.VISIBLE);
+            rnview.setNumber(num);
+        }
+
+        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
         }
@@ -440,12 +455,30 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    /**
+     * 评价总数量
+     *
+     * @param praiseTotal
+     */
+    @Override
+    public void praiseTotal(String praiseTotal) {
+        if (commentFrag != null) {
+            commentFrag.praiseTotal(praiseTotal);
+        }
+    }
+
     /*
    显示足迹列表
     */
     public void showFootprintList() {
-        if (mFootprintEntity == null)
+        if (mFootprintEntity == null) {
             goodsDetailPresenter.footprint();
+        }else {
+            if (footprintDialog == null) {
+                footprintDialog = new FootprintDialog(this, mFootprintEntity);
+            }
+            footprintDialog.show();
+        }
     }
 
     /**
@@ -468,7 +501,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //            return;
 //        }
         switch (v.getId()){
-            case R.id.mrl_add_car:
+            case R.id.mtv_add_car:
                 isAddcart = true;
                 if (goodsCount == 0){
                     goodsDeatilFrag.showParamDialog();
@@ -751,7 +784,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             @Override
             public void onAnimationEnd(Animator animation) {
                 num++;
+                LogUtil.zhLogW("num======"+num);
                 if (rnview != null) {
+                    rnview.setVisibility(View.VISIBLE);
                     rnview.setNumber(num - 1);
                     rnview.setTargetNumber(num);
                 }
@@ -798,5 +833,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             isNowBuy = false;
             ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
         }
+    }
+
+    @OnClick(R.id.mtv_store)
+    public void jumpStore(){
+        StoreAct.startAct(this, store_id);
     }
 }

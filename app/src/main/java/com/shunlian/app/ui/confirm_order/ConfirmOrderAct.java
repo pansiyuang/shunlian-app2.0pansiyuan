@@ -20,7 +20,6 @@ import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,7 +55,6 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private String qty;
     private String sku_id;
     private ConfirmOrderPresenter confirmOrderPresenter;
-    private ArrayList<ConfirmOrderEntity.PayTypes> mPayTypes;
 
     public static void startAct(Context context,String cart_ids){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -194,16 +192,6 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 .getString(R.string.rmb)+price,11));
     }
 
-    /**
-     * 支付列表
-     *
-     * @param payTypes
-     */
-    @Override
-    public void payList(ArrayList<ConfirmOrderEntity.PayTypes> payTypes) {
-        mPayTypes = payTypes;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -228,7 +216,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mtv_go_pay:
-                PayListActivity.startAct(this,mPayTypes);
+                PayListActivity.startAct(this);
                 break;
         }
     }

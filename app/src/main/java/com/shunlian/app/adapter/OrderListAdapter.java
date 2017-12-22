@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +18,10 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.widget.DiscountListDialog;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 /**
  * Created by Administrator on 2017/12/14.
@@ -37,6 +41,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
     private final int new_gray;
     private final int strokeWidth;
     private AllFrag mAllFrag;
+    private RefreshOrderListener mOrderListener;
 
     public OrderListAdapter(Context context, boolean isShowFooter, List<MyOrderEntity.Orders> lists, AllFrag allFrag) {
         super(context, isShowFooter, lists);
@@ -97,7 +102,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         String formatFreight = getString(R.string.freight);
         mHolder.mtv_freight.setText(String.format(formatFreight, orders.shipping_fee));
 
-        setShowStatus(mHolder, orders.status, orders.is_append);
+        setShowStatus(mHolder, orders.status, orders.is_append,orders.is_postpone);
 
         OrderGoodsAdapter adapter = new OrderGoodsAdapter(context, orders.order_goods);
         mHolder.recy_view.setAdapter(adapter);
@@ -111,7 +116,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         });
     }
 
-    private void setShowStatus(OrderListHolder mHolder, String status, String is_append) {
+    private void setShowStatus(OrderListHolder mHolder, String status, String is_append, String is_postpone) {
         //-1取消状态，0待支付，1待发货, 2待收货, 3待评价, 4已评价
         GradientDrawable t1Dackground;
         GradientDrawable t2Dackground;
@@ -157,11 +162,16 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                 mHolder.mtv_title3.setVisibility(View.GONE);
                 break;
             case "2":
-                mHolder.mtv_title1.setVisibility(View.VISIBLE);
-                t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
-                t1Dackground.setStroke(strokeWidth, new_gray);
-                mHolder.mtv_title1.setTextColor(new_gray);
-                mHolder.mtv_title1.setText(getString(R.string.extend_the_collection));
+
+                if ("1".equals(is_postpone)){
+                    mHolder.mtv_title1.setVisibility(View.GONE);
+                }else {
+                    mHolder.mtv_title1.setVisibility(View.VISIBLE);
+                    t1Dackground = (GradientDrawable) mHolder.mtv_title1.getBackground();
+                    t1Dackground.setStroke(strokeWidth, new_gray);
+                    mHolder.mtv_title1.setTextColor(new_gray);
+                    mHolder.mtv_title1.setText(getString(R.string.extend_the_collection));
+                }
 
                 mHolder.mtv_title2.setVisibility(View.VISIBLE);
                 t2Dackground = (GradientDrawable) mHolder.mtv_title2.getBackground();
@@ -272,7 +282,10 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         @Override
         public void onClick(View v) {
             CharSequence text = null;
-            MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+            if (mOrderListener != null){
+                mOrderListener.onRefreshOrder(getAdapterPosition());
+            }
+            final MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
             switch (v.getId()) {
                 case R.id.ll_rootView:
                 case R.id.mtv_status:
@@ -288,30 +301,36 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     if (getString(R.string.contact_seller).equals(text)) {//联系商家
 
                     } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
-                        mAllFrag.remindseller(orders.id);
+                        if (mAllFrag != null) {
+                            mAllFrag.remindseller(orders.id);
+                        }
                     } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
-                        mAllFrag.postpone(orders.id);
+                        extendTheCollection(orders);
                     }
 
                     break;
                 case R.id.mtv_title2:
                     text = mtv_title2.getText();
                     if (getString(R.string.cancel_order).equals(text)) {//取消订单
-                        mAllFrag.cancleOrder(orders.id);
-                    } else if (getString(R.string.order_wuliu).equals(text)) {
-//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+
+                        cancleOrder(orders);
+
+                    } else if (getString(R.string.order_wuliu).equals(text)) {//物流
+                        //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                         OrderLogisticsActivity.startAct(context, orders.id);
                     }
                     break;
                 case R.id.mtv_title3:
                     text = mtv_title3.getText();
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
-
+                        PayListActivity.startAct(context);
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
-                    } else if (getString(R.string.comment).equals(text)) {
+                        confirmreceipt(orders);
 
-//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                    } else if (getString(R.string.comment).equals(text)) {//评价
+
+                        //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                         List<ReleaseCommentEntity> entities = new ArrayList<>();
                         List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
                         for (int i = 0; i < order_goods.size(); i++) {
@@ -322,9 +341,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                         }
                         CreatCommentActivity.startAct(context, entities, CreatCommentActivity.CREAT_COMMENT);
 
-                    } else if (getString(R.string.append_comment).equals(text)) {
+                    } else if (getString(R.string.append_comment).equals(text)) {//追评
 
-//                        MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
+                        //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                         List<ReleaseCommentEntity> entities = new ArrayList<>();
                         List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
                         for (int i = 0; i < order_goods.size(); i++) {
@@ -339,5 +358,76 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     break;
             }
         }
+
+        /**
+         * 确认收货
+         * @param orders
+         */
+        public void confirmreceipt(final MyOrderEntity.Orders orders) {
+            final PromptDialog promptDialog = new PromptDialog((Activity) context);
+            promptDialog.setSureAndCancleListener("要确认收货吗？", "确认收货后卖家将收到您的货款", "确认收货", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAllFrag != null){
+                        mAllFrag.confirmreceipt(orders.id);
+                    }
+                    promptDialog.dismiss();
+                }
+            }, "取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    promptDialog.dismiss();
+                }
+            }).show();
+        }
+
+        /*
+            取消订单
+         */
+        public void cancleOrder(final MyOrderEntity.Orders orders) {
+            DiscountListDialog dialog = new DiscountListDialog(context);
+            dialog.setSelectReason();
+            dialog.show();
+            dialog.setSelectListener(new DiscountListDialog.ISelectListener() {
+                @Override
+                public void onSelect(int position) {
+                    if (mAllFrag != null) {
+                        mAllFrag.cancleOrder(orders.id,position + 1);
+                    }
+                }
+            });
+        }
+
+        /*
+        延长收货
+         */
+        public void extendTheCollection(final MyOrderEntity.Orders orders) {
+            final PromptDialog promptDialog = new PromptDialog((Activity) context);
+            promptDialog.setSureAndCancleListener("确认延长收货时间？", "每笔订单只能延迟一次哦", "确认", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAllFrag != null) {
+                        mAllFrag.postpone(orders.id);
+                    }
+                    promptDialog.dismiss();
+                }
+            }, "取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    promptDialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
+    public void setRefreshOrderListener(RefreshOrderListener orderListener){
+        mOrderListener = orderListener;
+    }
+
+    /**
+     *刷新订单监听
+     */
+    public interface RefreshOrderListener{
+        void onRefreshOrder(int position);
     }
 }

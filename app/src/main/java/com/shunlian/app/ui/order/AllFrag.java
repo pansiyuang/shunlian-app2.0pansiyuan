@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -23,6 +24,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/12/14.
+ * 禁止fragment懒加载
  */
 
 public class AllFrag extends BaseLazyFragment implements IOrderListView {
@@ -37,6 +39,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     private LinearLayoutManager manager;
     private OrderListPresenter mPresenter;
     private int id;
+    private int refreshPosition;//刷新位置
 
     public static AllFrag getInstance(int id) {
         AllFrag allFrag = new AllFrag();
@@ -91,6 +94,14 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
 
     @Override
     public void fetchData() {
+        fetchNewData();
+    }
+    @Override
+    public void refreshData() {
+        fetchNewData();
+    }
+
+    public void fetchNewData() {
         adapter = null;
         recy_view.scrollToPosition(0);
         if (ordersLists != null) {
@@ -101,6 +112,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         }
         requestData(id);
     }
+
 
     public void requestData(int position) {
         mPresenter.detachView();
@@ -155,16 +167,82 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                     OrderDetailAct.startAct(baseActivity, orders1.id);
                 }
             });
+
+            adapter.setRefreshOrderListener(new OrderListAdapter.RefreshOrderListener() {
+                @Override
+                public void onRefreshOrder(int position) {
+                    refreshPosition = position;
+                }
+            });
         } else {
             adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
+        emptyPage();
+    }
+
+    private void emptyPage() {
         if (isEmpty(ordersLists)) {
             empty();
         } else {
             recy_view.setVisibility(View.VISIBLE);
             nei_empty.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 通知刷新列表
+     *
+     * @param status
+     */
+    @Override
+    public void notifRefreshList(int status) {
+//        if (status == OrderListPresenter.CANCLE_ORDER){
+//        }
+        String id = ordersLists.get(refreshPosition).id;
+        refreshOrder(id);
+        if (status == OrderListPresenter.CONFIRM_RECEIPT){
+            // TODO: 2017/12/20 确认收货界面
+            SuccessfulTradeAct.startAct(baseActivity);
+        }
+    }
+
+    /**
+     * 刷新订单
+     *
+     * @param orders
+     */
+    @Override
+    public void refreshOrder(MyOrderEntity.Orders orders) {
+        if (id == 0){//全部，更新条目
+            ordersLists.remove(refreshPosition);
+            ordersLists.add(refreshPosition,orders);
+            if (adapter != null){
+                adapter.notifyItemChanged(refreshPosition);
+            }
+        }else {//非全部，status状态一样就更新，不一样就删除
+            String old_status = ordersLists.get(refreshPosition).status;
+            String new_status = orders.status;
+            if (old_status.equals(new_status)) {//更新
+                ordersLists.remove(refreshPosition);
+                ordersLists.add(refreshPosition, orders);
+                if (adapter != null) {
+                    adapter.notifyItemChanged(refreshPosition);
+                }
+            } else {//删除
+                ordersLists.remove(refreshPosition);
+                if (isEmpty(ordersLists)) {
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                } else {
+                    if (adapter != null) {
+                        adapter.notifyItemRemoved(refreshPosition);
+                    }
+                }
+            }
+        }
+        emptyPage();
     }
 
     /**
@@ -215,9 +293,9 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      * 取消订单
      * @param order_id
      */
-    public void cancleOrder(String order_id) {
+    public void cancleOrder(String order_id,int reason) {
         if (mPresenter != null){
-            mPresenter.cancleOrder(order_id);
+            mPresenter.cancleOrder(order_id,reason);
         }
     }
 
@@ -238,6 +316,26 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     public void postpone(String order_id) {
         if (mPresenter != null){
             mPresenter.postpone(order_id);
+        }
+    }
+
+    /**
+     * 刷新指定订单
+     * @param order_id
+     */
+    public void refreshOrder(String order_id){
+        if (mPresenter != null){
+            mPresenter.refreshOrder(order_id);
+        }
+    }
+
+    /**
+     * 确认收货
+     * @param order_id
+     */
+    public void confirmreceipt(String order_id){
+        if (mPresenter != null){
+            mPresenter.confirmreceipt(order_id);
         }
     }
 }

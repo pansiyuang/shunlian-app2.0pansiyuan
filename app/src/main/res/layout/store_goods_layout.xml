@@ -227,15 +227,13 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:ll_control_adapter="true"
-        app:ll_control_height="88"
-        >
+        android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mll_self_hot"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:paddingTop="19dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
@@ -263,6 +261,7 @@
             android:id="@+id/mll_self_push"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:paddingTop="19dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center">
@@ -279,13 +278,18 @@
             <View
                 android:id="@+id/view_self_push"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/bg_gray_two"
+                android:layout_height="1dp"
+                android:background="@color/pink_color"
                 android:layout_marginTop="14dp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 />
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyLinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/bg_gray_two"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"

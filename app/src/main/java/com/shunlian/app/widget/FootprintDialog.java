@@ -21,6 +21,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import butterknife.BindView;
@@ -91,6 +92,8 @@ public class FootprintDialog extends Dialog {
             mbtn_clear.setVisibility(View.VISIBLE);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             recy_view.setLayoutManager(linearLayoutManager);
+            int space = TransformUtil.dip2px(context, 8.5f);
+            recy_view.addItemDecoration(new VerticalItemDecoration(space,0,0));
             SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<FootprintEntity.MarkData>(getContext(),
                     R.layout.item_footprint, mFootprintEntity.mark_data) {
 

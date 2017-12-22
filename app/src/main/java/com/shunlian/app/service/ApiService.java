@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.ComboDetailEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -43,6 +44,7 @@ import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
+import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -642,7 +644,7 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/cancelorder")
-    Call<BaseEntity<EmptyEntity>> cancleOrder(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> cancleOrder(@Body RequestBody body);
 
     /**
      * 提醒发货
@@ -650,7 +652,7 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/remindseller")
-    Call<BaseEntity<EmptyEntity>> remindseller(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> remindseller(@Body RequestBody body);
 
     /**
      * 延长发货
@@ -658,5 +660,43 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/postpone")
-    Call<BaseEntity<EmptyEntity>> postpone(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> postpone(@Body RequestBody body);
+
+    /**
+     * 刷新订单
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/partorderlist")
+    Call<BaseEntity<MyOrderEntity.Orders>> refreshOrder(@QueryMap Map<String,String> map);
+
+    /**
+     *确认收货
+     */
+    @POST("personalcenter/confirmreceipt")
+    Call<BaseEntity<CommonEntity>> confirmreceipt(@Body RequestBody body);
+
+    /**
+     * 获取支付列表
+     * @param map
+     * @return
+     */
+    @GET("order/getavailablepaymethod")
+    Call<BaseEntity<PayListEntity>> methodlist(@QueryMap Map<String,String> map);
+
+    /**
+     * 商品详情评价点赞
+     * @param body
+     * @return
+     */
+    @POST("comment/praise")
+    Call<BaseEntity<CommonEntity>> commentPraise(@Body RequestBody body);
+
+    /**
+     * 套餐详情
+     * @param body
+     * @return
+     */
+    @POST("goods/getcombodetail")
+    Call<BaseEntity<ComboDetailEntity>> getcombodetail(@Body RequestBody body);
 }

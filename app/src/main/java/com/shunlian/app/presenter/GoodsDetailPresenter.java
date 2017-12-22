@@ -255,4 +255,22 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public void setType(String type) {
         this.type = type;
     }
+
+    /**
+     * 点赞
+     */
+    public void setCommentPraise(String comment_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("comment_id",comment_id);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().commentPraise(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.praiseTotal(entity.data.praise_total);
+            }
+        });
+    }
+
 }

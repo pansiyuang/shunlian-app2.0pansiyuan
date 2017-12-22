@@ -188,9 +188,9 @@ public class Common {
      * @return
      */
     public static String getPlaceholder(int num) {
-        String str = "";
-        for (int i = 0; i < num; i++) {
-            str += "\u3000";
+        String str = "\u3000";
+        for (int i = 0; i < num - 1; i++) {
+            str = str.concat("\u3000");
         }
         return str;
     }
@@ -298,7 +298,7 @@ public class Common {
     /**
      * 更改源字符串的颜色
      * @param source 源字符串
-     * @param changeStr 需要改变颜色的问题
+     * @param changeStr 需要改变颜色的字符串
      * @param color 变化的颜色
      * @return
      */
@@ -315,6 +315,30 @@ public class Common {
             return ssb;
         }else {
             ssb.setSpan(colorSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 更改源字符串的大小
+     * @param source 源字符串
+     * @param changeStr 需要改变大小的字符串
+     * @param textSize 变化的文字大小  单位dip
+     * @return
+     */
+    public static SpannableStringBuilder changeTextSize(String source, String changeStr,int textSize){
+        if (sizeSpan == null)
+            sizeSpan = new AbsoluteSizeSpan(textSize,true);
+
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int i = source.indexOf(changeStr);
+        if (i == -1){
+            return ssb;
+        }else {
+            ssb.setSpan(sizeSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
     }

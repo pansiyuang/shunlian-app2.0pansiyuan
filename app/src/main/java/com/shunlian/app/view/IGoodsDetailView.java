@@ -37,4 +37,10 @@ public interface IGoodsDetailView extends IView {
      * @param entity
      */
     void commentListData(CommentListEntity entity);
+
+    /**
+     * 评价总数量
+     * @param praiseTotal
+     */
+    void praiseTotal(String praiseTotal);
 }

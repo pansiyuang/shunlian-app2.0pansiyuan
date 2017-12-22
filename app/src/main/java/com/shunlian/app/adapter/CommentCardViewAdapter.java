@@ -108,18 +108,31 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         }
     }
 
-    public class FooterHolder extends BaseRecyclerViewHolder{
+    public class FooterHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mll_bg)
         MyLinearLayout mll_bg;
 
         public FooterHolder(View itemView) {
             super(itemView);
-            if (Build.VERSION.SDK_INT >= 21) {
-                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-                int w = TransformUtil.dip2px(context, 20);
-                layoutParams.leftMargin = w;
-                itemView.setLayoutParams(layoutParams);
+            itemView.setOnClickListener(this);
+//            if (Build.VERSION.SDK_INT >= 21) {
+//                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+//                int w = TransformUtil.dip2px(context, 20);
+//                layoutParams.leftMargin = w;
+//                itemView.setLayoutParams(layoutParams);
+//            }
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
             }
         }
     }

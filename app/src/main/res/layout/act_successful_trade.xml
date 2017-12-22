@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/pink_color">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/icon_common_back_white" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="交易成功"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="9.5dp"
+                android:src="@mipmap/icon_common_more_white" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/miv_more"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/rounded_rectangle_12px"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="9+"
+                android:textColor="@color/pink_color"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink_color"
+        app:rl_control_adapter="true"
+        app:rl_control_height="220">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_success"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="交易成功"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="80"
+            app:tv_margin_top="75" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mtv_success"
+            android:layout_below="@+id/mtv_success"
+            android:text="卖家将收到您的货款"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_top="20" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:text="查看订单"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="20dp"
+            android:background="@color/bg_gray_two" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:text="立即评价"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/bg_gray_two" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="您可能还想买"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/bg_gray_two" />
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

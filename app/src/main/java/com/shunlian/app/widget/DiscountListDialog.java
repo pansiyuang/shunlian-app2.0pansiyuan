@@ -19,6 +19,7 @@ import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.utils.TransformUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,6 +43,10 @@ public class DiscountListDialog extends Dialog {
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
     private int recycleHeight;
     private int currentPosition = 0;
     private ISelectListener listener;
@@ -168,6 +173,49 @@ public class DiscountListDialog extends Dialog {
             }
         });
     }
+
+
+    /**
+     * 选择原因
+     */
+    public void setSelectReason(){
+        miv_close.setVisibility(View.VISIBLE);
+        mtv_title.setGravity(Gravity.CENTER);
+        mtv_title.setText("请选择原因");
+        mtv_close.setTextColor(mContext.getResources().getColor(R.color.white));
+        mtv_close.setBackgroundColor(mContext.getResources().getColor(R.color.pink_color));
+        mtv_close.setText("提交");
+
+        String[] select_reason = mContext.getResources().getStringArray(R.array.select_reason);
+        List<String> list = Arrays.asList(select_reason);
+        final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<String>(mContext,
+                R.layout.item_changeprefer, list) {
+
+            @Override
+            public void convert(SimpleViewHolder holder, String s, int position) {
+                TextView tv_prefer = holder.getView(R.id.tv_prefer);
+                tv_prefer.setText(s);
+                MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
+                holder.addOnClickListener(R.id.rl_item);
+                if (currentPosition == position) {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                } else {
+                    miv_prefer_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+                }
+            }
+        };
+
+        recycler_list.setAdapter(recyclerAdapter);
+
+        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                currentPosition = position;
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     public void setSelectListener(ISelectListener listener){
         this.listener = listener;
     }

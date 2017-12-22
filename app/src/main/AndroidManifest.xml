@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
@@ -178,6 +179,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.confirm_order.OrderLogisticsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.my_comment.SuccessfulTradeAct"
             android:exported="false"
             android:screenOrientation="portrait"
             />

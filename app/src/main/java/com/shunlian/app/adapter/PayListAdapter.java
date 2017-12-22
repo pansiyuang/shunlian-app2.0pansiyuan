@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -20,9 +20,9 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/7.
  */
 
-public class PayListAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.PayTypes> {
+public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> {
 
-    public PayListAdapter(Context context, boolean isShowFooter, List<ConfirmOrderEntity.PayTypes> lists) {
+    public PayListAdapter(Context context, boolean isShowFooter, List<PayListEntity.PayTypes> lists) {
         super(context, isShowFooter, lists);
     }
 
@@ -47,12 +47,12 @@ public class PayListAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.PayTy
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         PayListHolder mHolder = (PayListHolder) holder;
-        ConfirmOrderEntity.PayTypes payTypes = lists.get(position);
+        PayListEntity.PayTypes payTypes = lists.get(position);
         mHolder.mtv_pay_name.setText(payTypes.name);
         GlideUtils.getInstance().loadImage(context,mHolder.miv_pay_pic,payTypes.pic);
     }
 
-    public class PayListHolder extends BaseRecyclerViewHolder{
+    public class PayListHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_pay_name)
         MyTextView mtv_pay_name;
@@ -61,6 +61,19 @@ public class PayListAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.PayTy
         MyImageView miv_pay_pic;
         public PayListHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

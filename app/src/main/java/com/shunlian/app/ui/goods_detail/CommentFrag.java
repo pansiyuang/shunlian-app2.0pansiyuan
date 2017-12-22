@@ -38,6 +38,7 @@ public class CommentFrag extends BaseFragment {
     private String mCommentId;
     private String goodsId;
     private boolean isClickHead;
+    private int praisePosition;//点赞位置
 
     /**
      * 设置布局id
@@ -113,6 +114,13 @@ public class CommentFrag extends BaseFragment {
                     }
                 }
             });
+            commentAdapter.setCommentPraiseListener(new CommentAdapter.ICommentPraiseListener() {
+                @Override
+                public void onCommentPraise(String comment_id,int position) {
+                    goodsDetailPresenter.setCommentPraise(comment_id);
+                    praisePosition = position;
+                }
+            });
         }
         int page = Integer.parseInt(list.page) + 1;
         this.allPage = Integer.parseInt(list.allPage);
@@ -171,5 +179,14 @@ public class CommentFrag extends BaseFragment {
         goodsDetailPresenter.commentList(GoodsDetailPresenter.COMMENT_EMPTY_CODE,
                 GoodsDetailPresenter.COMMENT_FAILURE_CODE,false,
                 goodsId,type,page,String.valueOf(pageSize),null);
+    }
+
+    /**
+     * 评价总数量
+     * @param praiseTotal
+     */
+    public void praiseTotal(String praiseTotal) {
+        if (commentAdapter != null)
+            commentAdapter.setPraiseTotal(praiseTotal,praisePosition);
     }
 }
