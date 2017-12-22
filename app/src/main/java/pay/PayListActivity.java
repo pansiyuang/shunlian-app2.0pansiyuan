@@ -1,21 +1,32 @@
 package pay;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
+import com.alipay.sdk.app.PayTask;
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PayListAdapter;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.presenter.PayListPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.MyImageView;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -32,11 +43,42 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.recy_pay)
     RecyclerView recy_pay;
     private PayListPresenter payListPresenter;
+    private IWXAPI wxapi;
+    private static final int SDK_PAY_FLAG = 1;
+    private String payRequest = "partner=2088101568358171&seller_id=xxx@alipay.com&out_trade_no=0819145412-6177&subject=测试&body=测试测试&total_fee=0.01&notify_url=http://notify.msp.hk/notify.htm&service=mobile.securitypay.pay&payment_type=1&_input_charset=utf-8&it_b_pay=30m&sign=lBBK%2F0w5LOajrMrji7DUgEqNjIhQbidR13GovA5r3TgIbNqv231yC1NksLdw%2Ba3JnfHXoXuet6XNNHtn7VE%2BeCoRO1O%2BR1KugLrQEZMtG5jmJIe2pbjm%2F3kb%2FuGkpG%2BwYQYI51%2BhA3YBbvZHVQBYveBqK%2Bh8mUyb7GM1HxWs9k4%3D&sign_type=RSA";
 
     public static void startAct(Context context){
         Intent intent = new Intent(context, PayListActivity.class);
         context.startActivity(intent);
     }
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Common.staticToast("支付成功");
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        Common.staticToast("支付失败");
+                    }
+                    break;
+                }
+            }
+        };
+    };
     /**
      * 布局id
      *
@@ -58,6 +100,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     protected void initData() {
+        wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
+        wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
         payListPresenter = new PayListPresenter(this,this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
@@ -117,5 +161,37 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public void payList(List<PayListEntity.PayTypes> payTypes) {
         PayListAdapter adapter = new PayListAdapter(this,false,payTypes);
         recy_pay.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                alipay();
+            }
+        });
+    }
+
+
+
+    /**
+     * call alipay sdk pay. 调用SDK支付
+     */
+    public void alipay() {
+        Runnable payRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // 构造PayTask 对象
+                PayTask alipay = new PayTask(PayListActivity.this);
+                // 调用支付接口，获取支付结果
+//                String result = alipay.pay(payRequest, true);
+                Map<String, String> result = alipay.payV2(payRequest, true);
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
     }
 }

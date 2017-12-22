@@ -455,6 +455,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    /**
+     * 评价总数量
+     *
+     * @param praiseTotal
+     */
+    @Override
+    public void praiseTotal(String praiseTotal) {
+        if (commentFrag != null) {
+            commentFrag.praiseTotal(praiseTotal);
+        }
+    }
+
     /*
    显示足迹列表
     */

@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.ComboDetailEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -673,4 +674,20 @@ public interface ApiService {
      */
     @GET("order/getavailablepaymethod")
     Call<BaseEntity<PayListEntity>> methodlist(@QueryMap Map<String,String> map);
+
+    /**
+     * 商品详情评价点赞
+     * @param body
+     * @return
+     */
+    @POST("comment/praise")
+    Call<BaseEntity<CommonEntity>> commentPraise(@Body RequestBody body);
+
+    /**
+     * 套餐详情
+     * @param body
+     * @return
+     */
+    @POST("goods/getcombodetail")
+    Call<BaseEntity<ComboDetailEntity>> getcombodetail(@Body RequestBody body);
 }

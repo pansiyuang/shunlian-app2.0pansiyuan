@@ -766,7 +766,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         recyclerDialog = new RecyclerDialog(context);
                     }
                     if (!recyclerDialog.isShowing()){
-                        recyclerDialog.setCombos(mGoodsEntity.combo);
+                        recyclerDialog.setCombos(mGoodsEntity.combo,mGoodsEntity.id);
                         recyclerDialog.show();
                     }
                     break;

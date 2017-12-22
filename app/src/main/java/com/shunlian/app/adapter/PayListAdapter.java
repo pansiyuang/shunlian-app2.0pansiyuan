@@ -52,7 +52,7 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         GlideUtils.getInstance().loadImage(context,mHolder.miv_pay_pic,payTypes.pic);
     }
 
-    public class PayListHolder extends BaseRecyclerViewHolder{
+    public class PayListHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_pay_name)
         MyTextView mtv_pay_name;
@@ -61,6 +61,19 @@ public class PayListAdapter extends BaseRecyclerAdapter<PayListEntity.PayTypes> 
         MyImageView miv_pay_pic;
         public PayListHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

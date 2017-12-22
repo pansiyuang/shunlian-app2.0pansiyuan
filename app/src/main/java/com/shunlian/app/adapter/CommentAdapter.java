@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/21.
@@ -47,6 +48,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     private ICommentTypeListener mCommentTypeListener;
     private int selectId = 0;
     private View mHeadView;
+    private ICommentPraiseListener praiseListener;
+
     public CommentAdapter(Context context, boolean isShowFooter, List<CommentListEntity.Data> lists) {
         super(context, isShowFooter, lists);
     }
@@ -268,6 +271,13 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         }
     }
 
+    public void setPraiseTotal(String praiseTotal, int praisePosition) {
+        CommentListEntity.Data data = lists.get(praisePosition - 1);
+        data.praise_total = praiseTotal;
+        data.is_praise = true;
+        notifyItemChanged(praisePosition);
+    }
+
     public class CommentHolder extends BaseRecyclerViewHolder{
 
         @BindView(R.id.civ_head)
@@ -326,6 +336,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         public CommentHolder(View itemView) {
             super(itemView);
             miv_vip.setWHProportion(23,23);
+            int px = TransformUtil.dip2px(context, 20);
+            TransformUtil.expandViewTouchDelegate(miv_zan,px,px,px,px);
             GridLayoutManager manager = new GridLayoutManager(context,3);
             recy_view.setLayoutManager(manager);
             recy_view.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,5),false));
@@ -347,6 +359,14 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             });
 
         }
+
+        @OnClick(R.id.miv_zan)
+        public void commentPraise(){
+            if (praiseListener != null){
+                CommentListEntity.Data data = lists.get(getAdapterPosition() - 1);
+                praiseListener.onCommentPraise(data.comment_id,getAdapterPosition());
+            }
+        }
     }
 
     public class HeadHolder extends BaseRecyclerViewHolder{
@@ -366,6 +386,18 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
      */
     public void setCommentTypeListener(ICommentTypeListener listener){
         mCommentTypeListener = listener;
+    }
+
+    /**
+     * 评论点赞
+     * @param praiseListener
+     */
+    public void setCommentPraiseListener(ICommentPraiseListener praiseListener){
+        this.praiseListener = praiseListener;
+    }
+
+    public interface ICommentPraiseListener{
+        void onCommentPraise(String comment_id,int position);
     }
 
     public interface ICommentTypeListener{

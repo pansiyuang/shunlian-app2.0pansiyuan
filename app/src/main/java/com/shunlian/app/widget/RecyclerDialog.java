@@ -101,7 +101,7 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         });
     }
 
-    public void setCombos(List<GoodsDeatilEntity.Combo> combos) {
+    public void setCombos(List<GoodsDeatilEntity.Combo> combos, final String goods_id) {
         this.mCombos = combos;
         if (comboAdapter == null) {
             comboAdapter = new ComboAdapter(mContext, false, mCombos);
@@ -115,7 +115,8 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         comboAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ComboDetailAct.startAct(mContext);
+                GoodsDeatilEntity.Combo combo = mCombos.get(position);
+                ComboDetailAct.startAct(mContext,combo.combo_id,goods_id);
                 if (isShowing()) {
                     dismiss();
                 }
