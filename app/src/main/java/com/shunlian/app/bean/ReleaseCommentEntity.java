@@ -19,6 +19,7 @@ public class ReleaseCommentEntity implements Serializable {
     public String content;
     public String starLevel;
     public List<ImageEntity> imgs;
+    public String picString;
 
     public ReleaseCommentEntity(String pic, String title, String price, String comment_id) {
         this.pic = pic;

@@ -259,6 +259,7 @@
     <string name="go_comment">去评价</string>
     <string name="go_append_comment">去追评</string>
     <string name="this_append_comment">这些商品可追加</string>
+    <string name="ready_to_cancel_comment">确定取消发布吗？</string>
 
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>

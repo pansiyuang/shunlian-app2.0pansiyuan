@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,6 +15,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+
+import java.io.File;
 
 public class GlideUtils {
 
@@ -280,6 +283,7 @@ public class GlideUtils {
                 .thumbnail(Contants.THUMB_SIZE)
                 .into(imageView);
     }
+
     /**
      * 控件放置背景图片
      */
@@ -298,6 +302,30 @@ public class GlideUtils {
                     }
                 });
     }
+
+    /**
+     * 加载资源文件方法
+     */
+
+    public void loadLocalImageWithView(Context context, @DrawableRes int resourceId, ImageView view) {
+        Glide.with(context).
+                load(resourceId).
+                asBitmap().
+                diskCacheStrategy(DiskCacheStrategy.ALL). //缓存策略
+                into(view);
+    }
+
+    /**
+     * 加载图片文件方法
+     */
+
+    public void loadFileImageWithView(Context context, File file, ImageView view) {
+        Glide.with(context).
+                load(file).
+                into(view);
+    }
+
+
     /**
      * 恢复请求，一般在停止滚动的时候
      *

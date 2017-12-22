@@ -114,13 +114,10 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
         }
     }
 
-    public void appendComment(String commentId, String content, String images) {
+    public void appendComment(String commentId, String goodsStr) {
         Map<String, String> map = new HashMap<>();
-        map.put("comment_id", commentId);
-        map.put("content", content);
-        if (!TextUtils.isEmpty(images)) {
-            map.put("images", images);
-        }
+        map.put("ordersn", commentId);
+        map.put("goods", goodsStr);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);

@@ -10,7 +10,10 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -22,9 +25,12 @@ import com.shunlian.app.presenter.CommentPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICommentView;
+import com.shunlian.app.widget.FiveStarBar;
+import com.shunlian.app.widget.MyImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,13 +47,13 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/12.
  */
 
-public class CreatCommentActivity extends BaseActivity implements ICommentView, View.OnClickListener, CreatCommentAdapter.OnCommentChangeCallBack {
+public class CreatCommentActivity extends BaseActivity implements ICommentView, View.OnClickListener, CreatCommentAdapter.OnCommentChangeCallBack, FiveStarBar.OnRatingBarChangeListener {
     public static final int CREAT_COMMENT = 1; //发布评论
     public static final int APPEND_COMMENT = 2; //追加评论
     public static final int CHANGE_COMMENT = 3; //修改评论
 
     @BindView(R.id.recycler_creat_comment)
-    RecyclerView recycler_creat_comment;
+    ListView recycler_creat_comment;
 
     @BindView(R.id.tv_title_left)
     TextView tv_title_left;
@@ -55,16 +61,26 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+
+    FiveStarBar ratingBar_logistics, ratingBar_attitude, ratingBar_consistent;
+
     private List<ReleaseCommentEntity> commentList;
     private ReleaseCommentEntity commentEntity;
     private CreatCommentAdapter creatCommentAdapter;
     private int currentType;
     private CommentPresenter commentPresenter;
     private int currentPosition;
+    private String currentCommentId;
     private List<ImageEntity> paths = new ArrayList<>();
     private int currentLogisticsStar = 0;
     private int currentAttitudeStar = 0;
     private int currentConsistentStar = 0;
+    private View footView;
+    private PromptDialog promptDialog;
+
 
     public static void startAct(Context context, List<ReleaseCommentEntity> list, int type) {
         Intent intent = new Intent(context, CreatCommentActivity.class);
@@ -101,38 +117,49 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         commentList = new ArrayList<>();
 
         currentType = getIntent().getIntExtra("type", -1);
-        switch (currentType) {
-            //创建评论
-            case CREAT_COMMENT:
-                commentList.addAll((Collection<? extends ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList"));
-                commentList.addAll((Collection<? extends ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList"));
-                break;
-            //追评评论
-            case APPEND_COMMENT:
-                commentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
-                commentList.add(commentEntity);
-                break;
-            //修改评论
-            case CHANGE_COMMENT:
-                commentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
-                commentList.add(commentEntity);
-                break;
-            default:
-                finish();
-                break;
+
+        if (getIntent().getSerializableExtra("commentList") != null) {
+            commentList.addAll((Collection<? extends ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList"));
+        } else if (getIntent().getSerializableExtra("comment") != null) {
+            commentList.add((ReleaseCommentEntity) getIntent().getSerializableExtra("comment"));
         }
-        creatCommentAdapter = new CreatCommentAdapter(this, false, commentList, currentType);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recycler_creat_comment.setNestedScrollingEnabled(false);
-        recycler_creat_comment.setLayoutManager(linearLayoutManager);
+
+        creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
         recycler_creat_comment.setAdapter(creatCommentAdapter);
-        recycler_creat_comment.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 7), 0, 0));
         creatCommentAdapter.setOnCommentChangeCallBack(this);
+
+        if (currentType == CREAT_COMMENT) {
+            recycler_creat_comment.addFooterView(footView);
+        }
     }
 
     @Override
     protected void initListener() {
+        miv_close.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        footView = LayoutInflater.from(this).inflate(R.layout.foot_creat_comment, null, false);
+        ratingBar_logistics = (FiveStarBar) footView.findViewById(R.id.ratingBar_logistics);
+        ratingBar_attitude = (FiveStarBar) footView.findViewById(R.id.ratingBar_attitude);
+        ratingBar_consistent = (FiveStarBar) footView.findViewById(R.id.ratingBar_consistent);
+        ratingBar_consistent.setOnRatingBarChangeListener(this);
+        ratingBar_attitude.setOnRatingBarChangeListener(this);
+        ratingBar_logistics.setOnRatingBarChangeListener(this);
+
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_cancel_comment),
+                getStringResouce(R.string.SelectRecommendAct_sure),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }, getStringResouce(R.string.errcode_cancel),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                });
         super.initListener();
     }
 
@@ -152,10 +179,9 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
+
             paths.clear();
             paths.add(new ImageEntity(imagePath));
-
-            creatCommentAdapter.addImages(paths, currentPosition);
             commentPresenter.uploadPic(paths, "comment");
             c.close();
         }
@@ -178,17 +204,16 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         switch (v.getId()) {
             case R.id.tv_title_right:
                 if (currentType == APPEND_COMMENT) {
-                    ReleaseCommentEntity releaseCommentEntity = commentList.get(0);
-                    if (!isEmpty(releaseCommentEntity.content)) {
-                        commentPresenter.appendComment(commentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.pic);
+                    String goodsString = getGoodsString();
+                    if (!isEmpty(goodsString)) {
+                        commentPresenter.appendComment(currentCommentId, goodsString);
                     }
                 } else if (currentType == CHANGE_COMMENT) {
                     ReleaseCommentEntity releaseCommentEntity = commentList.get(0);
                     if (!isEmpty(releaseCommentEntity.content)) {
-                        commentPresenter.changeComment(commentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.pic);
+                        commentPresenter.changeComment(commentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.picString);
                     }
                 } else if (currentType == CREAT_COMMENT) {
-
                     if (currentLogisticsStar == 0) {
                         Common.staticToast("请评价物流服务");
                         return;
@@ -203,8 +228,16 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                         Common.staticToast("请评价描述相符");
                         return;
                     }
-                    getGoodsString();
-//                    commentPresenter.creatComment(commentEntity.comment_id, currentLogisticsStar, currentAttitudeStar, currentConsistentStar, releaseCommentEntity.pic);
+                    String goodsString = getGoodsString();
+                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentCommentId)) {
+                        return;
+                    }
+                    commentPresenter.creatComment(currentCommentId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
+                }
+                break;
+            case R.id.miv_close:
+                if (promptDialog != null) {
+                    promptDialog.show();
                 }
                 break;
         }
@@ -216,15 +249,18 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             return null;
         }
         try {
+            JSONArray array = new JSONArray();
             for (int i = 0; i < commentList.size(); i++) {
                 JSONObject jsonObject = new JSONObject();
                 ReleaseCommentEntity releaseCommentEntity = commentList.get(i);
+                currentCommentId = releaseCommentEntity.comment_id;
                 jsonObject.put("goods_id", releaseCommentEntity.goodsId);
                 jsonObject.put("star_level", releaseCommentEntity.starLevel);
                 jsonObject.put("content", releaseCommentEntity.content);
-                jsonObject.put("images", releaseCommentEntity.pic);
-                LogUtil.httpLogW("jsonObject:" + jsonObject.toString());
+                jsonObject.put("images", releaseCommentEntity.picString);
+                array.put(i, jsonObject);
             }
+            result = array.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -242,42 +278,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     }
 
     @Override
-    public void OnLogisticsStar(float logistics) {
-        currentLogisticsStar = ((int) logistics);
-    }
-
-    @Override
-    public void OnAttitudeStar(float attitude) {
-        currentAttitudeStar = ((int) attitude);
-    }
-
-    @Override
-    public void OnConsistent(float consistent) {
-        currentConsistentStar = ((int) consistent);
-    }
-
-    @Override
     public void uploadImg(UploadPicEntity picEntity) {
-        List<ImageEntity> imageEntities;
-        if (commentList.get(currentPosition).imgs == null) {
-            imageEntities = new ArrayList<>();
-        } else {
-            imageEntities = commentList.get(currentPosition).imgs;
-        }
-        List<String> pics = picEntity.relativePath;
-        for (String string : pics) {
-            imageEntities.add(new ImageEntity(string));
-        }
-        commentList.get(currentPosition).imgs = imageEntities;
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < imageEntities.size(); i++) {
-            if (i != imageEntities.size() - 1) {
-                stringBuffer.append(imageEntities.get(i).imgPath + ",");
-            } else {
-                stringBuffer.append(imageEntities.get(i).imgPath);
-            }
-        }
-        commentList.get(currentPosition).pic = stringBuffer.toString();
+        Message message = mHandler.obtainMessage();
+        message.obj = picEntity.relativePath;
+        message.what = 1;
+        mHandler.sendMessage(message);
     }
 
     @Override
@@ -313,9 +318,48 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int progress = msg.arg1;
-            String tag = String.valueOf(msg.obj);
+            switch (msg.what) {
+                case 0:
+                    int progress = msg.arg1;
+                    String tag = String.valueOf(msg.obj);
 //            creatCommentAdapter.updateProgress(currentPosition, tag, progress);
+                    break;
+                case 1:
+                    List<String> picStr = (List<String>) msg.obj;
+                    creatCommentAdapter.addImages(paths, currentPosition);
+                    ReleaseCommentEntity releaseCommentEntity = commentList.get(currentPosition);
+
+                    StringBuffer stringBuffer;
+                    if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
+                        stringBuffer = new StringBuffer("");
+                    } else {
+                        stringBuffer = new StringBuffer(releaseCommentEntity.picString);
+                        stringBuffer.append(",");
+                    }
+                    for (int i = 0; i < picStr.size(); i++) {
+                        stringBuffer.append(picStr.get(i));
+                        if (i != picStr.size() - 1) {
+                            stringBuffer.append(",");
+                        }
+                    }
+                    commentList.get(currentPosition).picString = stringBuffer.toString();
+                    break;
+            }
         }
     };
+
+    @Override
+    public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
+        switch (simpleRatingBar.getId()) {
+            case R.id.ratingBar_logistics:
+                currentLogisticsStar = (int) rating;
+                break;
+            case R.id.ratingBar_attitude:
+                currentAttitudeStar = (int) rating;
+                break;
+            case R.id.ratingBar_consistent:
+                currentConsistentStar = (int) rating;
+                break;
+        }
+    }
 }
