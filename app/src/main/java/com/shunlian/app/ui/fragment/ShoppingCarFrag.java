@@ -22,7 +22,6 @@ import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -229,7 +228,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 if (TextUtils.isEmpty(orderGoodsIds.toString())) {
                     return;
                 }
-                ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString());
+                ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString(),ConfirmOrderAct.TYPE_CART);
                 break;
             case R.id.miv_total_select:
                 if ("1".equals(isCheckAll)) {

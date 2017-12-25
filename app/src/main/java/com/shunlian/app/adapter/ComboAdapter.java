@@ -91,7 +91,7 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         }
     }
 
-    public class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
+    public static class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
         private List<GoodsDeatilEntity.Goods> goods;
 
         public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {

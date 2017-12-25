@@ -40,21 +40,23 @@
             app:iv_control_adapter="true"
             app:iv_margin_right="35" />
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_is_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_xiangqingye_souchag_n"
-            android:layout_toLeftOf="@+id/miv_more"
-            android:layout_centerVertical="true"
-            app:iv_control_adapter="true"
-            app:iv_margin_right="20" />
-
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="立即购买"
+        android:padding="15dp"
+        android:gravity="center"
+        android:background="@color/pink_color"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
 </com.shunlian.app.widget.MyLinearLayout>

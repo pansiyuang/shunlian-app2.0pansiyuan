@@ -23,7 +23,7 @@ android {
     buildToolsVersion '27.0.1'
 
     defaultConfig {
-        applicationId "com.shunlian.apps"
+        applicationId "com.shunlian.app"
         multiDexEnabled true
         minSdkVersion 14
         targetSdkVersion 22
