@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink_color"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.shunlian.app.ui.order.OrderDetailAct">
@@ -20,14 +20,14 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/icon_common_back_white" />
+            android:src="@mipmap/icon_common_back_black" />
 
-        <com.shunlian.app.widget.MyTextView
+  +      <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/order_xiangqing"
-            android:textColor="@color/white"
+            android:textColor="@color/my_dark_grey"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -42,7 +42,7 @@
                 android:layout_height="4dp"
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_common_more_white" />
+                android:src="@mipmap/icon_common_more_black" />
 
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="16dp"
@@ -50,10 +50,10 @@
                 android:layout_above="@id/miv_dot"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="1dp"
-                android:background="@drawable/bg_message_more_white"
+                android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
                 android:text="9+"
-                android:textColor="@color/pink_color"
+                android:textColor="@color/white"
                 android:textSize="9sp" />
         </RelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
