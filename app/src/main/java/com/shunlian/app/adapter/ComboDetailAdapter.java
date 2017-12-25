@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ComboDetailEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -36,6 +39,7 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     public static final int ITEM_OTHER_COMBO = 5;
     private final LayoutInflater mInflater;
     private ComboDetailEntity mEntity;
+    private ISelectParamsListener mParamsListener;
 
     public ComboDetailAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, ComboDetailEntity entity) {
         super(context, isShowFooter, lists);
@@ -66,7 +70,7 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
     @Override
     public int getItemCount() {
-        List<ComboDetailEntity.OthersCombo> others_combo = mEntity.others_combo;
+        List<GoodsDeatilEntity.Combo> others_combo = mEntity.others_combo;
         if (isEmpty(others_combo)){
             return super.getItemCount() + 2;
         }else {
@@ -100,7 +104,29 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private void holderOtherCombo(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof OtherComboHolder){
             OtherComboHolder mHolder = (OtherComboHolder) holder;
+            final GoodsDeatilEntity.Combo othersCombo = mEntity.others_combo.get(position - lists.size() - 3);
+            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
+                    .concat(othersCombo.combo_price), getString(R.string.rmb), 9);
+            mHolder.tv_combo_price.setText(spannableStringBuilder);
+            mHolder.tv_combo_price.setTextSize(19);
+            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb)).concat(othersCombo.old_combo_price));
 
+            ComboAdapter.ComboPicAdapter adapter = new ComboAdapter.
+                    ComboPicAdapter(context,false,othersCombo.goods);
+            mHolder.recycler_combo.setAdapter(adapter);
+            if (position + 1 == getItemCount()){
+                mHolder.view_line.setVisibility(View.INVISIBLE);
+            }else {
+                mHolder.view_line.setVisibility(View.VISIBLE);
+            }
+
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDeatilEntity.Goods goods = othersCombo.goods.get(position);
+                    ComboDetailAct.startAct(context,othersCombo.combo_id,goods.goods_id);
+                }
+            });
         }
     }
 
@@ -115,18 +141,20 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private void holderGift(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GiftPriceHolder){
             GiftPriceHolder mHolder = (GiftPriceHolder) holder;
-            mHolder.mtv_combo_title.setText(mEntity.combo_title);
+            GoodsDeatilEntity.Combo current_combo = mEntity.current_combo;
+            mHolder.mtv_combo_title.setText(current_combo.combo_title);
             SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
-                    .concat(mEntity.combo_price), getString(R.string.rmb), 9);
+                    .concat(current_combo.combo_price), getString(R.string.rmb), 9);
             mHolder.tv_combo_price.setText(spannableStringBuilder);
-            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb)).concat(mEntity.old_combo_price));
+            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb)).concat(current_combo.old_combo_price));
         }
     }
 
     private void holderPic(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PicHolder){
             PicHolder mHolder = (PicHolder) holder;
-            GlideUtils.getInstance().loadImage(context,(ImageView) mHolder.itemView,mEntity.combo_thumb);
+            GoodsDeatilEntity.Combo current_combo = mEntity.current_combo;
+            GlideUtils.getInstance().loadImage(context,(ImageView) mHolder.itemView,current_combo.combo_thumb);
         }
     }
 
@@ -223,6 +251,13 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         View view_line;
         public OtherComboHolder(View itemView) {
             super(itemView);
+            LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            recycler_combo.setLayoutManager(manager);
+
+            ViewGroup.LayoutParams layoutParams = view_line.getLayoutParams();
+            layoutParams.height = TransformUtil.dip2px(context,0.5f);
+            view_line.setLayoutParams(layoutParams);
+            view_line.setBackgroundColor(getColor(R.color.light_gray_three));
         }
     }
 
@@ -241,23 +276,41 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         View view_line;
         public ComboHolder(View itemView) {
             super(itemView);
+            miv_goods_pic.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
         @OnClick(R.id.mtv_select)
         public void tvSelect(){
-            GoodsDeatilEntity.Goods goods = lists.get(getAdapterPosition() - 2);
+            final GoodsDeatilEntity.Goods goods = lists.get(getAdapterPosition() - 2);
             ParamDialog paramDialog = new ParamDialog(context,goods);
             paramDialog.show();
             paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
                 @Override
                 public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
                     String name = "";
-                    if (sku != null) {
-                        name = sku.name;
+                    if (sku != null && sku.name != null) {
+                        name = sku.name ;
                     }
-                    mtv_select.setText("已选择:".concat(name).concat(count+"件"));
+                    mtv_select.setText("已选择:".concat(name)
+                            .concat(String.valueOf(count)).concat("件"));
+                    if (mParamsListener != null){
+                        mParamsListener.selectParam(goods.goods_id,sku.id);
+                    }
                 }
             });
         }
+    }
+
+    /**
+     * 选择商品属性
+     * @param paramsListener
+     */
+    public void setSelectParamsListener(ISelectParamsListener paramsListener){
+
+        mParamsListener = paramsListener;
+    }
+
+    public interface ISelectParamsListener{
+        void selectParam(String goods_id,String sku);
     }
 }

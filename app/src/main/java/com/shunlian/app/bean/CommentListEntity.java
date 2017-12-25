@@ -61,6 +61,7 @@ public class CommentListEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Data implements Serializable{
         public String comment_id;
+        public String ordersn;
         public String star_level;
         public String praise_total;
         public String goods_option;

@@ -720,4 +720,12 @@ public interface ApiService {
      */
     @POST("goods/getcombodetail")
     Call<BaseEntity<ComboDetailEntity>> getcombodetail(@Body RequestBody body);
+
+    /**
+     * 购买套餐
+     * @param body
+     * @return
+     */
+    @POST("order/buycombo")
+    Call<BaseEntity<ConfirmOrderEntity>> buycombo(@Body RequestBody body);
 }

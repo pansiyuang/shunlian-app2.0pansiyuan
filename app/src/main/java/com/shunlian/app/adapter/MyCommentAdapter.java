@@ -227,6 +227,7 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
         public void appendComment(){
             CommentListEntity.Data data = lists.get(getAdapterPosition());
             ReleaseCommentEntity entity = new ReleaseCommentEntity(data.thumb,data.title,data.price,data.comment_id);
+            entity.order = data.ordersn;
             CreatCommentActivity.startAct(context,entity,CreatCommentActivity.APPEND_COMMENT);
         }
 
