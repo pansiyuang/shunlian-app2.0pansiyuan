@@ -159,19 +159,19 @@ public class CreatCommentAdapter extends BaseAdapter {
         };
         edt_comment.addTextChangedListener(watcher);
         if (TextUtils.isEmpty(data.starLevel)) {
-            data.starLevel = "10";
+            data.starLevel = "5";
         }
         miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_n));
         miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
         miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
         switch (data.starLevel) {
-            case "2":
+            case "1":
                 miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_h));
                 break;
-            case "6":
+            case "3":
                 miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_h));
                 break;
-            case "10":
+            case "5":
                 miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_h));
                 break;
         }
@@ -182,7 +182,7 @@ public class CreatCommentAdapter extends BaseAdapter {
                 miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
                 miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
                 if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("10", position);
+                    mCallBack.OnCommentLevel("5", position);
                 }
             }
         });
@@ -194,7 +194,7 @@ public class CreatCommentAdapter extends BaseAdapter {
                 miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_h));
                 miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
                 if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("6", position);
+                    mCallBack.OnCommentLevel("3", position);
                 }
             }
         });
@@ -206,59 +206,12 @@ public class CreatCommentAdapter extends BaseAdapter {
                 miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
                 miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_h));
                 if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("2", position);
+                    mCallBack.OnCommentLevel("1", position);
                 }
             }
         });
         return convertView;
     }
-
-//    public void handleFoot(RecyclerView.ViewHolder holder) {
-//        if (holder instanceof FootViewHolder) {
-//            FootViewHolder viewHolder = (FootViewHolder) holder;
-//            viewHolder.ratingBar_logistics.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
-//                @Override
-//                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
-//                    if (mCallBack != null) {
-//                        mCallBack.OnLogisticsStar(rating);
-//                    }
-//                }
-//            });
-//            viewHolder.ratingBar_attitude.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
-//                @Override
-//                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
-//                    if (mCallBack != null) {
-//                        mCallBack.OnAttitudeStar(rating);
-//                    }
-//                }
-//            });
-//            viewHolder.ratingBar_consistent.setOnRatingBarChangeListener(new FiveStarBar.OnRatingBarChangeListener() {
-//                @Override
-//                public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
-//                    if (mCallBack != null) {
-//                        mCallBack.OnConsistent(rating);
-//                    }
-//                }
-//            });
-//        }
-//    }
-
-
-//    public class FootViewHolder extends BaseRecyclerViewHolder {
-//
-//        @BindView(R.id.ratingBar_logistics)
-//        FiveStarBar ratingBar_logistics;
-//
-//        @BindView(R.id.ratingBar_attitude)
-//        FiveStarBar ratingBar_attitude;
-//
-//        @BindView(R.id.ratingBar_consistent)
-//        FiveStarBar ratingBar_consistent;
-//
-//        public FootViewHolder(View itemView) {
-//            super(itemView);
-//        }
-//    }
 
     public void setOnCommentChangeCallBack(OnCommentChangeCallBack callBack) {
         this.mCallBack = callBack;

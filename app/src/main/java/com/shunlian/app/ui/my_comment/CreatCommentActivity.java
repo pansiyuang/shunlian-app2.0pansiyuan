@@ -39,7 +39,9 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -68,12 +70,12 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     FiveStarBar ratingBar_logistics, ratingBar_attitude, ratingBar_consistent;
 
     private List<ReleaseCommentEntity> commentList;
-    private ReleaseCommentEntity commentEntity;
     private CreatCommentAdapter creatCommentAdapter;
     private int currentType;
     private CommentPresenter commentPresenter;
     private int currentPosition;
     private String currentCommentId;
+    private String currentOrderId;
     private List<ImageEntity> paths = new ArrayList<>();
     private int currentLogisticsStar = 0;
     private int currentAttitudeStar = 0;
@@ -206,12 +208,12 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 if (currentType == APPEND_COMMENT) {
                     String goodsString = getGoodsString();
                     if (!isEmpty(goodsString)) {
-                        commentPresenter.appendComment(currentCommentId, goodsString);
+                        commentPresenter.appendComment(goodsString);
                     }
                 } else if (currentType == CHANGE_COMMENT) {
                     ReleaseCommentEntity releaseCommentEntity = commentList.get(0);
                     if (!isEmpty(releaseCommentEntity.content)) {
-                        commentPresenter.changeComment(commentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.picString);
+                        commentPresenter.changeComment(releaseCommentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.picString);
                     }
                 } else if (currentType == CREAT_COMMENT) {
                     if (currentLogisticsStar == 0) {
@@ -229,10 +231,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                         return;
                     }
                     String goodsString = getGoodsString();
+                    LogUtil.httpLogW("goodsString:" + goodsString);
                     if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentCommentId)) {
                         return;
                     }
-                    commentPresenter.creatComment(currentCommentId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
+                    commentPresenter.creatComment(currentOrderId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
                 }
                 break;
             case R.id.miv_close:
@@ -251,14 +254,37 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         try {
             JSONArray array = new JSONArray();
             for (int i = 0; i < commentList.size(); i++) {
-                JSONObject jsonObject = new JSONObject();
+                Map<String, String> map = new HashMap<>();
                 ReleaseCommentEntity releaseCommentEntity = commentList.get(i);
-                currentCommentId = releaseCommentEntity.comment_id;
-                jsonObject.put("goods_id", releaseCommentEntity.goodsId);
-                jsonObject.put("star_level", releaseCommentEntity.starLevel);
-                jsonObject.put("content", releaseCommentEntity.content);
-                jsonObject.put("images", releaseCommentEntity.picString);
-                array.put(i, jsonObject);
+
+                if (!isEmpty(releaseCommentEntity.comment_id)) {
+                    currentCommentId = releaseCommentEntity.comment_id;
+                    map.put("comment_id", releaseCommentEntity.comment_id);
+                }
+                if (!isEmpty(releaseCommentEntity.goodsId)) {
+                    map.put("goods_id", releaseCommentEntity.goodsId);
+                }
+
+                if (!isEmpty(releaseCommentEntity.order)) {
+                    currentOrderId = releaseCommentEntity.order;
+                    map.put("ordersn", releaseCommentEntity.order);
+                }
+
+                if (!isEmpty(releaseCommentEntity.starLevel)) {
+                    map.put("star_level", releaseCommentEntity.starLevel);
+                }
+
+                if (!isEmpty(releaseCommentEntity.content)) {
+                    map.put("content", releaseCommentEntity.content);
+                } else {
+                    map.put("content", "");
+                }
+                if (!isEmpty(releaseCommentEntity.picString)) {
+                    map.put("images", releaseCommentEntity.picString);
+                } else {
+                    map.put("images", "");
+                }
+                array.put(i, map.toString());
             }
             result = array.toString();
         } catch (JSONException e) {

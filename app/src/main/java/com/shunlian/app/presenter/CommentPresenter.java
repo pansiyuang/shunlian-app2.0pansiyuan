@@ -93,7 +93,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().addComment(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
@@ -114,16 +114,15 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
         }
     }
 
-    public void appendComment(String commentId, String goodsStr) {
+    public void appendComment(String goodsStr) {
         Map<String, String> map = new HashMap<>();
-        map.put("ordersn", commentId);
         map.put("goods", goodsStr);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().appendComment(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
@@ -156,7 +155,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().changeComment(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
