@@ -106,10 +106,12 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             OtherComboHolder mHolder = (OtherComboHolder) holder;
             final GoodsDeatilEntity.Combo othersCombo = mEntity.others_combo.get(position - lists.size() - 3);
             SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
-                    .concat(othersCombo.combo_price), getString(R.string.rmb), 9);
+                    .concat(othersCombo.combo_price).concat("-").concat(othersCombo.max_combo_price), getString(R.string.rmb), 9);
             mHolder.tv_combo_price.setText(spannableStringBuilder);
             mHolder.tv_combo_price.setTextSize(19);
-            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb)).concat(othersCombo.old_combo_price));
+            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb))
+                    .concat(othersCombo.old_combo_price).concat("-")
+                    .concat(othersCombo.max_old_combo_price));
 
             ComboAdapter.ComboPicAdapter adapter = new ComboAdapter.
                     ComboPicAdapter(context,false,othersCombo.goods);
@@ -144,9 +146,11 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             GoodsDeatilEntity.Combo current_combo = mEntity.current_combo;
             mHolder.mtv_combo_title.setText(current_combo.combo_title);
             SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
-                    .concat(current_combo.combo_price), getString(R.string.rmb), 9);
+                    .concat(current_combo.combo_price).concat("-")
+                    .concat(current_combo.max_combo_price), getString(R.string.rmb), 9);
             mHolder.tv_combo_price.setText(spannableStringBuilder);
-            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb)).concat(current_combo.old_combo_price));
+            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb))
+                    .concat(current_combo.old_combo_price).concat("-").concat(current_combo.max_old_combo_price));
         }
     }
 

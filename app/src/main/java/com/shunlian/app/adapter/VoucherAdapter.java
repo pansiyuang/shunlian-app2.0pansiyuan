@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -48,7 +47,7 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         final GoodsDeatilEntity.Voucher voucher = mData.get(position);
         final VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
-        firstSmallText(voucherViewHolder.tv_voucher_price, price, 26);
+        firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
 
         voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
         voucherViewHolder.tv_voucher_date.setText(String.format(mContext.getResources().getString(R.string.valid_date), voucher.start_time, voucher.end_time));

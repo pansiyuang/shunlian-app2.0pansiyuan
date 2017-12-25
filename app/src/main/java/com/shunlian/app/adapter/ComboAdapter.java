@@ -48,9 +48,11 @@ public class ComboAdapter extends BaseRecyclerAdapter {
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ComboViewHolder viewHolder = (ComboAdapter.ComboViewHolder) holder;
         GoodsDeatilEntity.Combo combo = combos.get(position);
-        String comboPrice = context.getResources().getString(R.string.rmb) + " " + combo.combo_price;
-        firstSmallText(viewHolder.tv_combo_price, comboPrice, 18);
-        viewHolder.tv_market_price.setText(String.format(context.getResources().getString(R.string.combo_original_price), combo.old_combo_price));
+        String comboPrice = context.getResources().getString(R.string.rmb) + " " +
+                combo.combo_price.concat("-").concat(combo.max_combo_price);
+        firstSmallText(viewHolder.tv_combo_price, comboPrice, 9);
+        viewHolder.tv_market_price.setText(String.format(context.getResources().
+                getString(R.string.combo_original_price), combo.old_combo_price).concat("-").concat(combo.max_old_combo_price));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
