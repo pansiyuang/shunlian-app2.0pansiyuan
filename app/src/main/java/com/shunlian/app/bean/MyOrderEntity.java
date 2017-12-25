@@ -21,6 +21,7 @@ public class MyOrderEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Orders {
         public String id;
+        public String order_sn;
         public String total_amount;
         public String store_name;
         public String shipping_fee;
@@ -54,6 +55,7 @@ public class MyOrderEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class OrderGoodsBean {
         public String goods_id;
+        public String order_sn;
         public String title;
         public String thumb;
         public String qty;
@@ -62,6 +64,9 @@ public class MyOrderEntity {
         public String sku_desc;
         public String offered;
         public String comment_id;
+        public String is_append;
+        public String is_edit_praise;
+        public String og_id;//订单商品表id
 
     }
 }
