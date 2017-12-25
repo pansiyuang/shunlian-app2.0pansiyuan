@@ -48,7 +48,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
 
     }
 
-    public void uploadPic(List<ImageEntity> filePath, String uploadPath) {
+    public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
         Map<String, RequestBody> params = new HashMap<>();
         for (int i = 0; i < filePath.size(); i++) {
             File file = new File(filePath.get(i).imgPath);
@@ -72,30 +72,63 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
         getNetData(call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
+                UploadPicEntity uploadPicEntity = entity.data;
+                if (uploadPicEntity != null) {
+                    iView.uploadImg(uploadPicEntity);
+                }
                 super.onSuccess(entity);
             }
         });
     }
 
-    public void appendComment(String commentId, String content, String images) {
+    public void creatComment(String ordersn, String logisticsStar, String attitudeStar, String consistentStar, String goodsString) {
         Map<String, String> map = new HashMap<>();
-        map.put("comment_id", commentId);
-        map.put("content", content);
-        if (!TextUtils.isEmpty(images)) {
-            map.put("images", images);
+        map.put("ordersn", ordersn);
+        map.put("ship_star_level", logisticsStar);
+        map.put("service_star_level", attitudeStar);
+        map.put("desc_star_level", consistentStar);
+        map.put("goods", goodsString);
+        sortAndMD5(map);
+        try {
+            String s = new ObjectMapper().writeValueAsString(map);
+            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
+            Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().addComment(requestBody);
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                    if (entity.code == 1000) {
+                        iView.CommentSuccess();
+                    } else {
+                        iView.CommentFail(entity.message);
+                    }
+                    super.onSuccess(entity);
+                }
+
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public void appendComment(String goodsStr) {
+        Map<String, String> map = new HashMap<>();
+        map.put("goods", goodsStr);
         sortAndMD5(map);
         try {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().appendComment(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
-                        iView.appendCommentSuccess();
+                        iView.CommentSuccess();
                     } else {
-                        iView.appendCommentFail(entity.message);
+                        iView.CommentFail(entity.message);
                     }
                     super.onSuccess(entity);
                 }
@@ -122,13 +155,13 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().changeComment(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
-                        iView.changeCommentSuccess();
+                        iView.CommentSuccess();
                     } else {
-                        iView.changeCommtFail(entity.message);
+                        iView.CommentFail(entity.message);
                     }
                     super.onSuccess(entity);
                 }

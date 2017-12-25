@@ -1,198 +1,106 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
+import java.io.File;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
- * Created by Administrator on 2017/12/12.
+ * Created by Administrator on 2017/12/22.
  */
 
-public class SingleImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
-
-    private static final int FOOTER_IMG = 2;
+public class SingleImgAdapter extends BaseAdapter {
+    private Context mContext;
+    private List<ImageEntity> pics;
     private int parentPosition;
+    private int screenWidth;
 
-    public SingleImgAdapter(Context context, boolean isShowFooter, List<ImageEntity> lists, int position) {
-        super(context, isShowFooter, lists);
+    public SingleImgAdapter(Context context, List<ImageEntity> data, int position) {
+        this.mContext = context;
+        this.pics = data;
         this.parentPosition = position;
+        screenWidth = DeviceInfoUtil.getDeviceWidth(mContext);
     }
 
-    public void addImages(List<ImageEntity> imageEntities) {
-        lists.addAll(imageEntities);
-        notifyDataSetChanged();
+    @Override
+    public int getCount() {
+        return pics == null ? 1 : pics.size() + 1;//返回listiview数目加1
     }
 
-    public void updateItemProgress(String tag, int progress) {
-        if (lists == null || lists.size() == 0) {
-            return;
-        }
-        for (int i = 0; i < lists.size(); i++) {
-            if (lists.get(i).imgPath.equals(tag)) {
-                lists.get(i).progress = progress;
-                break;
-            }
-        }
+    public void setData(List<ImageEntity> data) {
+        this.pics = data;
         notifyDataSetChanged();
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case FOOTER_IMG:
-                View inflate = LayoutInflater.from(context).inflate(R.layout.item_single_img, parent, false);
-                return new DelImagViewHolder(inflate);
-            default:
-                return super.onCreateViewHolder(parent, viewType);
+    public Object getItem(int position) {
+        return pics.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_single_img, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-    }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position + 1 == getItemCount())
-            return FOOTER_IMG;
-        else
-            return super.getItemViewType(position);
-    }
-
-    @Override
-    public int getItemCount() {
-        if (lists == null) {
-            return 1;
-        }
-        return super.getItemCount() + 1;
-    }
-
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int itemViewType = getItemViewType(position);
-        switch (itemViewType) {
-            case FOOTER_IMG:
-                if (holder instanceof DelImagViewHolder) {
-                    DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
-                    delImagViewHolder.miv_img_del.setVisibility(View.GONE);
-                    delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
-
-                    ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
-                                ((CreatCommentActivity) context).openAlbum(parentPosition);
-                            }
-                        }
-                    });
-                }
-                break;
-            default:
-                if (holder instanceof ImagViewHolder) {
-                    LogUtil.httpLogW("handleList:");
-                    ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
-                    imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
-                    GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position).imgPath);
-                    ImageEntity imageEntity = lists.get(position);
-
-                    LogUtil.httpLogW("progress111111111111111:" + imageEntity.progress);
-                    if (imageEntity.progress > 0 && imageEntity.progress < 100) {
-                        imagViewHolder.pgb_img.setVisibility(View.VISIBLE);
-                        imagViewHolder.pgb_img.setProgress(imageEntity.progress);
-                    } else if (imageEntity.progress >= 100) {
-                        imagViewHolder.pgb_img.setVisibility(View.GONE);
+        if (pics != null && position < pics.size()) {
+            viewHolder.miv_del.setVisibility(View.VISIBLE);
+            String imgPath = pics.get(position).imgPath;
+            GlideUtils.getInstance().loadFileImageWithView(mContext, new File(imgPath), viewHolder.miv_img);
+        } else {
+            GlideUtils.getInstance().loadLocalImageWithView(mContext, R.mipmap.img_tupian, viewHolder.miv_img);
+            viewHolder.miv_del.setVisibility(View.GONE);
+            viewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mContext instanceof CreatCommentActivity) {
+                        ((CreatCommentActivity) mContext).openAlbum(parentPosition);
                     }
                 }
-                break;
+            });
         }
+        return convertView;
     }
 
-
-    @Override
-    protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        View inflate = LayoutInflater.from(context).inflate(R.layout.item_single_img, parent, false);
-        return new ImagViewHolder(inflate);
-    }
-
-
-    @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
-//        if (holder instanceof ImagViewHolder) {
-//            LogUtil.httpLogW("handleList:");
-//            ImagViewHolder imagViewHolder = (ImagViewHolder) holder;
-//            imagViewHolder.miv_img_del.setVisibility(View.VISIBLE);
-//            GlideUtils.getInstance().loadImage(context, imagViewHolder.miv_img, lists.get(position).imgPath);
-//            ImageEntity imageEntity = lists.get(position);
-//
-//            LogUtil.httpLogW("progress111111111111111:" + imageEntity.progress);
-//            if (imageEntity.progress > 0 && imageEntity.progress < 100) {
-//                imagViewHolder.pgb_img.setVisibility(View.VISIBLE);
-//                imagViewHolder.pgb_img.setProgress(imageEntity.progress);
-//            } else if (imageEntity.progress >= 100) {
-//                imagViewHolder.pgb_img.setVisibility(View.GONE);
-//            }
-//        }
-    }
-
-
-    public void handFoot(RecyclerView.ViewHolder holder) {
-//        if (holder instanceof DelImagViewHolder) {
-//            DelImagViewHolder delImagViewHolder = (DelImagViewHolder) holder;
-//            delImagViewHolder.miv_img_del.setVisibility(View.GONE);
-//            delImagViewHolder.miv_img.setImageResource(R.mipmap.img_tupian);
-//
-//            ((DelImagViewHolder) holder).miv_img.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (context instanceof CreatCommentActivity && !((CreatCommentActivity) context).isFinishing()) {
-//                        ((CreatCommentActivity) context).openAlbum(parentPosition);
-//                    }
-//                }
-//            });
-//        }
-    }
-
-    public class ImagViewHolder extends BaseRecyclerViewHolder {
-
-        @BindView(R.id.miv_img)
+    public class ViewHolder {
         MyImageView miv_img;
+        MyImageView miv_del;
+        RelativeLayout rl_img;
 
-        @BindView(R.id.miv_img_del)
-        MyImageView miv_img_del;
-
-        @BindView(R.id.pgb_img)
-        ProgressBar pgb_img;
-
-
-        public ImagViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    public class DelImagViewHolder extends BaseRecyclerViewHolder {
-
-        @BindView(R.id.miv_img)
-        MyImageView miv_img;
-
-        @BindView(R.id.miv_img_del)
-        MyImageView miv_img_del;
-
-        @BindView(R.id.pgb_img)
-        ProgressBar pgb_img;
-
-        public DelImagViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View view) {
+            miv_img = (MyImageView) view.findViewById(R.id.miv_img);
+            miv_del = (MyImageView) view.findViewById(R.id.miv_img_del);
+            rl_img = (RelativeLayout) view.findViewById(R.id.layout_img);
+            
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.width = (screenWidth - TransformUtil.dip2px(mContext, 20 + (4 * 4))) / 5;
+            layoutParams.height = layoutParams.width;
+            rl_img.setLayoutParams(layoutParams);
         }
     }
 }

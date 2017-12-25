@@ -289,6 +289,7 @@ public interface ApiService {
 
     @GET("store/promotionGoodsList")
     Call<BaseEntity<StorePromotionGoodsListTwoEntity>> storePromotionGoodsListTwo(@QueryMap Map<String, String> map);
+
     /**
      * 店铺新品
      *
@@ -422,6 +423,7 @@ public interface ApiService {
 
     /**
      * 购物车进入确认订单页
+     *
      * @param body
      * @return
      */
@@ -430,6 +432,7 @@ public interface ApiService {
 
     /**
      * 收藏商品
+     *
      * @param body
      * @return
      */
@@ -438,6 +441,7 @@ public interface ApiService {
 
     /**
      * 移除收藏
+     *
      * @param body
      * @return
      */
@@ -446,14 +450,16 @@ public interface ApiService {
 
     /**
      * 评价列表
+     *
      * @param map
      * @return
      */
     @GET("comment/list")
-    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentListEntity>> commentList(@QueryMap Map<String, String> map);
 
     /**
      * 省市区数据
+     *
      * @param map
      * @return
      */
@@ -462,6 +468,7 @@ public interface ApiService {
 
     /**
      * 根据经纬度获取省市区
+     *
      * @param body
      * @return
      */
@@ -470,6 +477,7 @@ public interface ApiService {
 
     /**
      * 添加收货地址
+     *
      * @param body
      * @return
      */
@@ -478,6 +486,7 @@ public interface ApiService {
 
     /**
      * 编辑收货地址
+     *
      * @param body
      * @return
      */
@@ -541,14 +550,16 @@ public interface ApiService {
 
     /**
      * 我的评价列表
+     *
      * @param map
      * @return
      */
     @GET("member/comment/list")
-    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyCommentListEntity>> myCommentList(@QueryMap Map<String, String> map);
 
     /**
      * 查看营业执照
+     *
      * @param body
      * @return
      */
@@ -564,12 +575,21 @@ public interface ApiService {
     Call<BaseEntity<UploadPicEntity>> uploadPic(@PartMap Map<String, RequestBody> params, @Part("path_name") RequestBody path_name);
 
     /**
-     * 添加评价
+     * 新增评价
      *
      * @param body
      * @return
      */
-    @POST("/member/comment/append")
+    @POST("/member/comment/add")
+    Call<BaseEntity<EmptyEntity>> addComment(@Body RequestBody body);
+
+    /**
+     * 批量追加评价
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/batch_append")
     Call<BaseEntity<EmptyEntity>> appendComment(@Body RequestBody body);
 
     /**
@@ -607,30 +627,34 @@ public interface ApiService {
 
     /**
      * 待评价和待追评混合列表
+     *
      * @return
      */
     @GET("member/comment/mixed_list")
-    Call<BaseEntity<CommentSuccessEntity>> mixed_list(@QueryMap Map<String,String> map);
+    Call<BaseEntity<CommentSuccessEntity>> mixed_list(@QueryMap Map<String, String> map);
 
     /**
-     *我的订单列表
+     * 我的订单列表
+     *
      * @param map
      * @return
      */
     @GET("personalcenter/orderlist")
-    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String, String> map);
 
 
     /**
      * 订单详情
+     *
      * @param map
      * @return
      */
     @GET("personalcenter/orderdetail")
-    Call<BaseEntity<OrderdetailEntity>> orderdetail(@QueryMap Map<String,String> map);
+    Call<BaseEntity<OrderdetailEntity>> orderdetail(@QueryMap Map<String, String> map);
 
     /**
      * 取消订单
+     *
      * @param body
      * @return
      */
@@ -639,6 +663,7 @@ public interface ApiService {
 
     /**
      * 提醒发货
+     *
      * @param body
      * @return
      */
@@ -647,6 +672,7 @@ public interface ApiService {
 
     /**
      * 延长发货
+     *
      * @param body
      * @return
      */
@@ -655,28 +681,31 @@ public interface ApiService {
 
     /**
      * 刷新订单
+     *
      * @param map
      * @return
      */
     @GET("personalcenter/partorderlist")
-    Call<BaseEntity<MyOrderEntity.Orders>> refreshOrder(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MyOrderEntity.Orders>> refreshOrder(@QueryMap Map<String, String> map);
 
     /**
-     *确认收货
+     * 确认收货
      */
     @POST("personalcenter/confirmreceipt")
     Call<BaseEntity<CommonEntity>> confirmreceipt(@Body RequestBody body);
 
     /**
      * 获取支付列表
+     *
      * @param map
      * @return
      */
     @GET("order/getavailablepaymethod")
-    Call<BaseEntity<PayListEntity>> methodlist(@QueryMap Map<String,String> map);
+    Call<BaseEntity<PayListEntity>> methodlist(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情评价点赞
+     *
      * @param body
      * @return
      */
@@ -685,6 +714,7 @@ public interface ApiService {
 
     /**
      * 套餐详情
+     *
      * @param body
      * @return
      */
