@@ -8,7 +8,7 @@ import java.util.List;
  * 发布评论实体类
  */
 
-public class ReleaseCommentEntity implements Serializable {
+public class ReleaseCommentEntity implements Serializable{
 
     public String order;
     public String pic;
@@ -16,6 +16,7 @@ public class ReleaseCommentEntity implements Serializable {
     public String price;
     public String goodsId;
     public String comment_id;
+    public String is_append;
     public String content;
     public String starLevel;
     public List<ImageEntity> imgs;

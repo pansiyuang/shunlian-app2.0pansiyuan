@@ -22,7 +22,11 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -40,6 +44,8 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private final LayoutInflater mInflater;
     private ComboDetailEntity mEntity;
     private ISelectParamsListener mParamsListener;
+    private Map<String,String> priceMap = new HashMap<>();//价格
+    private Map<String,String> marketPriceMap = new HashMap<>();//原价
 
     public ComboDetailAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, ComboDetailEntity entity) {
         super(context, isShowFooter, lists);
@@ -145,13 +151,44 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             GiftPriceHolder mHolder = (GiftPriceHolder) holder;
             GoodsDeatilEntity.Combo current_combo = mEntity.current_combo;
             mHolder.mtv_combo_title.setText(current_combo.combo_title);
-            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
-                    .concat(current_combo.combo_price).concat("-")
-                    .concat(current_combo.max_combo_price), getString(R.string.rmb), 9);
-            mHolder.tv_combo_price.setText(spannableStringBuilder);
-            mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb))
-                    .concat(current_combo.old_combo_price).concat("-").concat(current_combo.max_old_combo_price));
+            if (priceMap != null && priceMap.size() > 0){
+                String mapValue = getMapValue(priceMap);
+                SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
+                        .concat(mapValue), getString(R.string.rmb), 9);
+                mHolder.tv_combo_price.setText(spannableStringBuilder);
+            }else {
+                SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.rmb)
+                        .concat(current_combo.combo_price).concat("-")
+                        .concat(current_combo.max_combo_price), getString(R.string.rmb), 9);
+                mHolder.tv_combo_price.setText(spannableStringBuilder);
+            }
+
+            if (marketPriceMap != null && marketPriceMap.size() > 0){
+                String mapValue = getMapValue(marketPriceMap);
+                mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb))
+                        .concat(mapValue));
+            }else {
+                mHolder.tv_market_price.setText("套餐原价".concat(getString(R.string.rmb))
+                        .concat(current_combo.old_combo_price).concat("-")
+                        .concat(current_combo.max_old_combo_price));
+            }
         }
+    }
+
+    /**
+     * 获取map中的值，相加得到返回
+     * @param priceMap
+     */
+    private String getMapValue(Map<String, String> priceMap) {
+        float totalPrice = 0;
+        Set<String> keySet = priceMap.keySet();
+        Iterator<String> iterator = keySet.iterator();
+        while (iterator.hasNext()){
+            String next = iterator.next();
+            String value = priceMap.get(next);
+            totalPrice += Float.parseFloat(value);
+        }
+        return Common.formatFloat(totalPrice);
     }
 
     private void holderPic(RecyclerView.ViewHolder holder, int position) {
@@ -294,8 +331,11 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                     String name = "";
                     if (sku != null && sku.name != null) {
                         name = sku.name ;
+                        priceMap.put(String.valueOf(getAdapterPosition() -2),sku.price);
+                        marketPriceMap.put(String.valueOf(getAdapterPosition() -2),sku.market_price);
+                        notifyItemChanged(1);
                     }
-                    mtv_select.setText("已选择:".concat(name)
+                    mtv_select.setText("已选择:".concat(name).concat("  ")
                             .concat(String.valueOf(count)).concat("件"));
                     if (mParamsListener != null){
                         mParamsListener.selectParam(goods.goods_id,sku.id);
