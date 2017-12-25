@@ -76,10 +76,10 @@ public abstract class BaseLazyFragment extends BaseFragment {
             fetchData();
             isDataInitiated = true;
             return true;
-        }
-        //禁止懒加载
-        if (isViewInitiated && isVisibleToUser && isDataInitiated && !forceUpdate){
+        }else if (isViewInitiated && isVisibleToUser && isDataInitiated && !forceUpdate){//禁止懒加载
             refreshData();
+            isDataInitiated = true;
+            return true;
         }
         return false;
     }

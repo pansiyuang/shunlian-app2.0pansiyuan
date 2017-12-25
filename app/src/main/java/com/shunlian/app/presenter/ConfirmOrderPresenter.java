@@ -65,7 +65,6 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
-                iView.payList(entity.data.pay_types);
             }
         });
     }
@@ -91,7 +90,27 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                 super.onSuccess(entity);
                 iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
                 iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
-                iView.payList(entity.data.pay_types);
+            }
+        });
+    }
+
+    /**
+     * 购买套餐
+     * @param combo
+     */
+    public void buyCombo(String combo,String address_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("combo",combo);
+        map.put("address_id",address_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<ConfirmOrderEntity>> buycombo = getAddCookieApiService().buycombo(getRequestBody(map));
+        getNetData(true,buycombo,new SimpleNetDataCallback<BaseEntity<ConfirmOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
+                super.onSuccess(entity);
+                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
+                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
             }
         });
     }

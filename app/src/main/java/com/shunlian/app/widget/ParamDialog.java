@@ -200,14 +200,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-                if ("1".equals(hasOption) && selectCallBack != null) {
+                if ("1".equals(hasOption)) {
                     GoodsDeatilEntity.Sku s = checkLinkmap(true);
-                    if (s != null && selectCallBack != null) {
+                    if (selectCallBack != null && s != null) {
                         selectCallBack.onSelectComplete(s, currentCount);
                         dismiss();
                     }
                 } else {
-                    selectCallBack.onSelectComplete(null, currentCount);
+                    if (selectCallBack != null)
+                        selectCallBack.onSelectComplete(null, currentCount);
                     dismiss();
                 }
                 break;

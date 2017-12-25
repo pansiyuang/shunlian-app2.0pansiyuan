@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 /**
  * Created by Administrator on 2017/12/14.
@@ -322,7 +323,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                 case R.id.mtv_title3:
                     text = mtv_title3.getText();
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
-
+                        PayListActivity.startAct(context);
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
                         confirmreceipt(orders);
@@ -334,7 +335,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                         List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
                         for (int i = 0; i < order_goods.size(); i++) {
                             MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
-                            ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.id,
+                            ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.order_sn,
                                     bean.thumb, bean.title, bean.price, bean.goods_id);
                             entities.add(entity);
                         }
@@ -349,6 +350,8 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                             MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
                             ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb,
                                     bean.title, bean.price, bean.comment_id);
+                            entity.order = bean.order_sn;
+                            entity.is_append = bean.is_append;
                             entities.add(entity);
                         }
                         CreatCommentActivity.startAct(context, entities, CreatCommentActivity.APPEND_COMMENT);

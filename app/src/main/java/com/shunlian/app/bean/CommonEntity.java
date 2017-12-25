@@ -9,4 +9,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CommonEntity {
     public String fid;//商品收藏id
     public String message;
+    public String praise_total;//总赞数
 }

@@ -20,7 +20,6 @@ import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,11 +55,14 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private String qty;
     private String sku_id;
     private ConfirmOrderPresenter confirmOrderPresenter;
-    private ArrayList<ConfirmOrderEntity.PayTypes> mPayTypes;
+    public static final String TYPE_CART = "cart";//购物车
+    public static final String TYPE_COMBO = "combo";//套餐
+    private String type;
 
-    public static void startAct(Context context,String cart_ids){
+    public static void startAct(Context context,String cart_ids,String type){
         Intent intent = new Intent(context, ConfirmOrderAct.class);
         intent.putExtra("cart_ids",cart_ids);
+        intent.putExtra("type",type);
         context.startActivity(intent);
     }
 
@@ -105,10 +107,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         goods_id = intent.getStringExtra("goods_id");
         qty = intent.getStringExtra("qty");
         sku_id = intent.getStringExtra("sku_id");
+        type = intent.getStringExtra("type");
         confirmOrderPresenter = new ConfirmOrderPresenter(this,this);
         if (!TextUtils.isEmpty(cart_ids)){
             isOrderBuy = false;
-            confirmOrderPresenter.orderConfirm(cart_ids,null);
+            if (TYPE_CART.equals(type)) {
+                confirmOrderPresenter.orderConfirm(cart_ids, null);
+            }else {
+                confirmOrderPresenter.buyCombo(cart_ids,null);
+            }
         }else {
             isOrderBuy = true;
             confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
@@ -194,16 +201,6 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 .getString(R.string.rmb)+price,11));
     }
 
-    /**
-     * 支付列表
-     *
-     * @param payTypes
-     */
-    @Override
-    public void payList(ArrayList<ConfirmOrderEntity.PayTypes> payTypes) {
-        mPayTypes = payTypes;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -211,7 +208,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             addressId = data.getStringExtra("addressId");
             if (!TextUtils.isEmpty(cart_ids)){
                 isOrderBuy = false;
-                confirmOrderPresenter.orderConfirm(cart_ids,addressId);
+                if (TYPE_CART.equals(type)) {
+                    confirmOrderPresenter.orderConfirm(cart_ids,addressId);
+                }else {
+                    confirmOrderPresenter.buyCombo(cart_ids,addressId);
+                }
             }else {
                 isOrderBuy = true;
                 confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,addressId);
@@ -228,7 +229,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mtv_go_pay:
-                PayListActivity.startAct(this,mPayTypes);
+                PayListActivity.startAct(this);
                 break;
         }
     }

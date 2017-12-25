@@ -766,7 +766,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         recyclerDialog = new RecyclerDialog(context);
                     }
                     if (!recyclerDialog.isShowing()){
-                        recyclerDialog.setCombos(mGoodsEntity.combo);
+                        recyclerDialog.setCombos(mGoodsEntity.combo,mGoodsEntity.id);
                         recyclerDialog.show();
                     }
                     break;
@@ -987,23 +987,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         private void setState(int state){
             mtv_self_hot.setTextColor(state == 1 ? getResources().getColor(R.color.new_text)
                     : getResources().getColor(R.color.value_88));
-            view_self_hot.setBackgroundColor(state == 1 ? getResources().getColor(R.color.pink_color)
-                    :getResources().getColor(R.color.bg_gray_two));
 
             mtv_self_push.setTextColor(state == 2 ? getResources().getColor(R.color.new_text)
                     : getResources().getColor(R.color.value_88));
-            view_self_push.setBackgroundColor(state == 2 ? getResources().getColor(R.color.pink_color)
-                    :getResources().getColor(R.color.bg_gray_two));
 
-            ViewGroup.LayoutParams hotlayoutParams = view_self_hot.getLayoutParams();
-            hotlayoutParams.height = state == 1 ? TransformUtil.dip2px(context,1.0f)
-                    : TransformUtil.dip2px(context,0.5f);
-            view_self_hot.setLayoutParams(hotlayoutParams);
-
-            ViewGroup.LayoutParams pushlayoutParams = view_self_push.getLayoutParams();
-            pushlayoutParams.height = state == 2 ? TransformUtil.dip2px(context,1.0f)
-                    :TransformUtil.dip2px(context,0.5f);
-            view_self_push.setLayoutParams(pushlayoutParams);
+            view_self_hot.setVisibility(state == 1 ? View.VISIBLE : View.INVISIBLE);
+            view_self_push.setVisibility(state == 2 ? View.VISIBLE : View.INVISIBLE);
         }
     }
 

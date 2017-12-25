@@ -122,7 +122,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        LogUtil.httpLogW("isShowFooter:"+isShowFooter+"======"+this.hashCode());
         if (isShowFooter) {
             int itemViewType = getItemViewType(position);
             switch (itemViewType) {

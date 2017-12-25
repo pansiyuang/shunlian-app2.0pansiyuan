@@ -218,7 +218,7 @@ public class Common {
             return;
         }
         SpannableString sp = new SpannableString(str);
-        sp.setSpan(new AbsoluteSizeSpan(size), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sp.setSpan(new AbsoluteSizeSpan(size,true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.setText(sp, TextView.BufferType.SPANNABLE);
     }
 

@@ -10,12 +10,15 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CreatCommentAdapter;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.bean.UploadPicEntity;
@@ -23,14 +26,23 @@ import com.shunlian.app.presenter.CommentPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICommentView;
+import com.shunlian.app.widget.FiveStarBar;
+import com.shunlian.app.widget.MyImageView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -38,13 +50,13 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/12.
  */
 
-public class CreatCommentActivity extends BaseActivity implements ICommentView, View.OnClickListener, CreatCommentAdapter.OnCommentContentCallBack {
+public class CreatCommentActivity extends BaseActivity implements ICommentView, View.OnClickListener, CreatCommentAdapter.OnCommentChangeCallBack, FiveStarBar.OnRatingBarChangeListener {
     public static final int CREAT_COMMENT = 1; //发布评论
     public static final int APPEND_COMMENT = 2; //追加评论
     public static final int CHANGE_COMMENT = 3; //修改评论
 
     @BindView(R.id.recycler_creat_comment)
-    RecyclerView recycler_creat_comment;
+    ListView recycler_creat_comment;
 
     @BindView(R.id.tv_title_left)
     TextView tv_title_left;
@@ -52,14 +64,26 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+
+    FiveStarBar ratingBar_logistics, ratingBar_attitude, ratingBar_consistent;
+
     private List<ReleaseCommentEntity> commentList;
-    private ReleaseCommentEntity commentEntity;
     private CreatCommentAdapter creatCommentAdapter;
     private int currentType;
-    private String currentContent;
     private CommentPresenter commentPresenter;
     private int currentPosition;
+    private String currentCommentId;
+    private String currentOrderId;
     private List<ImageEntity> paths = new ArrayList<>();
+    private int currentLogisticsStar = 0;
+    private int currentAttitudeStar = 0;
+    private int currentConsistentStar = 0;
+    private View footView;
+    private PromptDialog promptDialog;
+
 
     public static void startAct(Context context, List<ReleaseCommentEntity> list, int type) {
         Intent intent = new Intent(context, CreatCommentActivity.class);
@@ -96,37 +120,58 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         commentList = new ArrayList<>();
 
         currentType = getIntent().getIntExtra("type", -1);
-        switch (currentType) {
-            //创建评论
-            case CREAT_COMMENT:
-                commentList.addAll((Collection<? extends ReleaseCommentEntity>) getIntent().getSerializableExtra("comment"));
-                break;
-            //追评评论
-            case APPEND_COMMENT:
-                commentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
-                commentList.add(commentEntity);
-                break;
-            //修改评论
-            case CHANGE_COMMENT:
-                commentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
-                commentList.add(commentEntity);
-                break;
-            default:
-                finish();
-                break;
+
+        if (getIntent().getSerializableExtra("commentList") != null) {
+            List<ReleaseCommentEntity> list = (List<ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList");
+            if (currentType == APPEND_COMMENT) {
+                for (ReleaseCommentEntity entity : list) {
+                    if (!"0".equals(entity.is_append)) {
+                        commentList.add(entity);
+                    }
+                }
+            } else {
+                commentList.addAll(list);
+            }
+        } else if (getIntent().getSerializableExtra("comment") != null) {
+            commentList.add((ReleaseCommentEntity) getIntent().getSerializableExtra("comment"));
         }
-        creatCommentAdapter = new CreatCommentAdapter(this, false, commentList, currentType);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recycler_creat_comment.setNestedScrollingEnabled(false);
-        recycler_creat_comment.setLayoutManager(linearLayoutManager);
+
+        creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
         recycler_creat_comment.setAdapter(creatCommentAdapter);
-        recycler_creat_comment.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 7), 0, 0));
-        creatCommentAdapter.setOnCommentContentCallBack(this);
+        creatCommentAdapter.setOnCommentChangeCallBack(this);
+
+        if (currentType == CREAT_COMMENT) {
+            recycler_creat_comment.addFooterView(footView);
+        }
     }
 
     @Override
     protected void initListener() {
+        miv_close.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        footView = LayoutInflater.from(this).inflate(R.layout.foot_creat_comment, null, false);
+        ratingBar_logistics = (FiveStarBar) footView.findViewById(R.id.ratingBar_logistics);
+        ratingBar_attitude = (FiveStarBar) footView.findViewById(R.id.ratingBar_attitude);
+        ratingBar_consistent = (FiveStarBar) footView.findViewById(R.id.ratingBar_consistent);
+        ratingBar_consistent.setOnRatingBarChangeListener(this);
+        ratingBar_attitude.setOnRatingBarChangeListener(this);
+        ratingBar_logistics.setOnRatingBarChangeListener(this);
+
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_cancel_comment),
+                getStringResouce(R.string.SelectRecommendAct_sure),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }, getStringResouce(R.string.errcode_cancel),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                });
         super.initListener();
     }
 
@@ -146,9 +191,9 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             String imagePath = c.getString(columnIndex);
+
             paths.clear();
             paths.add(new ImageEntity(imagePath));
-            creatCommentAdapter.addImages(paths, currentPosition);
             commentPresenter.uploadPic(paths, "comment");
             c.close();
         }
@@ -171,22 +216,112 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         switch (v.getId()) {
             case R.id.tv_title_right:
                 if (currentType == APPEND_COMMENT) {
-                    if (!isEmpty(currentContent)) {
-                        commentPresenter.appendComment(commentEntity.comment_id, currentContent, "");
+                    String goodsString = getGoodsString();
+                    if (!isEmpty(goodsString)) {
+                        commentPresenter.appendComment(goodsString);
                     }
                 } else if (currentType == CHANGE_COMMENT) {
-                    if (!isEmpty(currentContent)) {
-                        commentPresenter.changeComment(commentEntity.comment_id, currentContent, "");
+                    ReleaseCommentEntity releaseCommentEntity = commentList.get(0);
+                    if (!isEmpty(releaseCommentEntity.content)) {
+                        commentPresenter.changeComment(releaseCommentEntity.comment_id, releaseCommentEntity.content, releaseCommentEntity.picString);
                     }
+                } else if (currentType == CREAT_COMMENT) {
+                    if (currentLogisticsStar == 0) {
+                        Common.staticToast("请评价物流服务");
+                        return;
+                    }
+
+                    if (currentAttitudeStar == 0) {
+                        Common.staticToast("请评价服务态度");
+                        return;
+                    }
+
+                    if (currentConsistentStar == 0) {
+                        Common.staticToast("请评价描述相符");
+                        return;
+                    }
+                    String goodsString = getGoodsString();
+                    LogUtil.httpLogW("goodsString:" + goodsString);
+                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderId)) {
+                        return;
+                    }
+                    commentPresenter.creatComment(currentOrderId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
+                }
+                break;
+            case R.id.miv_close:
+                if (promptDialog != null) {
+                    promptDialog.show();
                 }
                 break;
         }
     }
 
+    public String getGoodsString() {
+        String result = null;
+
+        if (commentList == null || commentList.size() == 0) {
+            return null;
+        }
+        List<Map> array = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            for (int i = 0; i < commentList.size(); i++) {
+                Map<String, String> map = new HashMap<>();
+                ReleaseCommentEntity releaseCommentEntity = commentList.get(i);
+
+                if (!isEmpty(releaseCommentEntity.comment_id)) {
+                    currentCommentId = releaseCommentEntity.comment_id;
+                    map.put("comment_id", releaseCommentEntity.comment_id);
+                }
+                if (!isEmpty(releaseCommentEntity.goodsId)) {
+                    map.put("goods_id", releaseCommentEntity.goodsId);
+                }
+
+                if (!isEmpty(releaseCommentEntity.order)) {
+                    currentOrderId = releaseCommentEntity.order;
+                    map.put("ordersn", releaseCommentEntity.order);
+                }
+
+                if (!isEmpty(releaseCommentEntity.starLevel) && currentType == CREAT_COMMENT) {
+                    map.put("star_level", releaseCommentEntity.starLevel);
+                }
+
+                if (!isEmpty(releaseCommentEntity.content)) {
+                    map.put("content", releaseCommentEntity.content);
+                } else {
+                    map.put("content", "");
+                }
+                if (!isEmpty(releaseCommentEntity.picString)) {
+                    map.put("images", releaseCommentEntity.picString);
+                } else {
+                    map.put("images", "");
+                }
+                array.add(map);
+            }
+            result = mapper.writeValueAsString(array);
+            LogUtil.httpLogW("result:" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     @Override
-    public void OnComment(String content) {
-        LogUtil.httpLogW("content:" + content);
-        currentContent = content;
+    public void OnComment(String content, int position) {
+        commentList.get(position).content = content;
+    }
+
+    @Override
+    public void OnCommentLevel(String level, int position) {
+        commentList.get(position).starLevel = level;
+    }
+
+    @Override
+    public void uploadImg(UploadPicEntity picEntity) {
+        Message message = mHandler.obtainMessage();
+        message.obj = picEntity.relativePath;
+        message.what = 1;
+        mHandler.sendMessage(message);
     }
 
     @Override
@@ -198,33 +333,71 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     }
 
     @Override
-    public void appendCommentSuccess() {
-        Common.staticToast("追评成功");
+    public void CommentSuccess() {
+        switch (currentType) {
+            case CREAT_COMMENT:
+                Common.staticToast("评价成功");
+                break;
+            case CHANGE_COMMENT:
+                Common.staticToast("修改评价成功");
+                break;
+            case APPEND_COMMENT:
+                Common.staticToast("追加评价成功");
+                break;
+        }
         finish();
     }
 
     @Override
-    public void appendCommentFail(String error) {
+    public void CommentFail(String error) {
         Common.staticToast(error);
-    }
-
-    @Override
-    public void changeCommentSuccess() {
-        Common.staticToast("修改好评成功");
-        finish();
-    }
-
-    @Override
-    public void changeCommtFail(String errorstr) {
-        Common.staticToast(errorstr);
     }
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int progress = msg.arg1;
-            String tag = String.valueOf(msg.obj);
-            creatCommentAdapter.updateProgress(currentPosition, tag, progress);
+            switch (msg.what) {
+                case 0:
+                    int progress = msg.arg1;
+                    String tag = String.valueOf(msg.obj);
+//            creatCommentAdapter.updateProgress(currentPosition, tag, progress);
+                    break;
+                case 1:
+                    List<String> picStr = (List<String>) msg.obj;
+                    creatCommentAdapter.addImages(paths, currentPosition);
+                    ReleaseCommentEntity releaseCommentEntity = commentList.get(currentPosition);
+
+                    StringBuffer stringBuffer;
+                    if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
+                        stringBuffer = new StringBuffer("");
+                    } else {
+                        stringBuffer = new StringBuffer(releaseCommentEntity.picString);
+                        stringBuffer.append(",");
+                    }
+                    for (int i = 0; i < picStr.size(); i++) {
+                        stringBuffer.append(picStr.get(i));
+                        if (i != picStr.size() - 1) {
+                            stringBuffer.append(",");
+                        }
+                    }
+                    commentList.get(currentPosition).picString = stringBuffer.toString();
+                    break;
+            }
         }
     };
+
+    @Override
+    public void onRatingChanged(FiveStarBar simpleRatingBar, float rating, boolean fromUser) {
+        switch (simpleRatingBar.getId()) {
+            case R.id.ratingBar_logistics:
+                currentLogisticsStar = (int) rating;
+                break;
+            case R.id.ratingBar_attitude:
+                currentAttitudeStar = (int) rating;
+                break;
+            case R.id.ratingBar_consistent:
+                currentConsistentStar = (int) rating;
+                break;
+        }
+    }
 }
