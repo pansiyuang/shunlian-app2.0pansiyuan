@@ -16,6 +16,7 @@ public class ReleaseCommentEntity implements Serializable{
     public String price;
     public String goodsId;
     public String comment_id;
+    public String is_append;
     public List<ImageEntity> imgs;
 
     public ReleaseCommentEntity(String pic, String title, String price, String comment_id) {
