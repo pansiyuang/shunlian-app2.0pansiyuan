@@ -22,7 +22,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/icon_common_back_black" />
 
-  +      <com.shunlian.app.widget.MyTextView
+        <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
