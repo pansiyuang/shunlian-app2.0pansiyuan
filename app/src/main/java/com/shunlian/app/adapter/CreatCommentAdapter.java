@@ -210,6 +210,8 @@ public class CreatCommentAdapter extends BaseAdapter {
                 }
             }
         });
+
+
         return convertView;
     }
 
