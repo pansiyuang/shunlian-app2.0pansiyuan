@@ -335,7 +335,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                         List<MyOrderEntity.OrderGoodsBean> order_goods = orders.order_goods;
                         for (int i = 0; i < order_goods.size(); i++) {
                             MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
-                            ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.id,
+                            ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.order_sn,
                                     bean.thumb, bean.title, bean.price, bean.goods_id);
                             entities.add(entity);
                         }

@@ -12,11 +12,8 @@ public interface ICommentView extends IView {
 
     void uploadProgress(int progress, String tag);
 
-    void appendCommentSuccess();
+    void CommentSuccess();
 
-    void appendCommentFail(String error);
+    void CommentFail(String error);
 
-    void changeCommentSuccess();
-
-    void changeCommtFail(String errorstr);
 }

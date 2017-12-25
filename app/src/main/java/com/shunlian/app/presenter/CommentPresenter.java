@@ -97,9 +97,9 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
-                        iView.appendCommentSuccess();
+                        iView.CommentSuccess();
                     } else {
-                        iView.appendCommentFail(entity.message);
+                        iView.CommentFail(entity.message);
                     }
                     super.onSuccess(entity);
                 }
@@ -126,9 +126,9 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
-                        iView.appendCommentSuccess();
+                        iView.CommentSuccess();
                     } else {
-                        iView.appendCommentFail(entity.message);
+                        iView.CommentFail(entity.message);
                     }
                     super.onSuccess(entity);
                 }
@@ -159,9 +159,9 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     if (entity.code == 1000) {
-                        iView.changeCommentSuccess();
+                        iView.CommentSuccess();
                     } else {
-                        iView.changeCommtFail(entity.message);
+                        iView.CommentFail(entity.message);
                     }
                     super.onSuccess(entity);
                 }

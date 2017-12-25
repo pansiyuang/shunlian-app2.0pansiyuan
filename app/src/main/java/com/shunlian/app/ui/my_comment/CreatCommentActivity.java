@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CreatCommentAdapter;
 import com.shunlian.app.bean.ImageEntity;
@@ -121,7 +122,16 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         currentType = getIntent().getIntExtra("type", -1);
 
         if (getIntent().getSerializableExtra("commentList") != null) {
-            commentList.addAll((Collection<? extends ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList"));
+            List<ReleaseCommentEntity> list = (List<ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList");
+            if (currentType == APPEND_COMMENT) {
+                for (ReleaseCommentEntity entity : list) {
+                    if (!"0".equals(entity.is_append)) {
+                        commentList.add(entity);
+                    }
+                }
+            } else {
+                commentList.addAll(list);
+            }
         } else if (getIntent().getSerializableExtra("comment") != null) {
             commentList.add((ReleaseCommentEntity) getIntent().getSerializableExtra("comment"));
         }
@@ -232,7 +242,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     }
                     String goodsString = getGoodsString();
                     LogUtil.httpLogW("goodsString:" + goodsString);
-                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentCommentId)) {
+                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderId)) {
                         return;
                     }
                     commentPresenter.creatComment(currentOrderId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
@@ -248,11 +258,13 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
     public String getGoodsString() {
         String result = null;
+
         if (commentList == null || commentList.size() == 0) {
             return null;
         }
+        List<Map> array = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            JSONArray array = new JSONArray();
             for (int i = 0; i < commentList.size(); i++) {
                 Map<String, String> map = new HashMap<>();
                 ReleaseCommentEntity releaseCommentEntity = commentList.get(i);
@@ -270,7 +282,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     map.put("ordersn", releaseCommentEntity.order);
                 }
 
-                if (!isEmpty(releaseCommentEntity.starLevel)) {
+                if (!isEmpty(releaseCommentEntity.starLevel) && currentType == CREAT_COMMENT) {
                     map.put("star_level", releaseCommentEntity.starLevel);
                 }
 
@@ -284,10 +296,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 } else {
                     map.put("images", "");
                 }
-                array.put(i, map.toString());
+                array.add(map);
             }
-            result = array.toString();
-        } catch (JSONException e) {
+            result = mapper.writeValueAsString(array);
+            LogUtil.httpLogW("result:" + result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -320,25 +333,24 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     }
 
     @Override
-    public void appendCommentSuccess() {
-        Common.staticToast("追评成功");
+    public void CommentSuccess() {
+        switch (currentType) {
+            case CREAT_COMMENT:
+                Common.staticToast("评价成功");
+                break;
+            case CHANGE_COMMENT:
+                Common.staticToast("修改评价成功");
+                break;
+            case APPEND_COMMENT:
+                Common.staticToast("追加评价成功");
+                break;
+        }
         finish();
     }
 
     @Override
-    public void appendCommentFail(String error) {
+    public void CommentFail(String error) {
         Common.staticToast(error);
-    }
-
-    @Override
-    public void changeCommentSuccess() {
-        Common.staticToast("修改好评成功");
-        finish();
-    }
-
-    @Override
-    public void changeCommtFail(String errorstr) {
-        Common.staticToast(errorstr);
     }
 
     private Handler mHandler = new Handler() {
