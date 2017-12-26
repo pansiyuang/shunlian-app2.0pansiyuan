@@ -3,13 +3,8 @@ package com.shunlian.app.ui.my_comment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,24 +17,20 @@ import com.shunlian.app.adapter.CreatCommentAdapter;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.photopick.PhotoPickerActivity;
+import com.shunlian.app.photopick.SelectModel;
+import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.presenter.CommentPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICommentView;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +45,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public static final int CREAT_COMMENT = 1; //发布评论
     public static final int APPEND_COMMENT = 2; //追加评论
     public static final int CHANGE_COMMENT = 3; //修改评论
+    private static final int REQUEST_CAMERA_CODE = 100;
 
     @BindView(R.id.recycler_creat_comment)
     ListView recycler_creat_comment;
@@ -176,29 +168,35 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
     public void openAlbum(int position) {
         currentPosition = position;
-        Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
-        albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(albumIntent, 100);
+        int max = 5;
+        if (commentList.get(currentPosition).imgs != null) {
+            max = 5 - commentList.get(currentPosition).imgs.size();
+        }
+        PhotoPickerIntent intent = new PhotoPickerIntent(this);
+        intent.setSelectModel(SelectModel.MULTI);
+        intent.setShowCarema(true); // 是否显示拍照
+        intent.setMaxTotal(max); // 最多选择照片数量，默认为9
+        startActivityForResult(intent, REQUEST_CAMERA_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumns = {MediaStore.Images.Media.DATA};
-            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-            c.moveToFirst();
-            int columnIndex = c.getColumnIndex(filePathColumns[0]);
-            String imagePath = c.getString(columnIndex);
+        if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            ArrayList<String> imagePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
+            if (commentList.get(currentPosition).imgs == null) {
+                paths = new ArrayList<>();
+            } else {
+                paths = commentList.get(currentPosition).imgs;
+            }
 
-            paths.clear();
-            paths.add(new ImageEntity(imagePath));
+            for (String s : imagePaths) {
+                ImageEntity imageEntity = new ImageEntity(s);
+                paths.add(imageEntity);
+            }
             commentPresenter.uploadPic(paths, "comment");
-            c.close();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     @Override
     public void showFailureView(int request_code) {
@@ -311,7 +309,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 array.add(map);
             }
             result = mapper.writeValueAsString(array);
-            LogUtil.httpLogW("result:" + result);
         } catch (Exception e) {
             e.printStackTrace();
         }

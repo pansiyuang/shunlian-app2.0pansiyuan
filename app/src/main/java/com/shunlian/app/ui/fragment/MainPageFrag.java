@@ -120,7 +120,7 @@ public class MainPageFrag extends BaseFragment {
 //                        GoodsDetailAct.startAct(baseContext,"134");
                         break;
                     case 2:
-                        StoreAct.startAct(baseContext, "");
+                        StoreAct.startAct(baseContext, "26");
                         break;
                     case 4:
                         CommentSuccessAct.startAct(baseActivity);

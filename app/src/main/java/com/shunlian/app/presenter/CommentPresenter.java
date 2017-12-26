@@ -57,6 +57,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
                 @Override
                 public void onProgress(int progress, String tag) {
+                    LogUtil.httpLogW("tag:" + tag + "    progress:" + progress);
                     iView.uploadProgress(progress, tag);
                 }
 
@@ -65,11 +66,11 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
 
                 }
             }, filePath.get(i).imgPath);
-            params.put("file\"; filename=\"" + file.getName(), uploadFileRequestBody);
+            params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
         }
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
         Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(params, body);
-        getNetData(call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        getNetData(true,call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 UploadPicEntity uploadPicEntity = entity.data;

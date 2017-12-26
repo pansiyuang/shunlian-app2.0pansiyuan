@@ -9,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -18,6 +20,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,6 +75,15 @@ public class SingleImgAdapter extends BaseAdapter {
             viewHolder.miv_del.setVisibility(View.VISIBLE);
             String imgPath = pics.get(position).imgPath;
             GlideUtils.getInstance().loadFileImageWithView(mContext, new File(imgPath), viewHolder.miv_img);
+            viewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList<String>) toStringArray();
+                    bigImgEntity.index = position;
+                    LookBigImgAct.startAct(mContext, bigImgEntity);
+                }
+            });
         } else {
             GlideUtils.getInstance().loadLocalImageWithView(mContext, R.mipmap.img_tupian, viewHolder.miv_img);
             viewHolder.miv_del.setVisibility(View.GONE);
@@ -93,6 +105,14 @@ public class SingleImgAdapter extends BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    public List<String> toStringArray() {
+        List<String> result = new ArrayList<>();
+        for (ImageEntity imageEntity : pics) {
+            result.add(imageEntity.imgPath);
+        }
+        return result;
     }
 
     public class ViewHolder {
