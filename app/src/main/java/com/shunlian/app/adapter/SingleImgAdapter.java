@@ -58,7 +58,7 @@ public class SingleImgAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_single_img, parent, false);
@@ -84,6 +84,14 @@ public class SingleImgAdapter extends BaseAdapter {
                 }
             });
         }
+        viewHolder.miv_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageEntity imageEntity = pics.get(position);
+                pics.remove(imageEntity);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
     }
 
@@ -96,7 +104,7 @@ public class SingleImgAdapter extends BaseAdapter {
             miv_img = (MyImageView) view.findViewById(R.id.miv_img);
             miv_del = (MyImageView) view.findViewById(R.id.miv_img_del);
             rl_img = (RelativeLayout) view.findViewById(R.id.layout_img);
-            
+
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.width = (screenWidth - TransformUtil.dip2px(mContext, 20 + (4 * 4))) / 5;
             layoutParams.height = layoutParams.width;

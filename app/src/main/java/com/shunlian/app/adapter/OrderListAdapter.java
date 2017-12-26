@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
@@ -37,15 +38,27 @@ import pay.PayListActivity;
 
 public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> {
 
-    private final int pink_color;
-    private final int new_gray;
-    private final int strokeWidth;
+    private int pink_color;
+    private int new_gray;
+    private int strokeWidth;
     private AllFrag mAllFrag;
+    private SearchOrderResultActivity mSearchOrderAct;
     private RefreshOrderListener mOrderListener;
 
     public OrderListAdapter(Context context, boolean isShowFooter, List<MyOrderEntity.Orders> lists, AllFrag allFrag) {
         super(context, isShowFooter, lists);
         mAllFrag = allFrag;
+        init(context);
+    }
+
+    public OrderListAdapter(Context context, boolean isShowFooter, List<MyOrderEntity.Orders> lists,
+                            SearchOrderResultActivity searchOrderResultActivity) {
+        super(context, isShowFooter, lists);
+        mSearchOrderAct = searchOrderResultActivity;
+        init(context);
+    }
+
+    private void init(Context context) {
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
         if (context == null) {
@@ -304,6 +317,10 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                         if (mAllFrag != null) {
                             mAllFrag.remindseller(orders.id);
                         }
+
+                        if (mSearchOrderAct != null) {
+                            mSearchOrderAct.remindseller(orders.id);
+                        }
                     } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
                         extendTheCollection(orders);
                     }
@@ -373,6 +390,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     if (mAllFrag != null){
                         mAllFrag.confirmreceipt(orders.id);
                     }
+                    if (mSearchOrderAct != null){
+                        mSearchOrderAct.confirmreceipt(orders.id);
+                    }
                     promptDialog.dismiss();
                 }
             }, "取消", new View.OnClickListener() {
@@ -396,6 +416,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     if (mAllFrag != null) {
                         mAllFrag.cancleOrder(orders.id,position + 1);
                     }
+                    if (mSearchOrderAct != null) {
+                        mSearchOrderAct.cancleOrder(orders.id,position + 1);
+                    }
                 }
             });
         }
@@ -411,6 +434,10 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     if (mAllFrag != null) {
                         mAllFrag.postpone(orders.id);
                     }
+                    if (mSearchOrderAct != null) {
+                        mSearchOrderAct.postpone(orders.id);
+                    }
+
                     promptDialog.dismiss();
                 }
             }, "取消", new View.OnClickListener() {

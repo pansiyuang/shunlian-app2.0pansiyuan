@@ -75,7 +75,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentType;
     private CommentPresenter commentPresenter;
     private int currentPosition;
-    private String currentCommentId;
     private String currentOrderId;
     private List<ImageEntity> paths = new ArrayList<>();
     private int currentLogisticsStar = 0;
@@ -270,7 +269,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 ReleaseCommentEntity releaseCommentEntity = commentList.get(i);
 
                 if (!isEmpty(releaseCommentEntity.comment_id)) {
-                    currentCommentId = releaseCommentEntity.comment_id;
                     map.put("comment_id", releaseCommentEntity.comment_id);
                 }
                 if (!isEmpty(releaseCommentEntity.goodsId)) {
@@ -291,8 +289,22 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 } else {
                     map.put("content", "");
                 }
-                if (!isEmpty(releaseCommentEntity.picString)) {
-                    map.put("images", releaseCommentEntity.picString);
+
+                if (releaseCommentEntity.imgs != null && releaseCommentEntity.imgs.size() != 0) {
+                    StringBuffer stringBuffer;
+                    if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
+                        stringBuffer = new StringBuffer("");
+                    } else {
+                        stringBuffer = new StringBuffer(releaseCommentEntity.picString);
+                        stringBuffer.append(",");
+                    }
+                    for (int j = 0; j < releaseCommentEntity.imgs.size(); j++) {
+                        stringBuffer.append(releaseCommentEntity.imgs.get(j));
+                        if (i != releaseCommentEntity.imgs.size() - 1) {
+                            stringBuffer.append(",");
+                        }
+                    }
+                    map.put("images", stringBuffer.toString());
                 } else {
                     map.put("images", "");
                 }
@@ -365,22 +377,6 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 case 1:
                     List<String> picStr = (List<String>) msg.obj;
                     creatCommentAdapter.addImages(paths, currentPosition);
-                    ReleaseCommentEntity releaseCommentEntity = commentList.get(currentPosition);
-
-                    StringBuffer stringBuffer;
-                    if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
-                        stringBuffer = new StringBuffer("");
-                    } else {
-                        stringBuffer = new StringBuffer(releaseCommentEntity.picString);
-                        stringBuffer.append(",");
-                    }
-                    for (int i = 0; i < picStr.size(); i++) {
-                        stringBuffer.append(picStr.get(i));
-                        if (i != picStr.size() - 1) {
-                            stringBuffer.append(",");
-                        }
-                    }
-                    commentList.get(currentPosition).picString = stringBuffer.toString();
                     break;
             }
         }

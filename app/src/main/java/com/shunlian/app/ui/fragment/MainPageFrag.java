@@ -13,14 +13,11 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
-import com.shunlian.app.ui.confirm_order.PaySuccessAct;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.my_comment.CommentSuccessAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
-import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -85,14 +82,13 @@ public class MainPageFrag extends BaseFragment {
         items.add("登录");
         items.add("商品详情");
         items.add("店铺");
-        items.add("购物车");
-        items.add("评价成功");
+        items.add("店铺57");
+        items.add("店铺58");
         items.add("我的评价");
         items.add("我的订单");
-        items.add("订单详情");
         items.add("订单物流详情");
         items.add("订单搜索历史");
-        items.add("支付成功");
+
         items.addAll(DataUtil.getListString(40, "条目"));
 
 
@@ -122,8 +118,11 @@ public class MainPageFrag extends BaseFragment {
                     case 2:
                         StoreAct.startAct(baseContext, "");
                         break;
+                    case 3:
+                        StoreAct.startAct(baseContext, "57");
+                        break;
                     case 4:
-                        CommentSuccessAct.startAct(baseActivity);
+                        StoreAct.startAct(baseContext, "58");
                         break;
                     case 5:
                         MyCommentAct.startAct(baseActivity);
@@ -132,18 +131,15 @@ public class MainPageFrag extends BaseFragment {
                         MyOrderAct.startAct(baseActivity);
                         break;
                     case 7:
-                        OrderDetailAct.startAct(baseActivity, "");
-                        break;
-                    case 8:
                         OrderLogisticsActivity.startAct(baseActivity, "5");
 //                        OrderLogisticsActivity.startAct(baseActivity, "4");
                         break;
-                    case 9:
+                    case 8:
                         SearchOrderActivity.startAct(baseActivity);
                         break;
-                    case 10:
-                        PaySuccessAct.startAct(baseActivity,"");
+                    case 9:
                         break;
+
                 }
             }
         });
