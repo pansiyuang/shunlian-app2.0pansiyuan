@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="25dp"
+    android:layout_height="match_parent"
+    android:id="@+id/mtv_content"
+    android:textColor="@color/white"
+    android:textSize="10sp"
+    android:gravity="center"
+    android:layout_marginRight="6dp"
+    android:background="@drawable/bg_store_type"/>
