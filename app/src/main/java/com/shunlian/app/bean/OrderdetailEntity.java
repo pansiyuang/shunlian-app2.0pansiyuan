@@ -25,6 +25,9 @@ public class OrderdetailEntity {
     public String voucher_amount;
     public String paytype;
     public String create_time;
+    public String pay_time;
+    public String send_time;
+    public String receive_time;
     public String is_append;
     public String is_edit_praise;
     public String is_postpone;

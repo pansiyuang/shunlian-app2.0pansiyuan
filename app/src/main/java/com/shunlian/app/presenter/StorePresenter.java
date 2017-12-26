@@ -212,6 +212,9 @@ public class StorePresenter extends BasePresenter<StoreView> {
         map.put("storeId", storeId);
         map.put("promotionId", String.valueOf(promotionId));
         map.put("type", type);
+        LogUtil.augusLogW("dfs--"+storeId);
+        LogUtil.augusLogW("dfs--"+promotionId);
+        LogUtil.augusLogW("dfs--"+type);
         sortAndMD5(map);
 
         Call<BaseEntity<StorePromotionGoodsListTwoEntity>> baseEntityCall = getApiService().storePromotionGoodsListTwo(map);
@@ -220,7 +223,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
             public void onSuccess(BaseEntity<StorePromotionGoodsListTwoEntity> entity) {
                 super.onSuccess(entity);
                 StorePromotionGoodsListTwoEntity data = entity.data;
-                if (data != null) {
+                if (data != null&&data.list!=null) {
                     LogUtil.httpLogW("StorePromotionGoodsListTwoEntity:" + data);
                     iView.storeDiscountTwo(data.list.goods);
                 }
@@ -368,12 +371,14 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             adata.id = ebodys.get(f).data.get(g).id;
                             adata.title = ebodys.get(f).data.get(g).title;
                             adata.thumb = ebodys.get(f).data.get(g).thumb;
+                            adata.sales = ebodys.get(f).data.get(g).sales;
                             adata.price = ebodys.get(f).data.get(g).price;
                             adata.type = ebodys.get(f).data.get(g).type;
                             adata.store_id = ebodys.get(f).data.get(g).store_id;
                             adata.item_id = ebodys.get(f).data.get(g).item_id;
                             adata.url = ebodys.get(f).data.get(g).url;
                             adata.whole_thumb = ebodys.get(f).data.get(g).whole_thumb;
+                            adata.label = ebodys.get(f).data.get(g).label;
                             fbody.ldata = adata;
                             gbodys.add(fbody);
                             if (g >= ebodys.get(f).data.size() - 1) {
@@ -424,6 +429,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             ldata.id = abodys.get(b).data.get(c).id;
                             ldata.title = abodys.get(b).data.get(c).title;
                             ldata.thumb = abodys.get(b).data.get(c).thumb;
+                            ldata.sales = abodys.get(b).data.get(c).sales;
                             ldata.price = abodys.get(b).data.get(c).price;
                             ldata.type = abodys.get(b).data.get(c).type;
                             ldata.store_id = abodys.get(b).data.get(c).store_id;
@@ -434,9 +440,11 @@ public class StorePresenter extends BasePresenter<StoreView> {
                                 rdata.id = abodys.get(b).data.get(c + 1).id;
                                 rdata.title = abodys.get(b).data.get(c + 1).title;
                                 rdata.thumb = abodys.get(b).data.get(c + 1).thumb;
+                                rdata.sales = abodys.get(b).data.get(c + 1).sales;
                                 rdata.price = abodys.get(b).data.get(c + 1).price;
                                 rdata.type = abodys.get(b).data.get(c + 1).type;
                                 rdata.store_id = abodys.get(b).data.get(c + 1).store_id;
+                                rdata.label = abodys.get(b).data.get(c + 1).label;
                                 rdata.item_id = abodys.get(b).data.get(c + 1).item_id;
                                 rdata.url = abodys.get(b).data.get(c + 1).url;
                                 rdata.whole_thumb = abodys.get(b).data.get(c + 1).whole_thumb;

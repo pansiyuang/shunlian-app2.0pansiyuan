@@ -34,7 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class OrderDetailAct extends BaseActivity implements View.OnClickListener, OrderdetailView {
+public class ExchangeDetailAct extends BaseActivity implements View.OnClickListener, OrderdetailView {
     @BindView(R.id.mtv_state)
     MyTextView mtv_state;
 
@@ -86,15 +86,6 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_xiadanshijian)
     MyTextView mtv_xiadanshijian;
 
-    @BindView(R.id.mtv_fukuanshijian)
-    MyTextView mtv_fukuanshijian;
-
-    @BindView(R.id.mtv_fahuojian)
-    MyTextView mtv_fahuojian;
-
-    @BindView(R.id.mtv_chengjiaoshijian)
-    MyTextView mtv_chengjiaoshijian;
-
     @BindView(R.id.mllayout_store)
     MyLinearLayout mllayout_store;
 
@@ -125,7 +116,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     private OrderdetailEntity orderdetailEntity;
 
     public static void startAct(Context context, String orderId) {
-        Intent intent = new Intent(context, OrderDetailAct.class);
+        Intent intent = new Intent(context, ExchangeDetailAct.class);
         intent.putExtra("orderId", orderId);
         context.startActivity(intent);
     }
@@ -138,8 +129,6 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
         if (!TextUtils.isEmpty(getIntent().getStringExtra("orderId"))) {
             orderId = getIntent().getStringExtra("orderId");
         }
@@ -184,36 +173,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             mrlayout_youhuiquan.setVisibility(View.GONE);
         }
         mtv_shifu.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.total_amount);
-        if (TextUtils.isEmpty(orderdetailEntity.paytype)){
-            mtv_zhifufangshi.setVisibility(View.GONE);
-        }else {
-            mtv_zhifufangshi.setVisibility(View.VISIBLE);
-            mtv_zhifufangshi.setText("支付方式：" + orderdetailEntity.paytype);
-        }
-        if (TextUtils.isEmpty(orderdetailEntity.create_time)){
-            mtv_xiadanshijian.setVisibility(View.GONE);
-        }else {
-            mtv_xiadanshijian.setVisibility(View.VISIBLE);
-            mtv_xiadanshijian.setText("下单时间：" + orderdetailEntity.create_time);
-        }
-        if (TextUtils.isEmpty(orderdetailEntity.pay_time)){
-            mtv_fukuanshijian.setVisibility(View.GONE);
-        }else {
-            mtv_fukuanshijian.setVisibility(View.VISIBLE);
-            mtv_fukuanshijian.setText("付款时间：" + orderdetailEntity.pay_time);
-        }
-        if (TextUtils.isEmpty(orderdetailEntity.send_time)){
-            mtv_fahuojian.setVisibility(View.GONE);
-        }else {
-            mtv_fahuojian.setVisibility(View.VISIBLE);
-            mtv_fahuojian.setText("发货时间：" + orderdetailEntity.send_time);
-        }
-        if (TextUtils.isEmpty(orderdetailEntity.receive_time)){
-            mtv_chengjiaoshijian.setVisibility(View.GONE);
-        }else {
-            mtv_chengjiaoshijian.setVisibility(View.VISIBLE);
-            mtv_chengjiaoshijian.setText("成交时间：" + orderdetailEntity.receive_time);
-        }
+        mtv_zhifufangshi.setText("支付方式：" + orderdetailEntity.paytype);
+        mtv_xiadanshijian.setText("下单时间：" + orderdetailEntity.create_time);
         storeId = orderdetailEntity.store_id;
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_goods.setLayoutManager(manager);

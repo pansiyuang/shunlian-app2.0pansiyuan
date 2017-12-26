@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -120,7 +121,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         oneHolder.mtv_one.setText(data.title);
                     }
                     oneHolder.mtv_descl.setText(data.ldata.title);
-                    oneHolder.mtv_numberl.setText("已售null");
+                    oneHolder.mtv_numberl.setText("已售"+data.ldata.sales);
                     oneHolder.mtv_pricel.setText(data.ldata.price);
                     GlideUtils.getInstance().loadImage(context,oneHolder.miv_onel,data.ldata.whole_thumb);
 
@@ -129,7 +130,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                     }else {
                         oneHolder.mllayout_oner.setVisibility(View.VISIBLE);
                         oneHolder.mtv_descr.setText(data.rdata.title);
-                        oneHolder.mtv_numberr.setText("已售null");
+                        oneHolder.mtv_numberr.setText("已售"+data.rdata.sales);
                         oneHolder.mtv_pricer.setText(data.rdata.price);
                         GlideUtils.getInstance().loadImage(context,oneHolder.miv_oner,data.rdata.whole_thumb);
                     }
@@ -173,8 +174,11 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         }
                     });
                     twoHolder.mtv_desc.setText(data.ldata.title);
-                    twoHolder.mtv_number.setText("已售null");
+                    twoHolder.mtv_number.setText("已售"+data.ldata.sales);
                     twoHolder.mtv_price.setText(data.ldata.price);
+                    LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                    twoHolder.rv_type.setLayoutManager(firstManager);
+                    twoHolder.rv_type.setAdapter(new StoreTypeAdapter(context, false, data.ldata.label));
                     GlideUtils.getInstance().loadImage(context,twoHolder.miv_two,data.ldata.whole_thumb);
                 }
                 break;
@@ -325,6 +329,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
         private View view_lineOne,view_lineTwo;
         private MyImageView miv_two;
         private MyLinearLayout mllayout_two;
+        private RecyclerView rv_type;
 
 
         TwoHolder(View itemView) {
@@ -337,6 +342,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             view_lineTwo = itemView.findViewById(R.id.view_lineTwo);
             miv_two = (MyImageView) itemView.findViewById(R.id.miv_two);
             mllayout_two = (MyLinearLayout) itemView.findViewById(R.id.mllayout_two);
+            rv_type = (RecyclerView) itemView.findViewById(R.id.rv_type);
         }
     }
 

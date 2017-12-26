@@ -35,6 +35,7 @@ public class StoreIndexEntity {
         public String store_id;
         public String decoration_banner;
         public String decoration_logo;
+        public String star;
         public String mark_count;
         public String goods_count;
         public String promotion_count;
@@ -138,6 +139,8 @@ public class StoreIndexEntity {
             public String thumb;
             public String price;
             public String type;
+            public String sales;
+            public List<String> label;
             public String store_id;
             public String item_id;
             public String url;
