@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,21 +10,29 @@ import java.util.List;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefundInfoEntity {
+public class RefundInfoEntity implements Serializable {
+    public String is_last;
+    public String title;
+    public String sku_desc;
+    public String store_name;
+    public String thumb;
     public String price;
     public String qty;
     public String shipping_fee;
     public List<RefundChoice> refund_choice;
     public List<Reason> reason;
+    public String serviceType;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class RefundChoice {
+    public static class RefundChoice {
+        public String icon;
         public String type;
         public String hint;
+        public String tip;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Reason {
+    public static class Reason {
         public String reason_id;
         public String reason_info;
     }

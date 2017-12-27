@@ -378,6 +378,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @Override
     public void resetPsw(String message) {
         Common.staticToast(message);
+        finish();
     }
 
     @Override
