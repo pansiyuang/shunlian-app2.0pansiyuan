@@ -54,12 +54,14 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
 
     private boolean isFocus;
-    private String storeId,seller_id;
+    private String storeId,seller_id,storeScore;
     private StoreIntroducePresenter storeIntroducePresenter;
 
-    public static void startAct(Context context, String storeId) {
+    public static void startAct(Context context, String storeId,String storeScore,boolean isFocus) {
         Intent intent = new Intent(context, StoreIntroduceAct.class);
         intent.putExtra("storeId", storeId);//店铺id
+        intent.putExtra("storeScore", storeScore);//店铺id
+        intent.putExtra("isFocus", isFocus);//店铺id
         context.startActivity(intent);
     }
 
@@ -94,6 +96,15 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @Override
     protected void initData() {
         storeId = getIntent().getStringExtra("storeId");
+        storeScore= getIntent().getStringExtra("storeScore");
+        isFocus = getIntent().getBooleanExtra("isFocus",false);
+        if (!isFocus) {
+            mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+        } else {
+            mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+        }
         storeIntroducePresenter = new StoreIntroducePresenter(this, this, storeId);
     }
 
@@ -120,7 +131,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 //        }
         seller_id=storeIntroduceEntity.seller_id;
         mtv_storeName.setText(storeIntroduceEntity.store_name);
-        mtv_storeScore.setText("店铺分null");
+        mtv_storeScore.setText("店铺分"+storeScore);
         mtv_number.setText(storeIntroduceEntity.store_collect + "人");
         mtv_haopinglv.setText(storeIntroduceEntity.evaluate.praise_rate);
         mtv_dianhua.setText(storeIntroduceEntity.store_phone);

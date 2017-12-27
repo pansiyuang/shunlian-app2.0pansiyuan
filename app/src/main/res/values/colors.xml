@@ -119,6 +119,10 @@
     <color name="value_65alp">#92000000</color>
     <color name="value_f5">#F5F5F5</color>
     <color name="value_FEEAEA">#FEEAEA</color>
+
+    <color name="action_text_color_normal">#cfcfcf</color>
+    <color name="action_text_color_pressed">#353535</color>
+    <color name="action_text_color_enabled">#818585</color>
 </resources>
 
 

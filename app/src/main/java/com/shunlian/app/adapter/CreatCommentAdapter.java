@@ -57,15 +57,15 @@ public class CreatCommentAdapter extends BaseAdapter {
         if (mAdapters.size() != 0) {
             SingleImgAdapter imgAdapter = mAdapters.get(position);
 
-            List<ImageEntity> imageEntityList;
-            if (lists.get(position).imgs == null) {
-                imageEntityList = new ArrayList<>();
-                imageEntityList.addAll(pathes);
-                lists.get(position).imgs = imageEntityList;
-            } else {
-                lists.get(position).imgs.addAll(pathes);
-            }
-            imgAdapter.setData(lists.get(position).imgs);
+//            List<ImageEntity> imageEntityList;
+//            if (lists.get(position).imgs == null) {
+//                imageEntityList = new ArrayList<>();
+//                imageEntityList.addAll(pathes);
+//                lists.get(position).imgs = imageEntityList;
+//            } else {
+            lists.get(position).imgs = pathes;
+//            }
+            imgAdapter.setData(pathes);
         }
     }
 

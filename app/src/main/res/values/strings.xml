@@ -261,6 +261,12 @@
     <string name="this_append_comment">这些商品可追加</string>
     <string name="ready_to_cancel_comment">确定取消发布吗？</string>
 
+    <!--换货详情-->
+    <string name="exchange_xieshanglishi">协商历史</string>
+    <string name="exchange_bianjiwuliu">编辑物流信息</string>
+    <string name="exchange_tuihuodizhi">退货地址</string>
+    <string name="exchange_yonghutuihuo">用户退货物流</string>
+
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>
     <string name="order_fuzhi">复制</string>
@@ -294,4 +300,16 @@
     <string name="confirm_goods_receipt_label">确认收货后卖家将收到您的货款</string>
     <string name="confirm_extend_goods_time">确认延长收货时间？</string>
     <string name="order_extend_once">每笔订单只能延迟一次哦</string>
+
+    <!--选择图片-->
+
+    <string name="all_image">所有图片</string>
+    <string name="preview">预览</string>
+    <string name="msg_no_camera">无法启用系统相机</string>
+    <string name="deleted_a_photo">删除了一张图片</string>
+    <string name="confirm_to_delete">确认删除？</string>
+    <string name="done_with_count">发送(%1$d/%2$d)</string>
+    <string name="msg_amount_limit">已经达到最高选择数量</string>
+    <string name="image_index">%1$d/%2$d</string>
+    <string name="undo">撤销</string>
 </resources>

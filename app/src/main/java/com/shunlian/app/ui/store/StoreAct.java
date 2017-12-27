@@ -186,7 +186,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
-    private String storeId = "53";
+    private String storeId = "26",storeScore;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
@@ -428,7 +428,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startAct(this, storeId);
+                StoreIntroduceAct.startAct(this, storeId,storeScore,isFocus);
                 break;
             case R.id.mrlayout_sort:
                 StoreSortAct.startAct(this, storeId);
@@ -518,8 +518,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
         }
+        storeScore=head.star;
         mtv_storeName.setText(head.decoration_name);
-        mtv_storeScore.setText("店铺分null");
+        mtv_storeScore.setText("店铺分"+storeScore);
         mtv_number.setText(head.mark_count + "人");
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
@@ -588,7 +589,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             rv_discounts.setLayoutManager(new LinearLayoutManager(this));
             rv_discounts.setAdapter(storeDiscountTwoAdapter);
         } else {
-            storeDiscountOneAdapter.notifyDataSetChanged();
+            storeDiscountTwoAdapter.notifyDataSetChanged();
         }
     }
 

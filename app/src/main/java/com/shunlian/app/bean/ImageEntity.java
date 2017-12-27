@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ImageEntity {
 
     public String imgPath;
+    public String imgUrl;
     public int progress;
 
     public ImageEntity(String path) {

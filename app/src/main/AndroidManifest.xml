@@ -191,6 +191,14 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             />
 
+        <activity
+            android:name=".photopick.PhotoPickerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".photopick.PhotoPreviewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
