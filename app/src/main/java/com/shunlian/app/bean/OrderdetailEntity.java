@@ -76,6 +76,9 @@ public class OrderdetailEntity {
         public String market_price;
         public String price;
         public String offered;
+        public String refund_button_desc    ;
+        public String og_id;
+        public String refund_button_type;
         public String goods_id;
         public List<Gift> gift;
 

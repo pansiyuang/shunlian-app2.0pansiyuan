@@ -142,12 +142,12 @@ public class MainPageFrag extends BaseFragment {
                         SearchOrderActivity.startAct(baseActivity);
                         break;
                     case 9:
-                        SelectServiceActivity.startAct(baseActivity, null);
+                        SelectServiceActivity.startAct(baseActivity, "404");
                         break;
                     case 10:
 //                        String url = "https://pro.m.jd.com/mall/active/2PimE38Vam99eMLJWXiLTx1VgLJs/index.html";
                         String url = "https://h5.api.shunliandongli.com/v1/detail/389517.html";
-                        H5Act.startActivity(baseActivity,"hhahh",url,H5Act.MODE_SONIC);
+                        H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                 }
             }
