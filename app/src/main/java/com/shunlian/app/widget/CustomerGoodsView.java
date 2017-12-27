@@ -29,9 +29,11 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
     private MyTextView mtv_count_reduce;
     private MyTextView mtv_count;
     private MyTextView mtv_count_add;
+    private MyTextView mtv_refund_price;
     private MyTextView textView;
     private MyImageView imgShop;
     private int maxCount = 10;
+    private IChangeCountListener mListener;
 
     public CustomerGoodsView(Context context) {
         this(context, null);
@@ -105,6 +107,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         mtv_count_reduce = (MyTextView) view.findViewById(R.id.mtv_count_reduce);
         mtv_count = (MyTextView) view.findViewById(R.id.mtv_count);
         mtv_count_add = (MyTextView) view.findViewById(R.id.mtv_count_add);
+        mtv_refund_price = (MyTextView) view.findViewById(R.id.mtv_refund_price);
 
 
         mtv_count_add.setOnClickListener(this);
@@ -198,6 +201,17 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
     }
 
     /**
+     * 设置退款金额
+     * @param sequence
+     * @return
+     */
+    public CustomerGoodsView setRefundPrice(CharSequence sequence){
+        mtv_refund_price.setVisibility(VISIBLE);
+        mtv_refund_price.setText(sequence);
+        return this;
+    }
+
+    /**
      * Called when a view has been clicked.
      *
      * @param v The view that was clicked.
@@ -224,5 +238,25 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
                 break;
         }
         mtv_count.setText(String.valueOf(i));
+
+        if (mListener != null){
+            mListener.onChangeCount(i);
+        }
+    }
+
+    /**
+     * 数量改变监听
+     * @param listener
+     */
+    public void setIChangeCountListener(IChangeCountListener listener){
+        mListener = listener;
+    }
+
+    public interface IChangeCountListener{
+        /**
+         * 数量改变
+         * @param count
+         */
+        void onChangeCount(int count);
     }
 }

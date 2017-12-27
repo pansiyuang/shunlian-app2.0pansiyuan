@@ -16,20 +16,18 @@
 
         <com.shunlian.app.widget.ProgressView
             android:id="@+id/progressBar"
-            style="@style/SpinKitView"
             android:layout_width="19dp"
             android:layout_height="19dp"
             android:layout_gravity="center"
             android:layout_marginRight="15dp"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"/>
+            android:layout_centerVertical="true"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/progressBar"
+            android:layout_toRightOf="@+id/progressBar"
             android:text="加载中..."
             android:textColor="@color/share_text"
             android:textSize="13dp" />

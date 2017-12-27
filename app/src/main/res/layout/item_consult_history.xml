@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_logistics"
+        android:layout_width="14dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mrl_detail"
+        android:layout_alignTop="@+id/mrl_detail"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view_logistics_line1"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:background="@color/my_line_gray"
+            android:visibility="visible" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_logistics"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_wuliu_active" />
+
+        <View
+            android:id="@+id/view_logistics_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="@color/my_line_gray"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrl_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ll_logistics"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        app:rl_control_adapter="true"
+        app:rl_margin_left="20"
+        app:rl_margin_right="20">
+
+        <com.shunlian.app.widget.circle.CircleImageView
+            android:id="@+id/civ_head"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_login_logo" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/civ_head"
+            android:maxLines="1"
+            android:text="顺联动力官方"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="15"
+            app:tv_margin_top="21" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/civ_head"
+            android:text="平台已经同意了申请"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:tv_control_adapter="true"
+            app:tv_margin_top="30" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/civ_head"
+            android:text="2017-09-26 08:24:23"
+            android:textColor="@color/new_gray"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_top="30" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_sanjiao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mtv_label"
+            android:src="@mipmap/img_sanjiao"
+            app:iv_control_adapter="true"
+            app:iv_margin_left="60"
+            app:iv_margin_top="30" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/miv_sanjiao"
+            android:background="@drawable/rounded_rectangle_gray_6px"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp"
+            android:text="您好，查看到您的商品是在运送的途中，商品还没有退回到我们公司的哦，公司只能等货物退回公司后才能同意您的退款申请，我们现在需要先拒绝您的申请。感谢您的支持，祝您生活愉快~"
+            android:textColor="@color/new_gray"
+            android:textSize="14sp"/>
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+</RelativeLayout>

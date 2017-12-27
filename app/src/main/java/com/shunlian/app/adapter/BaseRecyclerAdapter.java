@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
@@ -303,7 +302,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public BaseFooterHolder(View itemView) {
             super(itemView);
             spinKitView = (ProgressView) itemView.findViewById(R.id.progressBar);
-            spinKitView.startAnimation();
 //            circle = new Circle();
 //            spinKitView.setIndeterminateDrawable(circle);
             layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
