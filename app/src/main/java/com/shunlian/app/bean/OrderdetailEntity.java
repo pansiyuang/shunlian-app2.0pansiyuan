@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -66,7 +67,7 @@ public class OrderdetailEntity {
         }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Good {
+    public static class Good implements Serializable{
         public String title;
         public String thumb;
         public String comment_id;

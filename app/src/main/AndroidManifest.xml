@@ -189,7 +189,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".photopick.PhotoPreviewActivity"
+            android:name=".ui.returns_order.SelectServiceActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
