@@ -46,6 +46,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
+import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
@@ -728,4 +729,12 @@ public interface ApiService {
      */
     @POST("order/buycombo")
     Call<BaseEntity<ConfirmOrderEntity>> buycombo(@Body RequestBody body);
+
+    /**
+     * 选择服务类型
+     * @param body
+     * @return
+     */
+    @POST("/member/refund/getrefundinfo")
+    Call<BaseEntity<RefundInfoEntity>> getrefundinfo(@Body RequestBody body);
 }
