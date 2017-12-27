@@ -120,6 +120,7 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mHolder.line_bottom.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
+            mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
         } else if (position < mCommentSize) {
 
             mHolder.line.setVisibility(View.GONE);

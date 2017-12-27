@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_login_logo"
+            android:scaleType="centerCrop"
             app:iv_control_adapter="true"
             app:iv_control_height="116"
             app:iv_control_width="116" />

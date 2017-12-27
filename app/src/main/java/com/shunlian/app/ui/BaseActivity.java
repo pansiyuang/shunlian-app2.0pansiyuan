@@ -168,6 +168,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPrefUtil.saveSharedPrfString("Net-Type", NetworkUtils.getNetWorkStatusName(this));
     }
 
+    public Map<String, String> setWebviewHeader(){
+        Map<String, String> extraHeaders = new HashMap<String, String>();
+        extraHeaders.put("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 5.1.1/1.0.0"));
+        extraHeaders.put("X-Device-ID", SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
+        extraHeaders.put("resolution", SharedPrefUtil.getSharedPrfString("resolution", "720x1184"));
+        extraHeaders.put("DeviceIp", SharedPrefUtil.getSharedPrfString("DeviceIp", "192.168.1.1"));
+        extraHeaders.put("Accept-Encoding", "gzip,deflate");
+        extraHeaders.put("Content-Type", "application/json");
+        extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
+        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
+        return extraHeaders;
+    }
     /**
      * 设置状态栏的颜色
      *
