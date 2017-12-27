@@ -18,6 +18,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.order.AllFrag;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
@@ -307,7 +308,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     }
                     break;
                 case R.id.mllayout_store:
-                    Common.staticToast("进入店铺");
+                    StoreAct.startAct(context,orders.store_id);
                     break;
                 case R.id.mtv_title1:
                     text = mtv_title1.getText();
@@ -384,7 +385,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
          */
         public void confirmreceipt(final MyOrderEntity.Orders orders) {
             final PromptDialog promptDialog = new PromptDialog((Activity) context);
-            promptDialog.setSureAndCancleListener("要确认收货吗？", "确认收货后卖家将收到您的货款", "确认收货", new View.OnClickListener() {
+            promptDialog.setSureAndCancleListener(getString(R.string.confirm_goods_receipt),
+                    getString(R.string.confirm_goods_receipt_label),
+                    getString(R.string.confirm_goods), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mAllFrag != null){
@@ -395,7 +398,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     }
                     promptDialog.dismiss();
                 }
-            }, "取消", new View.OnClickListener() {
+            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     promptDialog.dismiss();
@@ -428,7 +431,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
          */
         public void extendTheCollection(final MyOrderEntity.Orders orders) {
             final PromptDialog promptDialog = new PromptDialog((Activity) context);
-            promptDialog.setSureAndCancleListener("确认延长收货时间？", "每笔订单只能延迟一次哦", "确认", new View.OnClickListener() {
+            promptDialog.setSureAndCancleListener(getString(R.string.confirm_extend_goods_time),
+                    getString(R.string.order_extend_once),
+                    getString(R.string.confirm_goods), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mAllFrag != null) {
@@ -440,7 +445,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
 
                     promptDialog.dismiss();
                 }
-            }, "取消", new View.OnClickListener() {
+            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     promptDialog.dismiss();

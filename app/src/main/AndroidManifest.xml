@@ -184,6 +184,12 @@
             android:name=".ui.my_comment.SuccessfulTradeAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.h5.H5Act"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
         <activity
             android:name=".photopick.PhotoPickerActivity"
             android:exported="false"

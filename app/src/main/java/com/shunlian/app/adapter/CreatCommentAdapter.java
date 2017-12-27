@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.shunlian.app.ui.my_comment.CreatCommentActivity.APPEND_COMMENT;
-import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CHANGE_COMMENT;
-import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CREAT_COMMENT;
 
 /**
  * Created by Administrator on 2017/12/12.

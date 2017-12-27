@@ -255,7 +255,7 @@
     <string name="comment_success">评价成功</string>
     <string name="append_comment_title">以下商品您还没有进行追评，赶紧追评一下吧</string>
     <string name="comment_next">接着评下去</string>
-    <string name="no_comment_goods">您还没有需要追评的商品</string>
+    <string name="no_comment_goods">您暂无需要评价的商品</string>
     <string name="go_comment">去评价</string>
     <string name="go_append_comment">去追评</string>
     <string name="this_append_comment">这些商品可追加</string>
@@ -296,6 +296,10 @@
     <string name="extend_the_collection">延长收货</string>
     <string name="confirm_goods">确认收货</string>
     <string name="append_comment">追评</string>
+    <string name="confirm_goods_receipt">要确认收货吗？</string>
+    <string name="confirm_goods_receipt_label">确认收货后卖家将收到您的货款</string>
+    <string name="confirm_extend_goods_time">确认延长收货时间？</string>
+    <string name="order_extend_once">每笔订单只能延迟一次哦</string>
 
     <!--选择图片-->
 

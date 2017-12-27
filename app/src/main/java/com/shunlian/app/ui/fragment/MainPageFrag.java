@@ -15,6 +15,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
@@ -90,6 +91,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单物流详情");
         items.add("订单搜索历史");
         items.add("选择服务类型");
+        items.add("H5");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -142,7 +144,11 @@ public class MainPageFrag extends BaseFragment {
                     case 9:
                         SelectServiceActivity.startAct(baseActivity, null);
                         break;
-
+                    case 10:
+//                        String url = "https://pro.m.jd.com/mall/active/2PimE38Vam99eMLJWXiLTx1VgLJs/index.html";
+                        String url = "https://h5.api.shunliandongli.com/v1/detail/389517.html";
+                        H5Act.startActivity(baseActivity,"hhahh",url,H5Act.MODE_SONIC);
+                        break;
                 }
             }
         });

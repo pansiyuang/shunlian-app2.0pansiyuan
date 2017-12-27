@@ -28,6 +28,7 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
     private CommentSuccessPresenter presenter;
     private List<CommentSuccessEntity.Comment> otherComments = new ArrayList<>();
     private int commentSize = 0;
