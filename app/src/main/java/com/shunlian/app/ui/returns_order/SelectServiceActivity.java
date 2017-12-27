@@ -2,7 +2,6 @@ package com.shunlian.app.ui.returns_order;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
