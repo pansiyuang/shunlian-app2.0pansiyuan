@@ -1,8 +1,11 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -64,6 +69,36 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
                 GoodsDetailAct.startAct(context,orderGoodsBean.goods_id);
             }
         });
+        String offered = orderGoodsBean.offered;
+        if (isEmpty(offered)){
+            mHolder.mtv_label.setVisibility(View.GONE);
+            mHolder.mtv_title.setText(orderGoodsBean.title);
+        }else {
+            mHolder.mtv_label.setVisibility(View.VISIBLE);
+            GradientDrawable background = (GradientDrawable) mHolder.mtv_label.getBackground();
+            background.setColor(getColor(R.color.pink_color));
+            mHolder.mtv_label.setText(offered);
+            mHolder.mtv_title.setText(Common.getPlaceholder(offered.length())
+                    .concat(orderGoodsBean.title));
+        }
+        if (!TextUtils.isEmpty(orderGoodsBean.refund_button_desc)){
+            mHolder.mtv_refund.setText(orderGoodsBean.refund_button_desc);
+            mHolder.mtv_refund.setVisibility(View.VISIBLE);
+        }else {
+            mHolder.mtv_refund.setVisibility(View.GONE);
+        }
+        mHolder.mtv_refund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ("apply".equals(orderGoodsBean.refund_button_type)){
+                    SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
+                }else {
+                    ExchangeDetailAct.startAct(context,"");
+                }
+            }
+        });
+        GradientDrawable copyBackground = (GradientDrawable) mHolder.mtv_refund.getBackground();
+        copyBackground.setColor(getColor(R.color.white));
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         mHolder.rv_goods.setLayoutManager(manager);
         mHolder.rv_goods.setAdapter(new OrderGiftAdapter(context, orderGoodsBean.gift));
@@ -101,6 +136,11 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         @BindView(R.id.mrlayout_root)
         MyRelativeLayout mrlayout_root;
 
+        @BindView(R.id.mtv_label)
+        MyTextView mtv_label;
+
+        @BindView(R.id.mtv_refund)
+        MyTextView mtv_refund;
 
         public OrderGoodsHolder(View itemView) {
             super(itemView);
