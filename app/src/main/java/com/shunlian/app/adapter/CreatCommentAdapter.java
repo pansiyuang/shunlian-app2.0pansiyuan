@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.shunlian.app.ui.my_comment.CreatCommentActivity.APPEND_COMMENT;
-import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CHANGE_COMMENT;
-import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CREAT_COMMENT;
 
 /**
  * Created by Administrator on 2017/12/12.
@@ -57,15 +55,15 @@ public class CreatCommentAdapter extends BaseAdapter {
         if (mAdapters.size() != 0) {
             SingleImgAdapter imgAdapter = mAdapters.get(position);
 
-            List<ImageEntity> imageEntityList;
-            if (lists.get(position).imgs == null) {
-                imageEntityList = new ArrayList<>();
-                imageEntityList.addAll(pathes);
-                lists.get(position).imgs = imageEntityList;
-            } else {
-                lists.get(position).imgs.addAll(pathes);
-            }
-            imgAdapter.setData(lists.get(position).imgs);
+//            List<ImageEntity> imageEntityList;
+//            if (lists.get(position).imgs == null) {
+//                imageEntityList = new ArrayList<>();
+//                imageEntityList.addAll(pathes);
+//                lists.get(position).imgs = imageEntityList;
+//            } else {
+            lists.get(position).imgs = pathes;
+//            }
+            imgAdapter.setData(pathes);
         }
     }
 

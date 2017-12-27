@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ash"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_common_layout" />
+
+    <TextView
+        android:id="@+id/tv_store_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/img_shoppingcar_shop"
+        android:drawablePadding="7.5dp"
+        android:paddingBottom="13dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="13dp"
+        android:text="adidas官方旗舰店"
+        android:textColor="@color/new_text"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_goods_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_goods_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/tv_goods_price"
+            android:layout_toRightOf="@+id/miv_goods_icon"
+            android:background="@color/white"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="adidas 阿迪达斯 足球 男子 COPA 18.2 FG 足球鞋 BB6357"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tv_goods_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="¥ 799.00"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_goods_param"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_goods_name"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/miv_goods_icon"
+            android:background="@color/white"
+            android:text="亮白/1号黑色/质感金"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_goods_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_goods_price"
+            android:layout_marginTop="7.5dp"
+            android:background="@color/white"
+            android:text="x1"
+            android:textColor="@color/new_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>
