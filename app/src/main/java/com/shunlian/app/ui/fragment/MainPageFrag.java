@@ -21,6 +21,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
@@ -95,6 +96,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("选择服务类型");
         items.add("H5");
         items.add("字母");
+        items.add("协商历史");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -154,6 +156,10 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 11:
                         startActivity(new Intent(baseActivity,LetterCategoryAct.class));
+                        break;
+                    case 12:
+//                        ConsultHistoryAct.startAct(baseActivity);
+                        RefundAfterSaleAct.startAct(baseActivity);
                         break;
                 }
             }
