@@ -7,16 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.RefundListEntity;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.widget.CustomerGoodsView;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/12/27.
  */
 
-public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<String> {
+public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity.RefundList> {
 
-    public RefundAfterSaleAdapter(Context context, boolean isShowFooter, List<String> lists) {
+    public RefundAfterSaleAdapter(Context context, boolean isShowFooter, List<RefundListEntity.RefundList> lists) {
         super(context, isShowFooter, lists);
     }
 
@@ -59,11 +66,32 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<String> {
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RefundAfterSaleHolder){
             RefundAfterSaleHolder mHolder = (RefundAfterSaleHolder) holder;
+            RefundListEntity.RefundList refundList = lists.get(position);
+            mHolder.cgv_goods.setLabelName(refundList.store_name,true)
+            .setGoodsTitle(refundList.title).setGoodsParams(refundList.sku_desc)
+            .setGoodsCount(String.format(getString(R.string.x),/*refundList.goods_num*/"10"))
+//                    .setGoodsPrice(getString(R.string.rmb).concat(refundList.price))
+            .setRefundPrice("退款金额：".concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
+            GlideUtils.getInstance().loadImage(context,mHolder.cgv_goods.getGoodsIcon(),refundList.thumb);
+            mHolder.mtv_label.setText(refundList.status_msg);
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_icon,refundList.type_icon);
 
         }
     }
 
     public class RefundAfterSaleHolder extends BaseRecyclerViewHolder{
+
+        @BindView(R.id.cgv_goods)
+        CustomerGoodsView cgv_goods;
+
+        @BindView(R.id.miv_icon)
+        MyImageView miv_icon;
+
+        @BindView(R.id.mtv_label)
+        MyTextView mtv_label;
+
+        @BindView(R.id.mtv_look_detail)
+        MyTextView mtv_look_detail;
 
         public RefundAfterSaleHolder(View itemView) {
             super(itemView);

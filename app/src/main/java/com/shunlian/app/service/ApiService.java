@@ -48,6 +48,7 @@ import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
@@ -738,6 +739,14 @@ public interface ApiService {
      */
     @POST("/member/refund/getrefundinfo")
     Call<BaseEntity<RefundInfoEntity>> getrefundinfo(@Body RequestBody body);
+
+    /**
+     * 售后申请列表
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyList")
+    Call<BaseEntity<RefundListEntity>> refundList(@QueryMap Map<String,String> map);
 
     /**
      * 申请退款
