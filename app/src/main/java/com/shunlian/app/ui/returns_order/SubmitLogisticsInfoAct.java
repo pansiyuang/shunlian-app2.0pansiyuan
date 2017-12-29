@@ -43,7 +43,6 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
     MyEditText met_explain;
 
     private List<ImageEntity> listExplains = new ArrayList();
-    public static final int ALBUM_CODE = 1000;//相册code
     private SingleImgAdapter singleImgAdapter;
 
     public static void startAct(Context context) {
@@ -129,7 +128,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
         if (requestCode == 100 && resultCode == ZXingDemoAct.RESULT_CODE) {
             String result = data.getStringExtra("result");
             met_logistics.setText(result);
-        }else if (requestCode == ALBUM_CODE && resultCode == Activity.RESULT_OK){
+        }else if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK){
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             for (String picturePath: picturePaths) {
                 listExplains.add(new ImageEntity(picturePath));
