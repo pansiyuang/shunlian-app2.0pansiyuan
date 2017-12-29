@@ -46,6 +46,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
+import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -724,7 +725,6 @@ public interface ApiService {
 
     /**
      * 购买套餐
-     *
      * @param body
      * @return
      */
@@ -733,7 +733,6 @@ public interface ApiService {
 
     /**
      * 选择服务类型
-     *
      * @param body
      * @return
      */
@@ -748,4 +747,13 @@ public interface ApiService {
      */
     @POST("/member/refund/applyRefund")
     Call<BaseEntity<EmptyEntity>> applyRefund(@Body RequestBody body);
+
+    /**
+     * 售后申请详情
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyDetail")
+    Call<BaseEntity<RefundDetailEntity>> refundDetail(@QueryMap Map<String, String> map);
 }
