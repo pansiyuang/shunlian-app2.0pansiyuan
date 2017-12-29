@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_rootview"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_rootview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,66 +13,96 @@
         android:layout_height="wrap_content"
         android:background="@color/light_gray_two"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="7"
         android:layout_alignParentBottom="true"
-        android:paddingTop="0.5dp"
-        app:ll_control_adapter="true"
-        app:ll_control_height="88">
+        android:paddingTop="0.5dp">
 
-
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
+        <!--客服-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:background="@color/white"
-            android:drawablePadding="2dp"
-            android:drawableTop="@mipmap/icon_productdetails_tab_kefu"
+            android:orientation="vertical"
+            android:layout_weight="1"
             android:gravity="center"
-            android:paddingTop="8dp"
-            android:text="@string/store_kefu"
-            app:tv_control_adapter="true"
-            android:textColor="@color/new_text"
-            android:textSize="10sp"/>
+            android:background="@color/white">
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_store"
-            android:layout_width="wrap_content"
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6.5dp"
+                android:src="@mipmap/icon_productdetails_tab_kefu"/>
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/store_kefu"
+                android:textColor="@color/new_text"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp"/>
+
+
+        </com.shunlian.app.widget.MyLinearLayout>
+        <!--店铺-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_store"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
             android:layout_marginLeft="0.5dp"
-            android:layout_weight="1.5"
-            android:background="@color/white"
-            android:drawablePadding="2dp"
-            android:drawableTop="@mipmap/icon_productdetails_tab_dianpu"
-            android:gravity="center"
-            android:paddingTop="8dp"
-            android:text="@string/shop"
-            android:textColor="@color/new_text"
-            android:textSize="10sp"
-            />
+            android:background="@color/white">
 
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6.5dp"
+                android:src="@mipmap/icon_productdetails_tab_dianpu"/>
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shop"
+                android:textColor="@color/new_text"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp"/>
+        </com.shunlian.app.widget.MyLinearLayout>
+        <!--购物车-->
         <com.shunlian.app.widget.MyRelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:layout_marginLeft="0.5dp"
             android:layout_weight="1">
 
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_car"
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_car"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:drawablePadding="2dp"
-                android:drawableTop="@mipmap/icon_productdetails_tab_gouwuche"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:paddingTop="8dp"
-                android:text="@string/shopping_cart"
-                android:textColor="@color/new_text"
-                android:textSize="10sp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true">
 
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_productdetails_tab_gouwuche"
+                    android:layout_marginTop="6.5dp"/>
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shopping_cart"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/new_text"
+                    android:textSize="10sp"/>
+            </com.shunlian.app.widget.MyLinearLayout>
 
             <com.shunlian.app.widget.RollNumView
                 android:id="@+id/rnview"
-                android:layout_alignRight="@+id/mtv_car"
+                android:layout_alignRight="@+id/mllayout_car"
                 android:layout_marginTop="1dp"
                 android:visibility="gone"
                 android:layout_width="14dp"
@@ -81,11 +111,12 @@
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_add_car"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:background="@color/my_black_one"
             android:text="@string/add_shopping_cart"
             android:textColor="@color/white"
@@ -93,9 +124,11 @@
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_buy_immediately"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:background="@color/pink_color"
             android:gravity="center"
             android:text="@string/now_buy"
