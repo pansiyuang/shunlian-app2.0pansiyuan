@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.photopick.PhotoPickerIntent;
+import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
@@ -29,10 +32,12 @@ import java.util.List;
  */
 
 public class SingleImgAdapter extends BaseAdapter {
+    public static final int REQUEST_CAMERA_CODE = 1001;
     private Context mContext;
     private List<ImageEntity> pics;
     private int parentPosition;
     private int screenWidth;
+    private PhotoPickerIntent intent;
 
     public SingleImgAdapter(Context context, List<ImageEntity> data, int position) {
         this.mContext = context;
@@ -45,6 +50,9 @@ public class SingleImgAdapter extends BaseAdapter {
         this.mContext = context;
         this.pics = data;
         screenWidth = DeviceInfoUtil.getDeviceWidth(mContext);
+        intent = new PhotoPickerIntent(context);
+        intent.setSelectModel(SelectModel.MULTI);
+        intent.setShowCarema(true);
     }
 
     @Override
@@ -99,8 +107,9 @@ public class SingleImgAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (mContext instanceof CreatCommentActivity) {
                         ((CreatCommentActivity) mContext).openAlbum(parentPosition);
-                    } else if (mContext instanceof ReturnRequestActivity) {
-                        ((ReturnRequestActivity) mContext).openAlbum();
+                    } else {
+                        intent.setMaxTotal(5 - pics.size()); // 最多选择照片数量，默认为9
+                        ((Activity) mContext).startActivityForResult(intent, REQUEST_CAMERA_CODE);
                     }
                 }
             });

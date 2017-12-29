@@ -34,6 +34,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static com.shunlian.app.adapter.SingleImgAdapter.REQUEST_CAMERA_CODE;
+
 /**
  * Created by Administrator on 2017/12/27.
  */
@@ -73,7 +75,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @BindView(R.id.tv_request_complete)
     TextView tv_request_complete;
 
-    private static final int REQUEST_CAMERA_CODE = 100;
     /**
      * 输入框小数的位数
      */
@@ -81,7 +82,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private RefundInfoEntity currentInfoEntity;
     private List<ImageEntity> imageEntityList;
     private List<ImageEntity> upLoadList = new ArrayList<>();
-    private PhotoPickerIntent intent;
     private SingleImgAdapter singleImgAdapter;
     private String currentServiceType;  //1 仅退款、 3 退货换货 4 换货
     private int goodsCount;
@@ -159,10 +159,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 .setGoodsPrice(getStringResouce(R.string.common_yuan) + currentInfoEntity.price)
                 .selectCount(Integer.valueOf(currentInfoEntity.qty));
 
-        intent = new PhotoPickerIntent(this);
-        intent.setSelectModel(SelectModel.MULTI);
-        intent.setShowCarema(true); // 是否显示拍照
-
         imageEntityList = new ArrayList<>();
         singleImgAdapter = new SingleImgAdapter(this, imageEntityList);
         grid_imgs.setAdapter(singleImgAdapter);
@@ -174,16 +170,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         rl_return_reason.setOnClickListener(this);
         tv_request_complete.setOnClickListener(this);
         super.initListener();
-    }
-
-    public void openAlbum() {
-        int max = 5;
-        if (imageEntityList != null) {
-            max = 5 - imageEntityList.size();
-        }
-
-        intent.setMaxTotal(max); // 最多选择照片数量，默认为9
-        startActivityForResult(intent, REQUEST_CAMERA_CODE);
     }
 
     @Override
