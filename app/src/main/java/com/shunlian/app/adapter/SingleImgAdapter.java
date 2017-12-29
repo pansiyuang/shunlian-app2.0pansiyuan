@@ -13,6 +13,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -37,6 +38,12 @@ public class SingleImgAdapter extends BaseAdapter {
         this.mContext = context;
         this.pics = data;
         this.parentPosition = position;
+        screenWidth = DeviceInfoUtil.getDeviceWidth(mContext);
+    }
+
+    public SingleImgAdapter(Context context, List<ImageEntity> data) {
+        this.mContext = context;
+        this.pics = data;
         screenWidth = DeviceInfoUtil.getDeviceWidth(mContext);
     }
 
@@ -92,6 +99,8 @@ public class SingleImgAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (mContext instanceof CreatCommentActivity) {
                         ((CreatCommentActivity) mContext).openAlbum(parentPosition);
+                    } else if (mContext instanceof ReturnRequestActivity) {
+                        ((ReturnRequestActivity) mContext).openAlbum();
                     }
                 }
             });

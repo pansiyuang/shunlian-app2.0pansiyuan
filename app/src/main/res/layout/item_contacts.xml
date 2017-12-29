@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="10dp">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_index"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gjiazhgjhgjhgje"
+        android:textColor="@color/new_text"
+        android:textSize="14sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginRight="50dp"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+</LinearLayout>

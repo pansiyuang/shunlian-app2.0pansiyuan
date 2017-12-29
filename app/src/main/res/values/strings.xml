@@ -37,6 +37,9 @@
     <string name="SelectRecommendAct_sure">确定</string>
     <string name="SelectRecommendAct_bind">绑定</string>
 
+    <!--分类-->
+    <string name="category_reset">重置</string>
+
     <!--登陆-->
     <string name="LoginPswFrg_qsrsjh">请输入手机号/用户ID</string>
     <string name="LoginPswFrg_inputphone">请输入手机号</string>
@@ -308,7 +311,7 @@
     <string name="msg_no_camera">无法启用系统相机</string>
     <string name="deleted_a_photo">删除了一张图片</string>
     <string name="confirm_to_delete">确认删除？</string>
-    <string name="done_with_count">发送(%1$d/%2$d)</string>
+    <string name="done_with_count">完成(%1$d/%2$d)</string>
     <string name="msg_amount_limit">已经达到最高选择数量</string>
     <string name="image_index">%1$d/%2$d</string>
     <string name="undo">撤销</string>
@@ -316,4 +319,15 @@
     <!--退换货-->
 
     <string name="select_service_type">选择服务类型</string>
+    <string name="return_order">退款原因</string>
+    <string name="return_request">退款申请</string>
+    <string name="change_request">换货申请</string>
+    <string name="please_select">请选择</string>
+    <string name="return_money">退款金额:</string>
+    <string name="refunds">退款说明:</string>
+    <string name="upload_voucher">上传凭证</string>
+    <string name="subimt_request">提交申请</string>
+    <string name="return_goods">退货商品</string>
+    <string name="change_goods">换货商品</string>
+    <string name="return_money_hint">请输入退款金额</string>
 </resources>

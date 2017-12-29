@@ -120,6 +120,7 @@ public class ProgressView extends View {
     public void stopAnimation() {
         if (valueAnimator != null) {
             valueAnimator.end();
+            angle = 360;
         }
     }
 
@@ -127,6 +128,7 @@ public class ProgressView extends View {
         if (valueAnimator != null) {
             valueAnimator.removeAllUpdateListeners();
             valueAnimator.cancel();
+            angle = 360;
         }
     }
 }

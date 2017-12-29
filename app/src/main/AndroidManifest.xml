@@ -207,6 +207,14 @@
             android:name=".ui.returns_order.SelectServiceActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.returns_order.ReturnRequestActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.category.LetterCategoryAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.returns_order.ConsultHistoryAct"
             android:exported="false"
             android:screenOrientation="portrait"

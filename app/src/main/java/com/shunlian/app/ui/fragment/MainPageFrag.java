@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.LetterCategoryAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -19,6 +21,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
@@ -94,6 +97,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单搜索历史");
         items.add("选择服务类型");
         items.add("H5");
+        items.add("字母");
         items.add("协商历史");
         items.add("提交物流信息");
 
@@ -154,6 +158,9 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
+                        startActivity(new Intent(baseActivity,LetterCategoryAct.class));
+                        break;
+                    case 12:
 //                        ConsultHistoryAct.startAct(baseActivity);
                         RefundAfterSaleAct.startAct(baseActivity);
                         break;
