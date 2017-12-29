@@ -95,7 +95,6 @@ public class MainPageFrag extends BaseFragment {
         items.add("选择服务类型");
         items.add("H5");
         items.add("协商历史");
-        items.add("提交申请");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -156,9 +155,6 @@ public class MainPageFrag extends BaseFragment {
                     case 11:
 //                        ConsultHistoryAct.startAct(baseActivity);
                         RefundAfterSaleAct.startAct(baseActivity);
-                        break;
-                    case 12:
-                        ReturnRequestActivity.startAct(baseActivity);
                         break;
                 }
             }

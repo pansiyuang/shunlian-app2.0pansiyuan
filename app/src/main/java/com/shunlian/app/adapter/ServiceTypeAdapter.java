@@ -42,7 +42,7 @@ public class ServiceTypeAdapter extends BaseRecyclerAdapter<RefundInfoEntity.Ref
         viewholder.tv_service_content.setText(entity.tip);
     }
 
-    public class ServiceViewholder extends BaseRecyclerViewHolder {
+    public class ServiceViewholder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_service_icon)
         MyImageView miv_service_icon;
 
@@ -54,6 +54,11 @@ public class ServiceTypeAdapter extends BaseRecyclerAdapter<RefundInfoEntity.Ref
 
         public ServiceViewholder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
             if (listener != null) {
                 listener.onItemClick(itemView, getAdapterPosition());
             }

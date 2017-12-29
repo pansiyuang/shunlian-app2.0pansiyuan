@@ -11,6 +11,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfoEntity implements Serializable {
+    public String og_Id;
     public String is_last;
     public String title;
     public String sku_desc;
@@ -24,7 +25,7 @@ public class RefundInfoEntity implements Serializable {
     public String serviceType;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class RefundChoice {
+    public static class RefundChoice implements Serializable {
         public String icon;
         public String type;
         public String hint;
@@ -32,7 +33,7 @@ public class RefundInfoEntity implements Serializable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Reason {
+    public static class Reason implements Serializable {
         public String reason_id;
         public String reason_info;
     }

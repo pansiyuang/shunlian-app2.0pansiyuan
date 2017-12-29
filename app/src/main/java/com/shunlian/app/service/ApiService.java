@@ -724,6 +724,7 @@ public interface ApiService {
 
     /**
      * 购买套餐
+     *
      * @param body
      * @return
      */
@@ -732,9 +733,19 @@ public interface ApiService {
 
     /**
      * 选择服务类型
+     *
      * @param body
      * @return
      */
     @POST("/member/refund/getrefundinfo")
     Call<BaseEntity<RefundInfoEntity>> getrefundinfo(@Body RequestBody body);
+
+    /**
+     * 申请退款
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/refund/applyRefund")
+    Call<BaseEntity<EmptyEntity>> applyRefund(@Body RequestBody body);
 }

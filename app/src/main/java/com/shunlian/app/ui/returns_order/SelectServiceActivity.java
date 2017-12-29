@@ -114,6 +114,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
             List<RefundInfoEntity.RefundChoice> choices = mEntity.refund_choice;
             RefundInfoEntity.RefundChoice choice = choices.get(position);
             mEntity.serviceType = choice.type;
+            mEntity.og_Id = currentOgId;
             ReturnRequestActivity.startAct(this, mEntity);
         }
     }
