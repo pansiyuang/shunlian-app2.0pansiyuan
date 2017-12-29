@@ -21,7 +21,6 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
-import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
@@ -164,7 +163,7 @@ public class MainPageFrag extends BaseFragment {
 //                        ConsultHistoryAct.startAct(baseActivity);
                         RefundAfterSaleAct.startAct(baseActivity);
                         break;
-                    case 12:
+                    case 13:
                         SubmitLogisticsInfoAct.startAct(baseActivity);
                         break;
                 }

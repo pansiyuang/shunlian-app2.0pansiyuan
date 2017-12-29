@@ -177,6 +177,8 @@
         android:paddingTop="13dp"
         android:horizontalSpacing="4dp"
         android:numColumns="5"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@color/white"
         android:verticalSpacing="4dp"/>
 
