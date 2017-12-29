@@ -85,4 +85,5 @@ dependencies {
     implementation files('libs/libammsdk.jar')
     implementation files('libs/alipaySdk-20170922.jar')
     compile 'com.tencent.sonic:sdk:2.0.0'
+    compile 'com.google.zxing:core:3.2.1'
 }

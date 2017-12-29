@@ -29,5 +29,7 @@ public class RefundListEntity {
         public String sku_desc;
         public String price;
         public String qty;
+        public String type_icon;
+        public String status_msg;
     }
 }

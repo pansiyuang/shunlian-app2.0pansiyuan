@@ -26,12 +26,13 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
     private MyTextView tv_goods_price;
     private MyTextView tv_goods_param;
     private MyTextView tv_goods_count;
-    private MyTextView mtv_count_reduce;
+    private MyImageView mtv_count_reduce;
     private MyTextView mtv_count;
-    private MyTextView mtv_count_add;
+    private MyImageView mtv_count_add;
     private MyTextView mtv_refund_price;
     private MyTextView textView;
     private MyImageView imgShop;
+    private MyImageView imgArrow;
     private int maxCount = 10;
     private IChangeCountListener mListener;
 
@@ -54,6 +55,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         int px = TransformUtil.dip2px(getContext(), 0.5f);
 
         LinearLayout layoutName = new LinearLayout(getContext());
+        layoutName.setOrientation(HORIZONTAL);
 
         LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -77,6 +79,15 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         int padding = TransformUtil.dip2px(getContext(), 13);
         textView.setPadding(0,padding,0,padding);
         layoutName.addView(textView);
+
+        //箭头
+        imgArrow = new MyImageView(getContext());
+        imgArrow.setImageResource(R.mipmap.img_common_viewarrow_1);
+        layoutName.addView(imgArrow);
+        LinearLayout.LayoutParams arrowParams = (LayoutParams) imgArrow.getLayoutParams();
+        arrowParams.leftMargin = TransformUtil.dip2px(getContext(),5f);
+        imgArrow.setLayoutParams(arrowParams);
+        imgArrow.setVisibility(INVISIBLE);
 
         addView(layoutName);
 
@@ -104,9 +115,9 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         tv_goods_price = (MyTextView) view.findViewById(R.id.tv_goods_price);
         tv_goods_param = (MyTextView) view.findViewById(R.id.tv_goods_param);
         tv_goods_count = (MyTextView) view.findViewById(R.id.tv_goods_count);
-        mtv_count_reduce = (MyTextView) view.findViewById(R.id.mtv_count_reduce);
+        mtv_count_reduce = (MyImageView) view.findViewById(R.id.mtv_count_reduce);
         mtv_count = (MyTextView) view.findViewById(R.id.mtv_count);
-        mtv_count_add = (MyTextView) view.findViewById(R.id.mtv_count_add);
+        mtv_count_add = (MyImageView) view.findViewById(R.id.mtv_count_add);
         mtv_refund_price = (MyTextView) view.findViewById(R.id.mtv_refund_price);
 
 
@@ -178,6 +189,15 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
             imgShop.setVisibility(GONE);
         }
         textView.setText(sequence);
+        return this;
+    }
+
+    public CustomerGoodsView setIsArrow(boolean isShow){
+        if (isShow){
+            imgArrow.setVisibility(VISIBLE);
+        }else {
+            imgArrow.setVisibility(INVISIBLE);
+        }
         return this;
     }
 

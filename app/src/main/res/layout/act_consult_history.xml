@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -62,22 +63,38 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@color/white" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/light_gray_two" />
 
-    <com.shunlian.app.widget.MyTextView
+    <!--联系商家-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_call_business"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
         android:gravity="center"
-        android:text="联系商家"
-        android:textColor="@color/new_text"
-        android:textSize="14sp" />
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_shop_about_kefu" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系商家"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="15" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
 </LinearLayout>
