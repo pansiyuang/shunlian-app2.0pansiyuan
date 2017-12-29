@@ -19,6 +19,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -61,7 +62,7 @@ import butterknife.Unbinder;
  * Created by zhang on 2017/4/13 16 : 37.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Unbinder unbinder;
     public ImmersionBar immersionBar;
@@ -369,6 +370,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 netDialog = null;
             }
             dialogLists.clear();
+        }
+    }
+    @Override
+    public void onClick(View view) {
+        if (FastClickListener.isFastClick()) {
+            return;
         }
     }
 }

@@ -93,8 +93,10 @@
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_refund"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="27dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
         android:layout_below="@id/mtv_count"
         android:layout_alignParentRight="true"
         android:background="@drawable/bg_common_round"

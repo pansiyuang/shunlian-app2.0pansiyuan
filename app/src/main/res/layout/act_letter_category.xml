@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="品牌"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="@string/errcode_cancel"
+            android:textColor="@color/my_gray_one"
+            android:textSize="15sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reset"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/category_reset"
+            android:gravity="center"
+            android:text="@string/category_reset"
+            android:textColor="@color/pink_color"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="@string/RegisterTwoAct_finish"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:id="@+id/mtv_finish"/>
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/mllayout_bottom"
+        android:layout_below="@id/mrlayout_title" />
+
+    <com.shunlian.app.widget.WaveSideBar
+        android:id="@+id/side_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        app:sidebar_text_color="@color/my_gray_one" />
+</RelativeLayout>

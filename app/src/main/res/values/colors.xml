@@ -123,6 +123,9 @@
     <color name="action_text_color_normal">#cfcfcf</color>
     <color name="action_text_color_pressed">#353535</color>
     <color name="action_text_color_enabled">#818585</color>
+
+    <!--分类-->
+    <color name="category_reset">#fceaee</color>
 </resources>
 
 

@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.LetterCategoryAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -92,6 +94,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单搜索历史");
         items.add("选择服务类型");
         items.add("H5");
+        items.add("字母");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -148,6 +151,9 @@ public class MainPageFrag extends BaseFragment {
 //                        String url = "https://pro.m.jd.com/mall/active/2PimE38Vam99eMLJWXiLTx1VgLJs/index.html";
                         String url = "https://h5.api.shunliandongli.com/v1/detail/389517.html";
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
+                        break;
+                    case 11:
+                        startActivity(new Intent(baseActivity,LetterCategoryAct.class));
                         break;
                 }
             }
