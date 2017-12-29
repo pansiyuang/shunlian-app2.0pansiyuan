@@ -123,6 +123,7 @@
     <color name="action_text_color_normal">#cfcfcf</color>
     <color name="action_text_color_pressed">#353535</color>
     <color name="action_text_color_enabled">#818585</color>
+    <color name="value_f3">#f3f3f3</color>
 </resources>
 
 

@@ -20,6 +20,7 @@ import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
+import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.DataUtil;
@@ -93,6 +94,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单搜索历史");
         items.add("选择服务类型");
         items.add("H5");
+        items.add("协商历史");
         items.add("提交申请");
 
         items.addAll(DataUtil.getListString(40, "条目"));
@@ -152,6 +154,10 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
+//                        ConsultHistoryAct.startAct(baseActivity);
+                        RefundAfterSaleAct.startAct(baseActivity);
+                        break;
+                    case 12:
                         ReturnRequestActivity.startAct(baseActivity);
                         break;
                 }
