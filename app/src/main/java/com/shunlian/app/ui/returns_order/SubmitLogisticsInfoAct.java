@@ -11,7 +11,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 
