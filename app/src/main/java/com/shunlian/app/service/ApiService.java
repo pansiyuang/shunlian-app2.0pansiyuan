@@ -45,6 +45,7 @@ import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
@@ -765,4 +766,21 @@ public interface ApiService {
      */
     @GET("member/refund/applyDetail")
     Call<BaseEntity<RefundDetailEntity>> refundDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 协商历史
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyLogList")
+    Call<BaseEntity<EmptyEntity>> refundHistory(@QueryMap Map<String,String> map);
+
+
+    /**
+     * 提交订单
+     * @param body
+     * @return
+     */
+    @POST("order/checkout")
+    Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
 }

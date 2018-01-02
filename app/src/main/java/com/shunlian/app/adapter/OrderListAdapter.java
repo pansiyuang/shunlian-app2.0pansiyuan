@@ -341,7 +341,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                 case R.id.mtv_title3:
                     text = mtv_title3.getText();
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
-                        PayListActivity.startAct(context);
+                        PayListActivity.startAct(mAllFrag.getActivity(),null,null);
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
 
                         confirmreceipt(orders);

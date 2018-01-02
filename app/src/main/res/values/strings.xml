@@ -54,6 +54,7 @@
     <string name="errcode_deny">被拒绝</string>
     <string name="errcode_unknown">网络异常，请稍后再试！</string>
     <string name="LoginPswFrg_dl">登录</string>
+    <string name="plase_login">请先登录</string>
 
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>
@@ -164,7 +165,7 @@
     <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满1%s减2%s</string>
     <string name="full_discount">满折</string>
-    <string name="buy_gift">买赠</string>
+    <string name="buy_gift">满赠</string>
     <string name="full_discount_">满%s打%s折</string>
     <string name="share">分享</string>
     <string name="activity">活动</string>

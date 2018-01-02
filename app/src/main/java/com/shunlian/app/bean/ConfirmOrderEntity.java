@@ -43,6 +43,7 @@ public class ConfirmOrderEntity {
         public String promotion_total_hint;
         public String sub_total;
         public String sub_count;
+        public String remark;
         public int selectVoucherId;//选择优惠券id，默认是0
         public int selectPromotionId = -1;//选择促销活动id，默认是0
 

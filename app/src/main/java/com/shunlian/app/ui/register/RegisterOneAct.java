@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -166,6 +167,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
+
+        GradientDrawable background = (GradientDrawable) tv_select.getBackground();
+        background.setColor(getColorResouce(R.color.bg_gray_two));
         setEdittextFocusable(true,et_id);
         miv_logo.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
@@ -223,6 +227,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @Override
     public void smsCode(String smsCode) {
         if (!TextUtils.isEmpty(smsCode) && isCheckCode) {
+            if (!isCheckMobile){
+                return;
+            }
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }

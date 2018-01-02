@@ -139,7 +139,7 @@ public class MainPageFrag extends BaseFragment {
                         MyCommentAct.startAct(baseActivity);
                         break;
                     case 6:
-                        MyOrderAct.startAct(baseActivity);
+                        MyOrderAct.startAct(baseActivity,0);
                         break;
                     case 7:
                         OrderLogisticsActivity.startAct(baseActivity, "5");

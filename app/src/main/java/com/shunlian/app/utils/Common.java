@@ -344,6 +344,19 @@ public class Common {
     }
 
     /**
+     * 判断是否已经登录，登录返回true 否则false
+     * @return
+     */
+    public static boolean isAlreadyLogin(){
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
+        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(member_id)){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 判断应用是否在运行
      * @param context
      * @return
