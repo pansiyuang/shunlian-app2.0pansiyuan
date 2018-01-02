@@ -3,6 +3,7 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,7 +211,12 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             childViewHolder = (ChildViewHolder) view.getTag();
         }
 
-        childViewHolder.tv_full_min.setText(promotion.prom_label);
+        if (!TextUtils.isEmpty(promotion.prom_label)) {
+            childViewHolder.tv_full_min.setVisibility(View.VISIBLE);
+            childViewHolder.tv_full_min.setText(promotion.prom_label);
+        } else {
+            childViewHolder.tv_full_min.setVisibility(View.GONE);
+        }
         childViewHolder.tv_content.setText(promotion.hint);
 
         goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods, promotion);
