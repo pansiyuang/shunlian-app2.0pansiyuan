@@ -75,8 +75,7 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
             @Override
             public void onSuccess(BaseEntity<PayOrderEntity> entity) {
                 super.onSuccess(entity);
-                PayOrderEntity data = entity.data;
-                iView.payOrder(data.alipay,data.order_id);
+                iView.payOrder(entity.data);
             }
         });
     }
@@ -99,8 +98,7 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
             @Override
             public void onSuccess(BaseEntity<PayOrderEntity> entity) {
                 super.onSuccess(entity);
-                PayOrderEntity data = entity.data;
-                iView.payOrder(data.alipay,data.order_id);
+                iView.payOrder(entity.data);
             }
         });
 

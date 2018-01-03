@@ -1,6 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 
 import java.util.List;
 
@@ -18,8 +19,7 @@ public interface IPayListView extends IView{
 
     /**
      * 支付订单
-     * @param alipay
-     * @param pay_sn
+     * @param entity
      */
-    void payOrder(String alipay,String pay_sn);
+    void payOrder(PayOrderEntity entity);
 }

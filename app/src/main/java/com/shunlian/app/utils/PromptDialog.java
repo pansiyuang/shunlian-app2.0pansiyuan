@@ -3,6 +3,7 @@ package com.shunlian.app.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,6 +46,22 @@ public class PromptDialog {
         }
     }
 
+    /**
+     * 设置确定按钮是否加粗
+     * @param isBold true 加粗
+     * @return
+     */
+    public PromptDialog setTvSureIsBold(boolean isBold){
+        if (tvSure != null) {
+            if (isBold){
+                tvSure.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            }else {
+                tvSure.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            }
+        }
+        return this;
+    }
+
     public void setTvSureColor(int color) {
         if (tvSure != null) {
             tvSure.setTextColor(ctx.getResources().getColor(color));
@@ -59,6 +76,21 @@ public class PromptDialog {
         if (tvCancle != null) {
             tvCancle.setText(text);
         }
+    }
+
+    /**
+     * 取消按钮是否加粗
+     * @param isBold true 加粗
+     */
+    public PromptDialog setTvCancleIsBold(boolean isBold){
+        if (tvCancle != null) {
+            if (isBold){
+                tvCancle.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            }else {
+                tvCancle.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            }
+        }
+        return this;
     }
 
     public void setTvMessage(CharSequence text) {
