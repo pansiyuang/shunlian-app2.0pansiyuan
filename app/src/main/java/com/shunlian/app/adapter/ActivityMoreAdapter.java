@@ -52,7 +52,8 @@ public class ActivityMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.A
             }else {
                 mHolder.mtv_title.setVisibility(View.INVISIBLE);
             }
-            mHolder.mtv_content.setText(String.format(getString(R.string.full_cut),ad.money_type_condition,ad.money_type_discount));
+//            mHolder.mtv_content.setText(String.format(getString(R.string.full_cut),ad.money_type_condition,ad.money_type_discount));
+            mHolder.mtv_content.setText(ad.prom_title);
         }else if (position < fullCut + fullDiscount){
             if (position == fullCut){
                 mHolder.mtv_title.setVisibility(View.VISIBLE);
@@ -60,7 +61,8 @@ public class ActivityMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.A
             }else {
                 mHolder.mtv_title.setVisibility(View.INVISIBLE);
             }
-            mHolder.mtv_content.setText(String.format(getString(R.string.full_discount_),ad.qty_type_condition,ad.qty_type_discount));
+//            mHolder.mtv_content.setText(String.format(getString(R.string.full_discount_),ad.qty_type_condition,ad.qty_type_discount));
+            mHolder.mtv_content.setText(ad.prom_title);
         }else {
             if (position == fullCut + fullDiscount){
                 mHolder.mtv_title.setVisibility(View.VISIBLE);
@@ -68,7 +70,8 @@ public class ActivityMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.A
             }else {
                 mHolder.mtv_title.setVisibility(View.INVISIBLE);
             }
-            mHolder.mtv_content.setText(ad.promotion_title);
+//            mHolder.mtv_content.setText(ad.promotion_title);
+            mHolder.mtv_content.setText(ad.prom_title);
         }
     }
 

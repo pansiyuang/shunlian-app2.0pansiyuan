@@ -142,7 +142,7 @@
     <string name="select_voucher">领取店铺优惠券</string>
     <string name="voucher_full_use">满%s使用</string>
     <string name="valid_date">有效期：%1$s-%2$s</string>
-    <string name="all_store_use">全店通用</string>
+    <string name="no_doorsill_voucher">无门槛优惠券</string>
     <string name="receive">领取</string>
     <string name="hava_received">已领取</string>
     <string name="shop">店铺</string>
