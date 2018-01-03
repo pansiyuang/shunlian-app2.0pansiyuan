@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="17dp"
+    android:paddingLeft="14dp"
+    android:paddingRight="10dp"
+    android:paddingTop="17dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_service_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_service_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13.5dp"
+        android:layout_toRightOf="@+id/miv_service_icon"
+        android:textColor="@color/new_text"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_service_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_service_name"
+        android:layout_marginLeft="13.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/miv_service_icon"
+        android:textColor="@color/new_gray"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/img_common_viewarrow" />
+</RelativeLayout>

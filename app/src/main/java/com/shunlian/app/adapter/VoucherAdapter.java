@@ -49,14 +49,19 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
         firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
 
-        voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
+        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)){
+            voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));
+        }else {
+            voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
+        }
         voucherViewHolder.tv_voucher_date.setText(String.format(mContext.getResources().getString(R.string.valid_date), voucher.start_time, voucher.end_time));
 
-        if ("ALL".equals(voucher.goods_scope)) { //全店通用卷
+        /*if ("ALL".equals(voucher.goods_scope)) { //全店通用卷
             voucherViewHolder.tv_voucher_use.setText(mContext.getResources().getText(R.string.all_store_use));
         } else if ("ASSIGN".equals(voucher.goods_scope)) {
             // TODO: 2017/11/16
-        }
+        }*/
+        voucherViewHolder.tv_voucher_use.setText(voucher.goods_scope);
 
         if ("1".equals(voucher.is_get)) {  //1为已经领取
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_n));

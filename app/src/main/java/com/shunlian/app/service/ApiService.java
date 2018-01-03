@@ -45,9 +45,11 @@ import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
@@ -740,6 +742,23 @@ public interface ApiService {
     Call<BaseEntity<RefundInfoEntity>> getrefundinfo(@Body RequestBody body);
 
     /**
+     * 售后申请列表
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyList")
+    Call<BaseEntity<RefundListEntity>> refundList(@QueryMap Map<String,String> map);
+
+    /**
+     * 申请退款
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/refund/applyRefund")
+    Call<BaseEntity<EmptyEntity>> applyRefund(@Body RequestBody body);
+
+    /**
      * 售后申请详情
      *
      * @param map
@@ -747,4 +766,30 @@ public interface ApiService {
      */
     @GET("member/refund/applyDetail")
     Call<BaseEntity<RefundDetailEntity>> refundDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 协商历史
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyLogList")
+    Call<BaseEntity<EmptyEntity>> refundHistory(@QueryMap Map<String,String> map);
+
+
+    /**
+     * 提交订单
+     * @param body
+     * @return
+     */
+    @POST("order/checkout")
+    Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+
+    /**
+     *从订单列表去支付
+     * @param body
+     * @return
+     */
+    @POST("order/payinorderlist")
+    Call<BaseEntity<PayOrderEntity>> fromOrderListGoPay(@Body RequestBody body);
 }

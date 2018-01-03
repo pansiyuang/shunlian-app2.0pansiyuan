@@ -66,10 +66,13 @@ public class MyOrderAct extends BaseActivity {
     private int pink_color;
     private int new_text;
     private List<BaseFragment> fragments;
+    private int pageItem;
 
 
-    public static void startAct(Context context) {
-        context.startActivity(new Intent(context, MyOrderAct.class));
+    public static void startAct(Context context,int positionItem) {
+        Intent intent = new Intent(context, MyOrderAct.class);
+        intent.putExtra("item",positionItem);
+        context.startActivity(intent);
     }
 
     /**
@@ -108,6 +111,7 @@ public class MyOrderAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        pageItem = getIntent().getIntExtra("item",0);
         int width = TransformUtil.dip2px(this, 10);
         TransformUtil.expandViewTouchDelegate(miv_search,width,width,width,width);
         pink_color = getResources().getColor(R.color.pink_color);
@@ -118,7 +122,15 @@ public class MyOrderAct extends BaseActivity {
         }
         viewpager.setAdapter(new MyOrderAdapter(getSupportFragmentManager(), fragments));
 
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (pageItem > 0 && pageItem < 6){
+            setStatus(pageItem);
+            viewpager.setCurrentItem(pageItem - 1);
+        }
     }
 
     /**

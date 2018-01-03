@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-feature android:name="android.hardware.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -33,6 +38,8 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -90,8 +97,9 @@
         <activity
             android:name=".ui.goods_detail.GoodsDetailAct"
             android:exported="false"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.store.StoreIntroduceAct"
             android:exported="false"
@@ -203,6 +211,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.returns_order.ReturnRequestActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.category.LetterCategoryAct"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -211,6 +223,18 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".ui.returns_order.RefundAfterSaleAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.zxing_code.ZXingDemoAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.returns_order.SubmitLogisticsInfoAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.category.CategoryAct"
             android:exported="false"
             android:screenOrientation="portrait"
             />

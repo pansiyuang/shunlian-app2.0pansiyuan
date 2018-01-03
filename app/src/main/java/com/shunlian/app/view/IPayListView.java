@@ -15,4 +15,11 @@ public interface IPayListView extends IView{
      * @param payTypes
      */
     void payList(List<PayListEntity.PayTypes> payTypes);
+
+    /**
+     * 支付订单
+     * @param alipay
+     * @param pay_sn
+     */
+    void payOrder(String alipay,String pay_sn);
 }

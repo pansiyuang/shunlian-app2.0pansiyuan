@@ -51,6 +51,7 @@ public class GoodsDeatilEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ActivityDetail {
         public String goods_id;//商品id
+        public String prom_title;
         public String promotion_gift_id; //买赠活动id
         public String promotion_title;     //买赠活动标题
         public String gift_goodsid;    //赠送的商品id
@@ -187,6 +188,7 @@ public class GoodsDeatilEntity {
         public String cate_id;
         public String cate_name;
         public String sales;
+        public String prom_id;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterTwoAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
@@ -61,7 +62,7 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        setEdittextFocusable(true,et_code,et_phone);
+        setEdittextFocusable(true, et_code, et_phone);
         onePresenter = new RegisterOnePresenter(this, this);
         initViews();
     }
@@ -92,7 +93,8 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     @Override
     public void smsCode(String smsCode) {
         String phoneNum = et_phone.getText().toString();
-        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", "", TYPE_FIND_PSW,et_code.getText().toString());
+        Common.staticToast(smsCode);
+        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", "", TYPE_FIND_PSW, et_code.getText().toString());
     }
 
     @Override

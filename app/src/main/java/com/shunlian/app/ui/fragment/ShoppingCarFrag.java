@@ -106,6 +106,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         tv_title_right.setText(baseContext.getResources().getText(R.string.edit));
         footerHolderView = new FooterHolderView(footView);
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
+        expand_shoppingcar.addFooterView(footView);
     }
 
     @Override
@@ -190,7 +191,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         getOrderIds(mCarEntity.checked_cartId);//拼接商品id
         if (mCarEntity.disabled != null && mCarEntity.disabled.size() != 0) {
-            expand_shoppingcar.addFooterView(footView);
+            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
+        } else {
+            footerHolderView.foot_disable.setVisibility(View.GONE);
         }
     }
 
@@ -228,7 +231,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 if (TextUtils.isEmpty(orderGoodsIds.toString())) {
                     return;
                 }
-                ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString(),ConfirmOrderAct.TYPE_CART);
+                ConfirmOrderAct.startAct(baseContext, orderGoodsIds.toString(), ConfirmOrderAct.TYPE_CART);
                 break;
             case R.id.miv_total_select:
                 if ("1".equals(isCheckAll)) {
@@ -334,13 +337,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         disGoodsIds = mCarEntity.disabled_ids;
 
         if (mCarEntity.disabled == null || mCarEntity.disabled.size() == 0) {
-            if (expand_shoppingcar.getFooterViewsCount() == 1) {
-                expand_shoppingcar.removeFooterView(footView);
-            }
+            footerHolderView.foot_disable.setVisibility(View.GONE);
         } else {
-            if (expand_shoppingcar.getFooterViewsCount() == 0) {
-                expand_shoppingcar.addFooterView(footView);
-            }
+            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
         }
     }
 
@@ -367,6 +366,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         @BindView(R.id.recycle_disable)
         RecyclerView recycle_disable;
+
+        @BindView(R.id.foot_disable)
+        LinearLayout foot_disable;
 
 
         public FooterHolderView(View view) {

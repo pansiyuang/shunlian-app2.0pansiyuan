@@ -8,18 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ConfirmOrderAdapter;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.SubmitGoodsEntity;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,8 +63,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public static final String TYPE_CART = "cart";//购物车
     public static final String TYPE_COMBO = "combo";//套餐
     private String type;
+    private List<ConfirmOrderEntity.Enabled> enabled;
 
     public static void startAct(Context context,String cart_ids,String type){
+        if (!Common.isAlreadyLogin()){
+            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            return;
+        }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
         intent.putExtra("cart_ids",cart_ids);
         intent.putExtra("type",type);
@@ -67,6 +77,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     }
 
     public static void startAct(Context context,String goods_id,String qty,String sku_id){
+        if (!Common.isAlreadyLogin()){
+            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            return;
+        }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
         intent.putExtra("goods_id",goods_id);
         intent.putExtra("qty",qty);
@@ -141,12 +155,14 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled,ConfirmOrderEntity.Address address) {
         if (address != null){
+            addressId = address.id;
             detail_address = address.detail_address;
             mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
         }else {
             mtv_address.setText(getResources().getString(R.string.add_address));
         }
         if (enabled != null && enabled.size() > 0) {
+            this.enabled = enabled;
             manager = new LinearLayoutManager(this);
             recy_view.setLayoutManager(manager);
             int space = TransformUtil.dip2px(this, 10);
@@ -198,7 +214,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public void goodsTotalPrice(String count, String price) {
         mTotalPrice = price;
         mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                .getString(R.string.rmb)+price,11));
+                .getString(R.string.rmb).concat(price),11));
     }
 
     @Override
@@ -229,8 +245,62 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mtv_go_pay:
-                PayListActivity.startAct(this);
+                if (isEmpty(addressId)) {
+                    Common.staticToast(getStringResouce(R.string.add_address));
+                    recy_view.scrollToPosition(0);
+                    return;
+                }
+                String shop_goods = null;
+                try {
+                    shop_goods = new ObjectMapper().writeValueAsString(mosaicParams());
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                LogUtil.zhLogW("go_pay=============="+shop_goods);
+                PayListActivity.startAct(this,shop_goods,addressId,null);
                 break;
         }
+    }
+
+    /**
+     * 拼接参数
+     */
+    private List<SubmitGoodsEntity> mosaicParams() {
+        List<SubmitGoodsEntity> goodsEntityList = new ArrayList<>();
+        if (enabled != null){
+            for (int i = 0; i < enabled.size(); i++) {
+                ConfirmOrderEntity.Enabled enabled = this.enabled.get(i);
+                SubmitGoodsEntity goodsEntity = new SubmitGoodsEntity();
+                goodsEntity.store_id = enabled.store_id;
+                goodsEntity.goods_items = new ArrayList<>();
+                for (int j = 0; j < enabled.goods.size(); j++) {
+                    GoodsDeatilEntity.Goods goods = enabled.goods.get(j);
+                    SubmitGoodsEntity.GoodsItems goodsItems =new  SubmitGoodsEntity.GoodsItems();
+                    goodsItems.goods_id = goods.goods_id;
+                    goodsItems.qty = goods.qty;
+                    goodsItems.sku_id = goods.sku_id;
+                    goodsItems.prom_id = goods.prom_id;
+                    goodsEntity.goods_items.add(goodsItems);
+                }
+                int selectVoucherId = enabled.selectVoucherId;
+                List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
+                if (!isEmpty(voucher) && selectVoucherId != 0){
+                    goodsEntity.voucher_id = voucher.get(selectVoucherId).voucher_id;
+                }
+
+                if (isOrderBuy){
+                    int selectPromotionId = enabled.selectPromotionId;
+                    List<ConfirmOrderEntity.PromotionInfo> promotion_info = enabled.promotion_info;
+                    if (!isEmpty(promotion_info) && selectPromotionId != -1){
+                        //不选择促销会崩
+                        goodsEntity.goods_items.get(0).prom_id = promotion_info.
+                                get(selectPromotionId).prom_id;
+                    }
+                }
+                goodsEntity.remark = enabled.remark;
+                goodsEntityList.add(goodsEntity);
+            }
+        }
+        return goodsEntityList;
     }
 }

@@ -656,8 +656,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         rl_rootview.addView(myImageView);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) myImageView.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         layoutParams.bottomMargin = TransformUtil.dip2px(this, 6);
+        int[] position = new int[2];
+        mtv_add_car.getLocationInWindow(position);
+        int measuredWidth = mtv_add_car.getMeasuredWidth();
+        layoutParams.leftMargin =  position[0] + measuredWidth / 2 - TransformUtil.dip2px(this,25) / 2;
         myImageView.setLayoutParams(layoutParams);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
         alphaAnimation.setDuration(100);
@@ -835,7 +838,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
-    @OnClick(R.id.mtv_store)
+    @OnClick(R.id.mllayout_store)
     public void jumpStore(){
         StoreAct.startAct(this, store_id);
     }
