@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
@@ -143,7 +144,7 @@ public class SingleImgAdapter extends BaseAdapter {
             miv_del = (MyImageView) view.findViewById(R.id.miv_img_del);
             rl_img = (RelativeLayout) view.findViewById(R.id.layout_img);
 
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.width = (screenWidth - TransformUtil.dip2px(mContext, 20 + (4 * 4))) / 5;
             layoutParams.height = layoutParams.width;
             rl_img.setLayoutParams(layoutParams);
