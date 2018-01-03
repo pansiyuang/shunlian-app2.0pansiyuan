@@ -82,7 +82,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
                                 letterCategoryAct.strings.add(String.valueOf(position));
                                 LogUtil.augusLogW("yxf456");
                             } else {
-                                Common.staticToast("最多选择8个，请取消后重新选择...");
+                                Common.staticToast("已达上限8个");
                             }
                             break;
                         }

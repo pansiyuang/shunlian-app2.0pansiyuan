@@ -2,6 +2,8 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/12/15.
  */
@@ -30,7 +32,11 @@ public class RefundDetailEntity {
         public String sku_desc;
         public String price;
         public String qty;
-        public String html_description;
+        public String status_desc;
+        public String time_desc;
+        public String rest_second;
+        public List<Msg> msg_list;
+        public List<Opt> opt_list;
 
         @Override
         public String toString() {
@@ -47,7 +53,44 @@ public class RefundDetailEntity {
                     ", sku_desc='" + sku_desc + '\'' +
                     ", price='" + price + '\'' +
                     ", qty='" + qty + '\'' +
+                    ", status_desc='" + status_desc + '\'' +
+                    ", time_desc='" + time_desc + '\'' +
+                    ", rest_second='" + rest_second + '\'' +
+                    ", msg_list=" + msg_list +
+                    ", opt_list=" + opt_list +
                     '}';
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Msg {
+            public String label;
+            public String title;
+            public String description;
+
+            @Override
+            public String toString() {
+                return "Msg{" +
+                        "label='" + label + '\'' +
+                        ", title='" + title + '\'' +
+                        ", description='" + description + '\'' +
+                        '}';
+            }
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Opt {
+            public String code;
+            public String name;
+            public String is_highlight;
+
+            @Override
+            public String toString() {
+                return "Opt{" +
+                        "code='" + code + '\'' +
+                        ", name='" + name + '\'' +
+                        ", is_highlight='" + is_highlight + '\'' +
+                        '}';
+            }
         }
     }
 }
