@@ -80,4 +80,29 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
             }
         });
     }
+
+    /**
+     * 从订单列表去支付
+     * @param order_id
+     * @param paytype
+     */
+    public void fromOrderListGoPay(String order_id,String paytype){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        map.put("paytype",paytype);
+        sortAndMD5(map);
+
+        Call<BaseEntity<PayOrderEntity>> baseEntityCall = getAddCookieApiService()
+                .fromOrderListGoPay(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                super.onSuccess(entity);
+                PayOrderEntity data = entity.data;
+                iView.payOrder(data.alipay,data.order_id);
+            }
+        });
+
+    }
 }

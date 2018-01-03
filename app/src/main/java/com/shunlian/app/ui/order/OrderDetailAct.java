@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 public class OrderDetailAct extends BaseActivity implements View.OnClickListener, OrderdetailView {
     @BindView(R.id.mtv_state)
@@ -447,7 +448,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_title3:
                 text = mtv_title3.getText();
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
-
+                    PayListActivity.startAct(this, null,null,orderId);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价

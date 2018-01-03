@@ -257,7 +257,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     e.printStackTrace();
                 }
                 LogUtil.zhLogW("go_pay=============="+shop_goods);
-                PayListActivity.startAct(this,shop_goods,addressId);
+                PayListActivity.startAct(this,shop_goods,addressId,null);
                 break;
         }
     }

@@ -51,14 +51,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private static final int SDK_PAY_FLAG = 1;
     private String payRequest = "";
     private String order_id;
+    private String orderId;
     private String shop_goods;
     private String addressId;
 
-    public static void startAct(Activity activity, String shop_goods, String addressId){
+    public static void startAct(Activity activity, String shop_goods, String addressId,String order_id){
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
         intent.putExtra("shop_goods",shop_goods);
         intent.putExtra("addressId",addressId);
+        intent.putExtra("order_id",order_id);
         activity.startActivity(intent);
     }
 
@@ -126,6 +128,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
         shop_goods = getIntent().getStringExtra("shop_goods");
         addressId = getIntent().getStringExtra("addressId");
+        orderId = getIntent().getStringExtra("order_id");
 
         wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
@@ -214,7 +217,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private void submitOrder(PayListEntity.PayTypes pay_types) {
         switch (pay_types.code){
             case "alipay":
-                payListPresenter.orderCheckout(shop_goods,addressId,pay_types.code);
+                if (!isEmpty(shop_goods)) {
+                    payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
+                }else if (!isEmpty(orderId)){
+                    payListPresenter.fromOrderListGoPay(orderId,pay_types.code);
+                }
                 break;
             case "wechat":
                 break;

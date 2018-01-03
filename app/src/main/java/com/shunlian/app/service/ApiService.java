@@ -783,4 +783,13 @@ public interface ApiService {
      */
     @POST("order/checkout")
     Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+
+    /**
+     *从订单列表去支付
+     * @param body
+     * @return
+     */
+    @POST("order/payinorderlist")
+    Call<BaseEntity<PayOrderEntity>> fromOrderListGoPay(@Body RequestBody body);
 }
