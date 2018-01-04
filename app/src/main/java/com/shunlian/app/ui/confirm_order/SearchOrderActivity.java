@@ -2,7 +2,6 @@ package com.shunlian.app.ui.confirm_order;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.OrderListAdapter;
-import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.presenter.OrderHistoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -147,6 +144,7 @@ public class SearchOrderActivity extends BaseActivity implements ITagView, TextV
                 Common.staticToast("请输入您要搜索的商品");
             } else {
                 SearchOrderResultActivity.startAct(this, currentKeyword);
+                finish();
             }
         }
         return false;

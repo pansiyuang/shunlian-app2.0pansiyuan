@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
 
@@ -174,6 +175,12 @@ public class DiscountListDialog extends Dialog {
         });
     }
 
+    @OnClick(R.id.miv_close)
+    public void dismissDialog(){
+        if (isShowing()){
+            dismiss();
+        }
+    }
 
     /**
      * 选择原因

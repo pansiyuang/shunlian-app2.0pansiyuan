@@ -71,7 +71,8 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
             .setGoodsTitle(refundList.title).setGoodsParams(refundList.sku_desc)
             .setGoodsCount(String.format(getString(R.string.x),/*refundList.goods_num*/"10"))
 //                    .setGoodsPrice(getString(R.string.rmb).concat(refundList.price))
-            .setRefundPrice("退款金额：".concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
+            .setRefundPrice(getString(R.string.refund_balance)
+                    .concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
             GlideUtils.getInstance().loadImage(context,mHolder.cgv_goods.getGoodsIcon(),refundList.thumb);
             mHolder.mtv_label.setText(refundList.status_msg);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_icon,refundList.type_icon);

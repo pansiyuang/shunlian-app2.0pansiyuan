@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IPayListView;
 
@@ -54,5 +55,52 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
                 iView.payList(entity.data.pay_method);
             }
         });
+    }
+
+    /**
+     * 提交订单
+     * @param shop_goods
+     * @param address_id
+     * @param paytype
+     */
+    public void orderCheckout(String shop_goods,String address_id,String paytype){
+        Map<String,String> map = new HashMap<>();
+        map.put("shop_goods",shop_goods);
+        map.put("address_id",address_id);
+        map.put("paytype",paytype);
+        sortAndMD5(map);
+        Call<BaseEntity<PayOrderEntity>> baseEntityCall = getAddCookieApiService().orderCheckout(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                super.onSuccess(entity);
+                iView.payOrder(entity.data);
+            }
+        });
+    }
+
+    /**
+     * 从订单列表去支付
+     * @param order_id
+     * @param paytype
+     */
+    public void fromOrderListGoPay(String order_id,String paytype){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        map.put("paytype",paytype);
+        sortAndMD5(map);
+
+        Call<BaseEntity<PayOrderEntity>> baseEntityCall = getAddCookieApiService()
+                .fromOrderListGoPay(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<PayOrderEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                super.onSuccess(entity);
+                iView.payOrder(entity.data);
+            }
+        });
+
     }
 }

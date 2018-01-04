@@ -54,6 +54,7 @@
     <string name="errcode_deny">被拒绝</string>
     <string name="errcode_unknown">网络异常，请稍后再试！</string>
     <string name="LoginPswFrg_dl">登录</string>
+    <string name="plase_login">请先登录</string>
 
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>
@@ -141,7 +142,7 @@
     <string name="select_voucher">领取店铺优惠券</string>
     <string name="voucher_full_use">满%s使用</string>
     <string name="valid_date">有效期：%1$s-%2$s</string>
-    <string name="all_store_use">全店通用</string>
+    <string name="no_doorsill_voucher">无门槛优惠券</string>
     <string name="receive">领取</string>
     <string name="hava_received">已领取</string>
     <string name="shop">店铺</string>
@@ -164,7 +165,7 @@
     <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满1%s减2%s</string>
     <string name="full_discount">满折</string>
-    <string name="buy_gift">买赠</string>
+    <string name="buy_gift">满赠</string>
     <string name="full_discount_">满%s打%s折</string>
     <string name="share">分享</string>
     <string name="activity">活动</string>
@@ -317,7 +318,6 @@
     <string name="undo">撤销</string>
 
     <!--退换货-->
-
     <string name="select_service_type">选择服务类型</string>
     <string name="return_order">退款原因</string>
     <string name="return_request">退款申请</string>
@@ -332,4 +332,17 @@
     <string name="return_goods">退货商品</string>
     <string name="change_goods">换货商品</string>
     <string name="return_money_hint">请输入退款金额</string>
+
+    <!--支付-->
+    <string name="pay_success">支付成功</string>
+    <string name="pay_fail">支付失败</string>
+    <string name="cancel_the_pay">确定要取消支付吗？</string>
+    <string name="next_the_pay">继续支付</string>
+    <string name="select_pay_type">选择支付方式</string>
+
+    <!--协商历史-->
+    <string name="consult_history">协商历史</string>
+    <string name="refund_after_sale">退款/售后</string>
+    <string name="refund_balance">退款金额：</string>
+
 </resources>

@@ -93,15 +93,8 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     }
 
     @Override
-    public void fetchData() {
-        fetchNewData();
-    }
-    @Override
-    public void refreshData() {
-        fetchNewData();
-    }
-
-    public void fetchNewData() {
+    public void onResume() {
+        super.onResume();
         adapter = null;
         recy_view.scrollToPosition(0);
         if (ordersLists != null) {
@@ -111,6 +104,27 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
             mPresenter.detachView();
         }
         requestData(id);
+    }
+
+    @Override
+    public void fetchData() {
+        fetchNewData();
+    }
+    @Override
+    public void refreshData() {
+        fetchNewData();
+    }
+
+    public void fetchNewData() {
+       /* adapter = null;
+        recy_view.scrollToPosition(0);
+        if (ordersLists != null) {
+            ordersLists.clear();
+        }
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+        requestData(id);*/
     }
 
 

@@ -234,6 +234,10 @@
             android:exported="false"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".ui.category.CategoryAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

@@ -3,6 +3,8 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -265,7 +267,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     }
 
 
-    public class BuyGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class BuyGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener, TextWatcher {
 
         @BindView(R.id.recy_view)
         RecyclerView recy_view;
@@ -313,6 +315,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             mllayout_discount.setOnClickListener(this);
             met_leav_msg.setOnClickListener(this);
             mll_promotion.setOnClickListener(this);
+            met_leav_msg.addTextChangedListener(this);
         }
 
         @Override
@@ -367,6 +370,18 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     break;
             }
         }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
+            if (!isEmpty(s))
+                enabled.remark = s.toString();
+        }
+        @Override
+        public void afterTextChanged(Editable s) {}
     }
 
     public class InvalidGoodsHolder extends BaseRecyclerViewHolder{

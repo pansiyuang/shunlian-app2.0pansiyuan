@@ -418,8 +418,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         background.setColor(Color.WHITE);
                         int padding = TransformUtil.dip2px(context, 4);
                         textView.setPadding(padding, padding, padding, padding);
-                        textView.setText(getString(R.string.pull).concat(voucher.use_condition)
-                                .concat(getString(R.string.reduce)).concat(voucher.denomination));
+                        if (Float.parseFloat(voucher.use_condition) == 0){
+                            textView.setText(voucher.denomination.concat("元无门槛优惠券"));
+                        }else {
+                            textView.setText(getString(R.string.pull).concat(voucher.use_condition)
+                                    .concat(getString(R.string.reduce)).concat(voucher.denomination));
+                        }
                         mHolder.mll_Coupon.addView(textView);
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
                         layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
@@ -504,11 +508,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 break;
             GoodsDeatilEntity.ActivityDetail ad = detailList.get(i);
             if (state == 0) {
-                sb.append(String.format(format,ad.money_type_condition,ad.money_type_discount));
+//                sb.append(String.format(format,ad.money_type_condition,ad.money_type_discount));
+                sb.append(ad.prom_title);
             }else if (state == 1){
-                sb.append(String.format(format,ad.qty_type_condition,ad.qty_type_discount));
+//                sb.append(String.format(format,ad.qty_type_condition,ad.qty_type_discount));
+                sb.append(ad.prom_title);
             }else {
-                sb.append(ad.promotion_title);
+//                sb.append(ad.promotion_title);
+                sb.append(ad.prom_title);
             }
             sb.append(",");
 

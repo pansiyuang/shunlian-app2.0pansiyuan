@@ -30,6 +30,7 @@ import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -45,6 +46,7 @@ import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
@@ -765,4 +767,30 @@ public interface ApiService {
      */
     @GET("member/refund/applyDetail")
     Call<BaseEntity<RefundDetailEntity>> refundDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 协商历史
+     * @param map
+     * @return
+     */
+    @GET("member/refund/applyLogList")
+    Call<BaseEntity<ConsultHistoryEntity>> refundHistory(@QueryMap Map<String,String> map);
+
+
+    /**
+     * 提交订单
+     * @param body
+     * @return
+     */
+    @POST("order/checkout")
+    Call<BaseEntity<PayOrderEntity>> orderCheckout(@Body RequestBody body);
+
+
+    /**
+     *从订单列表去支付
+     * @param body
+     * @return
+     */
+    @POST("order/payinorderlist")
+    Call<BaseEntity<PayOrderEntity>> fromOrderListGoPay(@Body RequestBody body);
 }
