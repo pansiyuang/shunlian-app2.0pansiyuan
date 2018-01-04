@@ -30,6 +30,7 @@ import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -773,7 +774,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/refund/applyLogList")
-    Call<BaseEntity<EmptyEntity>> refundHistory(@QueryMap Map<String,String> map);
+    Call<BaseEntity<ConsultHistoryEntity>> refundHistory(@QueryMap Map<String,String> map);
 
 
     /**

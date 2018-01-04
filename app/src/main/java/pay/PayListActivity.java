@@ -115,7 +115,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * 支付失败
      */
     private void payFail() {
-        Common.staticToast("支付失败");
+        Common.staticToast(getStringResouce(R.string.pay_fail));
         if (activity instanceof ConfirmOrderAct){
             activity.finish();
         }
@@ -131,7 +131,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void paySuccess(){
         finish();
-        Common.staticToast("支付成功");
+        if (activity instanceof ConfirmOrderAct){
+            activity.finish();
+        }
+        Common.staticToast(getStringResouce(R.string.pay_success));
         PaySuccessAct.startAct(this, order_id);
     }
 
@@ -186,12 +189,13 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private void backSelect() {
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                .setSureAndCancleListener("确定要取消支付吗？", "继续支付", new View.OnClickListener() {
+                .setSureAndCancleListener(getStringResouce(R.string.cancel_the_pay),
+                        getStringResouce(R.string.next_the_pay), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptDialog.dismiss();
             }
-        }, "确定", new View.OnClickListener() {
+        }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -268,6 +272,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 break;
             case "unionpay":
                 callbackH5Pay(entity.unionpay);
+//                callbackH5Pay("http://pay-test.shunliandongli.com/app_jump_test.php");
                 break;
             case "credit":
                 break;
@@ -278,7 +283,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * 调起银联支付
      * @param unionpay
      */
-    private void callbackH5Pay(String unionpay) {
+    private void callbackH5Pay(final String unionpay) {
         h5_pay.setVisibility(View.VISIBLE);
         lLayout_pay.setVisibility(View.GONE);
         final HttpDialog httpDialog = new HttpDialog(this);
@@ -294,7 +299,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url,setWebviewHeader());
+                LogUtil.zhLogW("====="+url);
+                if (url.startsWith("slmall://")){
+                    if (url.contains("success")){
+                        paySuccess();
+                    }else {
+                        payFail();
+                    }
+                }else {
+                    view.loadUrl(url, setWebviewHeader());
+                }
                 return true;
             }
 

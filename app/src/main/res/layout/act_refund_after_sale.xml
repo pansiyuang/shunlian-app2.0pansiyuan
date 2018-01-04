@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="退款/售后"
+            android:text="@string/refund_after_sale"
             android:textColor="@color/new_text"
             android:textSize="18dp" />
 
