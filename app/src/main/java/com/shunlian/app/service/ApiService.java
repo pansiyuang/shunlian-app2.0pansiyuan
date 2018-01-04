@@ -39,6 +39,7 @@ import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.LogisticsNameEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
@@ -793,4 +794,12 @@ public interface ApiService {
      */
     @POST("order/payinorderlist")
     Call<BaseEntity<PayOrderEntity>> fromOrderListGoPay(@Body RequestBody body);
+
+    /**
+     * 退换货物流公司
+     * @param map
+     * @return
+     */
+    @GET("member/refund/refundExpressList")
+    Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
 }

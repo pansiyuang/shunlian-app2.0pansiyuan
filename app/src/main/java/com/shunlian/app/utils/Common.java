@@ -28,11 +28,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.support.annotation.ColorInt;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
+import android.support.annotation.ColorInt;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -49,10 +49,21 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.Contact;
 import com.shunlian.app.widget.MyTextView;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
+import java.text.Collator;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -377,5 +388,59 @@ public class Common {
 
 //        Log.i("ActivityService isRun()", "com.ad 程序   ...isAppRunning......"+isAppRunning);
         return isAppRunning;
+    }
+
+    /**
+     * 获取中文排序
+     * @param strings
+     */
+    public static List<Contact> getChineseSort(ArrayList<String> strings) {
+        Comparator<Object> com= Collator.getInstance(Locale.CHINESE);
+        Collections.sort(strings, com);
+
+        List<Contact> contacts = new ArrayList<>();
+
+        for (String name : strings) {
+            Contact contact = new Contact(getFirstChineseInitials(name),name);
+            contacts.add(contact);
+        }
+        Collections.sort(contacts);
+        return contacts;
+    }
+
+    /**
+     * 中文拼音首字母转为大写，非中文原样返回
+     * @param chinese
+     * @return
+     */
+    public static String getFirstChineseInitials(String chinese){
+
+        if (TextUtils.isEmpty(chinese)){
+            return null;
+        }
+
+        char[] chars = chinese.toCharArray();
+
+        if (chars[0] <= 128){
+            return String.valueOf(chars[0]);
+        }
+
+
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+        format.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        String[] pin_yin = {};
+        try {
+            pin_yin = PinyinHelper.toHanyuPinyinStringArray(chars[0], format);
+        } catch (BadHanyuPinyinOutputFormatCombination b) {
+            b.printStackTrace();
+        }
+
+        if (pin_yin != null && pin_yin.length > 0){
+
+            char[] initials = pin_yin[0].toCharArray();
+            return String.valueOf(initials[0]);
+        }else {
+            return null;
+        }
     }
 }

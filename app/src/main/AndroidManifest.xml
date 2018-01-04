@@ -238,6 +238,10 @@
             android:exported="false"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".ui.returns_order.SelectLogisticsAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
