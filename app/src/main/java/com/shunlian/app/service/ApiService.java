@@ -63,6 +63,7 @@ import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
@@ -802,4 +803,21 @@ public interface ApiService {
      */
     @GET("member/refund/refundExpressList")
     Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
+
+    /**
+     * 提交物流信息
+     * @param body
+     * @return
+     */
+    @POST("member/refund/saveShipInfo")
+    Call<BaseEntity<EmptyEntity>> addLogisticsShipInfo(@Body RequestBody body);
+
+    /**
+     * 获取提交的物流信息
+     * @param map
+     * @return
+     */
+    @GET("member/refund/getShipInfo")
+    Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String,String> map);
+
 }

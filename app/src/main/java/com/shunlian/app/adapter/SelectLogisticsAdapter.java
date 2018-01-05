@@ -20,8 +20,11 @@ import butterknife.BindView;
 
 public class SelectLogisticsAdapter extends BaseRecyclerAdapter<Contact> {
 
+
+
     public SelectLogisticsAdapter(Context context, List<Contact> lists) {
         super(context, false, lists);
+
     }
 
     /**
@@ -95,4 +98,5 @@ public class SelectLogisticsAdapter extends BaseRecyclerAdapter<Contact> {
             }
         }
     }
+
 }

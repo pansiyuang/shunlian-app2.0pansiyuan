@@ -845,4 +845,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void jumpStore(){
         StoreAct.startAct(this, store_id);
     }
+
+    public void getCouchers(String id) {
+        if (goodsDetailPresenter != null)
+            goodsDetailPresenter.getVoucher(id);
+    }
 }

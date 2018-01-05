@@ -262,10 +262,23 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof CouponHolder){
             CouponHolder mHolder = (CouponHolder) holder;
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
-            ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
+            final ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             //详情优惠券
-            StoreVoucherAdapter adapter = new StoreVoucherAdapter(context,false,vouchers);
+            final StoreVoucherAdapter adapter = new StoreVoucherAdapter(context,false,vouchers);
             recy_view_coupon.setAdapter(adapter);
+
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
+                    if (context instanceof GoodsDetailAct){
+                        GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                        goodsDetailAct.getCouchers(voucher.voucher_id);
+                        voucher.is_get = "1";
+                        adapter.notifyItemChanged(position);
+                    }
+                }
+            });
         }
     }
 

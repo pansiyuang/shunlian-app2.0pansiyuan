@@ -49,7 +49,7 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.V
             }else {
                 voucherViewHolder.mtv_full_cut.setText(String.format(format, voucher.use_condition));
             }
-            if ("0".equals(voucher.is_get)) {
+            if ("1".equals(voucher.is_get)) {
                 voucherViewHolder.mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_2);
             } else {
                 voucherViewHolder.mrl_bg.setBackgroundResource(R.mipmap.img_youhuiquan_1);
@@ -57,7 +57,7 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.V
         }
     }
 
-    public class VoucherViewHolder extends BaseRecyclerViewHolder {
+    public class VoucherViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         private MyTextView mtv_price, mtv_name, mtv_full_cut;
         private MyLinearLayout mrl_bg;
 
@@ -67,6 +67,19 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.V
             mtv_name = (MyTextView) itemView.findViewById(R.id.mtv_name);
             mtv_full_cut = (MyTextView) itemView.findViewById(R.id.mtv_full_cut);
             mrl_bg = (MyLinearLayout) itemView.findViewById(R.id.mrl_bg);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }
