@@ -83,6 +83,10 @@ public class ProgressView extends View {
     }
 
     public void startAnimation() {
+        LogUtil.httpLogW("ProgressView_startAnimation():" + hashCode());
+        if (isRunning()) {
+            return;
+        }
         valueAnimator = ValueAnimator.ofInt(0, angle);
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override
@@ -118,14 +122,16 @@ public class ProgressView extends View {
     }
 
     public void stopAnimation() {
-        if (valueAnimator != null) {
+        LogUtil.httpLogW("ProgressView_stopAnimation():" + hashCode());
+        if (isRunning()) {
             valueAnimator.end();
             angle = 360;
         }
     }
 
     public void releaseAnimation() {
-        if (valueAnimator != null) {
+        LogUtil.httpLogW("ProgressView_releaseAnimation():" + hashCode());
+        if (isRunning()) {
             valueAnimator.removeAllUpdateListeners();
             valueAnimator.cancel();
             angle = 360;
