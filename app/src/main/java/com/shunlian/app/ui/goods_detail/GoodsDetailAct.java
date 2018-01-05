@@ -504,12 +504,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switch (v.getId()){
             case R.id.mtv_add_car:
                 isAddcart = true;
-                if (goodsCount == 0){
+                /*if (goodsCount == 0){//此流程：如果选过商品属性，不需要勾选
                     goodsDeatilFrag.showParamDialog();
                 }else {
                     rnview.setVisibility(View.VISIBLE);
                     goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
-                }
+                }*/
+
+                //需求更改：每次加入购物车都需要选择属性
+                goodsDeatilFrag.showParamDialog();
                 break;
             case R.id.miv_more:
                 moreAnim();
