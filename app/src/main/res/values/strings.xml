@@ -344,5 +344,6 @@
     <string name="consult_history">协商历史</string>
     <string name="refund_after_sale">退款/售后</string>
     <string name="refund_balance">退款金额：</string>
+    <string name="selection_of_logistics_companies">选择物流公司</string>
 
 </resources>

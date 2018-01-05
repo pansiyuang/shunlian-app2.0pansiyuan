@@ -17,6 +17,7 @@ import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,14 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
     @BindView(R.id.met_explain)
     MyEditText met_explain;
 
+    @BindView(R.id.mtv_logistics)
+    MyTextView mtv_logistics;
+
     private List<ImageEntity> listExplains = new ArrayList();
     private SingleImgAdapter singleImgAdapter;
+
+    public final int LOGISTICS_CODE = 100;//物流单号
+    public final int LOGISTICS_NAME = 200;//物流名字
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, SubmitLogisticsInfoAct.class));
@@ -107,7 +114,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
 
     @OnClick(R.id.miv_code)
     public void scanCode() {
-        ZXingDemoAct.startAct(this,true, 100);
+        ZXingDemoAct.startAct(this,true, LOGISTICS_CODE);
     }
 
     @OnClick(R.id.met_logistics)
@@ -122,10 +129,15 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
         Common.showKeyboard(met_explain);
     }
 
+    @OnClick(R.id.mllayout_logistics)
+    public void selectLogistics(){
+        SelectLogisticsAct.startAct(this,LOGISTICS_NAME);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == ZXingDemoAct.RESULT_CODE) {
+        if (requestCode == LOGISTICS_CODE && resultCode == ZXingDemoAct.RESULT_CODE) {
             String result = data.getStringExtra("result");
             met_logistics.setText(result);
         }else if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK){
@@ -134,6 +146,9 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
                 listExplains.add(new ImageEntity(picturePath));
             }
             singleImgAdapter.notifyDataSetChanged();
+        }else if (requestCode == LOGISTICS_NAME && resultCode == Activity.RESULT_OK){
+            String name = data.getStringExtra("name");
+            mtv_logistics.setText(name);
         }
     }
 

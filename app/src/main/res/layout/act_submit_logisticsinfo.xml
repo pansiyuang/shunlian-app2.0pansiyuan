@@ -38,6 +38,7 @@
 
     <!--物流公司-->
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_logistics"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -55,6 +56,7 @@
 
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_logistics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
