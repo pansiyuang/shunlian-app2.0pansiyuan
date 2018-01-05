@@ -89,7 +89,7 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         mHolder.mtv_refund.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!"apply".equals(orderGoodsBean.refund_button_type)){
+                if ("apply".equals(orderGoodsBean.refund_button_type)){
                     SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
                 }else {
                     ExchangeDetailAct.startAct(context,"");

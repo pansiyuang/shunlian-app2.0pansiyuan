@@ -50,4 +50,84 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
     </com.shunlian.app.widget.MyLinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingLeft="27dp"
+        android:paddingRight="20dp"
+        android:paddingTop="9dp">
+
+        <TextView
+            android:id="@+id/tv_general_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/general_sort"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_general_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4.5dp"
+            android:layout_toRightOf="@+id/tv_general_sort"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_sanjiao" />
+
+        <TextView
+            android:id="@+id/tv_sales_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/sales_volume"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="8dp"
+            android:drawableRight="@mipmap/img_saixuan"
+            android:text="@string/filter"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_change_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/view_lin"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_lianglei" />
+
+        <View
+            android:id="@+id/view_lin"
+            android:layout_width="0.5dp"
+            android:layout_height="26.5dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16.5dp"
+            android:layout_toLeftOf="@+id/tv_filter"
+            android:background="@color/value_ECECEC" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_ECECEC" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

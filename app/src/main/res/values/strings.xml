@@ -325,6 +325,8 @@
     <string name="please_select">请选择</string>
     <string name="return_money">退款金额:</string>
     <string name="refunds">退款说明:</string>
+    <string name="return_instruction">换货说明</string>
+    <string name="return_reason">换货原因</string>
     <string name="upload_voucher">上传凭证</string>
     <string name="subimt_request">提交申请</string>
     <string name="return_goods">退货商品</string>
@@ -345,4 +347,7 @@
     <string name="selection_of_logistics_companies">选择物流公司</string>
     <string name="get_success">领取成功</string>
 
+    <string name="general_sort">综合排序</string>
+    <string name="sales_volume">销量</string>
+    <string name="filter">筛选</string>
 </resources>

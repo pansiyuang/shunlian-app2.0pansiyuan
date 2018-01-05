@@ -3,22 +3,21 @@ package com.shunlian.app.widget;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ChangePreferAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -49,16 +48,7 @@ public class ChangePreferDialog extends Dialog {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
         this.proms = promList;
-    }
 
-    public ChangePreferDialog(Context context, int themeResId) {
-        super(context, themeResId);
-        this.mContext = context;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_changeprefer, null, false);
         setContentView(view);
         ButterKnife.bind(this, view);
@@ -93,6 +83,17 @@ public class ChangePreferDialog extends Dialog {
                 }
             }
         });
+    }
+
+    public ChangePreferDialog(Context context, int themeResId) {
+        super(context, themeResId);
+        this.mContext = context;
+    }
+
+    public void selectItem(String promId) {
+        if (!TextUtils.isEmpty(promId) && changePreferAdapter != null) {
+            changePreferAdapter.selectPrefer(promId);
+        }
     }
 
     public void setOnPreferSelectCallBack(OnPreferSelectCallBack callBack) {

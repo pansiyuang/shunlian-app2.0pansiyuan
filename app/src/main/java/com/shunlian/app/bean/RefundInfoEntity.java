@@ -19,6 +19,7 @@ public class RefundInfoEntity implements Serializable {
     public String thumb;
     public String price;
     public String qty;
+    public String return_price;
     public String shipping_fee;
     public List<RefundChoice> refund_choice;
     public List<Reason> reason;
