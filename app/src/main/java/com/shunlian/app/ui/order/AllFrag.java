@@ -164,7 +164,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         if (adapter == null) {
             adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
             recy_view.setAdapter(adapter);
-//            adapter.setPageLoading(page, allPage);
+            adapter.setPageLoading(page, allPage);
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
@@ -189,7 +189,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                 }
             });
         } else {
-//            adapter.setPageLoading(page, allPage);
+            adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
         emptyPage();
