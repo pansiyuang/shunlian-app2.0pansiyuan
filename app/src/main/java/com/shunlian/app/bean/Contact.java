@@ -1,12 +1,14 @@
 package com.shunlian.app.bean;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by gjz on 9/3/16.
  */
-public class Contact {
+public class Contact implements Comparable<Contact>{
     private String index;
     private String name;
 
@@ -117,4 +119,10 @@ public class Contact {
         return contacts;
     }
 
+
+    @Override
+    public int compareTo(@NonNull Contact o) {
+        int i = this.getIndex().toCharArray()[0] - o.getIndex().toCharArray()[0];
+        return i;
+    }
 }

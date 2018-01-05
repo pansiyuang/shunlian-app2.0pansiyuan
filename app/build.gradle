@@ -88,4 +88,5 @@ dependencies {
     implementation files('libs/alipaySdk-20170922.jar')
     compile 'com.tencent.sonic:sdk:2.0.0'
     compile 'com.google.zxing:core:3.2.1'
+    implementation files('libs/pinyin4j-2.5.0.jar')
 }

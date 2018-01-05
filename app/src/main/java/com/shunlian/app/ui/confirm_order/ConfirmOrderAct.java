@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,9 +20,11 @@ import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
@@ -48,6 +51,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     @BindView(R.id.mtv_go_pay)
     MyTextView mtv_go_pay;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
 
     private LinearLayoutManager manager;
@@ -96,6 +102,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     protected void initListener() {
         super.initListener();
         mtv_go_pay.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -259,7 +266,35 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 LogUtil.zhLogW("go_pay=============="+shop_goods);
                 PayListActivity.startAct(this,shop_goods,addressId,null);
                 break;
+            case R.id.miv_close:
+                backSelect();
+                break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            backSelect();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void backSelect() {
+        final PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                .setSureAndCancleListener("忍心丢下心仪商品？", "我再想想", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptDialog.dismiss();
+            }
+        }, "去意已决", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        }).show();
     }
 
     /**

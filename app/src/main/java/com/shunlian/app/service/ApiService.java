@@ -30,6 +30,7 @@ import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -38,6 +39,7 @@ import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.bean.LogisticsNameEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
@@ -773,7 +775,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/refund/applyLogList")
-    Call<BaseEntity<EmptyEntity>> refundHistory(@QueryMap Map<String,String> map);
+    Call<BaseEntity<ConsultHistoryEntity>> refundHistory(@QueryMap Map<String,String> map);
 
 
     /**
@@ -792,4 +794,12 @@ public interface ApiService {
      */
     @POST("order/payinorderlist")
     Call<BaseEntity<PayOrderEntity>> fromOrderListGoPay(@Body RequestBody body);
+
+    /**
+     * 退换货物流公司
+     * @param map
+     * @return
+     */
+    @GET("member/refund/refundExpressList")
+    Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
 }

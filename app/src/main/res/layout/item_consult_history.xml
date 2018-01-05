@@ -103,19 +103,48 @@
             app:iv_margin_left="60"
             app:iv_margin_top="30" />
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_detail"
+        <LinearLayout
+            android:id="@+id/lLayout_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/miv_sanjiao"
             android:background="@drawable/rounded_rectangle_gray_6px"
-            android:paddingBottom="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:paddingTop="15dp"
-            android:text="您好，查看到您的商品是在运送的途中，商品还没有退回到我们公司的哦，公司只能等货物退回公司后才能同意您的退款申请，我们现在需要先拒绝您的申请。感谢您的支持，祝您生活愉快~"
-            android:textColor="@color/new_gray"
-            android:textSize="14sp"/>
+            android:layout_below="@+id/miv_sanjiao"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lLayout_text_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp">
+
+            </LinearLayout>
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_proof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="凭证"
+                android:textColor="@color/new_text"
+                android:textSize="14sp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="20dp"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15sp"
+                />
+        </LinearLayout>
+
 
     </com.shunlian.app.widget.MyRelativeLayout>
 </RelativeLayout>

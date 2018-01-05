@@ -375,6 +375,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }else {
             rnview.setVisibility(View.VISIBLE);
             rnview.setNumber(num);
+            rnview.setTargetNumber(num);
         }
 
         LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
@@ -506,6 +507,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsCount == 0){
                     goodsDeatilFrag.showParamDialog();
                 }else {
+                    rnview.setVisibility(View.VISIBLE);
                     goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
                 }
                 break;
@@ -829,6 +831,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         goodsCount = count;
         if (isAddcart){
             isAddcart = false;
+            rnview.setVisibility(View.VISIBLE);
             goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
         }
 
