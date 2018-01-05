@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/img_shoppingcar_shopjiantou" />
+                    android:src="@mipmap/icon_common_arrowdowns" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -229,7 +229,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="9dp"
             android:layout_toRightOf="@+id/tv_prefer"
-            android:text="购满500元可打8折"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 

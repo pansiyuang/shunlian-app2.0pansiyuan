@@ -346,4 +346,7 @@
     <string name="refund_balance">退款金额：</string>
     <string name="selection_of_logistics_companies">选择物流公司</string>
 
+    <string name="general_sort">综合排序</string>
+    <string name="sales_volume">销量</string>
+    <string name="filter">筛选</string>
 </resources>
