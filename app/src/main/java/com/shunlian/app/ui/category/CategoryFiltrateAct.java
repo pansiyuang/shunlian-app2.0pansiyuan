@@ -1,7 +1,5 @@
 package com.shunlian.app.ui.category;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,7 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class LetterCategoryAct extends BaseActivity {
+public class CategoryFiltrateAct extends BaseActivity {
 
     @BindView(R.id.mtv_reset)
     MyTextView mtv_reset;

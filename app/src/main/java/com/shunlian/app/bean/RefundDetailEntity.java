@@ -37,29 +37,10 @@ public class RefundDetailEntity {
         public String rest_second;
         public List<Msg> msg_list;
         public List<Opt> opt_list;
+//        public List<Gift> gift;
+//        public List<ReturnAddress> return_address;
+//        public List<MemberAddress> member_address;
 
-        @Override
-        public String toString() {
-            return "RefundDetail{" +
-                    "refund_id='" + refund_id + '\'' +
-                    ", store_name='" + store_name + '\'' +
-                    ", refund_amount='" + refund_amount + '\'' +
-                    ", goods_num='" + goods_num + '\'' +
-                    ", refund_sn='" + refund_sn + '\'' +
-                    ", buyer_message='" + buyer_message + '\'' +
-                    ", add_time='" + add_time + '\'' +
-                    ", thumb='" + thumb + '\'' +
-                    ", title='" + title + '\'' +
-                    ", sku_desc='" + sku_desc + '\'' +
-                    ", price='" + price + '\'' +
-                    ", qty='" + qty + '\'' +
-                    ", status_desc='" + status_desc + '\'' +
-                    ", time_desc='" + time_desc + '\'' +
-                    ", rest_second='" + rest_second + '\'' +
-                    ", msg_list=" + msg_list +
-                    ", opt_list=" + opt_list +
-                    '}';
-        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Msg {

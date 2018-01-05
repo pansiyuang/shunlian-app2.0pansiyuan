@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="10dp">
+    android:paddingRight="25dp">
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_index"
@@ -12,19 +12,26 @@
         android:text="A"
         android:textColor="@color/pink_color"
         android:textSize="15sp"
-        android:layout_marginTop="10dp"/>
+        android:padding="10dp"/>
+
+    <View
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_gray_zero"/>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:padding="10dp"
+        android:singleLine="true"
         android:text="Gjiazhgjhgjhgje"
         android:textColor="@color/new_text"
-        android:textSize="14sp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginRight="50dp"
-        android:singleLine="true"
-        android:ellipsize="end"/>
-
+        android:textSize="14sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/my_gray_zero"/>
 </LinearLayout>

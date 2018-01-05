@@ -215,7 +215,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.category.LetterCategoryAct"
+            android:name=".ui.category.CategoryLetterAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.returns_order.ConsultHistoryAct"
@@ -239,6 +239,10 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".ui.returns_order.SelectLogisticsAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.category.CategoryFiltrateAct"
             android:exported="false"
             android:screenOrientation="portrait"
             />

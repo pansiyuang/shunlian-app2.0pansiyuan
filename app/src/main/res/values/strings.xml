@@ -37,9 +37,6 @@
     <string name="SelectRecommendAct_sure">确定</string>
     <string name="SelectRecommendAct_bind">绑定</string>
 
-    <!--分类-->
-    <string name="category_reset">重置</string>
-
     <!--登陆-->
     <string name="LoginPswFrg_qsrsjh">请输入手机号/用户ID</string>
     <string name="LoginPswFrg_inputphone">请输入手机号</string>
@@ -343,5 +340,15 @@
     <string name="refund_after_sale">退款/售后</string>
     <string name="refund_balance">退款金额：</string>
     <string name="selection_of_logistics_companies">选择物流公司</string>
+
+    <!--分类-->
+    <string name="category_shaixuan">筛选</string>
+    <string name="category_pinpai">品牌</string>
+    <string name="category_reset">重置</string>
+    <string name="category_send">发货</string>
+    <string name="category_jiangzhehu">江浙沪</string>
+    <string name="category_zhusanjiao">珠三角</string>
+    <string name="category_baoyou">包邮</string>
+    <string name="category_jiagequjian">价格区间（元）</string>
 
 </resources>
