@@ -160,7 +160,7 @@
     <string name="full_yuan_available">满%s元可用</string>
     <string name="good_comment">好评(%s)</string>
     <string name="praise_rate">好评率%s%%</string>
-    <string name="full_cut">满1%s减2%s</string>
+    <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
     <string name="buy_gift">满赠</string>
     <string name="full_discount_">满%s打%s折</string>
@@ -344,6 +344,7 @@
     <string name="refund_after_sale">退款/售后</string>
     <string name="refund_balance">退款金额：</string>
     <string name="selection_of_logistics_companies">选择物流公司</string>
+    <string name="get_success">领取成功</string>
     <string name="general_sort">综合排序</string>
     <string name="sales_volume">销量</string>
     <string name="filter">筛选</string>

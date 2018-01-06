@@ -37,6 +37,7 @@ import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -55,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -239,22 +241,28 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
-        Common.staticToast(message);
+        HttpUrl url = clone.request().url();
+        if ("/member/refund/getShipInfo".equals(url.encodedPath())){
+            //不弹toast
+        }else {
+            Common.staticToast(message);
+        }
         switch (code) {
             // TODO: 2017/10/19
-            case 203://未登录
+            case Code.CODE_NO_LOGIN://未登录
                 String token = SharedPrefUtil.getSharedPrfString("token", "");
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
                 }else {
                     requestCount++;
                     if (requestCount >= 5){
+                        clone.cancel();
                         return;
                     }
                     refreshToken(clone,emptyCode,failureCode,isLoading);
                 }
                 break;
-            case 204://刷新token过期,让用户登录
+            case Code.CODE_REFRESH_TOKEN_VALIDE://刷新token过期,让用户登录
                 SharedPrefUtil.clearSharedPreferences();
                 LoginAct.startAct(context);
                 break;

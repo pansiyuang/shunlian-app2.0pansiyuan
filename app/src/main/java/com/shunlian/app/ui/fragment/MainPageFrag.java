@@ -165,7 +165,7 @@ public class MainPageFrag extends BaseFragment {
 //                        RefundAfterSaleAct.startAct(baseActivity);
                         break;
                     case 13:
-                        SubmitLogisticsInfoAct.startAct(baseActivity);
+                        SubmitLogisticsInfoAct.startAct(baseActivity,"155");
                         break;
                 }
             }

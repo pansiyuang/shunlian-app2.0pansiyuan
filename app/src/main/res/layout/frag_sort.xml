@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rLayout_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rLayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rl_more"
+            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:ll_control_adapter="true"
+            app:ll_control_height="63"
+            app:ll_margin_left="20">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_common_search_gray"
+                app:iv_control_adapter="true"
+                app:iv_control_height="25"
+                app:iv_control_width="25"
+                app:iv_margin_left="20" />
+
+            <com.shunlian.app.widget.MyEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:et_control_adapter="true"
+                app:et_margin_left="10" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="9.5dp"
+                android:src="@mipmap/icon_more_n" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_rectangle_12px"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_below="@+id/rLayout_title"
+        android:layout_width="match_parent"
+        android:background="@color/value_ECECEC"
+        android:layout_height="0.5dp"/>
+
+    <LinearLayout
+        android:id="@+id/lLayout_sort"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_line">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/white"
+            android:overScrollMode="never"
+            android:dividerHeight="1dp"
+            android:scrollbars="none" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_sort"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"
+            android:overScrollMode="never"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

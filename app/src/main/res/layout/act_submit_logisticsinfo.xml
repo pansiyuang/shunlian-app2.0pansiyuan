@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="请选择"
+            android:text="@string/please_select"
             android:textColor="@color/new_gray"
             android:textSize="14sp"
             app:tv_control_adapter="true"
@@ -185,6 +185,7 @@
         android:verticalSpacing="4dp"/>
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pink_color"

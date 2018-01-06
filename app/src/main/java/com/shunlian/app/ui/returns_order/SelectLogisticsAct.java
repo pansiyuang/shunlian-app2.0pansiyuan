@@ -13,7 +13,6 @@ import com.shunlian.app.bean.Contact;
 import com.shunlian.app.bean.LogisticsNameEntity;
 import com.shunlian.app.presenter.SelectLogisticsPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ISelectLogisticsView;
 import com.shunlian.app.widget.WaveSideBar;
 
@@ -34,10 +33,11 @@ public class SelectLogisticsAct extends BaseActivity implements ISelectLogistics
     @BindView(R.id.side_bar)
     WaveSideBar side_bar;
 
-    private ArrayList<String> strings = new ArrayList<>();
     private SelectLogisticsPresenter presenter;
     private LinearLayoutManager manager;
-    private List<Contact> chineseSort;
+
+    private List<Contact> mLogisticsName = new ArrayList<>();
+
 
     public static void startAct(Activity activity,int requestCode){
         Intent intent = new Intent(activity, SelectLogisticsAct.class);
@@ -69,8 +69,8 @@ public class SelectLogisticsAct extends BaseActivity implements ISelectLogistics
         side_bar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
             @Override
             public void onSelectIndexItem(String index) {
-                for (int i=0; i<chineseSort.size(); i++) {
-                    if (chineseSort.get(i).getIndex().equals(index)) {
+                for (int i=0; i<mLogisticsName.size(); i++) {
+                    if (mLogisticsName.get(i).getIndex().equals(index)) {
                         manager.scrollToPositionWithOffset(i, 0);
                         return;
                     }
@@ -111,18 +111,21 @@ public class SelectLogisticsAct extends BaseActivity implements ISelectLogistics
     @Override
     public void selectLogistics(List<LogisticsNameEntity.LogisticsName> logistics) {
 
-        for (LogisticsNameEntity.LogisticsName name: logistics){
-            strings.add(name.name);
+        for(LogisticsNameEntity.LogisticsName nameItem : logistics){
+            for(String name : nameItem.item_list){
+                System.out.println("name=========="+name);
+                Contact contact = new Contact(nameItem.first_letter,name);
+                mLogisticsName.add(contact);
+            }
         }
-        chineseSort = Common.getChineseSort(strings);
 
-        SelectLogisticsAdapter adapter = new SelectLogisticsAdapter(this, chineseSort);
+        SelectLogisticsAdapter adapter = new SelectLogisticsAdapter(this, mLogisticsName);
         rv_contacts.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String name = chineseSort.get(position).getName();
+                String name = mLogisticsName.get(position).getName();
                 Intent intent = new Intent();
                 intent.putExtra("name",name);
                 setResult(Activity.RESULT_OK,intent);
