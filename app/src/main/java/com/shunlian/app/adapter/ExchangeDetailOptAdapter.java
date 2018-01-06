@@ -87,10 +87,10 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
 
                         break;
                     case "add_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context);
+                        SubmitLogisticsInfoAct.startAct(context,refund_id);
                         break;
                     case "edit_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context);
+                        SubmitLogisticsInfoAct.startAct(context,refund_id);
                         break;
                     case "check_receive_enable":
                         confirmreceipt(order_id);
