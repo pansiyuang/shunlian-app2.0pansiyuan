@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lLayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    app:ll_control_adapter="true"
+    app:ll_margin_top="60"
+    app:ll_margin_left="15"
+    app:ll_margin_right="15"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:iv_control_adapter="true"
+        app:iv_control_height="115"
+        app:iv_control_width="115" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/my_black_one"
+        android:textSize="12sp" />
+
+</com.shunlian.app.widget.MyLinearLayout>

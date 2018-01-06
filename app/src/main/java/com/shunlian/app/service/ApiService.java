@@ -54,6 +54,7 @@ import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
@@ -820,4 +821,18 @@ public interface ApiService {
     @GET("member/refund/getShipInfo")
     Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String,String> map);
 
+    /**
+     * 分类顶级列表
+     * @return
+     */
+    @GET("category/toplist")
+    Call<BaseEntity<SortFragEntity>> categoryToplist(@QueryMap Map<String,String> map);
+
+    /**
+     * 分类子目录
+     * @param map
+     * @return
+     */
+    @GET("category/subList")
+    Call<BaseEntity<SortFragEntity>> categorySubList(@QueryMap Map<String,String> map);
 }

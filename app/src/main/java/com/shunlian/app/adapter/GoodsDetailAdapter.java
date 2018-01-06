@@ -90,6 +90,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     public ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
+    private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -418,6 +419,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.view_coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_ling_Coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_Coupon.removeAllViews();
+                strLengthMeasure.delete(0,strLengthMeasure.length());
                 for (int i = 0; i < vouchers.size(); i++) {
                     if (i > 2){
                         break;
@@ -425,6 +427,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         GoodsDeatilEntity.Voucher voucher = vouchers.get(i);
                         MyTextView textView = new MyTextView(context);
                         textView.setTextSize(11);
+                        textView.setMaxLines(1);
+                        textView.setEllipsize(TextUtils.TruncateAt.END);
                         textView.setTextColor(getResources().getColor(R.color.value_FC2F57));
                         textView.setBackgroundResource(R.drawable.edge_frame_r3);
                         GradientDrawable background = (GradientDrawable) textView.getBackground();
@@ -441,6 +445,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
                         layoutParams.leftMargin = TransformUtil.dip2px(context, 5.5f);
                         textView.setLayoutParams(layoutParams);
+
+                        //长度兼容
+                        strLengthMeasure.append(textView.getText());
+                        if (strLengthMeasure.length() > 22){
+                            mHolder.mll_Coupon.removeViewAt(mHolder.mll_Coupon.getChildCount() - 1);
+                        }
                     }
                 }
 
@@ -502,32 +512,21 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyLinearLayout mll_content = (MyLinearLayout) subView1.findViewById(R.id.mll_content);
         MyTextView textView = new MyTextView(context);
         textView.setTextSize(12);
+        textView.setMaxLines(1);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(getResources().getColor(R.color.text_param_value));
-//        int padding = TransformUtil.dip2px(context, 4);
-//        textView.setPadding(padding, padding, padding, padding);
         mll_content.addView(textView);
         StringBuilder sb = new StringBuilder();
-        String format = null;
-        if (state == 0) {
-            format = getString(R.string.full_cut);
-        }else if (state == 1){
-            format = getString(R.string.full_discount_);
-        }else {
-            format = "";
-        }
 
         for (int i = 0; i < detailList.size(); i++) {
-            if (i > 1)
+            if (i > 2)
                 break;
             GoodsDeatilEntity.ActivityDetail ad = detailList.get(i);
             if (state == 0) {
-//                sb.append(String.format(format,ad.money_type_condition,ad.money_type_discount));
                 sb.append(ad.prom_title);
             }else if (state == 1){
-//                sb.append(String.format(format,ad.qty_type_condition,ad.qty_type_discount));
                 sb.append(ad.prom_title);
             }else {
-//                sb.append(ad.promotion_title);
                 sb.append(ad.prom_title);
             }
             sb.append(",");
@@ -545,7 +544,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleHolder){
             TitleHolder mHolder = (TitleHolder) holder;
-
 
             int pref_length = 0;
             String is_preferential = mGoodsEntity.is_preferential;
@@ -779,6 +777,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     if (!recyclerDialog.isShowing()){
                         recyclerDialog.setVoucheres(mGoodsEntity.voucher);
                         recyclerDialog.show();
+                        recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
+                            @Override
+                            public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+                                if (context instanceof GoodsDetailAct){
+                                    GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+                                    goodsDetailAct.getCouchers(voucher.voucher_id);
+                                    voucher.is_get = "1";
+//                                    adapter.notifyItemChanged(position);
+                                }
+                            }
+                        });
                     }
                     break;
                 case R.id.mtv_combo:

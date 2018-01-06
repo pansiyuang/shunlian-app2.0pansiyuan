@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="25dp"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <TextView
+            android:id="@+id/sort_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textStyle="bold"
+            android:textColor="#010101"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="25dp"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+    </LinearLayout>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="3dp"
+        android:drawableRight="@mipmap/img_common_viewarrow"
+        android:paddingTop="20dp"
+        android:text="排行榜"
+        android:textColor="@color/new_gray"
+        android:textSize="12.5sp" />
+</RelativeLayout>
+

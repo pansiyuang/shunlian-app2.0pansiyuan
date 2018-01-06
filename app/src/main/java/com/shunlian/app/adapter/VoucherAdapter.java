@@ -72,14 +72,6 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
-        voucherViewHolder.tv_draw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCallBack != null) {
-                    mCallBack.OnVoucherSelect(voucher);
-                }
-            }
-        });
     }
 
     public class VoucherViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -105,13 +97,15 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
         public VoucherViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View v) {
             if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+                if (mCallBack != null) {
+                    mCallBack.OnVoucherSelect(mData.get(getAdapterPosition()));
+                }
             }
         }
     }
