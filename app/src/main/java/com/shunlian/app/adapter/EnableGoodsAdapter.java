@@ -81,12 +81,14 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         stock = Integer.valueOf(goods.stock);
         enableViewHolder.tv_goods_param.setText(goods.sku);
         enableViewHolder.tv_edit_param.setText(goods.sku);
-        enableViewHolder.tv_discount.setText(promotionTitle);
         enableViewHolder.tv_goods_attribute.setText(goods.sku);
         enableViewHolder.tv_goods_num.setText("x" + goods.qty);
         enableViewHolder.tv_goods_count.setText(goods.qty);
         enableViewHolder.tv_goods_price.setText(goods.price);
 //        enableViewHolder.tv_prefer.setText(goods.title_label);
+        if (!isEmpty(promotionTitle)) {
+            enableViewHolder.tv_discount.setText(promotionTitle);
+        }
         enableViewHolder.tv_goods_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,11 +174,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         });
 
         if (goods.all_prom == null || goods.all_prom.size() == 0) {
-            enableViewHolder.rl_prefer.setEnabled(false);
-            enableViewHolder.tv_edit_promo.setVisibility(View.INVISIBLE);
+            enableViewHolder.rl_prefer.setVisibility(View.GONE);
         } else {
-            enableViewHolder.rl_prefer.setEnabled(true);
-            enableViewHolder.tv_edit_promo.setVisibility(View.VISIBLE);
+            enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);
         }
 
         enableViewHolder.rl_prefer.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +185,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 if (preferDialog == null) {
                     preferDialog = new ChangePreferDialog(mContext, goods.all_prom);
                 }
+                preferDialog.selectItem(goods.prom_id);
                 preferDialog.setOnPreferSelectCallBack(new ChangePreferDialog.OnPreferSelectCallBack() {
                     @Override
                     public void onSelect(GoodsDeatilEntity.AllProm allProm) {

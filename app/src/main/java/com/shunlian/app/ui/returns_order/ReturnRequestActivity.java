@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
@@ -75,6 +76,12 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @BindView(R.id.tv_request_complete)
     TextView tv_request_complete;
 
+    @BindView(R.id.tv_request)
+    TextView tv_request;
+
+    @BindView(R.id.tv_return_type)
+    TextView tv_return_type;
+
     /**
      * 输入框小数的位数
      */
@@ -87,7 +94,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private int goodsCount;
     private double maxPrice;
     private double freightPrice;
-    private double goodsPrice;
+    private double returnPrice;
     private int isLast;  //是否改订单最后一件没有退的商品  1是  0 否
     private ReturnGoodsDialog goodsDialog;
     private String currentReasonId;
@@ -113,7 +120,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         currentInfoEntity = (RefundInfoEntity) getIntent().getSerializableExtra("infoEntity");
         goodsCount = Integer.valueOf(currentInfoEntity.qty);
         freightPrice = Double.valueOf(currentInfoEntity.shipping_fee);
-        goodsPrice = Double.valueOf(currentInfoEntity.price);
+        returnPrice = Double.valueOf(currentInfoEntity.return_price);
         isLast = Integer.valueOf(currentInfoEntity.is_last);
 
         if (!isEmpty(currentInfoEntity.serviceType)) {
@@ -121,12 +128,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             initViews(currentServiceType);
         }
         presenter = new ReturnRequestPresenter(this, this);
-
-        goodsDialog = new ReturnGoodsDialog(this, currentInfoEntity.reason);
-        goodsDialog.setSelectListener(this);
     }
 
     public void initViews(String type) {
+        goodsDialog = new ReturnGoodsDialog(this, currentInfoEntity.reason);
+        goodsDialog.setSelectListener(this);
         switch (type) {
             case "1": //仅退款
                 tv_title.setText(getStringResouce(R.string.return_request));
@@ -149,6 +155,10 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             case "4": //换货
                 tv_title.setText(getStringResouce(R.string.change_request));
                 customer_goods.setLabelName(getStringResouce(R.string.change_goods), false);
+                rl_return_money.setVisibility(View.GONE);
+                tv_request.setText(getStringResouce(R.string.return_instruction));
+                tv_return_type.setText(getStringResouce(R.string.return_reason));
+                goodsDialog.setDialogTitle(getStringResouce(R.string.return_reason));
                 break;
         }
 
@@ -194,18 +204,18 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     public void setMaxPrice(int count) {
         if (isLast == 1) { //是最后一件
             if (freightPrice == 0) {
-                maxPrice = goodsPrice * count;
+                maxPrice = returnPrice * count;
                 tv_freight.setText("您最多能退¥" + maxPrice);
             } else {
                 if (count == goodsCount) {
-                    maxPrice = count * goodsPrice + freightPrice;
+                    maxPrice = count * returnPrice + freightPrice;
                     tv_freight.setText("您最多能退¥" + maxPrice + ",含邮费¥" + freightPrice);
                 } else {
                     tv_freight.setText("您最多能退¥" + maxPrice);
                 }
             }
         } else {
-            maxPrice = count * goodsPrice;
+            maxPrice = count * returnPrice;
             tv_freight.setText("您最多能退¥" + maxPrice);
         }
     }
@@ -250,12 +260,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 }
                 break;
             case R.id.tv_request_complete:
-
                 if (isEmpty(currentReasonId)) {
                     Common.staticToast("请选择原因");
                     return;
                 }
-                if ("4".equals(currentServiceType) || "1".equals(currentServiceType)) {
+                if ("3".equals(currentServiceType) || "1".equals(currentServiceType)) {
                     if (isEmpty(edt_return_money.getText())) {
                         Common.staticToast("请输入退款金额");
                         return;
@@ -267,7 +276,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 }
 
                 String imageStr = getImageString();
-
                 presenter.applyRefund(currentInfoEntity.og_Id, String.valueOf(customer_goods.getCurrentCount()), edt_return_money.getText().toString(), currentServiceType, currentReasonId, edt_refunds.getText().toString(), imageStr);
                 break;
         }

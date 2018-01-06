@@ -212,10 +212,10 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         }
 
         if (!TextUtils.isEmpty(promotion.prom_label)) {
-            childViewHolder.tv_full_min.setVisibility(View.VISIBLE);
             childViewHolder.tv_full_min.setText(promotion.prom_label);
+            childViewHolder.rl_merge.setVisibility(View.VISIBLE);
         } else {
-            childViewHolder.tv_full_min.setVisibility(View.GONE);
+            childViewHolder.rl_merge.setVisibility(View.GONE);
         }
         childViewHolder.tv_content.setText(promotion.hint);
 

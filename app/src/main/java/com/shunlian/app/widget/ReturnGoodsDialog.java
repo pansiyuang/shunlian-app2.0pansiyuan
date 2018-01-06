@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.listener.OnItemClickListener;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
@@ -50,17 +52,10 @@ public class ReturnGoodsDialog extends Dialog {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
         this.mData = reasons;
-    }
 
-    public ReturnGoodsDialog(Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_return_dialog, null, false);
         setContentView(view);
+
         ButterKnife.bind(this, view);
         setCanceledOnTouchOutside(false);
 
@@ -109,6 +104,17 @@ public class ReturnGoodsDialog extends Dialog {
             }
         });
     }
+
+    public ReturnGoodsDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
+
+    public void setDialogTitle(String title) {
+        if (!TextUtils.isEmpty(title)) {
+            tv_title.setText(title);
+        }
+    }
+
 
     public void setSelectListener(ISelectListener listener) {
         this.listener = listener;

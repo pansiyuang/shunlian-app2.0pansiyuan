@@ -83,25 +83,28 @@ public class ProgressView extends View {
     }
 
     public void startAnimation() {
+        if (isRunning()) {
+            return;
+        }
         valueAnimator = ValueAnimator.ofInt(0, angle);
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animator) {
+            public void onAnimationStart(Animator animation) {
 
             }
 
             @Override
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animation) {
 
             }
 
             @Override
-            public void onAnimationCancel(Animator animator) {
+            public void onAnimationCancel(Animator animation) {
 
             }
 
             @Override
-            public void onAnimationRepeat(Animator animator) {
+            public void onAnimationRepeat(Animator animation) {
                 isGay = !isGay;
             }
         });
@@ -118,14 +121,14 @@ public class ProgressView extends View {
     }
 
     public void stopAnimation() {
-        if (valueAnimator != null) {
+        if (isRunning()) {
             valueAnimator.end();
             angle = 360;
         }
     }
 
     public void releaseAnimation() {
-        if (valueAnimator != null) {
+        if (isRunning()) {
             valueAnimator.removeAllUpdateListeners();
             valueAnimator.cancel();
             angle = 360;

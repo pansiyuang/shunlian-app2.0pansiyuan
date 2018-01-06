@@ -52,9 +52,13 @@ public class ReturnRequestPresenter extends BasePresenter<IReturnRequestView> {
         Map<String, String> map = new HashMap<>();
         map.put("og_id", ogId);
         map.put("qty", qty);
-        map.put("amount", amount);
         map.put("type", type);
         map.put("reason_id", reasonId);
+
+        if (!TextUtils.isEmpty(amount)) {
+            map.put("amount", amount);
+        }
+
         if (!TextUtils.isEmpty(remark)) {
             map.put("remark", remark);
         }
