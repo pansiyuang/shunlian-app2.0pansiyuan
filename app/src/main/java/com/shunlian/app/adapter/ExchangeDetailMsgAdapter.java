@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,24 @@ public class ExchangeDetailMsgAdapter extends BaseRecyclerAdapter<RefundDetailEn
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MsgHolder mHolder = (MsgHolder) holder;
         RefundDetailEntity.RefundDetail.Msg msg=lists.get(position);
-        mHolder.mtv_desc.setText(msg.description);
-        mHolder.mtv_label.setText(msg.label);
-        mHolder.mtv_title.setText(msg.title);
+        if (TextUtils.isEmpty(msg.description)){
+            mHolder.mtv_desc.setVisibility(View.GONE);
+        }else {
+            mHolder.mtv_desc.setVisibility(View.VISIBLE);
+            mHolder.mtv_desc.setText(msg.description);
+        }
+        if (TextUtils.isEmpty(msg.label)){
+            mHolder.mtv_label.setVisibility(View.GONE);
+        }else {
+            mHolder.mtv_label.setVisibility(View.VISIBLE);
+            mHolder.mtv_label.setText(msg.label);
+        }
+        if (TextUtils.isEmpty(msg.title)){
+            mHolder.mtv_title.setVisibility(View.GONE);
+        }else {
+            mHolder.mtv_title.setVisibility(View.VISIBLE);
+            mHolder.mtv_title.setText(msg.title);
+        }
     }
 
     public class MsgHolder extends BaseRecyclerViewHolder {

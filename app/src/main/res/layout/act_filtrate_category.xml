@@ -94,19 +94,23 @@
                 android:paddingRight="10dp">
 
                 <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_address"
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/category_send"
+                    android:background="@color/value_f5"
+                    android:text="@string/category_dingwei"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
                 <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_locate"
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="7dp"
                     android:gravity="center"
                     android:text="@string/location"
+                    android:background="@color/value_f5"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -116,6 +120,7 @@
                     android:layout_marginLeft="27dp"
                     android:gravity="center"
                     android:text="@string/category_jiangzhehu"
+                    android:background="@color/value_f5"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -125,6 +130,7 @@
                     android:layout_marginLeft="7dp"
                     android:gravity="center"
                     android:text="@string/category_zhusanjiao"
+                    android:background="@color/value_f5"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -133,6 +139,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="27dp"
                     android:gravity="center"
+                    android:background="@color/value_f5"
                     android:text="@string/category_baoyou"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
@@ -195,8 +202,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
                     android:text="@string/category_pinpai"
                     android:textColor="@color/share_text"
                     android:textSize="13sp" />
@@ -205,21 +210,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:src=""
-                    android:text="@string/category_pinpai"
-                    android:textColor="@color/share_text"
-                    android:textSize="13sp" />
+                    android:src="@mipmap/icon_saixuan_gd" />
                 <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:text="@string/category_pinpai"
+                    android:layout_toLeftOf="@id/miv_arrow"
+                    android:text="@string/category_gengduo"
                     android:textColor="@color/share_text"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    android:layout_marginRight="5dp"/>
             </com.shunlian.app.widget.MyRelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_pingpai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"/>
         </com.shunlian.app.widget.MyLinearLayout>
     </ScrollView>
 

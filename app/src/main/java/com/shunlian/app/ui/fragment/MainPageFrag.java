@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.CategoryFiltrateAct;
 import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
@@ -157,7 +158,7 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
-                        startActivity(new Intent(baseActivity,CategoryLetterAct.class));
+                        startActivity(new Intent(baseActivity,CategoryFiltrateAct.class));
                         break;
                     case 12:
                         ConsultHistoryAct.startAct(baseActivity,"87");

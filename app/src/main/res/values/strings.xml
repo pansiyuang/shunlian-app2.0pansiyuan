@@ -266,7 +266,9 @@
     <string name="exchange_xieshanglishi">协商历史</string>
     <string name="exchange_bianjiwuliu">编辑物流信息</string>
     <string name="exchange_tuihuodizhi">退货地址</string>
+    <string name="exchange_shouhuodizhi">收货地址</string>
     <string name="exchange_yonghutuihuo">用户退货物流</string>
+    <string name="exchange_shangjiafahuo">商家发货物流</string>
 
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>
@@ -355,6 +357,9 @@
     <string name="category_zhusanjiao">珠三角</string>
     <string name="category_baoyou">包邮</string>
     <string name="category_jiagequjian">价格区间（元）</string>
+    <string name="category_gengduo">更多</string>
+    <string name="category_shouqi">收起</string>
+    <string name="category_dingwei">定位失败</string>
 
 
 </resources>

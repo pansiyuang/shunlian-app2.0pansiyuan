@@ -20,7 +20,9 @@ public class RefundDetailEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RefundDetail {
+        public String order_id;
         public String refund_id;
+        public String refund_type;
         public String store_name;
         public String refund_amount;
         public String goods_num;
@@ -34,13 +36,111 @@ public class RefundDetailEntity {
         public String qty;
         public String status_desc;
         public String time_desc;
+        public String express;
+        public String s_express;
         public String rest_second;
         public List<Msg> msg_list;
         public List<Opt> opt_list;
-//        public List<Gift> gift;
-//        public List<ReturnAddress> return_address;
-//        public List<MemberAddress> member_address;
+        public Gift gift;
+        public ReturnAddress return_address;
+        public MemberAddress member_address;
+        public Edit edit;
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Edit {
+            public String refund_type;
+            public String edit_apply_type;
+            public Gift gift;
+            public String thumb;
+            public String title;
+            public String sku_desc;
+            public String price;
+            public String qty;
+            public String refund_amount;
+            public String goods_num;
+            public String refund_remark_seller;
+            public String buyer_message;
+            public String reason_id;
+            public List<Reason> user_status;
+            public String current_user_status;
+            public String time_desc;
+            public String rest_second;
+            public String refund_remark_admin;
+            public String is_last;
+            public String return_price;
+            public String shipping_fee;
+            public List<Reason> reason;
+            public List<RefundChoice> refund_choice;
+            public List<String> member_evidence_seller;
+            public List<String> member_evidence_admin;
+
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class RefundChoice {
+                public String icon;
+                public String type;
+                public String hint;
+                public String tip;
+
+            }
+
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class Reason {
+                public String reason_id;
+                public String reason_info;
+
+            }
+        }
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ReturnAddress {
+            public String id;
+            public String name;
+            public String phone;
+            public String address;
+
+            @Override
+            public String toString() {
+                return "ReturnAddress{" +
+                        "id='" + id + '\'' +
+                        ", name='" + name + '\'' +
+                        ", phone='" + phone + '\'' +
+                        ", address='" + address + '\'' +
+                        '}';
+            }
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class MemberAddress {
+            public String id;
+            public String name;
+            public String phone;
+            public String address;
+
+            @Override
+            public String toString() {
+                return "MemberAddress{" +
+                        "id='" + id + '\'' +
+                        ", name='" + name + '\'' +
+                        ", phone='" + phone + '\'' +
+                        ", address='" + address + '\'' +
+                        '}';
+            }
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Gift {
+            public String goods_id;
+            public String title;
+            public String thumb;
+
+            @Override
+            public String toString() {
+                return "Gift{" +
+                        "goods_id='" + goods_id + '\'' +
+                        ", title='" + title + '\'' +
+                        ", thumb='" + thumb + '\'' +
+                        '}';
+            }
+        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Msg {

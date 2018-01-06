@@ -35,6 +35,7 @@ import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
@@ -802,4 +803,12 @@ public interface ApiService {
      */
     @GET("member/refund/refundExpressList")
     Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
+
+    /**
+     * 筛选条件
+     * @param body
+     * @return
+     */
+    @POST("goods/getListFilter")
+    Call<BaseEntity<GetListFilterEntity>> getListFilter(@Body RequestBody body);
 }

@@ -1,13 +1,22 @@
 package com.shunlian.app.ui.category;
 
+import android.location.Location;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ContactsAdapter;
+import com.shunlian.app.adapter.PingpaiAdapter;
+import com.shunlian.app.adapter.ShaixuanAttrAdapter;
 import com.shunlian.app.bean.Contact;
+import com.shunlian.app.bean.DistrictGetlocationEntity;
+import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.WaveSideBar;
 
@@ -16,58 +25,50 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class CategoryFiltrateAct extends BaseActivity {
+public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrateView {
 
-    @BindView(R.id.mtv_reset)
-    MyTextView mtv_reset;
+    @BindView(R.id.mtv_address)
+    MyTextView mtv_address;
 
-    @BindView(R.id.mtv_finish)
-    MyTextView mtv_finish;
+    @BindView(R.id.mtv_locate)
+    MyTextView mtv_locate;
 
     @BindView(R.id.mtv_cancel)
     MyTextView mtv_cancel;
 
-    @BindView(R.id.rv_contacts)
-    RecyclerView rv_contacts;
+    @BindView(R.id.mtv_finish)
+    MyTextView mtv_finish;
 
-    @BindView(R.id.side_bar)
-    WaveSideBar side_bar;
+    @BindView(R.id.rv_pingpai)
+    RecyclerView rv_pingpai;
 
-    public List<String> strings=new ArrayList<>();
+    @BindView(R.id.rv_category)
+    RecyclerView rv_category;
 
-    private ArrayList<Contact> contacts = new ArrayList<>();
 
-    private ContactsAdapter contactsAdapter;
-
+    private String district_ids;
+    private CategoryFiltratePresenter categoryFiltratePresenter;
+    private PingpaiAdapter pingpaiAdapter;
+    private ShaixuanAttrAdapter shaixuanAttrAdapter;
     @Override
     protected int getLayoutId() {
-        return R.layout.act_letter_category;
+        return R.layout.act_filtrate_category;
     }
 
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        mtv_reset.setOnClickListener(this);
-        mtv_finish.setOnClickListener(this);
-        mtv_cancel.setOnClickListener(this);
-        contacts.addAll(Contact.getEnglishContacts());
-        rv_contacts.setLayoutManager(new LinearLayoutManager(this));
-        if (contactsAdapter==null){
-            contactsAdapter=new ContactsAdapter(this, false,contacts);
+        mtv_address.setOnClickListener(this);
+        categoryFiltratePresenter=new CategoryFiltratePresenter(this,this,"6","");
+        Location location = Common.getGPS(this);
+        if (location != null) {
+            categoryFiltratePresenter.initGps(String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()));
         }
-        rv_contacts.setAdapter(contactsAdapter);
-        side_bar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
-            @Override
-            public void onSelectIndexItem(String index) {
-                for (int i=0; i<contacts.size(); i++) {
-                    if (contacts.get(i).getIndex().equals(index)) {
-                        ((LinearLayoutManager) rv_contacts.getLayoutManager()).scrollToPositionWithOffset(i, 0);
-                        return;
-                    }
-                }
-            }
-        });
+        mtv_locate.setOnClickListener(this);
+        mtv_cancel.setOnClickListener(this);
+        mtv_finish.setOnClickListener(this);
+
     }
 
     @Override
@@ -75,15 +76,59 @@ public class CategoryFiltrateAct extends BaseActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.mtv_reset:
-                strings.clear();
-                contactsAdapter.notifyDataSetChanged();
-                break;
-            case R.id.mtv_finish:
 
+                break;
+            case R.id.mtv_locate:
+                Location location = Common.getGPS(this);
+                if (location != null) {
+                    categoryFiltratePresenter.initGps(String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()));
+                }
                 break;
             case R.id.mtv_cancel:
 
                 break;
+            case R.id.mtv_finish:
+
+                break;
         }
+    }
+
+    @Override
+    public void getListFilter(GetListFilterEntity getListFilterEntity) {
+        rv_pingpai.setLayoutManager(new GridLayoutManager(this,3));
+        if (pingpaiAdapter==null){
+            pingpaiAdapter=new PingpaiAdapter(this, false,getListFilterEntity.recommend_brand_list);
+        }
+        rv_pingpai.setAdapter(pingpaiAdapter);
+
+        rv_category.setLayoutManager(new LinearLayoutManager(this));
+        if (shaixuanAttrAdapter==null){
+            shaixuanAttrAdapter=new ShaixuanAttrAdapter(this, false,getListFilterEntity.attr_list);
+        }
+        rv_category.setAdapter(shaixuanAttrAdapter);
+
+    }
+
+    @Override
+    public void getGps(DistrictGetlocationEntity districtGetlocationEntity) {
+        district_ids = "";
+        for (int m = 0; m < districtGetlocationEntity.district_ids.size(); m++) {
+            if (m >= districtGetlocationEntity.district_ids.size() - 1) {
+                district_ids += districtGetlocationEntity.district_ids.get(m);
+            } else {
+                district_ids += districtGetlocationEntity.district_ids.get(m) + ",";
+            }
+        }
+        mtv_address.setText(districtGetlocationEntity.district_names.get(1));
+        mtv_address.setBackgroundResource(R.mipmap.img_xcha);
+    }
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

@@ -1,21 +1,13 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.bean.DistrictGetlocationEntity;
-import com.shunlian.app.bean.StoreGoodsListEntity;
-import com.shunlian.app.bean.StoreIndexEntity;
-import com.shunlian.app.bean.StoreNewGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
-
-import java.util.List;
+import com.shunlian.app.bean.GetListFilterEntity;
 
 /**
  * Created by Administrator on 2017/10/24.
  */
 
-public interface AddAddressView extends IView {
+public interface CategoryFiltrateView extends IView {
+    void getListFilter(GetListFilterEntity getListFilterEntity);
     void getGps(DistrictGetlocationEntity districtGetlocationEntity);
-    void getDistrict(String district,String district_ids);
-    void saveAddressCallback();
 }
