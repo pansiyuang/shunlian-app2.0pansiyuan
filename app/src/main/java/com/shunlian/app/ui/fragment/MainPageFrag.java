@@ -14,7 +14,6 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryFiltrateAct;
-import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -22,7 +21,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
-import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
+import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -161,8 +160,8 @@ public class MainPageFrag extends BaseFragment {
                         startActivity(new Intent(baseActivity,CategoryFiltrateAct.class));
                         break;
                     case 12:
-                        ConsultHistoryAct.startAct(baseActivity,"87");
-//                        RefundAfterSaleAct.startAct(baseActivity);
+//                        ConsultHistoryAct.startAct(baseActivity,"87");
+                        RefundAfterSaleAct.startAct(baseActivity);
                         break;
                     case 13:
                         SubmitLogisticsInfoAct.startAct(baseActivity,"155");
