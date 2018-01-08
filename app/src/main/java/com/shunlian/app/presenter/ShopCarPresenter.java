@@ -51,7 +51,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<ShoppingCarEntity>> baseEntityCall = getApiService().storeList(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     super.onSuccess(entity);
@@ -91,7 +91,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<ShoppingCarEntity>> baseEntityCall = getApiService().carEdit(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     ShoppingCarEntity shoppingCarEntity = entity.data;
@@ -120,7 +120,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<ShoppingCarEntity>> baseEntityCall = getApiService().checkCartGoods(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     ShoppingCarEntity shoppingCarEntity = entity.data;
@@ -148,10 +148,10 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<GoodsDeatilEntity.Voucher>> baseEntityCall = getApiService().getVoucher(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
                 @Override
                 public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
-                    if (entity.data != null) {
+                    if (entity.code == 1000 && entity.data != null) {
                         iView.OnGetVoucher(entity.data);
                     } else {
                         Common.staticToast(entity.message);
@@ -177,7 +177,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<ShoppingCarEntity>> baseEntityCall = getApiService().removetofav(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     ShoppingCarEntity shoppingCarEntity = entity.data;
@@ -205,7 +205,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<ShoppingCarEntity>> baseEntityCall = getApiService().cartRemove(requestBody);
-            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ShoppingCarEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     ShoppingCarEntity shoppingCarEntity = entity.data;

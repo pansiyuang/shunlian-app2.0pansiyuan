@@ -53,6 +53,7 @@ import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
@@ -802,4 +803,12 @@ public interface ApiService {
      */
     @GET("member/refund/refundExpressList")
     Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
+
+    /**
+     * 商品搜索列表
+     * @param body
+     * @return
+     */
+    @POST("/goods/search")
+    Call<BaseEntity<SearchGoodsEntity>> getSearchGoods(@Body RequestBody body);
 }

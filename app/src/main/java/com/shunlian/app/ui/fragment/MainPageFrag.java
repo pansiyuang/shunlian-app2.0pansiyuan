@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.LetterCategoryAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
@@ -99,6 +100,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("字母");
         items.add("协商历史");
         items.add("提交物流信息");
+        items.add("列表排序");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -139,7 +141,7 @@ public class MainPageFrag extends BaseFragment {
                         MyCommentAct.startAct(baseActivity);
                         break;
                     case 6:
-                        MyOrderAct.startAct(baseActivity,0);
+                        MyOrderAct.startAct(baseActivity, 0);
                         break;
                     case 7:
                         OrderLogisticsActivity.startAct(baseActivity, "5");
@@ -157,14 +159,17 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
-                        startActivity(new Intent(baseActivity,LetterCategoryAct.class));
+                        startActivity(new Intent(baseActivity, LetterCategoryAct.class));
                         break;
                     case 12:
-                        ConsultHistoryAct.startAct(baseActivity,"87");
+                        ConsultHistoryAct.startAct(baseActivity, "87");
 //                        RefundAfterSaleAct.startAct(baseActivity);
                         break;
                     case 13:
                         SubmitLogisticsInfoAct.startAct(baseActivity);
+                        break;
+                    case 14:
+                        CategoryAct.startAct(baseActivity);
                         break;
                 }
             }

@@ -36,6 +36,19 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         this.mData = vouchers;
     }
 
+    public void getItemSuccess(String voucherId) {
+        if (lists == null || lists.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < lists.size(); i++) {
+            if (voucherId.equals(lists.get(i).voucher_id)) {
+                lists.get(i).is_get = "1";
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         VoucherViewHolder voucherViewHolder = new VoucherViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_voucher, parent, false));
@@ -49,9 +62,9 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
         firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
 
-        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)){
+        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)) {
             voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));
-        }else {
+        } else {
             voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
         }
         voucherViewHolder.tv_voucher_date.setText(String.format(mContext.getResources().getString(R.string.valid_date), voucher.start_time, voucher.end_time));
@@ -66,10 +79,12 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         if ("1".equals(voucher.is_get)) {  //1为已经领取
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_n));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.hava_received));
+            voucherViewHolder.tv_draw.setEnabled(false);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_gray));
         } else {
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_h));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
+            voucherViewHolder.tv_draw.setEnabled(true);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
         voucherViewHolder.tv_draw.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +125,8 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

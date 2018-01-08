@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
@@ -37,12 +38,13 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     private LinearLayoutManager linearLayoutManager;
     private OnEnableChangeListener mListener;
     private HashMap<String, Boolean> mMap;
-    private RecyclerDialog recyclerDialog;
+    private ShoppingCarFrag carFrag;
 
-    public ShopCarStoreAdapter(Context context, List<ShoppingCarEntity.Enabled> enableds) {
+    public ShopCarStoreAdapter(Context context, List<ShoppingCarEntity.Enabled> enableds, ShoppingCarFrag frag) {
         this.mContext = context;
         layoutInflater = LayoutInflater.from(mContext);
         this.mStores = enableds;
+        this.carFrag = frag;
     }
 
     public void setEnables(List<ShoppingCarEntity.Enabled> datas, HashMap<String, Boolean> mLink) {
@@ -100,7 +102,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
 
     //  获得父项显示的view
     @Override
-    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int i, boolean b, View view, ViewGroup viewGroup) {
         final ParentViewHolder parentViewHolder;
         if (view == null) {
             view = layoutInflater.inflate(R.layout.item_shoppingcar_store, viewGroup, false);
@@ -124,12 +126,6 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         }
         parentViewHolder.tv_store.setText(enabled.store_name);
 
-        parentViewHolder.tv_get_voucher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //领劵
-            }
-        });
         if (mMap != null && mMap.size() != 0 && mMap.containsKey(enabled.store_id)) {
             enabled.isEditGood = mMap.get(enabled.store_id);
         }
@@ -176,22 +172,18 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
+        if (enabled.store_voucher == null || enabled.store_voucher.size() == 0) {
+            parentViewHolder.tv_get_voucher.setVisibility(View.GONE);
+        } else {
+            parentViewHolder.tv_get_voucher.setVisibility(View.VISIBLE);
+        }
+
         parentViewHolder.tv_get_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (recyclerDialog == null) {
-                    recyclerDialog = new RecyclerDialog(mContext);
+                if (carFrag != null) {
+                    carFrag.showVouchersDialog(i);
                 }
-                recyclerDialog.setVoucheres(enabled.store_voucher);
-                recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
-                    @Override
-                    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
-                        if (mListener != null) {
-                            mListener.OnVoucherSelect(voucher);
-                        }
-                    }
-                });
-                recyclerDialog.show();
             }
         });
         return view;
@@ -341,8 +333,6 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         void OnChangeEdit(String storeId, boolean isEdit);
 
         void OnGoodsDel(String goodsId);
-
-        void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
 
         void OnChangePromotion(String goodsId, String promoId);
 

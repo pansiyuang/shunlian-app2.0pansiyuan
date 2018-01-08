@@ -168,6 +168,7 @@ public class GoodsDeatilEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods {
+        public String id;
         public String cart_id;                  //是否被编辑
         public String store_id;              //店铺id
         public String store_name;            //店铺名字
@@ -189,6 +190,17 @@ public class GoodsDeatilEntity {
         public String cate_name;
         public String sales;
         public String prom_id;
+        public String is_new;                //是否 新品，1是，0否
+        public String is_hot;                //是否 热卖，1是，0否
+        public String is_explosion;          //是否 爆款，1是，0否
+        public String is_recommend;          //是否 推荐，1是，0否
+        public String has_coupon;            //是否 有优惠券，1是，0否
+        public String has_discount;          //是否 有折扣，1是，0否
+        public String has_gift;              //是否 有赠品，1是，0否
+        public String free_ship;             //是否 包邮，1是，0否
+        public String send_area;             //发货地
+        public String comment_num;           //评论数
+        public String comment_rate;          //好评率
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

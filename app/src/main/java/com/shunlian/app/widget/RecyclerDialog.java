@@ -116,7 +116,7 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
             @Override
             public void onItemClick(View view, int position) {
                 GoodsDeatilEntity.Combo combo = mCombos.get(position);
-                ComboDetailAct.startAct(mContext,combo.combo_id,goods_id);
+                ComboDetailAct.startAct(mContext, combo.combo_id, goods_id);
                 if (isShowing()) {
                     dismiss();
                 }
@@ -137,7 +137,7 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
     }
 
-    public void setVoucheres(List<GoodsDeatilEntity.Voucher> voucheres) {
+    public void setVoucheres(final List<GoodsDeatilEntity.Voucher> voucheres) {
         this.mVourcheres = voucheres;
         if (voucherAdapter == null) {
             voucherAdapter = new VoucherAdapter(mContext, false, mVourcheres);
@@ -152,13 +152,15 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
             @Override
             public void onItemClick(View view, int position) {
                 // TODO: 2017/11/24 跳转优惠券
+                GoodsDeatilEntity.Voucher voucher = voucheres.get(position);
+                OnVoucherSelect(voucher);
             }
         });
     }
 
     public void setActivity(List<GoodsDeatilEntity.ActivityDetail> full_cut,
                             List<GoodsDeatilEntity.ActivityDetail> full_discount,
-                            List<GoodsDeatilEntity.ActivityDetail> buy_gift){
+                            List<GoodsDeatilEntity.ActivityDetail> buy_gift) {
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         if (full_cut != null && full_cut.size() > 0) {
             fullCut = full_cut.size();
@@ -174,10 +176,10 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         allActs.addAll(full_discount);
         allActs.addAll(buy_gift);
         if (moreAdapter == null) {
-            moreAdapter = new ActivityMoreAdapter(mContext,false,allActs,fullCut,fullDiscount,buyGift);
+            moreAdapter = new ActivityMoreAdapter(mContext, false, allActs, fullCut, fullDiscount, buyGift);
             int px = TransformUtil.dip2px(mContext, 20);
-            recycler_list.addItemDecoration(new VerticalItemDecoration(px,0,0));
-        }else {
+            recycler_list.addItemDecoration(new VerticalItemDecoration(px, 0, 0));
+        } else {
 
         }
         dialog_title.setText(mContext.getResources().getText(R.string.shop_promotion_activity));
@@ -185,11 +187,11 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         moreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (position < fullCut){
+                if (position < fullCut) {
                     //满减
-                }else if (position < fullCut + fullDiscount){
+                } else if (position < fullCut + fullDiscount) {
                     //打折
-                }else {
+                } else {
                     //买赠
                 }
             }
@@ -198,12 +200,13 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
 
     /**
      * 促销详情
+     *
      * @param infos
      */
-    public void setPromotionDetail(List<ConfirmOrderEntity.PromotionInfo> infos){
+    public void setPromotionDetail(List<ConfirmOrderEntity.PromotionInfo> infos) {
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         dialog_title.setText(mContext.getResources().getString(R.string.promotional_details));
-        PromotionAdapter adapter = new PromotionAdapter(mContext,false,infos);
+        PromotionAdapter adapter = new PromotionAdapter(mContext, false, infos);
         recycler_list.setAdapter(adapter);
     }
 
@@ -220,5 +223,11 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
 
     public interface OnVoucherCallBack {
         void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
+    }
+
+    public void getVoucherSuccess(String voucherId) {
+        if (voucherAdapter != null) {
+            voucherAdapter.getItemSuccess(voucherId);
+        }
     }
 }
