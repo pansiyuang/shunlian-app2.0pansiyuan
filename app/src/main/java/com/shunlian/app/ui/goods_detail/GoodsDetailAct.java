@@ -468,6 +468,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    /**
+     * 刷新优惠券状态
+     *
+     * @param voucher
+     */
+    @Override
+    public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
+        if (goodsDeatilFrag != null){
+            goodsDeatilFrag.refreshVoucherState(voucher);
+        }
+    }
+
     /*
    显示足迹列表
     */

@@ -288,6 +288,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
                 super.onSuccess(entity);
                 Common.staticToast(context.getResources().getString(R.string.get_success));
+                iView.refreshVoucherState(entity.data);
             }
         });
 

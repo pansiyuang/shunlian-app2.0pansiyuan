@@ -186,4 +186,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     }
 
 
+    public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
+        if (goodsDetailAdapter != null){
+            goodsDetailAdapter.refreshVoucherState(voucher);
+        }
+    }
 }
