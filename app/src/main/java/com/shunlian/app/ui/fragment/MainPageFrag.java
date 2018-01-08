@@ -97,7 +97,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("选择服务类型");
         items.add("H5");
         items.add("字母");
-        items.add("协商历史");
+        items.add("退换/售后");
         items.add("提交物流信息");
 
         items.addAll(DataUtil.getListString(40, "条目"));
@@ -160,7 +160,6 @@ public class MainPageFrag extends BaseFragment {
                         startActivity(new Intent(baseActivity,CategoryFiltrateAct.class));
                         break;
                     case 12:
-//                        ConsultHistoryAct.startAct(baseActivity,"87");
                         RefundAfterSaleAct.startAct(baseActivity);
                         break;
                     case 13:
