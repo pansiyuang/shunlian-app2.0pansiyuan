@@ -34,6 +34,7 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
     public void setData(List<GoodsDeatilEntity.Voucher> vouchers) {
         this.mData = vouchers;
+        notifyDataSetChanged();
     }
 
     public void getItemSuccess(String voucherId) {
