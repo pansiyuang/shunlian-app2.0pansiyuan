@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.category;
 
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.WaveSideBar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +53,17 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     private CategoryFiltratePresenter categoryFiltratePresenter;
     private PingpaiAdapter pingpaiAdapter;
     private ShaixuanAttrAdapter shaixuanAttrAdapter;
+    private List<GetListFilterEntity.Brand> brands;
+    private ArrayList<String> letters;
     @Override
     protected int getLayoutId() {
         return R.layout.act_filtrate_category;
+    }
+
+    public static void startAct(Context context, String orderId) {
+        Intent intent = new Intent(context, CategoryFiltrateAct.class);
+        intent.putExtra("orderId", orderId);
+        context.startActivity(intent);
     }
 
     @Override
@@ -60,16 +71,13 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         mtv_address.setOnClickListener(this);
-        categoryFiltratePresenter=new CategoryFiltratePresenter(this,this,"6","");
-        Location location = Common.getGPS(this);
-        if (location != null) {
-            categoryFiltratePresenter.initGps(String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()));
-        }
+        categoryFiltratePresenter=new CategoryFiltratePresenter(this,this,"75","");
         mtv_locate.setOnClickListener(this);
         mtv_cancel.setOnClickListener(this);
         mtv_finish.setOnClickListener(this);
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -79,16 +87,15 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 
                 break;
             case R.id.mtv_locate:
-                Location location = Common.getGPS(this);
-                if (location != null) {
-                    categoryFiltratePresenter.initGps(String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()));
-                }
+                categoryFiltratePresenter.initGps();
                 break;
             case R.id.mtv_cancel:
 
                 break;
             case R.id.mtv_finish:
-
+                if (letters!=null&&brands!=null&&letters.size()>0){
+                    CategoryLetterAct.startAct(this,brands,letters);
+                }
                 break;
         }
     }
@@ -100,13 +107,17 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             pingpaiAdapter=new PingpaiAdapter(this, false,getListFilterEntity.recommend_brand_list);
         }
         rv_pingpai.setAdapter(pingpaiAdapter);
+        rv_pingpai.setNestedScrollingEnabled(false);//防止滚动卡顿
 
         rv_category.setLayoutManager(new LinearLayoutManager(this));
         if (shaixuanAttrAdapter==null){
             shaixuanAttrAdapter=new ShaixuanAttrAdapter(this, false,getListFilterEntity.attr_list);
         }
         rv_category.setAdapter(shaixuanAttrAdapter);
+        rv_category.setNestedScrollingEnabled(false);//防止滚动卡顿
 
+        brands=getListFilterEntity.brand_list;
+        letters=getListFilterEntity.first_letter_list;
     }
 
     @Override

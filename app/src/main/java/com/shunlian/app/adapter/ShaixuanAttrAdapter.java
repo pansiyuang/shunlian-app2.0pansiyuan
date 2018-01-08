@@ -37,6 +37,7 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         viewHolder.mtv_name.setText(attr.name);
         viewHolder.rv_attr.setLayoutManager(new GridLayoutManager(context,3));
         viewHolder.rv_attr.setAdapter(new ShaixuanAttrsAdapter(context, false,attr.val_list));
+        viewHolder.rv_attr.setNestedScrollingEnabled(false);
     }
 
 

@@ -1,28 +1,20 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
-import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.view.AddAddressView;
 import com.shunlian.app.view.CategoryFiltrateView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import chihane.shunlian.BottomDialog;
-import chihane.shunlian.DataProvider;
-import chihane.shunlian.ISelectAble;
-import chihane.shunlian.SelectedListener;
-import chihane.shunlian.Selector;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -32,11 +24,12 @@ import retrofit2.Call;
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
     private String cid, keyword;
+    private boolean isSecond;
 
-    public CategoryFiltratePresenter(Context context, CategoryFiltrateView iView,String cid, String keyword) {
+    public CategoryFiltratePresenter(Context context, CategoryFiltrateView iView, String cid, String keyword) {
         super(context, iView);
-        this.cid=cid;
-        this.keyword=keyword;
+        this.cid = cid;
+        this.keyword = keyword;
         initApi();
     }
 
@@ -52,28 +45,34 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
             public void onSuccess(BaseEntity<GetListFilterEntity> entity) {
                 super.onSuccess(entity);
                 iView.getListFilter(entity.data);
+                initGps();
             }
         });
     }
-    public void initGps(String lng, String lat) {
-        Map<String, String> map = new HashMap<>();
-        map.put("lng", lng);
-        map.put("lat", lat);
-        sortAndMD5(map);
 
-        RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<DistrictGetlocationEntity>> baseEntityCall = getAddCookieApiService().districtGetlocation(requestBody);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<DistrictGetlocationEntity>>() {
-            @Override
-            public void onSuccess(BaseEntity<DistrictGetlocationEntity> entity) {
-                super.onSuccess(entity);
-                DistrictGetlocationEntity data = entity.data;
-                if (data != null) {
-                    LogUtil.httpLogW("DistrictGetlocationEntity:" + data);
-                    iView.getGps(data);
+    public void initGps() {
+        Location location = Common.getGPS((Activity) context);
+        if (location != null) {
+            Map<String, String> map = new HashMap<>();
+            map.put("lng", String.valueOf(location.getLongitude()));
+            map.put("lat", String.valueOf(location.getLatitude()));
+            sortAndMD5(map);
+
+            RequestBody requestBody = getRequestBody(map);
+            Call<BaseEntity<DistrictGetlocationEntity>> baseEntityCall = getAddCookieApiService().districtGetlocation(requestBody);
+            getNetData(isSecond, baseEntityCall, new SimpleNetDataCallback<BaseEntity<DistrictGetlocationEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<DistrictGetlocationEntity> entity) {
+                    super.onSuccess(entity);
+                    DistrictGetlocationEntity data = entity.data;
+                    if (data != null) {
+                        LogUtil.httpLogW("DistrictGetlocationEntity:" + data);
+                        iView.getGps(data);
+                        isSecond=true;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

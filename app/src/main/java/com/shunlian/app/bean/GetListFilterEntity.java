@@ -2,15 +2,17 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/18.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetListFilterEntity {
+public class GetListFilterEntity implements Serializable{
     public List<Recommend> recommend_brand_list;
-    public List<String> first_letter_list;
+    public ArrayList<String> first_letter_list;
     public List<Brand> brand_list;
     public List<Attr> attr_list;
 
@@ -25,7 +27,7 @@ public class GetListFilterEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Recommend{
+    public static class Recommend implements Serializable{
         public String id;
         public String brand_name;
 
@@ -38,9 +40,9 @@ public class GetListFilterEntity {
         }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Brand{
+    public static class Brand implements Serializable{
         public String first_letter;
-        public List<Item> item_list;
+        public List<Contact> item_list;
 
         @Override
         public String toString() {
@@ -49,27 +51,9 @@ public class GetListFilterEntity {
                     ", item_list=" + item_list +
                     '}';
         }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Item{
-            public String id;
-            public String brand_name;
-            public String first_letter;
-            public String spell;
-
-            @Override
-            public String toString() {
-                return "Item{" +
-                        "id='" + id + '\'' +
-                        ", brand_name='" + brand_name + '\'' +
-                        ", first_letter='" + first_letter + '\'' +
-                        ", spell='" + spell + '\'' +
-                        '}';
-            }
-        }
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Attr{
+    public static class Attr implements Serializable{
         public String name;
         public List<String> val_list;
 

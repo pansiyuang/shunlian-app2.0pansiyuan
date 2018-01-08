@@ -361,6 +361,7 @@
     <string name="category_gengduo">更多</string>
     <string name="category_shouqi">收起</string>
     <string name="category_dingwei">定位失败</string>
+    <string name="category_jiage">.0123456789</string>
 
 
 </resources>
