@@ -80,7 +80,7 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
         }
     }
 
-    public class RefundAfterSaleHolder extends BaseRecyclerViewHolder{
+    public class RefundAfterSaleHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.cgv_goods)
         CustomerGoodsView cgv_goods;
@@ -96,6 +96,19 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
 
         public RefundAfterSaleHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

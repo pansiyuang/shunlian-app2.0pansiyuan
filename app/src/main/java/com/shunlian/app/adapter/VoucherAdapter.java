@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
@@ -34,6 +36,25 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
     public void setData(List<GoodsDeatilEntity.Voucher> vouchers) {
         this.mData = vouchers;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
+    public void getItemSuccess(String voucherId) {
+        if (mData == null || mData.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < mData.size(); i++) {
+            if (voucherId.equals(mData.get(i).voucher_id)) {
+                mData.get(i).is_get = "1";
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     @Override
@@ -49,9 +70,9 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
         firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
 
-        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)){
+        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)) {
             voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));
-        }else {
+        } else {
             voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
         }
         voucherViewHolder.tv_voucher_date.setText(String.format(mContext.getResources().getString(R.string.valid_date), voucher.start_time, voucher.end_time));
@@ -72,6 +93,14 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
+        voucherViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallBack != null) {
+                    mCallBack.OnVoucherSelect(voucher);
+                }
+            }
+        });
     }
 
     public class VoucherViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -102,10 +131,8 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                if (mCallBack != null) {
-                    mCallBack.OnVoucherSelect(mData.get(getAdapterPosition()));
-                }
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.RefundAfterSaleAdapter;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.presenter.RefundListPresent;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.view.IRefundListView;
 
 import java.util.ArrayList;
@@ -99,14 +102,20 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
     }
 
     @Override
-    public void refundList(List<RefundListEntity.RefundList> refundLists, int page, int allPage) {
-        if (isEmpty(refundLists)){
-            this.refundLists.addAll(refundLists);
+    public void refundList(List<RefundListEntity.RefundList> refundList, int page, int allPage) {
+        if (isEmpty(refundList)){
+            this.refundLists.addAll(refundList);
         }
         if (afterSaleAdapter == null) {
             afterSaleAdapter = new RefundAfterSaleAdapter(this, true, refundLists);
             recy_view.setAdapter(afterSaleAdapter);
             afterSaleAdapter.setPageLoading(page,allPage);
+            afterSaleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    ExchangeDetailAct.startAct(RefundAfterSaleAct.this, refundLists.get(position).refund_id);
+                }
+            });
         }else {
             afterSaleAdapter.notifyDataSetChanged();
             afterSaleAdapter.setPageLoading(page,allPage);

@@ -41,6 +41,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -89,4 +90,17 @@
             android:textColor="@color/share_text"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_bananer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/white_ash" />
 </LinearLayout>
