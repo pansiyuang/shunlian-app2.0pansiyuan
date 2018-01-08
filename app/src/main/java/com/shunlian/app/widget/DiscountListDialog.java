@@ -24,7 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
 
@@ -52,6 +52,7 @@ public class DiscountListDialog extends Dialog {
     private int currentPosition = 0;
     private ISelectListener listener;
     private List<ConfirmOrderEntity.Voucher> mVouchers;
+    private Unbinder bind;
 
 
     public DiscountListDialog(Context context) {
@@ -59,7 +60,7 @@ public class DiscountListDialog extends Dialog {
         this.mContext = context;
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.discount_list_dialog, null, false);
         setContentView(rootView);
-        ButterKnife.bind(this, rootView);
+        bind = ButterKnife.bind(this, rootView);
         initViews();
     }
 
@@ -90,6 +91,21 @@ public class DiscountListDialog extends Dialog {
                     listener.onSelect(currentPosition);
                 }
                 dismiss();
+                if (bind != null){
+                    bind.unbind();
+                }
+            }
+        });
+
+        miv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShowing()){
+                    dismiss();
+                    if (bind != null){
+                        bind.unbind();
+                    }
+                }
             }
         });
     }
@@ -173,13 +189,6 @@ public class DiscountListDialog extends Dialog {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
-    }
-
-    @OnClick(R.id.miv_close)
-    public void dismissDialog(){
-        if (isShowing()){
-            dismiss();
-        }
     }
 
     /**

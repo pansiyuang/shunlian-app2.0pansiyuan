@@ -80,6 +80,7 @@ public class OrderdetailEntity {
         public String og_id;
         public String refund_button_type;
         public String goods_id;
+        public String refund_id;
         public List<Gift> gift;
 
         @Override

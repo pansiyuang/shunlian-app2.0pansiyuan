@@ -1,51 +1,38 @@
 package com.shunlian.app.ui.order;
 
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.WebView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.OrderGoodAdapter;
-import com.shunlian.app.bean.OrderdetailEntity;
+import com.shunlian.app.adapter.ExchangeDetailMsgAdapter;
+import com.shunlian.app.adapter.ExchangeDetailOptAdapter;
 import com.shunlian.app.bean.RefundDetailEntity;
-import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
-import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
-import com.shunlian.app.ui.my_comment.CreatCommentActivity;
-import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ExchangeDetailView;
-import com.shunlian.app.view.OrderdetailView;
 import com.shunlian.app.widget.CustomerGoodsView;
-import com.shunlian.app.widget.DiscountListDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
 public class ExchangeDetailAct extends BaseActivity implements View.OnClickListener, ExchangeDetailView {
     @BindView(R.id.mtv_state)
     MyTextView mtv_state;
+
+    @BindView(R.id.miv_gift)
+    MyImageView miv_gift;
+
+    @BindView(R.id.mtv_gift)
+    MyTextView mtv_gift;
 
     @BindView(R.id.mtv_time)
     MyTextView mtv_time;
@@ -62,17 +49,17 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mtv_address)
     MyTextView mtv_address;
 
-    @BindView(R.id.mtv_history)
-    MyTextView mtv_history;
+    @BindView(R.id.mtv_phones)
+    MyTextView mtv_phones;
 
-    @BindView(R.id.mtv_title1)
-    MyTextView mtv_title1;
+    @BindView(R.id.mtv_names)
+    MyTextView mtv_names;
 
-    @BindView(R.id.mtv_title2)
-    MyTextView mtv_title2;
+    @BindView(R.id.mtv_addresss)
+    MyTextView mtv_addresss;
 
-    @BindView(R.id.mtv_title3)
-    MyTextView mtv_title3;
+    @BindView(R.id.mtv_contact)
+    MyTextView mtv_contact;
 
     @BindView(R.id.ctgv_goods)
     CustomerGoodsView ctgv_goods;
@@ -92,18 +79,59 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mtv_amount)
     MyTextView mtv_amount;
 
-    @BindView(R.id.mtv_ceshi)
-    MyTextView mtv_ceshi;
+    @BindView(R.id.mtv_shouhuo)
+    MyTextView mtv_shouhuo;
 
-    @BindView(R.id.web_desc)
-    WebView web_desc;
+    @BindView(R.id.mrlayout_shouhuo)
+    MyRelativeLayout mrlayout_shouhuo;
+
+    @BindView(R.id.view_shouhuo)
+    View view_shouhuo;
+
+    @BindView(R.id.view_shouhuos)
+    View view_shouhuos;
+
+    @BindView(R.id.view_wulius)
+    View view_wulius;
+
+    @BindView(R.id.view_wuliu)
+    View view_wuliu;
+
+    @BindView(R.id.mtv_tuihuo)
+    MyTextView mtv_tuihuo;
+
+    @BindView(R.id.mrlayout_tuihuo)
+    MyRelativeLayout mrlayout_tuihuo;
+
+    @BindView(R.id.mrlayout_wuliu)
+    MyRelativeLayout mrlayout_wuliu;
+
+    @BindView(R.id.mlLayout_gift)
+    MyLinearLayout mlLayout_gift;
+
+    @BindView(R.id.mtv_wuliu)
+    MyTextView mtv_wuliu;
+
+    @BindView(R.id.mrlayout_wulius)
+    MyRelativeLayout mrlayout_wulius;
+
+    @BindView(R.id.mtv_wulius)
+    MyTextView mtv_wulius;
+
+    @BindView(R.id.view_tuihuo)
+    View view_tuihuo;
+
+    @BindView(R.id.view_tuihuos)
+    View view_tuihuos;
+
+    @BindView(R.id.rv_msg)
+    RecyclerView rv_msg;
+
+    @BindView(R.id.rv_opt)
+    RecyclerView rv_opt;
 
     private ExchangeDetailPresenter exchangeDetailPresenter;
-    private String refund_id="53";
-
-    private  int pink_color;
-    private  int new_gray;
-    private  int strokeWidth;
+    private String refund_id = "53";
 
     public static void startAct(Context context, String refund_id) {
         Intent intent = new Intent(context, ExchangeDetailAct.class);
@@ -121,21 +149,11 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("refund_id"))) {
-            refund_id = getIntent().getStringExtra("refund_id");
-        }
-        //设置圆角背景
-        GradientDrawable copyBackground = (GradientDrawable) mtv_history.getBackground();
-        copyBackground.setColor(getColorResouce(R.color.white));//设置填充色
-//        float[] floats={30,30,30,30,30,30,30,30};//每两个数值代表一个角，左上，右上，右下，左下
-//        goodBackground.setCornerRadii(floats);
-//        goodBackground.setCornerRadius(30);//数值近似px
 
-        //设置边线,但是圆角的弧度不能统一，不建议使用
-//        goodBackground.setStroke(10,Color.parseColor("#858585"));
-        pink_color = getColorResouce(R.color.pink_color);
-        new_gray = getColorResouce(R.color.new_gray);
-        strokeWidth = TransformUtil.dip2px(this, 0.5f);
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("refund_id"))) {
+//            refund_id = getIntent().getStringExtra("refund_id");
+        }
+
         exchangeDetailPresenter = new ExchangeDetailPresenter(this, this, refund_id);
     }
 
@@ -153,9 +171,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     protected void initListener() {
         super.initListener();
-        mtv_title1.setOnClickListener(this);
-        mtv_title2.setOnClickListener(this);
-        mtv_title3.setOnClickListener(this);
+        mtv_contact.setOnClickListener(this);
     }
 
     @Override
@@ -176,90 +192,142 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 //                }
 //
 //                break;
-//            case R.id.mtv_title2:
-//                text = mtv_title2.getText();
-//                if (getString(R.string.cancel_order).equals(text)) {//取消订单
-//                    cancleOrder();
-//                } else if (getString(R.string.order_wuliu).equals(text)) {//物流
-//                    //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-//                    OrderLogisticsActivity.startAct(this,orderId);
-//                }
-//                break;
-//            case R.id.mtv_title3:
-//                text = mtv_title3.getText();
-//                if (getString(R.string.order_fukuan).equals(text)) {//付款
-//
-//                } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
-//                    confirmreceipt();
-//                } else if (getString(R.string.comment).equals(text)) {//评价
-//                    //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-//                    List<ReleaseCommentEntity> entities = new ArrayList<>();
-//                    List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
-//                    for (int i = 0; i < order_goods.size(); i++) {
-//                        OrderdetailEntity.Good bean = order_goods.get(i);
-//                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId,
-//                                bean.thumb, bean.title, bean.price, bean.goods_id);
-//                        entities.add(entity);
-//                    }
-//                    CreatCommentActivity.startAct(this, entities, CreatCommentActivity.CREAT_COMMENT);
-//
-//                } else if (getString(R.string.append_comment).equals(text)) {//追评
-//
-//                    //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-//                    List<ReleaseCommentEntity> entities = new ArrayList<>();
-//                    List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
-//                    for (int i = 0; i < order_goods.size(); i++) {
-//                        OrderdetailEntity.Good bean = order_goods.get(i);
-//                        ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb,
-//                                bean.title, bean.price, bean.comment_id);
-//                        entities.add(entity);
-//                    }
-//                    CreatCommentActivity.startAct(this, entities, CreatCommentActivity.APPEND_COMMENT);
-//                }
-//                break;
-        }
-    }
-    private String fmtString(String str){
-        String notice = "";
-        try{
-            notice = URLEncoder.encode(str, "utf-8");
-        }catch(UnsupportedEncodingException ex){
 
         }
-        return notice;
     }
-    private String blank = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    private String notice1 = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>" +
-            "<h3 align='center'>关于关闭电话银行语音系统查询动态密码功能的公告</h3></head>"
-            + "<body>"
-            + "<p align='center'><i>发布日期：2011-04-25</i>"
-            + "</p><p>尊敬的客户："
-            + "</p><p>" + blank +
-            "根据优化电话银行相关服务功能的整体安排，我行决定自4月25日起，在95595电话银行语音系统中，停止受理查询手机动态密码功能。给您带来的不便之处敬请谅解。如有问题，请致电我行24小时服务热线95595。"
-            + "</p><p>" + blank +
-            "感谢您长期以来对我行的关注、支持与厚爱!"
-            + "</p><p>" + blank +
-            "特此公告。"
-            + "</p><p align='right'>中国光大银行"
-            + "</p><p align='right'>2011年4月25日</p></body></html>";
+
+    /**
+     * 确认收货
+     * @param order_id
+     */
+    public void confirmreceipt(String order_id){
+        if (exchangeDetailPresenter != null){
+            exchangeDetailPresenter.confirmreceipt(order_id);
+        }
+    }
+
     @Override
     public void setData(RefundDetailEntity refundDetailEntity) {
-        RefundDetailEntity.RefundDetail refundDetail =refundDetailEntity.refund_detail;
+        RefundDetailEntity.RefundDetail refundDetail = refundDetailEntity.refund_detail;
         GlideUtils.getInstance().loadImage(this, ctgv_goods.getGoodsIcon(), refundDetail.thumb);
-        ctgv_goods.setLabelName(refundDetail.store_name,true);
+        ctgv_goods.setLabelName(refundDetail.store_name, true);
         ctgv_goods.setGoodsTitle(refundDetail.title);
         ctgv_goods.setGoodsParams(refundDetail.sku_desc);
-        ctgv_goods.setGoodsCount(refundDetail.qty);
-        ctgv_goods.setGoodsPrice(refundDetail.price);
-        mtv_reason.setText(refundDetail.buyer_message);
-        mtv_money.setText(refundDetail.refund_amount);
-        mtv_amount.setText(refundDetail.goods_num);
-        mtv_applyTime.setText(refundDetail.add_time);
-        mtv_order.setText(refundDetail.refund_sn);
-        mtv_ceshi.setText(Html.fromHtml(refundDetail.html_description, null, null));
-        web_desc.getSettings().setDefaultTextEncodingName("utf-8");
-        web_desc.loadData(fmtString(notice1), "text/html; charset=UTF-8", null);
-//        web_desc.loadData(fmtString("你好"), "text/html", "utf-8");
-//        web_desc.loadUrl("https://lanhuapp.com/web/#!/item/board/annotation?imgId=ab9ceb6c-82f9-4276-8904-367018644e7c&pid=68165c01-751f-4471-a485-8436c57d5ecd");
+        ctgv_goods.setGoodsCount("x" + refundDetail.qty);
+        ctgv_goods.setGoodsPrice(getStringResouce(R.string.common_yuan) + refundDetail.price);
+
+        LinearLayoutManager managerV = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_msg.setLayoutManager(managerV);
+        rv_msg.setNestedScrollingEnabled(false);
+        rv_msg.setAdapter(new ExchangeDetailMsgAdapter(this, false, refundDetail.msg_list));
+        LinearLayoutManager managerH = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rv_opt.setLayoutManager(managerH);
+        rv_opt.setNestedScrollingEnabled(false);
+        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.order_id));
+
+        mtv_state.setText(refundDetail.status_desc);
+        mtv_time.setText(refundDetail.time_desc);
+        if (refundDetail.return_address != null) {
+            mtv_tuihuo.setVisibility(View.VISIBLE);
+            view_tuihuo.setVisibility(View.VISIBLE);
+            view_tuihuos.setVisibility(View.VISIBLE);
+            mrlayout_tuihuo.setVisibility(View.VISIBLE);
+            mtv_phone.setText("联系电话：" + refundDetail.return_address.phone);
+            mtv_name.setText("收件人：" + refundDetail.return_address.name);
+            mtv_address.setText(refundDetail.return_address.address);
+        } else {
+            mtv_tuihuo.setVisibility(View.GONE);
+            view_tuihuo.setVisibility(View.GONE);
+            view_tuihuos.setVisibility(View.GONE);
+            mrlayout_tuihuo.setVisibility(View.GONE);
+        }
+        if (refundDetail.member_address != null) {
+            mtv_shouhuo.setVisibility(View.VISIBLE);
+            view_shouhuo.setVisibility(View.VISIBLE);
+            view_shouhuos.setVisibility(View.VISIBLE);
+            mrlayout_shouhuo.setVisibility(View.VISIBLE);
+            mtv_phones.setText("联系电话：" + refundDetail.member_address.phone);
+            mtv_names.setText("收件人：" + refundDetail.member_address.name);
+            mtv_addresss.setText(refundDetail.member_address.address);
+        } else {
+            mtv_shouhuo.setVisibility(View.GONE);
+            view_shouhuo.setVisibility(View.GONE);
+            view_shouhuos.setVisibility(View.GONE);
+            mrlayout_shouhuo.setVisibility(View.GONE);
+        }
+
+        if (TextUtils.isEmpty(refundDetail.express)) {
+            mrlayout_wuliu.setVisibility(View.GONE);
+            mtv_wuliu.setVisibility(View.GONE);
+            view_wuliu.setVisibility(View.GONE);
+        } else {
+            mrlayout_wuliu.setVisibility(View.VISIBLE);
+            mtv_wuliu.setVisibility(View.VISIBLE);
+            view_wuliu.setVisibility(View.VISIBLE);
+            mtv_wuliu.setText(refundDetail.express);
+        }
+
+        if (TextUtils.isEmpty(refundDetail.s_express)) {
+            mrlayout_wulius.setVisibility(View.GONE);
+            mtv_wulius.setVisibility(View.GONE);
+            view_wulius.setVisibility(View.GONE);
+        } else {
+            mrlayout_wulius.setVisibility(View.VISIBLE);
+            mtv_wulius.setVisibility(View.VISIBLE);
+            view_wulius.setVisibility(View.VISIBLE);
+            mtv_wulius.setText(refundDetail.express);
+        }
+
+        if (refundDetail.gift==null){
+            mlLayout_gift.setVisibility(View.GONE);
+        }else {
+            mlLayout_gift.setVisibility(View.VISIBLE);
+            GlideUtils.getInstance().loadImage(this,miv_gift,refundDetail.gift.thumb);
+            mtv_gift.setText(refundDetail.gift.title);
+        }
+//        web_desc.loadData("测试", "text/html; charset=UTF-8", null);//解决加载html代码乱码
+        String key;
+        if ("4".equals(refundDetail.refund_type)) {
+            mtv_title.setText("换货详情");
+            key="换货";
+        } else {
+            mtv_title.setText("退款详情");
+            key="退款";
+        }
+        if (TextUtils.isEmpty(refundDetail.buyer_message)){
+            mtv_reason.setVisibility(View.GONE);
+        }else {
+            mtv_reason.setText(key+"原因：" + refundDetail.buyer_message);
+            mtv_reason.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(refundDetail.refund_amount)){
+            mtv_money.setVisibility(View.GONE);
+        }else {
+            mtv_money.setText("退款金额：" + refundDetail.refund_amount);
+            mtv_money.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(refundDetail.goods_num)){
+            mtv_amount.setVisibility(View.GONE);
+        }else {
+            mtv_amount.setText(key+"数量：" + refundDetail.goods_num);
+            mtv_amount.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(refundDetail.add_time)){
+            mtv_applyTime.setVisibility(View.GONE);
+        }else {
+            mtv_applyTime.setText("申请时间：" + refundDetail.add_time);
+            mtv_applyTime.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(refundDetail.refund_sn)){
+            mtv_order.setVisibility(View.GONE);
+        }else {
+            mtv_order.setText(key+"编号：" + refundDetail.refund_sn);
+            mtv_order.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void confirmReceive() {
+
     }
 }

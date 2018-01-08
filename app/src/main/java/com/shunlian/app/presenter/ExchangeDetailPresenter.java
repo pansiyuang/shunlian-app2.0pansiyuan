@@ -54,4 +54,25 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
             }
         });
     }
+    /**
+     * 确认收货
+     * @param order_id
+     */
+    public void confirmreceipt(String order_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("order_id",order_id);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().confirmreceipt(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null){
+                    Common.staticToast(data.message);
+                }
+                iView.confirmReceive();
+            }
+        });
+    }
 }

@@ -165,9 +165,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_state.setText(orderdetailEntity.notice_status.status_text);
         mtv_time.setText(orderdetailEntity.notice_status.status_small);
         mtv_number.setText("订单号：" + orderdetailEntity.order_sn);
-        mtv_phone.setText(orderdetailEntity.receipt_address.mobile);
-        mtv_name.setText(orderdetailEntity.receipt_address.realname);
-        mtv_address.setText(orderdetailEntity.receipt_address.receipt_address);
+        mtv_phone.setText("联系电话："+orderdetailEntity.receipt_address.mobile);
+        mtv_name.setText("收件人："+orderdetailEntity.receipt_address.realname);
+        mtv_address.setText("收货地址："+orderdetailEntity.receipt_address.receipt_address);
         mtv_message.setText("用户留言：" + orderdetailEntity.remark);
         mtv_storeName.setText(orderdetailEntity.store_name);
         mtv_zongjia.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.goods_amount);

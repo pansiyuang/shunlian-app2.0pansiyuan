@@ -14,4 +14,5 @@ public class Code {
     public static final int STATUS_ERROR_API_VALIDE_SESSION = 998; //session失效
     public static final int STATUS_ERROR_API_VALIDE_TOKEN = 999; //token失效
     public static final int CODE_NO_LOGIN = 203;//未登录
+    public static final int CODE_REFRESH_TOKEN_VALIDE = 204;//刷新token过期,让用户登录
 }

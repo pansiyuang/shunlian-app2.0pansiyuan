@@ -36,13 +36,14 @@
         android:id="@+id/view_line"
         android:layout_below="@+id/mrLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/light_gray_two"/>
+        android:layout_height="1dp"
+        android:background="@color/my_gray_zero"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_contacts"
         android:layout_below="@+id/view_line"
         android:background="@color/white"
+        android:paddingRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

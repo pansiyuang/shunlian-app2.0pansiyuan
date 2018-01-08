@@ -11,10 +11,13 @@ import android.widget.GridView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SingleImgAdapter;
 import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.PhotoPickerActivity;
+import com.shunlian.app.presenter.SubmitLogisticsInfoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.ISubmitLogisticsInfoView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -29,7 +32,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/28.
  */
 
-public class SubmitLogisticsInfoAct extends BaseActivity {
+public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogisticsInfoView {
 
     @BindView(R.id.met_logistics)
     MyEditText met_logistics;
@@ -51,9 +54,13 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
 
     public final int LOGISTICS_CODE = 100;//物流单号
     public final int LOGISTICS_NAME = 200;//物流名字
+    private String refund_id;
+    private SubmitLogisticsInfoPresenter presenter;
 
-    public static void startAct(Context context) {
-        context.startActivity(new Intent(context, SubmitLogisticsInfoAct.class));
+    public static void startAct(Context context,String refund_id) {
+        Intent intent = new Intent(context, SubmitLogisticsInfoAct.class);
+        intent.putExtra("refund_id",refund_id);
+        context.startActivity(intent);
     }
 
     /**
@@ -107,7 +114,12 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        refund_id = getIntent().getStringExtra("refund_id");
+
         met_explain.setText(Common.getPlaceholder(3));
+        presenter = new SubmitLogisticsInfoPresenter(this,this,refund_id);
+
         singleImgAdapter = new SingleImgAdapter(this, listExplains);
         gv_proof.setAdapter(singleImgAdapter);
     }
@@ -134,6 +146,27 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
         SelectLogisticsAct.startAct(this,LOGISTICS_NAME);
     }
 
+    @OnClick(R.id.mtv_submit)
+    public void submit(){
+        CharSequence text = mtv_logistics.getText();
+        if (getStringResouce(R.string.please_select).equals(text)){
+            Common.staticToast("请选择物流公司");
+            return;
+        }
+        String logistics_code = met_logistics.getText().toString();
+        if (isEmpty(logistics_code)){
+            Common.staticToast("请填写物流单号");
+            return;
+        }
+        String explain = met_explain.getText().toString();
+        if (isEmpty(explain)){
+            Common.staticToast("请填写申请说明");
+            return;
+        }
+
+        presenter.submitLogisticsInfo(text.toString(),logistics_code,explain);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,6 +179,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
                 listExplains.add(new ImageEntity(picturePath));
             }
             singleImgAdapter.notifyDataSetChanged();
+            presenter.uploadPic(listExplains,"customer_service");//上传图片
         }else if (requestCode == LOGISTICS_NAME && resultCode == Activity.RESULT_OK){
             String name = data.getStringExtra("name");
             mtv_logistics.setText(name);
@@ -156,5 +190,85 @@ public class SubmitLogisticsInfoAct extends BaseActivity {
     protected void onDestroy() {
         Common.hideKeyboard(met_logistics);
         super.onDestroy();
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    /**
+     * 设置物流公司
+     *
+     * @param name
+     */
+    @Override
+    public void setLogisticsName(String name) {
+        if (!isEmpty(name))
+            mtv_logistics.setText(name);
+    }
+
+    /**
+     * 设置物流单号
+     *
+     * @param code
+     */
+    @Override
+    public void setLogisticsCode(String code) {
+        if (!isEmpty(code))
+            met_logistics.setText(code);
+    }
+
+    /**
+     * 设置说明
+     *
+     * @param memo
+     */
+    @Override
+    public void setRefundMemo(String memo) {
+        if (!isEmpty(memo))
+            met_explain.setText(memo);
+    }
+
+    /**
+     * 设置凭证图片
+     *
+     * @param pics
+     */
+    @Override
+    public void setRefundPics(List<String> pics) {
+        if (isEmpty(pics)){
+            return;
+        }
+
+        for (String picturePath : pics) {
+            listExplains.add(new ImageEntity(picturePath));
+        }
+        singleImgAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void uploadImg(UploadPicEntity picEntity) {
+
+    }
+
+    @Override
+    public void uploadProgress(int progress, String tag) {
+        // TODO: 2018/1/5 上传进度 
     }
 }

@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
@@ -273,4 +274,22 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         });
     }
 
+    /**
+     * 领取优惠券
+     * @param voucherId
+     */
+    public void getVoucher(String voucherId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("voucher_id", voucherId);
+        sortAndMD5(map);
+        Call<BaseEntity<GoodsDeatilEntity.Voucher>> baseEntityCall = getApiService().getVoucher(getRequestBody(map));
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
+            @Override
+            public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(context.getResources().getString(R.string.get_success));
+            }
+        });
+
+    }
 }

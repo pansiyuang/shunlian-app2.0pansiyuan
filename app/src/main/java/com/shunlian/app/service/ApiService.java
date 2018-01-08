@@ -35,6 +35,7 @@ import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
@@ -55,6 +56,7 @@ import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
@@ -64,6 +66,7 @@ import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UserLoginEntity;
@@ -811,4 +814,43 @@ public interface ApiService {
      */
     @POST("/goods/search")
     Call<BaseEntity<SearchGoodsEntity>> getSearchGoods(@Body RequestBody body);
+
+    /**
+     * 筛选条件
+     * @param body
+     * @return
+     */
+    @POST("goods/getListFilter")
+    Call<BaseEntity<GetListFilterEntity>> getListFilter(@Body RequestBody body);
+
+    /**
+     * 提交物流信息
+     * @param body
+     * @return
+     */
+    @POST("member/refund/saveShipInfo")
+    Call<BaseEntity<EmptyEntity>> addLogisticsShipInfo(@Body RequestBody body);
+
+    /**
+     * 获取提交的物流信息
+     * @param map
+     * @return
+     */
+    @GET("member/refund/getShipInfo")
+    Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String,String> map);
+
+    /**
+     * 分类顶级列表
+     * @return
+     */
+    @GET("category/toplist")
+    Call<BaseEntity<SortFragEntity>> categoryToplist(@QueryMap Map<String,String> map);
+
+    /**
+     * 分类子目录
+     * @param map
+     * @return
+     */
+    @GET("category/subList")
+    Call<BaseEntity<SortFragEntity>> categorySubList(@QueryMap Map<String,String> map);
 }

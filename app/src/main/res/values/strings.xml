@@ -37,8 +37,6 @@
     <string name="SelectRecommendAct_sure">确定</string>
     <string name="SelectRecommendAct_bind">绑定</string>
 
-    <!--分类-->
-    <string name="category_reset">重置</string>
 
     <!--登陆-->
     <string name="LoginPswFrg_qsrsjh">请输入手机号/用户ID</string>
@@ -163,7 +161,7 @@
     <string name="full_yuan_available">满%s元可用</string>
     <string name="good_comment">好评(%s)</string>
     <string name="praise_rate">好评率%s%%</string>
-    <string name="full_cut">满1%s减2%s</string>
+    <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
     <string name="buy_gift">满赠</string>
     <string name="full_discount_">满%s打%s折</string>
@@ -269,7 +267,9 @@
     <string name="exchange_xieshanglishi">协商历史</string>
     <string name="exchange_bianjiwuliu">编辑物流信息</string>
     <string name="exchange_tuihuodizhi">退货地址</string>
+    <string name="exchange_shouhuodizhi">收货地址</string>
     <string name="exchange_yonghutuihuo">用户退货物流</string>
+    <string name="exchange_shangjiafahuo">商家发货物流</string>
 
     <!--订单详情-->
     <string name="order_xiangqing">订单详情</string>
@@ -345,10 +345,24 @@
     <string name="refund_after_sale">退款/售后</string>
     <string name="refund_balance">退款金额：</string>
     <string name="selection_of_logistics_companies">选择物流公司</string>
-
-    <!--排序-->
+    <string name="get_success">领取成功</string>
     <string name="general_sort">综合排序</string>
     <string name="sales_volume">销量</string>
     <string name="filter">筛选</string>
+
+    <!--分类-->
+    <string name="category_shaixuan">筛选</string>
+    <string name="category_pinpai">品牌</string>
+    <string name="category_reset">重置</string>
+    <string name="category_send">发货</string>
+    <string name="category_jiangzhehu">江浙沪</string>
+    <string name="category_zhusanjiao">珠三角</string>
+    <string name="category_baoyou">包邮</string>
+    <string name="category_jiagequjian">价格区间（元）</string>
+    <string name="category_gengduo">更多</string>
+    <string name="category_shouqi">收起</string>
+    <string name="category_dingwei">定位失败</string>
+
+
     <string name="sort_comment">%s条评论 %s好评</string>
 </resources>

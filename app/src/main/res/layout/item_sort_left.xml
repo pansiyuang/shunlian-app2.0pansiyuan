@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:background="@color/pink_color" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="为您推荐"
+        android:textColor="@color/pink_color"
+        android:textSize="14sp" />
+</LinearLayout>

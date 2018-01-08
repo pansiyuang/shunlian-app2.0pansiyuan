@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.Contact;
-import com.shunlian.app.ui.category.LetterCategoryAct;
+import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.LogUtil;
@@ -20,11 +20,11 @@ import java.util.List;
  * Created by gjz on 9/4/16.
  */
 public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
-    private LetterCategoryAct letterCategoryAct;
+    private CategoryLetterAct categoryLetterAct;
 
     public ContactsAdapter(Context context, boolean isShowFooter, List<Contact> contacts) {
-        super(context, false, contacts);
-        letterCategoryAct = (LetterCategoryAct) context;
+        super(context, isShowFooter, contacts);
+        categoryLetterAct = (CategoryLetterAct) context;
     }
 
     @Override
@@ -44,16 +44,18 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
         if (position == 0 || !lists.get(position - 1).getIndex().equals(contact.getIndex())) {
             viewHolder.mtv_index.setVisibility(View.VISIBLE);
             viewHolder.mtv_index.setText(contact.getIndex());
+            viewHolder.view_title.setVisibility(View.VISIBLE);
         } else {
             viewHolder.mtv_index.setVisibility(View.GONE);
+            viewHolder.view_title.setVisibility(View.GONE);
         }
-        if (letterCategoryAct.strings.size() > 0) {
-            for (int i = 0; i < letterCategoryAct.strings.size(); i++) {
-                if (String.valueOf(position).equals(letterCategoryAct.strings.get(i))) {
+        if (categoryLetterAct.strings.size() > 0) {
+            for (int i = 0; i < categoryLetterAct.strings.size(); i++) {
+                if (String.valueOf(position).equals(categoryLetterAct.strings.get(i))) {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
                     LogUtil.augusLogW("yxf000");
                     break;
-                } else if (i >= letterCategoryAct.strings.size() - 1) {
+                } else if (i >= categoryLetterAct.strings.size() - 1) {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
                     LogUtil.augusLogW("yxf999");
                     break;
@@ -69,27 +71,27 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
                 if (FastClickListener.isFastClick()) {
                     return;
                 }
-                if (letterCategoryAct.strings.size() > 0) {
-                    for (int i = 0; i < letterCategoryAct.strings.size(); i++) {
-                        if (String.valueOf(position).equals(letterCategoryAct.strings.get(i))) {
+                if (categoryLetterAct.strings.size() > 0) {
+                    for (int i = 0; i < categoryLetterAct.strings.size(); i++) {
+                        if (String.valueOf(position).equals(categoryLetterAct.strings.get(i))) {
                             viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
-                            letterCategoryAct.strings.remove(i);
+                            categoryLetterAct.strings.remove(i);
                             LogUtil.augusLogW("yxf123");
                             break;
-                        } else if (i >= letterCategoryAct.strings.size() - 1) {
-                            if (letterCategoryAct.strings.size() < 8) {
+                        } else if (i >= categoryLetterAct.strings.size() - 1) {
+                            if (categoryLetterAct.strings.size() < 8) {
                                 viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                                letterCategoryAct.strings.add(String.valueOf(position));
+                                categoryLetterAct.strings.add(String.valueOf(position));
                                 LogUtil.augusLogW("yxf456");
                             } else {
-                                Common.staticToast("最多选择8个，请取消后重新选择...");
+                                Common.staticToast("已达上限8个");
                             }
                             break;
                         }
                     }
                 } else {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                    letterCategoryAct.strings.add(String.valueOf(position));
+                    categoryLetterAct.strings.add(String.valueOf(position));
                     LogUtil.augusLogW("yxf789");
                 }
             }
@@ -98,13 +100,15 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
 
 
     class ContactsViewHolder extends RecyclerView.ViewHolder {
-        public MyTextView mtv_index;
-        public MyTextView mtv_name;
+        private MyTextView mtv_index;
+        private MyTextView mtv_name;
+        private View view_title;
 
         public ContactsViewHolder(View itemView) {
             super(itemView);
             mtv_index = (MyTextView) itemView.findViewById(R.id.mtv_index);
             mtv_name = (MyTextView) itemView.findViewById(R.id.mtv_name);
+            view_title = itemView.findViewById(R.id.view_title);
         }
     }
 }

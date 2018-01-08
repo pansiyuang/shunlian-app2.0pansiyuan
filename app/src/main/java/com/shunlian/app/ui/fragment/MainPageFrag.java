@@ -15,6 +15,8 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.LetterCategoryAct;
+import com.shunlian.app.ui.category.CategoryFiltrateAct;
+import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -141,7 +143,7 @@ public class MainPageFrag extends BaseFragment {
                         MyCommentAct.startAct(baseActivity);
                         break;
                     case 6:
-                        MyOrderAct.startAct(baseActivity, 0);
+                        MyOrderAct.startAct(baseActivity,0);
                         break;
                     case 7:
                         OrderLogisticsActivity.startAct(baseActivity, "5");
@@ -159,14 +161,14 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
-                        startActivity(new Intent(baseActivity, LetterCategoryAct.class));
+                        startActivity(new Intent(baseActivity,CategoryFiltrateAct.class));
                         break;
                     case 12:
-                        ConsultHistoryAct.startAct(baseActivity, "87");
+                        ConsultHistoryAct.startAct(baseActivity,"87");
 //                        RefundAfterSaleAct.startAct(baseActivity);
                         break;
                     case 13:
-                        SubmitLogisticsInfoAct.startAct(baseActivity);
+                        SubmitLogisticsInfoAct.startAct(baseActivity,"155");
                         break;
                     case 14:
                         CategoryAct.startAct(baseActivity);

@@ -16,6 +16,7 @@ import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -92,7 +93,8 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
                 if ("apply".equals(orderGoodsBean.refund_button_type)){
                     SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
                 }else {
-                    ExchangeDetailAct.startAct(context,"");
+                    LogUtil.augusLogW("yxf--"+orderGoodsBean.refund_id);
+                    ExchangeDetailAct.startAct(context,orderGoodsBean.refund_id);
                 }
             }
         });
