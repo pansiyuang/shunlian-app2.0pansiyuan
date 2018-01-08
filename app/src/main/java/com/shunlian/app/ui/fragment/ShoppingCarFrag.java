@@ -22,8 +22,10 @@ import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.RecyclerDialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +91,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private String isCheckAll; //用来记录是否全选了
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
     private String disGoodsIds;//失效订单的id
+    private RecyclerDialog recyclerDialog;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -107,6 +110,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         footerHolderView = new FooterHolderView(footView);
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
         expand_shoppingcar.addFooterView(footView);
+        recyclerDialog = new RecyclerDialog(baseContext);
     }
 
     @Override
@@ -155,7 +159,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         String totalCount = getString(R.string.balance_accounts);
         btn_total_complete.setText(String.format(totalCount, mCarEntity.total_count));
 
-        shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled);
+        shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled, this);
         expand_shoppingcar.setAdapter(shopCarStoreAdapter);
         shopCarStoreAdapter.setOnEnableChangeListener(this);
 
@@ -254,6 +258,20 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
     }
 
+    public void showVouchersDialog(int position) {
+        if (mCarEntity.enabled.get(position).store_voucher != null && mCarEntity.enabled.get(position).store_voucher.size() != 0) {
+            List<GoodsDeatilEntity.Voucher> voucherList = mCarEntity.enabled.get(position).store_voucher;
+            recyclerDialog.setVoucheres(voucherList);
+            recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
+                @Override
+                public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+                    shopCarPresenter.getVoucher(voucher.voucher_id);
+                }
+            });
+            recyclerDialog.show();
+        }
+    }
+
     //修改商品数量
     @Override
     public void OnChangeCount(String goodsId, int count) {
@@ -286,12 +304,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnGoodsDel(String goodsId) {
         shopCarPresenter.cartRemove(goodsId);
-    }
-
-    //商品选择优惠卷
-    @Override
-    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
-        shopCarPresenter.getVoucher(voucher.voucher_id);
     }
 
     //商品选择活动
@@ -345,7 +357,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void OnGetVoucher(GoodsDeatilEntity.Voucher voucher) {
-
+        //领取成功
+        if (recyclerDialog != null) {
+            recyclerDialog.getVoucherSuccess(voucher.id);
+        }
     }
 
     public void getOrderIds(List<String> orderList) {

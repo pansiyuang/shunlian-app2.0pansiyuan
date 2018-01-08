@@ -37,6 +37,7 @@
     <string name="SelectRecommendAct_sure">确定</string>
     <string name="SelectRecommendAct_bind">绑定</string>
 
+
     <!--登陆-->
     <string name="LoginPswFrg_qsrsjh">请输入手机号/用户ID</string>
     <string name="LoginPswFrg_inputphone">请输入手机号</string>
@@ -363,4 +364,5 @@
     <string name="category_dingwei">定位失败</string>
 
 
+    <string name="sort_comment">%s条评论 %s好评</string>
 </resources>

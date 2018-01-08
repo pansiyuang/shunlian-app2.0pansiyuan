@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.CategoryFiltrateAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
@@ -99,6 +100,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("字母");
         items.add("退换/售后");
         items.add("提交物流信息");
+        items.add("列表排序");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -164,6 +166,9 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 13:
                         SubmitLogisticsInfoAct.startAct(baseActivity,"155");
+                        break;
+                    case 14:
+                        CategoryAct.startAct(baseActivity);
                         break;
                 }
             }

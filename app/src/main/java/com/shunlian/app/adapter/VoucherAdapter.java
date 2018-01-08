@@ -34,6 +34,20 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
     public void setData(List<GoodsDeatilEntity.Voucher> vouchers) {
         this.mData = vouchers;
+        notifyDataSetChanged();
+    }
+
+    public void getItemSuccess(String voucherId) {
+        if (lists == null || lists.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < lists.size(); i++) {
+            if (voucherId.equals(lists.get(i).voucher_id)) {
+                lists.get(i).is_get = "1";
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     @Override
@@ -66,12 +80,22 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         if ("1".equals(voucher.is_get)) {  //1为已经领取
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_n));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.hava_received));
+            voucherViewHolder.tv_draw.setEnabled(false);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_gray));
         } else {
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_h));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
+            voucherViewHolder.tv_draw.setEnabled(true);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
+        voucherViewHolder.tv_draw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallBack != null) {
+                    mCallBack.OnVoucherSelect(voucher);
+                }
+            }
+        });
     }
 
     public class VoucherViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -102,10 +126,8 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                if (mCallBack != null) {
-                    mCallBack.OnVoucherSelect(mData.get(getAdapterPosition()));
-                }
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }
