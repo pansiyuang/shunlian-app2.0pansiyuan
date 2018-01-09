@@ -73,8 +73,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        presenter = new CategoryPresenter(this, this);
-        presenter.getSearchGoods();
+        presenter = new CategoryPresenter(this, this,null);
+//        presenter.getSearchGoods();
 
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);

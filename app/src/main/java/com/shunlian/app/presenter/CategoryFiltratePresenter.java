@@ -24,7 +24,7 @@ import retrofit2.Call;
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
     private String cid, keyword;
-    private boolean isSecond;
+    public boolean isSecond;
 
     public CategoryFiltratePresenter(Context context, CategoryFiltrateView iView, String cid, String keyword) {
         super(context, iView);

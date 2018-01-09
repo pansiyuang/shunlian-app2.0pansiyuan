@@ -11,6 +11,7 @@ import com.shunlian.app.adapter.ContactsAdapter;
 import com.shunlian.app.bean.Contact;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.WaveSideBar;
 
@@ -37,9 +38,7 @@ public class CategoryLetterAct extends BaseActivity {
     @BindView(R.id.side_bar)
     WaveSideBar side_bar;
 
-    public List<String> strings=new ArrayList<>();
-
-    private ArrayList<Contact> contacts = new ArrayList<>();
+    private List<GetListFilterEntity.Brand.Item> items = new ArrayList<>();
 
     private ContactsAdapter contactsAdapter;
 
@@ -61,22 +60,22 @@ public class CategoryLetterAct extends BaseActivity {
         for (int m=0;m<letters.size();m++){
             for (int n=0;n<brands.size();n++){
                 if (letters.get(m).equals(brands.get(n).first_letter)){
-                    contacts.addAll(brands.get(n).item_list);
+                    items.addAll(brands.get(n).item_list);
                     break;
                 }
             }
             if (m>=letters.size()-1){
                 rv_contacts.setLayoutManager(new LinearLayoutManager(this));
                 if (contactsAdapter==null){
-                    contactsAdapter=new ContactsAdapter(this, false,contacts);
+                    contactsAdapter=new ContactsAdapter(this, false,items);
                 }
                 rv_contacts.setAdapter(contactsAdapter);
                 side_bar.setIndexItems(letters);
                 side_bar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
                     @Override
                     public void onSelectIndexItem(String index) {
-                        for (int i=0; i<contacts.size(); i++) {
-                            if (contacts.get(i).first_letter.equals(index)) {
+                        for (int i=0; i<items.size(); i++) {
+                            if (items.get(i).first_letter.equals(index)) {
                                 ((LinearLayoutManager) rv_contacts.getLayoutManager()).scrollToPositionWithOffset(i, 0);
                                 return;
                             }
@@ -103,14 +102,16 @@ public class CategoryLetterAct extends BaseActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.mtv_reset:
-                strings.clear();
+                Constant.BRAND_IDS.clear();
                 contactsAdapter.notifyDataSetChanged();
                 break;
             case R.id.mtv_finish:
-
+                finish();
                 break;
             case R.id.mtv_cancel:
-
+                Constant.BRAND_IDS.clear();
+                Constant.BRAND_IDS.addAll(Constant.BRAND_IDSBEFORE);
+                finish();
                 break;
         }
     }

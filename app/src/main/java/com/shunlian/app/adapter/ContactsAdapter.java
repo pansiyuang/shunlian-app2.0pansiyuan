@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.Contact;
+import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
@@ -19,12 +21,10 @@ import java.util.List;
 /**
  * Created by gjz on 9/4/16.
  */
-public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
-    private CategoryLetterAct categoryLetterAct;
+public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Brand.Item> {
 
-    public ContactsAdapter(Context context, boolean isShowFooter, List<Contact> contacts) {
-        super(context, isShowFooter, contacts);
-        categoryLetterAct = (CategoryLetterAct) context;
+    public ContactsAdapter(Context context, boolean isShowFooter, List<GetListFilterEntity.Brand.Item> items) {
+        super(context, isShowFooter, items);
     }
 
     @Override
@@ -40,49 +40,45 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
     @Override
     public void handleList(final RecyclerView.ViewHolder holder, final int position) {
         final ContactsViewHolder viewHolder = (ContactsViewHolder) holder;
-        Contact contact = lists.get(position);
-        if (position == 0 || !lists.get(position - 1).getIndex().equals(contact.getIndex())) {
+        GetListFilterEntity.Brand.Item  item= lists.get(position);
+        if (position == 0 || !lists.get(position - 1).first_letter.equals(item.first_letter)) {
             viewHolder.mtv_index.setVisibility(View.VISIBLE);
-            viewHolder.mtv_index.setText(contact.getIndex());
+            viewHolder.mtv_index.setText(item.first_letter);
             viewHolder.view_title.setVisibility(View.VISIBLE);
         } else {
             viewHolder.mtv_index.setVisibility(View.GONE);
             viewHolder.view_title.setVisibility(View.GONE);
         }
-        if (categoryLetterAct.strings.size() > 0) {
-            for (int i = 0; i < categoryLetterAct.strings.size(); i++) {
-                if (String.valueOf(position).equals(categoryLetterAct.strings.get(i))) {
+        if (Constant.BRAND_IDS.size() > 0) {
+            for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
+                if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                    LogUtil.augusLogW("yxf000");
                     break;
-                } else if (i >= categoryLetterAct.strings.size() - 1) {
+                } else if (i >= Constant.BRAND_IDS.size() - 1) {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
-                    LogUtil.augusLogW("yxf999");
                     break;
                 }
             }
         } else {
             viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
         }
-        viewHolder.mtv_name.setText(contact.getName());
+        viewHolder.mtv_name.setText(item.brand_name);
         viewHolder.mtv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (FastClickListener.isFastClick()) {
                     return;
                 }
-                if (categoryLetterAct.strings.size() > 0) {
-                    for (int i = 0; i < categoryLetterAct.strings.size(); i++) {
-                        if (String.valueOf(position).equals(categoryLetterAct.strings.get(i))) {
+                if (Constant.BRAND_IDS.size() > 0) {
+                    for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
+                        if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
                             viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
-                            categoryLetterAct.strings.remove(i);
-                            LogUtil.augusLogW("yxf123");
+                            Constant.BRAND_IDS.remove(i);
                             break;
-                        } else if (i >= categoryLetterAct.strings.size() - 1) {
-                            if (categoryLetterAct.strings.size() < 8) {
+                        } else if (i >= Constant.BRAND_IDS.size() - 1) {
+                            if (Constant.BRAND_IDS.size() < 8) {
                                 viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                                categoryLetterAct.strings.add(String.valueOf(position));
-                                LogUtil.augusLogW("yxf456");
+                                Constant.BRAND_IDS.add(String.valueOf(position));
                             } else {
                                 Common.staticToast("已达上限8个");
                             }
@@ -91,8 +87,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<Contact> {
                     }
                 } else {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                    categoryLetterAct.strings.add(String.valueOf(position));
-                    LogUtil.augusLogW("yxf789");
+                    Constant.BRAND_IDS.add(String.valueOf(position));
                 }
             }
         });

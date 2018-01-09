@@ -9,8 +9,13 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,8 +40,11 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         ViewHolder viewHolder = (ViewHolder) holder;
         GetListFilterEntity.Attr attr = lists.get(position);
         viewHolder.mtv_name.setText(attr.name);
-        viewHolder.rv_attr.setLayoutManager(new GridLayoutManager(context,3));
-        viewHolder.rv_attr.setAdapter(new ShaixuanAttrsAdapter(context, false,attr.val_list));
+        viewHolder.rv_attr.setLayoutManager(new GridLayoutManager(context, 3));
+        viewHolder.strings=new ArrayList<>();
+        Constant.BRAND_ATTRS.put(attr.name,viewHolder.strings);
+        viewHolder.shaixuanAttrsAdapter=new ShaixuanAttrsAdapter(context, false, attr.val_list,attr.name);
+        viewHolder.rv_attr.setAdapter(viewHolder.shaixuanAttrsAdapter);
         viewHolder.rv_attr.setNestedScrollingEnabled(false);
     }
 
@@ -45,18 +53,43 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;
 
+        @BindView(R.id.mtv_more)
+        MyTextView mtv_more;
+
+        @BindView(R.id.miv_arrow)
+        MyImageView miv_arrow;
+
         @BindView(R.id.rv_attr)
         RecyclerView rv_attr;
 
+        private ShaixuanAttrsAdapter shaixuanAttrsAdapter;
+        private boolean isMore;
+        private List<String> strings;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            mtv_more.setOnClickListener(this);
+            miv_arrow.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClick(v, getAdapterPosition());
+            switch (v.getId()) {
+                case R.id.mtv_more:
+                case R.id.miv_arrow:
+                    if (isMore) {
+                        miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+                        mtv_more.setText(R.string.category_gengduo);
+                        shaixuanAttrsAdapter.isAll=false;
+                        isMore=false;
+                    } else {
+                        miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+                        mtv_more.setText(R.string.category_shouqi);
+                        shaixuanAttrsAdapter.isAll=true;
+                        isMore=true;
+                    }
+                    shaixuanAttrsAdapter.notifyDataSetChanged();
+                    break;
             }
         }
     }

@@ -11,10 +11,7 @@ import java.io.Serializable;
 public class Contact implements Serializable {
     private String index;
     private String name;
-    public String id;
-    public String brand_name;
-    public String first_letter;
-    public String spell;
+
 
     public Contact(String index, String name) {
         this.index = index;

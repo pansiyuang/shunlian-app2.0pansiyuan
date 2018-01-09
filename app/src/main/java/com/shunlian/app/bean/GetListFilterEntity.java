@@ -42,8 +42,16 @@ public class GetListFilterEntity implements Serializable{
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Brand implements Serializable{
         public String first_letter;
-        public List<Contact> item_list;
+        public List<Item> item_list;
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Item implements Serializable{
+            public String id;
+            public String brand_name;
+            public String first_letter;
+            public String spell;
+
+        }
         @Override
         public String toString() {
             return "Brand{" +
