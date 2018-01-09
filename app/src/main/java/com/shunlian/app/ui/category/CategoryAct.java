@@ -15,7 +15,6 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICategoryView;
@@ -23,7 +22,6 @@ import com.shunlian.app.widget.MyImageView;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.adapter.DoubleCategoryAdapter.BANANER_LAYOUT;
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
@@ -48,7 +46,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private GridLayoutManager gridLayoutManager;
     private VerticalItemDecoration verticalItemDecoration;
     private GridSpacingItemDecoration spacingItemDecoration;
-    private int currentMode = MODE_SINGLE;
+    private int currentMode = MODE_DOUBLE;
 
     /**
      * 布局id
@@ -73,8 +71,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        presenter = new CategoryPresenter(this, this);
-        presenter.getSearchGoods();
+        presenter = new CategoryPresenter(this, this,null);
+//        presenter.getSearchGoods();
 
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
@@ -82,19 +80,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         verticalItemDecoration = new VerticalItemDecoration(TransformUtil.dip2px(this, 0.5f), 0, 0, getColorResouce(R.color.value_ECECEC));
         spacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(this, 5f), false);
 
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                //通过获取adapter来获取当前item的itemviewtype
-                int type = recycle_category.getAdapter().getItemViewType(position);
-                LogUtil.httpLogW("type:" + type);
-                if (type == BANANER_LAYOUT) {
-                    return 1;
-                } else {
-                    return gridLayoutManager.getSpanCount();
-                }
-            }
-        });
         recycle_category.setNestedScrollingEnabled(false);
     }
 
@@ -124,6 +109,16 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 recycle_category.setAdapter(singleAdapter);
             }
         } else if (mode == MODE_DOUBLE) {
+//            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                @Override
+//                public int getSpanSize(int position) {
+//                    if (position == 0) {
+//                        return 1;
+//                    } else {
+//                        return gridLayoutManager.getSpanCount();
+//                    }
+//                }
+//            });
             recycle_category.setLayoutManager(gridLayoutManager);
             recycle_category.removeItemDecoration(verticalItemDecoration);
             recycle_category.addItemDecoration(spacingItemDecoration);

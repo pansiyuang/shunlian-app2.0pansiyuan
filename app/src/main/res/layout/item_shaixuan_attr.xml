@@ -11,16 +11,15 @@
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_marginTop="15dp">
+        android:paddingRight="10dp">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
             android:text="@string/category_pinpai"
             android:textColor="@color/share_text"
             android:textSize="13sp" />
@@ -30,15 +29,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
-            android:src="@mipmap/icon_saixuan_gd" />
+            android:src="@mipmap/icon_saixuan_gd"
+            android:layout_marginBottom="5dp"/>
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_more"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
             android:layout_marginRight="5dp"
+            android:gravity="bottom"
             android:layout_toLeftOf="@id/miv_arrow"
             android:text="@string/category_gengduo"
             android:textColor="@color/share_text"

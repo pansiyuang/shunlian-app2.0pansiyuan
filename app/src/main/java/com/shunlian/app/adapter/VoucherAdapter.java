@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
@@ -37,13 +39,18 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
     public void getItemSuccess(String voucherId) {
-        if (lists == null || lists.size() == 0) {
+        if (mData == null || mData.size() == 0) {
             return;
         }
-        for (int i = 0; i < lists.size(); i++) {
-            if (voucherId.equals(lists.get(i).voucher_id)) {
-                lists.get(i).is_get = "1";
+        for (int i = 0; i < mData.size(); i++) {
+            if (voucherId.equals(mData.get(i).voucher_id)) {
+                mData.get(i).is_get = "1";
                 notifyItemChanged(i);
                 break;
             }
@@ -63,9 +70,9 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
         firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
 
-        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)){
+        if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)) {
             voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));
-        }else {
+        } else {
             voucherViewHolder.tv_voucher_title.setText(String.format(mContext.getResources().getString(R.string.voucher_full_use), voucher.use_condition));
         }
         voucherViewHolder.tv_voucher_date.setText(String.format(mContext.getResources().getString(R.string.valid_date), voucher.start_time, voucher.end_time));
@@ -80,15 +87,13 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         if ("1".equals(voucher.is_get)) {  //1为已经领取
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_n));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.hava_received));
-            voucherViewHolder.tv_draw.setEnabled(false);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_gray));
         } else {
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_h));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
-            voucherViewHolder.tv_draw.setEnabled(true);
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
-        voucherViewHolder.tv_draw.setOnClickListener(new View.OnClickListener() {
+        voucherViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCallBack != null) {

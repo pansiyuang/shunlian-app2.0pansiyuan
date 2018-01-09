@@ -304,6 +304,10 @@
     <string name="confirm_goods_receipt_label">确认收货后卖家将收到您的货款</string>
     <string name="confirm_extend_goods_time">确认延长收货时间？</string>
     <string name="order_extend_once">每笔订单只能延迟一次哦</string>
+    <string name="goods_status">货物状态</string>
+    <string name="problem_description">问题描述:</string>
+    <string name="platform_intervention_request">申请平台介入</string>
+
 
     <!--选择图片-->
 
@@ -362,7 +366,9 @@
     <string name="category_gengduo">更多</string>
     <string name="category_shouqi">收起</string>
     <string name="category_dingwei">定位失败</string>
-
+    <string name="category_jiage">.0123456789</string>
+    <string name="category_quanbu">全部品牌</string>
+    <item name="tag_category_isclick" type="id" />
 
     <string name="sort_comment">%s条评论 %s好评</string>
 </resources>

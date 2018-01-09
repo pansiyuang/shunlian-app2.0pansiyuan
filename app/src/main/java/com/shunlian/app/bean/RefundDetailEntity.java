@@ -2,13 +2,14 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/15.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefundDetailEntity {
+public class RefundDetailEntity implements Serializable{
     public RefundDetail refund_detail;
 
     @Override
@@ -19,7 +20,7 @@ public class RefundDetailEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class RefundDetail {
+    public static class RefundDetail implements Serializable {
         public String order_id;
         public String refund_id;
         public String refund_type;
@@ -47,7 +48,9 @@ public class RefundDetailEntity {
         public Edit edit;
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Edit {
+        public static class Edit implements Serializable{
+            public String og_Id;
+            public String store_name;
             public String refund_type;
             public String edit_apply_type;
             public Gift gift;
@@ -62,7 +65,7 @@ public class RefundDetailEntity {
             public String buyer_message;
             public String reason_id;
             public List<Reason> user_status;
-            public String current_user_status;
+            public UserStatus current_user_status;
             public String time_desc;
             public String rest_second;
             public String refund_remark_admin;
@@ -73,25 +76,31 @@ public class RefundDetailEntity {
             public List<RefundChoice> refund_choice;
             public List<String> member_evidence_seller;
             public List<String> member_evidence_admin;
+            public String serviceType;
 
             @JsonIgnoreProperties(ignoreUnknown = true)
-            public static class RefundChoice {
+            public static class RefundChoice implements Serializable{
                 public String icon;
                 public String type;
                 public String hint;
                 public String tip;
 
             }
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class UserStatus implements Serializable{
+                public String id;
+                public String desc;
+            }
 
             @JsonIgnoreProperties(ignoreUnknown = true)
-            public static class Reason {
+            public static class Reason implements Serializable{
                 public String reason_id;
                 public String reason_info;
 
             }
         }
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class ReturnAddress {
+        public static class ReturnAddress implements Serializable{
             public String id;
             public String name;
             public String phone;
@@ -109,7 +118,7 @@ public class RefundDetailEntity {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class MemberAddress {
+        public static class MemberAddress implements Serializable{
             public String id;
             public String name;
             public String phone;
@@ -127,7 +136,7 @@ public class RefundDetailEntity {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Gift {
+        public static class Gift implements Serializable{
             public String goods_id;
             public String title;
             public String thumb;
@@ -143,7 +152,7 @@ public class RefundDetailEntity {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Msg {
+        public static class Msg implements Serializable{
             public String label;
             public String title;
             public String description;
@@ -159,7 +168,7 @@ public class RefundDetailEntity {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Opt {
+        public static class Opt implements Serializable{
             public String code;
             public String name;
             public String is_highlight;
