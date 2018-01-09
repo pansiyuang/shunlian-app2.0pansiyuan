@@ -49,6 +49,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundInfoEntity;
@@ -840,17 +841,16 @@ public interface ApiService {
     Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String,String> map);
 
     /**
-     * 分类顶级列表
+     * 分类所有数据
      * @return
      */
-    @GET("category/toplist")
-    Call<BaseEntity<SortFragEntity>> categoryToplist(@QueryMap Map<String,String> map);
+    @GET("operatecategory/all")
+    Call<BaseEntity<SortFragEntity>> categoryAll(@QueryMap Map<String,String> map);
 
     /**
-     * 分类子目录
-     * @param map
+     * 排行榜
      * @return
      */
-    @GET("category/subList")
-    Call<BaseEntity<SortFragEntity>> categorySubList(@QueryMap Map<String,String> map);
+    @GET("goods/top")
+    Call<BaseEntity<RankingListEntity>> rankingList(@QueryMap Map<String,String> map);
 }
