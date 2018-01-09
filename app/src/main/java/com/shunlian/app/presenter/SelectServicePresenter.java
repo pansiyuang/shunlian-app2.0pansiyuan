@@ -3,8 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.ISelectServiceView;
 
@@ -45,10 +44,10 @@ public class SelectServicePresenter extends BasePresenter<ISelectServiceView> {
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<RefundInfoEntity>> baseEntityCall = getAddCookieApiService().getrefundinfo(requestBody);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<RefundInfoEntity>>() {
+        Call<BaseEntity<RefundDetailEntity.RefundDetail.Edit>> baseEntityCall = getAddCookieApiService().getrefundinfo(requestBody);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<RefundDetailEntity.RefundDetail.Edit>>() {
             @Override
-            public void onSuccess(BaseEntity<RefundInfoEntity> entity) {
+            public void onSuccess(BaseEntity<RefundDetailEntity.RefundDetail.Edit> entity) {
                 if (entity.data != null) {
                     iView.getRefundInfo(entity.data);
                 }

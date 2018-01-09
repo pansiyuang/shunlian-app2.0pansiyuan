@@ -7,7 +7,7 @@ import com.shunlian.app.bean.UploadPicEntity;
  */
 
 public interface IReturnRequestView extends IView {
-    void applyRefundSuccess(String success);
+    void applyRefundSuccess(String refoundId);
 
     void applyRefundFail(String error);
 

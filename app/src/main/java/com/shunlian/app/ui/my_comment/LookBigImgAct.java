@@ -22,6 +22,7 @@ import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,11 +52,12 @@ public class LookBigImgAct extends BaseActivity {
     View layout_top_section;
     private BigImgEntity entity;
 
-    public static void startAct(Context context, BigImgEntity entity){
-        Intent intent = new Intent(context,LookBigImgAct.class);
-        intent.putExtra("data",entity);
+    public static void startAct(Context context, BigImgEntity entity) {
+        Intent intent = new Intent(context, LookBigImgAct.class);
+        intent.putExtra("data", entity);
         context.startActivity(intent);
     }
+
     /**
      * 布局id
      *
@@ -77,23 +79,27 @@ public class LookBigImgAct extends BaseActivity {
 
         view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int pos = 0;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 pos = position;
                 leftNo.setText(String.valueOf(position + 1));
             }
+
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         rightNo.setText(String.valueOf(entity.itemList.size()));
         view_pager.setCurrentItem(entity.index);
-        if(isEmpty(entity.desc)){
+        if (isEmpty(entity.desc)) {
             layout_content.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             layout_content.setVisibility(View.VISIBLE);
             tv_content.setText(entity.desc);
         }
@@ -103,7 +109,7 @@ public class LookBigImgAct extends BaseActivity {
         private List<String> list;
         private LayoutInflater inflater;
 
-        public SamplePagerAdapter( List<String> imageMap) {
+        public SamplePagerAdapter(List<String> imageMap) {
             this.list = imageMap;
             inflater = getLayoutInflater();
         }
@@ -119,17 +125,18 @@ public class LookBigImgAct extends BaseActivity {
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
             final PhotoView imageView = (PhotoView) imageLayout.findViewById(R.id.image);
             final View layout_error = imageLayout.findViewById(R.id.layout_error);
-            imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener(){
+            imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
                 @Override
                 public void onPhotoTap(View view, float x, float y) {
                     finish();
                 }
+
                 @Override
                 public void onOutsidePhotoTap() {
-                    if(layout_top_section.getVisibility()==View.VISIBLE){
+                    if (layout_top_section.getVisibility() == View.VISIBLE) {
                         layout_top_section.setVisibility(View.INVISIBLE);
                         layout_content.setVisibility(View.INVISIBLE);
-                    }else {
+                    } else {
                         layout_top_section.setVisibility(View.VISIBLE);
                         layout_content.setVisibility(View.VISIBLE);
                     }
@@ -138,11 +145,11 @@ public class LookBigImgAct extends BaseActivity {
 
             try {
                 final String url = list.get(position);
-                loadImg(url,imageView, spinner,layout_error);
+                loadImg(url, imageView, spinner, layout_error);
                 layout_error.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loadImg(url,imageView, spinner, layout_error);
+                        loadImg(url, imageView, spinner, layout_error);
                     }
                 });
             } catch (Exception e) {
@@ -171,28 +178,32 @@ public class LookBigImgAct extends BaseActivity {
 
     }
 
-    public void loadImg(String url, final PhotoView imageView, final ProgressBar spinner, final View layout_error){
-        GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                spinner.setVisibility(View.GONE);
-                layout_error.setVisibility(View.GONE);
-                imageView.setImageBitmap(resource);
-            }
+    public void loadImg(String url, final PhotoView imageView, final ProgressBar spinner, final View layout_error) {
+        if (url.startsWith("http")) {
+            GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    spinner.setVisibility(View.GONE);
+                    layout_error.setVisibility(View.GONE);
+                    imageView.setImageBitmap(resource);
+                }
 
-            @Override
-            public void onLoadStarted(Drawable placeholder) {
-                super.onLoadStarted(placeholder);
-                spinner.setVisibility(View.VISIBLE);
-                layout_error.setVisibility(View.GONE);
-            }
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                    spinner.setVisibility(View.VISIBLE);
+                    layout_error.setVisibility(View.GONE);
+                }
 
-            @Override
-            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                super.onLoadFailed(e, errorDrawable);
-                spinner.setVisibility(View.GONE);
-                layout_error.setVisibility(View.VISIBLE);
-            }
-        });
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    spinner.setVisibility(View.GONE);
+                    layout_error.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            GlideUtils.getInstance().loadFileImageWithView(this, new File(url),imageView);
+        }
     }
 }

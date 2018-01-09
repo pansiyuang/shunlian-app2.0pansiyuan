@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -20,9 +20,9 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/27.
  */
 
-public class ServiceTypeAdapter extends BaseRecyclerAdapter<RefundInfoEntity.RefundChoice> {
+public class ServiceTypeAdapter extends BaseRecyclerAdapter<RefundDetailEntity.RefundDetail.Edit.RefundChoice> {
 
-    public ServiceTypeAdapter(Context context, boolean isShowFooter, List<RefundInfoEntity.RefundChoice> lists) {
+    public ServiceTypeAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Edit.RefundChoice> lists) {
         super(context, isShowFooter, lists);
     }
 
@@ -36,7 +36,7 @@ public class ServiceTypeAdapter extends BaseRecyclerAdapter<RefundInfoEntity.Ref
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ServiceViewholder viewholder = (ServiceViewholder) holder;
-        RefundInfoEntity.RefundChoice entity = lists.get(position);
+        RefundDetailEntity.RefundDetail.Edit.RefundChoice entity = lists.get(position);
         GlideUtils.getInstance().loadImage(context, viewholder.miv_service_icon, entity.icon);
         viewholder.tv_service_name.setText(entity.hint);
         viewholder.tv_service_content.setText(entity.tip);

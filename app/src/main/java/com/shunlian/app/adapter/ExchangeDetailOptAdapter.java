@@ -12,6 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.ui.order.PlatformInterventionRequestActivity;
 import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
@@ -36,8 +37,9 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
     private int strokeWidth;
     private String refund_id,order_id;
     private ExchangeDetailAct exchangeDetailAct;
+    private RefundDetailEntity.RefundDetail.Edit mEdit;
 
-    public ExchangeDetailOptAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Opt> opts,String refund_id,String order_id) {
+    public ExchangeDetailOptAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Opt> opts,String refund_id,String order_id,RefundDetailEntity.RefundDetail.Edit edit) {
         super(context, isShowFooter,opts);
         exchangeDetailAct= (ExchangeDetailAct) context;
         this.refund_id=refund_id;
@@ -45,6 +47,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
         strokeWidth = TransformUtil.dip2px(context, 0.5f);
+        this.mEdit = edit;
     }
 
     @Override
@@ -78,13 +81,13 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                         ConsultHistoryAct.startAct(context,refund_id);
                         break;
                     case "edit_apply_enable":
-                        ReturnRequestActivity.startAct(context,null);
+                        ReturnRequestActivity.startAct(context,mEdit,true,refund_id);
                         break;
                     case "call_plat_enable":
-
+                        PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,false);
                         break;
                     case "edit_call_plat_enable":
-
+                        PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,true);
                         break;
                     case "add_ship_enable":
                         SubmitLogisticsInfoAct.startAct(context,refund_id);

@@ -15,7 +15,6 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICategoryView;
@@ -87,7 +86,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             public int getSpanSize(int position) {
                 //通过获取adapter来获取当前item的itemviewtype
                 int type = recycle_category.getAdapter().getItemViewType(position);
-                LogUtil.httpLogW("type:" + type);
                 if (type == BANANER_LAYOUT) {
                     return 1;
                 } else {
