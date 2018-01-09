@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.Contact;
 import com.shunlian.app.bean.GetListFilterEntity;
-import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.FastClickListener;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;

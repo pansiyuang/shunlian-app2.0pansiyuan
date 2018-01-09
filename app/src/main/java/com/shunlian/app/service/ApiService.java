@@ -852,8 +852,6 @@ public interface ApiService {
      */
     @GET("goods/top")
     Call<BaseEntity<RankingListEntity>> rankingList(@QueryMap Map<String,String> map);
-    @GET("category/subList")
-    Call<BaseEntity<SortFragEntity>> categorySubList(@QueryMap Map<String,String> map);
 
     /**
      * 申请平台介入
