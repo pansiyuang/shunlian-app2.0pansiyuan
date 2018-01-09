@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ServiceTypeAdapter;
-import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.presenter.SelectServicePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
@@ -44,7 +44,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
 
     private String currentOgId;
     private SelectServicePresenter presenter;
-    private RefundInfoEntity mEntity;
+    private RefundDetailEntity.RefundDetail.Edit mEntity;
 
     public static void startAct(Context context, String ogId) {
         Intent intent = new Intent(context, SelectServiceActivity.class);
@@ -78,7 +78,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     }
 
     @Override
-    public void getRefundInfo(RefundInfoEntity infoEntity) {
+    public void getRefundInfo(RefundDetailEntity.RefundDetail.Edit infoEntity) {
         mEntity = infoEntity;
         GlideUtils.getInstance().loadImage(this, customer_goods.getGoodsIcon(), infoEntity.thumb);
         customer_goods.setLabelName(infoEntity.store_name, true);
@@ -111,11 +111,11 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     @Override
     public void onItemClick(View view, int position) {
         if (mEntity != null && mEntity.refund_choice != null) {
-            List<RefundInfoEntity.RefundChoice> choices = mEntity.refund_choice;
-            RefundInfoEntity.RefundChoice choice = choices.get(position);
+            List<RefundDetailEntity.RefundDetail.Edit.RefundChoice> choices = mEntity.refund_choice;
+            RefundDetailEntity.RefundDetail.Edit.RefundChoice choice = choices.get(position);
             mEntity.serviceType = choice.type;
             mEntity.og_Id = currentOgId;
-            ReturnRequestActivity.startAct(this, mEntity);
+            ReturnRequestActivity.startAct(this, mEntity,false,null);
         }
     }
 }

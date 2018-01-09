@@ -16,4 +16,7 @@ public class ImageEntity {
     public ImageEntity(String path) {
         this.imgPath = path;
     }
+
+    public ImageEntity() {
+    }
 }

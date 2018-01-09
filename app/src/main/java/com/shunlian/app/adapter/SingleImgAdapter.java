@@ -3,6 +3,7 @@ package com.shunlian.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,12 @@ public class SingleImgAdapter extends BaseAdapter {
         if (pics != null && position < pics.size()) {
             viewHolder.miv_del.setVisibility(View.VISIBLE);
             String imgPath = pics.get(position).imgPath;
-            GlideUtils.getInstance().loadFileImageWithView(mContext, new File(imgPath), viewHolder.miv_img);
+            String imgUrl = pics.get(position).imgUrl;
+            if (!TextUtils.isEmpty(imgPath)) {
+                GlideUtils.getInstance().loadFileImageWithView(mContext, new File(imgPath), viewHolder.miv_img);
+            } else if (!TextUtils.isEmpty(imgUrl)) {
+                GlideUtils.getInstance().loadImage(mContext, viewHolder.miv_img, imgUrl);
+            }
             viewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -115,7 +121,9 @@ public class SingleImgAdapter extends BaseAdapter {
                 }
             });
         }
-        viewHolder.miv_del.setOnClickListener(new View.OnClickListener() {
+        viewHolder.miv_del.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
                 ImageEntity imageEntity = pics.get(position);
@@ -129,7 +137,11 @@ public class SingleImgAdapter extends BaseAdapter {
     public List<String> toStringArray() {
         List<String> result = new ArrayList<>();
         for (ImageEntity imageEntity : pics) {
-            result.add(imageEntity.imgPath);
+            if (!TextUtils.isEmpty(imageEntity.imgPath)) {
+                result.add(imageEntity.imgPath);
+            }else if(!TextUtils.isEmpty(imageEntity.imgUrl)){
+                result.add(imageEntity.imgUrl);
+            }
         }
         return result;
     }

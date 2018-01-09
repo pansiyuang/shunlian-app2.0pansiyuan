@@ -51,7 +51,6 @@ import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
-import com.shunlian.app.bean.RefundInfoEntity;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
@@ -745,7 +744,7 @@ public interface ApiService {
      * @return
      */
     @POST("/member/refund/getrefundinfo")
-    Call<BaseEntity<RefundInfoEntity>> getrefundinfo(@Body RequestBody body);
+    Call<BaseEntity<RefundDetailEntity.RefundDetail.Edit>> getrefundinfo(@Body RequestBody body);
 
     /**
      * 售后申请列表
@@ -762,7 +761,7 @@ public interface ApiService {
      * @return
      */
     @POST("/member/refund/applyRefund")
-    Call<BaseEntity<EmptyEntity>> applyRefund(@Body RequestBody body);
+    Call<BaseEntity<RefundDetailEntity.RefundDetail>> applyRefund(@Body RequestBody body);
 
     /**
      * 售后申请详情
@@ -853,4 +852,12 @@ public interface ApiService {
      */
     @GET("category/subList")
     Call<BaseEntity<SortFragEntity>> categorySubList(@QueryMap Map<String,String> map);
+
+    /**
+     * 申请平台介入
+     * @param body
+     * @return
+     */
+    @POST("member/refund/callplat")
+    Call<BaseEntity<EmptyEntity>> callPlat(@Body RequestBody body);
 }

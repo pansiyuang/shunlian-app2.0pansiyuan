@@ -26,7 +26,7 @@ import butterknife.BindView;
  */
 
 public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
-    private static final int TITLE_LAYOUT = 1;
+    private static final int TITLE_LAYOUT = 10;
 
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;

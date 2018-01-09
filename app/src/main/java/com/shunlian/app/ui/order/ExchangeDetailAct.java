@@ -151,7 +151,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         setStatusBarFontDark();
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("refund_id"))) {
-//            refund_id = getIntent().getStringExtra("refund_id");
+            refund_id = getIntent().getStringExtra("refund_id");
         }
 
         exchangeDetailPresenter = new ExchangeDetailPresenter(this, this, refund_id);
@@ -223,7 +223,8 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         LinearLayoutManager managerH = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rv_opt.setLayoutManager(managerH);
         rv_opt.setNestedScrollingEnabled(false);
-        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.order_id));
+        refundDetail.edit.store_name = refundDetail.store_name;
+        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.order_id,refundDetail.edit));
 
         mtv_state.setText(refundDetail.status_desc);
         mtv_time.setText(refundDetail.time_desc);

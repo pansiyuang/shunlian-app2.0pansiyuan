@@ -16,13 +16,12 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SingleImgAdapter;
 import com.shunlian.app.bean.ImageEntity;
-import com.shunlian.app.bean.RefundInfoEntity;
+import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.PhotoPickerActivity;
-import com.shunlian.app.photopick.PhotoPickerIntent;
-import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -86,8 +85,8 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
      * 输入框小数的位数
      */
     private static final int DECIMAL_DIGITS = 1;
-    private RefundInfoEntity currentInfoEntity;
-    private List<ImageEntity> imageEntityList;
+    private RefundDetailEntity.RefundDetail.Edit currentInfoEntity;
+    private List<ImageEntity> imageEntityList = new ArrayList<>();
     private List<ImageEntity> upLoadList = new ArrayList<>();
     private SingleImgAdapter singleImgAdapter;
     private String currentServiceType;  //1 仅退款、 3 退货换货 4 换货
@@ -98,16 +97,20 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private int isLast;  //是否改订单最后一件没有退的商品  1是  0 否
     private ReturnGoodsDialog goodsDialog;
     private String currentReasonId;
+    private String currentRefundId;
     private ReturnRequestPresenter presenter;
+    private boolean isEdit; //是否是编辑
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_return_request;
     }
 
-    public static void startAct(Context context, RefundInfoEntity infoEntity) {
+    public static void startAct(Context context, RefundDetailEntity.RefundDetail.Edit infoEntity, boolean isEdit, String refundId) {
         Intent intent = new Intent(context, ReturnRequestActivity.class);
         intent.putExtra("infoEntity", infoEntity);
+        intent.putExtra("isEdit", isEdit);
+        intent.putExtra("refundId", refundId);
         context.startActivity(intent);
     }
 
@@ -117,7 +120,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        currentInfoEntity = (RefundInfoEntity) getIntent().getSerializableExtra("infoEntity");
+        currentInfoEntity = (RefundDetailEntity.RefundDetail.Edit) getIntent().getSerializableExtra("infoEntity");
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        currentRefundId = getIntent().getStringExtra("refundId");
         goodsCount = Integer.valueOf(currentInfoEntity.qty);
         freightPrice = Double.valueOf(currentInfoEntity.shipping_fee);
         returnPrice = Double.valueOf(currentInfoEntity.return_price);
@@ -127,11 +132,19 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             currentServiceType = currentInfoEntity.serviceType;
             initViews(currentServiceType);
         }
+
+        if (isEdit) {
+            currentReasonId = currentInfoEntity.reason_id;
+            currentServiceType = currentInfoEntity.refund_type;
+            currentReasonId = currentInfoEntity.reason_id;
+            initViews(currentServiceType);
+        }
         presenter = new ReturnRequestPresenter(this, this);
     }
 
     public void initViews(String type) {
-        goodsDialog = new ReturnGoodsDialog(this, currentInfoEntity.reason);
+        goodsDialog = new ReturnGoodsDialog(this);
+        goodsDialog.setRefundReason(currentInfoEntity.reason, currentReasonId);
         goodsDialog.setSelectListener(this);
         switch (type) {
             case "1": //仅退款
@@ -162,14 +175,25 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 break;
         }
 
+        if (isEdit) {
+            edt_refunds.setText(currentInfoEntity.refund_remark_seller);
+            List<ImageEntity> list = getImageEntityList();
+            if (list != null && list.size() != 0) {
+                imageEntityList.addAll(list);
+            }
+            tv_return_reason.setText(currentInfoEntity.buyer_message);
+            tv_return_reason.setTextColor(getColorResouce(R.color.new_text));
+            if (rl_return_money.getVisibility() == View.VISIBLE) {
+                edt_return_money.setText(currentInfoEntity.refund_amount);
+            }
+        }
+
         GlideUtils.getInstance().loadImage(this, customer_goods.getGoodsIcon(), currentInfoEntity.thumb);
         customer_goods.setGoodsTitle(currentInfoEntity.title)
                 .setGoodsCount("x" + currentInfoEntity.qty)
                 .setGoodsParams(currentInfoEntity.sku_desc)
                 .setGoodsPrice(getStringResouce(R.string.common_yuan) + currentInfoEntity.price)
                 .selectCount(Integer.valueOf(currentInfoEntity.qty));
-
-        imageEntityList = new ArrayList<>();
         singleImgAdapter = new SingleImgAdapter(this, imageEntityList);
         grid_imgs.setAdapter(singleImgAdapter);
     }
@@ -243,6 +267,19 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         }
     };
 
+    private List<ImageEntity> getImageEntityList() {
+        if (currentInfoEntity.member_evidence_seller == null || currentInfoEntity.member_evidence_seller.size() == 0) {
+            return null;
+        }
+        List<ImageEntity> list = new ArrayList<>();
+        for (String str : currentInfoEntity.member_evidence_seller) {
+            ImageEntity imageEntity = new ImageEntity();
+            imageEntity.imgUrl = str;
+            list.add(imageEntity);
+        }
+        return list;
+    }
+
     @Override
     public void onSelect(int position) {
         currentReasonId = currentInfoEntity.reason.get(position).reason_id;
@@ -270,20 +307,17 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                         return;
                     }
                 }
-                if (isEmpty(edt_refunds.getText())) {
-                    Common.staticToast("请输入说明");
-                    return;
-                }
 
                 String imageStr = getImageString();
-                presenter.applyRefund(currentInfoEntity.og_Id, String.valueOf(customer_goods.getCurrentCount()), edt_return_money.getText().toString(), currentServiceType, currentReasonId, edt_refunds.getText().toString(), imageStr);
+                presenter.applyRefund(currentRefundId, currentInfoEntity.og_Id, String.valueOf(customer_goods.getCurrentCount()), edt_return_money.getText().toString(), currentServiceType, currentReasonId, edt_refunds.getText().toString(), imageStr, isEdit);
                 break;
         }
     }
 
     @Override
-    public void applyRefundSuccess(String str) {
-        Common.staticToast(str);
+    public void applyRefundSuccess(String refundId) {
+        finish();
+        ExchangeDetailAct.startAct(this, refundId);
     }
 
     @Override

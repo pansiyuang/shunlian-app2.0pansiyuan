@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -211,6 +212,8 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public TitleViewHolder(View itemView) {
             super(itemView);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            itemView.setLayoutParams(params);
         }
     }
 
@@ -238,6 +241,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public DoubleViewHolder(View itemView) {
             super(itemView);
+            int width = (DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 5f)) / 2;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, TransformUtil.dip2px(context, 180f));
+            miv_icon.setLayoutParams(params);
         }
     }
 }
