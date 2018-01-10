@@ -51,24 +51,24 @@ import butterknife.BindView;
 public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.ItemList> {
 
 
-//    private List<SortFragEntity.SubList> mSubLists;
+    private SortFragEntity.Toplist mToplist;
     public List<Integer> counts;
     private int titleCount = 1;
     public Map<Integer,SortFragEntity.SubList> titleData = new HashMap<>();
 
-    public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> lists, List<SortFragEntity.SubList> subLists) {
-        super(context, false, lists);
-//        mSubLists = subLists;
+    public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children, SortFragEntity.Toplist toplist) {
+        super(context, false, children);
+        mToplist = toplist;
         counts = new ArrayList<>();
         counts.add(0);
-
+        List<SortFragEntity.SubList> subLists = mToplist.children;
         if (!isEmpty(subLists)) {//统计title位置
             titleData.put(counts.get(counts.size() - 1), subLists.get(0));
             for (int i = 0; i < subLists.size(); i++) {
                 SortFragEntity.SubList subList = subLists.get(i);
-                if (!isEmpty(subList.item_list)) {
+                if (!isEmpty(subList.children)) {
                     if (i + 1 != subLists.size()) {
-                        counts.add(counts.size() + subList.item_list.size());
+                        counts.add(counts.size() + subList.children.size());
                         titleData.put(counts.get(counts.size() - 1), subLists.get(i + 1));
                     }
                 }
@@ -145,8 +145,8 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             SortFragEntity.SubList subList = titleData.get(position);
             mHolder.sort_tv_title.setVisibility(View.VISIBLE);
             mHolder.sort_tv_title.setText(subList.name);
-            String has_top_page = subList.has_top_page;
-            if ("Y".equalsIgnoreCase(has_top_page)){
+            String on_ranking = subList.on_ranking;
+            if ("1".equalsIgnoreCase(on_ranking)){
                 mHolder.mtv_ranking.setVisibility(View.VISIBLE);
             }else {
                 mHolder.mtv_ranking.setVisibility(View.GONE);

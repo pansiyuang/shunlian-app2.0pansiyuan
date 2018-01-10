@@ -37,6 +37,11 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         this.mStore = store;
     }
 
+    public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
+        super(context, isShowFooter, lists);
+        mInflater = LayoutInflater.from(context);
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new SingleViewHolder(mInflater.inflate(R.layout.item_category_single, parent, false));
@@ -239,33 +244,6 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         TextView tv_address;
 
         public SingleViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    public class DoubleViewHolder extends BaseRecyclerViewHolder {
-        @BindView(R.id.miv_icon)
-        MyImageView miv_icon;
-
-        @BindView(R.id.tv_title)
-        TextView tv_title;
-
-        @BindView(R.id.ll_tag)
-        LinearLayout ll_tag;
-
-        @BindView(R.id.tv_price)
-        TextView tv_price;
-
-        @BindView(R.id.tv_free)
-        TextView tv_free;
-
-        @BindView(R.id.tv_comment)
-        TextView tv_comment;
-
-        @BindView(R.id.tv_address)
-        TextView tv_address;
-
-        public DoubleViewHolder(View itemView) {
             super(itemView);
         }
     }

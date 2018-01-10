@@ -11,14 +11,8 @@ import java.util.List;
 public interface ISortFragView extends IView {
 
     /**
-     * 左侧大分类
-     * @param toplists
+     * 分类所有类目
+     * @param categoryList
      */
-    void toplist(List<SortFragEntity.Toplist> toplists);
-
-    /**
-     * 右侧子分类
-     * @param subLists
-     */
-    void subRightList(List<SortFragEntity.SubList> subLists,List<SortFragEntity.ItemList> subAllItemLists);
+    void categoryAll(List<SortFragEntity.Toplist> categoryList);
 }

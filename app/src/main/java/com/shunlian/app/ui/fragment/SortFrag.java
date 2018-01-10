@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -15,12 +16,16 @@ import com.shunlian.app.adapter.SortFragAdapter;
 import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.presenter.SortFragPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class SortFrag extends BaseFragment implements ISortFragView{
 
@@ -29,6 +34,13 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     @BindView(R.id.recycler_sort)
     RecyclerView recycler_sort;
+
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private SortFragPresenter presenter;
 
     /**
@@ -54,6 +66,11 @@ public class SortFrag extends BaseFragment implements ISortFragView{
         recycler_sort.setLayoutManager(manager);
     }
 
+    @OnClick(R.id.rl_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.setShowItem(1,4,5);
+    }
     /**
      * 显示网络请求失败的界面
      *
@@ -74,37 +91,25 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     }
 
-
-    /**
-     * 左侧大分类
-     *
-     * @param toplists
-     */
-    @Override
-    public void toplist(final List<SortFragEntity.Toplist> toplists) {
-        final SortFragAdapter adapter = new SortFragAdapter(baseActivity, toplists);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SortFragEntity.Toplist toplist = toplists.get(position);
-                adapter.currentPosition = position;
-                adapter.notifyDataSetChanged();
-                presenter.categorySubList(toplist.id);
-            }
-        });
-    }
-
     /**
      * 右侧子分类
-     * @param subLists
+     * @param toplist
      */
-    @Override
-    public void subRightList(List<SortFragEntity.SubList> subLists, final List<SortFragEntity.ItemList> subAllItemLists) {
+    public void subRightList(final SortFragEntity.Toplist toplist) {
 
-        final SortCategoryAdapter adapter = new SortCategoryAdapter(baseActivity,subAllItemLists,subLists);
+        final List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
+        List<SortFragEntity.SubList> children = toplist.children;
+        if (children != null && children.size() > 0){
+            for (int i = 0; i < children.size(); i++) {
+                List<SortFragEntity.ItemList> children1 = children.get(i).children;
+                if (children1 != null && children1.size() > 0){
+                    itemLists.addAll(children1);
+                }
+            }
+        }
+
+
+        final SortCategoryAdapter adapter = new SortCategoryAdapter(baseActivity,itemLists,toplist);
 
         recycler_sort.setAdapter(adapter);
 
@@ -112,18 +117,46 @@ public class SortFrag extends BaseFragment implements ISortFragView{
             @Override
             public void onItemClick(View view, int position) {
                 if (adapter.counts.contains(position)){
-                    // TODO: 2018/1/6 跳转排行榜
-                    Common.staticToast(adapter.titleData.get(position).name);
+                    SortFragEntity.SubList subList = adapter.titleData.get(position);
+                    RankingListAct.startAct(baseActivity, subList.id,toplist.name,subList.name);
                 }else {
                     int i = adapter.computeCount(position);
-                    SortFragEntity.ItemList itemList = subAllItemLists.get(position - i);
+                    SortFragEntity.ItemList itemList = itemLists.get(position - i);
                     // TODO: 2018/1/6 跳转分类列表
                     Common.staticToast(itemList.name);
                 }
             }
         });
-
     }
 
 
+    /**
+     * 分类所有类目
+     * @param categoryList
+     */
+    @Override
+    public void categoryAll(final List<SortFragEntity.Toplist> categoryList) {
+        SortFragEntity.Toplist toplist = categoryList.get(0);
+        subRightList(toplist);
+
+        final SortFragAdapter adapter = new SortFragAdapter(baseActivity, categoryList);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SortFragEntity.Toplist toplist = categoryList.get(position);
+                adapter.currentPosition = position;
+                adapter.notifyDataSetChanged();
+                subRightList(toplist);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+    }
 }

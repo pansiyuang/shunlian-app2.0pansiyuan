@@ -58,7 +58,8 @@ public class HorItemDecoration extends RecyclerView.ItemDecoration {
     }
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-       outRect.right = space;
+        outRect.right = space;
+        outRect.left = leftMargin;
         RecyclerView.LayoutManager manager = parent.getLayoutManager();
         if (manager instanceof LinearLayoutManager){
             LinearLayoutManager manager1 = (LinearLayoutManager) manager;
