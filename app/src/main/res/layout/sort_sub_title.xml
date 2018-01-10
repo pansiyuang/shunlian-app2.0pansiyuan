@@ -42,6 +42,6 @@
         android:paddingTop="20dp"
         android:text="排行榜"
         android:textColor="@color/new_gray"
-        android:textSize="12.5sp" />
+        android:textSize="11sp" />
 </RelativeLayout>
 

@@ -668,6 +668,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
+    /**
+     * 刷新领取优惠券状态
+     * @param voucher
+     */
+    public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
+        if (recyclerDialog != null){//领取成功之后id == voucher_id
+            recyclerDialog.getVoucherSuccess(voucher.id);
+        }
+    }
+
 
     public class PicListHolder extends BaseRecyclerViewHolder{
 

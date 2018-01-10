@@ -43,4 +43,10 @@ public interface IGoodsDetailView extends IView {
      * @param praiseTotal
      */
     void praiseTotal(String praiseTotal);
+
+    /**
+     * 刷新优惠券状态
+     * @param voucher
+     */
+    void refreshVoucherState(GoodsDeatilEntity.Voucher voucher);
 }

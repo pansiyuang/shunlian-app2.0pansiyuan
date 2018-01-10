@@ -25,6 +25,9 @@ package com.shunlian.app.utils;
 
 import android.os.Environment;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by zhang on 2017/4/14 11 : 38.
  * 常量
@@ -52,6 +55,10 @@ public final class Constant {
     public static final String DOWNLOAD_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
             "/Android/data/com.shunlian.app/ShunLian/DownLoad/";
     public static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
+
+    public static List<String> BRAND_IDS;//筛选品牌id
+    public static List<String> BRAND_IDSBEFORE;//筛选品牌id,记录用
+    public static Map<String, List<String>> BRAND_ATTRS;//筛选属性
 
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

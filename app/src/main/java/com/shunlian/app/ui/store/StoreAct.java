@@ -603,4 +603,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     public void showDataEmptyView(int rquest_code) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

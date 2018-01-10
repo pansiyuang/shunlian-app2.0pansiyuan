@@ -10,14 +10,19 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SortFragEntity {
 
-    public List<Toplist> category_list;
+    public List<Toplist> categoryList;
 
-    public List<SubList> sub_list;
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Toplist{
         public String id;
         public String name;
+        public String thumb;
+        public String pid;
+        public String level;
+        public String on_ranking;
+        public List<SubList> children;
     }
 
 
@@ -25,8 +30,11 @@ public class SortFragEntity {
     public static class SubList{
         public String id;
         public String name;
-        public String has_top_page;
-        public List<ItemList> item_list;
+        public String thumb;
+        public String pid;
+        public String level;
+        public String on_ranking;
+        public List<ItemList> children;
     }
 
 
@@ -35,5 +43,8 @@ public class SortFragEntity {
         public String id;
         public String name;
         public String thumb;
+        public String pid;
+        public String level;
+        public String on_ranking;
     }
 }
