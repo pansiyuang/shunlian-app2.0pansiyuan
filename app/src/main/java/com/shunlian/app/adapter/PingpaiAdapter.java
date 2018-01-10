@@ -53,7 +53,7 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
         final ViewHolder viewHolder = (ViewHolder) holder;
-        GetListFilterEntity.Recommend recommend = lists.get(position);
+        final GetListFilterEntity.Recommend recommend = lists.get(position);
         if (position == lists.size() - 1 && position > 10) {
             viewHolder.mtv_name.setText(R.string.category_quanbu);
             viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
@@ -63,7 +63,7 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
         }
         if (Constant.BRAND_IDS.size() > 0) {
             for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
-                if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
+                if (recommend.id.equals(Constant.BRAND_IDS.get(i))) {
                     viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
                     break;
                 } else if (i >= Constant.BRAND_IDS.size() - 1) {
@@ -90,14 +90,14 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
                     CategoryLetterAct.startAct(context, brands, letters);
                 } else if (Constant.BRAND_IDS.size() > 0) {
                     for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
-                        if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
+                        if (recommend.id.equals(Constant.BRAND_IDS.get(i))) {
                             viewHolder.mtv_name.setBackgroundColor(getColor(R.color.value_f5));
                             Constant.BRAND_IDS.remove(i);
                             break;
                         } else if (i >= Constant.BRAND_IDS.size() - 1) {
                             if (Constant.BRAND_IDS.size() < 8) {
                                 viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
-                                Constant.BRAND_IDS.add(String.valueOf(position));
+                                Constant.BRAND_IDS.add(recommend.id);
                             } else {
                                 Common.staticToast("已达上限8个");
                             }
@@ -106,7 +106,7 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
                     }
                 } else {
                     viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
-                    Constant.BRAND_IDS.add(String.valueOf(position));
+                    Constant.BRAND_IDS.add(recommend.id);
                 }
 
             }

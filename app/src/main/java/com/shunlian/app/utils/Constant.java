@@ -59,6 +59,7 @@ public final class Constant {
     public static List<String> BRAND_IDS;//筛选品牌id
     public static List<String> BRAND_IDSBEFORE;//筛选品牌id,记录用
     public static Map<String, List<String>> BRAND_ATTRS;//筛选属性
+    public static List<String> BRAND_ATTRNAME;//筛选属性名
 
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

@@ -40,7 +40,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Bra
     @Override
     public void handleList(final RecyclerView.ViewHolder holder, final int position) {
         final ContactsViewHolder viewHolder = (ContactsViewHolder) holder;
-        GetListFilterEntity.Brand.Item  item= lists.get(position);
+        final GetListFilterEntity.Brand.Item  item= lists.get(position);
         if (position == 0 || !lists.get(position - 1).first_letter.equals(item.first_letter)) {
             viewHolder.mtv_index.setVisibility(View.VISIBLE);
             viewHolder.mtv_index.setText(item.first_letter);
@@ -51,7 +51,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Bra
         }
         if (Constant.BRAND_IDS.size() > 0) {
             for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
-                if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
+                if (item.id.equals(Constant.BRAND_IDS.get(i))) {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
                     break;
                 } else if (i >= Constant.BRAND_IDS.size() - 1) {
@@ -71,14 +71,14 @@ public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Bra
                 }
                 if (Constant.BRAND_IDS.size() > 0) {
                     for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
-                        if (String.valueOf(position).equals(Constant.BRAND_IDS.get(i))) {
+                        if (item.id.equals(Constant.BRAND_IDS.get(i))) {
                             viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
                             Constant.BRAND_IDS.remove(i);
                             break;
                         } else if (i >= Constant.BRAND_IDS.size() - 1) {
                             if (Constant.BRAND_IDS.size() < 8) {
                                 viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                                Constant.BRAND_IDS.add(String.valueOf(position));
+                                Constant.BRAND_IDS.add(item.id);
                             } else {
                                 Common.staticToast("已达上限8个");
                             }
@@ -87,7 +87,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Bra
                     }
                 } else {
                     viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
-                    Constant.BRAND_IDS.add(String.valueOf(position));
+                    Constant.BRAND_IDS.add(item.id);
                 }
             }
         });

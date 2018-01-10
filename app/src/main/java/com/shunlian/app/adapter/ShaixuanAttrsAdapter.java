@@ -40,12 +40,12 @@ public class ShaixuanAttrsAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
         final ViewHolder viewHolder = (ViewHolder) holder;
-        String attrs = lists.get(position);
+        final String attrs = lists.get(position);
         viewHolder.mtv_name.setText(attrs);
 
         if (Constant.BRAND_ATTRS.get(tag).size() > 0) {
             for (int i = 0; i < Constant.BRAND_ATTRS.get(tag).size(); i++) {
-                if (String.valueOf(position).equals(Constant.BRAND_ATTRS.get(tag).get(i))) {
+                if (attrs.equals(Constant.BRAND_ATTRS.get(tag).get(i))) {
                     viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
                     break;
                 } else if (i >= Constant.BRAND_ATTRS.get(tag).size() - 1) {
@@ -64,19 +64,19 @@ public class ShaixuanAttrsAdapter extends BaseRecyclerAdapter<String> {
                 }
                 if (Constant.BRAND_ATTRS.get(tag).size() > 0) {
                     for (int i = 0; i < Constant.BRAND_ATTRS.get(tag).size(); i++) {
-                        if (String.valueOf(position).equals(Constant.BRAND_ATTRS.get(tag).get(i))) {
+                        if (attrs.equals(Constant.BRAND_ATTRS.get(tag).get(i))) {
                             viewHolder.mtv_name.setBackgroundColor(getColor(R.color.value_f5));
                             Constant.BRAND_ATTRS.get(tag).remove(i);
                             break;
                         } else if (i >= Constant.BRAND_ATTRS.get(tag).size() - 1) {
                             viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
-                            Constant.BRAND_ATTRS.get(tag).add(String.valueOf(position));
+                            Constant.BRAND_ATTRS.get(tag).add(attrs);
                             break;
                         }
                     }
                 } else {
                     viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
-                    Constant.BRAND_ATTRS.get(tag).add(String.valueOf(position));
+                    Constant.BRAND_ATTRS.get(tag).add(attrs);
                 }
 
             }

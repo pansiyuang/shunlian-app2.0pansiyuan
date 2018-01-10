@@ -27,6 +27,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
     public CategoryPresenter(Context context, ICategoryView iView, GoodsSearchParam goodsSearchParam) {
         super(context, iView);
         this.goodsSearchParam = goodsSearchParam;
+        initApi();
     }
 
     @Override
@@ -41,7 +42,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
 
     @Override
     protected void initApi() {
-
+        getSearchGoods(goodsSearchParam);
     }
 
     public void getSearchGoods(GoodsSearchParam goodsSearchParam) {
@@ -53,14 +54,16 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
         map.put("brand_ids", goodsSearchParam.brand_ids);
         map.put("cid", goodsSearchParam.cid);
         map.put("send_area", goodsSearchParam.send_area);
+        LogUtil.augusLogW("yxf55");
         try {
-            String attr_data = new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
+            String attr_data=new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
             map.put("attr_data", attr_data);
+            LogUtil.augusLogW("yxf89--" + attr_data);
+            LogUtil.augusLogW("yxf89--" + goodsSearchParam.brand_ids);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         map.put("sort_type",goodsSearchParam. sort_type);
-
         sortAndMD5(map);
 
         Call<BaseEntity<SearchGoodsEntity>> searchGoodsCallback = getAddCookieApiService().getSearchGoods(getRequestBody(map));
