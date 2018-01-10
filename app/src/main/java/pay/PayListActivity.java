@@ -68,16 +68,18 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private static final int SDK_PAY_FLAG = 1;
     private String order_id;
     private String orderId;
+    private String price;
     private String shop_goods;
     private String addressId;
     private String currentPayType;//当前支付方式
 
-    public static void startAct(Activity activity, String shop_goods, String addressId,String order_id){
+    public static void startAct(Activity activity, String shop_goods, String addressId,String order_id,String price){
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
         intent.putExtra("shop_goods",shop_goods);
         intent.putExtra("addressId",addressId);
         intent.putExtra("order_id",order_id);
+        intent.putExtra("price",price);
         activity.startActivity(intent);
     }
 
@@ -135,7 +137,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             activity.finish();
         }
         Common.staticToast(getStringResouce(R.string.pay_success));
-        PaySuccessAct.startAct(this, order_id);
+        PaySuccessAct.startAct(this, order_id,price);
     }
 
     /**
@@ -164,6 +166,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         shop_goods = getIntent().getStringExtra("shop_goods");
         addressId = getIntent().getStringExtra("addressId");
         orderId = getIntent().getStringExtra("order_id");
+        price = getIntent().getStringExtra("price");
 
         wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
@@ -275,6 +278,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 //                callbackH5Pay("http://pay-test.shunliandongli.com/app_jump_test.php");
                 break;
             case "credit":
+                paySuccess();
                 break;
         }
     }
@@ -321,7 +325,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         h5_pay.loadUrl(unionpay,setWebviewHeader());
     }
 
-    private void submitOrder(PayListEntity.PayTypes pay_types) {
+    private void submitOrder(final PayListEntity.PayTypes pay_types) {
         currentPayType = pay_types.code;
         switch (pay_types.code){
             case "alipay":
@@ -341,6 +345,25 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
             case "credit":
+                final PromptDialog promptDialog = new PromptDialog(this);
+                promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                        .setSureAndCancleListener("确定使用余额支付吗？\n(￥：-￥".concat(price + ")"),
+                                getString(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!isEmpty(shop_goods)) {
+                                            payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
+                                        } else if (!isEmpty(orderId)) {
+                                            payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
+                                        }
+                                        promptDialog.dismiss();
+                                    }
+                                }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        promptDialog.dismiss();
+                                    }
+                                }).show();
                 break;
         }
     }

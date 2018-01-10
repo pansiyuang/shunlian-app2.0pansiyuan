@@ -20,5 +20,5 @@ public interface IRankingListView extends IView {
      * 排行商品列表
      * @param goods
      */
-    void rankingGoodsList(RankingListEntity.Goods goods);
+    void rankingGoodsList(RankingListEntity.Goods goods,int page, int allpage);
 }

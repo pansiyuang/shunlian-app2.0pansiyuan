@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RankingListEntity;
@@ -18,7 +19,9 @@ import retrofit2.Call;
 
 public class RankingListPresenter extends BasePresenter <IRankingListView>{
 
-    private String op_id;
+    public String op_id;
+    public String cid;
+    public final int page_size = 20;
 
     public RankingListPresenter(Context context, IRankingListView iView, String id) {
         super(context, iView);
@@ -47,18 +50,62 @@ public class RankingListPresenter extends BasePresenter <IRankingListView>{
      */
     @Override
     protected void initApi() {
+        rankingList(true);
+    }
+
+    public void getNewRankingList(String g_cid){
+        cid = g_cid;
+        currentPage = 1;
+        allPage = 1;
+        rankingList(true);
+    }
+
+    private void rankingList(boolean isShowLoading) {
         Map<String,String> map = new HashMap<>();
-        map.put("op_cid",op_id);
+        if (!TextUtils.isEmpty(op_id) && TextUtils.isEmpty(cid))
+            map.put("op_cid",op_id);
+
+        if (!TextUtils.isEmpty(cid))
+            map.put("cid",cid);
+
+        map.put("page",String.valueOf(currentPage));
+        map.put("page_size",String.valueOf(page_size));
         sortAndMD5(map);
 
         Call<BaseEntity<RankingListEntity>> baseEntityCall = getApiService().rankingList(map);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RankingListEntity>>(){
+        getNetData(isShowLoading,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RankingListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<RankingListEntity> entity) {
+                isLoading = false;
 
-                iView.rankingCategoryList(entity.data.category);
-                iView.rankingGoodsList(entity.data.goods);
+                RankingListEntity.Goods goods = entity.data.goods;
+                if (goods != null){
+                    currentPage = Integer.parseInt(goods.page);
+                    allPage = Integer.parseInt(goods.total_page);
+                }
+                iView.rankingGoodsList(goods,currentPage,allPage);
+                if (currentPage == 1) {
+                    iView.rankingCategoryList(entity.data.category);
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading) {
+            isLoading = true;
+            if (currentPage <= allPage) {
+                currentPage++;
+                rankingList(false);
+            }
+        }
     }
 }

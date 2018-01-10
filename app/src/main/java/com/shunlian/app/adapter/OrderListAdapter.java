@@ -342,9 +342,11 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     text = mtv_title3.getText();
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
                         if (mAllFrag != null) {
-                            PayListActivity.startAct(mAllFrag.getActivity(), null, null,orders.id);
+                            PayListActivity.startAct(mAllFrag.getActivity(),
+                                    null, null,orders.id,orders.total_amount);
                         }else if (mSearchOrderAct != null){
-                            PayListActivity.startAct(mSearchOrderAct, null, null,orders.id);
+                            PayListActivity.startAct(mSearchOrderAct,
+                                    null, null,orders.id,orders.total_amount);
                         }
 
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货

@@ -448,7 +448,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_title3:
                 text = mtv_title3.getText();
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
-                    PayListActivity.startAct(this, null,null,orderId);
+                    PayListActivity.startAct(this, null,null,orderId,orderdetailEntity.total_amount);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价

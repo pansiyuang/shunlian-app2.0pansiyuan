@@ -2,6 +2,7 @@ package com.shunlian.app.ui.category;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,7 +11,12 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.RankingListAdapter;
+import com.shunlian.app.adapter.SimpleRecyclerAdapter;
+import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.adapter.SingleCategoryAdapter;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.RankingListEntity;
+import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.RankingListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.HorItemDecoration;
@@ -19,6 +25,7 @@ import com.shunlian.app.view.IRankingListView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +63,11 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
 
     private LinearLayoutManager verManager;
     private boolean isShow;//默认不显示
+    private GridLayoutManager gridManager;
+    private RankingListPresenter presenter;
+    private SingleCategoryAdapter adapter;
+    private List<GoodsDeatilEntity.Goods> goodsList = new ArrayList<>();
+    private String g_cid;
 
     public static void startAct(Context context, String id, String firstName, String secondName){
 
@@ -73,6 +85,26 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
     @Override
     protected int getLayoutId() {
         return R.layout.act_ranking_list;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        recy_view_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (verManager != null){
+                    int lastPosition = verManager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == verManager.getItemCount()){
+                        if ( presenter  != null){
+                            presenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -98,7 +130,12 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
 
         verManager = new LinearLayoutManager(this);
         recy_view_list.setLayoutManager(verManager);
-        RankingListPresenter presenter = new RankingListPresenter(this,this,id);
+
+
+        gridManager = new GridLayoutManager(this,3);
+        recy_view_text.setLayoutManager(gridManager);
+
+        presenter = new RankingListPresenter(this,this,id);
 
     }
 
@@ -128,22 +165,55 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
      * @param categoryList
      */
     @Override
-    public void rankingCategoryList(List<RankingListEntity.Category> categoryList) {
+    public void rankingCategoryList(final List<RankingListEntity.Category> categoryList) {
 
         final RankingListAdapter adapter = new RankingListAdapter(this,categoryList);
         recy_view.setAdapter(adapter);
+        if (categoryList != null && categoryList.size() > 0){
+            g_cid = categoryList.get(0).g_cid;
+            presenter.cid = g_cid;
+        }
 
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 adapter.currentPosition = position;
                 adapter.notifyDataSetChanged();
+                RankingListEntity.Category category = categoryList.get(position);
+                presenter.getNewRankingList(category.g_cid);
+            }
+        });
+
+
+        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter
+                <RankingListEntity.Category>(this,R.layout.layout_ranking_title,categoryList) {
+
+            @Override
+            public void convert(SimpleViewHolder holder, RankingListEntity.Category category, int position) {
+                MyTextView mtv_text = holder.getView(R.id.mtv_text);
+                holder.addOnClickListener(R.id.mtv_text);
+                mtv_text.setWHProportion(240,50);
+                mtv_text.setText(category.name);
+            }
+        };
+
+        recy_view_text.setAdapter(simpleRecyclerAdapter);
+        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                RankingListEntity.Category category = categoryList.get(position);
+                presenter.getNewRankingList(category.g_cid);
+                showCategory();
             }
         });
     }
 
     @OnClick(R.id.view_btn)
-    public void showCategory(){
+    public void showCategoryClick(){
+        showCategory();
+    }
+
+    private void showCategory() {
         if (!isShow){//显示
             recy_view.setVisibility(View.GONE);
             mtv_name.setVisibility(View.VISIBLE);
@@ -156,7 +226,6 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             miv_pic.setImageResource(R.mipmap.icon_xjiantou);
         }
         isShow = !isShow;
-
     }
 
     /**
@@ -165,9 +234,33 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
      * @param goods
      */
     @Override
-    public void rankingGoodsList(RankingListEntity.Goods goods) {
+    public void rankingGoodsList(RankingListEntity.Goods goods,int page, int allpage) {
 
+        if (page == 1){
+            goodsList.clear();
+        }
 
-
+        if (!isEmpty(goods.goods_list)){
+            goodsList.addAll(goods.goods_list);
+        }
+        if (adapter == null) {
+            adapter = new SingleCategoryAdapter(this, true, goodsList);
+            recy_view_list.setAdapter(adapter);
+            adapter.setPageLoading(page,allpage);
+            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (presenter != null){
+                        presenter.onRefresh();
+                    }
+                }
+            });
+        }else {
+            adapter.setPageLoading(page,allpage);
+            if (goodsList.size() <= presenter.page_size)
+                adapter.notifyDataSetChanged();
+            else
+                adapter.notifyItemInserted(presenter.page_size);
+        }
     }
 }
