@@ -22,4 +22,10 @@ public interface IPayListView extends IView{
      * @param entity
      */
     void payOrder(PayOrderEntity entity);
+
+    /**
+     * 支付订单失败
+     * @param entity
+     */
+    void payOrderFail(PayOrderEntity entity);
 }

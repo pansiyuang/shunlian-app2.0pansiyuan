@@ -284,6 +284,17 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     }
 
     /**
+     * 支付订单失败
+     *
+     * @param entity
+     */
+    @Override
+    public void payOrderFail(PayOrderEntity entity) {
+        this.order_id = entity.order_id;
+        payFail();
+    }
+
+    /**
      * 调起银联支付
      * @param unionpay
      */

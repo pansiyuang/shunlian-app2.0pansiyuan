@@ -20,4 +20,9 @@ public class SimpleNetDataCallback<T> implements INetDataCallback<T> {
     public void onErrorCode(int code, String message) {
 
     }
+
+    @Override
+    public void onErrorData(T t) {
+
+    }
 }
