@@ -242,31 +242,4 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             super(itemView);
         }
     }
-
-    public class DoubleViewHolder extends BaseRecyclerViewHolder {
-        @BindView(R.id.miv_icon)
-        MyImageView miv_icon;
-
-        @BindView(R.id.tv_title)
-        TextView tv_title;
-
-        @BindView(R.id.ll_tag)
-        LinearLayout ll_tag;
-
-        @BindView(R.id.tv_price)
-        TextView tv_price;
-
-        @BindView(R.id.tv_free)
-        TextView tv_free;
-
-        @BindView(R.id.tv_comment)
-        TextView tv_comment;
-
-        @BindView(R.id.tv_address)
-        TextView tv_address;
-
-        public DoubleViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
 }

@@ -14,14 +14,11 @@ import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
 
 import butterknife.BindView;
-
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
@@ -44,9 +41,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private DoubleCategoryAdapter doubleAdapter;
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
-    private VerticalItemDecoration verticalItemDecoration;
-    private GridSpacingItemDecoration spacingItemDecoration;
-    private int currentMode = MODE_DOUBLE;
+    private int currentMode = MODE_SINGLE;
 
     /**
      * 布局id
@@ -77,9 +72,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
 
-        verticalItemDecoration = new VerticalItemDecoration(TransformUtil.dip2px(this, 0.5f), 0, 0, getColorResouce(R.color.value_ECECEC));
-        spacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(this, 5f), false);
-
         recycle_category.setNestedScrollingEnabled(false);
     }
 
@@ -102,26 +94,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     public void setListMode(int mode) {
         if (mode == MODE_SINGLE) {
             recycle_category.setLayoutManager(linearLayoutManager);
-            recycle_category.removeItemDecoration(spacingItemDecoration);
-            recycle_category.addItemDecoration(verticalItemDecoration);
             miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_yilei));
             if (singleAdapter != null) {
                 recycle_category.setAdapter(singleAdapter);
             }
         } else if (mode == MODE_DOUBLE) {
-//            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-//                @Override
-//                public int getSpanSize(int position) {
-//                    if (position == 0) {
-//                        return 1;
-//                    } else {
-//                        return gridLayoutManager.getSpanCount();
-//                    }
-//                }
-//            });
             recycle_category.setLayoutManager(gridLayoutManager);
-            recycle_category.removeItemDecoration(verticalItemDecoration);
-            recycle_category.addItemDecoration(spacingItemDecoration);
             miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_lianglei));
             if (doubleAdapter != null) {
                 recycle_category.setAdapter(doubleAdapter);

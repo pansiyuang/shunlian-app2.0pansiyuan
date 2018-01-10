@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
-import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -32,10 +31,12 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
+    private RecyclerView.LayoutParams params;
 
     public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
+        params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mStore = store;
     }
 
@@ -104,9 +105,28 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     public void handItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DoubleViewHolder) {
-            GoodsDeatilEntity.Goods goods = lists.get(position - 1);
+            GoodsDeatilEntity.Goods goods;
+            int margin = TransformUtil.dip2px(context, 5f);
+            if (mStore != null) {
+                goods = lists.get(position - 1);
+                if (position % 2 == 0) {
+                    params.setMargins(0, 0, 0, margin);
+                    holder.itemView.setLayoutParams(params);
+                } else {
+                    params.setMargins(0, 0, margin, margin);
+                    holder.itemView.setLayoutParams(params);
+                }
+            } else {
+                goods = lists.get(position);
+                if (position % 2 == 0) {
+                    params.setMargins(0, 0, margin, margin);
+                    holder.itemView.setLayoutParams(params);
+                } else {
+                    params.setMargins(0, 0, 0, margin);
+                    holder.itemView.setLayoutParams(params);
+                }
+            }
             DoubleViewHolder viewHolder = (DoubleViewHolder) holder;
-
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
             viewHolder.tv_title.setText(goods.title);
             viewHolder.tv_price.setText(goods.price);
@@ -164,6 +184,29 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         }
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    int type = getItemViewType(position);
+                    switch (type) {
+                        case BANANER_LAYOUT:
+                            return gridManager.getSpanCount();
+                        default:
+                            return 1;
+                    }
+                }
+            });
+        }
+    }
+
     public TextView creatTextTag(String content, int colorRes, Drawable drawable, DoubleViewHolder viewHolder) {
 
         TextView textView = new TextView(context);
@@ -212,8 +255,6 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public TitleViewHolder(View itemView) {
             super(itemView);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            itemView.setLayoutParams(params);
         }
     }
 
@@ -241,9 +282,6 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public DoubleViewHolder(View itemView) {
             super(itemView);
-            int width = (DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 5f)) / 2;
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, TransformUtil.dip2px(context, 180f));
-            miv_icon.setLayoutParams(params);
         }
     }
 }
