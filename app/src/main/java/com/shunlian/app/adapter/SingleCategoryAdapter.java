@@ -37,6 +37,11 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         this.mStore = store;
     }
 
+    public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
+        super(context, isShowFooter, lists);
+        mInflater = LayoutInflater.from(context);
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new SingleViewHolder(mInflater.inflate(R.layout.item_category_single, parent, false));
