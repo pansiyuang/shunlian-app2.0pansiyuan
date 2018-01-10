@@ -22,11 +22,9 @@ import retrofit2.Call;
  */
 
 public class CategoryPresenter extends BasePresenter<ICategoryView> {
-    private GoodsSearchParam goodsSearchParam;
 
-    public CategoryPresenter(Context context, ICategoryView iView, GoodsSearchParam goodsSearchParam) {
+    public CategoryPresenter(Context context, ICategoryView iView) {
         super(context, iView);
-        this.goodsSearchParam = goodsSearchParam;
     }
 
     @Override
@@ -46,20 +44,46 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
 
     public void getSearchGoods(GoodsSearchParam goodsSearchParam) {
         Map<String, String> map = new HashMap<>();
-        map.put("keyword", goodsSearchParam.keyword);
-        map.put("min_price", goodsSearchParam.min_price);
-        map.put("max_price",goodsSearchParam. max_price);
-        map.put("is_free_ship", goodsSearchParam.is_free_ship);
-        map.put("brand_ids", goodsSearchParam.brand_ids);
-        map.put("cid", goodsSearchParam.cid);
-        map.put("send_area", goodsSearchParam.send_area);
-        try {
-            String attr_data = new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
-            map.put("attr_data", attr_data);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+
+        if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
+            map.put("keyword", goodsSearchParam.keyword);
         }
-        map.put("sort_type",goodsSearchParam. sort_type);
+
+        if (!TextUtils.isEmpty(goodsSearchParam.min_price)) {
+            map.put("min_price", goodsSearchParam.min_price);
+        }
+
+        if (!TextUtils.isEmpty(goodsSearchParam.max_price)) {
+            map.put("max_price", goodsSearchParam.max_price);
+        }
+
+        if (!TextUtils.isEmpty(goodsSearchParam.is_free_ship)) {
+            map.put("is_free_ship", goodsSearchParam.is_free_ship);
+        }
+
+        if (!TextUtils.isEmpty(goodsSearchParam.brand_ids)) {
+            map.put("brand_ids", goodsSearchParam.brand_ids);
+        }
+        if (!TextUtils.isEmpty(goodsSearchParam.cid)) {
+            map.put("cid", goodsSearchParam.cid);
+        }
+
+        if (!TextUtils.isEmpty(goodsSearchParam.send_area)) {
+            map.put("send_area", goodsSearchParam.send_area);
+        }
+
+        if (goodsSearchParam.attr_data != null || goodsSearchParam.attr_data.size() != 0) {
+            try {
+                String attr_data = new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
+                map.put("attr_data", attr_data);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!TextUtils.isEmpty(goodsSearchParam.sort_type)) {
+            map.put("sort_type", goodsSearchParam.sort_type);
+        }
 
         sortAndMD5(map);
 
@@ -70,15 +94,10 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
                 super.onSuccess(entity);
                 if (entity.data != null) {
                     SearchGoodsEntity searchGoodsEntity = entity.data;
-//                    iView.getSearchGoods(entity.data);
+                    iView.getSearchGoods(entity.data);
                     LogUtil.httpLogW("searchGoodsEntity:" + searchGoodsEntity);
-
                 }
-
             }
         });
     }
-
-//    public void getSearchGoods(String keyword, String min_price, String max_price, String is_free_ship, String brand_ids, String cid, String send_area, String attr_data, String sort_type) {
-
 }

@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
@@ -19,6 +20,7 @@ import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
 
 import butterknife.BindView;
+
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
@@ -41,6 +43,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private DoubleCategoryAdapter doubleAdapter;
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
+    private GoodsSearchParam searchParam;
     private int currentMode = MODE_SINGLE;
 
     /**
@@ -53,8 +56,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         return R.layout.act_category;
     }
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context, GoodsSearchParam param) {
         Intent intent = new Intent(context, CategoryAct.class);
+        intent.putExtra("param", param);
         context.startActivity(intent);
     }
 
@@ -66,8 +70,13 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        presenter = new CategoryPresenter(this, this,null);
-//        presenter.getSearchGoods();
+
+        searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
+        if (searchParam == null) {
+            searchParam = new GoodsSearchParam();
+        }
+        presenter = new CategoryPresenter(this, this);
+        presenter.getSearchGoods(searchParam);
 
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);

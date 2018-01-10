@@ -281,7 +281,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 //                            }
 //                            attr.attr_name=set[n];
 //                        }
-                        categoryPresenter = new CategoryPresenter(this, this, goodsSearchParam);
+                        categoryPresenter = new CategoryPresenter(this, this);
                     } else {
                         brand_ids += Constant.BRAND_IDS.get(m) + ",";
                     }
