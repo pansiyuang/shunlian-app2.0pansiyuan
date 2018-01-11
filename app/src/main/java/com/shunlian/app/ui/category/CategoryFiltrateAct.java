@@ -60,6 +60,9 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     @BindView(R.id.mtv_more)
     MyTextView mtv_more;
 
+    @BindView(R.id.mtv_reset)
+    MyTextView mtv_reset;
+
     @BindView(R.id.edt_max)
     EditText edt_max;
 
@@ -97,6 +100,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 
     public void reset() {
         categoryFiltratePresenter.isSecond = false;
+        categoryFiltratePresenter.initGps();
 
         mtv_baoyou.setBackgroundColor(getColorResouce(R.color.value_f5));
         isBao = false;
@@ -116,10 +120,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         }
 
         if (shaixuanAttrAdapter != null) {
-            if (Constant.BRAND_IDSBEFORE == null) {
+            if (Constant.BRAND_IDSBEFORE != null) {
                 Constant.BRAND_IDSBEFORE.clear();
             }
-            if (Constant.BRAND_IDS == null) {
+            if (Constant.BRAND_IDS != null) {
                 Constant.BRAND_IDS.clear();
             }
             shaixuanAttrAdapter.notifyDataSetChanged();
@@ -152,6 +156,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         mtv_locate.setOnClickListener(this);
         mtv_cancel.setOnClickListener(this);
+        mtv_reset.setOnClickListener(this);
         mtv_finish.setOnClickListener(this);
         mtv_baoyou.setOnClickListener(this);
         mtv_zhusan.setOnClickListener(this);
