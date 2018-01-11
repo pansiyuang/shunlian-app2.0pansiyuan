@@ -12,6 +12,7 @@ public class CustomPopupWindow {
     private PopupWindow mPopupWindow;
     private View contentview;
     private Context mContext;
+    private static final String[] desc = {"综合排序", "价格（从高到低）", "价格（从低到高）", "人气"};
 
     public CustomPopupWindow(Builder builder) {
         mContext = builder.context;
@@ -161,7 +162,6 @@ public class CustomPopupWindow {
             this.animstyle = animstyle;
             return this;
         }
-
 
         public CustomPopupWindow builder() {
             return new CustomPopupWindow(this);

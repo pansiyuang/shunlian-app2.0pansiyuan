@@ -168,7 +168,7 @@ public class MainPageFrag extends BaseFragment {
                         SubmitLogisticsInfoAct.startAct(baseActivity,"155");
                         break;
                     case 14:
-                        CategoryAct.startAct(baseActivity);
+                        CategoryAct.startAct(baseActivity,null);
                         break;
                 }
             }

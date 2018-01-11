@@ -11,6 +11,7 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -122,7 +123,7 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
             attrs.add(attr);
             if (n>=Constant.BRAND_ATTRNAME.size()-1){
                 goodsSearchParam.attr_data=attrs;
-                // TODO: 2018/1/10
+                CategoryAct.startAct(context, goodsSearchParam);
             }
         }
     }

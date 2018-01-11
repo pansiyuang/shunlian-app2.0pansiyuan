@@ -72,7 +72,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
             map.put("send_area", goodsSearchParam.send_area);
         }
 
-        if (goodsSearchParam.attr_data != null || goodsSearchParam.attr_data.size() != 0) {
+        if (goodsSearchParam.attr_data != null && goodsSearchParam.attr_data.size() != 0) {
             try {
                 String attr_data = new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
                 map.put("attr_data", attr_data);
