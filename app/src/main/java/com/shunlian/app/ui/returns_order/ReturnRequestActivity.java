@@ -23,14 +23,18 @@ import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 import static com.shunlian.app.adapter.SingleImgAdapter.REQUEST_CAMERA_CODE;
 
@@ -98,6 +102,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private String currentRefundId;
     private ReturnRequestPresenter presenter;
     private boolean isEdit; //是否是编辑
+    private int index;
 
     @Override
     protected int getLayoutId() {
@@ -209,13 +214,39 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK && data != null) {
             ArrayList<String> imagePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             upLoadList.clear();
-            for (String s : imagePaths) {
-                ImageEntity imageEntity = new ImageEntity(s);
-                upLoadList.add(imageEntity);
-            }
-            presenter.uploadPic(upLoadList, "refund");
+            index = 0;
+            compressImgs(index, imagePaths);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void compressImgs(int i, final List<String> list) {
+        Luban.with(this).load(list.get(i)).putGear(3).setCompressListener(new OnCompressListener() {
+
+            @Override
+            public void onStart() {
+                LogUtil.httpLogW("onStart()");
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                LogUtil.httpLogW("压缩后大小:" + file.length());
+                ImageEntity imageEntity = new ImageEntity(list.get(index));
+                imageEntity.file = file;
+                upLoadList.add(imageEntity);
+                index++;
+                if (index >= list.size()) {
+                    presenter.uploadPic(upLoadList, "refund");
+                } else {
+                    compressImgs(index, list);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Common.staticToast("上传图片失败");
+            }
+        }).launch();
     }
 
     @Override

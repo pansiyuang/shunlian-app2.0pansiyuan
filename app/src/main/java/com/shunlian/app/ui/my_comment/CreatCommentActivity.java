@@ -29,6 +29,7 @@ import com.shunlian.app.view.ICommentView;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by Administrator on 2017/12/12.
@@ -74,7 +77,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentConsistentStar = 0;
     private View footView;
     private PromptDialog promptDialog;
-
+    private int index;
 
     public static void startAct(Context context, List<ReleaseCommentEntity> list, int type) {
         Intent intent = new Intent(context, CreatCommentActivity.class);
@@ -182,21 +185,46 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            ArrayList<String> imagePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
+            final ArrayList<String> imagePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             if (commentList.get(currentPosition).imgs == null) {
                 paths = new ArrayList<>();
             } else {
                 paths = commentList.get(currentPosition).imgs;
             }
-
-            for (String s : imagePaths) {
-                ImageEntity imageEntity = new ImageEntity(s);
-                paths.add(imageEntity);
-            }
-            commentPresenter.uploadPic(paths, "comment");
+            index = 0;
+            compressImgs(index, imagePaths);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public void compressImgs(int i, final List<String> list) {
+        Luban.with(this).load(list.get(i)).putGear(3).setCompressListener(new OnCompressListener() {
+
+            @Override
+            public void onStart() {
+                LogUtil.httpLogW("onStart()");
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                ImageEntity imageEntity = new ImageEntity(list.get(index));
+                imageEntity.file = file;
+                paths.add(imageEntity);
+                index++;
+                if (index >= list.size()) {
+                    commentPresenter.uploadPic(paths, "comment");
+                } else {
+                    compressImgs(index, list);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Common.staticToast("上传图片失败");
+            }
+        }).launch();
+    }
+
 
     @Override
     public void showFailureView(int request_code) {

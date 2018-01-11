@@ -17,16 +17,20 @@ import com.shunlian.app.presenter.SubmitLogisticsInfoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ISubmitLogisticsInfoView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by Administrator on 2017/12/28.
@@ -56,6 +60,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     public final int LOGISTICS_NAME = 200;//物流名字
     private String refund_id;
     private SubmitLogisticsInfoPresenter presenter;
+    private int index;
 
     public static void startAct(Context context,String refund_id) {
         Intent intent = new Intent(context, SubmitLogisticsInfoAct.class);
@@ -175,15 +180,41 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
             met_logistics.setText(result);
         }else if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK){
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
-            for (String picturePath: picturePaths) {
-                listExplains.add(new ImageEntity(picturePath));
-            }
-            singleImgAdapter.notifyDataSetChanged();
-            presenter.uploadPic(listExplains,"customer_service");//上传图片
+            index = 0;
+            compressImgs(0, picturePaths);
         }else if (requestCode == LOGISTICS_NAME && resultCode == Activity.RESULT_OK){
             String name = data.getStringExtra("name");
             mtv_logistics.setText(name);
         }
+    }
+
+    public void compressImgs(int i, final List<String> list) {
+        Luban.with(this).load(list.get(i)).putGear(3).setCompressListener(new OnCompressListener() {
+
+            @Override
+            public void onStart() {
+                LogUtil.httpLogW("onStart()");
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                ImageEntity imageEntity = new ImageEntity(list.get(index));
+                imageEntity.file = file;
+                listExplains.add(imageEntity);
+                index++;
+                if (index >= list.size()) {
+                    singleImgAdapter.notifyDataSetChanged();
+                    presenter.uploadPic(listExplains,"customer_service");//上传图片
+                } else {
+                    compressImgs(index, list);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Common.staticToast("上传图片失败");
+            }
+        }).launch();
     }
 
     @Override
@@ -257,7 +288,9 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
         }
 
         for (String picturePath : pics) {
-            listExplains.add(new ImageEntity(picturePath));
+            ImageEntity imageEntity = new ImageEntity();
+            imageEntity.imgUrl = picturePath;
+            listExplains.add(imageEntity);
         }
         singleImgAdapter.notifyDataSetChanged();
     }
