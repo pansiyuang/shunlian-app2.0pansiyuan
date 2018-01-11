@@ -17,10 +17,8 @@ import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
-import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
@@ -82,7 +80,6 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 
 
     private CategoryFiltratePresenter categoryFiltratePresenter;
-    private CategoryPresenter categoryPresenter;
     private PingpaiAdapter pingpaiAdapter;
     private ShaixuanAttrAdapter shaixuanAttrAdapter;
     private List<GetListFilterEntity.Brand> brands;

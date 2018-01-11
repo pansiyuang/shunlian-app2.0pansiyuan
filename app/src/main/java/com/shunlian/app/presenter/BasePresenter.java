@@ -218,6 +218,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                             iView.showDataEmptyView(emptyCode);
                         }
                     }
+                }else if (body.code != 1000 && body.data != null){
+                    callback.onErrorData(body);
                 }else {
                     callback.onErrorCode(body.code,body.message);
                     //请求错误

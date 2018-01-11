@@ -26,7 +26,7 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
     public ExchangeDetailPresenter(Context context, ExchangeDetailView iView, String refund_id) {
         super(context, iView);
         this.refund_id = refund_id;
-        initApi();
+        initApiData();
     }
 
     @Override
@@ -39,8 +39,7 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
 
     }
 
-    @Override
-    protected void initApi() {
+    public void initApiData(){
         Map<String, String> map = new HashMap<>();
         map.put("refund_id", refund_id);
         sortAndMD5(map);
@@ -74,5 +73,10 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
                 iView.confirmReceive();
             }
         });
+    }
+
+    @Override
+    protected void initApi() {
+
     }
 }

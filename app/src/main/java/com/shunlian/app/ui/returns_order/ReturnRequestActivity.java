@@ -21,10 +21,8 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
@@ -317,7 +315,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @Override
     public void applyRefundSuccess(String refundId) {
         finish();
-        ExchangeDetailAct.startAct(this, refundId);
     }
 
     @Override

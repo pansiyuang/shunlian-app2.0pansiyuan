@@ -2,6 +2,7 @@ package com.shunlian.app.ui.order;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,6 +16,8 @@ import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ExchangeDetailView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyImageView;
@@ -139,6 +142,14 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         context.startActivity(intent);
     }
 
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (exchangeDetailPresenter!=null){
+            exchangeDetailPresenter.initApiData();
+        }
+    }
 
     @Override
     protected int getLayoutId() {

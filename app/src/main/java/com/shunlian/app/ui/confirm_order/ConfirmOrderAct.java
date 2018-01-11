@@ -264,7 +264,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     e.printStackTrace();
                 }
                 LogUtil.zhLogW("go_pay=============="+shop_goods);
-                PayListActivity.startAct(this,shop_goods,addressId,null);
+                String price = mtv_total_price.getText().toString();
+                PayListActivity.startAct(this,shop_goods,addressId,null,price.substring(1,price.length()));
                 break;
             case R.id.miv_close:
                 backSelect();
