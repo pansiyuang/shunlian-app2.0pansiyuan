@@ -42,6 +42,7 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         viewHolder.mtv_name.setText(attr.name);
         viewHolder.rv_attr.setLayoutManager(new GridLayoutManager(context, 3));
         viewHolder.strings=new ArrayList<>();
+        Constant.BRAND_ATTRNAME.add(attr.name);
         Constant.BRAND_ATTRS.put(attr.name,viewHolder.strings);
         viewHolder.shaixuanAttrsAdapter=new ShaixuanAttrsAdapter(context, false, attr.val_list,attr.name);
         viewHolder.rv_attr.setAdapter(viewHolder.shaixuanAttrsAdapter);

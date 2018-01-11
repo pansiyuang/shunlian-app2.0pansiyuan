@@ -20,6 +20,7 @@ import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
@@ -29,7 +30,6 @@ import com.shunlian.app.widget.MyTextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 
@@ -258,35 +258,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     goodsSearchParam.send_area = "珠三角";
                 }
                 goodsSearchParam.sort_type = sort_type;
-                String brand_ids="";
-                for (int m = 0; m < Constant.BRAND_IDS.size(); m++) {
-                    if (m >= Constant.BRAND_IDS.size() - 1) {
-                        brand_ids += Constant.BRAND_IDS.get(m);
-                        goodsSearchParam.brand_ids = brand_ids;
-
-                        goodsSearchParam.attr_data=new ArrayList<>();
-
-//                        for (int n = 0; n < Constant.BRAND_ATTRS.size(); n++) {
-//                            GoodsSearchParam.Attr attr=new GoodsSearchParam.Attr();
-//                            Set set = Constant.BRAND_ATTRS.keySet();
-//                            HashMap hashmp = ne HashMap();
-//                            hashmp.put("aa", "111");
-//                            Set set = hashmp.keySet();
-//                            Iterator iter = set.iterator();
-//                            while (iter.hasNext()) {
-//                                String key = (String) iter.next();
-//                            }
-//                            for (String key : list.get(pos).keySet() ) {
-//                                myKey = key;
-//                            }
-//                            attr.attr_name=set[n];
-//                        }
-                        categoryPresenter = new CategoryPresenter(this, this);
-                    } else {
-                        brand_ids += Constant.BRAND_IDS.get(m) + ",";
-                    }
-                }
-
+                categoryFiltratePresenter.dealBrandIds(goodsSearchParam);
                 break;
         }
     }
@@ -298,27 +270,14 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         if (pingpaiAdapter == null && getListFilterEntity.recommend_brand_list != null && getListFilterEntity.recommend_brand_list.size() > 0) {
             mrlayout_pingpai.setVisibility(View.VISIBLE);
             view_pingpai.setVisibility(View.VISIBLE);
-            Constant.BRAND_IDS = new ArrayList<>();
-            List<GetListFilterEntity.Recommend> recommends = new ArrayList<>();
-            for (int i = 0; i < 11 || i < getListFilterEntity.recommend_brand_list.size(); i++) {
-                GetListFilterEntity.Recommend recommend = getListFilterEntity.recommend_brand_list.get(i);
-                recommends.add(recommend);
-                if (i >= getListFilterEntity.recommend_brand_list.size() - 1 || i >= 10) {
-                    if (getListFilterEntity.recommend_brand_list.size() > 10) {
-                        recommends.add(getListFilterEntity.recommend_brand_list.get(0));
-                    }
-                    pingpaiAdapter = new PingpaiAdapter(this, false, recommends, brands, letters);
-                    rv_pingpai.setLayoutManager(new GridLayoutManager(this, 3));
-                    rv_pingpai.setAdapter(pingpaiAdapter);
-                    rv_pingpai.setNestedScrollingEnabled(false);//防止滚动卡顿
-                }
-            }
+            categoryFiltratePresenter.dealRecommendBrand(getListFilterEntity);
         } else {
             mrlayout_pingpai.setVisibility(View.GONE);
             view_pingpai.setVisibility(View.GONE);
         }
         if (shaixuanAttrAdapter == null && getListFilterEntity.attr_list != null && getListFilterEntity.attr_list.size() > 0) {
             Constant.BRAND_ATTRS = new HashMap<>();
+            Constant.BRAND_ATTRNAME = new ArrayList<>();
             rv_category.setLayoutManager(new LinearLayoutManager(this));
             shaixuanAttrAdapter = new ShaixuanAttrAdapter(this, false, getListFilterEntity.attr_list);
             rv_category.setAdapter(shaixuanAttrAdapter);
@@ -337,6 +296,14 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 //        mtv_zhusan.setBackgroundResource(0);
         mtv_zhusan.setBackgroundColor(getColorResouce(R.color.value_f5));
         mtv_jiangzhe.setBackgroundColor(getColorResouce(R.color.value_f5));
+    }
+
+    @Override
+    public void initPingpai(List<GetListFilterEntity.Recommend> recommends) {
+        pingpaiAdapter = new PingpaiAdapter(this, false, recommends, brands, letters);
+        rv_pingpai.setLayoutManager(new GridLayoutManager(this, 3));
+        rv_pingpai.setAdapter(pingpaiAdapter);
+        rv_pingpai.setNestedScrollingEnabled(false);//防止滚动卡顿
     }
 
     @Override

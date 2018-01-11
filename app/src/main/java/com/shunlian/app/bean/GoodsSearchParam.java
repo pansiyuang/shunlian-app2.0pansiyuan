@@ -16,6 +16,7 @@ public class GoodsSearchParam implements Serializable{
     public String cid;
     public String send_area;
     public List<Attr> attr_data;
+//    public String attr_data;
     public String sort_type;
 
     @Override
@@ -33,7 +34,7 @@ public class GoodsSearchParam implements Serializable{
                 '}';
     }
 
-    public static class Attr {
+    public static class Attr implements Serializable{
         public String attr_name;
         public List<String> attr_vals;
 
