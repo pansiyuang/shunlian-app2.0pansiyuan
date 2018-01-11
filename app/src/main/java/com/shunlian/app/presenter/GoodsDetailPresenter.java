@@ -58,6 +58,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 if (data != null) {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
+                    iView.goodsOffShelf(data.status);
                 }
             }
         });

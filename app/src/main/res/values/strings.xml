@@ -371,4 +371,5 @@
     <item name="tag_category_isclick" type="id" />
 
     <string name="sort_comment">%s条评论 %s好评</string>
+    <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>
 </resources>

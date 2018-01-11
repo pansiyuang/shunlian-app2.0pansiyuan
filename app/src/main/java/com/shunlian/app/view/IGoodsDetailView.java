@@ -49,4 +49,10 @@ public interface IGoodsDetailView extends IView {
      * @param voucher
      */
     void refreshVoucherState(GoodsDeatilEntity.Voucher voucher);
+
+    /**
+     * 商品是否下架
+     * @param status
+     */
+    void goodsOffShelf(String status);
 }

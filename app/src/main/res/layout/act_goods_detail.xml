@@ -284,6 +284,18 @@
                 android:background="@color/light_gray_three"/>
         </com.shunlian.app.widget.MyRelativeLayout>
     </android.support.v7.widget.Toolbar>
+    <!--商品下架提示-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_off_shelf"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/mll_bottom"
+        android:background="#b2000000"
+        android:gravity="center"
+        android:text="@string/goods_off_the_shelf"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="gone" />
 
     <!--遮罩-->
     <ScrollView
