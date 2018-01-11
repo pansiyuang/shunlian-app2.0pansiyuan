@@ -24,7 +24,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
     public OrderDetailPresenter(Context context, OrderdetailView iView, String order_id) {
         super(context, iView);
         this.order_id = order_id;
-        initApi();
+        initApiData();
     }
 
     @Override
@@ -39,6 +39,10 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
 
     @Override
     protected void initApi() {
+
+    }
+
+    public void initApiData(){
         Map<String, String> map = new HashMap<>();
         map.put("order_id", order_id);
         sortAndMD5(map);
@@ -51,7 +55,6 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 iView.setOrder(data);
             }
         });
-
     }
     /**
      * 取消订单

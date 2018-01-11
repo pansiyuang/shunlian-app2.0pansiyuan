@@ -147,8 +147,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     protected void onRestart() {
         super.onRestart();
         if (exchangeDetailPresenter!=null){
-            exchangeDetailPresenter.initData();
-            LogUtil.augusLogW("sdfs");
+            exchangeDetailPresenter.initApiData();
         }
     }
 

@@ -131,6 +131,13 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         context.startActivity(intent);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (orderDetailPresenter!=null){
+            orderDetailPresenter.initApiData();
+        }
+    }
 
     @Override
     protected int getLayoutId() {
