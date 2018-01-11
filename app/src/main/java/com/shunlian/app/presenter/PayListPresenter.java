@@ -77,6 +77,11 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
                 super.onSuccess(entity);
                 iView.payOrder(entity.data);
             }
+            @Override
+            public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
+                super.onErrorData(payOrderEntityBaseEntity);
+                iView.payOrderFail(payOrderEntityBaseEntity.data);
+            }
         });
     }
 
@@ -99,6 +104,12 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
             public void onSuccess(BaseEntity<PayOrderEntity> entity) {
                 super.onSuccess(entity);
                 iView.payOrder(entity.data);
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
+                super.onErrorData(payOrderEntityBaseEntity);
+                iView.payOrderFail(payOrderEntityBaseEntity.data);
             }
         });
 

@@ -82,9 +82,9 @@
                 android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="456.9890"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
         </com.shunlian.app.widget.MyLinearLayout>
@@ -97,6 +97,7 @@
             android:orientation="horizontal">
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_order"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -106,6 +107,7 @@
                 android:textSize="14sp" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_firstPage"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

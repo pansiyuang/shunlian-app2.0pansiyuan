@@ -73,6 +73,11 @@ public class TestPresenter extends BasePresenter {
             public void onErrorCode(int code, String message) {
 
             }
+
+            @Override
+            public void onErrorData(BaseEntity<MyHomeEntity> myHomeEntityBaseEntity) {
+
+            }
         });
     }
 
@@ -110,6 +115,11 @@ public class TestPresenter extends BasePresenter {
 
             @Override
             public void onErrorCode(int code, String message) {
+
+            }
+
+            @Override
+            public void onErrorData(BaseEntity<UserLoginEntity> userLoginEntityBaseEntity) {
 
             }
         });

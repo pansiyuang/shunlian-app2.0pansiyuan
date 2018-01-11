@@ -29,11 +29,28 @@ package com.shunlian.app.listener;
 
 public interface INetDataCallback<T> {
 
-
+    /**
+     * 请求成功
+     * @param t
+     */
     void onSuccess(T t);
 
+    /**
+     * 请求失败
+     */
     void onFailure();
 
+    /**
+     * 请求成功，但是响应码不是1000
+     * @param code
+     * @param message
+     */
     void onErrorCode(int code,String message);
+
+    /**
+     * 请求成功，响应码不是1000，但是data有数据
+     * @param t
+     */
+    void onErrorData(T t);
 
 }
