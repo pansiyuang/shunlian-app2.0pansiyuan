@@ -133,6 +133,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.line)
     View line;
+
+    @BindView(R.id.mtv_off_shelf)
+    MyTextView mtv_off_shelf;
+
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -477,6 +481,32 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
         if (goodsDeatilFrag != null){
             goodsDeatilFrag.refreshVoucherState(voucher);
+        }
+    }
+
+    /**
+     * 商品是否下架
+     *
+     * @param status
+     */
+    @Override
+    public void goodsOffShelf(String status) {
+        if ("0".equals(status)){//下架
+            mtv_off_shelf.setVisibility(View.VISIBLE);
+            mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
+            mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
+            mtv_add_car.setEnabled(false);
+            mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_CACACA));
+            mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
+            mtv_buy_immediately.setEnabled(false);
+        }else {
+            mtv_off_shelf.setVisibility(View.GONE);
+            mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
+            mtv_add_car.setTextColor(getColorResouce(R.color.white));
+            mtv_add_car.setEnabled(true);
+            mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.pink_color));
+            mtv_buy_immediately.setTextColor(getColorResouce(R.color.white));
+            mtv_buy_immediately.setEnabled(true);
         }
     }
 

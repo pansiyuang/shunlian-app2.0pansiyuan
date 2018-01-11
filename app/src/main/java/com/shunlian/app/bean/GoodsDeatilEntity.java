@@ -21,6 +21,7 @@ public class GoodsDeatilEntity {
     public String max_price;
     public String stock;
     public String thumb;
+    public String status;//1为上架 0为下架
     public String is_fav;
     public ArrayList<String> pics;
     public String has_option;

@@ -32,6 +32,7 @@ public class SuccessfulTradeAct extends BaseActivity {
      */
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.pink_color);
 
     }
 }

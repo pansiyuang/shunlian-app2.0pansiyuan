@@ -134,6 +134,10 @@
 
     <!--分类-->
     <color name="category_reset">#fceaee</color>
+    <color name="value_FDCD22">#FDCD22</color>
+    <color name="value_CACACA">#CACACA</color>
+    <color name="value_CDA101">#CDA101</color>
+    <color name="value_A0A0A0">#A0A0A0</color>
 
 </resources>
 

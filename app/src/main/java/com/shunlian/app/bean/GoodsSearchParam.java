@@ -1,5 +1,7 @@
 package com.shunlian.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class GoodsSearchParam implements Serializable{
                 ", sort_type='" + sort_type + '\'' +
                 '}';
     }
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Attr implements Serializable{
         public String attr_name;
         public List<String> attr_vals;

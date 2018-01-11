@@ -73,7 +73,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
         Call<BaseEntity<LoginFinishEntity>> requestBodyCall = getSaveCookieApiService().login(requestBody);
 
-        getNetData(requestBodyCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
+        getNetData(true,requestBodyCall,new SimpleNetDataCallback<BaseEntity<LoginFinishEntity>>(){
             @Override
             public void onSuccess(BaseEntity<LoginFinishEntity> entity) {
                 super.onSuccess(entity);
@@ -92,7 +92,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<String>> baseEntityCall = getAddCookieApiService().sendSmsCode(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
+            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<String>>() {
                 @Override
                 public void onSuccess(BaseEntity<String> entity) {
                     super.onSuccess(entity);

@@ -51,7 +51,7 @@ public class PlatformInterventionPresenter extends BasePresenter<IPlatformInterv
     public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
         Map<String, RequestBody> params = new HashMap<>();
         for (int i = 0; i < filePath.size(); i++) {
-            File file = new File(filePath.get(i).imgPath);
+            File file = filePath.get(i).file;
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             LogUtil.httpLogW("file:" + file.getName());
             UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
@@ -65,7 +65,7 @@ public class PlatformInterventionPresenter extends BasePresenter<IPlatformInterv
                 public void onDetailProgress(long written, long total, String tag) {
 
                 }
-            }, filePath.get(i).imgPath);
+            }, file.getAbsolutePath());
             params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
         }
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);

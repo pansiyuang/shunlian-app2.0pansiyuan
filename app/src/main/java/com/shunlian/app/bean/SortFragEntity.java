@@ -43,8 +43,9 @@ public class SortFragEntity {
         public String id;
         public String name;
         public String thumb;
-        public String pid;
-        public String level;
-        public String on_ranking;
+        public String op_cid;
+        public String g_cid;
+        public String is_attr;
+        public List<GoodsSearchParam.Attr> attrs;
     }
 }
