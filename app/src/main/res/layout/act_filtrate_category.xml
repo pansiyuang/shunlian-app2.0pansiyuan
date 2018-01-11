@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_title"
         android:layout_width="match_parent"
-        android:layout_height="44dp">
+        android:layout_height="44dp"
+        android:background="@color/white">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_title"
@@ -68,9 +68,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/mllayout_bottom"
-        android:layout_below="@id/mrlayout_title">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mrlayout_title"
+        android:layout_marginBottom="40dp"
+        android:background="@color/white">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
@@ -97,8 +98,8 @@
                     android:id="@+id/mtv_address"
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:background="@color/value_f5"
+                    android:gravity="center"
                     android:text="@string/category_dingwei"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
@@ -108,10 +109,10 @@
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="7dp"
-                    android:paddingRight="6dp"
-                    android:gravity="right|center_vertical"
-                    android:text="@string/location"
                     android:background="@mipmap/img_dingwei"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="6dp"
+                    android:text="@string/location"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -120,9 +121,9 @@
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="27dp"
+                    android:background="@color/value_f5"
                     android:gravity="center"
                     android:text="@string/category_jiangzhehu"
-                    android:background="@color/value_f5"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -131,9 +132,9 @@
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="7dp"
+                    android:background="@color/value_f5"
                     android:gravity="center"
                     android:text="@string/category_zhusanjiao"
-                    android:background="@color/value_f5"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -142,8 +143,8 @@
                     android:layout_width="54dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="27dp"
-                    android:gravity="center"
                     android:background="@color/value_f5"
+                    android:gravity="center"
                     android:text="@string/category_baoyou"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
@@ -170,11 +171,12 @@
                     android:layout_width="109dp"
                     android:layout_height="match_parent"
                     android:background="@color/value_f5"
+                    android:digits="@string/category_jiage"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textColor="@color/new_text"
-                    android:textSize="12sp"
                     android:textCursorDrawable="@drawable/edit_cursor"
-                    android:digits="@string/category_jiage" />
+                    android:textSize="12sp" />
 
                 <View
                     android:layout_width="22dp"
@@ -189,10 +191,44 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     android:background="@color/value_f5"
+                    android:digits="@string/category_jiage"
                     android:gravity="center"
-                    android:textCursorDrawable="@drawable/edit_cursor"
+                    android:singleLine="true"
                     android:textColor="@color/new_text"
+                    android:textCursorDrawable="@drawable/edit_cursor"
                     android:textSize="12sp" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_bottoms"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_resets"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/category_reset"
+                    android:gravity="center"
+                    android:text="@string/category_reset"
+                    android:textColor="@color/pink_color"
+                    android:textSize="13sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_finishs"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/pink_color"
+                    android:gravity="center"
+                    android:text="@string/RegisterTwoAct_finish"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
             </com.shunlian.app.widget.MyLinearLayout>
 
             <View
@@ -201,12 +237,14 @@
                 android:layout_height="5dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/value_f5" />
+
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_pingpai"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
+
                 <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,6 +252,7 @@
                     android:text="@string/category_pinpai"
                     android:textColor="@color/share_text"
                     android:textSize="13sp" />
+
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_arrow"
                     android:layout_width="wrap_content"
@@ -222,31 +261,34 @@
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:src="@mipmap/icon_saixuan_gd" />
+
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:gravity="center"
+                    android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@id/miv_arrow"
+                    android:gravity="center"
                     android:text="@string/category_gengduo"
                     android:textColor="@color/share_text"
-                    android:textSize="13sp"
-                    android:layout_marginRight="5dp"/>
+                    android:textSize="13sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_pingpai"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:overScrollMode="never"/>
+                android:paddingRight="5dp" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:overScrollMode="never"/>
+                android:overScrollMode="never" />
         </com.shunlian.app.widget.MyLinearLayout>
     </ScrollView>
 
