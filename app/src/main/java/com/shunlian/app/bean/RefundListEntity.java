@@ -17,6 +17,17 @@ public class RefundListEntity {
 
     public List<RefundList> refund_list;
 
+    @Override
+    public String toString() {
+        return "RefundListEntity{" +
+                "count='" + count + '\'' +
+                ", total_page='" + total_page + '\'' +
+                ", page='" + page + '\'' +
+                ", page_size='" + page_size + '\'' +
+                ", refund_list=" + refund_list +
+                '}';
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RefundList {
 
@@ -31,5 +42,22 @@ public class RefundListEntity {
         public String qty;
         public String type_icon;
         public String status_msg;
+
+        @Override
+        public String toString() {
+            return "RefundList{" +
+                    "refund_id='" + refund_id + '\'' +
+                    ", store_name='" + store_name + '\'' +
+                    ", refund_amount='" + refund_amount + '\'' +
+                    ", goods_num='" + goods_num + '\'' +
+                    ", thumb='" + thumb + '\'' +
+                    ", title='" + title + '\'' +
+                    ", sku_desc='" + sku_desc + '\'' +
+                    ", price='" + price + '\'' +
+                    ", qty='" + qty + '\'' +
+                    ", type_icon='" + type_icon + '\'' +
+                    ", status_msg='" + status_msg + '\'' +
+                    '}';
+        }
     }
 }

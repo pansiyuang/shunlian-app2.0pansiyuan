@@ -15,7 +15,6 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
@@ -160,8 +159,8 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         @BindView(R.id.mtv_num)
         MyTextView mtv_num;
 
-        @BindView(R.id.mrl_root)
-        MyRelativeLayout mrl_root;
+//        @BindView(R.id.mrl_root)
+//        MyLinearLayout mrl_root;
 
         public CommentCardViewHolder(View itemView) {
             super(itemView);
