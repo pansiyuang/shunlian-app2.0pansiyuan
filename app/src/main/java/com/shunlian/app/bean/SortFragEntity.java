@@ -46,13 +46,6 @@ public class SortFragEntity {
         public String op_cid;
         public String g_cid;
         public String is_attr;
-        public List<Attrs> attrs;
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Attrs{
-
-        public String attr_name;
-        public List<String> attr_vals;
+        public List<GoodsSearchParam.Attr> attrs;
     }
 }

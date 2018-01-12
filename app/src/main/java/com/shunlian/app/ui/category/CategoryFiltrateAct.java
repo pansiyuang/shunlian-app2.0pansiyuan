@@ -22,6 +22,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -60,6 +61,15 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     @BindView(R.id.mtv_more)
     MyTextView mtv_more;
 
+    @BindView(R.id.mtv_reset)
+    MyTextView mtv_reset;
+
+    @BindView(R.id.mtv_resets)
+    MyTextView mtv_resets;
+
+    @BindView(R.id.mtv_finishs)
+    MyTextView mtv_finishs;
+
     @BindView(R.id.edt_max)
     EditText edt_max;
 
@@ -71,6 +81,12 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 
     @BindView(R.id.mrlayout_pingpai)
     MyRelativeLayout mrlayout_pingpai;
+
+    @BindView(R.id.mllayout_bottom)
+    MyLinearLayout mllayout_bottom;
+
+    @BindView(R.id.mllayout_bottoms)
+    MyLinearLayout mllayout_bottoms;
 
     @BindView(R.id.rv_pingpai)
     RecyclerView rv_pingpai;
@@ -97,6 +113,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
 
     public void reset() {
         categoryFiltratePresenter.isSecond = false;
+        categoryFiltratePresenter.initGps();
 
         mtv_baoyou.setBackgroundColor(getColorResouce(R.color.value_f5));
         isBao = false;
@@ -116,10 +133,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         }
 
         if (shaixuanAttrAdapter != null) {
-            if (Constant.BRAND_IDSBEFORE == null) {
+            if (Constant.BRAND_IDSBEFORE != null) {
                 Constant.BRAND_IDSBEFORE.clear();
             }
-            if (Constant.BRAND_IDS == null) {
+            if (Constant.BRAND_IDS != null) {
                 Constant.BRAND_IDS.clear();
             }
             shaixuanAttrAdapter.notifyDataSetChanged();
@@ -152,7 +169,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         mtv_locate.setOnClickListener(this);
         mtv_cancel.setOnClickListener(this);
+        mtv_reset.setOnClickListener(this);
         mtv_finish.setOnClickListener(this);
+        mtv_resets.setOnClickListener(this);
+        mtv_finishs.setOnClickListener(this);
         mtv_baoyou.setOnClickListener(this);
         mtv_zhusan.setOnClickListener(this);
         mtv_jiangzhe.setOnClickListener(this);
@@ -214,6 +234,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 }
                 break;
             case R.id.mtv_reset:
+            case R.id.mtv_resets:
                 reset();
                 break;
             case R.id.mtv_more:
@@ -239,6 +260,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 finish();
                 break;
             case R.id.mtv_finish:
+            case R.id.mtv_finishs:
                 GoodsSearchParam goodsSearchParam = new GoodsSearchParam();
                 goodsSearchParam.keyword = keyword;
                 goodsSearchParam.min_price = edt_min.getText().toString();
@@ -279,6 +301,14 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             shaixuanAttrAdapter = new ShaixuanAttrAdapter(this, false, getListFilterEntity.attr_list);
             rv_category.setAdapter(shaixuanAttrAdapter);
             rv_category.setNestedScrollingEnabled(false);//防止滚动卡顿
+        }
+        if (pingpaiAdapter==null&&shaixuanAttrAdapter==null){
+            mllayout_bottom.setVisibility(View.GONE);
+            mllayout_bottoms.setVisibility(View.VISIBLE);
+            rv_category.setVisibility(View.GONE);
+        }else {
+            mllayout_bottom.setVisibility(View.VISIBLE);
+            mllayout_bottoms.setVisibility(View.GONE);
         }
     }
 

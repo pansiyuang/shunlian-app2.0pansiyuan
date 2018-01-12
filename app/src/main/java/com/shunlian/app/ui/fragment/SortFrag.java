@@ -13,11 +13,12 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SortCategoryAdapter;
 import com.shunlian.app.adapter.SortFragAdapter;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.presenter.SortFragPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 
@@ -122,8 +123,10 @@ public class SortFrag extends BaseFragment implements ISortFragView{
                 }else {
                     int i = adapter.computeCount(position);
                     SortFragEntity.ItemList itemList = itemLists.get(position - i);
-                    // TODO: 2018/1/6 跳转分类列表
-                    Common.staticToast(itemList.name);
+                    GoodsSearchParam param = new GoodsSearchParam();
+                    param.cid = itemList.g_cid;
+                    param.attr_data = itemList.attrs;
+                    CategoryAct.startAct(baseActivity, param);
                 }
             }
         });
