@@ -32,7 +32,7 @@ public interface ISubmitLogisticsInfoView extends IView {
      * 设置凭证图片
      * @param pics
      */
-    void setRefundPics(List<String> pics);
+    void setRefundPics(List<String> pics,boolean isShow);
 
 
     void uploadImg(UploadPicEntity picEntity);
