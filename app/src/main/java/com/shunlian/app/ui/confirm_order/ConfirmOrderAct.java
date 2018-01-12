@@ -288,12 +288,12 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private void backSelect() {
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                .setSureAndCancleListener("忍心丢下心仪商品？", "我再想想", new View.OnClickListener() {
+                .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods), getStringResouce(R.string.i_think), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptDialog.dismiss();
             }
-        }, "去意已决", new View.OnClickListener() {
+        }, getStringResouce(R.string.to_resolve), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptDialog.dismiss();

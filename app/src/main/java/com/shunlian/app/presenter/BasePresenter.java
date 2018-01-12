@@ -56,7 +56,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -243,12 +242,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
-        HttpUrl url = clone.request().url();
-        if ("/member/refund/getShipInfo".equals(url.encodedPath())){
-            //不弹toast
-        }else {
-            Common.staticToast(message);
-        }
+        Common.staticToast(message);
         switch (code) {
             // TODO: 2017/10/19
             case Code.CODE_NO_LOGIN://未登录

@@ -53,6 +53,7 @@ public class SelectLogisticsPresenter extends BasePresenter<ISelectLogisticsView
             public void onSuccess(BaseEntity<LogisticsNameEntity> entity) {
                 super.onSuccess(entity);
                 iView.selectLogistics(entity.data.express_list);
+                iView.setLetterSort(entity.data.first_letter_list);
             }
         });
     }

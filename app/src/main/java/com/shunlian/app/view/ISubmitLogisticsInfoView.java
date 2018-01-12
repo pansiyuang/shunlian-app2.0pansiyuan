@@ -38,4 +38,9 @@ public interface ISubmitLogisticsInfoView extends IView {
     void uploadImg(UploadPicEntity picEntity);
 
     void uploadProgress(int progress, String tag);
+
+    /**
+     * 提交成功
+     */
+    void submitSuccess();
 }
