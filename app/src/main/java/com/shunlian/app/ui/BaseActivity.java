@@ -336,6 +336,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (networkBroadcast != null){
+            unregisterReceiver(networkBroadcast);
+        }
+        dismissDialog(false);
+    }
+
+    @Override
     protected void onDestroy() {
         if (unbinder != null) {
             unbinder.unbind();
@@ -344,10 +353,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (immersionBar != null){
             immersionBar.destroy();
         }
-        if (networkBroadcast != null){
-            unregisterReceiver(networkBroadcast);
-        }
-        dismissDialog(false);
     }
 
     private void dismissDialog(boolean isClearAll) {

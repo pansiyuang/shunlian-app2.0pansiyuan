@@ -44,6 +44,12 @@ public class LogUtil {
         }
     }
 
+    public static void logError(String msg){
+        if (isOpenLog) {
+            Log.e("error", msg);
+        }
+    }
+
     /**
      * 截断输出日志
      *
