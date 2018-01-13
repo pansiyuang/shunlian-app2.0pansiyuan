@@ -21,6 +21,7 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -311,6 +312,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @Override
     public void onSelect(int position) {
+        if (position < 0) {
+            return;
+        }
         currentReasonId = currentInfoEntity.reason.get(position).reason_id;
         String reason = currentInfoEntity.reason.get(position).reason_info;
         tv_return_reason.setText(reason);
@@ -346,6 +350,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @Override
     public void applyRefundSuccess(String refundId) {
         finish();
+        ExchangeDetailAct.startAct(this, refundId);
     }
 
     @Override

@@ -87,10 +87,12 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         if ("1".equals(voucher.is_get)) {  //1为已经领取
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_n));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.hava_received));
+            voucherViewHolder.tv_draw.setTextColor(mContext.getResources().getColor(R.color.my_gray_one));
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_gray));
         } else {
             voucherViewHolder.ll_voucher.setBackgroundDrawable(mContext.getResources().getDrawable(R.mipmap.img_dianpu_youhuiquan_h));
             voucherViewHolder.tv_draw.setText(mContext.getResources().getText(R.string.receive));
+            voucherViewHolder.tv_draw.setTextColor(mContext.getResources().getColor(R.color.pink_color));
             voucherViewHolder.tv_draw.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_line_pink));
         }
         voucherViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,8 @@ package com.shunlian.app.ui.category;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,15 +18,20 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
 import com.shunlian.app.widget.MyImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -74,6 +81,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private String currentSort;
     private boolean sortBySales;
     private int currentMode = MODE_SINGLE;
+    private List<GoodsDeatilEntity.Goods> mGoods;
 
     /**
      * 布局id
@@ -105,7 +113,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         }
         presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam);
-
+        mGoods = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
 
@@ -113,6 +121,17 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         popupWindow = new CategorySortPopWindow(this);
         popupWindow.setOnSortSelectListener(this);
         popupWindow.setOnDismissListener(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        LogUtil.httpLogW("onNewIntent");
+        super.onNewIntent(intent);
+        setIntent(intent);
+        tv_filter.setTextColor(getColorResouce(R.color.pink_color));
+        tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.icon_sx), null);
+        searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
+        presenter.getSearchGoods(searchParam);
     }
 
     @Override
@@ -130,10 +149,26 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     public void getSearchGoods(SearchGoodsEntity goodsEntity) {
         if (goodsEntity.goods_list != null && goodsEntity.goods_list.size() != 0) {
-            singleAdapter = new SingleCategoryAdapter(this, false, goodsEntity.goods_list, goodsEntity.ref_store);
-            doubleAdapter = new DoubleCategoryAdapter(this, false, goodsEntity.goods_list, goodsEntity.ref_store);
+            mGoods.clear();
+            mGoods = goodsEntity.goods_list;
+            if (singleAdapter == null) {
+                singleAdapter = new SingleCategoryAdapter(this, false, mGoods, goodsEntity.ref_store);
+            } else {
+                singleAdapter.setData(mGoods);
+            }
+            if (doubleAdapter == null) {
+                doubleAdapter = new DoubleCategoryAdapter(this, false, goodsEntity.goods_list, goodsEntity.ref_store);
+            } else {
+                doubleAdapter.setData(mGoods);
+            }
             setListMode(currentMode);
         }
+    }
+
+    public Drawable getRightDrawable(int drawableRes) {
+        Drawable drawable = getResources().getDrawable(drawableRes);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        return drawable;
     }
 
     public void setListMode(int mode) {
@@ -175,7 +210,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 break;
             case R.id.tv_filter:
                 String keyword = edt_keyword.getText().toString();
-                CategoryFiltrateAct.startAct(CategoryAct.this, keyword, "", "price_desc");
+                CategoryFiltrateAct.startAct(CategoryAct.this, keyword, searchParam.cid, "price_desc");
                 break;
             case R.id.tv_general_sort:
                 popupWindow.initData(currentSortPosition);

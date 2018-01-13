@@ -32,12 +32,19 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
     private RecyclerView.LayoutParams params;
+    private List<GoodsDeatilEntity.Goods> mGoods;
 
     public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
         params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mStore = store;
+        this.mGoods = lists;
+    }
+
+    public void setData(List<GoodsDeatilEntity.Goods> lists) {
+        this.mGoods = lists;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -108,7 +115,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             GoodsDeatilEntity.Goods goods;
             int margin = TransformUtil.dip2px(context, 5f);
             if (mStore != null) {
-                goods = lists.get(position - 1);
+                goods = mGoods.get(position - 1);
                 if (position % 2 == 0) {
                     params.setMargins(0, 0, 0, margin);
                     holder.itemView.setLayoutParams(params);
@@ -117,7 +124,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     holder.itemView.setLayoutParams(params);
                 }
             } else {
-                goods = lists.get(position);
+                goods = mGoods.get(position);
                 if (position % 2 == 0) {
                     params.setMargins(0, 0, margin, margin);
                     holder.itemView.setLayoutParams(params);

@@ -252,6 +252,9 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
 
     @Override
     public void onSelect(int position) {
+        if (position < 0) {
+            return;
+        }
         RefundDetailEntity.RefundDetail.Edit.Reason reason = mEdit.user_status.get(position);
         currentStatusId = reason.reason_id;
         tv_select_status.setText(reason.reason_info);

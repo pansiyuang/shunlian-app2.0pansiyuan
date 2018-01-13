@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
@@ -125,6 +126,12 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
         parentViewHolder.tv_store.setText(enabled.store_name);
+        parentViewHolder.tv_store.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StoreAct.startAct(mContext,mStores.get(i).store_id);
+            }
+        });
 
         if (mMap != null && mMap.size() != 0 && mMap.containsKey(enabled.store_id)) {
             enabled.isEditGood = mMap.get(enabled.store_id);

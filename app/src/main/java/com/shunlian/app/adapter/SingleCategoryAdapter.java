@@ -30,16 +30,22 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
+    private List<GoodsDeatilEntity.Goods> mGoods;
 
     public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
+        this.mGoods = lists;
         this.mStore = store;
     }
 
     public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
+    }
+
+    public void setData(List<GoodsDeatilEntity.Goods> lists) {
+        this.mGoods = lists;
     }
 
     @Override
@@ -108,9 +114,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         if (holder instanceof SingleViewHolder) {
             GoodsDeatilEntity.Goods goods;
             if (mStore != null) {
-                goods = lists.get(position - 1);
+                goods = mGoods.get(position - 1);
             } else {
-                goods = lists.get(position);
+                goods = mGoods.get(position);
             }
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
