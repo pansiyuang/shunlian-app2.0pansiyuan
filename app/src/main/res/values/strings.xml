@@ -373,4 +373,8 @@
 
     <string name="sort_comment">%s条评论 %s好评</string>
     <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>
+    <string name="submit_success">提交成功</string>
+    <string name="leave_behind_goods">忍心丢下心仪商品？</string>
+    <string name="i_think">我再想想</string>
+    <string name="to_resolve">去意已决</string>
 </resources>

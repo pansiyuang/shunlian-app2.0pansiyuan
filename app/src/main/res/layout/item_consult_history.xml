@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/ll_logistics"
         android:layout_width="14dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/mrl_detail"
         android:layout_alignTop="@+id/mrl_detail"
         android:layout_marginLeft="16dp"
@@ -31,10 +31,9 @@
         <View
             android:id="@+id/view_logistics_line"
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@color/my_line_gray"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="@color/my_line_gray"/>
+    </com.shunlian.app.widget.MyLinearLayout>
 
 
     <com.shunlian.app.widget.MyRelativeLayout
@@ -132,7 +131,7 @@
                 android:textColor="@color/new_text"
                 android:textSize="14sp"
                 android:paddingLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 />
 
             <android.support.v7.widget.RecyclerView

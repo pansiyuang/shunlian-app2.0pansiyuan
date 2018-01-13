@@ -181,9 +181,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             df.setSelectVoucherListener(new ConfirmOrderAdapter.ISelectVoucherListener() {
                 @Override
                 public void onSelectVoucher(int position) {
-                    float currentPrice = Float.parseFloat(mTotalPrice);
+//                    float currentPrice = Float.parseFloat(mTotalPrice);
+                    float currentPrice = 0;
                     for (int i = 0; i < enabled.size(); i++) {
-                        ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
+                       /* ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
                         int selectVoucherId = enabled1.selectVoucherId;
                         if (isOrderBuy) {
                             int selectPromotionId = enabled1.selectPromotionId;
@@ -202,7 +203,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                             currentPrice -= discount;
                         } else {
                             continue;
-                        }
+                        }*/
+                        String post_discount_price = enabled.get(i).post_discount_price;
+                        currentPrice += Float.parseFloat(isEmpty(post_discount_price) ? "0" : post_discount_price);
                     }
                     mtv_total_price.setText(Common.dotAfterSmall(getResources()
                             .getString(R.string.rmb) + Common.formatFloat(currentPrice),11));
@@ -285,14 +288,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private void backSelect() {
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                .setSureAndCancleListener("忍心丢下心仪商品？", "我再想想", new View.OnClickListener() {
+                .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods), getStringResouce(R.string.i_think), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptDialog.dismiss();
             }
-        }, "去意已决", new View.OnClickListener() {
+        }, getStringResouce(R.string.to_resolve), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                promptDialog.dismiss();
                 finish();
             }
         }).show();

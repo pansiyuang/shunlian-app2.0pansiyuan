@@ -59,6 +59,9 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
      */
     @Override
     protected void initApi() {
+    }
+
+    public void getLogisticsShipInfo() {
         Map<String,String> map = new HashMap<>();
         map.put("refund_id",refund_id);
         sortAndMD5(map);
@@ -99,7 +102,7 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-
+                iView.submitSuccess();
             }
         });
 

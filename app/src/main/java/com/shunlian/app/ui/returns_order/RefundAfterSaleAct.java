@@ -103,7 +103,7 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
 
     @Override
     public void refundList(List<RefundListEntity.RefundList> refundList, int page, int allPage) {
-        if (isEmpty(refundList)){
+        if (!isEmpty(refundList)){
             this.refundLists.addAll(refundList);
         }
         if (afterSaleAdapter == null) {
@@ -117,7 +117,12 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
                 }
             });
         }else {
-            afterSaleAdapter.notifyDataSetChanged();
+            if (refundList.size() <= RefundListPresent.PAGE_SIZE){
+                afterSaleAdapter.notifyDataSetChanged();
+            }else {
+                afterSaleAdapter.notifyItemInserted(RefundListPresent.PAGE_SIZE);
+            }
+
             afterSaleAdapter.setPageLoading(page,allPage);
         }
     }

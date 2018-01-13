@@ -11,14 +11,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,8 +63,9 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
             ConsultHistoryHolder mHolder = (ConsultHistoryHolder) holder;
             GradientDrawable background = (GradientDrawable) mHolder.lLayout_detail.getBackground();
             background.setColor(getColor(R.color.value_f3));
+            background.setStroke(0,getColor(R.color.value_f3));
 
-            ConsultHistoryEntity.HistoryList historyList = lists.get(position);
+            final ConsultHistoryEntity.HistoryList historyList = lists.get(position);
 
             GlideUtils.getInstance().loadImage(context,mHolder.civ_head,historyList.user_thumb);
             mHolder.mtv_name.setText(historyList.username);
@@ -99,11 +105,21 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
                     @Override
                     public void convert(SimpleViewHolder holder, String s, int position) {
                         MyImageView imageView = holder.getView(R.id.miv_pic);
+                        holder.addOnClickListener(R.id.miv_pic);
                         imageView.setWHProportion(160,160);
                         GlideUtils.getInstance().loadImage(context,imageView,s);
                     }
                 };
                 mHolder.recy_view.setAdapter(adapter);
+                adapter.setOnItemClickListener(new com.shunlian.app.listener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {//查看大图
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>) historyList.images;
+                        bigImgEntity.index = position;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
 
 
@@ -148,11 +164,25 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
 
         @BindView(R.id.recy_view)
         RecyclerView recy_view;
+
+        @BindView(R.id.mrl_detail)
+        MyRelativeLayout mrl_detail;
+
+        @BindView(R.id.ll_logistics)
+        MyLinearLayout ll_logistics;
         public ConsultHistoryHolder(View itemView) {
             super(itemView);
             recy_view.setNestedScrollingEnabled(false);
             GridLayoutManager manager = new GridLayoutManager(context,3);
             recy_view.setLayoutManager(manager);
+
+            mrl_detail.post(new Runnable() {
+                @Override
+                public void run() {
+                    int measuredHeight = mrl_detail.getMeasuredHeight();
+                    ll_logistics.setWHProportion(TransformUtil.dip2px(context,14),measuredHeight);
+                }
+            });
         }
     }
 }

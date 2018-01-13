@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -69,8 +71,8 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
             RefundListEntity.RefundList refundList = lists.get(position);
             mHolder.cgv_goods.setLabelName(refundList.store_name,true)
             .setGoodsTitle(refundList.title).setGoodsParams(refundList.sku_desc)
-            .setGoodsCount(String.format(getString(R.string.x),/*refundList.goods_num*/"10"))
-//                    .setGoodsPrice(getString(R.string.rmb).concat(refundList.price))
+            .setGoodsCount(String.format(getString(R.string.x),refundList.goods_num))
+                    .setGoodsPrice(getString(R.string.rmb).concat(refundList.price))
             .setRefundPrice(getString(R.string.refund_balance)
                     .concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
             GlideUtils.getInstance().loadImage(context,mHolder.cgv_goods.getGoodsIcon(),refundList.thumb);
@@ -97,6 +99,10 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
         public RefundAfterSaleHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+
+            GradientDrawable background = (GradientDrawable) mtv_look_detail.getBackground();
+            background.setColor(getColor(R.color.white));
+            background.setStroke(TransformUtil.dip2px(context,0.5f),getColor(R.color.pink_color));
         }
 
         /**
