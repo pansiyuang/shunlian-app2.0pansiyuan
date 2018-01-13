@@ -25,6 +25,10 @@ package com.shunlian.app.utils;
 
 import android.os.Environment;
 
+import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.bean.GoodsSearchParam;
+import com.shunlian.app.ui.register.SelectRecommendAct;
+
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +64,13 @@ public final class Constant {
     public static List<String> BRAND_IDSBEFORE;//筛选品牌id,记录用
     public static Map<String, List<String>> BRAND_ATTRS;//筛选属性
     public static List<String> BRAND_ATTRNAME;//筛选属性名
+
+    public static GoodsSearchParam SEARCHPARAM;//搜索参数
+    public static List<String> REBRAND_IDS;//筛选品牌id(重新赋值用)
+    public static Map<String, List<String>> REBRAND_ATTRS;//筛选属性(重新赋值用)
+    public static GetListFilterEntity LISTFILTER;//列表属性(重新赋值用)
+    public static String DINGWEI;//定位
+
 
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

@@ -248,8 +248,7 @@
         <activity android:name=".ui.category.CategoryAct"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.returns_order.SelectLogisticsAct"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -257,7 +256,7 @@
         <activity android:name=".ui.category.CategoryFiltrateAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/pay"/>
+            android:theme="@style/pay" />
         <activity android:name=".ui.category.RankingListAct"
             android:exported="false"
             android:screenOrientation="portrait"

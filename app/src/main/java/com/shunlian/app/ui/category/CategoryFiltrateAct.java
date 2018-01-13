@@ -1,6 +1,6 @@
 package com.shunlian.app.ui.category;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +19,7 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
@@ -100,19 +101,21 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     private ShaixuanAttrAdapter shaixuanAttrAdapter;
     private List<GetListFilterEntity.Brand> brands;
     private ArrayList<String> letters;
-    private Boolean isZhu = false, isZhe = false, isDing = false, isBao = false, isMore = false;
-    private String keyword, cid = "75", sort_type;
+    private Boolean isZhu = false, isZhe = false, isDing = false, isBao = false, isMore = false, isopt = false;
+    private String keyword, cid = "75", sort_type, locate;
 
-    public static void startAct(Context context, String keyword, String cid, String sort_type) {
+    public static void startAct(Activity context, String keyword, String cid, String sort_type) {
         Intent intent = new Intent(context, CategoryFiltrateAct.class);
         intent.putExtra("keyword", keyword);
         intent.putExtra("cid", cid);
         intent.putExtra("sort_type", sort_type);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, 0);
     }
 
     public void reset() {
         categoryFiltratePresenter.isSecond = false;
+        isopt = false;
+        initLocate();
         categoryFiltratePresenter.initGps();
 
         mtv_baoyou.setBackgroundColor(getColorResouce(R.color.value_f5));
@@ -129,15 +132,15 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             if (Constant.BRAND_IDS != null) {
                 Constant.BRAND_IDS.clear();
             }
+            if (Constant.BRAND_IDSBEFORE != null) {
+                Constant.BRAND_IDSBEFORE.clear();
+            }
             pingpaiAdapter.notifyDataSetChanged();
         }
 
         if (shaixuanAttrAdapter != null) {
-            if (Constant.BRAND_IDSBEFORE != null) {
-                Constant.BRAND_IDSBEFORE.clear();
-            }
-            if (Constant.BRAND_IDS != null) {
-                Constant.BRAND_IDS.clear();
+            if (Constant.BRAND_ATTRS != null) {
+                Constant.BRAND_ATTRS.clear();
             }
             shaixuanAttrAdapter.notifyDataSetChanged();
         }
@@ -152,7 +155,70 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     protected void onResume() {
         super.onResume();
         if (pingpaiAdapter != null) {
+            LogUtil.augusLogW("dsf");
             pingpaiAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void reBuildData() {
+        if (!TextUtils.isEmpty(Constant.DINGWEI)) {
+            locate = Constant.DINGWEI;
+            mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+            mtv_address.setText("      " + locate);
+        }
+        initList(Constant.LISTFILTER);
+        if (Constant.SEARCHPARAM != null){
+            if (Constant.BRAND_IDS == null) {
+                Constant.BRAND_IDS = new ArrayList<>();
+            } else {
+                Constant.BRAND_IDS.clear();
+            }
+            if (Constant.REBRAND_IDS!=null)
+            Constant.BRAND_IDS.addAll(Constant.REBRAND_IDS);
+            if (Constant.BRAND_ATTRS == null) {
+                Constant.BRAND_ATTRS = new HashMap<>();
+            } else {
+                Constant.BRAND_ATTRS.clear();
+            }
+            if (Constant.REBRAND_ATTRS!=null)
+            Constant.BRAND_ATTRS.putAll(Constant.REBRAND_ATTRS);
+
+            if ("Y".equals(Constant.SEARCHPARAM.is_free_ship)) {
+                isBao = true;
+                mtv_baoyou.setBackgroundResource(R.mipmap.img_xcha);
+            } else {
+                isBao = false;
+                mtv_baoyou.setBackgroundColor(getColorResouce(R.color.value_f5));
+            }
+            if (!TextUtils.isEmpty(Constant.SEARCHPARAM.min_price)) {
+                edt_min.setText(Constant.SEARCHPARAM.min_price);
+            }
+            if (!TextUtils.isEmpty(Constant.SEARCHPARAM.max_price)) {
+                edt_max.setText(Constant.SEARCHPARAM.max_price);
+            }
+            if (!TextUtils.isEmpty(Constant.SEARCHPARAM.send_area)) {
+                switch (Constant.SEARCHPARAM.send_area) {
+                    case "珠三角":
+                        mtv_zhusan.setBackgroundResource(R.mipmap.img_xcha);
+                        isZhu = true;
+                        isZhe = false;
+                        isDing = false;
+                        break;
+                    case "江浙沪":
+                        mtv_jiangzhe.setBackgroundResource(R.mipmap.img_xcha);
+                        isZhu = false;
+                        isZhe = true;
+                        isDing = false;
+                        break;
+                    default:
+                        mtv_address.setBackgroundResource(R.mipmap.img_xcha);
+                        mtv_address.setText(locate);
+                        isZhu = false;
+                        isZhe = false;
+                        isDing = true;
+                        break;
+                }
+            }
         }
     }
 
@@ -160,13 +226,21 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        locate = getStringResouce(R.string.category_dingwei);
+        categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         keyword = getIntent().getStringExtra("keyword");
         if (!TextUtils.isEmpty(getIntent().getStringExtra("cid"))) {
             cid = getIntent().getStringExtra("cid");
         }
         sort_type = getIntent().getStringExtra("sort_type");
+
+        if (Constant.LISTFILTER!=null) {
+            reBuildData();
+        } else {
+            categoryFiltratePresenter.initApiData();
+        }
+
         mtv_address.setOnClickListener(this);
-        categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         mtv_locate.setOnClickListener(this);
         mtv_cancel.setOnClickListener(this);
         mtv_reset.setOnClickListener(this);
@@ -202,7 +276,8 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     mtv_zhusan.setBackgroundResource(R.mipmap.img_xcha);
                     isZhu = true;
                     mtv_jiangzhe.setBackgroundColor(getColorResouce(R.color.value_f5));
-                    mtv_address.setBackgroundColor(getColorResouce(R.color.value_f5));
+                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                    mtv_address.setText("      " + locate);
                     isDing = false;
                     isZhe = false;
                 }
@@ -215,17 +290,20 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     mtv_jiangzhe.setBackgroundResource(R.mipmap.img_xcha);
                     isZhe = true;
                     mtv_zhusan.setBackgroundColor(getColorResouce(R.color.value_f5));
-                    mtv_address.setBackgroundColor(getColorResouce(R.color.value_f5));
+                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                    mtv_address.setText("      " + locate);
                     isDing = false;
                     isZhu = false;
                 }
                 break;
             case R.id.mtv_address:
                 if (isDing) {
-                    mtv_address.setBackgroundColor(getColorResouce(R.color.value_f5));
+                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                    mtv_address.setText("      " + locate);
                     isDing = false;
                 } else {
                     mtv_address.setBackgroundResource(R.mipmap.img_xcha);
+                    mtv_address.setText(locate);
                     isDing = true;
                     mtv_zhusan.setBackgroundColor(getColorResouce(R.color.value_f5));
                     mtv_jiangzhe.setBackgroundColor(getColorResouce(R.color.value_f5));
@@ -253,10 +331,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 pingpaiAdapter.notifyDataSetChanged();
                 break;
             case R.id.mtv_locate:
+                isopt = true;
                 categoryFiltratePresenter.initGps();
                 break;
             case R.id.mtv_cancel:
-                reset();
                 finish();
                 break;
             case R.id.mtv_finish:
@@ -282,10 +360,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         }
     }
 
-    @Override
-    public void getListFilter(GetListFilterEntity getListFilterEntity) {
+    public void initList(GetListFilterEntity getListFilterEntity) {
         brands = getListFilterEntity.brand_list;
         letters = getListFilterEntity.first_letter_list;
+        
         if (pingpaiAdapter == null && getListFilterEntity.recommend_brand_list != null && getListFilterEntity.recommend_brand_list.size() > 0) {
             mrlayout_pingpai.setVisibility(View.VISIBLE);
             view_pingpai.setVisibility(View.VISIBLE);
@@ -295,34 +373,55 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             view_pingpai.setVisibility(View.GONE);
         }
         if (shaixuanAttrAdapter == null && getListFilterEntity.attr_list != null && getListFilterEntity.attr_list.size() > 0) {
-            Constant.BRAND_ATTRS = new HashMap<>();
-            Constant.BRAND_ATTRNAME = new ArrayList<>();
+            if (Constant.BRAND_ATTRS == null) {
+                Constant.BRAND_ATTRS = new HashMap<>();
+            }
+            if (Constant.BRAND_ATTRNAME == null) {
+                Constant.BRAND_ATTRNAME = new ArrayList<>();
+            }
             rv_category.setLayoutManager(new LinearLayoutManager(this));
             shaixuanAttrAdapter = new ShaixuanAttrAdapter(this, false, getListFilterEntity.attr_list);
             rv_category.setAdapter(shaixuanAttrAdapter);
             rv_category.setNestedScrollingEnabled(false);//防止滚动卡顿
         }
-        if (pingpaiAdapter==null&&shaixuanAttrAdapter==null){
+        if (pingpaiAdapter == null && shaixuanAttrAdapter == null) {
             mllayout_bottom.setVisibility(View.GONE);
             mllayout_bottoms.setVisibility(View.VISIBLE);
             rv_category.setVisibility(View.GONE);
-        }else {
+        } else {
             mllayout_bottom.setVisibility(View.VISIBLE);
             mllayout_bottoms.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void getGps(DistrictGetlocationEntity districtGetlocationEntity) {
-        mtv_address.setText(districtGetlocationEntity.district_names.get(1));
-        mtv_address.setBackgroundResource(R.mipmap.img_xcha);
-        isDing = true;
+    public void getListFilter(GetListFilterEntity getListFilterEntity) {
+        Constant.LISTFILTER = getListFilterEntity;
+        initList(getListFilterEntity);
+    }
+
+    public void initLocate() {
+        if (isopt) {
+            mtv_address.setText(locate);
+            mtv_address.setBackgroundResource(R.mipmap.img_xcha);
+            isDing = true;
+        } else {
+            mtv_address.setText("      " + locate);
+            mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+            isDing = false;
+        }
         isZhe = false;
         isZhu = false;
-        mtv_address.setBackgroundResource(R.mipmap.img_xcha);
 //        mtv_zhusan.setBackgroundResource(0);
         mtv_zhusan.setBackgroundColor(getColorResouce(R.color.value_f5));
         mtv_jiangzhe.setBackgroundColor(getColorResouce(R.color.value_f5));
+    }
+
+    @Override
+    public void getGps(DistrictGetlocationEntity districtGetlocationEntity) {
+        locate = districtGetlocationEntity.district_names.get(1);
+        Constant.DINGWEI=locate;
+        initLocate();
     }
 
     @Override
@@ -331,6 +430,12 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         rv_pingpai.setLayoutManager(new GridLayoutManager(this, 3));
         rv_pingpai.setAdapter(pingpaiAdapter);
         rv_pingpai.setNestedScrollingEnabled(false);//防止滚动卡顿
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override

@@ -19,8 +19,11 @@ import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
@@ -34,7 +37,7 @@ import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
  * Created by Administrator on 2018/1/2.
  */
 
-public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener, TextView.OnEditorActionListener {
+public class CategoryAct extends BaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener, TextView.OnEditorActionListener {
 
     public static final int MODE_SINGLE = 1;
     public static final int MODE_DOUBLE = 2;
@@ -99,11 +102,14 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
+
+        presenter = new CategoryPresenter(this, this);
+        if (getIntent().getSerializableExtra("param")!=null){
+            searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
+        }
         if (searchParam == null) {
             searchParam = new GoodsSearchParam();
         }
-        presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam);
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -198,6 +204,23 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         super.onClick(view);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtil.augusLogW("yxfxd11--"+Constant.BRAND_IDS);
+        LogUtil.augusLogW("yxfxd22--"+Constant.BRAND_IDSBEFORE);
+        LogUtil.augusLogW("yxfxd33--"+Constant.BRAND_ATTRS);
+        LogUtil.augusLogW("yxfxd44--"+Constant.BRAND_ATTRNAME);
+        LogUtil.augusLogW("yxfxd55--"+Constant.SEARCHPARAM);
+
+
+        if (resultCode==1){
+            if (presenter!=null&&Constant.SEARCHPARAM!=null){
+                presenter.getSearchGoods(Constant.SEARCHPARAM);
+            }
+        }
+    }
+
     public void setSortMode(boolean b) {
         if (b) {
             tv_general_sort.setTextColor(getColorResouce(R.color.pink_color));
@@ -260,5 +283,20 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Constant.BRAND_IDS = null;//筛选品牌id
+        Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
+        Constant.BRAND_ATTRS = null;//筛选属性
+        Constant.BRAND_ATTRNAME = null;//筛选属性名
+
+        Constant.SEARCHPARAM = null;//搜索参数
+        Constant.REBRAND_IDS = null;//筛选品牌id(重新赋值用)
+        Constant.REBRAND_ATTRS = null;//筛选属性(重新赋值用)
+        Constant.LISTFILTER = null;//列表属性(重新赋值用)
+        Constant.DINGWEI=null;
     }
 }

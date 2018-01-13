@@ -57,13 +57,15 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
         if (position == lists.size() - 1 && position > 10) {
             viewHolder.mtv_name.setText(R.string.category_quanbu);
             viewHolder.mtv_name.setTextColor(getColor(R.color.pink_color));
+            viewHolder.mtv_name.setBackgroundColor(getColor(R.color.value_f5));
         } else {
             viewHolder.mtv_name.setText(recommend.brand_name);
             viewHolder.mtv_name.setTextColor(getColor(R.color.new_text));
+            viewHolder.mtv_name.setBackgroundColor(getColor(R.color.value_f5));
         }
         if (Constant.BRAND_IDS.size() > 0) {
             for (int i = 0; i < Constant.BRAND_IDS.size(); i++) {
-                if (recommend.id.equals(Constant.BRAND_IDS.get(i))) {
+                if (recommend.id.equals(Constant.BRAND_IDS.get(i))&&!viewHolder.mtv_name.getText().toString().equals(getString(R.string.category_quanbu))) {
                     viewHolder.mtv_name.setBackgroundResource(R.mipmap.img_dcha);
                     break;
                 } else if (i >= Constant.BRAND_IDS.size() - 1) {

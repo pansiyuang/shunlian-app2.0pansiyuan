@@ -3,9 +3,7 @@ package com.shunlian.app.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-import android.support.v7.widget.GridLayoutManager;
 
-import com.shunlian.app.adapter.PingpaiAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
@@ -30,18 +28,18 @@ import retrofit2.Call;
  */
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
-    private String cid, keyword;
     public boolean isSecond;
+    private String cid, keyword;
+    private Activity context;
 
     public CategoryFiltratePresenter(Context context, CategoryFiltrateView iView, String cid, String keyword) {
         super(context, iView);
         this.cid = cid;
         this.keyword = keyword;
-        initApi();
+        this.context= (Activity) context;
     }
 
-    @Override
-    protected void initApi() {
+    public void initApiData(){
         Map<String, String> map = new HashMap<>();
         map.put("cid", cid);
         map.put("keyword", keyword);
@@ -56,9 +54,13 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
             }
         });
     }
+    @Override
+    protected void initApi() {
+
+    }
 
     public void initGps() {
-        Location location = Common.getGPS((Activity) context);
+        Location location = Common.getGPS(context);
         if (location != null) {
             Map<String, String> map = new HashMap<>();
             map.put("lng", String.valueOf(location.getLongitude()));
@@ -75,15 +77,17 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                     if (data != null) {
                         LogUtil.httpLogW("DistrictGetlocationEntity:" + data);
                         iView.getGps(data);
-                        isSecond=true;
+                        isSecond = true;
                     }
                 }
             });
         }
     }
 
-    public void dealRecommendBrand(GetListFilterEntity getListFilterEntity){
-        Constant.BRAND_IDS = new ArrayList<>();
+    public void dealRecommendBrand(GetListFilterEntity getListFilterEntity) {
+        if (Constant.BRAND_IDS==null){
+            Constant.BRAND_IDS = new ArrayList<>();
+        }
         List<GetListFilterEntity.Recommend> recommends = new ArrayList<>();
         for (int i = 0; i < 11 || i < getListFilterEntity.recommend_brand_list.size(); i++) {
             GetListFilterEntity.Recommend recommend = getListFilterEntity.recommend_brand_list.get(i);
@@ -92,13 +96,14 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                 if (getListFilterEntity.recommend_brand_list.size() > 10) {
                     recommends.add(getListFilterEntity.recommend_brand_list.get(0));
                 }
-               iView.initPingpai(recommends);
+                iView.initPingpai(recommends);
             }
         }
     }
-    public void dealBrandIds(GoodsSearchParam goodsSearchParam){
+
+    public void dealBrandIds(GoodsSearchParam goodsSearchParam) {
         String brand_ids = "";
-        if (Constant.BRAND_IDS.size()>0){
+        if (Constant.BRAND_IDS!=null&&Constant.BRAND_IDS.size() > 0) {
             for (int m = 0; m < Constant.BRAND_IDS.size(); m++) {
                 if (m >= Constant.BRAND_IDS.size() - 1) {
                     brand_ids += Constant.BRAND_IDS.get(m);
@@ -108,25 +113,46 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                     brand_ids += Constant.BRAND_IDS.get(m) + ",";
                 }
             }
-        }else {
+        } else {
             dealBrandAttrs(goodsSearchParam);
         }
     }
 
-    private void dealBrandAttrs(GoodsSearchParam goodsSearchParam){
-        List<GoodsSearchParam.Attr> attrs=new ArrayList<>();
-        for (int n = 0; n< Constant.BRAND_ATTRNAME.size(); n++){
-            GoodsSearchParam.Attr attr=new GoodsSearchParam.Attr();
-            String name=Constant.BRAND_ATTRNAME.get(n);
-            attr.attr_name=name;
-            attr.attr_vals=Constant.BRAND_ATTRS.get(name);
-            attrs.add(attr);
-            if (n>=Constant.BRAND_ATTRNAME.size()-1){
-                goodsSearchParam.attr_data=attrs;
-                CategoryAct.startAct(context, goodsSearchParam);
+    private void dealBrandAttrs(GoodsSearchParam goodsSearchParam) {
+        if (Constant.BRAND_ATTRNAME!=null&&Constant.BRAND_ATTRNAME.size() > 0) {
+            List<GoodsSearchParam.Attr> attrs = new ArrayList<>();
+            for (int n = 0; n < Constant.BRAND_ATTRNAME.size(); n++) {
+                GoodsSearchParam.Attr attr = new GoodsSearchParam.Attr();
+                String name = Constant.BRAND_ATTRNAME.get(n);
+                attr.attr_name = name;
+                attr.attr_vals = Constant.BRAND_ATTRS.get(name);
+                attrs.add(attr);
+                if (n >= Constant.BRAND_ATTRNAME.size() - 1) {
+                    goodsSearchParam.attr_data = attrs;
+                    Constant.SEARCHPARAM=goodsSearchParam;
+                    if (Constant.REBRAND_IDS==null){
+                        Constant.REBRAND_IDS=new ArrayList<>();
+                    }else {
+                        Constant.REBRAND_IDS.clear();
+                    }
+                    Constant.REBRAND_IDS.addAll(Constant.BRAND_IDS);
+                    if (Constant.REBRAND_ATTRS==null){
+                        Constant.REBRAND_ATTRS=new HashMap<>();
+                    }else {
+                        Constant.REBRAND_ATTRS.clear();
+                    }
+                    Constant.REBRAND_ATTRS.putAll(Constant.BRAND_ATTRS);
+                    context.setResult(1);
+                    context.finish();
+                }
             }
+        }else {
+            Constant.SEARCHPARAM=goodsSearchParam;
+            context.setResult(1);
+            context.finish();
         }
     }
+
     @Override
     public void attachView() {
 
