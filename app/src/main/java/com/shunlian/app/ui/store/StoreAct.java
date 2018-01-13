@@ -382,7 +382,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 tv_price.setTextColor(getResources().getColor(R.color.my_gray_three));
                 iv_price.setVisibility(View.GONE);
                 storePresenter.resetBaby("default");
-                LogUtil.augusLogW("yxf456");
                 break;
             case R.id.tv_xiaoliang:
                 tv_zonghe.setTextColor(getResources().getColor(R.color.my_gray_three));
@@ -391,7 +390,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 tv_price.setTextColor(getResources().getColor(R.color.my_gray_three));
                 iv_price.setVisibility(View.GONE);
                 storePresenter.resetBaby("sales");
-                LogUtil.augusLogW("yxf789");
                 break;
             case R.id.tv_shangxin:
                 tv_zonghe.setTextColor(getResources().getColor(R.color.my_gray_three));

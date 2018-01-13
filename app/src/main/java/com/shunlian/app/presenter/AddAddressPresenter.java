@@ -223,11 +223,9 @@ public class AddAddressPresenter extends BasePresenter<AddAddressView> {
                         district += selectAbles.get(m).getName();
                         iView.getDistrict(district, district_ids);
                         dialog.dismiss();
-                        LogUtil.augusLogW("test"+district);
                     } else {
                         district_ids += selectAbles.get(m).getId() + ",";
                         district += selectAbles.get(m).getName() + " ";
-                        LogUtil.augusLogW("test"+district);
                     }
                 }
             }

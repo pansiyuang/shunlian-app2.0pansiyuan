@@ -212,9 +212,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
         map.put("storeId", storeId);
         map.put("promotionId", String.valueOf(promotionId));
         map.put("type", type);
-        LogUtil.augusLogW("dfs--"+storeId);
-        LogUtil.augusLogW("dfs--"+promotionId);
-        LogUtil.augusLogW("dfs--"+type);
         sortAndMD5(map);
 
         Call<BaseEntity<StorePromotionGoodsListTwoEntity>> baseEntityCall = getApiService().storePromotionGoodsListTwo(map);
@@ -288,7 +285,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
             StorePromotionGoodsListOneEntity.Lists.Good.Data ldata = new StorePromotionGoodsListOneEntity.Lists.Good.Data();
             StorePromotionGoodsListOneEntity.Lists.Good.Data rdata = new StorePromotionGoodsListOneEntity.Lists.Good.Data();
             cData.allPage = good.allPage;
-            LogUtil.augusLogW("testone44"+good.allPage);
             cData.type = "3";
             ldata.id = good.data.get(c).id;
             ldata.title = good.data.get(c).title;
@@ -319,7 +315,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 discountIsLoading = false;
                 discountPage++;
                 discountAllPage = Integer.parseInt(discountDatas.get(0).allPage);
-                LogUtil.augusLogW("testone33"+discountDatas);
                 iView.storeDiscountOne(discountDatas, discountAllPage, discountPage);
             }
         }
@@ -334,12 +329,10 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 mData.allPage = good.allPage;
                 discountDatas.add(mData);
                 if (m >= remarks.size() - 1) {
-                    LogUtil.augusLogW("testone11--"+discountDatas);
                     storeDiscountHandles(good);
                 }
             }
         } else {
-            LogUtil.augusLogW("testone22--"+discountDatas);
             storeDiscountHandles(good);
         }
     }
@@ -383,8 +376,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
                             gbodys.add(fbody);
                             if (g >= ebodys.get(f).data.size() - 1) {
                                 int p = Integer.parseInt(ebodys.get(f).name) + z;
-                                LogUtil.augusLogW("yxf**--" + p);
-                                LogUtil.augusLogW("yxf//--" + fbodys.size());
                                 fbodys.remove(p);
                                 fbodys.addAll(p, gbodys);
                                 z = z + gbodys.size() - 1;
@@ -456,8 +447,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
                                 int x = Integer.parseInt(abodys.get(b).name) + y;
                                 cbodys.remove(x);
                                 cbodys.addAll(x, bbodys);
-                                LogUtil.augusLogW("11yxf**" + x);
-                                LogUtil.augusLogW("11yxf//" + cbodys.size());
                                 y = y + bbodys.size() - 1;
                                 if (b >= abodys.size() - 1) {
                                     typeTwoHandle(cbodys);

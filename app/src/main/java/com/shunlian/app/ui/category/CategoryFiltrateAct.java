@@ -155,7 +155,6 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     protected void onResume() {
         super.onResume();
         if (pingpaiAdapter != null) {
-            LogUtil.augusLogW("dsf");
             pingpaiAdapter.notifyDataSetChanged();
         }
     }
@@ -363,7 +362,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     public void initList(GetListFilterEntity getListFilterEntity) {
         brands = getListFilterEntity.brand_list;
         letters = getListFilterEntity.first_letter_list;
-        
+
         if (pingpaiAdapter == null && getListFilterEntity.recommend_brand_list != null && getListFilterEntity.recommend_brand_list.size() > 0) {
             mrlayout_pingpai.setVisibility(View.VISIBLE);
             view_pingpai.setVisibility(View.VISIBLE);

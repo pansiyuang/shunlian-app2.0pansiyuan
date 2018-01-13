@@ -221,7 +221,6 @@ public class H5Act extends BaseActivity {
         });
 
 //        addCookie();
-        LogUtil.augusLogW("sdf--"+h5Url);
 
         // webview is ready now, just tell session client to bind
         if (sonicSessionClient != null) {

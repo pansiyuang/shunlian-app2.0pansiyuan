@@ -207,12 +207,6 @@ public class CategoryAct extends BaseActivity implements ICategoryView, OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.augusLogW("yxfxd11--"+Constant.BRAND_IDS);
-        LogUtil.augusLogW("yxfxd22--"+Constant.BRAND_IDSBEFORE);
-        LogUtil.augusLogW("yxfxd33--"+Constant.BRAND_ATTRS);
-        LogUtil.augusLogW("yxfxd44--"+Constant.BRAND_ATTRNAME);
-        LogUtil.augusLogW("yxfxd55--"+Constant.SEARCHPARAM);
-
 
         if (resultCode==1){
             if (presenter!=null&&Constant.SEARCHPARAM!=null){

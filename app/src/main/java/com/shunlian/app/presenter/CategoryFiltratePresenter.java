@@ -9,7 +9,6 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
