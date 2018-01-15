@@ -87,6 +87,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
     private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
+    private int detailBottomCouponPosition = -1;//详情下的优惠券位置
+    private StoreVoucherAdapter couponAdapter;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -261,10 +263,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
             final ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             //详情优惠券
-            final StoreVoucherAdapter adapter = new StoreVoucherAdapter(context,false,vouchers);
-            recy_view_coupon.setAdapter(adapter);
+            couponAdapter = new StoreVoucherAdapter(context,false,vouchers);
+            recy_view_coupon.setAdapter(couponAdapter);
 
-            adapter.setOnItemClickListener(new OnItemClickListener() {
+            couponAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
@@ -272,7 +274,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                         goodsDetailAct.getCouchers(voucher.voucher_id);
                         voucher.is_get = "1";
-                        adapter.notifyItemChanged(position);
+                        detailBottomCouponPosition = position;
                     }
                 }
             });
@@ -671,9 +673,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param voucher
      */
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if (recyclerDialog != null){//领取成功之后id == voucher_id
-            recyclerDialog.getVoucherSuccess(voucher.id);
+        if (detailBottomCouponPosition != -1){
+            if (couponAdapter != null){
+                couponAdapter.notifyItemChanged(detailBottomCouponPosition);
+            }
+        }else {
+            if (recyclerDialog != null){//领取成功之后id == voucher_id
+                recyclerDialog.getVoucherSuccess(voucher.id);
+            }
         }
+        detailBottomCouponPosition = -1;
     }
 
 

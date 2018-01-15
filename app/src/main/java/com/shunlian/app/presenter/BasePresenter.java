@@ -212,7 +212,6 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         callback.onSuccess(body);
                     }else {
                         if (body.data != null) {
-                            LogUtil.longW("onSuccess============");
                             callback.onSuccess(body);
                         } else {
                             iView.showDataEmptyView(emptyCode);
