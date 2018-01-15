@@ -9,6 +9,7 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -141,13 +142,13 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                         Constant.REBRAND_ATTRS.clear();
                     }
                     Constant.REBRAND_ATTRS.putAll(Constant.BRAND_ATTRS);
-                    context.setResult(1);
+                    CategoryAct.startAct(context, Constant.SEARCHPARAM);
                     context.finish();
                 }
             }
         }else {
             Constant.SEARCHPARAM=goodsSearchParam;
-            context.setResult(1);
+            CategoryAct.startAct(context, Constant.SEARCHPARAM);
             context.finish();
         }
     }

@@ -109,10 +109,18 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         intent.putExtra("keyword", keyword);
         intent.putExtra("cid", cid);
         intent.putExtra("sort_type", sort_type);
-        context.startActivityForResult(intent, 0);
+        context.startActivity(intent);
     }
 
     public void reset() {
+        if (Constant.SEARCHPARAM!=null){
+            Constant.SEARCHPARAM.send_area="";
+            Constant.SEARCHPARAM.brand_ids="";
+            Constant.SEARCHPARAM.attr_data.clear();
+            Constant.SEARCHPARAM.is_free_ship="";
+            Constant.SEARCHPARAM.max_price="";
+            Constant.SEARCHPARAM.min_price="";
+        }
         categoryFiltratePresenter.isSecond = false;
         isopt = false;
         initLocate();

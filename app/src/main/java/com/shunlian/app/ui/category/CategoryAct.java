@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
@@ -24,6 +25,7 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
@@ -31,6 +33,7 @@ import com.shunlian.app.widget.CategorySortPopWindow;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -82,6 +85,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private boolean sortBySales;
     private int currentMode = MODE_SINGLE;
     private List<GoodsDeatilEntity.Goods> mGoods;
+    private HashMap<String, Object> hashMap;
+    private ObjectMapper objectMapper;
+    private String currentBrandIds = "";
+    private String currentArea = "";
+    private String currentAttrData = "";
+    private String currentFreeship = "";
 
     /**
      * 布局id
@@ -107,6 +116,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        objectMapper = new ObjectMapper();
         searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
         if (searchParam == null) {
             searchParam = new GoodsSearchParam();
@@ -128,10 +138,23 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         LogUtil.httpLogW("onNewIntent");
         super.onNewIntent(intent);
         setIntent(intent);
-        tv_filter.setTextColor(getColorResouce(R.color.pink_color));
-        tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.icon_sx), null);
         searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
-        presenter.getSearchGoods(searchParam);
+//        if (!isEmpty(searchParam.brand_ids)) {
+//            tv_filter.setTextColor(getColorResouce(R.color.pink_color));
+//            tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.icon_sx), null);
+//        } else {
+//            tv_filter.setTextColor(getColorResouce(R.color.new_text));
+//            tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
+//        }
+        hashMap = classToMap(searchParam);
+        LogUtil.httpLogW("hashMap:" + hashMap.size());
+
+        if (!currentBrandIds.equals(searchParam.brand_ids)) {
+            presenter.getSearchGoods(searchParam);
+        }
+        currentBrandIds = searchParam.brand_ids;
+        currentArea = searchParam.send_area;
+        currentFreeship = searchParam.is_free_ship;
     }
 
     @Override
@@ -210,7 +233,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 break;
             case R.id.tv_filter:
                 String keyword = edt_keyword.getText().toString();
-                CategoryFiltrateAct.startAct(CategoryAct.this, keyword, searchParam.cid, "price_desc");
+                CategoryFiltrateAct.startAct(CategoryAct.this, keyword, searchParam.cid, searchParam.sort_type);
                 break;
             case R.id.tv_general_sort:
                 popupWindow.initData(currentSortPosition);
@@ -295,5 +318,48 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             return true;
         }
         return false;
+    }
+
+    public HashMap<String, Object> classToMap(GoodsSearchParam entity) {
+        hashMap = new HashMap<>();
+        if (!isEmpty(entity.send_area)) {
+            hashMap.put("send_area", entity.send_area);
+        }
+        if (!isEmpty(entity.attr_data)) {
+            hashMap.put("attr_data", entity.attr_data);
+            try {
+                LogUtil.httpLogW("attr_data:" + objectMapper.writeValueAsString(entity.attr_data));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (!isEmpty(entity.brand_ids)) {
+            hashMap.put("brand_ids", entity.brand_ids);
+        }
+        if ("Y".equals(entity.is_free_ship)) {
+            hashMap.put("is_free_ship", entity.is_free_ship);
+        }
+        if (!isEmpty(entity.max_price)) {
+            hashMap.put("max_price", entity.max_price);
+        }
+        if (!isEmpty(entity.min_price)) {
+            hashMap.put("min_price", entity.min_price);
+        }
+        return hashMap;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Constant.BRAND_IDS = null;//筛选品牌id
+        Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
+        Constant.BRAND_ATTRS = null;//筛选属性
+        Constant.BRAND_ATTRNAME = null;//筛选属性名
+
+        Constant.SEARCHPARAM = null;//搜索参数
+        Constant.REBRAND_IDS = null;//筛选品牌id(重新赋值用)
+        Constant.REBRAND_ATTRS = null;//筛选属性(重新赋值用)
+        Constant.LISTFILTER = null;//列表属性(重新赋值用)
+        Constant.DINGWEI = null;
     }
 }
