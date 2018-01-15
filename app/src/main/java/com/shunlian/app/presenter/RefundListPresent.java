@@ -19,7 +19,7 @@ import retrofit2.Call;
 
 public class RefundListPresent extends BasePresenter<IRefundListView> {
 
-    private final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 10;
 
     public RefundListPresent(Context context, IRefundListView iView) {
         super(context, iView);
@@ -47,20 +47,31 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
      */
     @Override
     protected void initApi() {
+        refundlist(true);
+    }
+
+    private void refundlist(boolean isShowLoading) {
         Map<String,String> map = new HashMap<>();
         map.put("page",String.valueOf(currentPage));
         map.put("page_size",String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
         Call<BaseEntity<RefundListEntity>> baseEntityCall = getApiService().refundList(map);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefundListEntity>>(){
+        getNetData(isShowLoading,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefundListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<RefundListEntity> entity) {
                 super.onSuccess(entity);
+                isLoading = false;
                 RefundListEntity data = entity.data;
                 List<RefundListEntity.RefundList> refund_list = data.refund_list;
                 currentPage = Integer.parseInt(data.page);
                 allPage = Integer.parseInt(data.total_page);
                 iView.refundList(refund_list,currentPage,allPage);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
             }
         });
     }
@@ -72,7 +83,7 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
             isLoading = true;
             if (currentPage <= allPage){
                 currentPage ++;
-                initApi();
+                refundlist(false);
             }
         }
     }

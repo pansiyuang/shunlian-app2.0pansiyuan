@@ -9,15 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.order.PlatformInterventionRequestActivity;
 import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
-import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
@@ -90,10 +87,10 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                         PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,true);
                         break;
                     case "add_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context,refund_id);
+                        SubmitLogisticsInfoAct.startAct(context,refund_id,SubmitLogisticsInfoAct.APPLY);
                         break;
                     case "edit_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context,refund_id);
+                        SubmitLogisticsInfoAct.startAct(context,refund_id,SubmitLogisticsInfoAct.MODIFY);
                         break;
                     case "check_receive_enable":
                         confirmreceipt(order_id);

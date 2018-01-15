@@ -203,9 +203,10 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.recy_view.setVisibility(View.GONE);
             }
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
-            if (voucher != null && voucher.size() > 0) {
+            if (voucher != null && voucher.size() > 0) {//有可用优惠券，默认使用第一张
                 ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
                 mHolder.mtv_discount.setText(voucher1.title);
+                enabled.post_discount_price = Common.formatFloat(enabled.sub_total,voucher1.denomination);
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
                 }
@@ -214,11 +215,12 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.mllayout_discount.setVisibility(View.VISIBLE);
             }else {
                 enabled.selectVoucherId = -1;
-                mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+enabled.sub_total,11));
+                mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
+                        .concat(Common.formatFloat(enabled.sub_total)),11));
                 mHolder.mllayout_discount.setVisibility(View.GONE);
             }
             List<ConfirmOrderEntity.PromotionInfo> promotion_info = enabled.promotion_info;
-            if (promotion_info != null && promotion_info.size() > 0){
+            if (promotion_info != null && promotion_info.size() > 0){//促销让用户选择
                 if (mIsOrderBuy){
                     mHolder.mtv_promotion.setText("");
                 }else {
@@ -321,18 +323,35 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
         @Override
         public void onClick(final View v) {
             switch (v.getId()){
-                case R.id.mllayout_discount:
+                case R.id.mllayout_discount://选择优惠券
                     DiscountListDialog discountDialog = new DiscountListDialog(context);
                     discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1));
                     discountDialog.setSelectListener(new DiscountListDialog.ISelectListener() {
                         @Override
                         public void onSelect(int position) {
-                            ConfirmOrderEntity.Voucher voucher = lists.get(getAdapterPosition() - 1).voucher.get(position);
-                            mtv_discount.setText(voucher.title);
+                            if (position < 0){
+                                return;
+                            }
                             ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
+                            ConfirmOrderEntity.Voucher voucher = enabled.voucher.get(position);
+                            mtv_discount.setText(voucher.title);
+
                             String sub_total = enabled.sub_total;
-                            mtv_goods_price.setText(getString(R.string.rmb)+ Common.formatFloat(sub_total,voucher.denomination));
+                            mtv_goods_price.setText(getString(R.string.rmb).concat(Common.formatFloat(sub_total,voucher.denomination)));
                             enabled.selectVoucherId = position;
+
+                            /**********计算折后小计***************/
+                            if (enabled.selectPromotionId == -1){
+                                enabled.post_discount_price = Common.formatFloat(sub_total,voucher.denomination);
+                            }else {
+                                if (!isEmpty(enabled.promotion_info)){
+                                    String prom_reduce = enabled.promotion_info.get(enabled.selectPromotionId).prom_reduce;
+                                    String s = Common.formatFloat(sub_total, voucher.denomination);
+                                    enabled.post_discount_price = Common.formatFloat(s,isEmpty(prom_reduce) ? "0" : prom_reduce);
+                                }
+                            }
+                            /************计算折后小计*************/
+
                             if (mListener != null){
                                 mListener.onSelectVoucher(position);
                             }
@@ -345,17 +364,29 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     met_leav_msg.setFocusable(true);
                     met_leav_msg.setFocusableInTouchMode(true);
                     break;
-                case R.id.mll_promotion:
+                case R.id.mll_promotion://选择促销
                     if (mIsOrderBuy){
-                        DiscountListDialog promotionDialog = new DiscountListDialog(context);
+                        final DiscountListDialog promotionDialog = new DiscountListDialog(context);
                         promotionDialog.setPromotion(lists.get(getAdapterPosition() - 1));
                         promotionDialog.setSelectListener(new DiscountListDialog.ISelectListener() {
                             @Override
                             public void onSelect(int position) {
+                                if (position < 0){
+                                    return;
+                                }
                                 ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
                                 ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.promotion_info.get(position);
                                 mtv_promotion.setText(promotionInfo.prom_title);
                                 enabled.selectPromotionId = position;
+
+                                if (isEmpty(enabled.voucher)){
+                                    /*********优惠券额度*************/
+                                    String denomination = enabled.voucher.get(enabled.selectVoucherId).denomination;
+                                    String s1 = Common.formatFloat(enabled.sub_total, denomination);
+                                    enabled.post_discount_price = Common.formatFloat(s1,
+                                            isEmpty(promotionInfo.prom_reduce) ? "0" : promotionInfo.prom_reduce);
+                                }
+
                                 if (mListener != null){
                                     mListener.onSelectVoucher(position);
                                 }

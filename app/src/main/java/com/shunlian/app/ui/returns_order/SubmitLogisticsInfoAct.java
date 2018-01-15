@@ -59,13 +59,18 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
 
     public final int LOGISTICS_CODE = 100;//物流单号
     public final int LOGISTICS_NAME = 200;//物流名字
+
+    public static final String APPLY = "0";//申请物流信息
+    public static final String MODIFY = "1";//修改物流信息
     private String refund_id;
     private SubmitLogisticsInfoPresenter presenter;
     private int index;
+    private String status;
 
-    public static void startAct(Context context,String refund_id) {
+    public static void startAct(Context context,String refund_id,String status) {
         Intent intent = new Intent(context, SubmitLogisticsInfoAct.class);
         intent.putExtra("refund_id",refund_id);
+        intent.putExtra("status",status);
         context.startActivity(intent);
     }
 
@@ -122,9 +127,13 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
         setStatusBarFontDark();
 
         refund_id = getIntent().getStringExtra("refund_id");
+        status = getIntent().getStringExtra("status");
+        presenter = new SubmitLogisticsInfoPresenter(this,this,refund_id);
+        if (MODIFY.equals(status)){
+            presenter.getLogisticsShipInfo();
+        }
 
         met_explain.setText(Common.getPlaceholder(3));
-        presenter = new SubmitLogisticsInfoPresenter(this,this,refund_id);
 
         singleImgAdapter = new SingleImgAdapter(this, listExplains);
         gv_proof.setAdapter(singleImgAdapter);
@@ -309,5 +318,14 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     @Override
     public void uploadProgress(int progress, String tag) {
         // TODO: 2018/1/5 上传进度 
+    }
+
+    /**
+     * 提交成功
+     */
+    @Override
+    public void submitSuccess() {
+        Common.staticToast(getStringResouce(R.string.submit_success));
+        finish();
     }
 }

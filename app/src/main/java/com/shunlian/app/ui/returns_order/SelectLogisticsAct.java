@@ -133,4 +133,14 @@ public class SelectLogisticsAct extends BaseActivity implements ISelectLogistics
             }
         });
     }
+
+    /**
+     * 设置字母排序
+     *
+     * @param first_letter_list
+     */
+    @Override
+    public void setLetterSort(List<String> first_letter_list) {
+        side_bar.setIndexItems((ArrayList<String>) first_letter_list);
+    }
 }

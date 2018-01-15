@@ -292,7 +292,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof StoreGoodsHolder){
             StoreGoodsHolder mHolder = (StoreGoodsHolder) holder;
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_shop_head,store_info.decoration_banner);
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_shop_head,store_info.store_icon);
             mHolder.mtv_store_name.setText(store_info.decoration_name);
             mHolder.mtv_goods_count.setText(store_info.goods_count);
             mHolder.mtv_attention_count.setText(store_info.attention_count);
@@ -793,8 +793,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                                 if (context instanceof GoodsDetailAct){
                                     GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                                     goodsDetailAct.getCouchers(voucher.voucher_id);
-                                    voucher.is_get = "1";
-//                                    adapter.notifyItemChanged(position);
                                 }
                             }
                         });

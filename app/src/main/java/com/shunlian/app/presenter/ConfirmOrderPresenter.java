@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IConfirmOrderView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -63,8 +65,17 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
-                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
+                ConfirmOrderEntity data = entity.data;
+                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
+                float total_amount = 0;
+                if (data.enabled != null && data.enabled.size() > 0){
+                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
+                    for (int i = 0; i < enabled.size(); i++) {
+                        String sub_total = enabled.get(i).sub_total;
+                        total_amount += Float.parseFloat(sub_total);
+                    }
+                }
+                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
             }
         });
     }
@@ -88,8 +99,17 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
-                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
+                ConfirmOrderEntity data = entity.data;
+                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
+                float total_amount = 0;
+                if (data.enabled != null && data.enabled.size() > 0){
+                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
+                    for (int i = 0; i < enabled.size(); i++) {
+                        String sub_total = enabled.get(i).sub_total;
+                        total_amount += Float.parseFloat(sub_total);
+                    }
+                }
+                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
             }
         });
     }
@@ -109,8 +129,17 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                iView.confirmOrderAllGoods(entity.data.enabled,entity.data.disabled,entity.data.address);
-                iView.goodsTotalPrice(entity.data.total_count,entity.data.total_amount);
+                ConfirmOrderEntity data = entity.data;
+                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
+                float total_amount = 0;
+                if (data.enabled != null && data.enabled.size() > 0){
+                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
+                    for (int i = 0; i < enabled.size(); i++) {
+                        String sub_total = enabled.get(i).sub_total;
+                        total_amount += Float.parseFloat(sub_total);
+                    }
+                }
+                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
             }
         });
     }

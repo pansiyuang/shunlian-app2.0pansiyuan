@@ -93,7 +93,6 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
                 if ("apply".equals(orderGoodsBean.refund_button_type)){
                     SelectServiceActivity.startAct(context, orderGoodsBean.og_id);
                 }else {
-                    LogUtil.augusLogW("yxf--"+orderGoodsBean.refund_id);
                     ExchangeDetailAct.startAct(context,orderGoodsBean.refund_id);
                 }
             }

@@ -44,11 +44,9 @@ public class StoreDiscountMenuAdapter extends BaseRecyclerAdapter<StorePromotion
             twoHolder.view.setTag(R.id.tag_store_discount_menu_id,data.promotionId);
             twoHolder.view.setTag(R.id.tag_store_discount_menu_type,data.type);
             if (selectPosition==position){
-                LogUtil.augusLogW("yxfdf--"+position);
                 twoHolder.mtv_name.setTextColor(context.getResources().getColor(R.color.white));
                 twoHolder.mtv_name.setBackgroundResource(R.drawable.shape_store_discount_menu);
             }else {
-                LogUtil.augusLogW("yxfdfkl--"+position);
                 twoHolder.mtv_name.setTextColor(context.getResources().getColor(R.color.pink_color));
                 twoHolder.mtv_name.setBackgroundResource(R.drawable.shape_store_discount_menus);
             }
