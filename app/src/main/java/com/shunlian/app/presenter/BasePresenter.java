@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
@@ -217,7 +218,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                             iView.showDataEmptyView(emptyCode);
                         }
                     }
-                }else if (body.code != 1000 && body.data != null){
+                }else if (body.code != 1000 && interceptApi(call,body)){//目前余额支付失败时code!=100,data不为空
                     callback.onErrorData(body);
                 }else {
                     callback.onErrorCode(body.code,body.message);
@@ -370,5 +371,20 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
         return requestBody;
+    }
+
+    private <T> boolean interceptApi(Call call, BaseEntity<T> body){
+        String url = call.request().url().toString();
+        LogUtil.longW("interceptApi=============url=".concat(url));
+        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout") || url.contains("order/payinorderlist"))){
+            T data = body.data;
+            if (data != null && data instanceof PayOrderEntity){
+                PayOrderEntity entity = (PayOrderEntity) data;
+                if ("credit".equals(entity.paytype)){//当支付类型为余额支付时，返回true
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

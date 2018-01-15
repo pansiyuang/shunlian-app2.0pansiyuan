@@ -1046,8 +1046,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_view_coupon.setLayoutManager(manager);
             recy_view_coupon.setNestedScrollingEnabled(false);
-            int space = TransformUtil.dip2px(context, 10);
-            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,space/2,space/2));
+            recy_view_coupon.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
     }
 
