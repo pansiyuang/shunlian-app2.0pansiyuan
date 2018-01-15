@@ -15,6 +15,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
@@ -29,9 +30,12 @@ import butterknife.BindView;
 public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Comments> {
 
     private static final int FOOTER = 2;
+    private final int margin,space;
 
     public CommentCardViewAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Comments> lists) {
         super(context, isShowFooter, lists);
+        margin = TransformUtil.dip2px(context, 12);
+        space = TransformUtil.dip2px(context, 5);
     }
 
     @Override
@@ -82,16 +86,31 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         if (holder instanceof CommentCardViewHolder){
             CommentCardViewHolder cardViewHolder = (CommentCardViewHolder) holder;
             GoodsDeatilEntity.Comments comments = lists.get(position);
-            if (comments.pics != null) {
+
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
+                    cardViewHolder.card_rootview.getLayoutParams();
+            if (position == 0){
+                layoutParams.leftMargin = margin;
+            }else {
+                layoutParams.leftMargin = 0;
+            }
+            if (Build.VERSION.SDK_INT >= 21){
+                layoutParams.rightMargin = space * 2;
+            }else {
+                layoutParams.rightMargin = space;
+            }
+            cardViewHolder.card_rootview.setLayoutParams(layoutParams);
+
+            if (!isEmpty(comments.pics)) {
+                cardViewHolder.mrlayout_pic.setVisibility(View.VISIBLE);
                 GlideUtils.getInstance().loadImage(context,
                         cardViewHolder.miv_show_pic, comments.pics.get(0));
-            }
 
-            if (comments.pics != null && comments.pics.size() > 0){
                 cardViewHolder.mtv_num.setVisibility(View.VISIBLE);
                 String format = "共%s张";
                 cardViewHolder.mtv_num.setText(String.format(format,comments.pics.size()));
             }else {
+                cardViewHolder.mrlayout_pic.setVisibility(View.GONE);
                 cardViewHolder.mtv_num.setVisibility(View.GONE);
             }
 
@@ -102,7 +121,10 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             cardViewHolder.mtv_nickname.setText(comments.nickname);
             Bitmap bitmap = TransformUtil.convertVIP(context, comments.vip_level);
             if (bitmap != null) {
+                cardViewHolder.miv_vip.setVisibility(View.VISIBLE);
                 cardViewHolder.miv_vip.setImageBitmap(bitmap);
+            }else {
+                cardViewHolder.miv_vip.setVisibility(View.GONE);
             }
         }
     }
@@ -112,15 +134,20 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         @BindView(R.id.mll_bg)
         MyLinearLayout mll_bg;
 
+        @BindView(R.id.card_rootview)
+        CardView card_rootview;
+
         public FooterHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-//            if (Build.VERSION.SDK_INT >= 21) {
-//                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-//                int w = TransformUtil.dip2px(context, 20);
-//                layoutParams.leftMargin = w;
-//                itemView.setLayoutParams(layoutParams);
-//            }
+            RecyclerView.LayoutParams rootParams = (RecyclerView.LayoutParams)
+                    card_rootview.getLayoutParams();
+            int top = TransformUtil.dip2px(context, 16);
+            int bottom = TransformUtil.dip2px(context, 19);
+            rootParams.topMargin = top;
+            rootParams.rightMargin = margin;
+            rootParams.bottomMargin = bottom;
+            card_rootview.setLayoutParams(rootParams);
         }
 
         /**
@@ -159,23 +186,21 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         @BindView(R.id.mtv_num)
         MyTextView mtv_num;
 
-//        @BindView(R.id.mrl_root)
-//        MyLinearLayout mrl_root;
+        @BindView(R.id.mrlayout_pic)
+        MyRelativeLayout mrlayout_pic;
 
         public CommentCardViewHolder(View itemView) {
             super(itemView);
             card_rootview.setOnClickListener(this);
-//            mrl_root.setWHProportion(534,233);
             mtv_content.setWHProportion(261,99);
-            if (Build.VERSION.SDK_INT >= 21){
-                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
-                        card_rootview.getLayoutParams();
-                int h = TransformUtil.dip2px(context, 20);
-                layoutParams.topMargin = h;
-                layoutParams.bottomMargin = h;
-                layoutParams.leftMargin = h;
-                card_rootview.setLayoutParams(layoutParams);
-            }
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
+                    card_rootview.getLayoutParams();
+            int top = TransformUtil.dip2px(context, 16);
+            int bottom = TransformUtil.dip2px(context, 19);
+            layoutParams.topMargin = top;
+            layoutParams.bottomMargin = bottom;
+            card_rootview.setLayoutParams(layoutParams);
+
         }
 
         @Override

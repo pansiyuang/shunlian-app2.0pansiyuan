@@ -3,18 +3,14 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -381,7 +377,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     }
 
     private void valueAnimator(final View view, final String id) {
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
+        /*ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
         valueAnimator.setDuration(300);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -403,7 +399,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                 goodsDetailAct.commentFrag(id);
             }
-        });
+        });*/
+        GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+        goodsDetailAct.commentFrag(id);
     }
 
     /**
