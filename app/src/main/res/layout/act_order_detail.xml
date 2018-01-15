@@ -161,6 +161,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>
             <View
+                android:id="@+id/view_message"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/white_ash"

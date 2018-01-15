@@ -111,6 +111,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_title3)
     MyTextView mtv_title3;
 
+    @BindView(R.id.view_message)
+    View view_message;
+
     @BindView(R.id.mrlayout_youhuiquan)
     MyRelativeLayout mrlayout_youhuiquan;
 
@@ -175,7 +178,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_phone.setText("联系电话："+orderdetailEntity.receipt_address.mobile);
         mtv_name.setText("收件人："+orderdetailEntity.receipt_address.realname);
         mtv_address.setText("收货地址："+orderdetailEntity.receipt_address.receipt_address);
-        mtv_message.setText("用户留言：" + orderdetailEntity.remark);
+        if (TextUtils.isEmpty(orderdetailEntity.remark)){
+            mtv_message.setVisibility(View.INVISIBLE);
+            view_message.setVisibility(View.INVISIBLE);
+        }else {
+            mtv_message.setText("用户留言：" + orderdetailEntity.remark);
+            mtv_message.setVisibility(View.VISIBLE);
+            view_message.setVisibility(View.VISIBLE);
+        }
         mtv_storeName.setText(orderdetailEntity.store_name);
         mtv_zongjia.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.goods_amount);
         mtv_yunfei.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.shipping_fee);
