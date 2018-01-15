@@ -41,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_reset"
@@ -171,7 +172,9 @@
                     android:layout_width="109dp"
                     android:layout_height="match_parent"
                     android:background="@color/value_f5"
-                    android:digits="@string/category_jiage"
+                    android:inputType="number"
+                    android:textColorHint="@color/share_text"
+                    android:hint="@string/category_zuidi"
                     android:gravity="center"
                     android:singleLine="true"
                     android:textColor="@color/new_text"
@@ -191,7 +194,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     android:background="@color/value_f5"
-                    android:digits="@string/category_jiage"
+                    android:inputType="number"
+                    android:textColorHint="@color/share_text"
+                    android:hint="@string/category_zuigao"
                     android:gravity="center"
                     android:singleLine="true"
                     android:textColor="@color/new_text"
