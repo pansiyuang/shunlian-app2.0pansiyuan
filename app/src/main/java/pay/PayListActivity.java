@@ -201,6 +201,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                promptDialog.dismiss();
                 finish();
             }
         }).show();

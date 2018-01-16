@@ -68,6 +68,14 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
                     .concat(orderGoodsBean.title));
         }
 
+        String is_refund = orderGoodsBean.is_refund;
+        if (isEmpty(is_refund)){
+            mHolder.mtv_refund_status.setVisibility(View.GONE);
+        }else {
+            mHolder.mtv_refund_status.setVisibility(View.VISIBLE);
+            mHolder.mtv_refund_status.setText(is_refund);
+        }
+
     }
 
     public class OrderGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -92,6 +100,9 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
 
         @BindView(R.id.mtv_label)
         MyTextView mtv_label;
+
+        @BindView(R.id.mtv_refund_status)
+        MyTextView mtv_refund_status;
 
         public OrderGoodsHolder(View itemView) {
             super(itemView);

@@ -387,7 +387,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.setTargetNumber(num);
         }
 
-        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
+//        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
         }
@@ -514,6 +514,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mtv_buy_immediately.setEnabled(true);
         }
     }
+
+    /**
+     * 刷新足迹
+
+    @Override
+    public void refreshFootprint() {
+        if (footprintDialog != null){
+            mFootprintEntity = null;
+            footprintDialog.refreshData();
+        }
+    }
+     */
 
     /*
    显示足迹列表
@@ -903,4 +915,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (goodsDetailPresenter != null)
             goodsDetailPresenter.getVoucher(id);
     }
+
+    /*public void clearFootprint(){
+        if (goodsDetailPresenter != null){
+            goodsDetailPresenter.clearFootprint();
+        }
+    }*/
 }

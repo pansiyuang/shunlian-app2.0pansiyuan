@@ -66,6 +66,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     private SubmitLogisticsInfoPresenter presenter;
     private int index;
     private String status;
+    private StringBuilder picstr = new StringBuilder();
 
     public static void startAct(Context context,String refund_id,String status) {
         Intent intent = new Intent(context, SubmitLogisticsInfoAct.class);
@@ -179,7 +180,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
             return;
         }
 
-        presenter.submitLogisticsInfo(text.toString(),logistics_code,explain);
+        presenter.submitLogisticsInfo(text.toString(),logistics_code,explain,picstr.toString());
     }
 
     @Override
@@ -293,17 +294,24 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
      * @param pics
      */
     @Override
-    public void setRefundPics(List<String> pics) {
+    public void setRefundPics(List<String> pics,boolean isShow) {
         if (isEmpty(pics)){
             return;
         }
-
-        for (String picturePath : pics) {
-            ImageEntity imageEntity = new ImageEntity();
-            imageEntity.imgUrl = picturePath;
-            listExplains.add(imageEntity);
+        if (isShow){
+            for (String picturePath : pics) {
+                ImageEntity imageEntity = new ImageEntity();
+                imageEntity.imgUrl = picturePath;
+                listExplains.add(imageEntity);
+            }
+            singleImgAdapter.notifyDataSetChanged();
         }
-        singleImgAdapter.notifyDataSetChanged();
+        picstr.delete(0, picstr.length());
+        for (int i = 0; i < pics.size(); i++) {
+            String path = pics.get(i);
+            picstr.append(path);
+            picstr.append(",");
+        }
     }
 
     @Override

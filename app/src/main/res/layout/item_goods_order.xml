@@ -25,7 +25,6 @@
         android:layout_toLeftOf="@+id/mtv_price"
         android:layout_toRightOf="@+id/miv_goods_pic"
         android:maxLines="2"
-        android:text="美颜秘笈果冻口红秘籍唇膏不易掉色保湿滋润不易沾有光.."
         android:textColor="@color/new_text"
         android:textSize="13sp"
         app:tv_control_adapter="true"
@@ -52,7 +51,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="¥ 51.50"
         android:textColor="@color/new_text"
         android:textSize="14sp" />
 
@@ -62,7 +60,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mtv_title"
         android:layout_below="@+id/mtv_title"
-        android:text="烈焰红"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"
@@ -74,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/mtv_price"
         android:layout_below="@+id/mtv_price"
-        android:text="¥ 99.00"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"
@@ -86,9 +82,20 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/mtv_price"
         android:layout_below="@+id/mtv_market_price"
-        android:text="x3"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"
         app:tv_margin_top="10" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_refund_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:layout_below="@+id/mtv_count"
+        android:layout_alignRight="@+id/mtv_count"
+        app:tv_control_adapter="true"
+        app:tv_margin_top="20"
+        android:textColor="@color/value_F5C243"
+        />
 </com.shunlian.app.widget.MyRelativeLayout>

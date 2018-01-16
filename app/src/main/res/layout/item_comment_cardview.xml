@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardElevation="3dp"
-    app:cardMaxElevation="16dp">
+    ><!--app:cardMaxElevation="16dp"-->
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mrl_root"
@@ -21,6 +21,8 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            app:ll_control_adapter="true"
+            app:ll_control_height="233"
             android:orientation="vertical">
 
             <com.shunlian.app.widget.MyLinearLayout
@@ -34,15 +36,13 @@
                     android:id="@+id/civ_head"
                     android:layout_width="26dp"
                     android:layout_height="26dp"
-                    android:layout_marginLeft="11dp"
-                    android:src="@mipmap/icon_login_logo" />
+                    android:layout_marginLeft="11dp"/>
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="进度款撒房价"
                     android:textColor="@color/value_8e"
                     android:textSize="12sp"
                     app:tv_control_adapter="true"
@@ -52,7 +52,6 @@
                     android:id="@+id/miv_vip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/img_login_v1"
                     app:iv_control_adapter="true"
                     app:iv_control_height="28"
                     app:iv_control_width="25"
@@ -69,7 +68,6 @@
                 android:maxLines="3"
                 android:textColor="@color/value_60"
                 android:textSize="12sp"
-                android:text="挺好用的，抹上以后头发很顺而且不毛躁，用一盒的效果更明显噢"
                 app:tv_control_adapter="true"
                 app:tv_control_width="261"
                 app:tv_margin_left="21"
@@ -78,6 +76,7 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
         <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_pic"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp">
@@ -87,7 +86,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
                 app:iv_control_adapter="true"
                 app:iv_control_height="233"
                 app:iv_control_width="233" />
@@ -100,7 +98,6 @@
                 android:layout_alignRight="@+id/miv_show_pic"
                 android:background="@color/colorMask"
                 android:gravity="center"
-                android:text="共6张"
                 android:textColor="@color/white"
                 android:textSize="8sp"
                 app:tv_control_adapter="true"

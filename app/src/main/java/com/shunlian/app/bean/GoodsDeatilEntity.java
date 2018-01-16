@@ -15,6 +15,7 @@ public class GoodsDeatilEntity {
     public String title;
     public Detail detail;
     public String free_shipping;
+    public String shipping_fee;//运费
     public String area;
     public String market_price;
     public String price;

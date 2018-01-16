@@ -53,6 +53,7 @@
     <string name="errcode_unknown">网络异常，请稍后再试！</string>
     <string name="LoginPswFrg_dl">登录</string>
     <string name="plase_login">请先登录</string>
+    <string name="plase_again_login">请重新登录</string>
 
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>
@@ -126,7 +127,7 @@
     <string name="the_shopkeeper_recommended">店主推荐</string>
     <string name="continue_dragging_to_view_text_details">继续拖动，查看图文详情</string>
     <string name="free_shipping">包邮</string>
-    <string name="no_mail">不包邮</string>
+    <string name="not_mail">邮费:%s元</string>
     <string name="sold">已售%s件</string>
     <string name="pull">满</string>
     <string name="reduce">减</string>
@@ -379,4 +380,5 @@
     <string name="leave_behind_goods">忍心丢下心仪商品？</string>
     <string name="i_think">我再想想</string>
     <string name="to_resolve">去意已决</string>
+    <string name="more_comment">更多评论</string>
 </resources>

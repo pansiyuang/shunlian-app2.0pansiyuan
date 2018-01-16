@@ -30,7 +30,6 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
 
     private String refund_id;
     private String is_edit = "N";//是否编辑提交，是Y，否N
-    private StringBuilder pics = null;
 
     public SubmitLogisticsInfoPresenter(Context context, ISubmitLogisticsInfoView iView, String refund_id) {
         super(context, iView);
@@ -75,7 +74,7 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
                 iView.setLogisticsName(data.express_com);
                 iView.setLogisticsCode(data.express_sn);
                 iView.setRefundMemo(data.memo);
-                iView.setRefundPics(data.pics);
+                iView.setRefundPics(data.pics,true);
                 is_edit = "Y";
             }
         });
@@ -84,14 +83,14 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
     /**
      * 提交物流信息
      */
-    public void submitLogisticsInfo(String express_com,String express_sn,String memo){
+    public void submitLogisticsInfo(String express_com,String express_sn,String memo,String pics){
         Map<String,String> map = new HashMap<>();
         map.put("express_com",express_com);
         map.put("refund_id",refund_id);
         map.put("express_sn",express_sn);
         map.put("memo",memo);
         if (pics != null)
-            map.put("pics",pics.toString());
+            map.put("pics",pics);
         map.put("is_edit",is_edit);
         sortAndMD5(map);
 
@@ -139,14 +138,7 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
                 if (uploadPicEntity != null) {
                     iView.uploadImg(uploadPicEntity);
                 }
-                if (uploadPicEntity.relativePath != null && uploadPicEntity.relativePath.size() > 0){
-                    pics  = new StringBuilder();
-                    for (int i = 0; i < uploadPicEntity.relativePath.size(); i++) {
-                        String path = uploadPicEntity.relativePath.get(i);
-                        pics.append(path);
-                        pics.append(",");
-                    }
-                }
+                iView.setRefundPics(uploadPicEntity.relativePath,false);
             }
         });
     }
