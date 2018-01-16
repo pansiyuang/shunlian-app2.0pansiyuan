@@ -67,6 +67,7 @@ public class MyOrderEntity {
         public String is_append;
         public String is_edit_praise;
         public String og_id;//订单商品表id
+        public String is_refund;//售后状态
 
     }
 }

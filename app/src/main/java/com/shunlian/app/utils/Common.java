@@ -357,6 +357,25 @@ public class Common {
     }
 
     /**
+     * 如果没有登录提示《请先登录》 并返回true
+     * @return
+     */
+    public static boolean loginPrompt(){
+        if (!isAlreadyLogin()){
+            Common.staticToast(getResources().getString(R.string.plase_login));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 清空登录信息
+     */
+    public static void clearLoginInfo(){
+        SharedPrefUtil.clearSharedPreferences();
+    }
+
+    /**
      * 判断应用是否在运行
      * @param context
      * @return

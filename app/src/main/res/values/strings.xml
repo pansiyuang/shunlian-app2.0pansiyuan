@@ -53,6 +53,7 @@
     <string name="errcode_unknown">网络异常，请稍后再试！</string>
     <string name="LoginPswFrg_dl">登录</string>
     <string name="plase_login">请先登录</string>
+    <string name="plase_again_login">请重新登录</string>
 
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>

@@ -28,6 +28,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.PayOrderEntity;
@@ -242,13 +243,16 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
-        Common.staticToast(message);
+        if (code != Code.CODE_REFRESH_TOKEN_VALIDE) {
+            Common.staticToast(message);
+        }
         switch (code) {
             // TODO: 2017/10/19
             case Code.CODE_NO_LOGIN://未登录
                 String token = SharedPrefUtil.getSharedPrfString("token", "");
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
+                    goLogin();
                 }else {
                     requestCount++;
                     if (requestCount >= 5){
@@ -259,10 +263,15 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 }
                 break;
             case Code.CODE_REFRESH_TOKEN_VALIDE://刷新token过期,让用户登录
-                SharedPrefUtil.clearSharedPreferences();
-                LoginAct.startAct(context);
+                Common.staticToast(Common.getResources().getString(R.string.plase_again_login));
+                goLogin();
                 break;
         }
+    }
+
+    private void goLogin() {
+        Common.clearLoginInfo();
+        LoginAct.startAct(context);
     }
 
 
