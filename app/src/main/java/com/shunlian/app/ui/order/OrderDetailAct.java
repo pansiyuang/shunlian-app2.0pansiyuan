@@ -189,13 +189,13 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_storeName.setText(orderdetailEntity.store_name);
         mtv_zongjia.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.goods_amount);
         mtv_yunfei.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.shipping_fee);
-        if (TextUtils.isEmpty(orderdetailEntity.promotion)&&Integer.parseInt(orderdetailEntity.promotion)>0){
+        if (!TextUtils.isEmpty(orderdetailEntity.promotion)&&Integer.parseInt(orderdetailEntity.promotion)>0){
             mtv_cuxiao.setText("-" + getStringResouce(R.string.common_yuan) +orderdetailEntity.promotion);
             mrlayout_cuxiao.setVisibility(View.VISIBLE);
         }else {
             mrlayout_cuxiao.setVisibility(View.GONE);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.voucher_amount)&&Integer.parseInt(orderdetailEntity.voucher_amount)>0){
+        if (!TextUtils.isEmpty(orderdetailEntity.voucher_amount)&&Integer.parseInt(orderdetailEntity.voucher_amount)>0){
             mtv_youhuiquan.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.voucher_amount);
             mrlayout_youhuiquan.setVisibility(View.VISIBLE);
         }else {
