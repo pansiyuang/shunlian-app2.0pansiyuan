@@ -28,7 +28,7 @@ import retrofit2.Call;
  */
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
-    public boolean isSecond;
+    public boolean isSecond,isEmpty=true;
     private String cid, keyword;
     private Activity context;
 
@@ -125,10 +125,17 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                 GoodsSearchParam.Attr attr = new GoodsSearchParam.Attr();
                 String name = Constant.BRAND_ATTRNAME.get(n);
                 attr.attr_name = name;
-                attr.attr_vals = Constant.BRAND_ATTRS.get(name);
+                if (Constant.BRAND_ATTRS.get(name)!=null&&Constant.BRAND_ATTRS.get(name).size()>0){
+                    isEmpty=false;
+                    attr.attr_vals = Constant.BRAND_ATTRS.get(name);
+                }
                 attrs.add(attr);
                 if (n >= Constant.BRAND_ATTRNAME.size() - 1) {
-                    goodsSearchParam.attr_data = attrs;
+                    if (!isEmpty){
+                        goodsSearchParam.attr_data = attrs;
+                    }else if(goodsSearchParam.attr_data!=null){
+                        goodsSearchParam.attr_data.clear();
+                    }
                     Constant.SEARCHPARAM=goodsSearchParam;
                     if (Constant.REBRAND_IDS==null){
                         Constant.REBRAND_IDS=new ArrayList<>();

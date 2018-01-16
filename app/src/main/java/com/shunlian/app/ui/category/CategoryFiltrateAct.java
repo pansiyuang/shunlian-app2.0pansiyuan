@@ -456,7 +456,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     }
 
     @Override
-    public void getSearchGoods(SearchGoodsEntity goodsEntity) {
+    public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
 
     }
 }

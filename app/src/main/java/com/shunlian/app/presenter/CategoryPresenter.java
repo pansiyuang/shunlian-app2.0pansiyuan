@@ -22,6 +22,8 @@ import retrofit2.Call;
  */
 
 public class CategoryPresenter extends BasePresenter<ICategoryView> {
+    public static final int PAGE_SIZE = 20;
+    private GoodsSearchParam mParam;
 
     public CategoryPresenter(Context context, ICategoryView iView) {
         super(context, iView);
@@ -42,7 +44,9 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
 
     }
 
-    public void getSearchGoods(GoodsSearchParam goodsSearchParam) {
+    public void getSearchGoods(GoodsSearchParam goodsSearchParam ,boolean isShowLoading) {
+        this.mParam = goodsSearchParam;
+
         Map<String, String> map = new HashMap<>();
 
         if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
@@ -72,6 +76,9 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
             map.put("send_area", goodsSearchParam.send_area);
         }
 
+        map.put("page",String.valueOf(currentPage));
+        map.put("page_size",String.valueOf(PAGE_SIZE));
+
         if (goodsSearchParam.attr_data != null && goodsSearchParam.attr_data.size() != 0) {
             try {
                 String attr_data = new ObjectMapper().writeValueAsString(goodsSearchParam.attr_data);
@@ -88,16 +95,27 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
         sortAndMD5(map);
 
         Call<BaseEntity<SearchGoodsEntity>> searchGoodsCallback = getAddCookieApiService().getSearchGoods(getRequestBody(map));
-        getNetData(true, searchGoodsCallback, new SimpleNetDataCallback<BaseEntity<SearchGoodsEntity>>() {
+        getNetData(isShowLoading, searchGoodsCallback, new SimpleNetDataCallback<BaseEntity<SearchGoodsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<SearchGoodsEntity> entity) {
                 super.onSuccess(entity);
-                if (entity.data != null) {
-                    SearchGoodsEntity searchGoodsEntity = entity.data;
-                    iView.getSearchGoods(entity.data);
-                    LogUtil.httpLogW("searchGoodsEntity:" + searchGoodsEntity);
-                }
+                isLoading = false;
+                SearchGoodsEntity searchGoodsEntity = entity.data;
+                currentPage = Integer.parseInt(entity.data.page);
+                allPage = Integer.parseInt(entity.data.total_page);
+                iView.getSearchGoods(searchGoodsEntity, currentPage, allPage);
             }
         });
+    }
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading){
+            isLoading = true;
+            if (currentPage <= allPage){
+                currentPage ++;
+                getSearchGoods(mParam,false);
+            }
+        }
     }
 }

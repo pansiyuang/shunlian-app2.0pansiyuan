@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -87,6 +88,30 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         } else {
             return getRecyclerHolder(parent);
         }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        if (isShowFooter) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof GridLayoutManager) {
+                final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+                manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        return isHeader(position) ? manager.getSpanCount() : 1;
+                    }
+                });
+            }
+        }
+    }
+
+    private boolean isHeader(int position) {
+        if (position + 1 == getItemCount()) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -7,5 +7,5 @@ import com.shunlian.app.bean.SearchGoodsEntity;
  */
 
 public interface ICategoryView extends IView {
-    void getSearchGoods(SearchGoodsEntity goodsEntity);
+    void getSearchGoods(SearchGoodsEntity goodsEntity ,int page,int allPage);
 }
