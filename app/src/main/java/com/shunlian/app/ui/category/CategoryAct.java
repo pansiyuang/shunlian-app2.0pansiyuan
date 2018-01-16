@@ -96,6 +96,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private String currentMinPrice = "";
     private List<GoodsSearchParam.Attr> currentAttrData = new ArrayList<>();
     private boolean hasChange;
+    private int totalPage;
+    private int currentPage;
 
     /**
      * 布局id
@@ -138,6 +140,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         popupWindow = new CategorySortPopWindow(this);
         popupWindow.setOnSortSelectListener(this);
         popupWindow.setOnDismissListener(this);
+
+        setListMode(currentMode);
     }
 
     @Override
@@ -223,6 +227,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                         int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                         if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
                             if (presenter != null) {
+                                if (currentPage > totalPage) {
+                                    presenter.resetCurrentPage();
+                                }
                                 presenter.onRefresh();
                             }
                         }
@@ -232,6 +239,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                         int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                         if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                             if (presenter != null) {
+                                if (currentPage > totalPage) {
+                                    presenter.resetCurrentPage();
+                                }
                                 presenter.onRefresh();
                             }
                         }
@@ -243,26 +253,27 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @Override
     public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
+        currentPage = page;
+        totalPage = allPage;
         if (goodsEntity.goods_list != null && goodsEntity.goods_list.size() != 0) {
             mGoods.addAll(goodsEntity.goods_list);
             mRefStore = goodsEntity.ref_store;
         }
         if (currentMode == MODE_SINGLE) {
-            if (goodsEntity.goods_list.size() <= RefundListPresent.PAGE_SIZE) {
+            if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 singleAdapter.notifyDataSetChanged();
             } else {
-                singleAdapter.notifyItemInserted(RefundListPresent.PAGE_SIZE);
+                singleAdapter.notifyItemInserted(CategoryPresenter.PAGE_SIZE);
             }
             singleAdapter.setPageLoading(page, allPage);
         } else if (currentMode == MODE_DOUBLE) {
-            if (goodsEntity.goods_list.size() <= RefundListPresent.PAGE_SIZE) {
+            if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 doubleAdapter.notifyDataSetChanged();
             } else {
-                doubleAdapter.notifyItemInserted(RefundListPresent.PAGE_SIZE);
+                doubleAdapter.notifyItemInserted(CategoryPresenter.PAGE_SIZE);
             }
             doubleAdapter.setPageLoading(page, allPage);
         }
-        setListMode(currentMode);
     }
 
     public Drawable getRightDrawable(int drawableRes) {
@@ -276,14 +287,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             recycle_category.setLayoutManager(linearLayoutManager);
             miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_yilei));
             if (singleAdapter != null) {
-                singleAdapter.notifyDataSetChanged();
                 recycle_category.setAdapter(singleAdapter);
             }
         } else if (mode == MODE_DOUBLE) {
             recycle_category.setLayoutManager(gridLayoutManager);
             miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_lianglei));
             if (doubleAdapter != null) {
-                doubleAdapter.notifyDataSetChanged();
                 recycle_category.setAdapter(doubleAdapter);
             }
         }

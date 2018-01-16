@@ -58,7 +58,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_order));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_goods));
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
@@ -219,6 +219,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
+                    if (position + 1 == getItemCount()){
+                        return gridManager.getSpanCount();
+                    }
                     int type = getItemViewType(position);
                     switch (type) {
                         case BANANER_LAYOUT:

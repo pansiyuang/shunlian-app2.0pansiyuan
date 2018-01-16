@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
@@ -90,29 +91,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        if (isShowFooter) {
-            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof GridLayoutManager) {
-                final GridLayoutManager manager = (GridLayoutManager) layoutManager;
-                manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        return isHeader(position) ? manager.getSpanCount() : 1;
-                    }
-                });
-            }
-        }
-    }
-
-    private boolean isHeader(int position) {
-        if (position + 1 == getItemCount()) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * 设置baseFooterHolder  layoutparams
