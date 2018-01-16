@@ -28,8 +28,10 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
@@ -211,13 +213,12 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         callback.onSuccess(body);
                     }else {
                         if (body.data != null) {
-                            LogUtil.longW("onSuccess============");
                             callback.onSuccess(body);
                         } else {
                             iView.showDataEmptyView(emptyCode);
                         }
                     }
-                }else if (body.code != 1000 && body.data != null){
+                }else if (body.code != 1000 && interceptApi(call,body)){//目前余额支付失败时code!=100,data不为空
                     callback.onErrorData(body);
                 }else {
                     callback.onErrorCode(body.code,body.message);
@@ -242,13 +243,16 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
-        Common.staticToast(message);
+        if (code != Code.CODE_REFRESH_TOKEN_VALIDE) {
+            Common.staticToast(message);
+        }
         switch (code) {
             // TODO: 2017/10/19
             case Code.CODE_NO_LOGIN://未登录
                 String token = SharedPrefUtil.getSharedPrfString("token", "");
                 if (TextUtils.isEmpty(token)){
                     Common.staticToast(message);
+                    goLogin();
                 }else {
                     requestCount++;
                     if (requestCount >= 5){
@@ -259,10 +263,15 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 }
                 break;
             case Code.CODE_REFRESH_TOKEN_VALIDE://刷新token过期,让用户登录
-                SharedPrefUtil.clearSharedPreferences();
-                LoginAct.startAct(context);
+                Common.staticToast(Common.getResources().getString(R.string.plase_again_login));
+                goLogin();
                 break;
         }
+    }
+
+    private void goLogin() {
+        Common.clearLoginInfo();
+        LoginAct.startAct(context);
     }
 
 
@@ -370,5 +379,20 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), stringEntry);
         return requestBody;
+    }
+
+    private <T> boolean interceptApi(Call call, BaseEntity<T> body){
+        String url = call.request().url().toString();
+        LogUtil.longW("interceptApi=============url=".concat(url));
+        if (!TextUtils.isEmpty(url) && (url.contains("order/checkout") || url.contains("order/payinorderlist"))){
+            T data = body.data;
+            if (data != null && data instanceof PayOrderEntity){
+                PayOrderEntity entity = (PayOrderEntity) data;
+                if ("credit".equals(entity.paytype)){//当支付类型为余额支付时，返回true
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

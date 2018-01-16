@@ -69,6 +69,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void followStore(String storeId){
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String,String> map = new HashMap<>();
         map.put("storeId",storeId);
         sortAndMD5(map);
@@ -94,6 +97,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void delFollowStore(String storeId){
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String,String> map = new HashMap<>();
         map.put("storeId",storeId);
         sortAndMD5(map);
@@ -115,6 +121,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     }
 
     public void addCart(String goods_id,String sku_id,String qty){
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("sku_id",sku_id);
@@ -152,6 +161,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param goods_id
      */
     public void goodsFavAdd(String goods_id){
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         sortAndMD5(map);
@@ -172,6 +184,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param ids
      */
     public void goodsFavRemove(String ids){
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String,String> map = new HashMap<>();
         map.put("ids",ids);
         sortAndMD5(map);
@@ -280,6 +295,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param voucherId
      */
     public void getVoucher(String voucherId) {
+        if (Common.loginPrompt()){
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put("voucher_id", voucherId);
         sortAndMD5(map);

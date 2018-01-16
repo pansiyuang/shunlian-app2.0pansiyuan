@@ -382,7 +382,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.setTargetNumber(num);
         }
 
-        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
+//        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
         }

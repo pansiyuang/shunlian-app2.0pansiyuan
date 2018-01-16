@@ -3,18 +3,14 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -91,6 +87,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
     private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
+    private int detailBottomCouponPosition = -1;//详情下的优惠券位置
+    private StoreVoucherAdapter couponAdapter;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -265,10 +263,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
             final ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             //详情优惠券
-            final StoreVoucherAdapter adapter = new StoreVoucherAdapter(context,false,vouchers);
-            recy_view_coupon.setAdapter(adapter);
+            couponAdapter = new StoreVoucherAdapter(context,false,vouchers);
+            recy_view_coupon.setAdapter(couponAdapter);
 
-            adapter.setOnItemClickListener(new OnItemClickListener() {
+            couponAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
@@ -276,7 +274,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                         goodsDetailAct.getCouchers(voucher.voucher_id);
                         voucher.is_get = "1";
-                        adapter.notifyItemChanged(position);
+                        detailBottomCouponPosition = position;
                     }
                 }
             });
@@ -381,7 +379,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     }
 
     private void valueAnimator(final View view, final String id) {
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
+        /*ValueAnimator valueAnimator = ValueAnimator.ofFloat(16,8,3);
         valueAnimator.setDuration(300);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -403,7 +401,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                 goodsDetailAct.commentFrag(id);
             }
-        });
+        });*/
+        GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
+        goodsDetailAct.commentFrag(id);
     }
 
     /**
@@ -673,9 +673,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param voucher
      */
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if (recyclerDialog != null){//领取成功之后id == voucher_id
-            recyclerDialog.getVoucherSuccess(voucher.id);
+        if (detailBottomCouponPosition != -1){
+            if (couponAdapter != null){
+                couponAdapter.notifyItemChanged(detailBottomCouponPosition);
+            }
+        }else {
+            if (recyclerDialog != null){//领取成功之后id == voucher_id
+                recyclerDialog.getVoucherSuccess(voucher.id);
+            }
         }
+        detailBottomCouponPosition = -1;
     }
 
 
@@ -1048,8 +1055,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_view_coupon.setLayoutManager(manager);
             recy_view_coupon.setNestedScrollingEnabled(false);
-            int space = TransformUtil.dip2px(context, 10);
-            recy_view_coupon.addItemDecoration(new HorItemDecoration(space,space/2,space/2));
+            recy_view_coupon.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
     }
 

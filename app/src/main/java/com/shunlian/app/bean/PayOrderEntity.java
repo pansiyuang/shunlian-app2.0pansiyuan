@@ -12,6 +12,7 @@ public class PayOrderEntity {
     public String pay_sn;
     public String order_id;
     public String unionpay;
+    public String paytype;
 
     public XiaoXiaopay xiaoxiaopay;
 
