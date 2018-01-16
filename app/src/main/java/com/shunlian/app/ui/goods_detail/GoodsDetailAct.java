@@ -510,6 +510,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
     }
 
+    /**
+     * 刷新足迹
+
+    @Override
+    public void refreshFootprint() {
+        if (footprintDialog != null){
+            mFootprintEntity = null;
+            footprintDialog.refreshData();
+        }
+    }
+     */
+
     /*
    显示足迹列表
     */
@@ -895,4 +907,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (goodsDetailPresenter != null)
             goodsDetailPresenter.getVoucher(id);
     }
+
+    /*public void clearFootprint(){
+        if (goodsDetailPresenter != null){
+            goodsDetailPresenter.clearFootprint();
+        }
+    }*/
 }

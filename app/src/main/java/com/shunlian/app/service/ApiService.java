@@ -860,4 +860,12 @@ public interface ApiService {
      */
     @POST("member/refund/callplat")
     Call<BaseEntity<EmptyEntity>> callPlat(@Body RequestBody body);
+
+    /**
+     * 清除详情页侧边栏足迹
+     * @param map
+     * @return
+     */
+    @GET("member/footermark/cleanSideMark")
+    Call<BaseEntity<EmptyEntity>> clearFootprint(@QueryMap Map<String,String> map);
 }

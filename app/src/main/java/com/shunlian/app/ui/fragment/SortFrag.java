@@ -21,6 +21,7 @@ import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,9 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.mtv_search)
+    MyTextView mtv_search;
 
     private SortFragPresenter presenter;
 
@@ -71,6 +75,18 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     public void more(){
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.setShowItem(1,4,5);
+    }
+
+    @OnClick(R.id.mtv_search)
+    public void onClickSearch(){
+        CharSequence text = mtv_search.getText();
+        if (!isEmpty(text)){
+            GoodsSearchParam param = new GoodsSearchParam();
+            param.keyword = text.toString();
+            CategoryAct.startAct(baseActivity,param);
+        }else {
+            CategoryAct.startAct(baseActivity,null);
+        }
     }
     /**
      * 显示网络请求失败的界面
@@ -154,6 +170,16 @@ public class SortFrag extends BaseFragment implements ISortFragView{
                 subRightList(toplist);
             }
         });
+    }
+
+    /**
+     * 设置搜索关键字
+     *
+     * @param keyworld
+     */
+    @Override
+    public void setKeyworld(String keyworld) {
+        mtv_search.setText(keyworld);
     }
 
     @Override

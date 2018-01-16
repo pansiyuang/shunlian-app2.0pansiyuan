@@ -55,4 +55,10 @@ public interface IGoodsDetailView extends IView {
      * @param status
      */
     void goodsOffShelf(String status);
+
+    /**
+     * 刷新足迹
+
+    void refreshFootprint();
+     */
 }
