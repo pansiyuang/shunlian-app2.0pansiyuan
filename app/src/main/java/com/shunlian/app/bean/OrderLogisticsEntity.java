@@ -28,6 +28,7 @@ public class OrderLogisticsEntity {
     public static class Trace {
         public String AcceptTime;
         public String AcceptStation;
+        public String Remark;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

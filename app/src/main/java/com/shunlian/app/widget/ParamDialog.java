@@ -185,7 +185,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.btn_add:
                 currentCount++;
-                if (currentCount >= totalStock) {
+                if (currentCount > totalStock) {
                     currentCount = totalStock;
                     return;
                 }

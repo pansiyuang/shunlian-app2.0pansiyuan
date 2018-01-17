@@ -54,6 +54,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     MyTextView mtv_logistics;
 
     private List<ImageEntity> listExplains = new ArrayList();
+    private List<ImageEntity> imgList = new ArrayList();
     private SingleImgAdapter singleImgAdapter;
 
     public final int LOGISTICS_CODE = 100;//物流单号
@@ -191,7 +192,8 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
         }else if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK){
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             index = 0;
-            compressImgs(0, picturePaths);
+            imgList.clear();
+            compressImgs(index, picturePaths);
         }else if (requestCode == LOGISTICS_NAME && resultCode == Activity.RESULT_OK){
             String name = data.getStringExtra("name");
             mtv_logistics.setText(name);
@@ -208,13 +210,13 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
 
             @Override
             public void onSuccess(File file) {
+                LogUtil.httpLogW("onSuccess:" + file.length());
                 ImageEntity imageEntity = new ImageEntity(list.get(index));
                 imageEntity.file = file;
-                listExplains.add(imageEntity);
+                imgList.add(imageEntity);
                 index++;
                 if (index >= list.size()) {
-                    singleImgAdapter.notifyDataSetChanged();
-                    presenter.uploadPic(listExplains,"customer_service");//上传图片
+                    presenter.uploadPic(imgList,"customer_service");//上传图片
                 } else {
                     compressImgs(index, list);
                 }
@@ -314,7 +316,11 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
 
     @Override
     public void uploadImg(UploadPicEntity picEntity) {
-
+        for (int i = 0; i < picEntity.relativePath.size(); i++) {
+            imgList.get(i).imgUrl = picEntity.relativePath.get(i);
+        }
+        listExplains.addAll(imgList);
+        singleImgAdapter.setData(listExplains);
     }
 
     @Override

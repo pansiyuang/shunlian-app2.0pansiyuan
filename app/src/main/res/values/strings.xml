@@ -263,6 +263,7 @@
     <string name="go_append_comment">去追评</string>
     <string name="this_append_comment">这些商品可追加</string>
     <string name="ready_to_cancel_comment">确定取消发布吗？</string>
+    <string name="logistics_detail">物流详情</string>
 
     <!--换货详情-->
     <string name="exchange_xieshanglishi">协商历史</string>
@@ -371,6 +372,7 @@
     <string name="category_zuidi">最低价</string>
     <string name="category_zuigao">最高价</string>
     <item name="tag_category_isclick" type="id" />
+    <string name="no_more_goods">您已经没有更多商品了</string>
 
     <string name="sort_comment">%s条评论 %s好评</string>
     <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>

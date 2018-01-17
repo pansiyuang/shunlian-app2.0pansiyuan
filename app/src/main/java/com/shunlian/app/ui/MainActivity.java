@@ -1,9 +1,11 @@
 package com.shunlian.app.ui;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -89,6 +91,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean isDoubleBack = false;
     private FragmentManager fragmentManager;
     private int pageIndex;
+    private String flag;
+
+    public static void startAct(Context context, String flag) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("flag", flag);
+        context.startActivity(intent);
+    }
 
     /**
      * 布局id
@@ -119,6 +128,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_tab_discover.setOnClickListener(this);
         ll_tab_shopping_car.setOnClickListener(this);
         ll_tab_person_center.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        flag = getIntent().getStringExtra("flag");
+        if (TextUtils.isEmpty(flag)) {
+            mainPageClick();
+        } else {
+            switch2jump(flag);
+        }
     }
 
     public void switchContent(Fragment show) {
@@ -301,7 +322,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     finish();
-                }finally {
+                } finally {
                 }
             }
             return true;
@@ -309,9 +330,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void switch2jump(String flag) {
+        switch (flag) {
+            case "mainPage":
+                mainPageClick();
+                break;
+            case "sort":
+                sortClick();
+                break;
+            case "discover":
+                discoverClick();
+                break;
+            case "shoppingcar":
+                shoppingCarClick();
+                break;
+            case "personCenter":
+                personCenterClick();
+                break;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
 
 }

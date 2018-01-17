@@ -159,12 +159,11 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         String totalCount = getString(R.string.balance_accounts);
         btn_total_complete.setText(String.format(totalCount, mCarEntity.total_count));
 
-        shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled, this);
-        expand_shoppingcar.setAdapter(shopCarStoreAdapter);
-        shopCarStoreAdapter.setOnEnableChangeListener(this);
-
         //默认展开
         if (mCarEntity.enabled != null && mCarEntity.enabled.size() != 0) {
+            shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled, this);
+            expand_shoppingcar.setAdapter(shopCarStoreAdapter);
+            shopCarStoreAdapter.setOnEnableChangeListener(this);
 
             for (int i = 0; i < mCarEntity.enabled.size(); i++) {
                 expand_shoppingcar.expandGroup(i);
@@ -179,11 +178,16 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 return true;
             }
         });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        footerHolderView.recycle_disable.setNestedScrollingEnabled(false);
-        footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
 
-        footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
+        if (mCarEntity.disabled != null && mCarEntity.disabled.size() != 0) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            footerHolderView.recycle_disable.setNestedScrollingEnabled(false);
+            footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
+            footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
+            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
+        }else{
+            footerHolderView.foot_disable.setVisibility(View.GONE);
+        }
 
         isCheckAll = getCheckAll();
         disGoodsIds = mCarEntity.disabled_ids;
@@ -194,11 +198,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
 
         getOrderIds(mCarEntity.checked_cartId);//拼接商品id
-        if (mCarEntity.disabled != null && mCarEntity.disabled.size() != 0) {
-            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
-        } else {
-            footerHolderView.foot_disable.setVisibility(View.GONE);
-        }
     }
 
 

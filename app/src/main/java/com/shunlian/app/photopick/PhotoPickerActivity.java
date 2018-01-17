@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -165,12 +167,16 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                     } else {
                         // 正常操作
                         Image image = (Image) adapterView.getAdapter().getItem(i);
-                        selectImageFromGrid(image, mode);
+                        if (checkPhoto(image.path)) {
+                            selectImageFromGrid(image, mode);
+                        }
                     }
                 } else {
                     // 正常操作
                     Image image = (Image) adapterView.getAdapter().getItem(i);
-                    selectImageFromGrid(image, mode);
+                    if (checkPhoto(image.path)) {
+                        selectImageFromGrid(image, mode);
+                    }
                 }
             }
         });
@@ -195,6 +201,19 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
         // 预览
         tv_send.setOnClickListener(this);
         super.initListener();
+    }
+
+    public boolean checkPhoto(String photoPath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(photoPath, options); //filePath代表图片路径
+        if (options.mCancel || options.outWidth == -1 || options.outHeight == -1) {
+            //说明图片已经损坏
+            Common.staticToast("图片已经损坏,请换一张图片");
+            return false;
+        }
+        return true;
     }
 
     private void createPopupFolderList() {

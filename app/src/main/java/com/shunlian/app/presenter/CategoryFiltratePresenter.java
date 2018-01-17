@@ -9,6 +9,7 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -27,7 +28,7 @@ import retrofit2.Call;
  */
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
-    public boolean isSecond;
+    public boolean isSecond,isEmpty=true;
     private String cid, keyword;
     private Activity context;
 
@@ -124,10 +125,17 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                 GoodsSearchParam.Attr attr = new GoodsSearchParam.Attr();
                 String name = Constant.BRAND_ATTRNAME.get(n);
                 attr.attr_name = name;
-                attr.attr_vals = Constant.BRAND_ATTRS.get(name);
+                if (Constant.BRAND_ATTRS.get(name)!=null&&Constant.BRAND_ATTRS.get(name).size()>0){
+                    isEmpty=false;
+                    attr.attr_vals = Constant.BRAND_ATTRS.get(name);
+                }
                 attrs.add(attr);
                 if (n >= Constant.BRAND_ATTRNAME.size() - 1) {
-                    goodsSearchParam.attr_data = attrs;
+                    if (!isEmpty){
+                        goodsSearchParam.attr_data = attrs;
+                    }else if(goodsSearchParam.attr_data!=null){
+                        goodsSearchParam.attr_data.clear();
+                    }
                     Constant.SEARCHPARAM=goodsSearchParam;
                     if (Constant.REBRAND_IDS==null){
                         Constant.REBRAND_IDS=new ArrayList<>();
@@ -141,13 +149,13 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                         Constant.REBRAND_ATTRS.clear();
                     }
                     Constant.REBRAND_ATTRS.putAll(Constant.BRAND_ATTRS);
-                    context.setResult(1);
+                    CategoryAct.startAct(context, Constant.SEARCHPARAM);
                     context.finish();
                 }
             }
         }else {
             Constant.SEARCHPARAM=goodsSearchParam;
-            context.setResult(1);
+            CategoryAct.startAct(context, Constant.SEARCHPARAM);
             context.finish();
         }
     }

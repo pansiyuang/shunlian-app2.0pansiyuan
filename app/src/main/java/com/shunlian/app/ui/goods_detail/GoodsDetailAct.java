@@ -30,6 +30,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -131,6 +132,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mll_bottom)
     MyLinearLayout mll_bottom;
 
+    @BindView(R.id.mllayout_car)
+    MyLinearLayout mllayout_car;
+
     @BindView(R.id.line)
     View line;
 
@@ -182,6 +186,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         miv_close.setOnClickListener(this);
         mtv_buy_immediately.setOnClickListener(this);
         miv_is_fav.setOnClickListener(this);
+        mllayout_car.setOnClickListener(this);
     }
 
     @Override
@@ -613,6 +618,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }else {
                     goodsDetailPresenter.goodsFavRemove(favId);
                 }
+                break;
+            case R.id.mllayout_car:
+                MainActivity.startAct(this,"shoppingcar");
                 break;
         }
     }
