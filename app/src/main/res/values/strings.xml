@@ -193,6 +193,8 @@
     <string name="go_to_shopcar">去购物车</string>
     <string name="move_to_collection">移入收藏</string>
     <string name="search_goods">搜索促销商品</string>
+    <string name="shopcar_is_empty">当前购物车为空</string>
+    <string name="go_to_visit">去逛逛</string>
 
     <!--确认订单-->
     <string name="Confirmation_of_order">确认订单</string>
