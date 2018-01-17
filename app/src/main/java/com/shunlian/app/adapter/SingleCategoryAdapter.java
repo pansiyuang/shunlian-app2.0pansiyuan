@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -48,6 +49,10 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         this.mGoods = lists;
     }
 
+    public void setStoreData(SearchGoodsEntity.RefStore store){
+        this.mStore = store;
+    }
+
     /**
      * 设置baseFooterHolder  layoutparams
      *
@@ -70,7 +75,6 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         return new SingleViewHolder(mInflater.inflate(R.layout.item_category_single, parent, false));
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -84,8 +88,10 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0 && mStore != null) {
-            return TITLE_LAYOUT;
+        if (position == 0) {
+            if (mStore != null) {
+                return TITLE_LAYOUT;
+            }
         }
         return super.getItemViewType(position);
     }

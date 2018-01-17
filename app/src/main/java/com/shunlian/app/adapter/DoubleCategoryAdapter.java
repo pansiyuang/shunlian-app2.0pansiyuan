@@ -44,7 +44,10 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     public void setData(List<GoodsDeatilEntity.Goods> lists) {
         this.mGoods = lists;
-        notifyDataSetChanged();
+    }
+
+    public void setStoreData(SearchGoodsEntity.RefStore store){
+        this.mStore = store;
     }
 
     /**

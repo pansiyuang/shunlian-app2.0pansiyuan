@@ -15,20 +15,16 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
-import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
-import com.shunlian.app.presenter.RefundListPresent;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
@@ -255,11 +251,17 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
         currentPage = page;
         totalPage = allPage;
+        if (currentPage == 1) {
+            mGoods.clear();
+            mRefStore = goodsEntity.ref_store;
+            singleAdapter.setStoreData(mRefStore);
+            doubleAdapter.setStoreData(mRefStore);
+        }
         if (goodsEntity.goods_list != null && goodsEntity.goods_list.size() != 0) {
             mGoods.addAll(goodsEntity.goods_list);
-            mRefStore = goodsEntity.ref_store;
         }
         if (currentMode == MODE_SINGLE) {
+            singleAdapter.setStoreData(mRefStore);
             if (goodsEntity.goods_list.size() <= CategoryPresenter.PAGE_SIZE) {
                 singleAdapter.notifyDataSetChanged();
             } else {
