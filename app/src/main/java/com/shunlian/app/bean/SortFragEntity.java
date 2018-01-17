@@ -11,6 +11,7 @@ import java.util.List;
 public class SortFragEntity {
 
     public List<Toplist> categoryList;
+    public String search;
 
 
 

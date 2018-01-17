@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 
 /**
  * Created by Administrator on 2017/12/1.
@@ -22,7 +23,7 @@ public class ProgressView extends View {
 
     private final int anmiDuation = 1500; //动画时间
 
-    private final int ringWidth = 3; //环的宽度;
+    private  int ringWidth = 3; //环的宽度;
 
     private int angle = 360;
     private Paint bottomPaint; //底色画笔
@@ -45,6 +46,7 @@ public class ProgressView extends View {
     }
 
     private void init() {
+        ringWidth = TransformUtil.dip2px(getContext(),1.5f);
         bottomPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bottomPaint.setStyle(Paint.Style.STROKE);
         bottomPaint.setStrokeWidth(ringWidth);
@@ -54,7 +56,6 @@ public class ProgressView extends View {
         animPaint.setStyle(Paint.Style.STROKE);
         animPaint.setStrokeWidth(ringWidth);
         animPaint.setColor(pinkColor);
-
 
     }
 

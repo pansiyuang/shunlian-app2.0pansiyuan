@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -23,6 +24,8 @@ import com.shunlian.app.widget.ParamDialog;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.utils.FastClickListener.isFastClick;
 
 /**
  * Created by Administrator on 2017/11/20.
@@ -92,6 +95,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_goods_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isFastClick()){
+                   return;
+                }
                 int count = Integer.valueOf(goods.qty) + 1;
                 if (count > stock) {
                     Common.staticToast("不能超出库存数量");
@@ -105,6 +111,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_goods_min.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isFastClick()){
+                    return;
+                }
                 int count = Integer.valueOf(goods.qty) - 1;
                 if (count <= 0) {
                     return;
@@ -207,7 +216,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         });
     }
 
-    public class EnableViewHolder extends BaseRecyclerViewHolder {
+    public class EnableViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_select)
         MyImageView miv_select;
 
@@ -270,6 +279,12 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
         public EnableViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            GoodsDetailAct.startAct(context,lists.get(getAdapterPosition()).goods_id);
         }
     }
 

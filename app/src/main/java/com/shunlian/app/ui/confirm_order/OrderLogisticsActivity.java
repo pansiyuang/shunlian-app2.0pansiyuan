@@ -33,6 +33,9 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
     @BindView(R.id.tv_title_number)
     TextView tv_title_number;
 
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
     public OrderLogisticsPresenter orderLogisticsPresenter;
     public TraceAdapter traceAdapter;
     private String currentOrder;
@@ -54,7 +57,7 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
         setStatusBarFontDark();
 
         rl_title_more.setVisibility(View.VISIBLE);
-
+        tv_title.setText(getStringResouce(R.string.logistics_detail));
         currentOrder = getIntent().getStringExtra("order");
 
         if (!isEmpty(currentOrder)) {

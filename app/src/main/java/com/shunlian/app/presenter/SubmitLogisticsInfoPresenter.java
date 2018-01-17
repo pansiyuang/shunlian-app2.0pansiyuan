@@ -109,11 +109,11 @@ public class SubmitLogisticsInfoPresenter extends BasePresenter<ISubmitLogistics
 
 
     public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
-        final Map<String, RequestBody> params = new HashMap<>();
+        Map<String, RequestBody> params = new HashMap<>();
         for (int i = 0; i < filePath.size(); i++) {
+            LogUtil.httpLogW("I:"+i);
             File file = filePath.get(i).file;
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            LogUtil.httpLogW("file:" + file.getName());
             UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
                 @Override
                 public void onProgress(int progress, String tag) {

@@ -4,4 +4,5 @@
     <stroke
         android:width="0.5dp"
         android:color="@color/my_gray_one"></stroke>
+    <solid android:color="@color/white"/>
 </shape>

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -39,8 +38,8 @@ public class FootprintDialog extends Dialog {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.mbtn_clear)
-    MyButton mbtn_clear;
+//    @BindView(R.id.mbtn_clear)
+//    MyButton mbtn_clear;
 
     @BindView(R.id.mrl_footprint_bg)
     MyRelativeLayout mrl_footprint_bg;
@@ -71,25 +70,30 @@ public class FootprintDialog extends Dialog {
         attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(attributes);
 
-        ViewGroup.LayoutParams layoutParams = mbtn_clear.getLayoutParams();
-        layoutParams.height = TransformUtil.countRealHeight(context,86);
-        mbtn_clear.setLayoutParams(layoutParams);
+//        ViewGroup.LayoutParams layoutParams = mbtn_clear.getLayoutParams();
+//        layoutParams.height = TransformUtil.countRealHeight(context,86);
+//        mbtn_clear.setLayoutParams(layoutParams);
 
         initData();
     }
+
+   /* public void refreshData(){
+        mFootprintEntity = null;
+        initData();
+    }*/
 
     private void initData() {
         if (mFootprintEntity == null){
             mll_empty.setVisibility(View.VISIBLE);
             recy_view.setVisibility(View.GONE);
-            mbtn_clear.setVisibility(View.GONE);
+//            mbtn_clear.setVisibility(View.GONE);
             return;
         }
 
         if (mFootprintEntity.mark_data != null && mFootprintEntity.mark_data.size() > 0) {
             mll_empty.setVisibility(View.GONE);
             recy_view.setVisibility(View.VISIBLE);
-            mbtn_clear.setVisibility(View.VISIBLE);
+//            mbtn_clear.setVisibility(View.VISIBLE);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             recy_view.setLayoutManager(linearLayoutManager);
             int space = TransformUtil.dip2px(context, 8.5f);
@@ -112,9 +116,17 @@ public class FootprintDialog extends Dialog {
         }else {
             mll_empty.setVisibility(View.VISIBLE);
             recy_view.setVisibility(View.GONE);
-            mbtn_clear.setVisibility(View.GONE);
+//            mbtn_clear.setVisibility(View.GONE);
         }
     }
+
+    /*@OnClick(R.id.mbtn_clear)
+    public void clearFootprint(){
+        if (context instanceof GoodsDetailAct){
+            GoodsDetailAct act = (GoodsDetailAct) context;
+            act.clearFootprint();
+        }
+    }*/
 
     @Override
     public void dismiss() {

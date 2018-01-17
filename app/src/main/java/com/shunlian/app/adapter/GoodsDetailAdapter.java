@@ -561,8 +561,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
             mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
-            if ("0".equals(mGoodsEntity.free_shipping)) {
-                mHolder.mtv_free_shipping.setText(getString(R.string.no_mail));
+            String shipping_fee = mGoodsEntity.shipping_fee;
+            if (!isEmpty(shipping_fee) && !"0".equals(shipping_fee)) {
+                mHolder.mtv_free_shipping.setText(String.format(getString(R.string.not_mail),shipping_fee));
             } else {
                 mHolder.mtv_free_shipping.setText(getString(R.string.free_shipping));
             }

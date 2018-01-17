@@ -43,7 +43,7 @@ public class ReturnGoodsDialog extends Dialog {
     private Context mContext;
     private int recycleHeight;
     private ISelectListener listener;
-    private int currentPosition;
+    private int currentPosition = -1;
 
     public ReturnGoodsDialog(Context context) {
         this(context, R.style.MyDialogStyleBottom);
@@ -77,9 +77,6 @@ public class ReturnGoodsDialog extends Dialog {
         tv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) {
-                    listener.onSelect(currentPosition);
-                }
                 dismiss();
             }
         });
@@ -113,8 +110,12 @@ public class ReturnGoodsDialog extends Dialog {
         recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                currentPosition = position;
-                recyclerAdapter.notifyDataSetChanged();
+                if (listener != null) {
+                    currentPosition = position;
+                    listener.onSelect(currentPosition);
+                    recyclerAdapter.notifyDataSetChanged();
+                    dismiss();
+                }
             }
         });
     }

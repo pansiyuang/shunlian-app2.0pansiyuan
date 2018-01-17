@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -30,10 +31,12 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
+    private List<GoodsDeatilEntity.Goods> mGoods;
 
     public SingleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
+        this.mGoods = lists;
         this.mStore = store;
     }
 
@@ -42,11 +45,35 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         mInflater = LayoutInflater.from(context);
     }
 
+    public void setData(List<GoodsDeatilEntity.Goods> lists) {
+        this.mGoods = lists;
+    }
+
+    public void setStoreData(SearchGoodsEntity.RefStore store){
+        this.mStore = store;
+    }
+
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_goods));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new SingleViewHolder(mInflater.inflate(R.layout.item_category_single, parent, false));
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,8 +88,10 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0 && mStore != null) {
-            return TITLE_LAYOUT;
+        if (position == 0) {
+            if (mStore != null) {
+                return TITLE_LAYOUT;
+            }
         }
         return super.getItemViewType(position);
     }
@@ -108,9 +137,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         if (holder instanceof SingleViewHolder) {
             GoodsDeatilEntity.Goods goods;
             if (mStore != null) {
-                goods = lists.get(position - 1);
+                goods = mGoods.get(position - 1);
             } else {
-                goods = lists.get(position);
+                goods = mGoods.get(position);
             }
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);

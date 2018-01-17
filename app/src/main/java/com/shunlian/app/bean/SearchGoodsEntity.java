@@ -55,6 +55,7 @@ public class SearchGoodsEntity {
     public static class Comment {
         public String name;
         public String score;
+        public String explain;
 
         @Override
         public String toString() {

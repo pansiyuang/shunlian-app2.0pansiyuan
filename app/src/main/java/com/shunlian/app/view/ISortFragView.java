@@ -15,4 +15,10 @@ public interface ISortFragView extends IView {
      * @param categoryList
      */
     void categoryAll(List<SortFragEntity.Toplist> categoryList);
+
+    /**
+     * 设置搜索关键字
+     * @param keyworld
+     */
+    void setKeyworld(String keyworld);
 }

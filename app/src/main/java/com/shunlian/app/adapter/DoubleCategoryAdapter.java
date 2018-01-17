@@ -32,12 +32,39 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
     private LayoutInflater mInflater;
     private SearchGoodsEntity.RefStore mStore;
     private RecyclerView.LayoutParams params;
+    private List<GoodsDeatilEntity.Goods> mGoods;
 
     public DoubleCategoryAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, SearchGoodsEntity.RefStore store) {
         super(context, isShowFooter, lists);
         mInflater = LayoutInflater.from(context);
         params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mStore = store;
+        this.mGoods = lists;
+    }
+
+    public void setData(List<GoodsDeatilEntity.Goods> lists) {
+        this.mGoods = lists;
+    }
+
+    public void setStoreData(SearchGoodsEntity.RefStore store){
+        this.mStore = store;
+    }
+
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_goods));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
     @Override
@@ -108,7 +135,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             GoodsDeatilEntity.Goods goods;
             int margin = TransformUtil.dip2px(context, 5f);
             if (mStore != null) {
-                goods = lists.get(position - 1);
+                goods = mGoods.get(position - 1);
                 if (position % 2 == 0) {
                     params.setMargins(0, 0, 0, margin);
                     holder.itemView.setLayoutParams(params);
@@ -117,7 +144,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                     holder.itemView.setLayoutParams(params);
                 }
             } else {
-                goods = lists.get(position);
+                goods = mGoods.get(position);
                 if (position % 2 == 0) {
                     params.setMargins(0, 0, margin, margin);
                     holder.itemView.setLayoutParams(params);
@@ -195,6 +222,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
+                    if (position + 1 == getItemCount()){
+                        return gridManager.getSpanCount();
+                    }
                     int type = getItemViewType(position);
                     switch (type) {
                         case BANANER_LAYOUT:

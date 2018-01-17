@@ -312,4 +312,20 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         });
 
     }
+
+    /**
+     * 清空足迹
+     */
+    public void clearFootprint(){
+        Map<String, String> map = new HashMap<>();
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().clearFootprint(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+//                iView.refreshFootprint();
+            }
+        });
+    }
 }
