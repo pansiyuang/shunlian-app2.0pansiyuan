@@ -27,10 +27,10 @@ import butterknife.BindView;
 public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Recommend> {
     private List<GetListFilterEntity.Brand> brands;
     private ArrayList<String> letters;
-    private boolean isAll=false;
+    public boolean isAll;
     private List<GetListFilterEntity.Recommend> lists;
 
-    public PingpaiAdapter(Context context, boolean isShowFooter, List<GetListFilterEntity.Recommend> lists, List<GetListFilterEntity.Brand> brands, ArrayList<String> letters,boolean isAll) {
+    public PingpaiAdapter(Context context, boolean isShowFooter, List<GetListFilterEntity.Recommend> lists, List<GetListFilterEntity.Brand> brands, ArrayList<String> letters, boolean isAll) {
         super(context, isShowFooter, lists);
         this.brands = brands;
         this.letters = letters;

@@ -27,9 +27,10 @@ public class ShaixuanAttrsAdapter extends BaseRecyclerAdapter<String> {
     public boolean isAll=false;
     private String tag;
 
-    public ShaixuanAttrsAdapter(Context context, boolean isShowFooter, List<String> lists,String tag) {
+    public ShaixuanAttrsAdapter(Context context, boolean isShowFooter, List<String> lists,String tag,boolean isAll) {
         super(context, isShowFooter, lists);
         this.tag=tag;
+        this.isAll=isAll;
     }
 
     @Override
