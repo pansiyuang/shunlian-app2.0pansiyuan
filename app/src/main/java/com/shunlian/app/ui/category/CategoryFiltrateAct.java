@@ -19,7 +19,6 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
@@ -113,13 +112,15 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     }
 
     public void reset() {
-        if (Constant.SEARCHPARAM!=null){
-            Constant.SEARCHPARAM.send_area="";
-            Constant.SEARCHPARAM.brand_ids="";
-            Constant.SEARCHPARAM.attr_data.clear();
-            Constant.SEARCHPARAM.is_free_ship="";
-            Constant.SEARCHPARAM.max_price="";
-            Constant.SEARCHPARAM.min_price="";
+        if (Constant.SEARCHPARAM != null) {
+            Constant.SEARCHPARAM.send_area = "";
+            Constant.SEARCHPARAM.brand_ids = "";
+            if (Constant.SEARCHPARAM.attr_data != null) {
+                Constant.SEARCHPARAM.attr_data.clear();
+            }
+            Constant.SEARCHPARAM.is_free_ship = "";
+            Constant.SEARCHPARAM.max_price = "";
+            Constant.SEARCHPARAM.min_price = "";
         }
         categoryFiltratePresenter.isSecond = false;
         isopt = false;
@@ -133,10 +134,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         edt_max.setText("");
 
         if (pingpaiAdapter != null) {
-            miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
-            mtv_more.setText(R.string.category_gengduo);
-            pingpaiAdapter.isAll = false;
-            isMore = false;
+//            miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+//            mtv_more.setText(R.string.category_gengduo);
+//            pingpaiAdapter.isAll = false;
+//            isMore = false;
             if (Constant.BRAND_IDS != null) {
                 Constant.BRAND_IDS.clear();
             }
@@ -174,21 +175,31 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             mtv_address.setText("      " + locate);
         }
         initList(Constant.LISTFILTER);
-        if (Constant.SEARCHPARAM != null){
+        if (Constant.SEARCHPARAM != null) {
             if (Constant.BRAND_IDS == null) {
                 Constant.BRAND_IDS = new ArrayList<>();
             } else {
                 Constant.BRAND_IDS.clear();
             }
-            if (Constant.REBRAND_IDS!=null)
-            Constant.BRAND_IDS.addAll(Constant.REBRAND_IDS);
+            if (Constant.REBRAND_IDS != null)
+                Constant.BRAND_IDS.addAll(Constant.REBRAND_IDS);
             if (Constant.BRAND_ATTRS == null) {
                 Constant.BRAND_ATTRS = new HashMap<>();
             } else {
                 Constant.BRAND_ATTRS.clear();
             }
-            if (Constant.REBRAND_ATTRS!=null)
-            Constant.BRAND_ATTRS.putAll(Constant.REBRAND_ATTRS);
+            if (Constant.REBRAND_ATTRS != null)
+                Constant.BRAND_ATTRS.putAll(Constant.REBRAND_ATTRS);
+
+            if (Constant.SEARCHPARAM.isMore) {
+                miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+                mtv_more.setText(R.string.category_shouqi);
+                isMore = true;
+            } else {
+                miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+                mtv_more.setText(R.string.category_gengduo);
+                isMore = false;
+            }
 
             if ("Y".equals(Constant.SEARCHPARAM.is_free_ship)) {
                 isBao = true;
@@ -241,7 +252,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         }
         sort_type = getIntent().getStringExtra("sort_type");
 
-        if (Constant.LISTFILTER!=null) {
+        if (Constant.LISTFILTER != null) {
             reBuildData();
         } else {
             categoryFiltratePresenter.initApiData();
@@ -327,12 +338,10 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 if (isMore) {
                     miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
                     mtv_more.setText(R.string.category_gengduo);
-                    pingpaiAdapter.isAll = false;
                     isMore = false;
                 } else {
                     miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
                     mtv_more.setText(R.string.category_shouqi);
-                    pingpaiAdapter.isAll = true;
                     isMore = true;
                 }
                 pingpaiAdapter.notifyDataSetChanged();
@@ -362,6 +371,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     goodsSearchParam.send_area = "珠三角";
                 }
                 goodsSearchParam.sort_type = sort_type;
+                goodsSearchParam.isMore = isMore;
                 categoryFiltratePresenter.dealBrandIds(goodsSearchParam);
                 break;
         }
@@ -427,13 +437,13 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     @Override
     public void getGps(DistrictGetlocationEntity districtGetlocationEntity) {
         locate = districtGetlocationEntity.district_names.get(1);
-        Constant.DINGWEI=locate;
+        Constant.DINGWEI = locate;
         initLocate();
     }
 
     @Override
     public void initPingpai(List<GetListFilterEntity.Recommend> recommends) {
-        pingpaiAdapter = new PingpaiAdapter(this, false, recommends, brands, letters);
+        pingpaiAdapter = new PingpaiAdapter(this, false, recommends, brands, letters, isMore);
         rv_pingpai.setLayoutManager(new GridLayoutManager(this, 3));
         rv_pingpai.setAdapter(pingpaiAdapter);
         rv_pingpai.setNestedScrollingEnabled(false);//防止滚动卡顿
