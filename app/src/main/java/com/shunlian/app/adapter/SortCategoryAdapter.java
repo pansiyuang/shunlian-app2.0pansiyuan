@@ -143,6 +143,9 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
         TitleHolder mHolder = (TitleHolder) holder;
         if (counts.contains(position)) {//有title
             SortFragEntity.SubList subList = titleData.get(position);
+            if (subList == null){
+                return;
+            }
             mHolder.sort_tv_title.setVisibility(View.VISIBLE);
             mHolder.sort_tv_title.setText(subList.name);
             String on_ranking = subList.on_ranking;

@@ -39,7 +39,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     private List<MyOrderEntity.Orders> ordersLists = new ArrayList<>();
     private LinearLayoutManager manager;
     private OrderListPresenter mPresenter;
-    private int id;
+    private int id;//页面id
     private int refreshPosition;//刷新位置
     /**是否刷新条目**/
     public static boolean isRefreshItem;
@@ -68,7 +68,6 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     protected void initListener() {
         super.initListener();
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -125,8 +124,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         requestData(id);
     }
 
-
-    public void requestData(int position) {
+    /*
+    获取相应id界面的数据
+     */
+    private void requestData(int position) {
         mPresenter.detachView();
         switch (position) {
             case 0:
@@ -274,6 +275,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
             }
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
             recy_view.setVisibility(View.GONE);
+            nei_empty.setVisibility(View.VISIBLE);
             nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -22,7 +22,6 @@ package com.shunlian.app.presenter;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -43,7 +42,6 @@ import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.HttpDialog;
@@ -193,9 +191,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         if (tCall == null || callback == null)
             return;
 
-        if (!NetworkUtils.isNetworkAvailable((Activity) context)){
+        /*if (!NetworkUtils.isNetworkAvailable((Activity) context)){//断网提示
             return;
-        }
+        }*/
         if (isLoading) {
             httpDialog = new HttpDialog(context);
             httpDialog.show();

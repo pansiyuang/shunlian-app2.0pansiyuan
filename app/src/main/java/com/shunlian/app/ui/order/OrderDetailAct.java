@@ -16,6 +16,7 @@ import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -465,6 +466,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_title3:
                 text = mtv_title3.getText();
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
+                    AllFrag.isRefreshItem = true;
+                    SearchOrderResultActivity.isRefreshItem = true;
                     PayListActivity.startAct(this, null,null,orderId,orderdetailEntity.total_amount);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
