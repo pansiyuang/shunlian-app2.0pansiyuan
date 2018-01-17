@@ -91,7 +91,7 @@ public class SearchOrderResultPresent extends BasePresenter<ISearchResultView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (currentPage <= allPage){
+            if (currentPage < allPage){
                 currentPage ++;
                 searchOrder(LOAD_CODE,LOAD_CODE,false,currentPage);
             }

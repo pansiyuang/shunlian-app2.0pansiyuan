@@ -68,6 +68,8 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
     private SingleCategoryAdapter adapter;
     private List<GoodsDeatilEntity.Goods> goodsList = new ArrayList<>();
     private String g_cid;
+    private RankingListAdapter listAdapter;
+    private SimpleRecyclerAdapter simpleRecyclerAdapter;
 
     public static void startAct(Context context, String id, String firstName, String secondName){
 
@@ -166,44 +168,47 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
      */
     @Override
     public void rankingCategoryList(final List<RankingListEntity.Category> categoryList) {
-
-        final RankingListAdapter adapter = new RankingListAdapter(this,categoryList);
-        recy_view.setAdapter(adapter);
+        if (listAdapter == null) {
+            listAdapter = new RankingListAdapter(this, categoryList);
+            recy_view.setAdapter(listAdapter);
+        }
         if (categoryList != null && categoryList.size() > 0){
             g_cid = categoryList.get(0).g_cid;
             presenter.cid = g_cid;
         }
 
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        listAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                adapter.currentPosition = position;
-                adapter.notifyDataSetChanged();
+                listAdapter.currentPosition = position;
+                listAdapter.notifyDataSetChanged();
                 RankingListEntity.Category category = categoryList.get(position);
                 presenter.getNewRankingList(category.g_cid);
             }
         });
 
+        if (simpleRecyclerAdapter == null) {
+            simpleRecyclerAdapter = new SimpleRecyclerAdapter<RankingListEntity.Category>(this, R.layout.layout_ranking_title, categoryList) {
 
-        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter
-                <RankingListEntity.Category>(this,R.layout.layout_ranking_title,categoryList) {
+                @Override
+                public void convert(SimpleViewHolder holder, RankingListEntity.Category category, int position) {
+                    MyTextView mtv_text = holder.getView(R.id.mtv_text);
+                    holder.addOnClickListener(R.id.mtv_text);
+                    mtv_text.setWHProportion(240, 50);
+                    mtv_text.setText(category.name);
+                }
+            };
 
-            @Override
-            public void convert(SimpleViewHolder holder, RankingListEntity.Category category, int position) {
-                MyTextView mtv_text = holder.getView(R.id.mtv_text);
-                holder.addOnClickListener(R.id.mtv_text);
-                mtv_text.setWHProportion(240,50);
-                mtv_text.setText(category.name);
-            }
-        };
-
-        recy_view_text.setAdapter(simpleRecyclerAdapter);
+            recy_view_text.setAdapter(simpleRecyclerAdapter);
+        }
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 RankingListEntity.Category category = categoryList.get(position);
                 presenter.getNewRankingList(category.g_cid);
                 showCategory();
+                listAdapter.currentPosition = position;
+                listAdapter.notifyDataSetChanged();
             }
         });
     }

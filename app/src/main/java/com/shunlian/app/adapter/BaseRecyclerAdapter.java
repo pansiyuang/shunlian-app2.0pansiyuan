@@ -171,7 +171,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             isLoadFailure = false;
         }
 
-        if (allPage >= currentPage) {
+        if (allPage > currentPage) {
             holder.setNormalVisibility(View.VISIBLE);
             holder.layout_no_more.setVisibility(View.GONE);
         } else {
