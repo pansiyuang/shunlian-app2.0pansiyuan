@@ -8,7 +8,9 @@ import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IRankingListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -22,10 +24,12 @@ public class RankingListPresenter extends BasePresenter <IRankingListView>{
     public String op_id;
     public String cid;
     public final int page_size = 20;
+    private List<RankingListEntity.Category> categories = new ArrayList<>();
 
     public RankingListPresenter(Context context, IRankingListView iView, String id) {
         super(context, iView);
         op_id = id;
+        categories.clear();
         initApi();
     }
 
@@ -84,9 +88,9 @@ public class RankingListPresenter extends BasePresenter <IRankingListView>{
                     allPage = Integer.parseInt(goods.total_page);
                 }
                 iView.rankingGoodsList(goods,currentPage,allPage);
-                if (currentPage == 1) {
-                    iView.rankingCategoryList(entity.data.category);
-                }
+                categories.addAll(entity.data.category);
+                iView.rankingCategoryList(categories);
+
             }
 
             @Override
@@ -102,7 +106,7 @@ public class RankingListPresenter extends BasePresenter <IRankingListView>{
         super.onRefresh();
         if (!isLoading) {
             isLoading = true;
-            if (currentPage <= allPage) {
+            if (currentPage < allPage) {
                 currentPage++;
                 rankingList(false);
             }

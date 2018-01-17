@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.OrderdetailView;
 
@@ -73,6 +74,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
+                AllFrag.isRefreshItem = true;
                 initApi();
             }
         });
@@ -138,6 +140,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
+                AllFrag.isRefreshItem = true;
                 initApi();
             }
         });

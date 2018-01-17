@@ -53,6 +53,7 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
     private LinearLayoutManager linearLayoutManage;
     private List<MyOrderEntity.Orders> ordersLists = new ArrayList<>();
     private int refreshPosition;//刷新位置
+    public static boolean isRefreshItem;
 
     public static void startAct(Context context, String keyword) {
         Intent intent = new Intent(context, SearchOrderResultActivity.class);
@@ -98,6 +99,18 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (isRefreshItem){
+            if (!isEmpty(ordersLists)) {
+                String id = ordersLists.get(refreshPosition).id;
+                refreshOrder(id);
+            }
+            isRefreshItem = false;
+        }
+    }
+
+    @Override
     public void getSearchResult(List<MyOrderEntity.Orders> orders,int page,int allPage) {
         if (orders != null) {
             ordersLists.addAll(orders);
@@ -120,6 +133,7 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
                 public void onItemClick(View view, int position) {
                     MyOrderEntity.Orders orders1 = ordersLists.get(position);
                     OrderDetailAct.startAct(SearchOrderResultActivity.this, orders1.id);
+                    refreshPosition = position;
                 }
             });
 
@@ -173,12 +187,35 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
      */
     @Override
     public void refreshOrder(MyOrderEntity.Orders orders) {
+        String old_status = ordersLists.get(refreshPosition).status;
+        String new_status = orders.status;
+        if (old_status.equals(new_status)) {//更新
+            refreshItem(orders);
+        } else {//删除
+            removeItem();
+        }
+        emptyPage();
+    }
+
+    private void removeItem() {
+        ordersLists.remove(refreshPosition);
+        if (isEmpty(ordersLists)) {
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            if (adapter != null) {
+                adapter.notifyItemRemoved(refreshPosition);
+            }
+        }
+    }
+
+    private void refreshItem(MyOrderEntity.Orders orders) {
         ordersLists.remove(refreshPosition);
         ordersLists.add(refreshPosition,orders);
         if (adapter != null){
             adapter.notifyItemChanged(refreshPosition);
         }
-        emptyPage();
     }
 
     @Override
