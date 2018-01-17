@@ -20,6 +20,7 @@ import java.util.List;
 public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Voucher> {
     private List<GoodsDeatilEntity.Voucher> mData;
     private Context mContext;
+    public int detailBottomCouponPosition = -1;//详情下的优惠券位置
 
     public StoreVoucherAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Voucher> lists) {
         super(context, isShowFooter, lists);
