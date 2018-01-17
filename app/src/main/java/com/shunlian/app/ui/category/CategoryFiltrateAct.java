@@ -174,6 +174,16 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
             mtv_address.setText("      " + locate);
         }
+
+        if (Constant.SEARCHPARAM.isMore) {
+            miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+            mtv_more.setText(R.string.category_shouqi);
+            isMore = true;
+        } else {
+            miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+            mtv_more.setText(R.string.category_gengduo);
+            isMore = false;
+        }
         initList(Constant.LISTFILTER);
         if (Constant.SEARCHPARAM != null) {
             if (Constant.BRAND_IDS == null) {
@@ -190,16 +200,6 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             }
             if (Constant.REBRAND_ATTRS != null)
                 Constant.BRAND_ATTRS.putAll(Constant.REBRAND_ATTRS);
-
-            if (Constant.SEARCHPARAM.isMore) {
-                miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
-                mtv_more.setText(R.string.category_shouqi);
-                isMore = true;
-            } else {
-                miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
-                mtv_more.setText(R.string.category_gengduo);
-                isMore = false;
-            }
 
             if ("Y".equals(Constant.SEARCHPARAM.is_free_ship)) {
                 isBao = true;
@@ -339,10 +339,12 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
                     mtv_more.setText(R.string.category_gengduo);
                     isMore = false;
+                    pingpaiAdapter.isAll = false;
                 } else {
                     miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
                     mtv_more.setText(R.string.category_shouqi);
                     isMore = true;
+                    pingpaiAdapter.isAll = true;
                 }
                 pingpaiAdapter.notifyDataSetChanged();
                 break;
