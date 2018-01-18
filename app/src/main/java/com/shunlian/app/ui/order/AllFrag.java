@@ -12,7 +12,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.presenter.OrderListPresenter;
-import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
@@ -28,7 +28,7 @@ import butterknife.BindView;
  * 禁止fragment懒加载
  */
 
-public class AllFrag extends BaseLazyFragment implements IOrderListView {
+public class AllFrag extends LazyFragment implements IOrderListView {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;

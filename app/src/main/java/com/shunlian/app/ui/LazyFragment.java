@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Field;
 
-public abstract class BaseLazyFragment extends BaseFragment {
+public abstract class LazyFragment extends BaseFragment {
 
     protected boolean isViewInitiated;
 
