@@ -125,7 +125,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             searchParam = new GoodsSearchParam();
         }
         presenter = new CategoryPresenter(this, this);
-        presenter.getSearchGoods(searchParam, true,currentPage);
+        presenter.getSearchGoods(searchParam, true);
         mGoods = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
@@ -220,7 +220,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
         }
         if (hasChange) {
-            presenter.getSearchGoods(searchParam, true,currentPage);
+            presenter.getSearchGoods(searchParam, true);
         }
     }
 
@@ -359,7 +359,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                     tv_general_sort.setText(getStringResouce(R.string.general_sort));
                     currentSortPosition = -1;
                     searchParam.sort_type = "sales_desc";
-                    presenter.getSearchGoods(searchParam, true,currentPage);
+                    presenter.getSearchGoods(searchParam, true);
                 }
                 break;
         }
@@ -410,7 +410,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 break;
         }
         searchParam.sort_type = currentSort;
-        presenter.getSearchGoods(searchParam, true,currentPage);
+        presenter.getSearchGoods(searchParam, true);
     }
 
     @Override
@@ -424,7 +424,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             String str = edt_keyword.getText().toString();
             searchParam.keyword = str;
             Common.hideKeyboard(edt_keyword);
-            presenter.getSearchGoods(searchParam, true,currentPage);
+            presenter.initPage();
+            presenter.getSearchGoods(searchParam, true);
             return true;
         }
         return false;
