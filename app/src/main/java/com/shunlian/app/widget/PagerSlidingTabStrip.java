@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -49,15 +48,12 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
     private ArgbEvaluator mColorEvaluator;
     private Paint rectPaint;
     private float indicatorHeight=1.5f;
-
     public PagerSlidingTabStrip(Context context) {
         this(context, null);
     }
-
     public PagerSlidingTabStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
         setHorizontalScrollBarEnabled(false); // 隐藏横向滑动提示条
-
         if (attrs != null) {
             TypedArray attrsTypedArray = context.obtainStyledAttributes(attrs,
                     R.styleable.PagerSlidingTabStrip);
@@ -71,33 +67,26 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                         false);
                 allowAlignmentl = attrsTypedArray.getBoolean(
                         R.styleable.PagerSlidingTabStrip_allowAlignment, false);
-
 //				DisplayMetrics dm = getResources().getDisplayMetrics();
 //				tabTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, tabTextSize, dm);
 //				tabTextSize = attrsTypedArray.getDimensionPixelSize(0, tabTextSize);
-
                 attrsTypedArray.recycle();
             }
         }
-
         mColorEvaluator  = new ArgbEvaluator();
         rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
         rectPaint.setStyle(Paint.Style.FILL);
-
         DisplayMetrics dm = getResources().getDisplayMetrics();
         indicatorHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, indicatorHeight, dm);
     }
-
 //	 public void setTextSize(int textSizePx) {  
 //	        this.tabTextSize = textSizePx;  
 //	        updateTabStyles();  
 //	    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         if (!allowWidthFull)
             return;
         ViewGroup tabsLayout = getTabsLayout();
@@ -106,7 +95,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             return;
         if (tabsLayout.getChildCount() <= 0)
             return;
-
         if (tabViews == null) {
             tabViews = new ArrayList<View>();
         } else {
@@ -115,11 +103,9 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         for (int w = 0; w < tabsLayout.getChildCount(); w++) {
             tabViews.add(tabsLayout.getChildAt(w));
         }
-
         adjustChildWidthWithParent(tabViews, getMeasuredWidth() - tabsLayout.getPaddingLeft() - tabsLayout.getPaddingRight(), widthMeasureSpec, heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
-
     /**
      * 调整views集合中的View，让所有View的宽度加起来正好等于parentViewWidth
      *
@@ -139,7 +125,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 parentViewWidth -= lp.leftMargin + lp.rightMargin;
             }
         }
-
         // 去掉宽度大于平均宽度的View后再次计算平均宽度
         int averageWidth = parentViewWidth / views.size();
         int bigTabCount = views.size();
@@ -164,7 +149,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 break;
             }
         }
-
         // 修改宽度小于新的平均宽度的View的宽度
         for (View view : views) {
             if (view.getMeasuredWidth() < averageWidth) {
@@ -180,11 +164,9 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             }
         }
     }
-
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-
         ViewGroup tabViewGroup = getTabsLayout();
         if (tabViewGroup != null) {
             // 初始化滑块位置以及选中状态
@@ -194,7 +176,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 scrollToChild(currentPosition, 0); // 移动滑块到指定位置
                 selectedTab(currentPosition); // 选中指定位置的TAB
             }
-
             // 给每一个tab设置点击事件，当点击的时候切换Pager
             for (int w = 0; w < tabViewGroup.getChildCount(); w++) {
                 View itemView = tabViewGroup.getChildAt(w);
@@ -213,7 +194,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             viewPager.setCurrentItem(index, true);
         }
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -247,7 +227,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                             slidingBlockLeft = (set*nextTabLeft + (1f - set) * slidingBlockLeft);
                             slidingBlockRight = (currentPositionOffset * nextTabRight + (1f - currentPositionOffset) * slidingBlockRight);
                         } else {
-
                         }
                     } else {
                         slidingBlockLeft = currentTab.getLeft();
@@ -262,17 +241,12 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                             }
                         }
                     }
-
                     slidingBlockDrawable.setBounds((int) slidingBlockLeft, (int) (getHeight()-indicatorHeight), (int) slidingBlockRight, getHeight());
                     slidingBlockDrawable.draw(canvas);
-
-
-
                 }
             }
         }
     }
-
     /**
      * 获取布局
      */
@@ -290,7 +264,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         }
         return tabsLayout;
     }
-
     /**
      * 滚动到指定的位置
      */
@@ -300,7 +273,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         } else {
             isAllowDraw = false;
         }
-
         ViewGroup tabsLayout = getTabsLayout();
         if (tabsLayout != null && tabsLayout.getChildCount() > 0
                 && position < tabsLayout.getChildCount()) {
@@ -311,7 +283,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 if (position > 0 || offset > 0) {
                     newScrollX -= 240 - getOffset(view.getWidth()) / 2;
                 }
-
                 // 如果同上次X坐标不一样就执行滚动
                 if (newScrollX != lastScrollX) {
                     lastScrollX = newScrollX;
@@ -320,7 +291,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             }
         }
     }
-
     /**
      * 获取偏移量
      */
@@ -350,7 +320,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             return lastOffset;
         }
     }
-
     /**
      * 选中指定位置的TAB
      */
@@ -368,7 +337,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             }
         }
     }
-
     /**
      * 添加Tab
      */
@@ -378,14 +346,12 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             requestLayout();
         }
     }
-
     /**
      * 添加Tab
      */
     public void addTab(View tabView) {
         addTab(tabView, -1);
     }
-
     /**
      * 添加Tab
      *
@@ -399,7 +365,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             requestLayout();
         }
     }
-
     /**
      * 添加Tab
      */
@@ -411,7 +376,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
             requestLayout();
         }
     }
-
     /**
      * 移除一个tab
      *
@@ -420,7 +384,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
     public void removeTab(int index) {
         removeTab(index, 1);
     }
-
     /**
      * 移除tab
      *
@@ -438,11 +401,9 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         if (count - start > tabCount) {
             count = tabCount - start;
         }
-
         getTabsLayout().removeViews(start, count);
         requestLayout();
     }
-
     /**
      * 移除所有
      */
@@ -450,15 +411,12 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         getTabsLayout().removeAllViews();
         requestLayout();
     }
-
     public View getChild(int idx) {
         return getTabsLayout().getChildAt(idx);
     }
-
 //    public View getBadgeView(int i) {
 //        return getTabsLayout().getChildAt(i).findViewById(R.id.tab_mes);
 //    }
-
     /**
      * 设置ViewPager
      *
@@ -468,7 +426,7 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         if (disableViewPager)
             return;
         this.viewPager = viewPager;
-        this.viewPager.addOnPageChangeListener(new OnPageChangeListener() {
+        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 LogUtil.httpLogW("----------onPageSelected--------position-"+position);
@@ -478,9 +436,7 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 }
                 if (listener != null)
                     listener.onChanged(position);
-
             }
-
             @Override
             public void onPageScrolled(int nextPagePosition, float positionOffset, int positionOffsetPixels) {
                 LogUtil.httpLogW("----------onPageScrolled--------positionOffset-"+positionOffset);
@@ -498,8 +454,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                 if (onPageChangeListener != null) {
                     onPageChangeListener.onPageScrolled(nextPagePosition, positionOffset, positionOffsetPixels);
                 }
-
-
                 int mTextNormalColor = getResources().getColor(R.color.my_gray_three);
                 int mTextSelectedColor = getResources().getColor(R.color.pink_color);
                 int  evaluateCurrent =(int) mColorEvaluator.evaluate(positionOffset,mTextSelectedColor , mTextNormalColor);//当前tab的颜色值
@@ -528,10 +482,7 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
                         }
                     }
                 }
-
-
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
                 LogUtil.httpLogW("----------onPageScrollStateChanged--------state-"+state);
@@ -542,17 +493,15 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         });
         requestLayout();
     }
-
     /**
      * 设置Page切换监听器
      *
      * @param onPageChangeListener Page切换监听器
      */
     public void setOnPageChangeListener(
-            OnPageChangeListener onPageChangeListener) {
+            ViewPager.OnPageChangeListener onPageChangeListener) {
         this.onPageChangeListener = onPageChangeListener;
     }
-
     /**
      * 设置是否充满屏幕
      *
@@ -562,7 +511,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         this.allowWidthFull = allowWidthFull;
         requestLayout();
     }
-
     /**
      * 设置滑块图片
      */
@@ -570,7 +518,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         this.slidingBlockDrawable = slidingBlockDrawable;
         requestLayout();
     }
-
     /**
      * 获取Tab总数
      */
@@ -578,7 +525,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         ViewGroup tabsLayout = getTabsLayout();
         return tabsLayout != null ? tabsLayout.getChildCount() : 0;
     }
-
     /**
      * 设置Tab点击监听器
      *
@@ -587,7 +533,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
     public void setOnClickTabListener(OnClickTabListener onClickTabListener) {
         this.onClickTabListener = onClickTabListener;
     }
-
     /**
      * 设置不使用ViewPager
      *
@@ -601,7 +546,6 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
         }
         requestLayout();
     }
-
     /**
      * Tab点击监听器
      *
@@ -610,15 +554,12 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
     public interface OnClickTabListener {
         public void onClickTab(View tab, int index);
     }
-
     public void setOnPagerChange(OnPagerChangeLis l) {
         this.listener = l;
     }
-
     public interface OnPagerChangeLis {
         void onChanged(int page);
     }
-
     /**
      * 每次标题栏重新绘制的时候一定要记得强制重绘滑块，不然滑块会没有,所以强制画滑动条
      */

@@ -150,7 +150,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void showFailureView(int rquest_code) {
-
     }
 
     @Override
