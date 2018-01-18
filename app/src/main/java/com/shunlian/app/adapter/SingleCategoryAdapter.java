@@ -250,7 +250,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         }
     }
 
-    public class SingleViewHolder extends BaseRecyclerViewHolder {
+    public class SingleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
@@ -274,6 +274,14 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public SingleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

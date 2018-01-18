@@ -44,7 +44,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
 
     }
 
-    public void getSearchGoods(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
+    public void getSearchGoods(GoodsSearchParam goodsSearchParam, boolean isShowLoading,int page) {
         this.mParam = goodsSearchParam;
 
         Map<String, String> map = new HashMap<>();
@@ -76,7 +76,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
             map.put("send_area", goodsSearchParam.send_area);
         }
 
-        map.put("page", String.valueOf(currentPage));
+        map.put("page", String.valueOf(page));
         map.put("page_size", String.valueOf(PAGE_SIZE));
 
         if (goodsSearchParam.attr_data != null && goodsSearchParam.attr_data.size() != 0) {
@@ -119,7 +119,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
             isLoading = true;
             if (currentPage <= allPage) {
                 currentPage++;
-                getSearchGoods(mParam, false);
+                getSearchGoods(mParam, false,currentPage);
             }
         }
     }

@@ -145,6 +145,7 @@
         android:layout_height="122dp"
         android:background="@drawable/rounded_corner_solid_gray_3px"
         android:gravity="top|left"
+        android:maxEms="500"
         android:paddingBottom="14dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"

@@ -19,7 +19,9 @@ import com.shunlian.app.presenter.RecommmendPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRecommmendView;
 
@@ -76,9 +78,14 @@ public class RecommendFrag extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void getJoinGoods(JoinGoodsEntity joinGoodsEntity) {
         goodsList = joinGoodsEntity.join_goods;
-        if (goodsList == null || goodsList.size() == 0) {
+        if (isEmpty(goodsList)) {
             return;
         }
         adapter = new RecommmendAdapter(baseContext, false, goodsList);
@@ -89,7 +96,13 @@ public class RecommendFrag extends BaseFragment implements View.OnClickListener,
         adapter.setOnItemClickListener(this);
         adapter.setOnGoodsBuyOnclickListener(this);
 
-        tv_meger_tag.setText(joinGoodsEntity.label);
+
+        if (isEmpty(joinGoodsEntity.label)) {
+            tv_meger_tag.setVisibility(View.GONE);
+        } else {
+            tv_meger_tag.setVisibility(View.VISIBLE);
+            tv_meger_tag.setText(joinGoodsEntity.label);
+        }
         tv_meger_pro.setText(joinGoodsEntity.title);
     }
 

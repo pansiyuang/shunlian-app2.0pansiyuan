@@ -49,7 +49,7 @@ public class RecommmendPresenter extends BasePresenter<IRecommmendView> {
             String s = new ObjectMapper().writeValueAsString(map);
             RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
             Call<BaseEntity<JoinGoodsEntity>> baseEntityCall = getApiService().getRecommmendGoods(requestBody);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<JoinGoodsEntity>>() {
+            getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<JoinGoodsEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<JoinGoodsEntity> entity) {
                     JoinGoodsEntity joinGoodsEntity = entity.data;

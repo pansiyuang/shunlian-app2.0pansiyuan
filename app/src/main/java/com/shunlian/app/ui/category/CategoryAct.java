@@ -3,7 +3,6 @@ package com.shunlian.app.ui.category;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -23,6 +23,7 @@ import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.TransformUtil;
@@ -124,7 +125,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             searchParam = new GoodsSearchParam();
         }
         presenter = new CategoryPresenter(this, this);
-        presenter.getSearchGoods(searchParam, true);
+        presenter.getSearchGoods(searchParam, true,currentPage);
         mGoods = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
         gridLayoutManager = new GridLayoutManager(this, 2);
@@ -138,6 +139,25 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         popupWindow.setOnDismissListener(this);
 
         setListMode(currentMode);
+
+        singleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDeatilEntity.Goods goods = mGoods.get(position);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }
+        });
+        doubleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDeatilEntity.Goods goods = mGoods.get(position);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
+            }
+        });
     }
 
     @Override
@@ -200,7 +220,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
         }
         if (hasChange) {
-            presenter.getSearchGoods(searchParam, true);
+            presenter.getSearchGoods(searchParam, true,currentPage);
         }
     }
 
@@ -339,7 +359,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                     tv_general_sort.setText(getStringResouce(R.string.general_sort));
                     currentSortPosition = -1;
                     searchParam.sort_type = "sales_desc";
-                    presenter.getSearchGoods(searchParam, true);
+                    presenter.getSearchGoods(searchParam, true,currentPage);
                 }
                 break;
         }
@@ -390,7 +410,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 break;
         }
         searchParam.sort_type = currentSort;
-        presenter.getSearchGoods(searchParam, true);
+        presenter.getSearchGoods(searchParam, true,currentPage);
     }
 
     @Override
@@ -404,7 +424,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             String str = edt_keyword.getText().toString();
             searchParam.keyword = str;
             Common.hideKeyboard(edt_keyword);
-            presenter.getSearchGoods(searchParam, true);
+            presenter.getSearchGoods(searchParam, true,currentPage);
             return true;
         }
         return false;

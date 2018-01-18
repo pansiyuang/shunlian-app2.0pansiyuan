@@ -20,12 +20,15 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
+import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +82,15 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @BindView(R.id.expand_shoppingcar)
     ExpandableListView expand_shoppingcar;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.line_total)
+    View line_total;
+
+    @BindView(R.id.rl_total)
+    RelativeLayout rl_total;
 
     private HashMap<String, Boolean> editMap; //用来记录店铺分组编辑状态
     private View rootView;
@@ -138,12 +150,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void showFailureView(int rquest_code) {
-
     }
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
     }
 
 
@@ -159,12 +169,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         String totalCount = getString(R.string.balance_accounts);
         btn_total_complete.setText(String.format(totalCount, mCarEntity.total_count));
 
-        //默认展开
-        if (mCarEntity.enabled != null && mCarEntity.enabled.size() != 0) {
-            shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled, this);
-            expand_shoppingcar.setAdapter(shopCarStoreAdapter);
-            shopCarStoreAdapter.setOnEnableChangeListener(this);
+        shopCarStoreAdapter = new ShopCarStoreAdapter(baseContext, mCarEntity.enabled, this);
+        expand_shoppingcar.setAdapter(shopCarStoreAdapter);
+        shopCarStoreAdapter.setOnEnableChangeListener(this);
 
+        //默认展开
+        if (!isEmpty(mCarEntity.enabled)) {
             for (int i = 0; i < mCarEntity.enabled.size(); i++) {
                 expand_shoppingcar.expandGroup(i);
                 editMap.put(mCarEntity.enabled.get(i).store_id, false);
@@ -179,13 +189,13 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             }
         });
 
-        if (mCarEntity.disabled != null && mCarEntity.disabled.size() != 0) {
+        if (!isEmpty(mCarEntity.disabled)) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             footerHolderView.recycle_disable.setNestedScrollingEnabled(false);
             footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
             footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
             footerHolderView.foot_disable.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             footerHolderView.foot_disable.setVisibility(View.GONE);
         }
 
@@ -198,6 +208,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
 
         getOrderIds(mCarEntity.checked_cartId);//拼接商品id
+
+        if (isEmpty(mCarEntity.enabled) && isEmpty(mCarEntity.disabled)) {
+            showEmptyView(true);
+        } else {
+            showEmptyView(false);
+        }
     }
 
 
@@ -352,6 +368,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         } else {
             footerHolderView.foot_disable.setVisibility(View.VISIBLE);
         }
+
+        if (isEmpty(mCarEntity.enabled) && isEmpty(mCarEntity.disabled)) {
+            showEmptyView(true);
+        } else {
+            showEmptyView(false);
+        }
     }
 
     @Override
@@ -371,6 +393,32 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                     orderGoodsIds.append(",");
                 }
             }
+        }
+    }
+
+    private void showEmptyView(boolean isEmpty) {
+        if (!isEmpty) {
+            expand_shoppingcar.setVisibility(View.VISIBLE);
+            line_total.setVisibility(View.VISIBLE);
+            rl_total.setVisibility(View.VISIBLE);
+            tv_title_right.setVisibility(View.VISIBLE);
+            nei_empty.setVisibility(View.GONE);
+        } else {
+            expand_shoppingcar.setVisibility(View.GONE);
+            line_total.setVisibility(View.GONE);
+            rl_total.setVisibility(View.GONE);
+            nei_empty.setVisibility(View.VISIBLE);
+            tv_title_right.setVisibility(View.GONE);
+            nei_empty.setImageResource(R.mipmap.img_empty_gouwuche).setText(getString(R.string.shopcar_is_empty));
+            MyButton myButton = nei_empty.setButtonText(getString(R.string.go_to_visit));
+            myButton.setBackgroundDrawable(null);
+            myButton.setTextColor(getColorResouce(R.color.shape3));
+            myButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.startAct(baseContext, "mainPage");
+                }
+            });
         }
     }
 
@@ -414,6 +462,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
         return "1";
     }
+
 
     @Override
     public void onDestroyView() {
