@@ -81,7 +81,7 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (currentPage <= allPage){
+            if (currentPage < allPage){
                 currentPage ++;
                 refundlist(false);
             }

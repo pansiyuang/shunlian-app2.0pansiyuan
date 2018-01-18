@@ -45,7 +45,8 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
     public ConfirmOrderAdapter(Context context, boolean isShowFooter,
                                List<ConfirmOrderEntity.Enabled> lists,
-                               List<GoodsDeatilEntity.Goods> disabled, ConfirmOrderEntity.Address address, boolean isOrderBuy) {
+                               List<GoodsDeatilEntity.Goods> disabled,
+                               ConfirmOrderEntity.Address address, boolean isOrderBuy) {
         super(context, isShowFooter, lists);
         this.disabled = disabled;
         mAddress = address;
@@ -269,7 +270,8 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
     }
 
 
-    public class BuyGoodsHolder extends BaseRecyclerViewHolder implements View.OnClickListener, TextWatcher {
+    public class BuyGoodsHolder extends BaseRecyclerViewHolder
+            implements View.OnClickListener, TextWatcher {
 
         @BindView(R.id.recy_view)
         RecyclerView recy_view;
@@ -311,7 +313,8 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recy_view.setLayoutManager(manager);
             int space = TransformUtil.dip2px(context, 20);
-            recy_view.addItemDecoration(new VerticalItemDecoration(space,space / 2,0));
+            recy_view.addItemDecoration(new VerticalItemDecoration(space,
+                    space / 2,0));
             recy_view.setFocusable(false);
 
             mllayout_discount.setOnClickListener(this);
@@ -337,21 +340,24 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                             mtv_discount.setText(voucher.title);
 
                             String sub_total = enabled.sub_total;
-                            mtv_goods_price.setText(getString(R.string.rmb).concat(Common.formatFloat(sub_total,voucher.denomination)));
                             enabled.selectVoucherId = position;
 
                             /**********计算折后小计***************/
                             if (enabled.selectPromotionId == -1){
-                                enabled.post_discount_price = Common.formatFloat(sub_total,voucher.denomination);
+                                enabled.post_discount_price = Common.formatFloat(sub_total,
+                                        voucher.denomination);
                             }else {
                                 if (!isEmpty(enabled.promotion_info)){
-                                    String prom_reduce = enabled.promotion_info.get(enabled.selectPromotionId).prom_reduce;
+                                    String prom_reduce = enabled.promotion_info.
+                                            get(enabled.selectPromotionId).prom_reduce;
                                     String s = Common.formatFloat(sub_total, voucher.denomination);
-                                    enabled.post_discount_price = Common.formatFloat(s,isEmpty(prom_reduce) ? "0" : prom_reduce);
+                                    enabled.post_discount_price = Common.formatFloat(s,
+                                            isEmpty(prom_reduce) ? "0" : prom_reduce);
                                 }
                             }
                             /************计算折后小计*************/
-
+                            //显示店铺小计
+                            mtv_goods_price.setText(getString(R.string.rmb).concat(enabled.post_discount_price));
                             if (mListener != null){
                                 mListener.onSelectVoucher(position);
                             }
@@ -374,19 +380,31 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                                 if (position < 0){
                                     return;
                                 }
-                                ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
-                                ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.promotion_info.get(position);
+                                ConfirmOrderEntity.Enabled enabled = lists.
+                                        get(getAdapterPosition() - 1);
+                                ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.
+                                        promotion_info.get(position);
                                 mtv_promotion.setText(promotionInfo.prom_title);
                                 enabled.selectPromotionId = position;
 
-                                if (isEmpty(enabled.voucher)){
-                                    /*********优惠券额度*************/
-                                    String denomination = enabled.voucher.get(enabled.selectVoucherId).denomination;
+                                /*********优惠券额度*************/
+                                if (!isEmpty(enabled.voucher)){
+                                    String denomination = enabled.voucher.get(enabled.
+                                            selectVoucherId).denomination;
                                     String s1 = Common.formatFloat(enabled.sub_total, denomination);
                                     enabled.post_discount_price = Common.formatFloat(s1,
-                                            isEmpty(promotionInfo.prom_reduce) ? "0" : promotionInfo.prom_reduce);
+                                            isEmpty(promotionInfo.prom_reduce) ?
+                                                    "0" : promotionInfo.prom_reduce);
+                                }else {
+                                    enabled.post_discount_price = Common.formatFloat(enabled.sub_total,
+                                            isEmpty(promotionInfo.prom_reduce) ?
+                                                    "0" : promotionInfo.prom_reduce);
                                 }
+                                /*********优惠券额度*************/
 
+                                //显示店铺小计
+                                mtv_goods_price.setText(getString(R.string.rmb)
+                                        .concat(enabled.post_discount_price));
                                 if (mListener != null){
                                     mListener.onSelectVoucher(position);
                                 }
@@ -395,7 +413,8 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                         promotionDialog.show();
                     }else {
                         RecyclerDialog recyclerDialog = new RecyclerDialog(context);
-                        recyclerDialog.setPromotionDetail(lists.get(getAdapterPosition() - 1).promotion_info);
+                        recyclerDialog.setPromotionDetail(lists
+                                .get(getAdapterPosition() - 1).promotion_info);
                         recyclerDialog.show();
                     }
                     break;

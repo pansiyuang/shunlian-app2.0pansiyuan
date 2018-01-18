@@ -20,6 +20,7 @@ public class GoodsSearchParam implements Serializable {
     public List<Attr> attr_data;
     //    public String attr_data;
     public String sort_type;
+    public boolean isMore;
 
     @Override
     public String toString() {

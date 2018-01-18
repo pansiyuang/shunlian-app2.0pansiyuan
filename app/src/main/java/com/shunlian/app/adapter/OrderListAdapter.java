@@ -344,9 +344,11 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                         if (mAllFrag != null) {
                             PayListActivity.startAct(mAllFrag.getActivity(),
                                     null, null,orders.id,orders.total_amount);
+                            AllFrag.isRefreshItem = true;
                         }else if (mSearchOrderAct != null){
                             PayListActivity.startAct(mSearchOrderAct,
                                     null, null,orders.id,orders.total_amount);
+                            SearchOrderResultActivity.isRefreshItem = true;
                         }
 
                     } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
@@ -365,7 +367,8 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                             entities.add(entity);
                         }
                         CreatCommentActivity.startAct(context, entities, CreatCommentActivity.CREAT_COMMENT);
-
+                        AllFrag.isRefreshItem = true;
+                        SearchOrderResultActivity.isRefreshItem = true;
                     } else if (getString(R.string.append_comment).equals(text)) {//追评
 
                         //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());

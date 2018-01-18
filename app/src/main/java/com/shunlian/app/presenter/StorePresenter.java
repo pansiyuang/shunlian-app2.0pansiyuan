@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
@@ -63,7 +65,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
     public void refreshDiscountOne() {
         if (!discountIsLoading && discountPage <= discountAllPage) {
             discountIsLoading = true;
-            isDiscountSecond=true;
+            isDiscountSecond = true;
             initDiscountOne(storeId, promotionId, discountType, discountPage, count);
         }
     }
@@ -76,13 +78,13 @@ public class StorePresenter extends BasePresenter<StoreView> {
         initBaby(storeId, babyPage, babySort, count);
     }
 
-    public void resetDiscountOne(int id,String type) {
+    public void resetDiscountOne(int id, String type) {
         discountPage = 1;
         promotionId = id;
         discountIsLoading = true;
-        discountType=type;
+        discountType = type;
         discountDatas.clear();
-        isDiscountSecond=false;
+        isDiscountSecond = false;
         initDiscountOne(storeId, promotionId, discountType, discountPage, count);
     }
 
@@ -93,7 +95,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         sortAndMD5(map);
 
         Call<BaseEntity<StoreIndexEntity>> baseEntityCall = getApiService().storeIndex(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>() {
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreIndexEntity>>() {
             @Override
             public void onSuccess(BaseEntity<StoreIndexEntity> entity) {
                 super.onSuccess(entity);
@@ -108,6 +110,30 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 }
             }
         });
+    }
+
+    /**
+     * 领取优惠券
+     *
+     * @param voucherId
+     */
+    public void getVoucher(String voucherId) {
+        if (Common.loginPrompt()) {
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("voucher_id", voucherId);
+        sortAndMD5(map);
+        Call<BaseEntity<GoodsDeatilEntity.Voucher>> baseEntityCall = getApiService().getVoucher(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
+            @Override
+            public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(context.getResources().getString(R.string.get_success));
+                iView.refreshVoucherState(entity.data);
+            }
+        });
+
     }
 
     public void initBaby(String storeId, final int page, String sort, int pageSize) {
@@ -166,7 +192,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
             public void onSuccess(BaseEntity<StorePromotionGoodsListEntity> entity) {
                 super.onSuccess(entity);
                 StorePromotionGoodsListEntity data = entity.data;
-                if (data != null) {
+                if (data != null && data.lable != null && data.lable.size() > 0) {
                     LogUtil.httpLogW("StorePromotionGoodsListEntity:" + data);
                     iView.storeDiscountMenu(data.lable);
                     if ("combo".equals(data.lable.get(0).type)) {
@@ -196,9 +222,9 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 StorePromotionGoodsListOneEntity data = entity.data;
                 if (data != null && data.list != null && data.list.remark != null) {
                     LogUtil.httpLogW("StorePromotionGoodsListOneEntity:" + data);
-                    if (!isDiscountSecond){
+                    if (!isDiscountSecond) {
                         storeDiscountHandle(data.list.goods, data.list.remark);
-                    }else {
+                    } else {
                         storeDiscountHandles(data.list.goods);
                     }
 
@@ -220,7 +246,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
             public void onSuccess(BaseEntity<StorePromotionGoodsListTwoEntity> entity) {
                 super.onSuccess(entity);
                 StorePromotionGoodsListTwoEntity data = entity.data;
-                if (data != null&&data.list!=null) {
+                if (data != null && data.list != null) {
                     LogUtil.httpLogW("StorePromotionGoodsListTwoEntity:" + data);
                     iView.storeDiscountTwo(data.list.goods);
                 }

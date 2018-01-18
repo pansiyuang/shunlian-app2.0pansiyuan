@@ -7,6 +7,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 
 import java.util.HashMap;
@@ -106,6 +107,8 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
                 currentPage = Integer.parseInt(data.page);
 
                 iView.orderList(data.orders,currentPage,allPage);
+                LogUtil.zhLogW(String.format("staus: %s=====currentPage=%s======allPage=%s",
+                        data.status,data.page,data.total_page));
             }
 
             @Override
@@ -127,7 +130,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (currentPage <= allPage){
+            if (currentPage < allPage){
                 currentPage ++;
                 orderList(LOAD_CODE,LOAD_CODE,false,status,currentPage);
             }

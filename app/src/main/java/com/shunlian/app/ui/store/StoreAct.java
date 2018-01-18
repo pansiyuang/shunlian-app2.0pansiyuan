@@ -32,9 +32,11 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
+import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -138,8 +140,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.mtv_storeName)
     MyTextView mtv_storeName;
 
-    @BindView(R.id.mtv_storeScore)
-    MyTextView mtv_storeScore;
+    @BindView(R.id.ratingBar1)
+    FiveStarBar ratingBar1;
 
     @BindView(R.id.mtv_number)
     MyTextView mtv_number;
@@ -185,7 +187,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
-    private String storeId = "26",storeScore;
+    private String storeId = "26",star;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
@@ -425,7 +427,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startAct(this, storeId,storeScore,isFocus);
+                StoreIntroduceAct.startAct(this, storeId,star,isFocus);
                 break;
             case R.id.mrlayout_sort:
                 StoreSortAct.startAct(this, storeId);
@@ -515,9 +517,12 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
         }
-        storeScore=head.star;
+        star=head.star;
         mtv_storeName.setText(head.decoration_name);
-        mtv_storeScore.setText("店铺分"+storeScore);
+        ratingBar1.setEnabled(false);
+        ratingBar1.setNumberOfStars(Integer.valueOf(star));
+        ratingBar1.setRating(Integer.valueOf(star));
+
         mtv_number.setText(head.mark_count + "人");
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
@@ -526,6 +531,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void storeDiscountMenu(List<StorePromotionGoodsListEntity.Lable> datas) {
+        rv_discountMenu.setVisibility(View.VISIBLE);
         if (storeDiscountMenuAdapter == null) {
             storeDiscountMenuAdapter = new StoreDiscountMenuAdapter(this, false, datas);
             LinearLayoutManager newManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -550,16 +556,33 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
+
     @Override
-    public void storeVoucher(List<GoodsDeatilEntity.Voucher> vouchers) {
-        if (storeVoucherAdapter == null) {
-            storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
-            LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            rv_firstVouch.setLayoutManager(firstManager);
-            rv_firstVouch.setOverScrollMode(View.OVER_SCROLL_NEVER);
-            rv_firstVouch.setAdapter(storeVoucherAdapter);
-        } else {
-            storeVoucherAdapter.notifyDataSetChanged();
+    public void storeVoucher(final List<GoodsDeatilEntity.Voucher> vouchers) {
+        if (vouchers!=null&&vouchers.size()>0){
+            rv_firstVouch.setVisibility(View.VISIBLE);
+            if (storeVoucherAdapter == null) {
+                storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
+                LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                rv_firstVouch.setLayoutManager(firstManager);
+                int space = TransformUtil.dip2px(this, 10);
+                rv_firstVouch.addItemDecoration(new HorItemDecoration(space,space / 2,space / 2));
+                rv_firstVouch.setAdapter(storeVoucherAdapter);
+
+                storeVoucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                            GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
+                            storePresenter.getVoucher(voucher.voucher_id);
+                            voucher.is_get = "1";
+                            storeVoucherAdapter.detailBottomCouponPosition = position;
+                    }
+                });
+            } else {
+                storeVoucherAdapter.notifyDataSetChanged();
+            }
+        }else {
+            rv_firstVouch.setVisibility(View.GONE);
         }
     }
 
@@ -586,6 +609,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             rv_discounts.setAdapter(storeDiscountTwoAdapter);
         } else {
             storeDiscountTwoAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
+        if (storeVoucherAdapter!=null){
+            if (storeVoucherAdapter.detailBottomCouponPosition != -1){
+                storeVoucherAdapter.notifyItemChanged(storeVoucherAdapter.detailBottomCouponPosition);
+            }
+            storeVoucherAdapter.detailBottomCouponPosition = -1;
         }
     }
 

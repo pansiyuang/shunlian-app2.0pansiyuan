@@ -12,8 +12,9 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.presenter.OrderListPresenter;
-import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -27,7 +28,7 @@ import butterknife.BindView;
  * 禁止fragment懒加载
  */
 
-public class AllFrag extends BaseLazyFragment implements IOrderListView {
+public class AllFrag extends LazyFragment implements IOrderListView {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -38,8 +39,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     private List<MyOrderEntity.Orders> ordersLists = new ArrayList<>();
     private LinearLayoutManager manager;
     private OrderListPresenter mPresenter;
-    private int id;
+    private int id;//页面id
     private int refreshPosition;//刷新位置
+    /**是否刷新条目**/
+    public static boolean isRefreshItem;
 
     public static AllFrag getInstance(int id) {
         AllFrag allFrag = new AllFrag();
@@ -65,7 +68,6 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     protected void initListener() {
         super.initListener();
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -92,9 +94,25 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         mPresenter = new OrderListPresenter(baseActivity, this);
     }
 
+
+    @Override
+    public void fetchData() {
+        fetchNewData();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        if (isRefreshItem){
+            if (!isEmpty(ordersLists)) {
+                String id = ordersLists.get(refreshPosition).id;
+                refreshOrder(id);
+            }
+            isRefreshItem = false;
+        }
+    }
+
+    public void fetchNewData() {
         adapter = null;
         recy_view.scrollToPosition(0);
         if (ordersLists != null) {
@@ -106,29 +124,10 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
         requestData(id);
     }
 
-    @Override
-    public void fetchData() {
-        fetchNewData();
-    }
-    @Override
-    public void refreshData() {
-        fetchNewData();
-    }
-
-    public void fetchNewData() {
-       /* adapter = null;
-        recy_view.scrollToPosition(0);
-        if (ordersLists != null) {
-            ordersLists.clear();
-        }
-        if (mPresenter != null) {
-            mPresenter.detachView();
-        }
-        requestData(id);*/
-    }
-
-
-    public void requestData(int position) {
+    /*
+    获取相应id界面的数据
+     */
+    private void requestData(int position) {
         mPresenter.detachView();
         switch (position) {
             case 0:
@@ -179,6 +178,8 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                 public void onItemClick(View view, int position) {
                     MyOrderEntity.Orders orders1 = ordersLists.get(position);
                     OrderDetailAct.startAct(baseActivity, orders1.id);
+                    LogUtil.zhLogW("=onItemClick============="+position);
+                    refreshPosition = position;
                 }
             });
 
@@ -186,6 +187,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
                 @Override
                 public void onRefreshOrder(int position) {
                     refreshPosition = position;
+                    LogUtil.zhLogW("=onRefreshOrder============="+position);
                 }
             });
         } else {
@@ -211,12 +213,9 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
      */
     @Override
     public void notifRefreshList(int status) {
-//        if (status == OrderListPresenter.CANCLE_ORDER){
-//        }
         String id = ordersLists.get(refreshPosition).id;
         refreshOrder(id);
         if (status == OrderListPresenter.CONFIRM_RECEIPT){
-            // TODO: 2017/12/20 确认收货界面
             SuccessfulTradeAct.startAct(baseActivity);
         }
     }
@@ -229,34 +228,38 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
     @Override
     public void refreshOrder(MyOrderEntity.Orders orders) {
         if (id == 0){//全部，更新条目
-            ordersLists.remove(refreshPosition);
-            ordersLists.add(refreshPosition,orders);
-            if (adapter != null){
-                adapter.notifyItemChanged(refreshPosition);
-            }
+            refreshItem(orders);
         }else {//非全部，status状态一样就更新，不一样就删除
             String old_status = ordersLists.get(refreshPosition).status;
             String new_status = orders.status;
             if (old_status.equals(new_status)) {//更新
-                ordersLists.remove(refreshPosition);
-                ordersLists.add(refreshPosition, orders);
-                if (adapter != null) {
-                    adapter.notifyItemChanged(refreshPosition);
-                }
+                refreshItem(orders);
             } else {//删除
-                ordersLists.remove(refreshPosition);
-                if (isEmpty(ordersLists)) {
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-                } else {
-                    if (adapter != null) {
-                        adapter.notifyItemRemoved(refreshPosition);
-                    }
-                }
+                removeItem();
             }
         }
         emptyPage();
+    }
+
+    private void removeItem() {
+        ordersLists.remove(refreshPosition);
+        if (isEmpty(ordersLists)) {
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            if (adapter != null) {
+                adapter.notifyItemRemoved(refreshPosition);
+            }
+        }
+    }
+
+    private void refreshItem(MyOrderEntity.Orders orders) {
+        ordersLists.remove(refreshPosition);
+        ordersLists.add(refreshPosition,orders);
+        if (adapter != null){
+            adapter.notifyItemChanged(refreshPosition);
+        }
     }
 
     /**
@@ -272,6 +275,7 @@ public class AllFrag extends BaseLazyFragment implements IOrderListView {
             }
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
             recy_view.setVisibility(View.GONE);
+            nei_empty.setVisibility(View.VISIBLE);
             nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -111,7 +111,7 @@ public class MyCommentListPresenter extends BasePresenter<IMyCommentListView> {
         super.onRefresh();
         if (!isLoading) {
             isLoading = true;
-            if (currentPage <= allPage) {
+            if (currentPage < allPage) {
                 currentPage++;
                 myCommentList(current_code, current_code, false, currentStatus, currentPage);
             }

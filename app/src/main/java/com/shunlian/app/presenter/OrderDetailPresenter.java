@@ -6,6 +6,8 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
+import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.OrderdetailView;
 
@@ -73,7 +75,9 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
-                initApi();
+                AllFrag.isRefreshItem = true;
+                SearchOrderResultActivity.isRefreshItem = true;
+                initApiData();
             }
         });
     }
@@ -116,7 +120,9 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
-                initApi();
+                AllFrag.isRefreshItem = true;
+                SearchOrderResultActivity.isRefreshItem = true;
+                initApiData();
             }
         });
     }
@@ -138,7 +144,9 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 if (data != null){
                     Common.staticToast(data.message);
                 }
-                initApi();
+                AllFrag.isRefreshItem = true;
+                SearchOrderResultActivity.isRefreshItem = true;
+                initApiData();
             }
         });
     }

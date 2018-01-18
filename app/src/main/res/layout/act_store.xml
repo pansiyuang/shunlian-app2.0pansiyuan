@@ -57,25 +57,44 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="4dp"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/icon_login_logo" />
 
-                        <com.shunlian.app.widget.MyTextView
-                            android:id="@+id/mtv_storeScore"
+                            android:src="@mipmap/icon_login_logo" />
+                        <com.shunlian.app.widget.FiveStarBar
+                            android:id="@+id/ratingBar1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="6dp"
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@id/miv_storeLogo"
-                            android:text="9.5分"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
+                            app:srb_borderColor="#DDDDDD"
+                            app:srb_drawBorderEnabled="false"
+                            app:srb_fillColor="#F5C149"
+                            app:srb_pressedBorderColor="#F5C149"
+                            app:srb_pressedFillColor="#F5C149"
+                            app:srb_starBackgroundColor="#DDDDDD"
+                            app:srb_starBorderWidth="1"
+                            app:srb_starSize="20dp"
+                            app:srb_starsSeparation="6dp"
+                            app:srb_stepSize="1" />
+
+                        <!--<com.shunlian.app.widget.MyTextView-->
+                            <!--android:id="@+id/mtv_storeScore"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentBottom="true"-->
+                            <!--android:layout_marginBottom="6dp"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:layout_toRightOf="@id/miv_storeLogo"-->
+                            <!--android:text="9.5分"-->
+                            <!--android:textColor="@color/white"-->
+                            <!--android:textSize="11sp" />-->
 
                         <com.shunlian.app.widget.MyTextView
                             android:id="@+id/mtv_storeName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_above="@id/mtv_storeScore"
+                            android:layout_above="@id/ratingBar1"
                             android:layout_marginBottom="2dp"
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@id/miv_storeLogo"
@@ -417,7 +436,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:background="@color/white"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_discount"
                 android:layout_marginTop="0.5dp"

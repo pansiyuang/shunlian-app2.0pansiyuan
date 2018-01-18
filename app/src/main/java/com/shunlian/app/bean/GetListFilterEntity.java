@@ -15,7 +15,6 @@ public class GetListFilterEntity implements Serializable{
     public ArrayList<String> first_letter_list;
     public List<Brand> brand_list;
     public List<Attr> attr_list;
-    public String dingwei;
 
     @Override
     public String toString() {
@@ -65,6 +64,7 @@ public class GetListFilterEntity implements Serializable{
     public static class Attr implements Serializable{
         public String name;
         public List<String> val_list;
+        public boolean isMore;
 
         @Override
         public String toString() {

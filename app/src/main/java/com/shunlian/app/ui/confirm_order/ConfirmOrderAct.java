@@ -160,7 +160,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
      * @param disabled
      */
     @Override
-    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled, List<GoodsDeatilEntity.Goods> disabled,ConfirmOrderEntity.Address address) {
+    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled,
+                                     List<GoodsDeatilEntity.Goods> disabled,
+                                     ConfirmOrderEntity.Address address) {
         if (address != null){
             addressId = address.id;
             detail_address = address.detail_address;
@@ -175,40 +177,21 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             int space = TransformUtil.dip2px(this, 10);
             recy_view.addItemDecoration(new VerticalItemDecoration(space,
                     0, 0, getResources().getColor(R.color.white_ash)));
-            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this, false, enabled, disabled,address,isOrderBuy);
+            ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
+                    false, enabled, disabled,address,isOrderBuy);
             recy_view.setAdapter(df);
 
             df.setSelectVoucherListener(new ConfirmOrderAdapter.ISelectVoucherListener() {
                 @Override
                 public void onSelectVoucher(int position) {
-//                    float currentPrice = Float.parseFloat(mTotalPrice);
                     float currentPrice = 0;
                     for (int i = 0; i < enabled.size(); i++) {
-                       /* ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
-                        int selectVoucherId = enabled1.selectVoucherId;
-                        if (isOrderBuy) {
-                            int selectPromotionId = enabled1.selectPromotionId;
-                            if (selectPromotionId >= 0 && enabled1.promotion_info != null
-                                    && enabled1.promotion_info.size() > 0){
-                                ConfirmOrderEntity.PromotionInfo promotionInfo = enabled1.
-                                        promotion_info.get(selectPromotionId);
-                                String prom_reduce = promotionInfo.prom_reduce;
-                                float v = Float.parseFloat(prom_reduce);
-                                currentPrice -= v;
-                            }
-                        }
-                        if (selectVoucherId >= 0) {
-                            ConfirmOrderEntity.Voucher voucher1 = enabled1.voucher.get(selectVoucherId);
-                            float discount = Float.parseFloat(voucher1.denomination);
-                            currentPrice -= discount;
-                        } else {
-                            continue;
-                        }*/
                         String post_discount_price = enabled.get(i).post_discount_price;
-                        currentPrice += Float.parseFloat(isEmpty(post_discount_price) ? "0" : post_discount_price);
+                        currentPrice += Float.parseFloat(isEmpty(post_discount_price)
+                                ? "0" : post_discount_price);
                     }
                     mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                            .getString(R.string.rmb) + Common.formatFloat(currentPrice),11));
+                            .getString(R.string.rmb).concat(Common.formatFloat(currentPrice)),11));
                 }
             });
         }
@@ -268,7 +251,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }
                 LogUtil.zhLogW("go_pay=============="+shop_goods);
                 String price = mtv_total_price.getText().toString();
-                PayListActivity.startAct(this,shop_goods,addressId,null,price.substring(1,price.length()));
+                PayListActivity.startAct(this,shop_goods,addressId,null,
+                        price.substring(1,price.length()));
                 break;
             case R.id.miv_close:
                 backSelect();
@@ -288,7 +272,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     private void backSelect() {
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods), getStringResouce(R.string.i_think), new View.OnClickListener() {
+                .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods),
+                        getStringResouce(R.string.i_think), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptDialog.dismiss();

@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Field;
 
-public abstract class BaseLazyFragment extends BaseFragment {
+public abstract class LazyFragment extends BaseFragment {
 
     protected boolean isViewInitiated;
 
     protected boolean isVisibleToUser;
 
-    protected boolean isDataInitiated;
+//    protected boolean isDataInitiated;
 
     @Override
     public void onAttach(Activity activity) {
@@ -51,6 +51,7 @@ public abstract class BaseLazyFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         this.isVisibleToUser = isVisibleToUser;
         if (isVisibleToUser) {
+//            isDataInitiated = false;
             prepareFetchData();
         }
     }
@@ -71,14 +72,14 @@ public abstract class BaseLazyFragment extends BaseFragment {
      * @return
      */
     public boolean prepareFetchData(boolean forceUpdate) {
-//        Log.i("---prepareFetchData-","--"+isViewInitiated+"--"+isVisibleToUser+"--"+isDataInitiated+"--"+forceUpdate);
-        if (isViewInitiated && isVisibleToUser && (!isDataInitiated || forceUpdate)) {
+//        LogUtil.zhLogW("--"+isViewInitiated+"--"+isVisibleToUser+"--"+isDataInitiated+"--"+forceUpdate);
+        /*if (isViewInitiated && isVisibleToUser && (!isDataInitiated || forceUpdate)) {
             fetchData();
             isDataInitiated = true;
             return true;
-        }else if (isViewInitiated && isVisibleToUser && isDataInitiated && !forceUpdate){//禁止懒加载
-            refreshData();
-            isDataInitiated = true;
+        }*/
+        if (isViewInitiated && isVisibleToUser) {
+            fetchData();
             return true;
         }
         return false;
@@ -86,10 +87,6 @@ public abstract class BaseLazyFragment extends BaseFragment {
 
     public abstract void fetchData();
 
-    /**
-     *刷新数据，即禁止Fragment懒加载
-     */
-    public void refreshData(){}
 
     /**
      * 视图销毁的时候讲Fragment是否初始化的状态变为false
@@ -98,12 +95,11 @@ public abstract class BaseLazyFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         isViewInitiated = false;
-        isDataInitiated = false;
+//        isDataInitiated = false;
 
     }
 
 
-    //    protected abstract void onPullToLoadMore(PullToRefreshLayout pullToRefreshLayout);
     @Override
     public void onDetach() {
         super.onDetach();

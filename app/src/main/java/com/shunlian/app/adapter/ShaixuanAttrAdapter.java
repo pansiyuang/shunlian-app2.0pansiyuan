@@ -48,7 +48,17 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         if (Constant.REBRAND_ATTRS==null||Constant.REBRAND_ATTRS.size()<=0||Constant.BRAND_ATTRS.size()<=lists.size()-1){
             Constant.BRAND_ATTRS.put(attr.name,viewHolder.strings);
         }
-        viewHolder.shaixuanAttrsAdapter=new ShaixuanAttrsAdapter(context, false, attr.val_list,attr.name);
+        if (Constant.LISTFILTER.attr_list.get(position).isMore) {
+            viewHolder.miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+            viewHolder.mtv_more.setText(R.string.category_shouqi);
+            viewHolder.isMore = true;
+        } else {
+            viewHolder.miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+            viewHolder.mtv_more.setText(R.string.category_gengduo);
+            viewHolder.isMore = false;
+        }
+        viewHolder.position=position;
+        viewHolder.shaixuanAttrsAdapter=new ShaixuanAttrsAdapter(context, false, attr.val_list,attr.name,viewHolder.isMore);
         viewHolder.rv_attr.setAdapter(viewHolder.shaixuanAttrsAdapter);
         viewHolder.rv_attr.setNestedScrollingEnabled(false);
     }
@@ -70,6 +80,7 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
         private ShaixuanAttrsAdapter shaixuanAttrsAdapter;
         private boolean isMore;
         private List<String> strings;
+        private int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -87,11 +98,13 @@ public class ShaixuanAttrAdapter extends BaseRecyclerAdapter<GetListFilterEntity
                         mtv_more.setText(R.string.category_gengduo);
                         shaixuanAttrsAdapter.isAll=false;
                         isMore=false;
+                        Constant.LISTFILTER.attr_list.get(position).isMore=false;
                     } else {
                         miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
                         mtv_more.setText(R.string.category_shouqi);
                         shaixuanAttrsAdapter.isAll=true;
                         isMore=true;
+                        Constant.LISTFILTER.attr_list.get(position).isMore=true;
                     }
                     shaixuanAttrsAdapter.notifyDataSetChanged();
                     break;

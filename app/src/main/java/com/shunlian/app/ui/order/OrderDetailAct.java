@@ -16,6 +16,7 @@ import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -111,6 +112,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_title3)
     MyTextView mtv_title3;
 
+    @BindView(R.id.view_message)
+    View view_message;
+
     @BindView(R.id.mrlayout_youhuiquan)
     MyRelativeLayout mrlayout_youhuiquan;
 
@@ -175,17 +179,24 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_phone.setText("联系电话："+orderdetailEntity.receipt_address.mobile);
         mtv_name.setText("收件人："+orderdetailEntity.receipt_address.realname);
         mtv_address.setText("收货地址："+orderdetailEntity.receipt_address.receipt_address);
-        mtv_message.setText("用户留言：" + orderdetailEntity.remark);
+        if (TextUtils.isEmpty(orderdetailEntity.remark)){
+            mtv_message.setVisibility(View.GONE);
+            view_message.setVisibility(View.GONE);
+        }else {
+            mtv_message.setText("用户留言：" + orderdetailEntity.remark);
+            mtv_message.setVisibility(View.VISIBLE);
+            view_message.setVisibility(View.VISIBLE);
+        }
         mtv_storeName.setText(orderdetailEntity.store_name);
         mtv_zongjia.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.goods_amount);
         mtv_yunfei.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.shipping_fee);
-        if (TextUtils.isEmpty(orderdetailEntity.promotion)&&Integer.parseInt(orderdetailEntity.promotion)>0){
+        if (!TextUtils.isEmpty(orderdetailEntity.promotion)){
             mtv_cuxiao.setText("-" + getStringResouce(R.string.common_yuan) +orderdetailEntity.promotion);
             mrlayout_cuxiao.setVisibility(View.VISIBLE);
         }else {
             mrlayout_cuxiao.setVisibility(View.GONE);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.voucher_amount)&&Integer.parseInt(orderdetailEntity.voucher_amount)>0){
+        if (!TextUtils.isEmpty(orderdetailEntity.voucher_amount)){
             mtv_youhuiquan.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.voucher_amount);
             mrlayout_youhuiquan.setVisibility(View.VISIBLE);
         }else {
@@ -455,6 +466,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_title3:
                 text = mtv_title3.getText();
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
+                    AllFrag.isRefreshItem = true;
+                    SearchOrderResultActivity.isRefreshItem = true;
                     PayListActivity.startAct(this, null,null,orderId,orderdetailEntity.total_amount);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
