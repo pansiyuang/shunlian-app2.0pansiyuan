@@ -2,6 +2,7 @@ package com.shunlian.app.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 
 import com.shunlian.app.bean.BaseEntity;
@@ -10,6 +11,7 @@ import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.category.CategoryAct;
+import com.shunlian.app.ui.category.CategoryFiltrateAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -28,6 +30,7 @@ import retrofit2.Call;
  */
 
 public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateView> {
+    public static final int FILTRATE_REQUEST_CODE = 1001;
     public boolean isSecond,isEmpty=true;
     private String cid, keyword;
     private Activity context;
@@ -149,13 +152,17 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                         Constant.REBRAND_ATTRS.clear();
                     }
                     Constant.REBRAND_ATTRS.putAll(Constant.BRAND_ATTRS);
-                    CategoryAct.startAct(context, Constant.SEARCHPARAM);
+                    Intent intent = new Intent();
+                    intent.putExtra("searchparam",Constant.SEARCHPARAM);
+                    context.setResult(Activity.RESULT_OK, intent);
                     context.finish();
                 }
             }
         }else {
             Constant.SEARCHPARAM=goodsSearchParam;
-            CategoryAct.startAct(context, Constant.SEARCHPARAM);
+            Intent intent = new Intent();
+            intent.putExtra("searchparam",Constant.SEARCHPARAM);
+            context.setResult(Activity.RESULT_OK, intent);
             context.finish();
         }
     }
