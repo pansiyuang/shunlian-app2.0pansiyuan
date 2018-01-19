@@ -288,7 +288,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         }
     }
 
-    public class DoubleViewHolder extends BaseRecyclerViewHolder {
+    public class DoubleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
@@ -312,6 +312,14 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public DoubleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

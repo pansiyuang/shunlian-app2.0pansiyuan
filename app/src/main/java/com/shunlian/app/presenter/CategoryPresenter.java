@@ -108,9 +108,14 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
         });
     }
 
+    public void initPage() {
+        currentPage = 1;
+    }
+
     public void resetCurrentPage() {
         currentPage = allPage;
     }
+
 
     @Override
     public void onRefresh() {

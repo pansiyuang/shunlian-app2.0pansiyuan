@@ -215,6 +215,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
     public void defToolbar(){
+        if (immersionBar == null){
+            immersionBar = ImmersionBar.with(this);
+        }
         immersionBar.titleBar(toolbar,false)
                 .statusBarDarkFont(true, 0.2f)
                 .addTag(GoodsDetailAct.class.getName())

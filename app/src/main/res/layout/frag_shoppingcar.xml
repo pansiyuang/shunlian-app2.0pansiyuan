@@ -13,24 +13,33 @@
         android:id="@+id/expand_shoppingcar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/view_total"
+        android:layout_above="@+id/line_total"
         android:layout_below="@+id/layout_title"
         android:divider="@null"
         android:groupIndicator="@null"></ExpandableListView>
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_title"
+        android:visibility="gone" />
+
     <View
-        android:id="@+id/view_total"
+        android:id="@+id/line_total"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@+id/rl_total"
-        android:background="@color/my_gray_seven" />
+        android:background="@color/my_gray_seven"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_total"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_total_select"

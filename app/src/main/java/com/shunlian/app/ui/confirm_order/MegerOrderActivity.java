@@ -16,6 +16,7 @@ import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.MegerPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.fragment.RecommendFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
@@ -32,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/8.
  */
 
-public class MegerOrderActivity extends BaseActivity implements IMegerView, ParamDialog.OnSelectCallBack {
+public class MegerOrderActivity extends BaseActivity implements IMegerView, ParamDialog.OnSelectCallBack, View.OnClickListener {
 
     @BindView(R.id.tv_search)
     TextView tv_search;
@@ -94,6 +95,12 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     }
 
     @Override
+    protected void initListener() {
+        tv_to_shopcar.setOnClickListener(this);
+        super.initListener();
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
@@ -108,7 +115,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         List<CateEntity.Cate> cateList = cateEntity.cates;
         strip_tab.removeAllTab();//清除所有
 
-        if (cateList == null || cateList.size() == 0) {
+        if (isEmpty(cateList)) {
             CateEntity.Cate item = new CateEntity.Cate();
             item.cate_id = "0";
             item.cate_name = "全部";
@@ -116,6 +123,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         } else {
             for (int i = 0; i < cateList.size(); i++) {
                 CateEntity.Cate cate = cateList.get(i);
+                LogUtil.httpLogW("cateList:" + cateList.size() + "   cate_id:" + cate.cate_id);
                 viewPageFragmentAdapter.addTab(cate.cate_name, cate.cate_id, RecommendFrag.getInstance(currentNeedId, cate.cate_id));
             }
         }
@@ -175,5 +183,15 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         } else {
             megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count));
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_to_shopcar:
+                MainActivity.startAct(this, "mainPage");
+                break;
+        }
+        super.onClick(view);
     }
 }

@@ -3,7 +3,6 @@ package com.shunlian.app.ui.category;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,15 +15,19 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
@@ -78,13 +81,14 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private GridLayoutManager gridLayoutManager;
     private GoodsSearchParam searchParam;
     private CategorySortPopWindow popupWindow;
-    private int currentSortPosition = -1;
+    private int currentSortPosition = 0;
     private String currentSort;
     private boolean sortBySales;
     private int currentMode = MODE_SINGLE;
     private List<GoodsDeatilEntity.Goods> mGoods;
     private SearchGoodsEntity.RefStore mRefStore;
     private HashMap<String, Object> hashMap;
+    private HashMap<String, Object> currentMap = new HashMap<>();
     private String currentBrandIds = "";
     private String currentArea = "";
     private String currentFreeship = "";
@@ -134,74 +138,31 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
         recycle_category.setNestedScrollingEnabled(false);
         popupWindow = new CategorySortPopWindow(this);
+        setSortMode(true);
+        popupWindow.initData(currentSortPosition);
         popupWindow.setOnSortSelectListener(this);
         popupWindow.setOnDismissListener(this);
 
         setListMode(currentMode);
-    }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
-        hashMap = classToMap(searchParam);
-        hasChange = false;
-
-        if (hashMap.size() == 0) {
-            tv_filter.setTextColor(getColorResouce(R.color.new_text));
-            tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
-        } else {
-            tv_filter.setTextColor(getColorResouce(R.color.pink_color));
-            tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.icon_sx), null);
-
-            if (isEmpty(searchParam.brand_ids)) {
-                searchParam.brand_ids = "";
+        singleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDeatilEntity.Goods goods = mGoods.get(position);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
             }
-            if (isEmpty(searchParam.send_area)) {
-                searchParam.send_area = "";
+        });
+        doubleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDeatilEntity.Goods goods = mGoods.get(position);
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
+                }
             }
-            if (isEmpty(searchParam.is_free_ship)) {
-                searchParam.is_free_ship = "";
-            }
-            if (isEmpty(searchParam.max_price)) {
-                searchParam.max_price = "";
-            }
-            if (isEmpty(searchParam.min_price)) {
-                searchParam.min_price = "";
-            }
-
-            if (!currentBrandIds.equals(searchParam.brand_ids)) {
-                currentBrandIds = searchParam.brand_ids;
-                hasChange = true;
-            }
-            if (!currentArea.equals(searchParam.send_area)) {
-                currentArea = searchParam.send_area;
-                hasChange = true;
-            }
-            if (!currentFreeship.equals(searchParam.is_free_ship)) {
-                currentFreeship = searchParam.is_free_ship;
-                hasChange = true;
-            }
-            if (!currentMaxPrice.equals(searchParam.max_price)) {
-                currentMaxPrice = searchParam.max_price;
-                hasChange = true;
-            }
-            if (!currentMinPrice.equals(searchParam.min_price)) {
-                currentMinPrice = searchParam.min_price;
-                hasChange = true;
-            }
-            if (!isEmpty(searchParam.attr_data)) {
-                hasChange = true;
-            }
-            if (!isEmpty(searchParam.attr_data) && currentAttrData.size() != searchParam.attr_data.size()) {
-                currentAttrData = searchParam.attr_data;
-                hasChange = true;
-            }
-        }
-        if (hasChange) {
-            presenter.getSearchGoods(searchParam, true);
-        }
+        });
     }
 
     @Override
@@ -339,6 +300,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                     tv_general_sort.setText(getStringResouce(R.string.general_sort));
                     currentSortPosition = -1;
                     searchParam.sort_type = "sales_desc";
+                    presenter.initPage();
                     presenter.getSearchGoods(searchParam, true);
                 }
                 break;
@@ -390,6 +352,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 break;
         }
         searchParam.sort_type = currentSort;
+        presenter.initPage();
         presenter.getSearchGoods(searchParam, true);
     }
 
@@ -404,6 +367,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             String str = edt_keyword.getText().toString();
             searchParam.keyword = str;
             Common.hideKeyboard(edt_keyword);
+            presenter.initPage();
             presenter.getSearchGoods(searchParam, true);
             return true;
         }
@@ -435,6 +399,79 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             hashMap.put("attr_data", entity.attr_data);
         }
         return hashMap;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CategoryFiltratePresenter.FILTRATE_REQUEST_CODE && resultCode == RESULT_OK) {
+            searchParam = (GoodsSearchParam) data.getSerializableExtra("searchparam");
+            hasChange = false;
+            HashMap<String, Object> map = classToMap(searchParam);
+
+            if (map.size() == 0) {
+                tv_filter.setTextColor(getColorResouce(R.color.new_text));
+                tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
+            }
+            if (currentMap.size() != map.size()) {
+                hasChange = true;
+            }
+
+            currentMap.clear();
+            currentMap.putAll(map);
+            if (currentMap.size() != 0) {
+                tv_filter.setTextColor(getColorResouce(R.color.pink_color));
+                tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.icon_sx), null);
+
+                if (isEmpty(searchParam.brand_ids)) {
+                    searchParam.brand_ids = "";
+                }
+                if (isEmpty(searchParam.send_area)) {
+                    searchParam.send_area = "";
+                }
+                if (isEmpty(searchParam.is_free_ship)) {
+                    searchParam.is_free_ship = "";
+                }
+                if (isEmpty(searchParam.max_price)) {
+                    searchParam.max_price = "";
+                }
+                if (isEmpty(searchParam.min_price)) {
+                    searchParam.min_price = "";
+                }
+
+                if (!currentBrandIds.equals(searchParam.brand_ids)) {
+                    currentBrandIds = searchParam.brand_ids;
+                    hasChange = true;
+                }
+                if (!currentArea.equals(searchParam.send_area)) {
+                    currentArea = searchParam.send_area;
+                    hasChange = true;
+                }
+                if (!currentFreeship.equals(searchParam.is_free_ship)) {
+                    currentFreeship = searchParam.is_free_ship;
+                    hasChange = true;
+                }
+                if (!currentMaxPrice.equals(searchParam.max_price)) {
+                    currentMaxPrice = searchParam.max_price;
+                    hasChange = true;
+                }
+                if (!currentMinPrice.equals(searchParam.min_price)) {
+                    currentMinPrice = searchParam.min_price;
+                    hasChange = true;
+                }
+                if (!isEmpty(searchParam.attr_data)) {
+                    hasChange = true;
+                }
+                if (!isEmpty(searchParam.attr_data) && currentAttrData.size() != searchParam.attr_data.size()) {
+                    currentAttrData = searchParam.attr_data;
+                    hasChange = true;
+                }
+            }
+            if (hasChange) {
+                presenter.initPage();
+                presenter.getSearchGoods(searchParam, true);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

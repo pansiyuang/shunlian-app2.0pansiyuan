@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:rl_control_adapter="true"
-        app:rl_control_height="68"
         app:rl_margin_left="23"
         app:rl_margin_right="23"
         app:rl_margin_top="24">
@@ -41,7 +40,7 @@
             />
         <View
             android:layout_width="0.5dp"
-            android:layout_height="match_parent"
+            android:layout_height="31dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_toRightOf="@+id/mtv_title"

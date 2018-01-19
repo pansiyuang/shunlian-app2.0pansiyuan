@@ -65,6 +65,9 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
     //  获得父项的数量
     @Override
     public int getChildrenCount(int i) {
+        if (mStores == null) {
+            return 0;
+        }
         if (mStores.get(i).promotion == null || mStores.get(i).promotion.size() == 0) {
             return 0;
         }
@@ -129,7 +132,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         parentViewHolder.tv_store.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StoreAct.startAct(mContext,mStores.get(i).store_id);
+                StoreAct.startAct(mContext, mStores.get(i).store_id);
             }
         });
 
