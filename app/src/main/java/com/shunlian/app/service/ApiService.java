@@ -22,6 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
@@ -868,4 +869,13 @@ public interface ApiService {
      */
     @GET("member/footermark/cleanSideMark")
     Call<BaseEntity<EmptyEntity>> clearFootprint(@QueryMap Map<String,String> map);
+
+    /**
+     * 天天特惠列表
+     * @param map
+     * @return
+     */
+    @GET("activity/ttList")
+    Call<BaseEntity<ActivityListEntity>> activityList(@QueryMap Map<String,String> map);
+
 }

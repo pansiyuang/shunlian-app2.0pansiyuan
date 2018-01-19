@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.CategoryFiltrateAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
@@ -97,7 +98,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("订单搜索历史");
         items.add("选择服务类型");
         items.add("H5");
-        items.add("字母");
+        items.add("天天特惠");
         items.add("退换/售后");
         items.add("提交物流信息");
         items.add("列表排序");
@@ -159,7 +160,7 @@ public class MainPageFrag extends BaseFragment {
                         H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
                         break;
                     case 11:
-                        startActivity(new Intent(baseActivity,CategoryFiltrateAct.class));
+                        startActivity(new Intent(baseActivity,DayDayAct.class));
                         break;
                     case 12:
                         RefundAfterSaleAct.startAct(baseActivity);
