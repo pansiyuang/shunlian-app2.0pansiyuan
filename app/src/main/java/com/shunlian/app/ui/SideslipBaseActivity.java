@@ -20,7 +20,7 @@ public abstract class SideslipBaseActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openSideslipCallback();
+//        openSideslipCallback();
     }
     /**
      * 初始化侧滑返回
@@ -51,21 +51,5 @@ public abstract class SideslipBaseActivity extends BaseActivity {
                 });
     }
 
-    /**
-     * 打开侧滑
-     */
-    protected void openSideslip(){
-        if (mSlideBackLayout != null){
-            mSlideBackLayout.lock(true);
-        }
-    }
 
-    /**
-     * 关闭侧滑
-     */
-    protected void closeSideslip(){
-        if (mSlideBackLayout != null){
-            mSlideBackLayout.lock(false);
-        }
-    }
 }

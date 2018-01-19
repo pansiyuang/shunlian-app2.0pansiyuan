@@ -5,7 +5,12 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.utils.LogUtil;
+
 import java.util.Stack;
+
+import pay.PayListActivity;
 
 /**
  * Created by Oubowu on 2016/9/20 3:28.
@@ -22,7 +27,11 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
         if (mActivityStack == null) {
             mActivityStack = new Stack<>();
         }
-        mActivityStack.add(activity);
+        LogUtil.logError("onActivityCreated=====name="+activity.getClass().getSimpleName());
+        if (!(activity instanceof ConfirmOrderAct) && !(activity instanceof PayListActivity)){
+            LogUtil.logError("mActivityStack=====add="+activity.getClass().getSimpleName());
+            mActivityStack.add(activity);
+        }
     }
 
     @Override

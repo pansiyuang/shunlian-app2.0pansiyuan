@@ -48,7 +48,6 @@ public class SlideBackHelper {
 
         View content = contentView.findViewById(android.R.id.content);
         if (content.getBackground() == null) {
-//            content.setBackground(decorView.getBackground());
             content.setBackgroundDrawable(decorView.getBackground());
         }
 
@@ -57,7 +56,6 @@ public class SlideBackHelper {
         Drawable preDecorViewDrawable = getDecorViewDrawable(preActivity[0]);
         content = preContentView[0].findViewById(android.R.id.content);
         if (content.getBackground() == null) {
-//            content.setBackground(preDecorViewDrawable);
             content.setBackgroundDrawable(preDecorViewDrawable);
         }
 
