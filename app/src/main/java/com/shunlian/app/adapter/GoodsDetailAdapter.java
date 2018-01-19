@@ -557,7 +557,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_discount_info.setVisibility(View.GONE);
                 pref_length = 0;
             }
-            mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+            if (pref_length != 0){
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+            }else {
+                mHolder.mtv_title.setText(mGoodsEntity.title);
+            }
+
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
             mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
