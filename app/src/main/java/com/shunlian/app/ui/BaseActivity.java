@@ -111,7 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                         // 屏幕是否旋转
                         .rotateScreen(false)
                         // 是否侧滑
-                        .edgeOnly(true)
+                        .edgeOnly(false)
                         // 是否禁止侧滑
                         .lock(false)
                         // 侧滑的响应阈值，0~1，对应屏幕宽度*percent
@@ -133,7 +133,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      */
     protected void openSideslip(){
         if (mSlideBackLayout != null){
-            mSlideBackLayout.lock(true);
+            mSlideBackLayout.edgeOnly(false);
+            mSlideBackLayout.lock(false);
         }
     }
 
@@ -142,7 +143,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      */
     protected void closeSideslip(){
         if (mSlideBackLayout != null){
-            mSlideBackLayout.lock(false);
+            mSlideBackLayout.edgeOnly(true);
+            mSlideBackLayout.lock(true);
         }
     }
 
