@@ -250,7 +250,6 @@
         <activity android:name=".ui.category.CategoryAct"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             />
         <activity android:name=".ui.returns_order.SelectLogisticsAct"

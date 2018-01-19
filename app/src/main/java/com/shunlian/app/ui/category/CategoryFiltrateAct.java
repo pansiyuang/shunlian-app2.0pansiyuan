@@ -17,6 +17,7 @@ import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
+import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.CategoryFiltrateView;
@@ -101,14 +102,14 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     private List<GetListFilterEntity.Brand> brands;
     private ArrayList<String> letters;
     private Boolean isZhu = false, isZhe = false, isDing = false, isBao = false, isMore = false, isopt = false;
-    private String keyword, cid = "75", sort_type, locate;
+    private String keyword, cid = "", sort_type, locate;
 
     public static void startAct(Activity context, String keyword, String cid, String sort_type) {
         Intent intent = new Intent(context, CategoryFiltrateAct.class);
         intent.putExtra("keyword", keyword);
         intent.putExtra("cid", cid);
         intent.putExtra("sort_type", sort_type);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, CategoryFiltratePresenter.FILTRATE_REQUEST_CODE);
     }
 
     public void reset() {
