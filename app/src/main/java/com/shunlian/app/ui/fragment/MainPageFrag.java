@@ -15,7 +15,6 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.category.CategoryAct;
-import com.shunlian.app.ui.category.CategoryFiltrateAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;

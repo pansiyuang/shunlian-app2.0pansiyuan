@@ -878,4 +878,18 @@ public interface ApiService {
     @GET("activity/ttList")
     Call<BaseEntity<ActivityListEntity>> activityList(@QueryMap Map<String,String> map);
 
+    /**
+     * 设置提醒功能
+     * @param body
+     * @return
+     */
+    @POST("activity/remindMe")
+    Call<BaseEntity<EmptyEntity>> actRemindMe(@Body RequestBody body);
+
+    /**
+     * 取消提醒
+     * @return
+     */
+    @POST("activity/cancelRemind")
+    Call<BaseEntity<EmptyEntity>> cancleRemind(@Body RequestBody body);
 }

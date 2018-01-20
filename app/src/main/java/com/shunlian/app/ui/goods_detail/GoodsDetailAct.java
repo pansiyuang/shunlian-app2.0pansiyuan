@@ -517,18 +517,26 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mtv_buy_immediately.setEnabled(true);
         }
     }
-
     /**
-     * 刷新足迹
-
-    @Override
-    public void refreshFootprint() {
-        if (footprintDialog != null){
-            mFootprintEntity = null;
-            footprintDialog.refreshData();
-        }
-    }
+     * 活动状态
      */
+    @Override
+    public void activityState(String status,String remindStatus) {
+        //1：活动进行中   0：活动未开始
+        if ("0".equals(status)){
+            //1：已设置提醒  0：未设置提醒
+            if ("0".equals(remindStatus)) {
+                mtv_buy_immediately.setText(getStringResouce(R.string.day_setting_remind));
+            }else {
+                mtv_buy_immediately.setText(getStringResouce(R.string.day_quxiaotixing));
+            }
+            mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_2096F2));
+        }else {
+            mtv_buy_immediately.setText(getStringResouce(R.string.now_buy));
+            mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.pink_color));
+        }
+        mtv_buy_immediately.setTextColor(getColorResouce(R.color.white));
+    }
 
     /*
    显示足迹列表
@@ -608,11 +616,25 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 backOrder();
                 break;
             case R.id.mtv_buy_immediately:
-                isNowBuy = true;
-                if (goodsCount == 0){
-                    goodsDeatilFrag.showParamDialog();
-                }else {
-                    ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+                String buyText = mtv_buy_immediately.getText().toString();
+                if (getStringResouce(R.string.now_buy).equals(buyText)){//立刻购买
+                    isNowBuy = true;
+                    if (goodsCount == 0){
+                        goodsDeatilFrag.showParamDialog();
+                    }else {
+                        ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+                    }
+                }else {//设置提醒
+                    if (getStringResouce(R.string.day_setting_remind).equals(buyText)){//设置提醒
+                        if (goodsDetailPresenter != null){
+                            goodsDetailPresenter.settingRemind();
+                        }
+                    }else {//取消提醒
+                        if (goodsDetailPresenter != null){
+                            goodsDetailPresenter.cancleRemind();
+                        }
+                    }
+
                 }
                 break;
             case R.id.miv_is_fav:
@@ -919,9 +941,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             goodsDetailPresenter.getVoucher(id);
     }
 
-    /*public void clearFootprint(){
-        if (goodsDetailPresenter != null){
-            goodsDetailPresenter.clearFootprint();
+    public void refreshDetail(){
+        if (goodsDeatilFrag != null){
+            goodsDetailPresenter.refreshDetail();
         }
-    }*/
+    }
 }
