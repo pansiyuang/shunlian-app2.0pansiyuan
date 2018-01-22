@@ -89,9 +89,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
             megerPresenter = new MegerPresenter(this, this);
             megerPresenter.getMegercCates(currentNeedId);
         }
-        vp_meger.setOffscreenPageLimit(0);
         viewPageFragmentAdapter = new ViewPageFragmentAdapter(getSupportFragmentManager(), strip_tab, vp_meger);
-
     }
 
     @Override
@@ -189,7 +187,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_to_shopcar:
-                MainActivity.startAct(this, "mainPage");
+                MainActivity.startAct(this, "shoppingcar");
                 break;
         }
         super.onClick(view);
