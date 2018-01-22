@@ -15,6 +15,7 @@ import com.shunlian.app.presenter.TestPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.category.CategoryAct;
+import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -101,6 +102,7 @@ public class MainPageFrag extends BaseFragment {
         items.add("退换/售后");
         items.add("提交物流信息");
         items.add("列表排序");
+        items.add("收藏");
 
         items.addAll(DataUtil.getListString(40, "条目"));
 
@@ -169,6 +171,9 @@ public class MainPageFrag extends BaseFragment {
                         break;
                     case 14:
                         CategoryAct.startAct(baseActivity,null);
+                        break;
+                    case 15:
+                        MyCollectionAct.startAct(baseActivity);
                         break;
                 }
             }

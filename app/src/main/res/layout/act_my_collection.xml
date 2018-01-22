@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_black"
+            app:iv_control_adapter="true"
+            app:iv_margin_left="10" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="商品收藏"
+            android:textColor="@color/new_text"
+            android:textSize="18sp" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_manage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="10dp"
+            android:text="管理"
+            android:textColor="@color/new_gray"
+            android:textSize="15sp" />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <!--条目分类-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="27dp">
+
+        <!--商品-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_goods"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商品"
+                android:textColor="@color/pink_color"
+                android:textSize="15sp" />
+
+
+            <View
+                android:id="@+id/view_goods"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/pink_color" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+        <!--店铺-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mrlayout_store"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="店铺"
+                android:textColor="@color/new_text"
+                android:textSize="15sp" />
+
+
+            <View
+                android:id="@+id/view_store"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+        <!--足迹-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mrlayout_footprint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_footprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="足迹"
+                android:textColor="@color/new_text"
+                android:textSize="15sp" />
+
+
+            <View
+                android:id="@+id/view_footprint"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+        <!--内容-->
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mrlayout_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内容"
+                android:textColor="@color/new_text"
+                android:textSize="15sp" />
+
+
+            <View
+                android:id="@+id/view_content"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/pink_color"
+                android:visibility="invisible" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/flayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <!--删除管理-->
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_manage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:rl_control_adapter="true"
+        app:rl_control_height="100">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray_two" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/color_value_6c"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:tv_control_adapter="true"
+            app:tv_control_width="210" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_all_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_shoppingcar_selected_n"
+            android:paddingLeft="12dp"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_all_select"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_all_select"
+            android:paddingLeft="10dp"
+            android:text="全选"
+            android:gravity="center"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+</LinearLayout>
