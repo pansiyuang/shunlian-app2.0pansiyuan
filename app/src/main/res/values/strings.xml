@@ -395,4 +395,13 @@
     <string name="day_setting_remind">设置提醒</string>
     <item name="tag_day_menu_id" type="id" />
 
+    <!--收藏-->
+    <string name="goods_collection">商品收藏</string>
+    <string name="store_collection">店铺收藏</string>
+    <string name="content_collection">内容收藏</string>
+    <string name="store">店铺</string>
+    <string name="footprint">足迹</string>
+    <string name="content">内容</string>
+    <string name="all_select">全选</string>
+
 </resources>

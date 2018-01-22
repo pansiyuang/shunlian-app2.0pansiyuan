@@ -67,6 +67,7 @@ public class MyCollectionAct extends BaseActivity {
 
     @BindView(R.id.mtv_delete)
     MyTextView mtv_delete;
+
     private int new_text;
     private int pink_color;
     private Map<String,CollectionFrag> fragments;
@@ -211,12 +212,15 @@ public class MyCollectionAct extends BaseActivity {
     @OnClick(R.id.mtv_manage)
     public void manage(){
         String s = mtv_manage.getText().toString();
-        if (s.equals("管理")) {
-            mtv_manage.setText("完成");
-            mrlayout_manage.setVisibility(View.VISIBLE);
-        }else {
-            mtv_manage.setText("管理");
-            mrlayout_manage.setVisibility(View.GONE);
+        CollectionFrag collectionFrag = fragments.get(currentFrag);
+        if (collectionFrag.isClickManage()) {
+            if (s.equals(getStringResouce(R.string.manage))) {
+                mtv_manage.setText(getStringResouce(R.string.RegisterTwoAct_finish));
+                mrlayout_manage.setVisibility(View.VISIBLE);
+            } else {
+                mtv_manage.setText(getStringResouce(R.string.manage));
+                mrlayout_manage.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -225,7 +229,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mllayout_goods)
     public void collectionGoods(){
-        mtv_title.setText("商品收藏");
+        mtv_title.setText(getStringResouce(R.string.goods_collection));
         currentFrag = GOODS_FLAG;
         showSataus(0);
         goodsFrag();
@@ -236,7 +240,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_store)
     public void collectionStore(){
-        mtv_title.setText("店铺收藏");
+        mtv_title.setText(getStringResouce(R.string.store_collection));
         currentFrag = STORE_FLAG;
         showSataus(1);
         storeFrag();
@@ -247,7 +251,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_footprint)
     public void collectionFootprint(){
-        mtv_title.setText("我的足迹");
+        mtv_title.setText(getStringResouce(R.string.my_footprint));
         currentFrag = FOOTPRINT_FLAG;
         showSataus(2);
         footprintFrag();
@@ -258,7 +262,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_content)
     public void collectionContent(){
-        mtv_title.setText("内容收藏");
+        mtv_title.setText(getStringResouce(R.string.content_collection));
         currentFrag = CONTENT_FLAG;
         showSataus(3);
         contentFrag();
@@ -277,21 +281,5 @@ public class MyCollectionAct extends BaseActivity {
         //内容
         mtv_content.setTextColor(status == 3 ? pink_color : new_text);
         view_content.setVisibility(status == 3 ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    /**
-     * 处理空界面
-     * @param isShow true显示 否则隐藏
-     */
-    public void handleEmptyPage(boolean isShow){
-
-    }
-
-    /**
-     * 处理网络异常
-     * @param isShow true显示 否则隐藏
-     */
-    public void handleNetException(boolean isShow){
-
     }
 }

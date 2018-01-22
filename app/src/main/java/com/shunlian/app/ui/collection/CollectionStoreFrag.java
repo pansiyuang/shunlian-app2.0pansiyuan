@@ -55,4 +55,14 @@ public class CollectionStoreFrag extends CollectionFrag {
     public void finishManage() {
 
     }
+
+    /**
+     * 管理是否可点击
+     *
+     * @return
+     */
+    @Override
+    public boolean isClickManage() {
+        return false;
+    }
 }
