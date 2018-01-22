@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingRight="10dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_img"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/icon_login_logo" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/miv_img"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textColor="@color/new_text"
+        android:textSize="14sp" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_remind"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:background="@color/value_2096F2"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_active_tiantiantehui_time" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_quxiao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2.5dp"
+            android:text="@string/day_tixinwo"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_toLeftOf="@id/mllayout_remind"
+        android:id="@+id/mtv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/miv_img"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/value_2096F2"
+        android:textSize="11sp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"/>
+    <com.shunlian.app.widget.MyTextView
+        android:layout_above="@id/mtv_number"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/mtv_priceO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/miv_img"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/value_2096F2"
+        android:textSize="12sp" />
+    <com.shunlian.app.widget.MyTextView
+        android:layout_above="@id/mtv_number"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/mtv_priceM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/mtv_priceO"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/new_text"
+        android:textSize="11sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_gray_three"/>
+</com.shunlian.app.widget.MyRelativeLayout>

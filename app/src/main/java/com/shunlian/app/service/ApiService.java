@@ -22,6 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
@@ -890,4 +891,27 @@ public interface ApiService {
      */
     @POST("/goods/clearSearchHistory")
     Call<BaseEntity<EmptyEntity>> clearSearchHistory(@QueryMap Map<String,String> map);
+
+    /**
+     * 天天特惠列表
+     * @param map
+     * @return
+     */
+    @GET("activity/ttList")
+    Call<BaseEntity<ActivityListEntity>> activityList(@QueryMap Map<String,String> map);
+
+    /**
+     * 设置提醒功能
+     * @param body
+     * @return
+     */
+    @POST("activity/remindMe")
+    Call<BaseEntity<EmptyEntity>> actRemindMe(@Body RequestBody body);
+
+    /**
+     * 取消提醒
+     * @return
+     */
+    @POST("activity/cancelRemind")
+    Call<BaseEntity<EmptyEntity>> cancleRemind(@Body RequestBody body);
 }

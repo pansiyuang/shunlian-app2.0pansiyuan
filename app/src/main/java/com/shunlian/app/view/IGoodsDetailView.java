@@ -57,8 +57,9 @@ public interface IGoodsDetailView extends IView {
     void goodsOffShelf(String status);
 
     /**
-     * 刷新足迹
-
-    void refreshFootprint();
+     * 活动状态
+     * @param status 活动状态
+     * @param remindStatus 提醒状态
      */
+    void activityState(String status,String remindStatus);
 }

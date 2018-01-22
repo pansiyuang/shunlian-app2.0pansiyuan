@@ -36,6 +36,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private boolean isLoading = false;
     private String type = "ALL";
     private int allPage;//总页数
+    private String act_id;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -59,9 +60,23 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
                     iView.goodsOffShelf(data.status);
+                    if (!"0".equals(data.status)){//非下架商品
+                        GoodsDeatilEntity.TTAct tt_act = data.tt_act;
+                        if (tt_act != null){
+                            act_id = tt_act.id;
+                            iView.activityState(tt_act.sale,tt_act.remind_status);
+                        }
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * 刷新整页数据
+     */
+    public void refreshDetail(){
+        initApi();
     }
 
     /**
@@ -314,17 +329,41 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     }
 
     /**
-     * 清空足迹
+     * 设置提醒
      */
-    public void clearFootprint(){
-        Map<String, String> map = new HashMap<>();
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().clearFootprint(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+    public void settingRemind(){
+        Map<String,String> map = new HashMap<>();
+        map.put("id",act_id);
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .actRemindMe(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(entity.message);
-//                iView.refreshFootprint();
+                iView.activityState("0","1");
+            }
+        });
+    }
+
+    /**
+     * 取消提醒
+     */
+    public void cancleRemind(){
+        Map<String,String> map = new HashMap<>();
+        map.put("id",act_id);
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .cancleRemind(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.activityState("0","0");
             }
         });
     }

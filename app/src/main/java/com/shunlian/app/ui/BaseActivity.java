@@ -9,20 +9,27 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.sideslip.SlideBackHelper;
+import com.shunlian.app.utils.sideslip.SlideConfig;
+import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
+import com.shunlian.app.utils.sideslip.widget.SlideBackLayout;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -34,6 +41,7 @@ import java.util.UUID;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import pay.PayListActivity;
 
 
 //                            _ooOoo_
@@ -69,10 +77,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private NetworkBroadcast networkBroadcast;
     private Resources resources;
     public static Map<Integer,NetDialog> dialogLists = new HashMap<>();
+    private SlideBackLayout mSlideBackLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!(this instanceof MainActivity) &&
+                !(this instanceof ConfirmOrderAct) &&
+                !(this instanceof PayListActivity)) {
+            openSideslipCallback();
+        }
         immersionBar = ImmersionBar.with(this);
         immersionBar.init();
         setContentView(getLayoutId());
@@ -83,6 +97,53 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
 
+    }
+
+    /**
+     * 初始化侧滑返回
+     */
+    private void openSideslipCallback() {
+        mSlideBackLayout = SlideBackHelper.attach(
+                // 当前Activity
+                this, App.getActivityHelper(),
+                // 参数的配置
+                new SlideConfig.Builder()
+                        // 屏幕是否旋转
+                        .rotateScreen(false)
+                        // 是否侧滑
+                        .edgeOnly(true)
+                        // 是否禁止侧滑
+                        .lock(false)
+                        // 侧滑的响应阈值，0~1，对应屏幕宽度*percent
+                        .edgePercent(0.1f)
+                        // 关闭页面的阈值，0~1，对应屏幕宽度*percent
+                        .slideOutPercent(0.3f).create(),
+                // 滑动的监听
+                new OnSlideListenerAdapter() {
+                    @Override
+                    public void onSlide(@FloatRange(from = 0.0,
+                            to = 1.0) float percent) {
+                        super.onSlide(percent);
+                    }
+                });
+    }
+
+    /**
+     * 打开侧滑
+     */
+    protected void openSideslip(){
+        if (mSlideBackLayout != null){
+            mSlideBackLayout.lock(false);
+        }
+    }
+
+    /**
+     * 关闭侧滑
+     */
+    protected void closeSideslip(){
+        if (mSlideBackLayout != null){
+            mSlideBackLayout.lock(true);
+        }
     }
 
     @Override
