@@ -1,7 +1,11 @@
 package com.shunlian.app.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,7 +194,7 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Goods {
+    public static class Goods implements Parcelable {
         public String id;
         public String cart_id;                  //是否被编辑
         public String store_id;              //店铺id
@@ -224,31 +228,201 @@ public class GoodsDeatilEntity {
         public String send_area;             //发货地
         public String comment_num;           //评论数
         public String comment_rate;          //好评率
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.cart_id);
+            dest.writeString(this.store_id);
+            dest.writeString(this.store_name);
+            dest.writeString(this.goods_id);
+            dest.writeString(this.qty);
+            dest.writeString(this.sku_id);
+            dest.writeString(this.goods_title);
+            dest.writeString(this.title);
+            dest.writeString(this.stock);
+            dest.writeString(this.thumb);
+            dest.writeString(this.is_check);
+            dest.writeString(this.prom_type);
+            dest.writeParcelable(this.goods_info, flags);
+            dest.writeString(this.sku);
+            dest.writeString(this.price);
+            dest.writeString(this.left);
+            dest.writeList(this.all_prom);
+            dest.writeString(this.cate_id);
+            dest.writeString(this.cate_name);
+            dest.writeString(this.sales);
+            dest.writeString(this.prom_id);
+            dest.writeString(this.is_new);
+            dest.writeString(this.is_hot);
+            dest.writeString(this.is_explosion);
+            dest.writeString(this.is_recommend);
+            dest.writeString(this.has_coupon);
+            dest.writeString(this.has_discount);
+            dest.writeString(this.has_gift);
+            dest.writeString(this.free_ship);
+            dest.writeString(this.send_area);
+            dest.writeString(this.comment_num);
+            dest.writeString(this.comment_rate);
+        }
+
+        public Goods() {
+        }
+
+        protected Goods(Parcel in) {
+            this.id = in.readString();
+            this.cart_id = in.readString();
+            this.store_id = in.readString();
+            this.store_name = in.readString();
+            this.goods_id = in.readString();
+            this.qty = in.readString();
+            this.sku_id = in.readString();
+            this.goods_title = in.readString();
+            this.title = in.readString();
+            this.stock = in.readString();
+            this.thumb = in.readString();
+            this.is_check = in.readString();
+            this.prom_type = in.readString();
+            this.goods_info = in.readParcelable(GoodsInfo.class.getClassLoader());
+            this.sku = in.readString();
+            this.price = in.readString();
+            this.left = in.readString();
+            this.all_prom = new ArrayList<AllProm>();
+            in.readList(this.all_prom, AllProm.class.getClassLoader());
+            this.cate_id = in.readString();
+            this.cate_name = in.readString();
+            this.sales = in.readString();
+            this.prom_id = in.readString();
+            this.is_new = in.readString();
+            this.is_hot = in.readString();
+            this.is_explosion = in.readString();
+            this.is_recommend = in.readString();
+            this.has_coupon = in.readString();
+            this.has_discount = in.readString();
+            this.has_gift = in.readString();
+            this.free_ship = in.readString();
+            this.send_area = in.readString();
+            this.comment_num = in.readString();
+            this.comment_rate = in.readString();
+        }
+
+        public static final Parcelable.Creator<Goods> CREATOR = new Parcelable.Creator<Goods>() {
+            @Override
+            public Goods createFromParcel(Parcel source) {
+                return new Goods(source);
+            }
+
+            @Override
+            public Goods[] newArray(int size) {
+                return new Goods[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class GoodsInfo {
+    public static class GoodsInfo implements Parcelable {
         public String has_option;
         public String price;
         public String max_price;
         public List<Specs> specs;
         public List<Sku> sku;
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.has_option);
+            dest.writeString(this.price);
+            dest.writeString(this.max_price);
+            dest.writeList(this.specs);
+            dest.writeList(this.sku);
+        }
+
+        public GoodsInfo() {
+        }
+
+        protected GoodsInfo(Parcel in) {
+            this.has_option = in.readString();
+            this.price = in.readString();
+            this.max_price = in.readString();
+            this.specs = new ArrayList<Specs>();
+            in.readList(this.specs, Specs.class.getClassLoader());
+            this.sku = new ArrayList<Sku>();
+            in.readList(this.sku, Sku.class.getClassLoader());
+        }
+
+        public static final Parcelable.Creator<GoodsInfo> CREATOR = new Parcelable.Creator<GoodsInfo>() {
+            @Override
+            public GoodsInfo createFromParcel(Parcel source) {
+                return new GoodsInfo(source);
+            }
+
+            @Override
+            public GoodsInfo[] newArray(int size) {
+                return new GoodsInfo[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Specs {
+    public static class Specs implements Parcelable {
         public String id;
         public String name;
         public String show_type;
         public List<Values> values;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.show_type);
+            dest.writeTypedList(this.values);
+        }
+
+        public Specs() {
+        }
+
+        protected Specs(Parcel in) {
+            this.id = in.readString();
+            this.name = in.readString();
+            this.show_type = in.readString();
+            this.values = in.createTypedArrayList(Values.CREATOR);
+        }
+
+        public static final Parcelable.Creator<Specs> CREATOR = new Parcelable.Creator<Specs>() {
+            @Override
+            public Specs createFromParcel(Parcel source) {
+                return new Specs(source);
+            }
+
+            @Override
+            public Specs[] newArray(int size) {
+                return new Specs[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Values {
+    public static class Values implements Parcelable {
         public String id;
         public String name;
         public String memo;
         public boolean isSelect;
+
 
         public boolean isSelect() {
             return isSelect;
@@ -257,10 +431,45 @@ public class GoodsDeatilEntity {
         public void setSelect(boolean select) {
             isSelect = select;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.memo);
+            dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
+        }
+
+        public Values() {
+        }
+
+        protected Values(Parcel in) {
+            this.id = in.readString();
+            this.name = in.readString();
+            this.memo = in.readString();
+            this.isSelect = in.readByte() != 0;
+        }
+
+        public static final Parcelable.Creator<Values> CREATOR = new Parcelable.Creator<Values>() {
+            @Override
+            public Values createFromParcel(Parcel source) {
+                return new Values(source);
+            }
+
+            @Override
+            public Values[] newArray(int size) {
+                return new Values[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Sku {
+    public static class Sku implements Parcelable {
         public String id;
         public String name;
         public String price;
@@ -269,6 +478,49 @@ public class GoodsDeatilEntity {
         public String stock;
         public String specs;
         public String thumb;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.price);
+            dest.writeString(this.market_price);
+            dest.writeString(this.weight);
+            dest.writeString(this.stock);
+            dest.writeString(this.specs);
+            dest.writeString(this.thumb);
+        }
+
+        public Sku() {
+        }
+
+        protected Sku(Parcel in) {
+            this.id = in.readString();
+            this.name = in.readString();
+            this.price = in.readString();
+            this.market_price = in.readString();
+            this.weight = in.readString();
+            this.stock = in.readString();
+            this.specs = in.readString();
+            this.thumb = in.readString();
+        }
+
+        public static final Parcelable.Creator<Sku> CREATOR = new Parcelable.Creator<Sku>() {
+            @Override
+            public Sku createFromParcel(Parcel source) {
+                return new Sku(source);
+            }
+
+            @Override
+            public Sku[] newArray(int size) {
+                return new Sku[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

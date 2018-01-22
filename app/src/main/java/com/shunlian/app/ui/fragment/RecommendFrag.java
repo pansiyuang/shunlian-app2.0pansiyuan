@@ -17,6 +17,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.presenter.RecommmendPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class RecommendFrag extends BaseFragment implements View.OnClickListener, IRecommmendView, BaseRecyclerAdapter.OnItemClickListener, RecommmendAdapter.OnGoodsBuyOnclickListener {
+public class RecommendFrag extends BaseLazyFragment implements View.OnClickListener, IRecommmendView, BaseRecyclerAdapter.OnItemClickListener, RecommmendAdapter.OnGoodsBuyOnclickListener {
 
     @BindView(R.id.recycler_recommmend)
     RecyclerView recycler_recommmend;
@@ -72,15 +73,9 @@ public class RecommendFrag extends BaseFragment implements View.OnClickListener,
     protected void initData() {
         currentCateId = getArguments().getString("cateId");
         mJoinSign = getArguments().getString("joinSign");
-        recommmendPresenter = new RecommmendPresenter(baseContext, this);
-        recommmendPresenter.getRecommmendGoods(mJoinSign, currentCateId);
         recycler_recommmend.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseContext, 5f), false));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void getJoinGoods(JoinGoodsEntity joinGoodsEntity) {
@@ -114,6 +109,12 @@ public class RecommendFrag extends BaseFragment implements View.OnClickListener,
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    protected void onFragmentFirstVisible() {
+        recommmendPresenter = new RecommmendPresenter(baseContext, this);
+        recommmendPresenter.getRecommmendGoods(mJoinSign, currentCateId);
     }
 
     @Override

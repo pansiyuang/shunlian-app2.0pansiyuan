@@ -39,6 +39,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.LogisticsNameEntity;
@@ -869,6 +870,27 @@ public interface ApiService {
      */
     @GET("member/footermark/cleanSideMark")
     Call<BaseEntity<EmptyEntity>> clearFootprint(@QueryMap Map<String,String> map);
+
+    /**
+     * 热搜关键字与搜索历史
+     * @return
+     */
+    @GET("/goods/hotSearch")
+    Call<BaseEntity<HotSearchEntity>> hotSearch(@QueryMap Map<String,String> map);
+
+    /**
+     * 搜索关键字提示
+     * @return
+     */
+    @POST("/goods/keywordSuggest")
+    Call<BaseEntity<CommonEntity>> keywordSuggest(@Body RequestBody body);
+
+    /**
+     * 清空搜索历史
+     * @return
+     */
+    @POST("/goods/clearSearchHistory")
+    Call<BaseEntity<EmptyEntity>> clearSearchHistory(@QueryMap Map<String,String> map);
 
     /**
      * 天天特惠列表

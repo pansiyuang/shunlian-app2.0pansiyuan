@@ -126,6 +126,7 @@
     <color name="value_fb6400">#FB6400</color>
     <color name="value_7898da">#7898da</color>
     <color name="value_f46c6f">#f46c6f</color>
+    <color name="value_25">#252525</color>
 
     <color name="action_text_color_normal">#cfcfcf</color>
     <color name="action_text_color_pressed">#353535</color>
