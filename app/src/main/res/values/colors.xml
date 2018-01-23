@@ -142,6 +142,9 @@
 
     <!--天天特惠-->
     <color name="value_2096F2">#2096F2</color>
+    <color name="value_f3dcbe">#f3dcbe</color>
+    <color name="value_FC6076">#FC6076</color>
+    <color name="value_FF9A44">#FF9A44</color>
 
 </resources>
 

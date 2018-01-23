@@ -9,10 +9,16 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DayDayMenuAdapter;
+import com.shunlian.app.adapter.DayListAdapter;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.DayDayView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -29,6 +35,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     private DayDayPresenter dayDayPresenter;
     private DayDayMenuAdapter dayDayMenuAdapter;
+    private DayListAdapter dayListAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, DayDayAct.class);
@@ -53,17 +61,30 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Override
     protected void initListener() {
         super.initListener();
-//        mtv_attention.setOnClickListener(this);
-//        mrlayout_yingye.setOnClickListener(this);
+
+        rv_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (linearLayoutManager != null) {
+                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
+                        if (dayDayPresenter != null) {
+                            dayDayPresenter.refreshBaby();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        closeSideslip();
         storeId = getIntent().getStringExtra("storeId");
         dayDayPresenter = new DayDayPresenter(this, this);
-        dayDayPresenter.initApiData();
+        dayDayPresenter.initApiData("",1,20);
     }
 
     @Override
@@ -77,8 +98,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     }
 
     @Override
-    public void getApiData(ActivityListEntity activityListEntity) {
-        rv_menu.setVisibility(View.VISIBLE);
+    public void getApiData(final ActivityListEntity activityListEntity, int allPage, final int page, final List<ActivityListEntity.MData.Good.MList> list) {
         if (dayDayMenuAdapter == null) {
             dayDayMenuAdapter = new DayDayMenuAdapter(this, false, activityListEntity.menu);
             LinearLayoutManager newManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -90,12 +110,28 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                     if (rv_list.getScrollState()==0){
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
-
+                        dayDayPresenter.resetBaby(activityListEntity.menu.get(position).id);
                     }
                 }
             });
         } else {
             dayDayMenuAdapter.notifyDataSetChanged();
         }
+        if (dayListAdapter == null) {
+            dayListAdapter = new DayListAdapter(this, true, list,activityListEntity.datas.sale);
+            linearLayoutManager = new LinearLayoutManager(this);
+            rv_list.setLayoutManager(linearLayoutManager);
+            rv_list.setAdapter(dayListAdapter);
+            dayListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(DayDayAct.this,list.get(position).goods_id);
+                }
+            });
+        } else {
+            dayListAdapter.isStart=activityListEntity.datas.sale;
+            dayListAdapter.notifyDataSetChanged();
+        }
+        dayListAdapter.setPageLoading(page, allPage);
     }
 }

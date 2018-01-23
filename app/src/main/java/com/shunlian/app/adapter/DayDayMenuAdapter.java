@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -20,7 +23,6 @@ import butterknife.BindView;
  */
 
 public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Menu> {
-    private Context context;
     private List<ActivityListEntity.Menu> datas;
     public int selectPosition=0;
 
@@ -50,13 +52,13 @@ public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Me
                 twoHolder.mllayout_tv.setBackgroundResource(0);
             }else {
                 twoHolder.mrlayout_rootView.setBackgroundResource(0);
-                twoHolder.mllayout_tv.setBackgroundResource(getColor(R.color.new_text));
+                twoHolder.mllayout_tv.setBackgroundColor(getColor(R.color.new_text));
             }
         }
     }
 
 
-    class TwoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class TwoHolder extends BaseRecyclerViewHolder implements View.OnClickListener{
         @BindView(R.id.mtv_time)
         MyTextView mtv_time;
 
@@ -64,10 +66,10 @@ public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Me
         MyTextView mtv_desc;
 
         @BindView(R.id.mrlayout_rootView)
-        MyTextView mrlayout_rootView;
+        MyRelativeLayout mrlayout_rootView;
 
         @BindView(R.id.mllayout_tv)
-        MyTextView mllayout_tv;
+        MyLinearLayout mllayout_tv;
 
         private View view;
 

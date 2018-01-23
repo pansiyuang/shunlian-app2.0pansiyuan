@@ -80,6 +80,9 @@ public class ActivityListEntity {
                 public String surplus_stock;
                 public String remind_status;
                 public String remind_count;
+                public int percent;
+                public String str_surplus_stock;
+                public String sale;
 
                 @Override
                 public String toString() {
