@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface DayDayView extends IView {
     void getApiData(ActivityListEntity activityListEntity, int allPage, int page, List<ActivityListEntity.MData.Good.MList> list);
+    void activityState(int position);
 }

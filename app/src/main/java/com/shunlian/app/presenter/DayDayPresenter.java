@@ -2,10 +2,14 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.DayDayView;
 
 import java.util.ArrayList;
@@ -79,7 +83,49 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
             }
         });
     }
+    /**
+     * 设置提醒
+     */
+    public void settingRemind(String id, String goods_id, final int position){
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
 
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .actRemindMe(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                babyDatas.get(position).remind_status="1";
+                iView.activityState(position);
+                Common.staticToasts(context,context.getString(R.string.day_set_remind),R.mipmap.icon_common_duihao);
+            }
+        });
+    }
+
+    /**
+     * 取消提醒
+     */
+    public void cancleRemind(String id,String goods_id,final int position){
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("goods_id",goods_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .cancleRemind(getRequestBody(map));
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                babyDatas.get(position).remind_status="0";
+                iView.activityState(position);
+                Common.staticToasts(context,context.getString(R.string.day_cancel_remind),R.mipmap.icon_common_tanhao);
+            }
+        });
+    }
     @Override
     protected void initApi() {
 

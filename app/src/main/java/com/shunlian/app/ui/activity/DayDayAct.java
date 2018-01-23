@@ -14,33 +14,26 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.DayDayView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 public class DayDayAct extends BaseActivity implements View.OnClickListener, DayDayView{
-
     @BindView(R.id.rv_menu)
     RecyclerView rv_menu;
 
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
 
-    private boolean isFocus;
-    private String storeId,seller_id,storeScore;
-
     private DayDayPresenter dayDayPresenter;
     private DayDayMenuAdapter dayDayMenuAdapter;
     private DayListAdapter dayListAdapter;
     private LinearLayoutManager linearLayoutManager;
 
-    public static void startAct(Context context, String storeId) {
+    public static void startAct(Context context) {
         Intent intent = new Intent(context, DayDayAct.class);
-        intent.putExtra("storeId", storeId);//店铺id
         context.startActivity(intent);
     }
 
@@ -61,7 +54,6 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Override
     protected void initListener() {
         super.initListener();
-
         rv_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -82,11 +74,15 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         closeSideslip();
-        storeId = getIntent().getStringExtra("storeId");
+        minitData();
+    }
+
+    public void minitData(){
+        dayDayMenuAdapter=null;
+        dayListAdapter=null;
         dayDayPresenter = new DayDayPresenter(this, this);
         dayDayPresenter.initApiData("",1,20);
     }
-
     @Override
     public void showFailureView(int rquest_code) {
 
@@ -110,6 +106,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                     if (rv_list.getScrollState()==0){
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
+                        dayListAdapter=null;
                         dayDayPresenter.resetBaby(activityListEntity.menu.get(position).id);
                     }
                 }
@@ -118,20 +115,30 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             dayDayMenuAdapter.notifyDataSetChanged();
         }
         if (dayListAdapter == null) {
-            dayListAdapter = new DayListAdapter(this, true, list,activityListEntity.datas.sale);
+            dayListAdapter = new DayListAdapter(this, true, list,dayDayPresenter, activityListEntity);
             linearLayoutManager = new LinearLayoutManager(this);
             rv_list.setLayoutManager(linearLayoutManager);
             rv_list.setAdapter(dayListAdapter);
             dayListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+//                    activityListEntity.from;//踩点
                     GoodsDetailAct.startAct(DayDayAct.this,list.get(position).goods_id);
                 }
             });
         } else {
+            dayListAdapter.title=activityListEntity.datas.title;
             dayListAdapter.isStart=activityListEntity.datas.sale;
+            dayListAdapter.content=activityListEntity.datas.content;
+            dayListAdapter.time=activityListEntity.datas.time;
+            dayListAdapter.from=activityListEntity.from;
             dayListAdapter.notifyDataSetChanged();
         }
         dayListAdapter.setPageLoading(page, allPage);
+    }
+
+    @Override
+    public void activityState(int position) {
+        dayListAdapter.notifyItemChanged(position);
     }
 }

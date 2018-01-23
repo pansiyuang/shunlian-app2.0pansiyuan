@@ -11,6 +11,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActivityListEntity {
+    public String from;
     public List<Menu> menu;
     @JsonProperty(value = "data")//关键字重名
     public MData datas;

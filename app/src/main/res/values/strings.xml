@@ -393,6 +393,8 @@
     <string name="day_yiyoutixing">已有%s人设置提醒</string>
     <string name="day_lijiqianggou">立即抢购</string>
     <string name="day_setting_remind">设置提醒</string>
+    <string name="day_set_remind">设置提醒成功</string>
+    <string name="day_cancel_remind">取消提醒成功</string>
     <item name="tag_day_menu_id" type="id" />
 
     <!--收藏-->
