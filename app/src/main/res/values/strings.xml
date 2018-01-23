@@ -403,5 +403,8 @@
     <string name="footprint">足迹</string>
     <string name="content">内容</string>
     <string name="all_select">全选</string>
+    <string name="expired">已失效</string>
+    <string name="cancel_collection">取消收藏</string>
+    <string name="i_have_a_bottom_line">我是有底线的</string>
 
 </resources>

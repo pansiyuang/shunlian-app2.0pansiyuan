@@ -209,6 +209,19 @@ public class MyCollectionAct extends BaseActivity {
         isSelectAll = !isSelectAll;
     }
 
+    /**
+     * 设置删除背景
+     * @param isLight
+     */
+    public void setDeleteBackgroundColor(boolean isLight){
+        if (isLight){
+            mtv_delete.setBackgroundColor(pink_color);
+        }else {
+            mtv_delete.setBackgroundColor(color_value_6c);
+            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
+    }
+
     @OnClick(R.id.mtv_manage)
     public void manage(){
         String s = mtv_manage.getText().toString();
@@ -218,6 +231,7 @@ public class MyCollectionAct extends BaseActivity {
                 mtv_manage.setText(getStringResouce(R.string.RegisterTwoAct_finish));
                 mrlayout_manage.setVisibility(View.VISIBLE);
             } else {
+                collectionFrag.finishManage();
                 mtv_manage.setText(getStringResouce(R.string.manage));
                 mrlayout_manage.setVisibility(View.GONE);
             }
