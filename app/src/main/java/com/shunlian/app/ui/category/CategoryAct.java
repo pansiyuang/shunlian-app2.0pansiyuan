@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -45,7 +46,7 @@ import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
  * Created by Administrator on 2018/1/2.
  */
 
-public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener, TextView.OnEditorActionListener {
+public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener{
 
     public static final int MODE_SINGLE = 1;
     public static final int MODE_DOUBLE = 2;
@@ -62,8 +63,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @BindView(R.id.tv_filter)
     TextView tv_filter;
 
-    @BindView(R.id.edt_keyword)
-    EditText edt_keyword;
+    @BindView(R.id.tv_keyword)
+    TextView tv_keyword;
 
     @BindView(R.id.tv_general_sort)
     TextView tv_general_sort;
@@ -127,6 +128,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         if (searchParam == null) {
             searchParam = new GoodsSearchParam();
         }
+        tv_keyword.setText(searchParam.keyword);
         presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam, true);
         mGoods = new ArrayList<>();
@@ -172,7 +174,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         tv_filter.setOnClickListener(this);
         tv_general_sort.setOnClickListener(this);
         tv_sales_volume.setOnClickListener(this);
-        edt_keyword.setOnEditorActionListener(this);
+        tv_keyword.setOnClickListener(this);
         expandViewTouchDelegate(tv_filter, TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f));
         expandViewTouchDelegate(miv_change_mode, TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f));
 
@@ -283,7 +285,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 setListMode(currentMode);
                 break;
             case R.id.tv_filter:
-                String keyword = edt_keyword.getText().toString();
+                String keyword = tv_keyword.getText().toString();
                 CategoryFiltrateAct.startAct(CategoryAct.this, keyword, searchParam.cid, searchParam.sort_type);
                 break;
             case R.id.tv_general_sort:
@@ -303,6 +305,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                     presenter.initPage();
                     presenter.getSearchGoods(searchParam, true);
                 }
+                break;
+            case R.id.tv_keyword:
+                SearchGoodsActivity.startAct(this);
                 break;
         }
         super.onClick(view);
@@ -359,19 +364,6 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     public void onDismiss() {
         miv_general_sort.setRotation(0);
-    }
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            String str = edt_keyword.getText().toString();
-            searchParam.keyword = str;
-            Common.hideKeyboard(edt_keyword);
-            presenter.initPage();
-            presenter.getSearchGoods(searchParam, true);
-            return true;
-        }
-        return false;
     }
 
     public HashMap<String, Object> classToMap(GoodsSearchParam entity) {
@@ -468,6 +460,14 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
             if (hasChange) {
                 presenter.initPage();
+                presenter.getSearchGoods(searchParam, true);
+            }
+        } else if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK) {
+            String keyword = data.getStringExtra("keyword");
+            if (!isEmpty(keyword)) {
+                searchParam.keyword = keyword;
+                presenter.initPage();
+                tv_keyword.setText(keyword);
                 presenter.getSearchGoods(searchParam, true);
             }
         }

@@ -28,9 +28,11 @@ import static com.shunlian.app.utils.Common.firstSmallText;
 public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
     public OnGoodsBuyOnclickListener mListener;
+    private List<GoodsDeatilEntity.Goods> mLists;
 
     public RecommmendAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
         super(context, isShowFooter, lists);
+        this.mLists = lists;
     }
 
     @Override
@@ -38,10 +40,15 @@ public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goo
         return new RecommmendViewHolder(LayoutInflater.from(context).inflate(R.layout.item_meger_recommmedn, parent, false));
     }
 
+    public void setData(List<GoodsDeatilEntity.Goods> lists) {
+        this.mLists = lists;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         RecommmendViewHolder viewHolder = (RecommmendViewHolder) holder;
-        final GoodsDeatilEntity.Goods goods = lists.get(position);
+        final GoodsDeatilEntity.Goods goods = mLists.get(position);
         GlideUtils.getInstance().loadImage(context, viewHolder.miv_meger_icon, goods.thumb);
         viewHolder.tv_meger_title.setText(goods.goods_title);
 
@@ -86,8 +93,8 @@ public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goo
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

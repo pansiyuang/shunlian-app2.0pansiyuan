@@ -31,7 +31,7 @@
             android:drawableLeft="@mipmap/icon_common_search_gray"
             android:drawablePadding="6.5dp"
             android:gravity="center_vertical"
-            android:hint="@string/search_goods"
+            android:hint="@string/search_promotion_goods"
             android:paddingLeft="10dp"
             android:textColor="@color/share_text"
             android:textSize="14dp" />

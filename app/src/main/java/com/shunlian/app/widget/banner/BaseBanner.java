@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreIndexEntity;
-import com.shunlian.app.ui.SideslipBaseActivity;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -452,7 +452,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (getContext() instanceof SideslipBaseActivity){
+        if (getContext() instanceof BaseActivity){
             if (ev.getX() < 100){
                 return false;
             }

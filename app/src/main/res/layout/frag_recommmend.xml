@@ -23,6 +23,7 @@
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:textColor="@color/new_gray"
+            android:visibility="gone"
             android:textSize="10sp" />
 
         <TextView

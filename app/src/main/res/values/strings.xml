@@ -147,7 +147,7 @@
     <string name="shop">店铺</string>
     <string name="shopping_cart">购物车</string>
     <string name="add_shopping_cart">加入购物车</string>
-    <string name="now_buy">立即购买</string>
+    <string name="now_buy">立刻购买</string>
     <string name="goods">商品</string>
     <string name="comment">评价</string>
     <string name="detail">详情</string>
@@ -155,6 +155,9 @@
     <string name="pic_text_share">图文分享</string>
     <string name="copy_link">复制链接</string>
     <string name="search">搜索</string>
+    <string name="hot_search">热搜</string>
+    <string name="search_goods">搜索商品</string>
+    <string name="clear_history">清空历史记录</string>
     <string name="message">消息</string>
     <string name="my_footprint">我的足迹</string>
     <string name="my_collection">我的收藏</string>
@@ -192,7 +195,7 @@
     <string name="close">关闭</string>
     <string name="go_to_shopcar">去购物车</string>
     <string name="move_to_collection">移入收藏</string>
-    <string name="search_goods">搜索促销商品</string>
+    <string name="search_promotion_goods">搜索促销商品</string>
     <string name="shopcar_is_empty">当前购物车为空</string>
     <string name="go_to_visit">去逛逛</string>
 
@@ -389,5 +392,16 @@
     <string name="day_quxiaotixing">取消提醒</string>
     <string name="day_yiyoutixing">已有%s人设置提醒</string>
     <string name="day_lijiqianggou">立即抢购</string>
+    <string name="day_setting_remind">设置提醒</string>
     <item name="tag_day_menu_id" type="id" />
+
+    <!--收藏-->
+    <string name="goods_collection">商品收藏</string>
+    <string name="store_collection">店铺收藏</string>
+    <string name="content_collection">内容收藏</string>
+    <string name="store">店铺</string>
+    <string name="footprint">足迹</string>
+    <string name="content">内容</string>
+    <string name="all_select">全选</string>
+
 </resources>

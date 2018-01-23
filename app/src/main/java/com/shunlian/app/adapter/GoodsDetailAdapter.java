@@ -20,6 +20,8 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.timer.DDPDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -89,6 +91,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
     private int detailBottomCouponPosition = -1;//详情下的优惠券位置
     private StoreVoucherAdapter couponAdapter;
+    private boolean isStartDownTime = false;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -543,21 +546,32 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      */
     private void handlerTitle(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleHolder){
-            TitleHolder mHolder = (TitleHolder) holder;
+            final TitleHolder mHolder = (TitleHolder) holder;
 
             int pref_length = 0;
-            String is_preferential = mGoodsEntity.is_preferential;
-            if (!isEmpty(is_preferential)){
-                GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
-                infoDrawable.setColor(Color.parseColor("#FB0036"));
-                mHolder.mtv_discount_info.setText(is_preferential);
-                mHolder.mtv_discount_info.setVisibility(View.VISIBLE);
-                pref_length = is_preferential.length();
+            final String is_preferential = mGoodsEntity.is_preferential;
+            if (mGoodsEntity.tt_act != null){
+                pref_length = 5;//显示天天特惠标题
+                mHolder.miv_pref.setVisibility(View.VISIBLE);
             }else {
-                mHolder.mtv_discount_info.setVisibility(View.GONE);
-                pref_length = 0;
+                mHolder.miv_pref.setVisibility(View.GONE);
+                if (!isEmpty(is_preferential)){//显示正常标题
+                    GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
+                    infoDrawable.setColor(Color.parseColor("#FB0036"));
+                    mHolder.mtv_discount_info.setText(is_preferential);
+                    mHolder.mtv_discount_info.setVisibility(View.VISIBLE);
+                    pref_length = is_preferential.length();
+                }else {
+                    mHolder.mtv_discount_info.setVisibility(View.GONE);
+                    pref_length = 0;
+                }
             }
-            mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+
+            if (pref_length != 0){
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+            }else {
+                mHolder.mtv_title.setText(mGoodsEntity.title);
+            }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);
             mHolder.mtv_marketPrice.setStrikethrough().setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
@@ -603,6 +617,67 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }else {
                 mHolder.mtv_recommend_goods.setVisibility(View.GONE);
             }
+
+
+            /**********天天特惠******************/
+            GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
+            if (tt_act != null) {
+                mHolder.mllayout_preferential.setVisibility(View.VISIBLE);
+                mHolder.mllayout_common_price.setVisibility(View.GONE);
+                mHolder.mtv_sales.setVisibility(View.GONE);
+
+                if ("1".equals(tt_act.sale)){//1：活动进行中   0：活动未开始
+                    mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
+                    mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_FEEBE7));
+                    mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
+                    mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
+                    mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
+                    mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
+                    mHolder.mtv_follow_count.setVisibility(View.GONE);
+                }else {
+                    mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
+                    mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
+                    mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
+                    mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
+                    mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
+                    mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_1B78C1));
+                    String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
+                    mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
+                    mHolder.mtv_follow_count.setVisibility(View.VISIBLE);
+                }
+
+                mHolder.mtv_pPrice.setText(mGoodsEntity.price);
+                mHolder.mtv_pmarketPrice.setStrikethrough()
+                        .setText(getString(R.string.rmb)
+                                .concat(mGoodsEntity.market_price));
+                mHolder.mtv_act_title.setText(tt_act.content);
+
+                if (!isStartDownTime) {
+                    String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
+                    mHolder.ddp_downTime.setDownTime(Integer.parseInt(time));
+                    mHolder.ddp_downTime.startDownTimer();
+                    isStartDownTime = true;
+                }
+                mHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        isStartDownTime = false;
+                        if (context instanceof GoodsDetailAct){
+                            GoodsDetailAct act = (GoodsDetailAct) context;
+                            if (act.isFinishing()){
+                                mHolder.ddp_downTime.cancelDownTimer();
+                                return;
+                            }
+                            act.refreshDetail();
+                        }
+                    }
+                });
+            }else {
+                mHolder.mtv_sales.setVisibility(View.VISIBLE);
+                mHolder.mllayout_common_price.setVisibility(View.VISIBLE);
+                mHolder.mllayout_preferential.setVisibility(View.GONE);
+            }
+            /**********天天特惠******************/
         }
     }
     /**
@@ -731,6 +806,36 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_recommend_goods)
         MyTextView mtv_recommend_goods;
+
+        @BindView(R.id.ddp_downTime)
+        DDPDownTimerView ddp_downTime;
+
+        @BindView(R.id.mllayout_preferential)
+        MyLinearLayout mllayout_preferential;
+
+        @BindView(R.id.mtv_pPrice)
+        MyTextView mtv_pPrice;
+
+        @BindView(R.id.mtv_pmarketPrice)
+        MyTextView mtv_pmarketPrice;
+
+        @BindView(R.id.mtv_act_title)
+        MyTextView mtv_act_title;
+
+        @BindView(R.id.mllayout_common_price)
+        MyLinearLayout mllayout_common_price;
+
+        @BindView(R.id.miv_pref)
+        MyImageView miv_pref;
+
+        @BindView(R.id.mrlayout_preBgL)
+        MyRelativeLayout mrlayout_preBgL;
+
+        @BindView(R.id.mrlayout_preBgR)
+        MyRelativeLayout mrlayout_preBgR;
+
+        @BindView(R.id.mtv_follow_count)
+        MyTextView mtv_follow_count;
 
         public TitleHolder(View itemView) {
             super(itemView);

@@ -125,9 +125,9 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
     }
 
     public void setAttributes(List<GoodsDeatilEntity.Attrs> attributes) {
+        attributeAdapter = new AttributeAdapter(mContext, false, mAttributes);
         this.mAttributes = attributes;
         if (attributeAdapter == null) {
-            attributeAdapter = new AttributeAdapter(mContext, false, mAttributes);
         } else {
             attributeAdapter.setData(mAttributes);
         }

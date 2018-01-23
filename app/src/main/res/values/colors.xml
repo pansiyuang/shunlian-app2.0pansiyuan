@@ -126,6 +126,7 @@
     <color name="value_fb6400">#FB6400</color>
     <color name="value_7898da">#7898da</color>
     <color name="value_f46c6f">#f46c6f</color>
+    <color name="value_25">#252525</color>
 
     <color name="action_text_color_normal">#cfcfcf</color>
     <color name="action_text_color_pressed">#353535</color>
@@ -139,9 +140,13 @@
     <color name="value_CDA101">#CDA101</color>
     <color name="value_A0A0A0">#A0A0A0</color>
     <color name="value_F5C243">#F5C243</color>
+    <color name="value_FEEBE7">#FEEBE7</color>
+    <color name="value_BF012A">#BF012A</color>
 
     <!--天天特惠-->
     <color name="value_2096F2">#2096F2</color>
+    <color name="value_DBEFFF">#DBEFFF</color>
+    <color name="value_1B78C1">#1B78C1</color>
     <color name="value_f3dcbe">#f3dcbe</color>
     <color name="value_FC6076">#FC6076</color>
     <color name="value_FF9A44">#FF9A44</color>
