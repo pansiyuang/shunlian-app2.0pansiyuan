@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -640,12 +639,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mHolder.seekbar_grow.setVisibility(View.VISIBLE);
                     mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
                     mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
-                    mHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            return true;
-                        }
-                    });
                 }else {
                     mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
                     mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
