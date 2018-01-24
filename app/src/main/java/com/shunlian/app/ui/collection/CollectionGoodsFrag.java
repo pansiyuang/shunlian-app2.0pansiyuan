@@ -19,7 +19,9 @@ import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionGoodsView;
@@ -64,6 +66,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     private CollectionGoodsAdapter adapter;
     private boolean isAllSelect;//是否全选
     private List<CollectionGoodsEntity.Goods> delLists;
+    private LinearLayoutManager manager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -71,11 +74,31 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     }
 
     @Override
+    protected void initListener() {
+        super.initListener();
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null){
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()){
+                        if (mPresenter != null){
+                            mPresenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
     protected void initData() {
         mPresenter = new CollectionGoodsPresenter(baseActivity,this);
 
         //列表
-        LinearLayoutManager manager = new LinearLayoutManager(baseActivity);
+        manager = new LinearLayoutManager(baseActivity);
         recy_view.setLayoutManager(manager);
 
         int space = TransformUtil.dip2px(baseActivity, 0.5f);
@@ -170,7 +193,22 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
      */
     @Override
     public void showFailureView(int request_code) {
-
+        LogUtil.zhLogW("showFailureView=========request_code="+request_code);
+        if (request_code == CollectionGoodsPresenter.DISPLAY_NET_FAIL){
+            visible(nei_empty);
+            nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPresenter != null){
+                        mPresenter.sort();
+                    }
+                }
+            });
+        }else {
+            if (adapter != null){
+                adapter.loadFailure();
+            }
+        }
     }
 
     /**
@@ -228,9 +266,22 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                 @Override
                 public void onItemClick(View view, int position) {
                     CollectionGoodsEntity.Goods goods = goodsLists.get(position);
-                    goods.isSelect = !goods.isSelect;
-                    adapter.notifyItemChanged(position);
-                    ((MyCollectionAct)baseActivity).setDeleteBackgroundColor(isSelectItem());
+                    if (adapter.isShowSelect) {
+                        goods.isSelect = !goods.isSelect;
+                        adapter.notifyItemChanged(position);
+                        ((MyCollectionAct) baseActivity).setDeleteBackgroundColor(isSelectItem());
+                    }else {
+                        GoodsDetailAct.startAct(baseActivity,goods.goods_id);
+                    }
+                }
+            });
+
+            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (mPresenter != null){
+                        mPresenter.onRefresh();
+                    }
                 }
             });
         }else {
@@ -327,6 +378,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             }
             adapter.notifyDataSetChanged();
         }
+        showEmptyPage(isEmpty(goodsLists));
     }
 
     private boolean isSelectItem(){

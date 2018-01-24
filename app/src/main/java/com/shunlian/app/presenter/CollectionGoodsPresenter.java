@@ -9,6 +9,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ICollectionGoodsView;
 
 import java.util.HashMap;
@@ -22,9 +23,11 @@ import retrofit2.Call;
  */
 
 public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView> {
-    private final int page_size = 20;
+    private final int page_size = 10;
     private String cate_id = "0";
     private String is_cut = "0";
+    public static final int DISPLAY_NET_FAIL = 100;//显示网络请求失败
+    public static final int NOT_DISPLAY_NET_FAIL = 200;//显示网络请求失败
 
     public CollectionGoodsPresenter(Context context, ICollectionGoodsView iView) {
         super(context, iView);
@@ -52,13 +55,13 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
      */
     @Override
     protected void initApi() {
-        collectionGoodsList(true, cate_id, is_cut);
+        collectionGoodsList(DISPLAY_NET_FAIL,true, cate_id, is_cut);
     }
 
     public void sort(){
         currentPage = 1;
         allPage = 1;
-        collectionGoodsList(true, cate_id, is_cut);
+        collectionGoodsList(DISPLAY_NET_FAIL,true, cate_id, is_cut);
     }
 
     public void setCateOrIscut(String cate_id, String is_cut){
@@ -70,7 +73,7 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
         }
     }
 
-    private void collectionGoodsList(boolean isShowLoading, String cate_id, String is_cut) {
+    private void collectionGoodsList(int netFail ,boolean isShowLoading, String cate_id, String is_cut) {
         Map<String, String> map = new HashMap<>();
         map.put("cate_id", cate_id);
         map.put("page", String.valueOf(currentPage));
@@ -81,15 +84,30 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
         Call<BaseEntity<CollectionGoodsEntity>> baseEntityCall = getAddCookieApiService()
                 .favoriteGoods(getRequestBody(map));
 
-        getNetData(isShowLoading, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CollectionGoodsEntity>>() {
+        getNetData(0,netFail,isShowLoading, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CollectionGoodsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CollectionGoodsEntity> entity) {
                 super.onSuccess(entity);
+                isLoading = false;
                 CollectionGoodsEntity data = entity.data;
                 iView.collectionGoodsCategoryList(data.cates);
                 currentPage = Integer.parseInt(data.page);
+                LogUtil.zhLogW("currentPage====="+currentPage);
                 allPage = Integer.parseInt(data.total_page);
                 iView.collectionGoodsList(currentPage, allPage, data.goods);
+                currentPage++;
+            }
+
+            @Override
+            public void onFailure() {
+                isLoading = false;
+                super.onFailure();
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                isLoading = false;
+                super.onErrorCode(code, message);
             }
         });
     }
@@ -120,9 +138,11 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
     @Override
     public void onRefresh() {
         super.onRefresh();
-        if (currentPage < allPage) {
-            currentPage++;
-            collectionGoodsList(false,cate_id, is_cut);
+        if (!isLoading) {
+            if (currentPage <= allPage) {
+                isLoading = true;
+                collectionGoodsList(NOT_DISPLAY_NET_FAIL,false, cate_id, is_cut);
+            }
         }
     }
 

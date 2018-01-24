@@ -197,8 +197,13 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.miv_shopping_car:
-                    if (mCarListener != null){
+                    if (mCarListener != null && !isShowSelect){
                         mCarListener.onGoodsId(v,getAdapterPosition());
+                    }
+                    if (isShowSelect){
+                        if (listener != null){
+                            listener.onItemClick(v,getAdapterPosition());
+                        }
                     }
                     break;
                 case R.id.mrlayout_item:
