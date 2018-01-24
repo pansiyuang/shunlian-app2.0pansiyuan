@@ -55,6 +55,27 @@
                 app:tv_margin_left="30"
                 app:tv_margin_top="26" />
 
+            <ProgressBar
+                android:id="@+id/seekbar_grow"
+                style="@style/CustomSeekbarStyle"
+                android:layout_width="106dp"
+                android:layout_height="12dp"
+                android:layout_alignLeft="@+id/mtv_pmarketPrice"
+                android:layout_below="@+id/mtv_pmarketPrice"
+                android:layout_marginTop="3dp"
+                />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mtv_pmarketPrice"
+                android:layout_alignLeft="@+id/mtv_pmarketPrice"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:textSize="9sp" />
+
             <!--9685人关注-->
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_follow_count"

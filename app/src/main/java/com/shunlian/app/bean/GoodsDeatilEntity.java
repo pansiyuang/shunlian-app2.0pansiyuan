@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +71,8 @@ public class GoodsDeatilEntity {
         public String sale;
         public String time;
         public String content;
+        public String percent;
+        public String str_surplus_stock;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
