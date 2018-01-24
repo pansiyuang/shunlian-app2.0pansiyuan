@@ -255,6 +255,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             adapter = new CollectionGoodsAdapter(baseActivity, goodsLists);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page,allPage);
+            //添加购物车
             adapter.setAddShoppingCarListener(new CollectionGoodsAdapter.IAddShoppingCarListener() {
                 @Override
                 public void onGoodsId(View view, int position) {
@@ -262,6 +263,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     mPresenter.getGoodsSku(goods.goods_id);
                 }
             });
+            //点击条目
             adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
@@ -275,13 +277,22 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     }
                 }
             });
-
+            //重新获取数据
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
                     if (mPresenter != null){
                         mPresenter.onRefresh();
                     }
+                }
+            });
+            //侧滑删除
+            adapter.setDelCollectionGoodsListener(new CollectionGoodsAdapter.IDelCollectionGoodsListener() {
+                @Override
+                public void onDelGoods(CollectionGoodsEntity.Goods goods) {
+                    mPresenter.goodsFavRemove(goods.favo_id);
+                    delLists = new ArrayList<>();
+                    delLists.add(goods);
                 }
             });
         }else {

@@ -31,7 +31,6 @@
             android:textColor="@color/new_text"
             android:textSize="18sp" />
 
-
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_manage"
             android:layout_width="wrap_content"
@@ -42,6 +41,15 @@
             android:text="@string/manage"
             android:textColor="@color/new_gray"
             android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_search"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/mtv_manage"
+            android:src="@mipmap/icon_common_search_gray" />
 
     </com.shunlian.app.widget.MyRelativeLayout>
 

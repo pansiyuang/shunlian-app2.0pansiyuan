@@ -68,6 +68,9 @@ public class MyCollectionAct extends BaseActivity {
     @BindView(R.id.mtv_delete)
     MyTextView mtv_delete;
 
+    @BindView(R.id.miv_search)
+    MyImageView miv_search;
+
     private int new_text;
     private int pink_color;
     private Map<String,CollectionFrag> fragments;
@@ -115,6 +118,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionGoodsFrag = (CollectionGoodsFrag) fragments.get(GOODS_FLAG);
         }
+        visible(miv_search);
         switchContent(collectionGoodsFrag);
     }
 
@@ -129,6 +133,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionStoreFrag = (CollectionStoreFrag) fragments.get(STORE_FLAG);
         }
+        visible(miv_search);
         switchContent(collectionStoreFrag);
     }
 
@@ -142,6 +147,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             footprintFrag = (FootprintFrag) fragments.get(FOOTPRINT_FLAG);
         }
+        gone(miv_search);
         switchContent(footprintFrag);
     }
 
@@ -155,6 +161,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionContentFrag = (CollectionContentFrag) fragments.get(CONTENT_FLAG);
         }
+        gone(miv_search);
         switchContent(collectionContentFrag);
     }
 
