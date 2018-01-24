@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lLayout_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,34 +57,15 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp" />
-
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="15dp">
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/new_text"
-            android:textSize="12sp" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
-    </com.shunlian.app.widget.MyRelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_title"
+        android:layout_marginTop="50dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_below="@id/rl_title"/>
+</com.shunlian.app.widget.MyRelativeLayout>

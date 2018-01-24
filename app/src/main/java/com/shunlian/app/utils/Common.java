@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.text.DecimalFormat;
@@ -60,14 +61,13 @@ import java.util.regex.Pattern;
  */
 
 public class Common {
-
-    private static Toast toast;
-    private static MyTextView mtv_toast;
+    private static Toast toast,toasts;
+    private static MyTextView mtv_toast,mtv_toasts;
     private static AbsoluteSizeSpan sizeSpan;
     private static SpannableStringBuilder ssb;
     private static PromptDialog promptDialog;
     private static ForegroundColorSpan colorSpan;
-
+    private static MyImageView miv_logo;
     //获取经纬度
     public static Location getGPS(final Activity activity){
         // 获取位置管理服务
@@ -164,6 +164,24 @@ public class Common {
         toast.show();
     }
 
+    public static void staticToasts(Context context,String content,int imgSource) {
+        if (toasts == null) {
+            View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
+            mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
+            miv_logo = (MyImageView) v.findViewById(R.id.miv_logo);
+            mtv_toasts.setText(content);
+            miv_logo.setImageResource(imgSource);
+            toasts = new Toast(context);
+//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
+            toasts.setDuration(Toast.LENGTH_SHORT);
+            toasts.setView(v);
+            toasts.setGravity(Gravity.CENTER, 0, 0);
+        } else {
+            mtv_toasts.setText(content);
+            miv_logo.setImageResource(imgSource);
+        }
+        toasts.show();
+    }
     //隐藏虚拟键盘
     public static void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

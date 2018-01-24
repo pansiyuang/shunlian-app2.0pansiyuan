@@ -11,6 +11,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActivityListEntity {
+    public String from;
     public List<Menu> menu;
     @JsonProperty(value = "data")//关键字重名
     public MData datas;
@@ -80,6 +81,9 @@ public class ActivityListEntity {
                 public String surplus_stock;
                 public String remind_status;
                 public String remind_count;
+                public int percent;
+                public String str_surplus_stock;
+                public String sale;
 
                 @Override
                 public String toString() {
