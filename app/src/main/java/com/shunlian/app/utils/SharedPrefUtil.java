@@ -32,10 +32,17 @@ import android.content.SharedPreferences;
 public class SharedPrefUtil {
 
     public static final String config = "shunlian_config";
+    public static final String shunlian_cache = "shunlian_cache";//缓存
+    public static final String COLLECTION_HISTORY = "collection";//收藏搜索历史
 
     public static SharedPreferences getsharedPreferences(){
         return Common.getApplicationContext().getSharedPreferences(config, Context.MODE_PRIVATE);
     }
+
+    public static SharedPreferences getsharedPreferences(String file_name){
+        return Common.getApplicationContext().getSharedPreferences(file_name, Context.MODE_PRIVATE);
+    }
+
 
     /**
      * 从sp中获取string
@@ -62,5 +69,33 @@ public class SharedPrefUtil {
      */
     public static void clearSharedPreferences(){
         getsharedPreferences().edit().clear().commit();
+    }
+
+
+    /**
+     * 从sp中获取string
+     * @param key
+     * @param def
+     * @return
+     */
+    public static String getCacheSharedPrf(String key,String def){
+        return getsharedPreferences(shunlian_cache).getString(key,def);
+    }
+
+    /**
+     * 将string保存到sp中
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean saveCacheSharedPrf(String key,String value){
+        return getsharedPreferences(shunlian_cache).edit().putString(key,value).commit();
+    }
+
+    /**
+     * 清空sp文件内容
+     */
+    public static void clearCacheSharedPref(){
+        getsharedPreferences(shunlian_cache).edit().clear().commit();
     }
 }

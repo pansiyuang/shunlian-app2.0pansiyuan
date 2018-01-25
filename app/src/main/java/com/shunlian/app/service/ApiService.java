@@ -923,10 +923,18 @@ public interface ApiService {
     Call<BaseEntity<FootprintEntity>> getmarklist(@Body RequestBody body);
 
     /**
-     * 收藏搜索
+     * 收藏商品搜索
      * @param body
      * @return
      */
     @POST("member/Myfavorite/search")
-    Call<BaseEntity<EmptyEntity>> collectionSearch(@Body RequestBody body);
+    Call<BaseEntity<CollectionGoodsEntity>> collectionGoodsSearch(@Body RequestBody body);
+
+    /**
+     * 收藏店铺搜索
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/search")
+    Call<BaseEntity<EmptyEntity>> collectionStoreSearch(@Body RequestBody body);
 }
