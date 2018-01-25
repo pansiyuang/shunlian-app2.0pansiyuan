@@ -13,7 +13,7 @@
         android:paddingTop="2dp">
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/edt_goods_search"
+            android:id="@+id/mtv_goods_search"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:layout_toLeftOf="@+id/tv_search_cancel"

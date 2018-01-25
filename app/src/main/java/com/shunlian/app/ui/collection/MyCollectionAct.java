@@ -9,6 +9,7 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -214,6 +215,11 @@ public class MyCollectionAct extends BaseActivity {
             mtv_delete.setBackgroundColor(color_value_6c);
         }
         isSelectAll = !isSelectAll;
+    }
+
+    @OnClick(R.id.miv_search)
+    public void clickSearch(){
+        SearchGoodsActivity.startActivityForResult(this, false,"goods");
     }
 
     /**

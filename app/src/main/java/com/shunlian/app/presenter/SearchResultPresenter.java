@@ -3,7 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.ICollectionSearchResultView;
 
@@ -28,6 +28,7 @@ public class SearchResultPresenter extends BasePresenter<ICollectionSearchResult
         super(context, iView);
         mKeyword = keyword;
         mType = type;
+        initApi();
     }
 
     /**
@@ -52,19 +53,24 @@ public class SearchResultPresenter extends BasePresenter<ICollectionSearchResult
     @Override
     protected void initApi() {
         Map<String,String> map = new HashMap<>();
-        map.put("keyWords",mKeyword);
+        map.put("key_words",mKeyword);
         map.put("type",mType);
         map.put("page",String.valueOf(currentPage));
         map.put("page_size",String.valueOf(page_size));
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
-                .collectionSearch(getRequestBody(map));
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
-            @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                super.onSuccess(entity);
-            }
-        });
+        if ("goods".equals(mType)){
+            Call<BaseEntity<CollectionGoodsEntity>> baseEntityCall = getAddCookieApiService()
+                    .collectionGoodsSearch(getRequestBody(map));
+            getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CollectionGoodsEntity>>(){
+                @Override
+                public void onSuccess(BaseEntity<CollectionGoodsEntity> entity) {
+                    super.onSuccess(entity);
+
+                }
+            });
+        }else {
+
+        }
     }
 }

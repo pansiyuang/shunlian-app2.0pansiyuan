@@ -6,8 +6,11 @@ import android.content.Intent;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.SearchResultPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.view.ICollectionSearchResultView;
+import com.shunlian.app.widget.MyTextView;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -17,9 +20,11 @@ import butterknife.OnClick;
 
 public class SearchResultAct extends BaseActivity implements ICollectionSearchResultView{
 
+    @BindView(R.id.mtv_goods_search)
+    MyTextView mtv_goods_search;
 
-    private String keyword;
-    private String type;
+    private String keyword = "衣服";
+    private String type = "goods";
     private SearchResultPresenter mPresenter;
 
     public static void startAct(Context context, String keyword, String type){
@@ -49,12 +54,19 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
         keyword = intent.getStringExtra("keyword");
         type = intent.getStringExtra("type");
 
+        mtv_goods_search.setText(keyword);
+
         mPresenter = new SearchResultPresenter(this,this,keyword,type);
     }
 
     @OnClick(R.id.tv_search_cancel)
     public void cancel(){
         finish();
+    }
+
+    @OnClick(R.id.mtv_goods_search)
+    public void search(){
+        SearchGoodsActivity.startActivityForResult(this,false,type);
     }
 
     /**
