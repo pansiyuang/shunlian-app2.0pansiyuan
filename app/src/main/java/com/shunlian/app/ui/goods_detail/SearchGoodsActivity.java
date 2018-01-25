@@ -78,9 +78,17 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private List<String> histotyTags = new ArrayList<>();
     private String currentKeyWord;
     private String currentFlag;
+    private boolean isShowHotSearch;
 
     public static void startActivityForResult(Activity context) {
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
+    }
+
+    public static void startActivityForResult(Activity context,boolean isShowHotSearch,String flag) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("isShowHotSearch",isShowHotSearch);
+        intent.putExtra("flag",flag);
+        context.startActivityForResult(intent,SEARCH_REQUEST_CODE);
     }
 
     public static void startAct(Activity context, String keyWord, String flag) {
@@ -99,15 +107,26 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        Intent intent = getIntent();
+        currentKeyWord = intent.getStringExtra("keyword");
+        currentFlag = intent.getStringExtra("flag");
+        isShowHotSearch = intent.getBooleanExtra("isShowHotSearch", true);
         presenter = new SearchGoodsPresenter(this, this);
-        presenter.getSearchTag();
+        if (isShowHotSearch) {
+            presenter.getSearchTag();
+        }
 
-        currentKeyWord = getIntent().getStringExtra("keyword");
-        currentFlag = getIntent().getStringExtra("flag");
         if (!isEmpty(currentKeyWord)) {
             edt_goods_search.setText(currentKeyWord);
         }
 
+        initKeywordSuggest();
+    }
+
+    /**
+     * 初始化关键字提示
+     */
+    private void initKeywordSuggest() {
         mTips = new ArrayList<>();
         simpleRecyclerAdapter = new SimpleRecyclerAdapter(this, R.layout.item_tips, mTips) {
             @Override
@@ -285,7 +304,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (!isEmpty(s.toString())) {
+        if (!isEmpty(s)) {
             changeSearchMode(true);
             presenter.getSearchTips(s.toString());
         } else {
