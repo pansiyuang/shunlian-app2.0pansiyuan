@@ -373,9 +373,17 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
      * @param goods
      */
     @Override
-    public void showGoodsSku(GoodsDeatilEntity.Goods goods) {
+    public void showGoodsSku(final GoodsDeatilEntity.Goods goods) {
         ParamDialog paramDialog = new ParamDialog(baseActivity,goods);
         paramDialog.show();
+        paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
+            @Override
+            public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+                if (mPresenter != null){
+                    mPresenter.addCart(goods.goods_id,sku.id,String.valueOf(count));
+                }
+            }
+        });
     }
 
     /**

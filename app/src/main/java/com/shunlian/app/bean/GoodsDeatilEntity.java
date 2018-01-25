@@ -328,6 +328,8 @@ public class GoodsDeatilEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GoodsInfo implements Parcelable {
         public String has_option;
+        public String stock;
+        public String thumb;
         public String price;
         public String max_price;
         public List<Specs> specs;
