@@ -67,6 +67,10 @@ public class MyCollectionAct extends BaseActivity {
 
     @BindView(R.id.mtv_delete)
     MyTextView mtv_delete;
+
+    @BindView(R.id.miv_search)
+    MyImageView miv_search;
+
     private int new_text;
     private int pink_color;
     private Map<String,CollectionFrag> fragments;
@@ -114,6 +118,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionGoodsFrag = (CollectionGoodsFrag) fragments.get(GOODS_FLAG);
         }
+        visible(miv_search);
         switchContent(collectionGoodsFrag);
     }
 
@@ -128,6 +133,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionStoreFrag = (CollectionStoreFrag) fragments.get(STORE_FLAG);
         }
+        visible(miv_search);
         switchContent(collectionStoreFrag);
     }
 
@@ -141,6 +147,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             footprintFrag = (FootprintFrag) fragments.get(FOOTPRINT_FLAG);
         }
+        gone(miv_search);
         switchContent(footprintFrag);
     }
 
@@ -154,6 +161,7 @@ public class MyCollectionAct extends BaseActivity {
         }else {
             collectionContentFrag = (CollectionContentFrag) fragments.get(CONTENT_FLAG);
         }
+        gone(miv_search);
         switchContent(collectionContentFrag);
     }
 
@@ -208,15 +216,32 @@ public class MyCollectionAct extends BaseActivity {
         isSelectAll = !isSelectAll;
     }
 
+    /**
+     * 设置删除背景
+     * @param isLight
+     */
+    public void setDeleteBackgroundColor(boolean isLight){
+        if (isLight){
+            mtv_delete.setBackgroundColor(pink_color);
+        }else {
+            mtv_delete.setBackgroundColor(color_value_6c);
+            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
+    }
+
     @OnClick(R.id.mtv_manage)
     public void manage(){
         String s = mtv_manage.getText().toString();
-        if (s.equals("管理")) {
-            mtv_manage.setText("完成");
-            mrlayout_manage.setVisibility(View.VISIBLE);
-        }else {
-            mtv_manage.setText("管理");
-            mrlayout_manage.setVisibility(View.GONE);
+        CollectionFrag collectionFrag = fragments.get(currentFrag);
+        if (collectionFrag.isClickManage()) {
+            if (s.equals(getStringResouce(R.string.manage))) {
+                mtv_manage.setText(getStringResouce(R.string.RegisterTwoAct_finish));
+                mrlayout_manage.setVisibility(View.VISIBLE);
+            } else {
+                collectionFrag.finishManage();
+                mtv_manage.setText(getStringResouce(R.string.manage));
+                mrlayout_manage.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -225,7 +250,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mllayout_goods)
     public void collectionGoods(){
-        mtv_title.setText("商品收藏");
+        mtv_title.setText(getStringResouce(R.string.goods_collection));
         currentFrag = GOODS_FLAG;
         showSataus(0);
         goodsFrag();
@@ -236,7 +261,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_store)
     public void collectionStore(){
-        mtv_title.setText("店铺收藏");
+        mtv_title.setText(getStringResouce(R.string.store_collection));
         currentFrag = STORE_FLAG;
         showSataus(1);
         storeFrag();
@@ -247,7 +272,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_footprint)
     public void collectionFootprint(){
-        mtv_title.setText("我的足迹");
+        mtv_title.setText(getStringResouce(R.string.my_footprint));
         currentFrag = FOOTPRINT_FLAG;
         showSataus(2);
         footprintFrag();
@@ -258,7 +283,7 @@ public class MyCollectionAct extends BaseActivity {
      */
     @OnClick(R.id.mrlayout_content)
     public void collectionContent(){
-        mtv_title.setText("内容收藏");
+        mtv_title.setText(getStringResouce(R.string.content_collection));
         currentFrag = CONTENT_FLAG;
         showSataus(3);
         contentFrag();
@@ -277,21 +302,5 @@ public class MyCollectionAct extends BaseActivity {
         //内容
         mtv_content.setTextColor(status == 3 ? pink_color : new_text);
         view_content.setVisibility(status == 3 ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    /**
-     * 处理空界面
-     * @param isShow true显示 否则隐藏
-     */
-    public void handleEmptyPage(boolean isShow){
-
-    }
-
-    /**
-     * 处理网络异常
-     * @param isShow true显示 否则隐藏
-     */
-    public void handleNetException(boolean isShow){
-
     }
 }

@@ -1,7 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-</LinearLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/store_coorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/store_ctLayout"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white_ash"
+                    app:layout_collapseMode="pin" />
+
+                <com.shunlian.app.widget.MyLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_collapseMode="pin">
+
+                    <com.shunlian.app.widget.MyRelativeLayout
+                        android:id="@+id/mrlayout_in_category"
+                        android:layout_width="105dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/rounded_rectangle_35px"
+                        app:rl_control_adapter="true"
+                        app:rl_margin_left="20">
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="分类"
+                            android:textColor="@color/new_text"
+                            android:textSize="14sp" />
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/icon_saixuan_gd"
+                            app:iv_control_adapter="true"
+                            app:iv_control_height="7"
+                            app:iv_control_width="13"
+                            app:iv_margin_right="20" />
+                    </com.shunlian.app.widget.MyRelativeLayout>
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_in_cate"
+                        android:layout_width="105dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/rounded_rectangle_35px"
+                        android:gravity="center"
+                        android:text="降价中"
+                        android:textColor="@color/new_text"
+                        android:textSize="14sp"
+                        app:tv_control_adapter="true"
+                        app:tv_margin_left="25" />
+
+                </com.shunlian.app.widget.MyLinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <com.shunlian.app.widget.empty.NetAndEmptyInterface
+            android:id="@+id/nei_empty"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.design.widget.CoordinatorLayout>
+
+
+    <!--分类-->
+    <FrameLayout
+        android:id="@+id/flayout_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorMask"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_ash"
+            android:orientation="vertical"
+            app:ll_control_adapter="true"
+            app:ll_control_height="530">
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_collapseMode="pin"
+                app:ll_control_adapter="true"
+                app:ll_margin_top="30">
+
+                <com.shunlian.app.widget.MyRelativeLayout
+                    android:id="@+id/mrlayout_out_category"
+                    android:layout_width="105dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/rounded_rectangle_35px"
+                    app:rl_control_adapter="true"
+                    app:rl_margin_left="20">
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="分类"
+                        android:textColor="@color/new_text"
+                        android:textSize="14sp" />
+
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_direction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/icon_saixuan_sq"
+                        app:iv_control_adapter="true"
+                        app:iv_control_height="7"
+                        app:iv_control_width="13"
+                        app:iv_margin_right="20" />
+                </com.shunlian.app.widget.MyRelativeLayout>
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_out_cate"
+                    android:layout_width="105dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/rounded_rectangle_35px"
+                    android:gravity="center"
+                    android:text="降价中"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp"
+                    app:tv_control_adapter="true"
+                    app:tv_margin_left="25" />
+
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+    </FrameLayout>
+
+
+</RelativeLayout>

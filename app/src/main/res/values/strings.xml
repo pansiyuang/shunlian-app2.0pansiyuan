@@ -393,6 +393,20 @@
     <string name="day_yiyoutixing">已有%s人设置提醒</string>
     <string name="day_lijiqianggou">立即抢购</string>
     <string name="day_setting_remind">设置提醒</string>
+    <string name="day_set_remind">设置提醒成功</string>
+    <string name="day_cancel_remind">取消提醒成功</string>
     <item name="tag_day_menu_id" type="id" />
+
+    <!--收藏-->
+    <string name="goods_collection">商品收藏</string>
+    <string name="store_collection">店铺收藏</string>
+    <string name="content_collection">内容收藏</string>
+    <string name="store">店铺</string>
+    <string name="footprint">足迹</string>
+    <string name="content">内容</string>
+    <string name="all_select">全选</string>
+    <string name="expired">已失效</string>
+    <string name="cancel_collection">取消收藏</string>
+    <string name="i_have_a_bottom_line">我是有底线的</string>
 
 </resources>

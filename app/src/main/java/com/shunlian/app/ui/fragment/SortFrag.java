@@ -151,6 +151,9 @@ public class SortFrag extends BaseFragment implements ISortFragView{
      */
     @Override
     public void categoryAll(final List<SortFragEntity.Toplist> categoryList) {
+        if (isEmpty(categoryList)){
+            return;
+        }
         SortFragEntity.Toplist toplist = categoryList.get(0);
         subRightList(toplist);
 

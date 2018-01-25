@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -634,6 +635,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
                     mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
                     mHolder.mtv_follow_count.setVisibility(View.GONE);
+                    mHolder.mtv_desc.setVisibility(View.VISIBLE);
+                    mHolder.seekbar_grow.setVisibility(View.VISIBLE);
+                    mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
+                    mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
                 }else {
                     mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
                     mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
@@ -644,6 +649,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
                     mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
                     mHolder.mtv_follow_count.setVisibility(View.VISIBLE);
+                    mHolder.seekbar_grow.setVisibility(View.GONE);
+                    mHolder.mtv_desc.setVisibility(View.GONE);
                 }
 
                 mHolder.mtv_pPrice.setText(mGoodsEntity.price);
@@ -654,6 +661,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                 if (!isStartDownTime) {
                     String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
+                    //time = "10";
                     mHolder.ddp_downTime.setDownTime(Integer.parseInt(time));
                     mHolder.ddp_downTime.startDownTimer();
                     isStartDownTime = true;
@@ -836,6 +844,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_follow_count)
         MyTextView mtv_follow_count;
+
+        @BindView(R.id.seekbar_grow)
+        ProgressBar seekbar_grow;
+
+        @BindView(R.id.mtv_desc)
+        MyTextView mtv_desc;
 
         public TitleHolder(View itemView) {
             super(itemView);

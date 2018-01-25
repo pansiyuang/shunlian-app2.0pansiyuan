@@ -26,6 +26,7 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
@@ -414,24 +415,6 @@ public interface ApiService {
      */
     @POST("/cart/multyremove")
     Call<BaseEntity<ShoppingCarEntity>> multyremove(@Body RequestBody body);
-
-    /**
-     * 收藏商品
-     *
-     * @param body
-     * @return
-     */
-    @POST("/member/goodsfavorite/add")
-    Call<BaseEntity<EmptyEntity>> addFavorite(@Body RequestBody body);
-
-    /**
-     * 取消收藏商品
-     *
-     * @param body
-     * @return
-     */
-    @POST("/member/goodsfavorite/remove")
-    Call<BaseEntity<String>> removeFavorite(@Body RequestBody body);
 
     /**
      * 购物车进入确认订单页
@@ -864,14 +847,6 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> callPlat(@Body RequestBody body);
 
     /**
-     * 清除详情页侧边栏足迹
-     * @param map
-     * @return
-     */
-    @GET("member/footermark/cleanSideMark")
-    Call<BaseEntity<EmptyEntity>> clearFootprint(@QueryMap Map<String,String> map);
-
-    /**
      * 热搜关键字与搜索历史
      * @return
      */
@@ -914,6 +889,15 @@ public interface ApiService {
      */
     @POST("activity/cancelRemind")
     Call<BaseEntity<EmptyEntity>> cancleRemind(@Body RequestBody body);
+
+    /**
+     * 收藏商品
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/favoriteGoods")
+    Call<BaseEntity<CollectionGoodsEntity>> favoriteGoods(@Body RequestBody body);
+
 
     /**
      * 获取足迹日历形式信息

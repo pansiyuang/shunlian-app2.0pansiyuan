@@ -62,7 +62,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.frag_footprint, null, false);
+        return inflater.inflate(R.layout.frag_footprint,null,false);
     }
 
     @Override
@@ -254,5 +254,15 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    /**
+     * 管理是否可点击
+     *
+     * @return
+     */
+    @Override
+    public boolean isClickManage() {
+        return false;
     }
 }

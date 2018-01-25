@@ -76,6 +76,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * 刷新整页数据
      */
     public void refreshDetail(){
+//        goods_id = "134";
         initApi();
     }
 
@@ -344,6 +345,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.activityState("0","1");
+                Common.staticToasts(context, Common.getResources()
+                        .getString(R.string.day_set_remind),R.mipmap.icon_common_duihao);
             }
         });
     }
@@ -364,6 +367,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.activityState("0","0");
+                Common.staticToasts(context, Common.getResources()
+                        .getString(R.string.day_cancel_remind),R.mipmap.icon_common_tanhao);
             }
         });
     }

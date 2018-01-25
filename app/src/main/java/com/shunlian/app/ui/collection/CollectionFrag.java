@@ -28,4 +28,10 @@ public abstract class CollectionFrag extends BaseFragment {
      */
     public abstract void finishManage();
 
+    /**
+     * 管理是否可点击
+     * @return
+     */
+    public abstract boolean isClickManage();
+
 }
