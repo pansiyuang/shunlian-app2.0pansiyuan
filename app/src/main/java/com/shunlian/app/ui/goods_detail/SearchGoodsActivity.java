@@ -17,7 +17,6 @@ import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.HotSearchEntity;
-import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
