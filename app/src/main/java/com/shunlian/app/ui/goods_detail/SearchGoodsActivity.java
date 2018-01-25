@@ -21,7 +21,6 @@ import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ISearchGoodsView;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
