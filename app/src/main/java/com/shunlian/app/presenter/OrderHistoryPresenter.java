@@ -63,11 +63,13 @@ public class OrderHistoryPresenter extends BasePresenter<ITagView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                if (entity.code == 1000) {
                     iView.delSuccess();
-                } else {
-                    iView.delFail(entity.message);
-                }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                iView.delFail(message);
+                super.onErrorCode(code, message);
             }
         });
     }

@@ -151,17 +151,14 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.Voucher>>() {
                 @Override
                 public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
-                    if (entity.code == 1000 && entity.data != null) {
-                        iView.OnGetVoucher(entity.data);
-                    } else {
-                        Common.staticToast(entity.message);
-                    }
+                    iView.OnGetVoucher(entity.data);
                     super.onSuccess(entity);
                 }
 
                 @Override
-                public void onFailure() {
-                    super.onFailure();
+                public void onErrorCode(int code, String message) {
+                    Common.staticToast(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {

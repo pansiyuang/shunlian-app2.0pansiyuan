@@ -22,6 +22,7 @@ import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ISearchGoodsView;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
@@ -79,6 +80,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private String currentKeyWord;
     private String currentFlag;
     private boolean isShowHotSearch;
+    private PromptDialog promptDialog;
 
     public static void startActivityForResult(Activity context) {
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
@@ -160,6 +162,23 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         tv_search_cancel.setOnClickListener(this);
         ll_clear.setOnClickListener(this);
         edt_goods_search.addTextChangedListener(this);
+
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_delete_history),
+                getStringResouce(R.string.SelectRecommendAct_sure),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.clearSearchHistory();
+                        promptDialog.dismiss();
+                    }
+                }, getStringResouce(R.string.errcode_cancel),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                });
         super.initListener();
     }
 
@@ -279,7 +298,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 finish();
                 break;
             case R.id.ll_clear:
-                presenter.clearSearchHistory();
+                promptDialog.show();
                 break;
         }
     }

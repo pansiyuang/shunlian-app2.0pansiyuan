@@ -97,11 +97,13 @@ public class SearchGoodsPresenter extends BasePresenter<ISearchGoodsView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
-                if (1000 == entity.code) {
-                    iView.clearSuccess(entity.message);
-                } else {
-                    Common.staticToast(entity.message);
-                }
+                iView.clearSuccess(entity.message);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }

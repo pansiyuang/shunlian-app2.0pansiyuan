@@ -82,18 +82,15 @@ public class ReturnRequestPresenter extends BasePresenter<IReturnRequestView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<RefundDetailEntity.RefundDetail>>() {
                 @Override
                 public void onSuccess(BaseEntity<RefundDetailEntity.RefundDetail> entity) {
-                    if (entity.code == 1000) {
-                        RefundDetailEntity.RefundDetail refundDetail = entity.data;
-                        iView.applyRefundSuccess(refundDetail.refund_id);
-                    } else {
-                        iView.applyRefundFail(entity.message);
-                    }
+                    RefundDetailEntity.RefundDetail refundDetail = entity.data;
+                    iView.applyRefundSuccess(refundDetail.refund_id);
                     super.onSuccess(entity);
                 }
 
                 @Override
-                public void onFailure() {
-                    super.onFailure();
+                public void onErrorCode(int code, String message) {
+                    iView.applyRefundFail(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {
@@ -117,7 +114,7 @@ public class ReturnRequestPresenter extends BasePresenter<IReturnRequestView> {
                 public void onDetailProgress(long written, long total, String tag) {
 
                 }
-            },file.getAbsolutePath());
+            }, file.getAbsolutePath());
             params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
         }
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
