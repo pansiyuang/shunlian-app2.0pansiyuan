@@ -15,10 +15,13 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.HotSearchEntity;
+import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ISearchGoodsView;
@@ -75,9 +78,18 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private List<String> mTips;
     private List<String> hotTags = new ArrayList<>();
     private List<String> histotyTags = new ArrayList<>();
+    private String currentKeyWord;
+    private String currentFlag;
 
-    public static void startAct(Activity context) {
+    public static void startActivityForResult(Activity context) {
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
+    }
+
+    public static void startAct(Activity context, String keyWord, String flag) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        intent.putExtra("flag", flag);
+        context.startActivity(intent);
     }
 
     @Override
@@ -91,6 +103,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         setStatusBarFontDark();
         presenter = new SearchGoodsPresenter(this, this);
         presenter.getSearchTag();
+
+        currentKeyWord = getIntent().getStringExtra("keyword");
+        currentFlag = getIntent().getStringExtra("flag");
+        if (!isEmpty(currentKeyWord)) {
+            edt_goods_search.setText(currentKeyWord);
+        }
 
         mTips = new ArrayList<>();
         simpleRecyclerAdapter = new SimpleRecyclerAdapter(this, R.layout.item_tips, mTips) {
@@ -106,9 +124,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra("keyword", mTips.get(position));
-                setResult(RESULT_OK, intent);
+                if ("sortFrag".equals(currentFlag)) {
+                    GoodsSearchParam param = new GoodsSearchParam();
+                    param.keyword = mTips.get(position);
+                    CategoryAct.startAct(SearchGoodsActivity.this, param);
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("keyword", mTips.get(position));
+                    setResult(RESULT_OK, intent);
+                }
                 finish();
             }
         });
@@ -158,9 +182,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra("keyword", entity.hot_keywords.get(position));
-                        setResult(RESULT_OK, intent);
+                        if ("sortFrag".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.hot_keywords.get(position);
+                            CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        } else {
+                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
+                            intent.putExtra("keyword", entity.hot_keywords.get(position));
+                            setResult(RESULT_OK, intent);
+                        }
                         finish();
                     }
                 });
@@ -179,9 +209,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra("keyword", entity.history_list.get(position));
-                        setResult(RESULT_OK, intent);
+                        if ("sortFrag".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.history_list.get(position);
+                            CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        } else {
+                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
+                            intent.putExtra("keyword", entity.history_list.get(position));
+                            setResult(RESULT_OK, intent);
+                        }
                         finish();
                     }
                 });

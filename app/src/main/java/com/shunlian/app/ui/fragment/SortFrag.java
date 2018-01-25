@@ -19,6 +19,7 @@ import com.shunlian.app.presenter.SortFragPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 import com.shunlian.app.widget.MyTextView;
@@ -80,13 +81,7 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     @OnClick(R.id.mtv_search)
     public void onClickSearch(){
         CharSequence text = mtv_search.getText();
-        if (!isEmpty(text)){
-            GoodsSearchParam param = new GoodsSearchParam();
-            param.keyword = text.toString();
-            CategoryAct.startAct(baseActivity,param);
-        }else {
-            CategoryAct.startAct(baseActivity,null);
-        }
+        SearchGoodsActivity.startAct(baseActivity,text.toString(),"sortFrag");
     }
     /**
      * 显示网络请求失败的界面
@@ -140,8 +135,9 @@ public class SortFrag extends BaseFragment implements ISortFragView{
                     int i = adapter.computeCount(position);
                     SortFragEntity.ItemList itemList = itemLists.get(position - i);
                     GoodsSearchParam param = new GoodsSearchParam();
-                    param.cid = itemList.g_cid;
+                    param.cid = itemList.id;
                     param.attr_data = itemList.attrs;
+                    param.keyword = itemList.name;
                     CategoryAct.startAct(baseActivity, param);
                 }
             }

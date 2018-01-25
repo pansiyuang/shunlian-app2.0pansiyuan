@@ -914,4 +914,18 @@ public interface ApiService {
      */
     @POST("activity/cancelRemind")
     Call<BaseEntity<EmptyEntity>> cancleRemind(@Body RequestBody body);
+
+    /**
+     * 获取足迹日历形式信息
+     * @return
+     */
+    @POST("member/footermark/getmarkCalendar")
+    Call<BaseEntity<CommonEntity>> getmarkCalendar(@Body RequestBody body);
+
+    /**
+     * 我的足迹列表
+     * @return
+     */
+    @POST("member/footermark/getmarklist")
+    Call<BaseEntity<FootprintEntity>> getmarklist(@Body RequestBody body);
 }
