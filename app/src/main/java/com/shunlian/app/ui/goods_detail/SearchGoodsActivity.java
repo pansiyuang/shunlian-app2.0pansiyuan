@@ -141,7 +141,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     @Override
     protected void initListener() {
         tv_search_cancel.setOnClickListener(this);
-        tv_clear.setOnClickListener(this);
+        ll_clear.setOnClickListener(this);
         edt_goods_search.addTextChangedListener(this);
         super.initListener();
     }
@@ -239,10 +239,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
 
     @Override
     public void clearSuccess(String str) {
-        Common.staticToast(str);
         histotyTags.clear();
         historyAdapter.notifyDataChanged();
         tv_history.setVisibility(View.GONE);
+        ll_clear.setVisibility(View.GONE);
     }
 
     @Override
@@ -261,7 +261,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             case R.id.tv_search_cancel:
                 finish();
                 break;
-            case R.id.tv_clear:
+            case R.id.ll_clear:
+                presenter.clearSearchHistory();
                 break;
         }
     }
