@@ -907,4 +907,26 @@ public interface ApiService {
     @POST("member/Myfavorite/favoriteShop")
     Call<BaseEntity<CollectionStoresEntity>> favoriteShop(@Body RequestBody body);
 
+
+    /**
+     * 获取足迹日历形式信息
+     * @return
+     */
+    @POST("member/footermark/getmarkCalendar")
+    Call<BaseEntity<CommonEntity>> getmarkCalendar(@Body RequestBody body);
+
+    /**
+     * 我的足迹列表
+     * @return
+     */
+    @POST("member/footermark/getmarklist")
+    Call<BaseEntity<FootprintEntity>> getmarklist(@Body RequestBody body);
+
+    /**
+     * 收藏搜索
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/search")
+    Call<BaseEntity<EmptyEntity>> collectionSearch(@Body RequestBody body);
 }

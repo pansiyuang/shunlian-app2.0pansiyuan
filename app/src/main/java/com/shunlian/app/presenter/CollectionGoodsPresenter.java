@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -117,7 +118,7 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
      *
      * @param goods_id
      */
-    public void getGoodsSku(String goods_id) {
+    public void getGoodsSku(final String goods_id) {
         Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
         sortAndMD5(map);
@@ -130,6 +131,10 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
                 super.onSuccess(entity);
                 GoodsDeatilEntity.Goods goods = new GoodsDeatilEntity.Goods();
                 goods.goods_info = entity.data;
+                goods.thumb = entity.data.thumb;
+                goods.stock = entity.data.stock;
+                goods.price = entity.data.price;
+                goods.goods_id = goods_id;
                 iView.showGoodsSku(goods);
             }
         });
@@ -167,5 +172,32 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
                 Common.staticToast(entity.message);
             }
         });
+    }
+
+    /**
+     * 添加购物车
+     * @param goods_id
+     * @param sku_id
+     * @param qty
+     */
+    public void addCart(String goods_id,String sku_id,String qty){
+        if (Common.loginPrompt()){
+            return;
+        }
+        Map<String,String> map = new HashMap<>();
+        map.put("goods_id",goods_id);
+        map.put("sku_id",sku_id);
+        map.put("qty",qty);
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<CateEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CateEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CateEntity> entity) {
+                super.onSuccess(entity);
+                Common.staticToast(entity.message);
+            }
+        });
+
     }
 }

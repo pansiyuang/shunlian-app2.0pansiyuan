@@ -96,17 +96,14 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                    if (entity.code == 1000) {
                         iView.CommentSuccess();
-                    } else {
-                        iView.CommentFail(entity.message);
-                    }
                     super.onSuccess(entity);
                 }
 
                 @Override
-                public void onFailure() {
-                    super.onFailure();
+                public void onErrorCode(int code, String message) {
+                    iView.CommentFail(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {
@@ -125,17 +122,14 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                    if (entity.code == 1000) {
-                        iView.CommentSuccess();
-                    } else {
-                        iView.CommentFail(entity.message);
-                    }
+                    iView.CommentSuccess();
                     super.onSuccess(entity);
                 }
 
                 @Override
-                public void onFailure() {
-                    super.onFailure();
+                public void onErrorCode(int code, String message) {
+                    iView.CommentFail(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {
@@ -158,17 +152,14 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                    if (entity.code == 1000) {
-                        iView.CommentSuccess();
-                    } else {
-                        iView.CommentFail(entity.message);
-                    }
+                    iView.CommentSuccess();
                     super.onSuccess(entity);
                 }
 
                 @Override
-                public void onFailure() {
-                    super.onFailure();
+                public void onErrorCode(int code, String message) {
+                    iView.CommentFail(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {

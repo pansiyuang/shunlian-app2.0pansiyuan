@@ -30,6 +30,7 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
 
     private IAddShoppingCarListener mCarListener;
     public boolean isShowSelect;
+    private IDelCollectionGoodsListener mDelListener;
 
     public CollectionGoodsAdapter(Context context,List<CollectionGoodsEntity.Goods> lists) {
         super(context, true, lists);
@@ -186,6 +187,7 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
 
             mrlayout_item.setOnClickListener(this);
             miv_shopping_car.setOnClickListener(this);
+            mtv_cancel_collection.setOnClickListener(this);
         }
 
         /**
@@ -211,18 +213,41 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
                         listener.onItemClick(v,getAdapterPosition());
                     }
                     break;
+                case R.id.mtv_cancel_collection:
+                    swipeMenuLayout.quickClose();
+                    if (mDelListener != null){
+                        mDelListener.onDelGoods(lists.get(getAdapterPosition()));
+                    }
+                    break;
             }
         }
 
 
     }
 
+    /**
+     * 添加购物车
+     * @param carListener
+     */
     public void setAddShoppingCarListener(IAddShoppingCarListener carListener){
-
         mCarListener = carListener;
     }
 
+    /**
+     * 删除商品
+     * @param delListener
+     */
+    public void setDelCollectionGoodsListener(IDelCollectionGoodsListener delListener){
+        mDelListener = delListener;
+    }
+
+
+
     public interface IAddShoppingCarListener{
         void onGoodsId(View view,int position);
+    }
+
+    public interface IDelCollectionGoodsListener{
+        void onDelGoods(CollectionGoodsEntity.Goods goods);
     }
 }

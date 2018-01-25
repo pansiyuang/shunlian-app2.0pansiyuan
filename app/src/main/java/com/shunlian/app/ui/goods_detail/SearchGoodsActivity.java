@@ -15,12 +15,14 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ISearchGoodsView;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
@@ -75,9 +77,27 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private List<String> mTips;
     private List<String> hotTags = new ArrayList<>();
     private List<String> histotyTags = new ArrayList<>();
+    private String currentKeyWord;
+    private String currentFlag;
+    private boolean isShowHotSearch;
+    private PromptDialog promptDialog;
 
-    public static void startAct(Activity context) {
+    public static void startActivityForResult(Activity context) {
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
+    }
+
+    public static void startActivityForResult(Activity context,boolean isShowHotSearch,String flag) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("isShowHotSearch",isShowHotSearch);
+        intent.putExtra("flag",flag);
+        context.startActivityForResult(intent,SEARCH_REQUEST_CODE);
+    }
+
+    public static void startAct(Activity context, String keyWord, String flag) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        intent.putExtra("flag", flag);
+        context.startActivity(intent);
     }
 
     @Override
@@ -89,9 +109,26 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        Intent intent = getIntent();
+        currentKeyWord = intent.getStringExtra("keyword");
+        currentFlag = intent.getStringExtra("flag");
+        isShowHotSearch = intent.getBooleanExtra("isShowHotSearch", true);
         presenter = new SearchGoodsPresenter(this, this);
-        presenter.getSearchTag();
+        if (isShowHotSearch) {
+            presenter.getSearchTag();
+        }
 
+        if (!isEmpty(currentKeyWord)) {
+            edt_goods_search.setText(currentKeyWord);
+        }
+
+        initKeywordSuggest();
+    }
+
+    /**
+     * 初始化关键字提示
+     */
+    private void initKeywordSuggest() {
         mTips = new ArrayList<>();
         simpleRecyclerAdapter = new SimpleRecyclerAdapter(this, R.layout.item_tips, mTips) {
             @Override
@@ -106,9 +143,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra("keyword", mTips.get(position));
-                setResult(RESULT_OK, intent);
+                if ("sortFrag".equals(currentFlag)) {
+                    GoodsSearchParam param = new GoodsSearchParam();
+                    param.keyword = mTips.get(position);
+                    CategoryAct.startAct(SearchGoodsActivity.this, param);
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("keyword", mTips.get(position));
+                    setResult(RESULT_OK, intent);
+                }
                 finish();
             }
         });
@@ -117,8 +160,25 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     @Override
     protected void initListener() {
         tv_search_cancel.setOnClickListener(this);
-        tv_clear.setOnClickListener(this);
+        ll_clear.setOnClickListener(this);
         edt_goods_search.addTextChangedListener(this);
+
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_delete_history),
+                getStringResouce(R.string.SelectRecommendAct_sure),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.clearSearchHistory();
+                        promptDialog.dismiss();
+                    }
+                }, getStringResouce(R.string.errcode_cancel),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        promptDialog.dismiss();
+                    }
+                });
         super.initListener();
     }
 
@@ -158,9 +218,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra("keyword", entity.hot_keywords.get(position));
-                        setResult(RESULT_OK, intent);
+                        if ("sortFrag".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.hot_keywords.get(position);
+                            CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        } else {
+                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
+                            intent.putExtra("keyword", entity.hot_keywords.get(position));
+                            setResult(RESULT_OK, intent);
+                        }
                         finish();
                     }
                 });
@@ -179,9 +245,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra("keyword", entity.history_list.get(position));
-                        setResult(RESULT_OK, intent);
+                        if ("sortFrag".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.history_list.get(position);
+                            CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        } else {
+                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
+                            intent.putExtra("keyword", entity.history_list.get(position));
+                            setResult(RESULT_OK, intent);
+                        }
                         finish();
                     }
                 });
@@ -203,10 +275,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
 
     @Override
     public void clearSuccess(String str) {
-        Common.staticToast(str);
         histotyTags.clear();
         historyAdapter.notifyDataChanged();
         tv_history.setVisibility(View.GONE);
+        ll_clear.setVisibility(View.GONE);
     }
 
     @Override
@@ -225,7 +297,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             case R.id.tv_search_cancel:
                 finish();
                 break;
-            case R.id.tv_clear:
+            case R.id.ll_clear:
+                promptDialog.show();
                 break;
         }
     }
@@ -250,7 +323,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (!isEmpty(s.toString())) {
+        if (!isEmpty(s)) {
             changeSearchMode(true);
             presenter.getSearchTips(s.toString());
         } else {

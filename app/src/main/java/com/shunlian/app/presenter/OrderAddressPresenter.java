@@ -75,11 +75,13 @@ public class OrderAddressPresenter extends BasePresenter<IOrderAddressView> {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     super.onSuccess(entity);
-                    if (entity.code == 1000) {
-                        iView.delAddressSuccess(addressId);
-                    } else {
-                        iView.delAddressFail();
-                    }
+                    iView.delAddressSuccess(addressId);
+                }
+
+                @Override
+                public void onErrorCode(int code, String message) {
+                    iView.delAddressFail();
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (JsonProcessingException e) {
