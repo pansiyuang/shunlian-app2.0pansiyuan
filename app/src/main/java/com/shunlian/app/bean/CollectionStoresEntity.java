@@ -1,6 +1,7 @@
 package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class CollectionStoresEntity {
 
     public List<Cates> cates;
+    @JsonProperty(value = "shop")//关键字重名
     public List<Store> stores;
     public String total_page;
     public String count;
