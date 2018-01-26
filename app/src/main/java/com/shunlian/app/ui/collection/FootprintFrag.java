@@ -1,13 +1,20 @@
 package com.shunlian.app.ui.collection;
 
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.FootAdapter;
+import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.CalendarEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.presenter.FootPrintPresenter;
@@ -16,6 +23,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFootPrintView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.calendar.CustomDayView;
+import com.shunlian.app.widget.calendar.Utils;
 import com.shunlian.app.widget.calendar.component.CalendarAttr;
 import com.shunlian.app.widget.calendar.component.CalendarViewAdapter;
 import com.shunlian.app.widget.calendar.interf.OnSelectDateListener;
@@ -52,6 +60,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @BindView(R.id.miv_next)
     MyImageView miv_next;
 
+    @BindView(R.id.content)
+    CoordinatorLayout content;
+
     private FootPrintPresenter printPresenter;
     private ArrayList<Calendar> currentCalendars = new ArrayList<>();
     private CalendarViewAdapter calendarAdapter;
@@ -59,10 +70,13 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private CalendarDate currentDate;
     private boolean initiated = false;
     private HashMap<String, String> markData = new HashMap<>();
+    private FootAdapter footAdapter;
+    private List<FootprintEntity.MarkData> markDataList;
+    private GridLayoutManager manager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.frag_footprint,null,false);
+        return inflater.inflate(R.layout.frag_footprint, null, false);
     }
 
     @Override
@@ -74,13 +88,34 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         initCurrentDate();
         initCalendarView();
         initSelectListener();
+
+        markDataList = new ArrayList<>();
+        manager = new GridLayoutManager(getContext(),3);
+        recycler_list.setLayoutManager(manager);
+        recycler_list.setNestedScrollingEnabled(false);
+
         printPresenter.getMarkCalendar(String.valueOf(currentDate.getYear()), String.valueOf(currentDate.month));
+        printPresenter.getMarklist(String.valueOf(currentDate.getYear()), String.valueOf(currentDate.month), false);
     }
 
     @Override
     protected void initListener() {
         miv_next.setOnClickListener(this);
         miv_pre.setOnClickListener(this);
+        recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (printPresenter != null) {
+                            printPresenter.onRefresh();
+                        }
+                    }
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
         super.initListener();
     }
 
@@ -218,10 +253,24 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             return;
         switch (v.getId()) {
             case R.id.miv_pre:
-                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() - 1);
+                if (calendarAdapter.getCalendarType() == CalendarAttr.CalendarType.WEEK) {
+                    Utils.scrollTo(content, recycler_list, calendar_view.getViewHeight(), 200);
+                    calendarAdapter.switchToMonth();
+                } else {
+                    Utils.scrollTo(content, recycler_list, calendar_view.getCellHeight(), 200);
+                    calendarAdapter.switchToWeek(calendar_view.getRowIndex());
+                }
+//                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() - 1);
                 break;
             case R.id.miv_next:
-                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() + 1);
+//                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() + 1);
+                if (calendarAdapter.getCalendarType() == CalendarAttr.CalendarType.WEEK) {
+                    Utils.scrollTo(content, recycler_list, calendar_view.getViewHeight(), 200);
+                    calendarAdapter.switchToMonth();
+                } else {
+                    Utils.scrollTo(content, recycler_list, calendar_view.getCellHeight(), 200);
+                    calendarAdapter.switchToWeek(calendar_view.getRowIndex());
+                }
                 break;
         }
     }
@@ -231,19 +280,43 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         if (!isEmpty(calendarEntityList)) {
             for (CalendarEntity calendarEntity : calendarEntityList) {
                 if ("1".equals(calendarEntity.has_data)) {
-                    LogUtil.httpLogW("getCurrentDate:" + calendarEntity.getCurrentDate());
                     markData.put(calendarEntity.getCurrentDate(), calendarEntity.has_data);
                 }
             }
-            LogUtil.httpLogW("getCalendarList:" + markData.size());
             calendarAdapter.setMarkData(markData);
             calendarAdapter.notifyDataChanged();
         }
     }
 
     @Override
-    public void getMarkList(List<FootprintEntity.MarkData> markDataList) {
-
+    public void getMarkList(List<FootprintEntity.MarkData> list, List<FootprintEntity.DateInfo> dateInfoList, int page, int allPage) {
+        if (page == 1) {
+            markDataList.clear();
+        }
+        if (!isEmpty(list)) {
+            markDataList.addAll(list);
+        }
+        LogUtil.httpLogW("markDataList:" + markDataList.size());
+        if (footAdapter == null) {
+            footAdapter = new FootAdapter(getContext(), true, markDataList);
+            recycler_list.setAdapter(footAdapter);
+            footAdapter.setPageLoading(page, allPage);
+            footAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    if (printPresenter != null) {
+                        printPresenter.onRefresh();
+                    }
+                }
+            });
+        } else {
+            footAdapter.setPageLoading(page, allPage);
+            if (markDataList.size() <= printPresenter.PAGE_SIZE)
+                footAdapter.notifyDataSetChanged();
+            else
+                footAdapter.notifyItemInserted(printPresenter.PAGE_SIZE);
+        }
+        footAdapter.notifyDataSetChanged();
     }
 
     @Override

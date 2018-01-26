@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.calendar.Utils;
 import com.shunlian.app.widget.calendar.interf.IDayRenderer;
 import com.shunlian.app.widget.calendar.interf.OnAdapterSelectListener;
@@ -69,14 +70,14 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        Log.e("ldf","setPrimaryItem");
+        LogUtil.httpLogW("setPrimaryItem");
         super.setPrimaryItem(container, position, object);
         this.currentPosition = position;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.e("ldf","instantiateItem");
+        LogUtil.httpLogW("instantiateItem");
         if (position < 2) {
             return null;
         }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_select"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginRight="5dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/img_shoppingcar_selected_n"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1月16日"
+        android:textSize="12sp"
+        android:textColor="@color/new_gray" />
+</LinearLayout>

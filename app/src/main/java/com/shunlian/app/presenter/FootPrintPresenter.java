@@ -5,8 +5,10 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFootPrintView;
 
 import java.util.HashMap;
@@ -20,6 +22,10 @@ import retrofit2.Call;
  */
 
 public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
+    public static final int PAGE_SIZE = 20;
+    private String currentYear;
+    private String currentMonth;
+
     public FootPrintPresenter(Context context, IFootPrintView iView) {
         super(context, iView);
     }
@@ -51,37 +57,58 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                if (1000 == entity.code) {
-                    CommonEntity commonEntity = entity.data;
-                    iView.getCalendarList(commonEntity.calendar);
-                } else {
-                    Common.staticToast(entity.message);
-                }
+                CommonEntity commonEntity = entity.data;
+                iView.getCalendarList(commonEntity.calendar);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }
 
-    public void getMarklist(String year, String month, String page, String pageSize) {
+    public void getMarklist(String year, String month, boolean isShowLoading) {
+        currentYear = year;
+        currentMonth = month;
         Map<String, String> map = new HashMap<>();
         map.put("year", year);
         map.put("month", month);
-        map.put("page", page);
-        map.put("pageSize", pageSize);
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<FootprintEntity>> baseEntityCall = getAddCookieApiService().getmarklist(requestBody);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FootprintEntity>>() {
+        getNetData(isShowLoading, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FootprintEntity>>() {
             @Override
             public void onSuccess(BaseEntity<FootprintEntity> entity) {
                 super.onSuccess(entity);
-                if (1000 == entity.code) {
-                    FootprintEntity footprintEntity = entity.data;
-                    iView.getMarkList(footprintEntity.mark_data);
-                } else {
-                    Common.staticToast(entity.message);
-                }
+                isLoading = false;
+                FootprintEntity footprintEntity = entity.data;
+                iView.getMarkList(footprintEntity.mark_data, footprintEntity.date_info, currentPage, allPage);
+                currentPage = Integer.parseInt(entity.data.page);
+                allPage = Integer.parseInt(entity.data.total_page);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading) {
+            isLoading = true;
+            if (currentPage <= allPage) {
+                currentPage++;
+                getMarklist(currentYear, currentMonth, false);
+            }
+        }
     }
 }

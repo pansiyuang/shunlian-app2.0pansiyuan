@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.calendar.Const;
 import com.shunlian.app.widget.calendar.Utils;
 import com.shunlian.app.widget.calendar.interf.IDayRenderer;
@@ -147,7 +148,7 @@ public class CalendarRenderer {
                 seedDate.year,
                 seedDate.month,
                 attr.getWeekArrayType());
-        Log.e("ldf", "firstDayPosition = " + firstDayPosition);
+        LogUtil.httpLogW( "firstDayPosition = " + firstDayPosition);
 
         int day = 0;
         for (int row = 0; row < Const.TOTAL_ROW; row++) {

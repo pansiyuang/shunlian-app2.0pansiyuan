@@ -2,6 +2,7 @@ package com.shunlian.app.widget.calendar.model;
 
 import android.util.Log;
 
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.calendar.Utils;
 
 import java.io.Serializable;
@@ -44,14 +45,14 @@ public class CalendarDate implements Serializable {
         CalendarDate modifyDate;
         if (day > currentMonthDays) {
             modifyDate = new CalendarDate(this.year, this.month, this.day);
-            Log.e("ldf", "移动天数过大");
+            LogUtil.httpLogW( "移动天数过大");
         } else if (day > 0) {
             modifyDate = new CalendarDate(this.year, this.month, day);
         } else if (day > 0 - lastMonthDays) {
             modifyDate = new CalendarDate(this.year, this.month - 1, lastMonthDays + day);
         } else {
             modifyDate = new CalendarDate(this.year, this.month, this.day);
-            Log.e("ldf", "移动天数过大");
+            LogUtil.httpLogW("移动天数过大");
         }
         return modifyDate;
     }

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.calendar.Utils;
 import com.shunlian.app.widget.calendar.component.CalendarViewAdapter;
 import com.shunlian.app.widget.calendar.view.MonthPager;
@@ -55,7 +56,7 @@ public class MonthPagerBehavior extends CoordinatorLayout.Behavior<MonthPager> {
             }
 
             child.offsetTopAndBottom(dy);
-            Log.e("ldf", "onDependentViewChanged = " + dy);
+            LogUtil.httpLogW("onDependentViewChanged = " + dy);
 
         }
 

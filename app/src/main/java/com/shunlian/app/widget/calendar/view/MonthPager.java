@@ -4,12 +4,11 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.calendar.behavior.MonthPagerBehavior;
 import com.shunlian.app.widget.calendar.component.CalendarViewAdapter;
-
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
 public class MonthPager extends ViewPager {
@@ -71,7 +70,7 @@ public class MonthPager extends ViewPager {
     @Override
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
         if (hasPageChangeListener) {
-            Log.e("ldf", "MonthPager Just Can Use Own OnPageChangeListener");
+            LogUtil.httpLogW("MonthPager Just Can Use Own OnPageChangeListener");
         } else {
             super.addOnPageChangeListener(listener);
         }
@@ -79,7 +78,7 @@ public class MonthPager extends ViewPager {
 
     public void addOnPageChangeListener(OnPageChangeListener listener) {
         this.monthPageChangeListener = listener;
-        Log.e("ldf", "MonthPager Just Can Use Own OnPageChangeListener");
+        LogUtil.httpLogW("MonthPager Just Can Use Own OnPageChangeListener");
     }
 
     public void setScrollable(boolean scrollable) {
@@ -122,7 +121,7 @@ public class MonthPager extends ViewPager {
 
     public int getTopMovableDistance() {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
-        if(calendarViewAdapter == null) {
+        if (calendarViewAdapter == null) {
             return cellHeight;
         }
         rowIndex = calendarViewAdapter.getPagers().get(currentPosition % 3).getSelectedRowIndex();
@@ -153,7 +152,7 @@ public class MonthPager extends ViewPager {
     public int getRowIndex() {
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
         rowIndex = calendarViewAdapter.getPagers().get(currentPosition % 3).getSelectedRowIndex();
-        Log.e("ldf", "getRowIndex = " + rowIndex);
+        LogUtil.httpLogW("getRowIndex = " + rowIndex);
         return rowIndex;
     }
 
