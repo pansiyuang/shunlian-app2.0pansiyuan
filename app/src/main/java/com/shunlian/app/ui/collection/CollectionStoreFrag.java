@@ -39,6 +39,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.shunlian.app.R2.string.goods;
+
 /**
  * Created by Administrator on 2018/1/22.
  * 收藏店铺
@@ -266,6 +268,15 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 }
             });
 
+            //侧滑删除
+            adapter.setDelCollectionStoresListener(new CollectionStoresAdapter.IDelCollectionStoresListener() {
+                @Override
+                public void onDelStores(CollectionStoresEntity.Store store) {
+                    mPresenter.storesFavRemove(store.id);
+                    delLists = new ArrayList<>();
+                    delLists.add(store);
+                }
+            });
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
