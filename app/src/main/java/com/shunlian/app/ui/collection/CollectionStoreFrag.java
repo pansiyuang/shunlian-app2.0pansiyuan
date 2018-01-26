@@ -128,7 +128,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             CollectionStoresEntity.Store store = stores.get(i);
             if (store.isSelect){
                 sb.append(store.id);
-                sb.append(",");
+                if (i<stores.size()-1){
+                    sb.append(",");
+                }
                 delLists.add(store);
             }
         }
@@ -330,7 +332,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 @Override
                 public void onItemClick(View view, int position) {
                     CollectionStoresEntity.Cates cate = cates.get(position);
-                    selectId = cate.id;
+                    if (cate.id!=null){
+                        selectId = cate.id;
+                    }
                     mPresenter.setCate(cate.id);
                     cateAdapter.notifyDataSetChanged();
                     gone(flayout_category);
