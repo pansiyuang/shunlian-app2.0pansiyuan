@@ -15,7 +15,6 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CollectionStoresAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
-import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
@@ -401,7 +400,13 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             }
             adapter.notifyDataSetChanged();
         }
-        showEmptyPage(isEmpty(stores));
+        boolean empty = isEmpty(stores);
+        showEmptyPage(empty);
+        if (!empty) {
+            ((MyCollectionAct) baseActivity).setManageState(selectState());
+        }else {
+            ((MyCollectionAct) baseActivity).recoveryManage(this);
+        }
     }
 
     private boolean isSelectItem() {
