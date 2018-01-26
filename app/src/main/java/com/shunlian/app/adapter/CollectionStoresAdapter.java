@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
@@ -27,6 +28,7 @@ import butterknife.BindView;
 
 public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStoresEntity.Store> {
     public boolean isShowSelect;
+    private IDelCollectionStoresListener mDelListener;
 
     public CollectionStoresAdapter(Context context, List<CollectionStoresEntity.Store> lists) {
         super(context, true, lists);
@@ -174,6 +176,7 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
         public CollectionStoresHolder(View itemView) {
             super(itemView);
             mtv_cancel_collection.setWHProportion(175,140);
+            mtv_cancel_collection.setOnClickListener(this);
             mrlayout_new.setOnClickListener(this);
             mrlayout_item.setOnClickListener(this);
         }
@@ -197,6 +200,12 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
                         isShow=true;
                     }
                     break;
+                case R.id.mtv_cancel_collection:
+                    swipeMenuLayout.quickClose();
+                    if (mDelListener != null){
+                        mDelListener.onDelStores(lists.get(getAdapterPosition()));
+                    }
+                    break;
                 default:
                     if (listener != null){
                         listener.onItemClick(v,getAdapterPosition());
@@ -205,7 +214,17 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
             }
         }
 
-
     }
 
+    /**
+     * 删除店铺
+     * @param delListener
+     */
+    public void setDelCollectionStoresListener(IDelCollectionStoresListener delListener){
+        mDelListener = delListener;
+    }
+
+    public interface IDelCollectionStoresListener{
+        void onDelStores(CollectionStoresEntity.Store store);
+    }
 }

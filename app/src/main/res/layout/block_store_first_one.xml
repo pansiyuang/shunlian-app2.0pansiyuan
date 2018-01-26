@@ -47,7 +47,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descl"
                 android:layout_width="match_parent"
-                android:layout_height="26.5dp"
+                android:layout_height="wrap_content"
                 android:text="第三方的身份是"
                 android:lines="2"
                 android:ellipsize="end"
@@ -106,7 +106,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_descr"
                 android:layout_width="match_parent"
-                android:layout_height="26.5dp"
+                android:layout_height="wrap_content"
                 android:text="第三方的身份是"
                 android:lines="2"
                 android:ellipsize="end"

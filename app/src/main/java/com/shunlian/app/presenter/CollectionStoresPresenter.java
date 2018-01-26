@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -126,14 +127,13 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
         if (Common.loginPrompt()){
             return;
         }
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("ids",ids);
         sortAndMD5(map);
-        RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavoriteRemove(requestBody);
-        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().removeFavoShop(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<CommonEntity> entity) {
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.delSuccess();
                 Common.staticToast(entity.message);
