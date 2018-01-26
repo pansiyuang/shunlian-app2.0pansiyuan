@@ -406,16 +406,16 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     /*
     是否选择条目
      */
-    private boolean isSelectItem(){
-        if (!isEmpty(goodsLists)){
-            for (CollectionGoodsEntity.Goods goods: goodsLists){
-                if (goods.isSelect){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    private boolean isSelectItem(){
+//        if (!isEmpty(goodsLists)){
+//            for (CollectionGoodsEntity.Goods goods: goodsLists){
+//                if (goods.isSelect){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
     /*
     是否全选  0 全选  1 部分选择 2 全不选
      */
