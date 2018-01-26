@@ -7,6 +7,7 @@ import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -209,6 +210,28 @@ public class SearchResultPresenter extends BasePresenter<ICollectionSearchResult
         getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.delSuccess();
+                Common.staticToast(entity.message);
+            }
+        });
+    }
+
+    /**
+     * 移除收藏
+     * @param ids
+     */
+    public void storesFavRemove(String ids){
+        if (Common.loginPrompt()){
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("ids",ids);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().removeFavoShop(map);
+        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.delSuccess();
                 Common.staticToast(entity.message);

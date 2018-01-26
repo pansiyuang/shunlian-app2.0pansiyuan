@@ -54,8 +54,10 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
     private List<CollectionGoodsEntity.Goods> goodsLists = new ArrayList<>();
     private List<CollectionStoresEntity.Store> storeLists = new ArrayList<>();
     private List<CollectionGoodsEntity.Goods> delGoodsLists;
+    private List<CollectionStoresEntity.Store> delStoreLists;
     private CollectionGoodsAdapter goodsAdapter;
     private CollectionStoresAdapter storeAdapter;
+    private LinearLayoutManager manager;
 
     public static void startAct(Context context, String keyword, String type){
         Intent intent = new Intent(context,SearchResultAct.class);
@@ -73,6 +75,25 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
         return R.layout.act_search_result;
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        recycler_search.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null){
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()){
+                        if (mPresenter != null){
+                            mPresenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * 初始化数据
      */
@@ -88,7 +109,7 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
 
         mPresenter = new SearchResultPresenter(this,this,keyword,type);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         recycler_search.setLayoutManager(manager);
         int space = TransformUtil.dip2px(this, 0.5f);
         recycler_search.addItemDecoration(new VerticalItemDecoration(space,
@@ -229,6 +250,16 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
                 }
             });
 
+            //侧滑删除
+            storeAdapter.setDelCollectionStoresListener(new CollectionStoresAdapter.IDelCollectionStoresListener() {
+                @Override
+                public void onDelStores(CollectionStoresEntity.Store store) {
+                    mPresenter.storesFavRemove(store.id);
+                    delStoreLists = new ArrayList<>();
+                    delStoreLists.add(store);
+                }
+            });
+
             storeAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
@@ -269,14 +300,26 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
      */
     @Override
     public void delSuccess() {
-        if (!isEmpty(delGoodsLists)){
-            for (CollectionGoodsEntity.Goods goods : delGoodsLists){
-                goodsLists.remove(goods);
+        if ("goods".equals(type)){
+            if (!isEmpty(delGoodsLists)){
+                for (CollectionGoodsEntity.Goods goods : delGoodsLists){
+                    goodsLists.remove(goods);
+                }
+                goodsAdapter.notifyDataSetChanged();
             }
-            goodsAdapter.notifyDataSetChanged();
+            delGoodsLists = null;
+            showEmptyPage(isEmpty(goodsLists));
+        }else {
+            if (!isEmpty(delStoreLists)){
+                for (CollectionStoresEntity.Store store : delStoreLists){
+                    storeLists.remove(store);
+                }
+                storeAdapter.notifyDataSetChanged();
+            }
+            delStoreLists = null;
+            showEmptyPage(isEmpty(storeLists));
         }
-        delGoodsLists = null;
-        showEmptyPage(isEmpty(goodsLists));
+
     }
 
     private void showEmptyPage(boolean isShow){
