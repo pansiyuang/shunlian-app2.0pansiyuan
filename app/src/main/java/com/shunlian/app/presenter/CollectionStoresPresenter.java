@@ -2,6 +2,7 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
