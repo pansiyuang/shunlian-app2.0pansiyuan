@@ -219,7 +219,13 @@ public class MyCollectionAct extends BaseActivity {
 
     @OnClick(R.id.miv_search)
     public void clickSearch(){
-        SearchGoodsActivity.startActivityForResult(this, false,"goods");
+        String flag = null;
+        if (currentFrag == GOODS_FLAG) {
+            flag = "goods";
+        }else {
+            flag = "shop";
+        }
+        SearchGoodsActivity.startActivityForResult(this, false, flag);
     }
 
     /**

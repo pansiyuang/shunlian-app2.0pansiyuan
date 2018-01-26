@@ -936,5 +936,5 @@ public interface ApiService {
      * @return
      */
     @POST("member/Myfavorite/search")
-    Call<BaseEntity<EmptyEntity>> collectionStoreSearch(@Body RequestBody body);
+    Call<BaseEntity<CollectionStoresEntity>> collectionStoreSearch(@Body RequestBody body);
 }

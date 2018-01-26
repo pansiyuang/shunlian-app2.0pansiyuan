@@ -33,7 +33,8 @@ public class SharedPrefUtil {
 
     public static final String config = "shunlian_config";
     public static final String shunlian_cache = "shunlian_cache";//缓存
-    public static final String COLLECTION_HISTORY = "collection";//收藏搜索历史
+    public static final String COLLECTION_GOODS_HISTORY = "collection_goods";//收藏搜索商品历史
+    public static final String COLLECTION_STORE_HISTORY = "collection_shop";//收藏搜索店铺历史
 
     public static SharedPreferences getsharedPreferences(){
         return Common.getApplicationContext().getSharedPreferences(config, Context.MODE_PRIVATE);
