@@ -91,11 +91,11 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
     }
 
-    public static void startActivityForResult(Activity context,boolean isShowHotSearch,String flag) {
+    public static void startActivityForResult(Activity context, boolean isShowHotSearch, String flag) {
         Intent intent = new Intent(context, SearchGoodsActivity.class);
-        intent.putExtra("isShowHotSearch",isShowHotSearch);
-        intent.putExtra("flag",flag);
-        context.startActivityForResult(intent,SEARCH_REQUEST_CODE);
+        intent.putExtra("isShowHotSearch", isShowHotSearch);
+        intent.putExtra("flag", flag);
+        context.startActivityForResult(intent, SEARCH_REQUEST_CODE);
     }
 
     public static void startAct(Activity context, String keyWord, String flag) {
@@ -124,30 +124,32 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         }
         if (!isEmpty(currentKeyWord)) {
             edt_goods_search.setText(currentKeyWord);
+            edt_goods_search.setFocusable(true);
+            edt_goods_search.setSelection(currentKeyWord.length());
         }
-        if (!isShowHotSearch){
+        if (!isShowHotSearch) {
             setHistoryAdapter();
         }
 
         initKeywordSuggest();
     }
 
-    private void setHistoryAdapter(){
+    private void setHistoryAdapter() {
         histotyTags.clear();
         edt_goods_search.setHint(getStringResouce(R.string.search_collection));
         String cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, "");
-        if (!isEmpty(cacheSharedPrf)){
+        if (!isEmpty(cacheSharedPrf)) {
             taglayout_history.setVisibility(View.VISIBLE);
             tv_history.setVisibility(View.VISIBLE);
             ll_clear.setVisibility(View.VISIBLE);
             String[] split = cacheSharedPrf.split(",");
-            for (String s : split){
-                if (isEmpty(s)){
+            for (String s : split) {
+                if (isEmpty(s)) {
                     continue;
                 }
                 histotyTags.add(s);
             }
-        }else {
+        } else {
             taglayout_history.setVisibility(View.GONE);
             tv_history.setVisibility(View.GONE);
             ll_clear.setVisibility(View.GONE);
@@ -167,7 +169,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 String s = histotyTags.get(position);
-                SearchResultAct.startAct(SearchGoodsActivity.this,s,currentFlag);
+                SearchResultAct.startAct(SearchGoodsActivity.this, s, currentFlag);
                 finish();
                 return true;
             }
@@ -217,23 +219,29 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Editable text = edt_goods_search.getText();
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                    if (!isShowHotSearch){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (!isShowHotSearch) {
                         if (!isEmpty(text)) {
                             String cacheSharedPrf = SharedPrefUtil
                                     .getCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, "");
                             String concat = cacheSharedPrf.concat(text.toString().concat(","));
-                            SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY,concat);
+                            SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, concat);
                             SearchResultAct.startAct(SearchGoodsActivity.this,
-                                    text.toString(),currentFlag);
+                                    text.toString(), currentFlag);
                             finish();
                         }
                         return true;
-                    }else {
+                    } else {
                         if (!isEmpty(text)) {
-                            Intent intent = new Intent();
-                            intent.putExtra("keyword",text.toString());
-                            setResult(RESULT_OK, intent);
+                            if ("sortFrag".equals(currentFlag)) {
+                                GoodsSearchParam param = new GoodsSearchParam();
+                                param.keyword = text.toString();
+                                CategoryAct.startAct(SearchGoodsActivity.this, param);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.putExtra("keyword", text.toString());
+                                setResult(RESULT_OK, intent);
+                            }
                             finish();
                         }
                         return true;
@@ -251,7 +259,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     public void onClick(View v) {
                         if (isShowHotSearch) {
                             presenter.clearSearchHistory();
-                        }else {
+                        } else {
                             SharedPrefUtil.clearCacheSharedPref();
                             clearSuccess("");
                         }
@@ -358,7 +366,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     }
 
     @Override
-    public void  clearSuccess(String str) {
+    public void clearSuccess(String str) {
         histotyTags.clear();
         historyAdapter.notifyDataChanged();
         tv_history.setVisibility(View.GONE);
