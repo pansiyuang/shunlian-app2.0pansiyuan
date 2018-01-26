@@ -122,9 +122,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             CollectionStoresEntity.Store store = stores.get(i);
             if (store.isSelect) {
                 sb.append(store.id);
-                if (i < stores.size() - 1) {
-                    sb.append(",");
-                }
+                sb.append(",");
                 delLists.add(store);
             }
         }
@@ -404,14 +402,14 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         showEmptyPage(isEmpty(stores));
     }
 
-    private boolean isSelectItem() {
-        if (!isEmpty(stores)) {
-            for (CollectionStoresEntity.Store store : stores) {
-                if (store.isSelect) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    private boolean isSelectItem() {
+//        if (!isEmpty(stores)) {
+//            for (CollectionStoresEntity.Store store : stores) {
+//                if (store.isSelect) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }
