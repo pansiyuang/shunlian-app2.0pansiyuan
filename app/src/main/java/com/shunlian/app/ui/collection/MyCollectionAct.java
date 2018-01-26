@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -182,10 +181,11 @@ public class MyCollectionAct extends BaseActivity {
                 Iterator<String> keys = fragments.keySet().iterator();
                 while (keys.hasNext()){
                     String next = keys.next();
-                    BaseFragment baseFragment = fragments.get(next);
-                    if (show != baseFragment) {
-                        if (baseFragment != null && baseFragment.isVisible()) {
-                            ft.hide(baseFragment);
+                    CollectionFrag collectionFrag = fragments.get(next);
+                    if (show != collectionFrag) {
+                        if (collectionFrag != null && collectionFrag.isVisible()) {
+                            ft.hide(collectionFrag);
+                            recoveryManage(collectionFrag);
                         }
                     }
                 }
@@ -244,11 +244,19 @@ public class MyCollectionAct extends BaseActivity {
                 mtv_manage.setText(getStringResouce(R.string.RegisterTwoAct_finish));
                 mrlayout_manage.setVisibility(View.VISIBLE);
             } else {
-                collectionFrag.finishManage();
-                mtv_manage.setText(getStringResouce(R.string.manage));
-                mrlayout_manage.setVisibility(View.GONE);
+                recoveryManage(collectionFrag);
             }
         }
+    }
+
+    /**
+     *将操作状态恢复为正常状态
+     * @param collectionFrag
+     */
+    private void recoveryManage(CollectionFrag collectionFrag) {
+        collectionFrag.finishManage();
+        mtv_manage.setText(getStringResouce(R.string.manage));
+        mrlayout_manage.setVisibility(View.GONE);
     }
 
     /**
