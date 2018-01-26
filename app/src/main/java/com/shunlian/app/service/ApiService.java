@@ -27,6 +27,7 @@ import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
+import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
@@ -898,6 +899,14 @@ public interface ApiService {
     @POST("member/Myfavorite/favoriteGoods")
     Call<BaseEntity<CollectionGoodsEntity>> favoriteGoods(@Body RequestBody body);
 
+    /**
+     * 收藏的店铺
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/favoriteShop")
+    Call<BaseEntity<CollectionStoresEntity>> favoriteShop(@Body RequestBody body);
+
 
     /**
      * 获取足迹日历形式信息
@@ -912,4 +921,20 @@ public interface ApiService {
      */
     @POST("member/footermark/getmarklist")
     Call<BaseEntity<FootprintEntity>> getmarklist(@Body RequestBody body);
+
+    /**
+     * 收藏商品搜索
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/search")
+    Call<BaseEntity<CollectionGoodsEntity>> collectionGoodsSearch(@Body RequestBody body);
+
+    /**
+     * 收藏店铺搜索
+     * @param body
+     * @return
+     */
+    @POST("member/Myfavorite/search")
+    Call<BaseEntity<EmptyEntity>> collectionStoreSearch(@Body RequestBody body);
 }

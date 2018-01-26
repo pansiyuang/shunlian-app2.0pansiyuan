@@ -44,10 +44,10 @@
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_search"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
+            android:paddingRight="15dp"
             android:layout_toLeftOf="@+id/mtv_manage"
             android:src="@mipmap/icon_common_search_gray" />
 

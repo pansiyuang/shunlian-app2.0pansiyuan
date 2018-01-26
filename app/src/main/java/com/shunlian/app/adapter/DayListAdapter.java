@@ -134,7 +134,6 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.mtv_number.setVisibility(View.VISIBLE);
                 oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
             }
-
             GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
         }
     }

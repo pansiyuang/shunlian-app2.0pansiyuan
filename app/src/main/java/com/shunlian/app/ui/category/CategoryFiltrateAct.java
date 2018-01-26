@@ -175,18 +175,17 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
             mtv_address.setText("      " + locate);
         }
-
-        if (Constant.SEARCHPARAM.isMore) {
-            miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
-            mtv_more.setText(R.string.category_shouqi);
-            isMore = true;
-        } else {
-            miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
-            mtv_more.setText(R.string.category_gengduo);
-            isMore = false;
-        }
         initList(Constant.LISTFILTER);
         if (Constant.SEARCHPARAM != null) {
+            if (Constant.SEARCHPARAM.isMore) {
+                miv_arrow.setImageResource(R.mipmap.icon_saixuan_sq);
+                mtv_more.setText(R.string.category_shouqi);
+                isMore = true;
+            } else {
+                miv_arrow.setImageResource(R.mipmap.icon_saixuan_gd);
+                mtv_more.setText(R.string.category_gengduo);
+                isMore = false;
+            }
             if (Constant.BRAND_IDS == null) {
                 Constant.BRAND_IDS = new ArrayList<>();
             } else {
