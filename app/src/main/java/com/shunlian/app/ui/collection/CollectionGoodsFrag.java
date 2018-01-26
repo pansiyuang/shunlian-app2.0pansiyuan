@@ -401,7 +401,13 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             }
             adapter.notifyDataSetChanged();
         }
-        showEmptyPage(isEmpty(goodsLists));
+        boolean empty = isEmpty(goodsLists);
+        showEmptyPage(empty);
+        if (!empty) {
+            ((MyCollectionAct) baseActivity).setManageState(selectState());
+        }else {
+            ((MyCollectionAct) baseActivity).recoveryManage(this);
+        }
     }
     /*
     是否选择条目

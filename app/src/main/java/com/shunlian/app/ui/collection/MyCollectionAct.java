@@ -279,7 +279,7 @@ public class MyCollectionAct extends BaseActivity {
      *将操作状态恢复为正常状态
      * @param collectionFrag
      */
-    private void recoveryManage(CollectionFrag collectionFrag) {
+    public void recoveryManage(CollectionFrag collectionFrag) {
         collectionFrag.finishManage();
         mtv_manage.setText(getStringResouce(R.string.manage));
         mrlayout_manage.setVisibility(View.GONE);
