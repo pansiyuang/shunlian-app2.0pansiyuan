@@ -49,6 +49,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
     @BindView(R.id.mtv_in_cate)
     MyTextView mtv_in_cate;
 
+    @BindView(R.id.mtv_cate)
+    MyTextView mtv_cate;
+
     @BindView(R.id.flayout_category)
     FrameLayout flayout_category;
 
@@ -58,7 +61,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     private SimpleRecyclerAdapter cateAdapter;
-    private String selectId = "null";
+    private String selectId = "0";
     private CollectionStoresPresenter mPresenter;
     private List<CollectionStoresEntity.Store> stores = new ArrayList<>();
     private CollectionStoresAdapter adapter;
@@ -124,8 +127,12 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 sb.append(",");
                 delLists.add(store);
             }
+            if (i>=stores.size()-1){
+                sb.replace(sb.length()-1,sb.length(),"");
+                mPresenter.storesFavRemove(sb.toString());
+            }
         }
-        mPresenter.storesFavRemove(sb.toString());
+
     }
 
     /**
@@ -159,6 +166,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         }
         adapter.notifyDataSetChanged();
         isAllSelect = false;
+        gone(flayout_category);
     }
 
     /**
@@ -260,13 +268,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                         store.isSelect = !store.isSelect;
                         adapter.notifyItemChanged(position);
                         ((MyCollectionAct) baseActivity).setManageState(selectState());
-//                        ((MyCollectionAct) baseActivity).setDeleteBackgroundColor(isSelectItem());
-                    } else {
+                    } else if ("1".equals(store.status)){
                         StoreAct.startAct(baseActivity, store.store_id);
                     }
-//                    }else if ("1".equals(store.status)){
-//                        StoreAct.startAct(baseActivity,store.store_id);
-//                    }
                 }
             });
 
@@ -326,10 +330,15 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      * @param cates
      */
     @Override
-    public void collectionStoresCategoryList(final List<CollectionStoresEntity.Cates> cates) {
+    public void collectionStoresCategoryList( List<CollectionStoresEntity.Cates> cates) {
+        final List<CollectionStoresEntity.Cates> mcates=cates;
+        CollectionStoresEntity.Cates cates1=new CollectionStoresEntity.Cates();
+        cates1.id="0";
+        cates1.name="全部";
+        mcates.add(0,cates1);
         if (cateAdapter == null) {
             cateAdapter = new SimpleRecyclerAdapter<CollectionStoresEntity.Cates>
-                    (baseActivity, R.layout.textview_layout, cates) {
+                    (baseActivity, R.layout.textview_layout, mcates) {
 
                 @Override
                 public void convert(SimpleViewHolder holder, CollectionStoresEntity.Cates cates, int position) {
@@ -357,10 +366,11 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             cateAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    CollectionStoresEntity.Cates cate = cates.get(position);
+                    CollectionStoresEntity.Cates cate = mcates.get(position);
                     if (cate.id != null) {
                         selectId = cate.id;
                     }
+                    mtv_cate.setText(cate.name);
                     mPresenter.setCate(cate.id);
                     cateAdapter.notifyDataSetChanged();
                     gone(flayout_category);
@@ -406,15 +416,4 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             ((MyCollectionAct) baseActivity).recoveryManage(this);
         }
     }
-
-//    private boolean isSelectItem() {
-//        if (!isEmpty(stores)) {
-//            for (CollectionStoresEntity.Store store : stores) {
-//                if (store.isSelect) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
 }
