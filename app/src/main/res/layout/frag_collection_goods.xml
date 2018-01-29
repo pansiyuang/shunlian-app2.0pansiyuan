@@ -21,17 +21,10 @@
                 android:layout_height="65dp"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/white_ash"
-                    app:layout_collapseMode="pin" />
-
                 <com.shunlian.app.widget.MyLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/white_ash"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:layout_collapseMode="pin">
@@ -94,7 +87,7 @@
         <com.shunlian.app.widget.empty.NetAndEmptyInterface
             android:id="@+id/nei_empty"
             android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_behavior= "@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </android.support.design.widget.CoordinatorLayout>
