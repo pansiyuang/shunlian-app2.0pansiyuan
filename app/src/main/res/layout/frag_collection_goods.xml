@@ -45,11 +45,12 @@
                         app:rl_margin_left="20">
 
                         <com.shunlian.app.widget.MyTextView
+                            android:id="@+id/mtv_cate_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:text="分类"
+                            android:text="@string/sort"
                             android:textColor="@color/new_text"
                             android:textSize="14sp" />
 
@@ -66,12 +67,12 @@
                     </com.shunlian.app.widget.MyRelativeLayout>
 
                     <com.shunlian.app.widget.MyTextView
-                        android:id="@+id/mtv_in_cate"
+                        android:id="@+id/mtv_cut_price"
                         android:layout_width="105dp"
                         android:layout_height="35dp"
                         android:background="@drawable/rounded_rectangle_35px"
                         android:gravity="center"
-                        android:text="降价中"
+                        android:text="@string/cut_price"
                         android:textColor="@color/new_text"
                         android:textSize="14sp"
                         app:tv_control_adapter="true"
@@ -98,13 +99,13 @@
             android:layout_height="match_parent"/>
     </android.support.design.widget.CoordinatorLayout>
 
-
     <!--分类-->
     <FrameLayout
         android:id="@+id/flayout_category"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorMask"
+        android:layout_marginTop="65dp"
         android:focusableInTouchMode="true"
         android:clickable="true"
         android:focusable="true"
@@ -118,59 +119,6 @@
             app:ll_control_adapter="true"
             app:ll_control_height="530">
 
-            <com.shunlian.app.widget.MyLinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_collapseMode="pin"
-                app:ll_control_adapter="true"
-                app:ll_margin_top="30">
-
-                <com.shunlian.app.widget.MyRelativeLayout
-                    android:id="@+id/mrlayout_out_category"
-                    android:layout_width="105dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/rounded_rectangle_35px"
-                    app:rl_control_adapter="true"
-                    app:rl_margin_left="20">
-
-                    <com.shunlian.app.widget.MyTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="分类"
-                        android:textColor="@color/new_text"
-                        android:textSize="14sp" />
-
-                    <com.shunlian.app.widget.MyImageView
-                        android:id="@+id/miv_direction"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@mipmap/icon_saixuan_sq"
-                        app:iv_control_adapter="true"
-                        app:iv_control_height="7"
-                        app:iv_control_width="13"
-                        app:iv_margin_right="20" />
-                </com.shunlian.app.widget.MyRelativeLayout>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_out_cate"
-                    android:layout_width="105dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/rounded_rectangle_35px"
-                    android:gravity="center"
-                    android:text="降价中"
-                    android:textColor="@color/new_text"
-                    android:textSize="14sp"
-                    app:tv_control_adapter="true"
-                    app:tv_margin_left="25" />
-
-            </com.shunlian.app.widget.MyLinearLayout>
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_category"
                 android:layout_width="match_parent"
@@ -179,6 +127,5 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
     </FrameLayout>
-
 
 </RelativeLayout>
