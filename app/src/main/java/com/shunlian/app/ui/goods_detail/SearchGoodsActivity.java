@@ -249,12 +249,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         }
                         return true;
                     }else {
-                        if (!isEmpty(text)) {
-                            Intent intent = new Intent();
-                            intent.putExtra("keyword",text.toString());
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
+                        GoodsSearchParam param = new GoodsSearchParam();
+                        param.keyword = text.toString();
+                        CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        finish();
                         return true;
                     }
                 }

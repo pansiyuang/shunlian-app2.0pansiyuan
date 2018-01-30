@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
@@ -49,7 +50,7 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         mHoler.mtv_price.setText(spannableStringBuilder);
     }
 
-    public class GoodsDetailShopHolder extends BaseRecyclerViewHolder{
+    public class GoodsDetailShopHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
@@ -69,6 +70,21 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             layoutParams.setMargins(marginsw,marginsh,marginsw,0);
             layoutParams.width = width;
             mtv_title.setLayoutParams(layoutParams);
+            miv_shop_head.setWHProportion(198,196);
+            miv_shop_head.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null){
+                listener.onItemClick(v,getAdapterPosition());
+            }
         }
     }
 }

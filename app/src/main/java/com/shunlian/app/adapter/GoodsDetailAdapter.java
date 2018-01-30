@@ -23,7 +23,6 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
-import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -300,10 +299,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.mtv_attention_count.setText(store_info.attention_count);
             mHolder.mtv_description_consistency.setText(store_info.description_consistency);
             mHolder.mtv_quality_satisfy.setText(store_info.quality_satisfy);
-
-            mHolder.ratingBar1.setEnabled(false);
-            mHolder.ratingBar1.setNumberOfStars(Integer.valueOf(store_info.star));
-            mHolder.ratingBar1.setRating(Integer.valueOf(store_info.star));
+            GlideUtils.getInstance().loadImage(context,mHolder.miv_starBar,store_info.star);
+//            mHolder.ratingBar1.setEnabled(false);
+//            mHolder.ratingBar1.setNumberOfStars(Integer.valueOf(store_info.star));
+//            mHolder.ratingBar1.setRating(Integer.valueOf(store_info.star));
             if ("1".equals(store_info.is_attention)){
                 mHolder.setCollectionState(1);
                 isAttentionShop = true;
@@ -324,16 +323,25 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         }
     }
 
-    private void setStoreOtherGoods(RecyclerView recy_view, List<GoodsDeatilEntity.StoreInfo.Item> item){
+    private void setStoreOtherGoods(RecyclerView recy_view,List<GoodsDeatilEntity.StoreInfo.Item> item){
         storeItems.clear();
         storeItems.addAll(item);
         if (goodsDetailShopAdapter == null) {
-            LinearLayoutManager storeManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager storeManager = new LinearLayoutManager
+                    (context, LinearLayoutManager.HORIZONTAL, false);
             recy_view.setLayoutManager(storeManager);
             recy_view.setNestedScrollingEnabled(false);
-            recy_view.addItemDecoration(new HorItemDecoration(TransformUtil.dip2px(context, 12),0,0));
-            goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, item);
+            int space = TransformUtil.dip2px(context, 10);
+            recy_view.addItemDecoration(new HorItemDecoration(space,0,0));
+            goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, storeItems);
             recy_view.setAdapter(goodsDetailShopAdapter);
+            goodsDetailShopAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDeatilEntity.StoreInfo.Item i1 = storeItems.get(position);
+                    GoodsDetailAct.startAct(context,i1.id);
+                }
+            });
         }else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
@@ -1075,14 +1083,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_quality_goods)
         MyTextView mtv_quality_goods;
 
-        @BindView(R.id.ratingBar1)
-        FiveStarBar ratingBar1;
+//        @BindView(R.id.ratingBar1)
+//        FiveStarBar ratingBar1;
 
         @BindView(R.id.mtv_collection)
         MyTextView mtv_collection;
 
         @BindView(R.id.recy_view)
         RecyclerView recy_view;
+
+        @BindView(R.id.miv_starBar)
+        MyImageView miv_starBar;
         public StoreGoodsHolder(View itemView) {
             super(itemView);
             mtv_collection.setOnClickListener(this);
@@ -1091,7 +1102,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             miv_shop_head.setOnClickListener(this);
             mtv_store_name.setOnClickListener(this);
             mtv_quality_goods.setOnClickListener(this);
-            ratingBar1.setOnClickListener(this);
+            miv_starBar.setOnClickListener(this);
         }
 
         public void setCollectionState(int state){
@@ -1139,7 +1150,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     setState(2);
                     setStoreOtherGoods(recy_view,store_info.push);
                     break;
-                case R.id.ratingBar1:
+                case R.id.miv_starBar:
                 case R.id.miv_shop_head:
                 case R.id.mtv_store_name:
                 case R.id.mtv_quality_goods:
