@@ -17,9 +17,9 @@ import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
-import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.MyImageView;
@@ -83,6 +83,12 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     @BindView(R.id.mrlayout_pingpai)
     MyRelativeLayout mrlayout_pingpai;
 
+    @BindView(R.id.mrlayout_title)
+    MyRelativeLayout mrlayout_title;
+
+    @BindView(R.id.rLayout_rootView)
+    MyRelativeLayout rLayout_rootView;
+
     @BindView(R.id.mllayout_bottom)
     MyLinearLayout mllayout_bottom;
 
@@ -102,7 +108,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     private List<GetListFilterEntity.Brand> brands;
     private ArrayList<String> letters;
     private Boolean isZhu = false, isZhe = false, isDing = false, isBao = false, isMore = false, isopt = false;
-    private String keyword, cid = "", sort_type, locate;
+    private String keyword, cid, sort_type, locate;
 
     public static void startAct(Activity context, String keyword, String cid, String sort_type) {
         Intent intent = new Intent(context, CategoryFiltrateAct.class);
@@ -245,19 +251,18 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         locate = getStringResouce(R.string.category_dingwei);
-        categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         keyword = getIntent().getStringExtra("keyword");
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("cid"))) {
-            cid = getIntent().getStringExtra("cid");
-        }
+        cid = getIntent().getStringExtra("cid");
         sort_type = getIntent().getStringExtra("sort_type");
-
+        categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
         if (Constant.LISTFILTER != null) {
             reBuildData();
         } else {
             categoryFiltratePresenter.initApiData();
         }
 
+        rLayout_rootView.setOnClickListener(this);
+        mrlayout_title.setOnClickListener(this);
         mtv_address.setOnClickListener(this);
         mtv_locate.setOnClickListener(this);
         mtv_cancel.setOnClickListener(this);
@@ -277,6 +282,9 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()) {
+            case R.id.rLayout_rootView:
+                finish();
+                break;
             case R.id.mtv_baoyou:
                 if (isBao) {
                     mtv_baoyou.setBackgroundColor(getColorResouce(R.color.value_f5));
