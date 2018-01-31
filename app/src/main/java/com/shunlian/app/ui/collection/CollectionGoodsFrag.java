@@ -240,6 +240,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
         background.setColor(getColorResouce(R.color.category_reset));
         mtv_cut_price.setTextColor(getColorResouce(R.color.pink_color));
+        gone(flayout_category);
         mPresenter.setCateOrIscut(null,"1");
         mPresenter.sort();
     }

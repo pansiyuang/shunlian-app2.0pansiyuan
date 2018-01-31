@@ -69,10 +69,16 @@ public class RefundAfterSaleAdapter extends BaseRecyclerAdapter<RefundListEntity
         if (holder instanceof RefundAfterSaleHolder){
             RefundAfterSaleHolder mHolder = (RefundAfterSaleHolder) holder;
             RefundListEntity.RefundList refundList = lists.get(position);
+            String price = null;
+            if (isEmpty(refundList.price)){
+                price = "";
+            }else {
+                price = getString(R.string.rmb).concat(refundList.price);
+            }
             mHolder.cgv_goods.setLabelName(refundList.store_name,true)
             .setGoodsTitle(refundList.title).setGoodsParams(refundList.sku_desc)
             .setGoodsCount(String.format(getString(R.string.x),refundList.goods_num))
-                    .setGoodsPrice(getString(R.string.rmb).concat(refundList.price))
+                    .setGoodsPrice(price)
             .setRefundPrice(getString(R.string.refund_balance)
                     .concat(getString(R.string.rmb).concat(refundList.refund_amount))).setIsArrow(true);
             GlideUtils.getInstance().loadImage(context,mHolder.cgv_goods.getGoodsIcon(),refundList.thumb);
