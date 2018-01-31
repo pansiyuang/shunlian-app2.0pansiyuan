@@ -255,7 +255,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         cid = getIntent().getStringExtra("cid");
         sort_type = getIntent().getStringExtra("sort_type");
         categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);
-        if (Constant.LISTFILTER != null) {
+        if (Constant.LISTFILTER != null&&cid.equals(Constant.LISTFILTER.cid)&&keyword.equals(Constant.LISTFILTER.keyword)) {
             reBuildData();
         } else {
             categoryFiltratePresenter.initApiData();
@@ -283,7 +283,9 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         super.onClick(view);
         switch (view.getId()) {
             case R.id.rLayout_rootView:
-                finish();
+                if (pingpaiAdapter == null && shaixuanAttrAdapter == null){
+                    finish();
+                }
                 break;
             case R.id.mtv_baoyou:
                 if (isBao) {
@@ -415,15 +417,19 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             mllayout_bottom.setVisibility(View.GONE);
             mllayout_bottoms.setVisibility(View.VISIBLE);
             rv_category.setVisibility(View.GONE);
+            rLayout_rootView.setBackgroundColor(0);
         } else {
             mllayout_bottom.setVisibility(View.VISIBLE);
             mllayout_bottoms.setVisibility(View.GONE);
+            rLayout_rootView.setBackgroundColor(getColorResouce(R.color.white));
         }
     }
 
     @Override
     public void getListFilter(GetListFilterEntity getListFilterEntity) {
         Constant.LISTFILTER = getListFilterEntity;
+        Constant.LISTFILTER.keyword=keyword;
+        Constant.LISTFILTER.cid=cid;
         initList(getListFilterEntity);
     }
 

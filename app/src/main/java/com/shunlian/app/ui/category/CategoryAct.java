@@ -478,6 +478,10 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        initFiltrate();
+    }
+
+    public void initFiltrate(){
         Constant.BRAND_IDS = null;//筛选品牌id
         Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
         Constant.BRAND_ATTRS = null;//筛选属性
@@ -488,6 +492,5 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         Constant.REBRAND_ATTRS = null;//筛选属性(重新赋值用)
         Constant.LISTFILTER = null;//列表属性(重新赋值用)
         Constant.DINGWEI = null;
-
     }
 }
