@@ -466,9 +466,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             String keyword = data.getStringExtra("keyword");
             if (!isEmpty(keyword) && !keyword.equals(searchParam.keyword)) {
                 searchParam.keyword = keyword;
-                presenter.initPage();
                 tv_keyword.setText(keyword);
-                searchParam.keyword = keyword;
+                initFiltrate();
                 presenter.getSearchGoods(searchParam, true);
             }
         }
@@ -481,7 +480,15 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         initFiltrate();
     }
 
-    public void initFiltrate(){
+    public void initFiltrate() {
+
+        currentSortPosition = 0;
+        presenter.initPage();
+        setSortMode(true);
+        searchParam = new GoodsSearchParam();
+        tv_filter.setTextColor(getColorResouce(R.color.new_text));
+        tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
+
         Constant.BRAND_IDS = null;//筛选品牌id
         Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
         Constant.BRAND_ATTRS = null;//筛选属性
