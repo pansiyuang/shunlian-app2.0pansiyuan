@@ -46,7 +46,7 @@ import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
  * Created by Administrator on 2018/1/2.
  */
 
-public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener{
+public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener {
 
     public static final int MODE_SINGLE = 1;
     public static final int MODE_DOUBLE = 2;
@@ -464,10 +464,11 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
         } else if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK) {
             String keyword = data.getStringExtra("keyword");
-            if (!isEmpty(keyword)) {
+            if (!isEmpty(keyword) && !keyword.equals(searchParam.keyword)) {
                 searchParam.keyword = keyword;
                 presenter.initPage();
                 tv_keyword.setText(keyword);
+                searchParam.keyword = keyword;
                 presenter.getSearchGoods(searchParam, true);
             }
         }

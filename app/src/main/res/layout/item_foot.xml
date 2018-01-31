@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="120dp"
+    android:layout_height="170dp">
+
+    <LinearLayout
+        android:id="@+id/ll_del"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="#A6000000"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_shoppingcar_selected_h" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:textColor="@color/pink_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+</FrameLayout>
