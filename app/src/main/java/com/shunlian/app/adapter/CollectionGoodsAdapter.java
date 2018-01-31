@@ -14,6 +14,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -97,11 +98,21 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
             String status = goods.status;
             if ("0".equals(status)){//失效
                 mHolder.mtv_expired.setVisibility(View.VISIBLE);
+                mHolder.miv_shopping_car.setVisibility(View.GONE);
+                mHolder.mtv_shippingFree.setVisibility(View.GONE);
+                mHolder.mtv_discount_price.setVisibility(View.GONE);
+                mHolder.mtv_collection_count.setVisibility(View.GONE);
+                mHolder.mrlayout_discount_title.setVisibility(View.INVISIBLE);
                 mHolder.mtv_title.setTextColor(getColor(R.color.color_value_6c));
                 mHolder.mtv_price.setTextColor(getColor(R.color.color_value_6c));
             }else {
                 mHolder.mtv_expired.setVisibility(View.GONE);
+                mHolder.miv_shopping_car.setVisibility(View.VISIBLE);
+                mHolder.mtv_shippingFree.setVisibility(View.VISIBLE);
+                mHolder.mtv_discount_price.setVisibility(View.VISIBLE);
+                mHolder.mtv_collection_count.setVisibility(View.VISIBLE);
                 mHolder.mtv_title.setTextColor(getColor(R.color.new_text));
+                mHolder.mrlayout_discount_title.setVisibility(View.VISIBLE);
                 mHolder.mtv_price.setTextColor(getColor(R.color.pink_color));
             }
             if (isShowSelect){
@@ -162,6 +173,9 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
 
         @BindView(R.id.mrlayout_item)
         MyRelativeLayout mrlayout_item;
+
+        @BindView(R.id.mrlayout_discount_title)
+        MyLinearLayout mrlayout_discount_title;
         private final SwipeMenuLayout swipeMenuLayout;
 
         public CollectionGoodsHolder(View itemView) {
