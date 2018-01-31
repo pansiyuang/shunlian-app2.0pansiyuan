@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -124,8 +125,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         if (isShowHotSearch) {
             presenter.getSearchTag();
         }
-        if (!isEmpty(currentKeyWord)) {
-            edt_goods_search.setText(currentKeyWord);
+
+        if ("sortFrag".equals(currentFlag)) {
+            edt_goods_search.setHint(currentKeyWord);
+        } else {
+            if (!isEmpty(currentKeyWord)) {
+                edt_goods_search.setText(currentKeyWord);
+                edt_goods_search.setFocusable(true);
+                edt_goods_search.setSelection(currentKeyWord.length());
+            }
         }
         if (!isShowHotSearch){
             save_goods_history = SharedPrefUtil.COLLECTION_GOODS_HISTORY
@@ -228,9 +236,12 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         edt_goods_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Editable text = edt_goods_search.getText();
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                    if (!isShowHotSearch){
+                String text = edt_goods_search.getText().toString();
+                if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
+                    text = edt_goods_search.getHint().toString();
+                }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (!isShowHotSearch) {
                         if (!isEmpty(text)) {
                             if ("goods".equals(currentFlag)) {
                                 String cacheSharedPrf = SharedPrefUtil
@@ -249,10 +260,18 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         }
                         return true;
                     }else {
-                        GoodsSearchParam param = new GoodsSearchParam();
-                        param.keyword = text.toString();
-                        CategoryAct.startAct(SearchGoodsActivity.this, param);
-                        finish();
+                        if (!isEmpty(text)) {
+                            if ("sortFrag".equals(currentFlag)) {
+                                GoodsSearchParam param = new GoodsSearchParam();
+                                param.keyword = text.toString();
+                                CategoryAct.startAct(SearchGoodsActivity.this, param);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.putExtra("keyword", text.toString());
+                                setResult(RESULT_OK, intent);
+                            }
+                            finish();
+                        }
                         return true;
                     }
                 }

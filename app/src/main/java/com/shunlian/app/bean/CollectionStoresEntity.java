@@ -33,6 +33,7 @@ public class CollectionStoresEntity {
         public String store_avatar;
         public String grade_id;
         public String nice_rate;
+        public String star;
         public String new_count;
         public String status;
         public List<NewGood> new_goods;

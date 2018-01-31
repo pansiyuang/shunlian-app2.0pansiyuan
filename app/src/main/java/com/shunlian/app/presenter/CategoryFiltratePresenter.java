@@ -145,12 +145,14 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
                     }else {
                         Constant.REBRAND_IDS.clear();
                     }
+                    if (Constant.BRAND_IDS!=null)
                     Constant.REBRAND_IDS.addAll(Constant.BRAND_IDS);
                     if (Constant.REBRAND_ATTRS==null){
                         Constant.REBRAND_ATTRS=new HashMap<>();
                     }else {
                         Constant.REBRAND_ATTRS.clear();
                     }
+                    if (Constant.BRAND_ATTRS!=null)
                     Constant.REBRAND_ATTRS.putAll(Constant.BRAND_ATTRS);
                     Intent intent = new Intent();
                     intent.putExtra("searchparam",Constant.SEARCHPARAM);

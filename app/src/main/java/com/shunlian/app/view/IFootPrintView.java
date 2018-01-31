@@ -12,5 +12,5 @@ import java.util.List;
 public interface IFootPrintView extends IView {
     void getCalendarList(List<CalendarEntity> calendarEntityList);
 
-   void getMarkList(List<FootprintEntity.MarkData> markDataList);
+   void getMarkList(List<FootprintEntity.MarkData> markDataList, List<FootprintEntity.DateInfo> dateInfoList, int page, int allPage);
 }

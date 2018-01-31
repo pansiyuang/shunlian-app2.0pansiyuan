@@ -2,6 +2,7 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,9 +11,14 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FootprintEntity {
     public List<MarkData> mark_data;
+    public List<DateInfo> date_info;
+    public String count;
+    public String total_page;
+    public String page;
+    public String page_size;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MarkData{
+    public static class MarkData {
         public String id;
         public String goods_id;
         public String title;
@@ -20,5 +26,13 @@ public class FootprintEntity {
         public String price;
         public String view_number;
         public String create_time;
+        public String date;
+        public String date_normal;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DateInfo {
+        public String date;
+        public String counts;
     }
 }

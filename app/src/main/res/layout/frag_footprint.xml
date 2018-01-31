@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <View
@@ -11,114 +10,124 @@
         android:layout_height="0.5dp"
         android:background="@color/bg_gray_two" />
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
 
-
-        <RelativeLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="17dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="17dp"
-            android:visibility="visible">
+            android:layout_height="440.5dp"
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
 
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="2018年1月"
-                android:textColor="@color/new_text"
-                android:textSize="15sp" />
+                app:layout_scrollFlags="scroll|enterAlways">
 
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_pre"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@+id/miv_next"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/img_shoucang_zuji_left_h" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="pin">
 
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_next"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/img_shoucang_zuji_right_h" />
-        </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rl_date_control"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@color/white"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/bg_gray_two" />
+                        <TextView
+                            android:id="@+id/tv_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="2018年1月"
+                            android:textColor="@color/new_text"
+                            android:textSize="15sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:orientation="horizontal">
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_pre"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="20dp"
+                            android:layout_toLeftOf="@+id/miv_next"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/img_shoucang_zuji_left_h" />
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="日" />
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_next"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/img_shoucang_zuji_right_h" />
+                    </RelativeLayout>
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="一" />
+                    <View
+                        android:id="@+id/view_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_below="@+id/rl_date_control"
+                        android:background="@color/bg_gray_two" />
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="二" />
+                    <com.shunlian.app.widget.calendar.CalendarView
+                        android:id="@+id/calendarView"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:layout_below="@+id/view_line"
+                        android:background="@color/white"
+                        app:calendar_height="50dp"
+                        app:current_month_text_color="@color/new_text"
+                        app:month_view="com.shunlian.app.widget.calendar.CustomMonthView"
+                        app:other_month_text_color="@color/color_value_6c"
+                        app:scheme_text_color="@color/new_text"
+                        app:selected_text_color="@color/white"
+                        app:selected_theme_color="@color/pink_color"
+                        app:week_text_color="@color/new_gray"
+                        app:week_view="com.shunlian.app.widget.calendar.CustomWeekView"
+                        app:year_view_day_text_color="@color/my_dark_grey"
+                        app:year_view_day_text_size="9sp"
+                        app:year_view_month_text_color="@color/white"
+                        app:year_view_month_text_size="20sp"
+                        app:year_view_scheme_color="#f17706" />
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="三" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_below="@+id/calendarView"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/white"
+                        android:gravity="right"
+                        android:orientation="vertical">
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="四" />
+                        <com.shunlian.app.widget.MyImageView
+                            android:id="@+id/miv_calendar_more"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="-15dp"
+                            android:layout_marginRight="30dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/img_shoucang_zuji_more" />
+                    </LinearLayout>
+                </RelativeLayout>
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="五" />
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
 
-            <TextView
-                style="@style/weekIndicatorStyle"
-                android:text="六" />
-        </LinearLayout>
-
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/content"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <com.shunlian.app.widget.calendar.view.MonthPager
-                android:id="@+id/calendar_view"
-                android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:background="#fff"></com.shunlian.app.widget.calendar.view.MonthPager>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="45dp"
-                android:background="@color/white"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                app:layout_behavior="com.shunlian.app.widget.calendar.behavior.RecyclerViewBehavior" />
-            <!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
-            <!-- RecyclerView的高度必须是MatchParent-->
-            <!-- RecyclerView的background必须是非透明-->
-        </android.support.design.widget.CoordinatorLayout>
-    </LinearLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

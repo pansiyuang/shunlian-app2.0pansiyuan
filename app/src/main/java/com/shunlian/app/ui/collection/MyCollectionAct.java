@@ -213,9 +213,11 @@ public class MyCollectionAct extends BaseActivity {
         if (!isSelectAll) {
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
             mtv_delete.setBackgroundColor(pink_color);
+            mtv_delete.setClickable(true);
         }else {
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
             mtv_delete.setBackgroundColor(color_value_6c);
+            mtv_delete.setClickable(false);
         }
         isSelectAll = !isSelectAll;
     }
@@ -238,8 +240,10 @@ public class MyCollectionAct extends BaseActivity {
     public void setDeleteBackgroundColor(boolean isLight){
         if (isLight){
             mtv_delete.setBackgroundColor(pink_color);
+            mtv_delete.setClickable(true);
         }else {
             mtv_delete.setBackgroundColor(color_value_6c);
+            mtv_delete.setClickable(false);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }
     }
@@ -249,6 +253,7 @@ public class MyCollectionAct extends BaseActivity {
      * @param state 0 全选  1 部分选择 2 全不选
      */
     public void setManageState(int state){
+        mtv_delete.setClickable(true);
         if (state == 0){
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
@@ -256,6 +261,7 @@ public class MyCollectionAct extends BaseActivity {
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }else {
+            mtv_delete.setClickable(false);
             mtv_delete.setBackgroundColor(color_value_6c);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }

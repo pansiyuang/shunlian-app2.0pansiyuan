@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -49,7 +50,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         this.mGoods = lists;
     }
 
-    public void setStoreData(SearchGoodsEntity.RefStore store){
+    public void setStoreData(SearchGoodsEntity.RefStore store) {
         this.mStore = store;
     }
 
@@ -247,6 +248,14 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         public TitleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mStore != null) {
+                        StoreAct.startAct(context, mStore.store_id);
+                    }
+                }
+            });
         }
     }
 
@@ -279,8 +288,8 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

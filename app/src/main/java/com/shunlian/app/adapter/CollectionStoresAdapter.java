@@ -69,6 +69,7 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
             CollectionStoresHolder mHolder = (CollectionStoresHolder) holder;
             final CollectionStoresEntity.Store store = lists.get(position);
             GlideUtils.getInstance().loadImage(context, mHolder.miv_goods_pic, store.store_avatar);
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_star, store.star);
             mHolder.mtv_title.setText(store.store_name);
             mHolder.mtv_nice.setText(getString(R.string.collection_haopinglv)+store.nice_rate);
             if (isShowSelect){
@@ -88,10 +89,12 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
                 mHolder.mtv_nice.setTextColor(getColor(R.color.light_gray_three));
                 mHolder.mrlayout_new.setVisibility(View.GONE);
                 mHolder.miv_arrow.setVisibility(View.GONE);
+                mHolder.miv_star.setAlpha(0.1f);
             }else {
                 mHolder.mtv_expired.setVisibility(View.GONE);
                 mHolder.mtv_title.setTextColor(getColor(R.color.new_text));
                 mHolder.mtv_nice.setTextColor(getColor(R.color.new_text));
+                mHolder.miv_star.setAlpha(1);
             }
             if (store.isSelect){
                 mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
@@ -153,6 +156,9 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
 
         @BindView(R.id.miv_arrow)
         MyImageView miv_arrow;
+
+        @BindView(R.id.miv_star)
+        MyImageView miv_star;
 
         @BindView(R.id.mtv_cancel_collection)
         MyTextView mtv_cancel_collection;

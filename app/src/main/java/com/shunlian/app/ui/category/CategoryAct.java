@@ -46,7 +46,7 @@ import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
  * Created by Administrator on 2018/1/2.
  */
 
-public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener{
+public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener {
 
     public static final int MODE_SINGLE = 1;
     public static final int MODE_DOUBLE = 2;
@@ -464,10 +464,11 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             }
         } else if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK) {
             String keyword = data.getStringExtra("keyword");
-            if (!isEmpty(keyword)) {
+            if (!isEmpty(keyword) && !keyword.equals(searchParam.keyword)) {
                 searchParam.keyword = keyword;
                 presenter.initPage();
                 tv_keyword.setText(keyword);
+                searchParam.keyword = keyword;
                 presenter.getSearchGoods(searchParam, true);
             }
         }
@@ -477,6 +478,10 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        initFiltrate();
+    }
+
+    public void initFiltrate(){
         Constant.BRAND_IDS = null;//筛选品牌id
         Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
         Constant.BRAND_ATTRS = null;//筛选属性
@@ -487,6 +492,5 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         Constant.REBRAND_ATTRS = null;//筛选属性(重新赋值用)
         Constant.LISTFILTER = null;//列表属性(重新赋值用)
         Constant.DINGWEI = null;
-
     }
 }
