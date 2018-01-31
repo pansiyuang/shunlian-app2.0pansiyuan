@@ -271,8 +271,10 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         int height = TransformUtil.dip2px(getActivity(), 440.5f);
         params.height = height;
         appBarLayout.setLayoutParams(params);
-        calendarParams.height = TransformUtil.dip2px(getActivity(), 300f);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
         calendarView.setLayoutParams(calendarParams);
+        calendarView.setVisibility(View.GONE);
+        rl_date_control.setVisibility(View.VISIBLE);
         miv_calendar_more.setRotation(180f);
     }
 
@@ -283,6 +285,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         appBarLayout.setLayoutParams(params);
         calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
         calendarView.setLayoutParams(calendarParams);
+        rl_date_control.setVisibility(View.GONE);
         miv_calendar_more.setRotation(0f);
     }
 }
