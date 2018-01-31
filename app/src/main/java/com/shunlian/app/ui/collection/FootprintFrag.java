@@ -1,38 +1,30 @@
 package com.shunlian.app.ui.collection;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FootAdapter;
-import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.CalendarEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.presenter.FootPrintPresenter;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFootPrintView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.calendar.CustomDayView;
-import com.shunlian.app.widget.calendar.Utils;
-import com.shunlian.app.widget.calendar.component.CalendarAttr;
-import com.shunlian.app.widget.calendar.component.CalendarViewAdapter;
-import com.shunlian.app.widget.calendar.interf.OnSelectDateListener;
-import com.shunlian.app.widget.calendar.model.CalendarDate;
-import com.shunlian.app.widget.calendar.view.Calendar;
-import com.shunlian.app.widget.calendar.view.MonthPager;
+import com.shunlian.app.widget.calendar.Calendar;
+import com.shunlian.app.widget.calendar.CalendarView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,9 +36,7 @@ import static com.shunlian.app.utils.FastClickListener.isFastClick;
  * 足迹
  */
 
-public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView {
-    @BindView(R.id.calendar_view)
-    MonthPager calendar_view;
+public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView, CalendarView.OnYearChangeListener, CalendarView.OnDateSelectedListener, CalendarView.OnStatusChangeListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -63,16 +53,26 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @BindView(R.id.content)
     CoordinatorLayout content;
 
+    @BindView(R.id.rl_date_control)
+    RelativeLayout rl_date_control;
+
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+
+    @BindView(R.id.calendarView)
+    CalendarView calendarView;
+
+    @BindView(R.id.miv_calendar_more)
+    MyImageView miv_calendar_more;
+
     private FootPrintPresenter printPresenter;
-    private ArrayList<Calendar> currentCalendars = new ArrayList<>();
-    private CalendarViewAdapter calendarAdapter;
-    private OnSelectDateListener onSelectDateListener;
-    private CalendarDate currentDate;
     private boolean initiated = false;
-    private HashMap<String, String> markData = new HashMap<>();
+    private List<Calendar> markData = new ArrayList<>();
     private FootAdapter footAdapter;
     private List<FootprintEntity.MarkData> markDataList;
     private GridLayoutManager manager;
+    private CoordinatorLayout.LayoutParams params;
+    private RelativeLayout.LayoutParams calendarParams;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -81,27 +81,32 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     protected void initData() {
-        calendar_view.setViewHeight(TransformUtil.dip2px(baseContext, 270));
         recycler_list.setHasFixedSize(false);
-
         printPresenter = new FootPrintPresenter(baseContext, this);
-        initCurrentDate();
-        initCalendarView();
-        initSelectListener();
-
         markDataList = new ArrayList<>();
-        manager = new GridLayoutManager(getContext(),3);
+        manager = new GridLayoutManager(getContext(), 3);
         recycler_list.setLayoutManager(manager);
-        recycler_list.setNestedScrollingEnabled(false);
 
-        printPresenter.getMarkCalendar(String.valueOf(currentDate.getYear()), String.valueOf(currentDate.month));
-        printPresenter.getMarklist(String.valueOf(currentDate.getYear()), String.valueOf(currentDate.month), false);
+        tv_date.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
+
+        printPresenter.getMarkCalendar(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()));
+        printPresenter.getMarklist(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()), false);
+
+        params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+        calendarParams = new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+
+        calendarView.shrink();
     }
 
     @Override
     protected void initListener() {
         miv_next.setOnClickListener(this);
         miv_pre.setOnClickListener(this);
+        miv_calendar_more.setOnClickListener(this);
+
+        calendarView.setOnYearChangeListener(this);
+        calendarView.setOnDateSelectedListener(this);
+        calendarView.setOnStatusChangeListener(this);
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -119,101 +124,16 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         super.initListener();
     }
 
-    /**
-     * 初始化currentDate
-     *
-     * @return void
-     */
-    private void initCurrentDate() {
-        currentDate = new CalendarDate();
-        tv_date.setText(currentDate.getYear() + "年" + currentDate.month + "月");
+    private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
+        Calendar calendar = new Calendar();
+        calendar.setYear(year);
+        calendar.setMonth(month);
+        calendar.setDay(day);
+        calendar.setSchemeColor(color);//如果单独标记颜色、则会使用这个颜色
+        calendar.setScheme(text);
+        return calendar;
     }
 
-    /**
-     * 初始化CustomDayView，并作为CalendarViewAdapter的参数传入
-     */
-    private void initCalendarView() {
-        initListener();
-        CustomDayView customDayView = new CustomDayView(baseContext, R.layout.custom_day);
-        calendarAdapter = new CalendarViewAdapter(
-                baseContext,
-                onSelectDateListener,
-                CalendarAttr.CalendarType.MONTH,
-                CalendarAttr.WeekArrayType.Sunday,
-                customDayView);
-        calendarAdapter.setOnCalendarTypeChangedListener(new CalendarViewAdapter.OnCalendarTypeChanged() {
-            @Override
-            public void onCalendarTypeChanged(CalendarAttr.CalendarType type) {
-                recycler_list.scrollToPosition(0);
-            }
-        });
-        initMonthPager();
-    }
-
-    private void initSelectListener() {
-        onSelectDateListener = new OnSelectDateListener() {
-            @Override
-            public void onSelectDate(CalendarDate date) {
-                refreshClickDate(date);
-            }
-
-            @Override
-            public void onSelectOtherMonth(int offset) {
-                //偏移量 -1表示刷新成上一个月数据 ， 1表示刷新成下一个月数据
-                calendar_view.selectOtherMonth(offset);
-            }
-        };
-    }
-
-    /**
-     * 初始化monthPager，MonthPager继承自ViewPager
-     *
-     * @return void
-     */
-    private void initMonthPager() {
-        calendar_view.setAdapter(calendarAdapter);
-        calendar_view.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
-        calendar_view.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View page, float position) {
-                position = (float) Math.sqrt(1 - Math.abs(position));
-                page.setAlpha(position);
-            }
-        });
-        calendar_view.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentCalendars = calendarAdapter.getPagers();
-                if (currentCalendars.get(position % currentCalendars.size()) != null) {
-                    CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
-                    refreshClickDate(date);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-    }
-
-    private void refreshClickDate(CalendarDate date) {
-        currentDate = date;
-        tv_date.setText(date.getYear() + "年" + date.month + "月");
-    }
-
-    public void onClickBackToDayBtn() {
-        refreshMonthPager();
-    }
-
-    private void refreshMonthPager() {
-        CalendarDate today = new CalendarDate();
-        calendarAdapter.notifyDataChanged(today);
-        tv_date.setText(today.getYear() + "年" + today.month + "月");
-    }
 
     /**
      * 删除
@@ -253,24 +173,20 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             return;
         switch (v.getId()) {
             case R.id.miv_pre:
-                if (calendarAdapter.getCalendarType() == CalendarAttr.CalendarType.WEEK) {
-                    Utils.scrollTo(content, recycler_list, calendar_view.getViewHeight(), 200);
-                    calendarAdapter.switchToMonth();
-                } else {
-                    Utils.scrollTo(content, recycler_list, calendar_view.getCellHeight(), 200);
-                    calendarAdapter.switchToWeek(calendar_view.getRowIndex());
-                }
-//                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() - 1);
+                calendarView.scrollToPre();
                 break;
             case R.id.miv_next:
-//                calendar_view.setCurrentItem(calendar_view.getCurrentPosition() + 1);
-                if (calendarAdapter.getCalendarType() == CalendarAttr.CalendarType.WEEK) {
-                    Utils.scrollTo(content, recycler_list, calendar_view.getViewHeight(), 200);
-                    calendarAdapter.switchToMonth();
+                calendarView.scrollToNext();
+                break;
+            case R.id.miv_calendar_more:
+                if (calendarView.isExpand()) {
+                    calendarView.shrink();
+                    rl_date_control.setVisibility(View.GONE);
                 } else {
-                    Utils.scrollTo(content, recycler_list, calendar_view.getCellHeight(), 200);
-                    calendarAdapter.switchToWeek(calendar_view.getRowIndex());
+                    calendarView.expand();
+                    rl_date_control.setVisibility(View.VISIBLE);
                 }
+                calendarView.setLayoutParams(calendarParams);
                 break;
         }
     }
@@ -280,11 +196,13 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         if (!isEmpty(calendarEntityList)) {
             for (CalendarEntity calendarEntity : calendarEntityList) {
                 if ("1".equals(calendarEntity.has_data)) {
-                    markData.put(calendarEntity.getCurrentDate(), calendarEntity.has_data);
+                    int year = Integer.valueOf(calendarEntity.year);
+                    int month = Integer.valueOf(calendarEntity.month);
+                    int day = Integer.valueOf(calendarEntity.date);
+                    markData.add(getSchemeCalendar(year, month, day, R.color.pink_color, "标"));
                 }
             }
-            calendarAdapter.setMarkData(markData);
-            calendarAdapter.notifyDataChanged();
+            calendarView.setSchemeDate(markData);
         }
     }
 
@@ -296,7 +214,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         if (!isEmpty(list)) {
             markDataList.addAll(list);
         }
-        LogUtil.httpLogW("markDataList:" + markDataList.size());
         if (footAdapter == null) {
             footAdapter = new FootAdapter(getContext(), true, markDataList);
             recycler_list.setAdapter(footAdapter);
@@ -337,5 +254,35 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @Override
     public boolean isClickManage() {
         return false;
+    }
+
+    @Override
+    public void onYearChange(int year) {
+
+    }
+
+    @Override
+    public void onDateSelected(Calendar calendar, boolean isClick) {
+        tv_date.setText(calendar.getYear() + "年" + calendar.getMonth() + "月");
+    }
+
+    @Override
+    public void OnExpand() {
+        int height = TransformUtil.dip2px(getActivity(), 440.5f);
+        params.height = height;
+        appBarLayout.setLayoutParams(params);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 300f);
+        calendarView.setLayoutParams(calendarParams);
+        miv_calendar_more.setRotation(180f);
+    }
+
+    @Override
+    public void OnShrink() {
+        int height = TransformUtil.dip2px(getActivity(), 130.5f);
+        params.height = height;
+        appBarLayout.setLayoutParams(params);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
+        calendarView.setLayoutParams(calendarParams);
+        miv_calendar_more.setRotation(0f);
     }
 }

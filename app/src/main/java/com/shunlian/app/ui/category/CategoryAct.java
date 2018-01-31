@@ -307,7 +307,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 }
                 break;
             case R.id.tv_keyword:
-                SearchGoodsActivity.startActivityForResult(this);
+                SearchGoodsActivity.startActivityForResult(this,searchParam.keyword);
                 break;
         }
         super.onClick(view);

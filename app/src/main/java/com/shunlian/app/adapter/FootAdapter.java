@@ -24,6 +24,8 @@ import butterknife.BindView;
 
 public class FootAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkData> {
 
+    public static final int DATE_LAYOUT = 1003;
+
     public FootAdapter(Context context, boolean isShowFooter, List<FootprintEntity.MarkData> lists) {
         super(context, isShowFooter, lists);
     }
@@ -39,7 +41,7 @@ public class FootAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkData> {
             MarkViewHolder markViewHolder = (MarkViewHolder) holder;
             FootprintEntity.MarkData markData = lists.get(position);
             GlideUtils.getInstance().loadImage(context, markViewHolder.miv_icon, markData.thumb);
-            markViewHolder.tv_price.setText(markData.price);
+            markViewHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
         }
     }
 

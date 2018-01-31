@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -87,8 +88,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private boolean isShowHotSearch;
     private PromptDialog promptDialog;
 
-    public static void startActivityForResult(Activity context) {
-        context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
+    public static void startActivityForResult(Activity context, String keyWord) {
+        Intent intent = new Intent(context, SearchGoodsActivity.class);
+        intent.putExtra("keyword", keyWord);
+        context.startActivityForResult(intent, SEARCH_REQUEST_CODE);
     }
 
     public static void startActivityForResult(Activity context, boolean isShowHotSearch, String flag) {
@@ -122,10 +125,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         if (isShowHotSearch) {
             presenter.getSearchTag();
         }
-        if (!isEmpty(currentKeyWord)) {
-            edt_goods_search.setText(currentKeyWord);
-            edt_goods_search.setFocusable(true);
-            edt_goods_search.setSelection(currentKeyWord.length());
+
+        if ("sortFrag".equals(currentFlag)) {
+            edt_goods_search.setHint(currentKeyWord);
+        } else {
+            if (!isEmpty(currentKeyWord)) {
+                edt_goods_search.setText(currentKeyWord);
+                edt_goods_search.setFocusable(true);
+                edt_goods_search.setSelection(currentKeyWord.length());
+            }
         }
         if (!isShowHotSearch) {
             setHistoryAdapter();
@@ -218,16 +226,17 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         edt_goods_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Editable text = edt_goods_search.getText();
+                String text = edt_goods_search.getText().toString();
+                if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
+                    text = edt_goods_search.getHint().toString();
+                }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!isShowHotSearch) {
                         if (!isEmpty(text)) {
-                            String cacheSharedPrf = SharedPrefUtil
-                                    .getCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, "");
+                            String cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, "");
                             String concat = cacheSharedPrf.concat(text.toString().concat(","));
                             SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_HISTORY, concat);
-                            SearchResultAct.startAct(SearchGoodsActivity.this,
-                                    text.toString(), currentFlag);
+                            SearchResultAct.startAct(SearchGoodsActivity.this, text.toString(), currentFlag);
                             finish();
                         }
                         return true;
