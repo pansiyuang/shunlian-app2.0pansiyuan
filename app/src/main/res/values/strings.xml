@@ -416,5 +416,6 @@
     <string name="collection_empty">未发现收藏的店铺</string>
     <string name="collection_more">更多     ></string>
     <string name="search_collection">搜索收藏的商品/店铺</string>
+    <string name="cut_price">降价中</string>
 
 </resources>

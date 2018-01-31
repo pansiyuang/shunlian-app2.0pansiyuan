@@ -38,6 +38,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:singleLine="true"
+                android:textColor="@color/share_text"
+                android:textSize="13.5sp"
                 app:tv_control_adapter="true"
                 app:tv_margin_left="10" />
 

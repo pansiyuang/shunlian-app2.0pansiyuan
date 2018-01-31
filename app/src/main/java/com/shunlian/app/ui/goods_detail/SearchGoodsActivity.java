@@ -86,6 +86,8 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     private String currentFlag;
     private boolean isShowHotSearch;
     private PromptDialog promptDialog;
+    private String save_goods_history;
+    private String save_shop_history;
 
     public static void startActivityForResult(Activity context) {
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
@@ -126,6 +128,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             edt_goods_search.setText(currentKeyWord);
         }
         if (!isShowHotSearch){
+            save_goods_history = SharedPrefUtil.COLLECTION_GOODS_HISTORY
+                    .concat(SharedPrefUtil.getSharedPrfString("member_id",""));
+            save_shop_history = SharedPrefUtil.COLLECTION_STORE_HISTORY
+                    .concat(SharedPrefUtil.getSharedPrfString("member_id",""));
             setHistoryAdapter();
         }
 
@@ -138,11 +144,9 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         String cacheSharedPrf = null;
         LogUtil.zhLogW("==currentFlag=========="+currentFlag);
         if ("goods".equals(currentFlag)) {
-            cacheSharedPrf = SharedPrefUtil
-                    .getCacheSharedPrf(SharedPrefUtil.COLLECTION_GOODS_HISTORY, "");
+            cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_goods_history, "");
         }else if ("shop".equals(currentFlag)){
-            cacheSharedPrf = SharedPrefUtil
-                    .getCacheSharedPrf(SharedPrefUtil.COLLECTION_STORE_HISTORY, "");
+            cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_shop_history, "");
         }
         if (!isEmpty(cacheSharedPrf)){
             taglayout_history.setVisibility(View.VISIBLE);
@@ -230,14 +234,14 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         if (!isEmpty(text)) {
                             if ("goods".equals(currentFlag)) {
                                 String cacheSharedPrf = SharedPrefUtil
-                                        .getCacheSharedPrf(SharedPrefUtil.COLLECTION_GOODS_HISTORY, "");
+                                        .getCacheSharedPrf(save_goods_history, "");
                                 String concat = cacheSharedPrf.concat(text.toString().concat(","));
-                                SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_GOODS_HISTORY, concat);
+                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history, concat);
                             }else {
                                 String cacheSharedPrf = SharedPrefUtil
-                                        .getCacheSharedPrf(SharedPrefUtil.COLLECTION_STORE_HISTORY, "");
+                                        .getCacheSharedPrf(save_shop_history, "");
                                 String concat = cacheSharedPrf.concat(text.toString().concat(","));
-                                SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_STORE_HISTORY, concat);
+                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
                             }
                             SearchResultAct.startAct(SearchGoodsActivity.this,
                                     text.toString(), currentFlag);
@@ -245,12 +249,10 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         }
                         return true;
                     }else {
-                        if (!isEmpty(text)) {
-                            Intent intent = new Intent();
-                            intent.putExtra("keyword",text.toString());
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
+                        GoodsSearchParam param = new GoodsSearchParam();
+                        param.keyword = text.toString();
+                        CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        finish();
                         return true;
                     }
                 }
@@ -268,9 +270,9 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             presenter.clearSearchHistory();
                         }else {
                             if ("goods".equals(currentFlag)){
-                                SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_GOODS_HISTORY,"");
+                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history,"");
                             }else if ("shop".equals(currentFlag)){
-                                SharedPrefUtil.saveCacheSharedPrf(SharedPrefUtil.COLLECTION_STORE_HISTORY,"");
+                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history,"");
                             }
                             clearSuccess("");
                         }
