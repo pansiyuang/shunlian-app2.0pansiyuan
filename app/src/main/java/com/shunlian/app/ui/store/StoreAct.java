@@ -140,8 +140,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.mtv_storeName)
     MyTextView mtv_storeName;
 
-    @BindView(R.id.ratingBar1)
-    FiveStarBar ratingBar1;
+    @BindView(R.id.miv_star)
+    MyImageView miv_star;
 
     @BindView(R.id.mtv_number)
     MyTextView mtv_number;
@@ -519,9 +519,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         star=head.star;
         mtv_storeName.setText(head.decoration_name);
-        ratingBar1.setEnabled(false);
-        ratingBar1.setNumberOfStars(Integer.valueOf(star));
-        ratingBar1.setRating(Integer.valueOf(star));
+        GlideUtils.getInstance().loadImage(this, miv_star, star);
 
         mtv_number.setText(head.mark_count + "人");
         mtv_babyNum.setText(head.goods_count);

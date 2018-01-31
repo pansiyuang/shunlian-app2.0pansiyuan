@@ -12,7 +12,9 @@ import com.shunlian.app.adapter.StoreEvaluateAdapter;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.StoreIntroduceView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -22,8 +24,8 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mtv_storeName)
     TextView mtv_storeName;
 
-    @BindView(R.id.mtv_storeScore)
-    TextView mtv_storeScore;
+    @BindView(R.id.miv_star)
+    MyImageView miv_star;
 
     @BindView(R.id.mtv_number)
     TextView mtv_number;
@@ -131,7 +133,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 //        }
         seller_id=storeIntroduceEntity.seller_id;
         mtv_storeName.setText(storeIntroduceEntity.store_name);
-        mtv_storeScore.setText("店铺分"+storeScore);
+        GlideUtils.getInstance().loadImage(this, miv_star, storeScore);
         mtv_number.setText(storeIntroduceEntity.store_collect + "人");
         mtv_haopinglv.setText(storeIntroduceEntity.evaluate.praise_rate);
         mtv_dianhua.setText(storeIntroduceEntity.store_phone);

@@ -88,18 +88,19 @@
                 app:ll_margin_bottom="30"
                 app:tv_margin_right="160">
 
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_voucher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="店铺等级"
-                    android:textSize="9sp" />
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_star"
+                    android:layout_width="67dp"
+                    android:layout_height="13dp"
+                    android:layout_alignParentBottom="true"
+                    android:scaleType="fitXY"
+                    android:layout_toRightOf="@id/miv_storeLogo" />
+
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_nice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="折"
                     android:textColor="@color/new_text"
                     android:textSize="12sp"
                     app:tv_control_adapter="true"
@@ -155,7 +156,7 @@
             android:layout_height="wrap_content"
             android:background="@color/pink_color"
             android:gravity="center"
-            android:text="@string/cancel_collection"
+            android:text="@string/cancels_collection"
             android:textColor="@color/white"
             android:textSize="15sp"
             app:tv_control_adapter="true"
