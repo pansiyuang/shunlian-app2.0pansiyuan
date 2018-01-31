@@ -89,24 +89,21 @@
                     android:scaleType="centerCrop"
                     android:src="@mipmap/icon_login_logo" />
 
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_storeScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_star"
+                    android:layout_width="67dp"
+                    android:layout_height="13dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="2dp"
+                    android:scaleType="fitXY"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/miv_storeLogo"
-                    android:text="9.5分"
-                    android:textColor="@color/share_text"
-                    android:textSize="11sp" />
+                    android:layout_toRightOf="@id/miv_storeLogo" />
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_storeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/mtv_storeScore"
-                    android:layout_marginBottom="1dp"
+                    android:layout_above="@id/miv_star"
+                    android:layout_marginBottom="2dp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/miv_storeLogo"
                     android:text="美特斯邦威"
