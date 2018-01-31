@@ -11,6 +11,7 @@
         android:layout_alignParentBottom="true">
 
         <android.support.design.widget.AppBarLayout
+            app:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
