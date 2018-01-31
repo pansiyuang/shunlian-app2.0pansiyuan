@@ -25,7 +25,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -76,6 +78,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
     private List<StoreIndexEntity.Body.Datas> mDatas;
 
+    private float slideBackWidth;//侧滑宽度
+    private boolean isSlideBackDispatch;//是否进行侧滑兼容处理
+
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             scrollToNextItem(currentPositon);
@@ -93,6 +98,11 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     public BaseBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
+        if (context instanceof BaseActivity){
+            isSlideBackDispatch = true;
+            handlerSlideBack();
+        }
+
         dm = context.getResources().getDisplayMetrics();
 
         //get custom attr
@@ -450,28 +460,51 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return vp;
     }
 
+    private boolean isSlideBackLock;//侧滑是否关闭
+
+    private void handlerSlideBack(){
+        if (isSlideBackDispatch) {
+            BaseActivity ba = (BaseActivity) getContext();
+            slideBackWidth = DeviceInfoUtil.getDeviceWidth(context)
+                    * ba.getSlideBackEdgePercent();
+            isSlideBackLock = ba.getIsSlideBackLock();
+            if (!isSlideBackLock)
+                ba.setSlideBackListener(new OnSlideListenerAdapter(){
+                    @Override
+                    public void onSlide(float percent) {
+                        super.onSlide(percent);
+                        if (percent == 0){
+                            goOnScroll();
+                        }
+                    }
+                });
+        }
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (getContext() instanceof BaseActivity){
-            if (ev.getX() < 100){
-                return false;
-            }
-        }
+//        LogUtil.zhLogW(ev.getX()+"================="+ev.getAction());
+
+//        LogUtil.zhLogW("slideBackWidth==="+slideBackWidth);
+
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 pauseScroll();
-//                Log.d(TAG, "dispatchTouchEvent--->ACTION_DOWN");
+                float currentScrollPosition = ev.getX();
+                if (isSlideBackDispatch && !isSlideBackLock && currentScrollPosition < slideBackWidth){
+                    return false;
+                }
+//                LogUtil.zhLogW("dispatchTouchEvent--->ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_UP:
                 goOnScroll();
-//                Log.d(TAG, "dispatchTouchEvent--->ACTION_UP");
+//                LogUtil.zhLogW("dispatchTouchEvent--->ACTION_UP");
                 break;
             case MotionEvent.ACTION_CANCEL:
                 goOnScroll();
-//                Log.d(TAG, "dispatchTouchEvent--->ACTION_CANCEL");
+//                LogUtil.zhLogW("dispatchTouchEvent--->ACTION_CANCEL");
                 break;
-
         }
         return super.dispatchTouchEvent(ev);
     }
