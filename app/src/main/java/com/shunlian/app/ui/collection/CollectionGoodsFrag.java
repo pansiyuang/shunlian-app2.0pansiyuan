@@ -48,19 +48,19 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     @BindView(R.id.recycle_category)
     RecyclerView recycle_category;
 
-    @BindView(R.id.mtv_in_cate)
-    MyTextView mtv_in_cate;
-
     @BindView(R.id.flayout_category)
     FrameLayout flayout_category;
 
-    @BindView(R.id.mtv_out_cate)
-    MyTextView mtv_out_cate;
+    @BindView(R.id.mtv_cate_name)
+    MyTextView mtv_cate_name;
+
+    @BindView(R.id.mtv_cut_price)
+    MyTextView mtv_cut_price;
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     private SimpleRecyclerAdapter cateAdapter;
-    private String selectId = "null";
+    private String selectId = "0";
     private CollectionGoodsPresenter mPresenter;
     private List<CollectionGoodsEntity.Goods> goodsLists = new ArrayList<>();
     private CollectionGoodsAdapter adapter;
@@ -155,7 +155,12 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
      */
     @Override
     public void operationMange() {
-
+        for (CollectionGoodsEntity.Goods goods : goodsLists) {
+            goods.isSelect = false;
+        }
+        adapter.notifyDataSetChanged();
+        isAllSelect = false;
+        gone(flayout_category);
     }
 
     /**
@@ -221,7 +226,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
 
     }
 
-    @OnClick({R.id.mrlayout_in_category,R.id.mrlayout_out_category,R.id.flayout_category})
+    @OnClick({R.id.mrlayout_in_category,R.id.flayout_category})
     public void clickCategory(){
         if (flayout_category.getVisibility() == View.GONE) {
             visible(flayout_category);
@@ -230,8 +235,11 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         }
     }
 
-    @OnClick(R.id.mtv_in_cate)
+    @OnClick(R.id.mtv_cut_price)
     public void  reducePrice(){
+        GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
+        background.setColor(getColorResouce(R.color.category_reset));
+        mtv_cut_price.setTextColor(getColorResouce(R.color.pink_color));
         mPresenter.setCateOrIscut(null,"1");
         mPresenter.sort();
     }
@@ -271,7 +279,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     if (adapter.isShowSelect) {
                         goods.isSelect = !goods.isSelect;
                         adapter.notifyItemChanged(position);
-                        ((MyCollectionAct) baseActivity).setDeleteBackgroundColor(isSelectItem());
+                        ((MyCollectionAct) baseActivity).setManageState(selectState());
                     }else {
                         GoodsDetailAct.startAct(baseActivity,goods.goods_id);
                     }
@@ -310,6 +318,10 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     @Override
     public void collectionGoodsCategoryList(final List<CollectionGoodsEntity.Cates> cates) {
         if (cateAdapter == null) {
+            CollectionGoodsEntity.Cates cate = new CollectionGoodsEntity.Cates();
+            cate.id = "0";
+            cate.name = getStringResouce(R.string.all);
+            cates.add(0,cate);
             cateAdapter = new SimpleRecyclerAdapter<CollectionGoodsEntity.Cates>
                     (baseActivity, R.layout.textview_layout, cates) {
 
@@ -343,8 +355,12 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     selectId = cate.id;
                     mPresenter.setCateOrIscut(cate.id,"0");
                     cateAdapter.notifyDataSetChanged();
+                    mtv_cate_name.setText(cate.name);
                     gone(flayout_category);
                     mPresenter.sort();
+                    GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
+                    background.setColor(getColorResouce(R.color.white));
+                    mtv_cut_price.setTextColor(getColorResouce(R.color.new_text));
                 }
             });
         }
@@ -397,17 +413,49 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             }
             adapter.notifyDataSetChanged();
         }
-        showEmptyPage(isEmpty(goodsLists));
+        boolean empty = isEmpty(goodsLists);
+        showEmptyPage(empty);
+        if (!empty) {
+            ((MyCollectionAct) baseActivity).setManageState(selectState());
+        }else {
+            ((MyCollectionAct) baseActivity).recoveryManage(this);
+        }
     }
-
-    private boolean isSelectItem(){
+    /*
+    是否选择条目
+     */
+//    private boolean isSelectItem(){
+//        if (!isEmpty(goodsLists)){
+//            for (CollectionGoodsEntity.Goods goods: goodsLists){
+//                if (goods.isSelect){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+    /*
+    是否全选  0 全选  1 部分选择 2 全不选
+     */
+    private int selectState(){
+        int hasSlect = 0;//有选择
+        int notSlect = 0;//没有选择
         if (!isEmpty(goodsLists)){
             for (CollectionGoodsEntity.Goods goods: goodsLists){
-                if (goods.isSelect){
-                    return true;
+                if (!goods.isSelect){
+                    notSlect = 1;
+                }else {
+                    hasSlect = 1;
+                }
+                if (hasSlect == 1 && notSlect == 1){
+                    return 1;//部分选择
                 }
             }
+            if (hasSlect == 0 && notSlect == 1){
+                return 2;//全不选
+            }
+            return 0;//全选
         }
-        return false;
+        return -1;
     }
 }

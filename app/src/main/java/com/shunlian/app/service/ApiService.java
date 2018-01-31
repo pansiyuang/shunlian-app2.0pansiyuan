@@ -936,5 +936,13 @@ public interface ApiService {
      * @return
      */
     @POST("member/Myfavorite/search")
-    Call<BaseEntity<EmptyEntity>> collectionStoreSearch(@Body RequestBody body);
+    Call<BaseEntity<CollectionStoresEntity>> collectionStoreSearch(@Body RequestBody body);
+
+    /**
+     * 批量删除关注的商店
+     * @param map
+     * @return
+     */
+    @GET("member/Myfavorite/removeFavoShop")
+    Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String,String> map);
 }

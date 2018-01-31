@@ -12,17 +12,13 @@ import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.CollectionGoodsAdapter;
 import com.shunlian.app.adapter.CollectionStoresAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
-import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.presenter.CollectionStoresPresenter;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
@@ -30,7 +26,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionStoresView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
@@ -44,7 +39,7 @@ import butterknife.OnClick;
  * 收藏店铺
  */
 
-public class CollectionStoreFrag extends CollectionFrag implements ICollectionStoresView{
+public class CollectionStoreFrag extends CollectionFrag implements ICollectionStoresView {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
@@ -73,7 +68,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.frag_collection_store,null,false);
+        return inflater.inflate(R.layout.frag_collection_store, null, false);
     }
 
     @Override
@@ -84,10 +79,10 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null){
+                if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
-                        if (mPresenter != null){
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (mPresenter != null) {
                             mPresenter.onRefresh();
                         }
                     }
@@ -98,7 +93,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
 
     @Override
     protected void initData() {
-        mPresenter = new CollectionStoresPresenter(baseActivity,this);
+        mPresenter = new CollectionStoresPresenter(baseActivity, this);
 
         //列表
         manager = new LinearLayoutManager(baseActivity);
@@ -106,11 +101,11 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
 
         int space = TransformUtil.dip2px(baseActivity, 0.5f);
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getColorResouce(R.color.light_gray_three)));
+                0, 0, getColorResouce(R.color.light_gray_three)));
 
 
         //分类
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(baseActivity,3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(baseActivity, 3);
         recycle_category.setLayoutManager(gridLayoutManager);
 
     }
@@ -122,11 +117,13 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
     public void delete() {
         delLists = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < stores.size(); i++){
+        for (int i = 0; i < stores.size(); i++) {
             CollectionStoresEntity.Store store = stores.get(i);
-            if (store.isSelect){
+            if (store.isSelect) {
                 sb.append(store.id);
-                sb.append(",");
+                if (i < stores.size() - 1) {
+                    sb.append(",");
+                }
                 delLists.add(store);
             }
         }
@@ -138,12 +135,12 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void selectAll() {
-        if (!isEmpty(stores)){
+        if (!isEmpty(stores)) {
             if (!isAllSelect) {
                 for (CollectionStoresEntity.Store store : stores) {
                     store.isSelect = true;
                 }
-            }else {
+            } else {
                 for (CollectionStoresEntity.Store store : stores) {
                     store.isSelect = false;
                 }
@@ -153,12 +150,17 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         }
     }
 
+
     /**
      * 操作管理
      */
     @Override
     public void operationMange() {
-
+        for (CollectionStoresEntity.Store goods : stores) {
+            goods.isSelect = false;
+        }
+        adapter.notifyDataSetChanged();
+        isAllSelect = false;
     }
 
     /**
@@ -166,7 +168,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void finishManage() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.isShowSelect = false;
             adapter.notifyDataSetChanged();
         }
@@ -179,8 +181,8 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public boolean isClickManage() {
-        if (!isEmpty(stores)){
-            if (adapter != null){
+        if (!isEmpty(stores)) {
+            if (adapter != null) {
                 adapter.isShowSelect = true;
                 adapter.notifyDataSetChanged();
             }
@@ -196,19 +198,19 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void showFailureView(int request_code) {
-        LogUtil.zhLogW("showFailureView=========request_code="+request_code);
-        if (request_code == CollectionGoodsPresenter.DISPLAY_NET_FAIL){
+        LogUtil.zhLogW("showFailureView=========request_code=" + request_code);
+        if (request_code == CollectionGoodsPresenter.DISPLAY_NET_FAIL) {
             visible(nei_empty);
             nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mPresenter != null){
+                    if (mPresenter != null) {
                         mPresenter.sort();
                     }
                 }
             });
-        }else {
-            if (adapter != null){
+        } else {
+            if (adapter != null) {
                 adapter.loadFailure();
             }
         }
@@ -224,11 +226,11 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
 
     }
 
-    @OnClick({R.id.mrlayout_in_category,R.id.mrlayout_out_category,R.id.flayout_category})
-    public void clickCategory(){
+    @OnClick({R.id.mrlayout_in_category, R.id.mrlayout_out_category, R.id.flayout_category})
+    public void clickCategory() {
         if (flayout_category.getVisibility() == View.GONE) {
             visible(flayout_category);
-        }else {
+        } else {
             gone(flayout_category);
         }
     }
@@ -241,17 +243,17 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void collectionStoresList(int page, int allPage, final List<CollectionStoresEntity.Store> mstores) {
-        if (page == 1){
+        if (page == 1) {
             recy_view.scrollToPosition(0);
             stores.clear();
         }
-        if (!isEmpty(mstores)){
+        if (!isEmpty(mstores)) {
             stores.addAll(mstores);
         }
         if (adapter == null) {
             adapter = new CollectionStoresAdapter(baseActivity, stores);
             recy_view.setAdapter(adapter);
-            adapter.setPageLoading(page,allPage);
+            adapter.setPageLoading(page, allPage);
             adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
@@ -259,31 +261,70 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                     if (adapter.isShowSelect) {
                         store.isSelect = !store.isSelect;
                         adapter.notifyItemChanged(position);
-                        ((MyCollectionAct) baseActivity).setDeleteBackgroundColor(isSelectItem());
-                    }else if ("1".equals(store.status)){
-                        StoreAct.startAct(baseActivity,store.store_id);
+                        ((MyCollectionAct) baseActivity).setManageState(selectState());
+//                        ((MyCollectionAct) baseActivity).setDeleteBackgroundColor(isSelectItem());
+                    } else {
+                        StoreAct.startAct(baseActivity, store.store_id);
                     }
+//                    }else if ("1".equals(store.status)){
+//                        StoreAct.startAct(baseActivity,store.store_id);
+//                    }
                 }
             });
 
+            //侧滑删除
+            adapter.setDelCollectionStoresListener(new CollectionStoresAdapter.IDelCollectionStoresListener() {
+                @Override
+                public void onDelStores(CollectionStoresEntity.Store store) {
+                    mPresenter.storesFavRemove(store.id);
+                    delLists = new ArrayList<>();
+                    delLists.add(store);
+                }
+            });
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
                 public void onReload() {
-                    if (mPresenter != null){
+                    if (mPresenter != null) {
                         mPresenter.onRefresh();
                     }
                 }
             });
-        }else {
-            adapter.setPageLoading(page,allPage);
+        } else {
+            adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
 
         showEmptyPage(isEmpty(stores));
     }
 
+    /*
+   是否全选  0 全选  1 部分选择 2 全不选
+    */
+    private int selectState() {
+        int hasSlect = 0;//有选择
+        int notSlect = 0;//没有选择
+        if (!isEmpty(stores)) {
+            for (CollectionStoresEntity.Store store : stores) {
+                if (!store.isSelect) {
+                    notSlect = 1;
+                } else {
+                    hasSlect = 1;
+                }
+                if (hasSlect == 1 && notSlect == 1) {
+                    return 1;//部分选择
+                }
+            }
+            if (hasSlect == 0 && notSlect == 1) {
+                return 2;//全不选
+            }
+            return 0;//全选
+        }
+        return -1;
+    }
+
     /**
      * 分类
+     *
      * @param cates
      */
     @Override
@@ -298,17 +339,17 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                     holder.addOnClickListener(R.id.mtv_text);
                     textView.setWHProportion(210, 70);
                     RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) textView.getLayoutParams();
-                    layoutParams.topMargin = TransformUtil.dip2px(baseContext,15);
-                    layoutParams.leftMargin = TransformUtil.dip2px(baseContext,10);
+                    layoutParams.topMargin = TransformUtil.dip2px(baseContext, 15);
+                    layoutParams.leftMargin = TransformUtil.dip2px(baseContext, 10);
                     textView.setLayoutParams(layoutParams);
                     Drawable drawable = baseActivity.getResources().getDrawable(R.drawable.rounded_rectangle_35px);
                     textView.setBackgroundDrawable(drawable);
                     textView.setText(cates.name);
                     GradientDrawable background = (GradientDrawable) textView.getBackground();
-                    if (selectId.equals(cates.id)){
+                    if (selectId.equals(cates.id)) {
                         background.setColor(getColorResouce(R.color.category_reset));
                         textView.setTextColor(getColorResouce(R.color.pink_color));
-                    }else {
+                    } else {
                         background.setColor(getColorResouce(R.color.white));
                         textView.setTextColor(getColorResouce(R.color.new_text));
                     }
@@ -319,7 +360,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 @Override
                 public void onItemClick(View view, int position) {
                     CollectionStoresEntity.Cates cate = cates.get(position);
-                    selectId = cate.id;
+                    if (cate.id != null) {
+                        selectId = cate.id;
+                    }
                     mPresenter.setCate(cate.id);
                     cateAdapter.notifyDataSetChanged();
                     gone(flayout_category);
@@ -329,7 +372,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         }
     }
 
-    private void showEmptyPage(boolean isShow){
+    private void showEmptyPage(boolean isShow) {
         if (isShow) {
             visible(nei_empty);
             nei_empty.setImageResource(R.mipmap.img_empty_common)
@@ -341,7 +384,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                             Common.staticToast("去首页");
                         }
                     });
-        }else {
+        } else {
             gone(nei_empty);
         }
     }
@@ -351,19 +394,25 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void delSuccess() {
-        if (!isEmpty(delLists)){
-            for (CollectionStoresEntity.Store store : delLists){
+        if (!isEmpty(delLists)) {
+            for (CollectionStoresEntity.Store store : delLists) {
                 stores.remove(store);
             }
             adapter.notifyDataSetChanged();
         }
-        showEmptyPage(isEmpty(stores));
+        boolean empty = isEmpty(stores);
+        showEmptyPage(empty);
+        if (!empty) {
+            ((MyCollectionAct) baseActivity).setManageState(selectState());
+        }else {
+            ((MyCollectionAct) baseActivity).recoveryManage(this);
+        }
     }
 
-    private boolean isSelectItem(){
-        if (!isEmpty(stores)){
-            for (CollectionStoresEntity.Store store : stores){
-                if (store.isSelect){
+    private boolean isSelectItem() {
+        if (!isEmpty(stores)) {
+            for (CollectionStoresEntity.Store store : stores) {
+                if (store.isSelect) {
                     return true;
                 }
             }

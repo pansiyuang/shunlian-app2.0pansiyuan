@@ -186,6 +186,9 @@ public class MyCollectionAct extends BaseActivity {
                         if (collectionFrag != null && collectionFrag.isVisible()) {
                             ft.hide(collectionFrag);
                             recoveryManage(collectionFrag);
+                            setDeleteBackgroundColor(false);
+                            isSelectAll = false;
+                            collectionFrag.operationMange();
                         }
                     }
                 }
@@ -219,16 +222,39 @@ public class MyCollectionAct extends BaseActivity {
 
     @OnClick(R.id.miv_search)
     public void clickSearch(){
-        SearchGoodsActivity.startActivityForResult(this, false,"goods");
+        String flag = null;
+        if (currentFrag == GOODS_FLAG) {
+            flag = "goods";
+        }else {
+            flag = "shop";
+        }
+        SearchGoodsActivity.startActivityForResult(this, false, flag);
     }
 
     /**
      * 设置删除背景
-     * @param isLight
+     * @param isLight 部分选择
      */
     public void setDeleteBackgroundColor(boolean isLight){
         if (isLight){
             mtv_delete.setBackgroundColor(pink_color);
+        }else {
+            mtv_delete.setBackgroundColor(color_value_6c);
+            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+        }
+    }
+
+    /**
+     * 设置管理选择状态
+     * @param state 0 全选  1 部分选择 2 全不选
+     */
+    public void setManageState(int state){
+        if (state == 0){
+            mtv_delete.setBackgroundColor(pink_color);
+            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        }else if (1 == state){
+            mtv_delete.setBackgroundColor(pink_color);
+            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
         }else {
             mtv_delete.setBackgroundColor(color_value_6c);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
@@ -253,7 +279,7 @@ public class MyCollectionAct extends BaseActivity {
      *将操作状态恢复为正常状态
      * @param collectionFrag
      */
-    private void recoveryManage(CollectionFrag collectionFrag) {
+    public void recoveryManage(CollectionFrag collectionFrag) {
         collectionFrag.finishManage();
         mtv_manage.setText(getStringResouce(R.string.manage));
         mrlayout_manage.setVisibility(View.GONE);
