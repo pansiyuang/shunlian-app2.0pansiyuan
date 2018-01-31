@@ -92,7 +92,7 @@ public class CategoryFiltratePresenter extends BasePresenter<CategoryFiltrateVie
             Constant.BRAND_IDS = new ArrayList<>();
         }
         List<GetListFilterEntity.Recommend> recommends = new ArrayList<>();
-        for (int i = 0; i < 11 || i < getListFilterEntity.recommend_brand_list.size(); i++) {
+        for (int i = 0; i < getListFilterEntity.recommend_brand_list.size()&&i < 11 ; i++) {
             GetListFilterEntity.Recommend recommend = getListFilterEntity.recommend_brand_list.get(i);
             recommends.add(recommend);
             if (i >= getListFilterEntity.recommend_brand_list.size() - 1 || i >= 10) {

@@ -78,6 +78,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private Resources resources;
     public static Map<Integer,NetDialog> dialogLists = new HashMap<>();
     private SlideBackLayout mSlideBackLayout;
+    private OnSlideListenerAdapter mSlideBackListener;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,10 +126,55 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                     public void onSlide(@FloatRange(from = 0.0,
                             to = 1.0) float percent) {
                         super.onSlide(percent);
+                        if (mSlideBackListener != null)
+                            mSlideBackListener.onSlide(percent);
+                    }
+
+                    @Override
+                    public void onClose() {
+                        super.onClose();
+                        if (mSlideBackListener != null)
+                            mSlideBackListener.onClose();
+                    }
+
+                    @Override
+                    public void onOpen() {
+                        super.onOpen();
+                        if (mSlideBackListener != null)
+                            mSlideBackListener.onOpen();
                     }
                 });
     }
 
+    /**
+     * 获取侧滑边沿百分比
+     * @return
+     */
+    public float getSlideBackEdgePercent() {
+        if (mSlideBackLayout != null) {
+            return mSlideBackLayout.getEdgeRangePercent();
+        }
+        return 0.1f;
+    }
+
+    /**
+     * 侧滑是否锁定
+     * @return
+     */
+    public boolean getIsSlideBackLock(){
+        if (mSlideBackLayout != null) {
+            return mSlideBackLayout.isLock();
+        }
+        return true;
+    }
+
+    /**
+     * 侧滑监听
+     * @param slideBackListener
+     */
+    public void setSlideBackListener(OnSlideListenerAdapter slideBackListener){
+        mSlideBackListener = slideBackListener;
+    }
     /**
      * 打开侧滑
      */
