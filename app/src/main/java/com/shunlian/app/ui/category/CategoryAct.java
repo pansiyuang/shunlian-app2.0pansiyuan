@@ -465,9 +465,16 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         } else if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK) {
             String keyword = data.getStringExtra("keyword");
             if (!isEmpty(keyword) && !keyword.equals(searchParam.keyword)) {
+                currentSortPosition = 0;
+                presenter.initPage();
+                setSortMode(true);
+                setSalesMode(false);
+                tv_filter.setTextColor(getColorResouce(R.color.new_text));
+                tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
+                initFiltrate();
+
                 searchParam.keyword = keyword;
                 tv_keyword.setText(keyword);
-                initFiltrate();
                 presenter.getSearchGoods(searchParam, true);
             }
         }
@@ -481,13 +488,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     }
 
     public void initFiltrate() {
-
-        currentSortPosition = 0;
-        presenter.initPage();
-        setSortMode(true);
         searchParam = new GoodsSearchParam();
-        tv_filter.setTextColor(getColorResouce(R.color.new_text));
-        tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
 
         Constant.BRAND_IDS = null;//筛选品牌id
         Constant.BRAND_IDSBEFORE = null;//筛选品牌id,记录用
