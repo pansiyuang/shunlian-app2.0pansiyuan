@@ -32,11 +32,8 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
-import com.shunlian.app.utils.HorItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
-import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -563,8 +560,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
                 LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
                 rv_firstVouch.setLayoutManager(firstManager);
-                int space = TransformUtil.dip2px(this, 10);
-                rv_firstVouch.addItemDecoration(new HorItemDecoration(space,space / 2,space / 2));
                 rv_firstVouch.setAdapter(storeVoucherAdapter);
 
                 storeVoucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
