@@ -18,6 +18,7 @@ import com.shunlian.app.adapter.FootAdapter;
 import com.shunlian.app.bean.CalendarEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.presenter.FootPrintPresenter;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFootPrintView;
 import com.shunlian.app.widget.MyImageView;
@@ -70,6 +71,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private List<Calendar> markData = new ArrayList<>();
     private FootAdapter footAdapter;
     private List<FootprintEntity.MarkData> markDataList;
+    private List<Object> objectList = new ArrayList<>();
     private GridLayoutManager manager;
     private CoordinatorLayout.LayoutParams params;
     private RelativeLayout.LayoutParams calendarParams;
@@ -210,12 +212,30 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     public void getMarkList(List<FootprintEntity.MarkData> list, List<FootprintEntity.DateInfo> dateInfoList, int page, int allPage) {
         if (page == 1) {
             markDataList.clear();
+            objectList.clear();
         }
         if (!isEmpty(list)) {
             markDataList.addAll(list);
         }
+        int childCount;
+        int dateCount = 0;
+        for (int i = 0; i < dateInfoList.size(); i++) {
+            objectList.add(dateInfoList.get(i));
+            dateCount++;
+            childCount = Integer.valueOf(dateInfoList.get(i).counts);
+            if (childCount > page * 20) {
+                childCount = page * 20;
+            }
+            for (int j = 1; j < childCount; j++) {
+                FootprintEntity.MarkData mark = list.get(objectList.size() - dateCount);
+                objectList.add(mark);
+            }
+            if (childCount == page * 20) {
+                break;
+            }
+        }
         if (footAdapter == null) {
-            footAdapter = new FootAdapter(getContext(), true, markDataList);
+            footAdapter = new FootAdapter(getContext(), objectList);
             recycler_list.setAdapter(footAdapter);
             footAdapter.setPageLoading(page, allPage);
             footAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
@@ -271,8 +291,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         int height = TransformUtil.dip2px(getActivity(), 440.5f);
         params.height = height;
         appBarLayout.setLayoutParams(params);
-        calendarParams.height = TransformUtil.dip2px(getActivity(), 300f);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
         calendarView.setLayoutParams(calendarParams);
+        rl_date_control.setVisibility(View.VISIBLE);
         miv_calendar_more.setRotation(180f);
     }
 
@@ -283,6 +304,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         appBarLayout.setLayoutParams(params);
         calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
         calendarView.setLayoutParams(calendarParams);
+        rl_date_control.setVisibility(View.GONE);
         miv_calendar_more.setRotation(0f);
     }
 }
