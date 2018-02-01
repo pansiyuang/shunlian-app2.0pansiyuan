@@ -34,7 +34,7 @@ import butterknife.BindView;
  */
 
 public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData.Good.MList> {
-    public String isStart,title,content,time,from;
+    public String isStart,title,content,time,from,id;
     private DayDayPresenter dayDayPresenter;
 
 
@@ -63,7 +63,6 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
             oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
             oneHolder.mtv_priceA.setText(context.getResources().getString(R.string.common_yuan) + data.act_price);
             oneHolder.goods_id = data.goods_id;
-            oneHolder.id = data.id;
             oneHolder.position = position;
             if (position==0){
                 oneHolder.mrlayout_time.setVisibility(View.VISIBLE);
@@ -186,7 +185,6 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 
         private boolean isRemind = false,isStartDownTime = false;;
         private String goods_id;
-        private String id;
         private int position;
 
         OneHolder(View itemView) {
