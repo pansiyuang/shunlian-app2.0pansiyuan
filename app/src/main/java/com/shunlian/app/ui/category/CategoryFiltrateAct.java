@@ -108,7 +108,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     private List<GetListFilterEntity.Brand> brands;
     private ArrayList<String> letters;
     private Boolean isZhu = false, isZhe = false, isDing = false, isBao = false, isMore = false, isopt = false;
-    private String keyword, cid, sort_type, locate;
+    private String keyword="", cid="", sort_type, locate;
 
     public static void startAct(Activity context, String keyword, String cid, String sort_type) {
         Intent intent = new Intent(context, CategoryFiltrateAct.class);
