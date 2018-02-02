@@ -419,4 +419,30 @@
     <string name="search_collection">搜索收藏的商品/店铺</string>
     <string name="cut_price">降价中</string>
 
+    <!--个人中心-->
+    <string name="personal_yue">余额</string>
+    <string name="personal_youhuiquan">优惠券</string>
+    <string name="personal_donglizhishu">动力指数</string>
+    <string name="personal_xiaoshou">销售</string>
+    <string name="personal_quanbu">全部</string>
+    <string name="personal_daifukuan">待付款</string>
+    <string name="personal_daishouhuo">待收货</string>
+    <string name="personal_daifahuo">待发货</string>
+    <string name="personal_daipingjia">待评价</string>
+    <string name="personal_shouhou">售后</string>
+    <string name="personal_shoucang">收藏</string>
+    <string name="personal_shangping">商品</string>
+    <string name="personal_dianpu">店铺</string>
+    <string name="personal_neirong">内容</string>
+    <string name="personal_zuji">足迹</string>
+    <string name="personal_xiaodianxinxi">小店信息</string>
+    <string name="personal_xiaodianhuiyuan">小店会员</string>
+    <string name="personal_xiaodiandingdan">小店订单</string>
+    <string name="personal_jianghupaiming">江湖排名</string>
+    <string name="personal_faxianhuiyuan">发现会员</string>
+    <string name="personal_yaoqingpengyou">邀请朋友创业</string>
+    <string name="personal_mashangyaoqing">马上邀请</string>
+    <string name="personal_wodedian">我的店</string>
+    <string name="personal_zhuangxiuwode">装修我的店</string>
+    <string name="personal_mashangzhuangxiu">马上装修</string>
 </resources>

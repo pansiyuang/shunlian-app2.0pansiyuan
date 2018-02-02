@@ -140,7 +140,7 @@ public class GlideUtils {
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
+                .placeholder(R.mipmap.img_guige_moren)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
@@ -160,6 +160,7 @@ public class GlideUtils {
                 .load(imgUrl)
 //                .error(R.mipmap.error)
 //                .placeholder(R.mipmap.error)
+                .placeholder(R.mipmap.img_guige_moren)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略

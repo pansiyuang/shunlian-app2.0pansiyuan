@@ -124,7 +124,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
             isLoading = true;
             if (currentPage <= allPage) {
                 currentPage++;
-//                getSearchGoods(mParam, false);
+                getSearchGoods(mParam, false);
             }
         }
     }
