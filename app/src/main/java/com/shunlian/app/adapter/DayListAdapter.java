@@ -12,9 +12,7 @@ import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ActivityListEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.DayDayPresenter;
-import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
