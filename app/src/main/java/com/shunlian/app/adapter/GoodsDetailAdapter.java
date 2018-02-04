@@ -319,6 +319,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_quality_goods.setVisibility(View.GONE);
             }
 
+            if (isEmpty(store_info.push)){
+                mHolder.mll_self_push.setVisibility(View.GONE);
+            }else {
+                mHolder.mll_self_push.setVisibility(View.VISIBLE);
+            }
+
             setStoreOtherGoods(mHolder.recy_view,store_info.hot);
         }
     }
@@ -1143,8 +1149,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     isAttentionShop = !isAttentionShop;
                     break;
                 case R.id.mll_self_hot:
-                    setState(1);
-                    setStoreOtherGoods(recy_view,store_info.hot);
+                    if (!isEmpty(store_info.push)) {
+                        setState(1);
+                        setStoreOtherGoods(recy_view, store_info.hot);
+                    }
                     break;
                 case R.id.mll_self_push:
                     setState(2);

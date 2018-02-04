@@ -251,8 +251,7 @@
             android:paddingTop="19dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
-            >
+            android:gravity="center">
 
 
             <com.shunlian.app.widget.MyTextView

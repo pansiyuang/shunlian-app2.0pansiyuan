@@ -15,6 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -103,6 +104,7 @@ public class FootprintDialog extends Dialog {
 
                 @Override
                 public void convert(SimpleViewHolder holder, FootprintEntity.MarkData s, int position) {
+                    holder.addOnClickListener(R.id.rootview);
                     MyImageView miv_icon = holder.getView(R.id.miv_icon);
                     MyTextView mtv_title = holder.getView(R.id.mtv_title);
                     MyTextView mtv_price = holder.getView(R.id.mtv_price);
@@ -113,6 +115,14 @@ public class FootprintDialog extends Dialog {
             };
 
             recy_view.setAdapter(simpleRecyclerAdapter);
+            simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    dismiss();
+                    FootprintEntity.MarkData markData = mFootprintEntity.mark_data.get(position);
+                    GoodsDetailAct.startAct(context, markData.goods_id);
+                }
+            });
         }else {
             mll_empty.setVisibility(View.VISIBLE);
             recy_view.setVisibility(View.GONE);
