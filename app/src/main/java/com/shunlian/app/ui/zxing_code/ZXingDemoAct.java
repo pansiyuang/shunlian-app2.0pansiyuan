@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.photopick.PhotoPickerActivity;
@@ -13,6 +14,8 @@ import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,13 +29,13 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
     @BindView(R.id.zxingview)
     QRCodeView mQRCodeView;
 
+    @BindView(R.id.mrlayout_title)
+    MyRelativeLayout mrlayout_title;
+
     private boolean isOpenLight = false;
     public static final int RESULT_CODE = 200;//结果码
-
-
     public static final int REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY = 666;
     private boolean isResult;
-    private long start;
 
     public static void startAct(Activity activity, boolean isResult, int requestCode) {
         if (isResult) {
@@ -59,13 +62,16 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
      */
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                mrlayout_title.getLayoutParams();
+        layoutParams.topMargin = statusBarHeight;
+        mrlayout_title.setLayoutParams(layoutParams);
         isResult = getIntent().getBooleanExtra("isResult", false);
         mQRCodeView.setDelegate(this);
     }
 
-    @OnClick(R.id.miv_light)
+    @OnClick(R.id.mllayout_light)
     public void openLight() {
         if (!isOpenLight) {
             mQRCodeView.openFlashlight();
@@ -75,7 +81,7 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
         isOpenLight = !isOpenLight;
     }
 
-    @OnClick(R.id.miv_album)
+    @OnClick(R.id.mtv_album)
     public void openAlbum() {
         PhotoPickerIntent intent = new PhotoPickerIntent(this);
         intent.setSelectModel(SelectModel.MULTI);
@@ -88,15 +94,11 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
     @Override
     protected void onStart() {
         super.onStart();
-        long start = System.currentTimeMillis();
         mQRCodeView.startCamera();
-//        mQRCodeView.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
         mQRCodeView.showScanRect();
 
         mQRCodeView.startSpot();
-        long end = System.currentTimeMillis();
-        System.out.println("=onStart==============="+(end - start));
     }
 
     @Override
@@ -123,7 +125,6 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
      */
     @Override
     public void onScanQRCodeSuccess(String result) {
-//        Common.staticToast("result:" + result);
         vibrate();
         mQRCodeView.startSpot();
         mQRCodeView.closeFlashlight();
@@ -146,7 +147,6 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        long start = System.currentTimeMillis();
         mQRCodeView.showScanRect();
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY) {
@@ -178,8 +178,6 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
                     }
                 }
             }.execute();
-        long end = System.currentTimeMillis();
-            System.out.println("=onActivityResult================="+(end - start));
         }
     }
 }
