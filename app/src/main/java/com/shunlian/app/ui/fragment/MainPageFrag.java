@@ -189,6 +189,8 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                 helper.setBgColor(getColorResouce(R.color.light_gray_three));
                 helper.setVGap(i);
                 helper.setHGap(i);
+                helper.setPaddingTop(i);
+                helper.setPaddingBottom(i);
                 brandAdapter = new BrandAdapter(brands.data, baseActivity, helper);
                 adapterList.add(brandAdapter);
 

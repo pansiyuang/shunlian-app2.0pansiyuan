@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.MainPageEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMainPageView;
 
@@ -73,14 +74,18 @@ public class MainPagePresenter extends BasePresenter<IMainPageView> {
             public void onSuccess(BaseEntity<MainPageEntity> entity) {
                 super.onSuccess(entity);
                 MainPageEntity data = entity.data;
+                isLoading = false;
+                isLoadingBrand = false;
 
                 banner_day(data);
                 if (isBrand) {
                     //brand
+                    LogUtil.zhLogW("===brand=====");
                     brand(data);
                 }
                 if (isGoods) {
                     //goods
+                    LogUtil.zhLogW("===goods=====");
                     goods(data);
                 }
             }
@@ -105,6 +110,7 @@ public class MainPagePresenter extends BasePresenter<IMainPageView> {
         currentPage = Integer.parseInt(data.recommend_goods.page);
         allPage = Integer.parseInt(data.recommend_goods.total);
         iView.moreGoods(data.recommend_goods);
+        LogUtil.zhLogW(currentPage+"=currentPage=============allPage=="+allPage);
         currentPage++;
     }
 
@@ -113,6 +119,7 @@ public class MainPagePresenter extends BasePresenter<IMainPageView> {
         brandPage = Integer.parseInt(recommend_brands.page);
         brandAllPage = Integer.parseInt(recommend_brands.total);
         iView.moreBrands(recommend_brands);
+        LogUtil.zhLogW(brandPage+"=brandPage=============brandAllPage=="+brandAllPage);
         brandPage++;
     }
 
@@ -144,6 +151,8 @@ public class MainPagePresenter extends BasePresenter<IMainPageView> {
                 isGoods = false;
                 isBrand = true;
                 pageData(true);
+            }else {
+                Common.staticToast("没有更多品牌了");
             }
         }
     }

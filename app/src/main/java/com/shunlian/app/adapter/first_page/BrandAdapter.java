@@ -1,12 +1,10 @@
 package com.shunlian.app.adapter.first_page;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
@@ -14,8 +12,12 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.MainPageEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2018/2/1.
@@ -42,7 +44,7 @@ public class BrandAdapter extends DelegateAdapter.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_detail, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_brand, parent, false);
         return new BrandHolder(view);
     }
 
@@ -61,14 +63,21 @@ public class BrandAdapter extends DelegateAdapter.Adapter {
 
     public class BrandHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private final MyImageView imageView;
+//        private final MyImageView imageView;
 
+        @BindView(R.id.iv_brand)
+        MyImageView imageView;
+
+        @BindView(R.id.brand_item)
+        MyLinearLayout brand_item;
         public BrandHolder(View itemView) {
             super(itemView);
-            imageView = (MyImageView) itemView;
-            imageView.setWHProportion(180,180);
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setBackgroundColor(Color.WHITE);
+            ButterKnife.bind(this,itemView);
+            brand_item.setWHProportion(180,180);
+//            imageView = (MyImageView) itemView;
+//            imageView.setWHProportion(180,180);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER);
+//            imageView.setBackgroundColor(Color.WHITE);
             itemView.setOnClickListener(this);
         }
 
