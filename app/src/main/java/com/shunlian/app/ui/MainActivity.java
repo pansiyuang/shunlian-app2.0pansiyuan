@@ -172,18 +172,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_tab_main_page:
+                setStatusBarColor(R.color.white);
                 mainPageClick();
                 break;
             case R.id.ll_tab_sort:
+                setStatusBarColor(R.color.white);
                 sortClick();
                 break;
             case R.id.ll_tab_discover:
+                setStatusBarColor(R.color.white);
                 discoverClick();
                 break;
             case R.id.ll_tab_shopping_car:
+                setStatusBarColor(R.color.white);
                 shoppingCarClick();
                 break;
             case R.id.ll_tab_person_center:
+                setStatusBarColor(R.color.pink_color);
                 personCenterClick();
                 break;
         }

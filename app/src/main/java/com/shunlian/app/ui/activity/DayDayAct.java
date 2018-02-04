@@ -31,6 +31,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     private DayDayMenuAdapter dayDayMenuAdapter;
     private DayListAdapter dayListAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private String id;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, DayDayAct.class);
@@ -107,7 +108,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                         dayDayMenuAdapter.selectPosition = position;
                         dayDayMenuAdapter.notifyDataSetChanged();
                         dayListAdapter=null;
-                        dayDayPresenter.resetBaby(activityListEntity.menu.get(position).id);
+                        id=activityListEntity.menu.get(position).id;
+                        dayDayPresenter.resetBaby(id);
                     }
                 }
             });
@@ -116,6 +118,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
         }
         if (dayListAdapter == null) {
             dayListAdapter = new DayListAdapter(this, true, list,dayDayPresenter, activityListEntity);
+            dayListAdapter.id=id;
             linearLayoutManager = new LinearLayoutManager(this);
             rv_list.setLayoutManager(linearLayoutManager);
             rv_list.setAdapter(dayListAdapter);

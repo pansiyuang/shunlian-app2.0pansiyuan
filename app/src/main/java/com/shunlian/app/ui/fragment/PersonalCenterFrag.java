@@ -1,148 +1,307 @@
 package com.shunlian.app.ui.fragment;
 
-import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.SimpleRecyclerAdapter;
-import com.shunlian.app.adapter.SimpleViewHolder;
-import com.shunlian.app.listener.OnItemClickListener;
+import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.activity.DayDayAct;
-import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
-import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
-import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
-import com.shunlian.app.ui.returns_order.SelectServiceActivity;
-import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
-import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.utils.DataUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.view.IPersonalView;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- *
+ * <p>
  * 个人中心页面
  */
 
-public class PersonalCenterFrag extends BaseFragment {
+public class PersonalCenterFrag extends BaseFragment implements IPersonalView, View.OnClickListener {
+    @BindView(R.id.miv_qiandao)
+    MyImageView miv_qiandao;
 
-    @BindView(R.id.recy_view)
-    RecyclerView recy_view;
+    @BindView(R.id.miv_before)
+    MyImageView miv_before;
+
+    @BindView(R.id.miv_equal)
+    MyImageView miv_equal;
+
+    @BindView(R.id.miv_mid)
+    MyImageView miv_mid;
+
+    @BindView(R.id.miv_after)
+    MyImageView miv_after;
+
+    @BindView(R.id.mtv_before)
+    MyTextView mtv_before;
+
+    @BindView(R.id.mtv_befores)
+    MyTextView mtv_befores;
+
+    @BindView(R.id.mtv_mid)
+    MyTextView mtv_mid;
+
+    @BindView(R.id.mtv_mids)
+    MyTextView mtv_mids;
+
+    @BindView(R.id.mtv_after)
+    MyTextView mtv_after;
+
+    @BindView(R.id.mtv_afters)
+    MyTextView mtv_afters;
+
+    @BindView(R.id.mtv_qiandao)
+    MyTextView mtv_qiandao;
+
+    @BindView(R.id.mtv_name)
+    MyTextView mtv_name;
+
+    @BindView(R.id.miv_level)
+    MyImageView miv_level;
+
+    @BindView(R.id.miv_avar)
+    MyImageView miv_avar;
+
+    @BindView(R.id.mtv_yaoqingma)
+    MyTextView mtv_yaoqingma;
+
+    @BindView(R.id.miv_call)
+    MyImageView miv_call;
+
+    @BindView(R.id.mtv_yue)
+    MyTextView mtv_yue;
+
+    @BindView(R.id.mtv_youhuiquan)
+    MyTextView mtv_youhuiquan;
+
+    @BindView(R.id.mtv_donglizhishu)
+    MyTextView mtv_donglizhishu;
+
+    @BindView(R.id.mtv_xiaoshou)
+    MyTextView mtv_xiaoshou;
+
+    @BindView(R.id.mtv_shangping)
+    MyTextView mtv_shangping;
+
+    @BindView(R.id.mtv_dianpu)
+    MyTextView mtv_dianpu;
+
+    @BindView(R.id.mtv_neirong)
+    MyTextView mtv_neirong;
+
+    @BindView(R.id.mtv_zuji)
+    MyTextView mtv_zuji;
+
+    @BindView(R.id.mtv_equal)
+    MyTextView mtv_equal;
+
+    @BindView(R.id.mtv_xiaodianhuiyuan)
+    MyTextView mtv_xiaodianhuiyuan;
+
+    @BindView(R.id.mtv_xiaodiandingdan)
+    MyTextView mtv_xiaodiandingdan;
+
+    @BindView(R.id.mllayout_quanbu)
+    MyLinearLayout mllayout_quanbu;
+
+    @BindView(R.id.mllayout_daifukuan)
+    MyLinearLayout mllayout_daifukuan;
+
+    @BindView(R.id.mllayout_daishouhuo)
+    MyLinearLayout mllayout_daishouhuo;
+
+    @BindView(R.id.mllayout_daifahuo)
+    MyLinearLayout mllayout_daifahuo;
+
+    @BindView(R.id.mllayout_daipingjia)
+    MyLinearLayout mllayout_daipingjia;
+
+    @BindView(R.id.mllayout_shangping)
+    MyLinearLayout mllayout_shangping;
+
+    @BindView(R.id.mllayout_dianpu)
+    MyLinearLayout mllayout_dianpu;
+
+    @BindView(R.id.mllayout_neirong)
+    MyLinearLayout mllayout_neirong;
+
+    @BindView(R.id.mllayout_zuji)
+    MyLinearLayout mllayout_zuji;
+
+    @BindView(R.id.mrlayout_xiaodianhuiyuan)
+    MyRelativeLayout mrlayout_xiaodianhuiyuan;
+
+    @BindView(R.id.mrlayout_xiaodiandingdan)
+    MyRelativeLayout mrlayout_xiaodiandingdan;
+
+    private PersonalcenterPresenter personalcenterPresenter;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View rootView = inflater.inflate(R.layout.frag_personal_center, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.frag_mine, container, false);
     }
+
 
     @Override
     protected void initData() {
-        List<String> items = new ArrayList<>();
-        items.add("登录");
-        items.add("商品详情");
-        items.add("店铺");
-        items.add("店铺57");
-        items.add("店铺58");
-        items.add("我的评价");
-        items.add("我的订单");
-        items.add("订单物流详情");
-        items.add("订单搜索历史");
-        items.add("选择服务类型");
-        items.add("H5");
-        items.add("天天特惠");
-        items.add("退换/售后");
-        items.add("提交物流信息");
-        items.add("列表排序");
-        items.add("收藏");
 
-        items.addAll(DataUtil.getListString(40, "条目"));
-
-
-        SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>(baseContext, android.R.layout.simple_list_item_1, items) {
-
-            @Override
-            public void convert(SimpleViewHolder holder, String s, int position) {
-                holder.addOnClickListener(android.R.id.text1);
-                holder.setText(android.R.id.text1, s);
-            }
-        };
-
-        LinearLayoutManager manager = new LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false);
-        recy_view.setLayoutManager(manager);
-        recy_view.setAdapter(simpleRecyclerAdapter);
-        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                switch (position) {
-                    case 0:
-                        LoginAct.startAct(baseContext);
-                        break;
-                    case 1:
-                        GoodsDetailAct.startAct(baseContext, "56");
-//                        GoodsDetailAct.startAct(baseContext,"134");
-                        break;
-                    case 2:
-                        StoreAct.startAct(baseContext, "26");
-                        break;
-                    case 3:
-                        StoreAct.startAct(baseContext, "57");
-                        break;
-                    case 4:
-                        StoreAct.startAct(baseContext, "58");
-                        break;
-                    case 5:
-                        MyCommentAct.startAct(baseActivity);
-                        break;
-                    case 6:
-                        MyOrderAct.startAct(baseActivity,0);
-                        break;
-                    case 7:
-                        OrderLogisticsActivity.startAct(baseActivity, "5");
-//                        OrderLogisticsActivity.startAct(baseActivity, "4");
-                        break;
-                    case 8:
-                        SearchOrderActivity.startAct(baseActivity);
-                        break;
-                    case 9:
-                        SelectServiceActivity.startAct(baseActivity, "404");
-                        break;
-                    case 10:
-//                        String url = "https://pro.m.jd.com/mall/active/2PimE38Vam99eMLJWXiLTx1VgLJs/index.html";
-                        String url = "https://h5.api.shunliandongli.com/v1/detail/389517.html";
-                        H5Act.startActivity(baseActivity, "hhahh", url, H5Act.MODE_SONIC);
-                        break;
-                    case 11:
-                        startActivity(new Intent(baseActivity,DayDayAct.class));
-                        break;
-                    case 12:
-                        RefundAfterSaleAct.startAct(baseActivity);
-                        break;
-                    case 13:
-                        SubmitLogisticsInfoAct.startAct(baseActivity,"155",SubmitLogisticsInfoAct.APPLY);
-                        break;
-                    case 14:
-                        CategoryAct.startAct(baseActivity,null);
-                        break;
-                    case 15:
-                        MyCollectionAct.startAct(baseActivity);
-                        break;
-                }
-            }
-        });
+        personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        miv_qiandao.setOnClickListener(this);
+        mtv_qiandao.setOnClickListener(this);
+        mllayout_quanbu.setOnClickListener(this);
+        mllayout_daifukuan.setOnClickListener(this);
+        mllayout_daishouhuo.setOnClickListener(this);
+        mllayout_daifahuo.setOnClickListener(this);
+        mllayout_daipingjia.setOnClickListener(this);
+        mllayout_shangping.setOnClickListener(this);
+        mllayout_dianpu.setOnClickListener(this);
+        mllayout_neirong.setOnClickListener(this);
+        mllayout_zuji.setOnClickListener(this);
+        mrlayout_xiaodianhuiyuan.setOnClickListener(this);
+        mrlayout_xiaodiandingdan.setOnClickListener(this);
+    }
+
+    @Override
+    public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        mtv_name.setText(personalcenterEntity.nickname);
+        mtv_equal.setText(personalcenterEntity.my_rank_info);
+        switch (personalcenterEntity.level) {
+            case "up":
+                miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
+                break;
+            case "down":
+                miv_equal.setImageResource(R.mipmap.icon_personalcenter_xiajiantou);
+                break;
+            default:
+                miv_equal.setImageResource(R.mipmap.icon_personalcenter_chiping);
+                break;
+        }
+        switch (personalcenterEntity.level) {
+            case "0":
+                miv_level.setImageResource(R.mipmap.v0);
+                break;
+            case "1":
+                miv_level.setImageResource(R.mipmap.v1);
+                break;
+            case "2":
+                miv_level.setImageResource(R.mipmap.v2);
+                break;
+            case "3":
+                miv_level.setImageResource(R.mipmap.v3);
+                break;
+            case "4":
+                miv_level.setImageResource(R.mipmap.v4);
+                break;
+            case "5":
+                miv_level.setImageResource(R.mipmap.v5);
+                break;
+            case "6":
+                miv_level.setImageResource(R.mipmap.v6);
+                break;
+        }
+        mtv_yaoqingma.setText("邀请码:" + personalcenterEntity.invite_code);
+        GlideUtils.getInstance().loadImage(baseContext, miv_call, personalcenterEntity.member_role);
+        GlideUtils.getInstance().loadCircleImage(baseContext, miv_avar, personalcenterEntity.avatar);
+        mtv_yue.setText(personalcenterEntity.balance);
+        mtv_youhuiquan.setText(personalcenterEntity.coupon_num);
+        mtv_donglizhishu.setText(personalcenterEntity.all_sl_income);
+        mtv_xiaoshou.setText(personalcenterEntity.team_sales);
+        mtv_shangping.setText(personalcenterEntity.goods_fav_num);
+        mtv_dianpu.setText(personalcenterEntity.store_fav_num);
+        mtv_neirong.setText(personalcenterEntity.article_fav_num);
+        mtv_zuji.setText(personalcenterEntity.footermark_fav_num);
+        mtv_xiaodianhuiyuan.setText(personalcenterEntity.team_member_num);
+        mtv_xiaodiandingdan.setText(personalcenterEntity.team_order_num);
+        if (personalcenterEntity.sl_user_ranks.get(0) != null) {
+            mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
+            mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).number);
+            GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+        }
+        if (personalcenterEntity.sl_user_ranks.get(1) != null) {
+            mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
+            mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).number);
+            GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+        }
+        if (personalcenterEntity.sl_user_ranks.get(2) != null) {
+            mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
+            mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).number);
+            GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.mtv_qiandao:
+            case R.id.miv_qiandao:
+                // TODO: 2018/2/2
+                //签到页面
+                break;
+            case R.id.mllayout_quanbu:
+                MyOrderAct.startAct(baseContext, 1);
+                break;
+            case R.id.mllayout_daifukuan:
+                MyOrderAct.startAct(baseContext, 2);
+                break;
+            case R.id.mllayout_daishouhuo:
+                MyOrderAct.startAct(baseContext, 4);
+                break;
+            case R.id.mllayout_daifahuo:
+                MyOrderAct.startAct(baseContext, 3);
+                break;
+            case R.id.mllayout_daipingjia:
+                MyOrderAct.startAct(baseContext, 5);
+                break;
+            case R.id.mllayout_shouhuo:
+                RefundAfterSaleAct.startAct(baseContext);
+                break;
+            case R.id.mllayout_shangping:
+                MyCollectionAct.startAct(baseContext);
+                break;
+            case R.id.mllayout_dianpu:
+                MyCollectionAct.startAct(baseContext);
+                break;
+            case R.id.mllayout_neirong:
+                MyCollectionAct.startAct(baseContext);
+                break;
+            case R.id.mllayout_zuji:
+                MyCollectionAct.startAct(baseContext);
+                break;
+            case R.id.mrlayout_xiaodianhuiyuan:
+                // TODO: 2018/2/2
+//                小店会员
+                break;
+            case R.id.mrlayout_xiaodiandingdan:
+                // TODO: 2018/2/2
+//                小店订单
+                break;
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+
 }

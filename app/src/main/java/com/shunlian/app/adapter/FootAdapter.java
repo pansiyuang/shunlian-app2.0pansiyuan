@@ -22,27 +22,28 @@ import butterknife.BindView;
  * Created by Administrator on 2018/1/25.
  */
 
-public class FootAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkData> {
+public class FootAdapter extends BaseRecyclerAdapter<Object> {
 
     public static final int DATE_LAYOUT = 1003;
 
-    public FootAdapter(Context context, boolean isShowFooter, List<FootprintEntity.MarkData> lists) {
-        super(context, isShowFooter, lists);
+    public FootAdapter(Context context, List<Object> lists) {
+        super(context, false, lists);
     }
 
     @Override
-    protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == DATE_LAYOUT) {
+            new DateViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot_head, parent, false));
+        }
         return new MarkViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot, parent, false));
     }
 
     @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MarkViewHolder) {
-            MarkViewHolder markViewHolder = (MarkViewHolder) holder;
-            FootprintEntity.MarkData markData = lists.get(position);
-            GlideUtils.getInstance().loadImage(context, markViewHolder.miv_icon, markData.thumb);
-            markViewHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
+    public int getItemViewType(int position) {
+        if (lists.get(position) instanceof FootprintEntity.DateInfo) {
+            return DATE_LAYOUT;
         }
+        return super.getItemViewType(position);
     }
 
     /**
@@ -60,6 +61,40 @@ public class FootAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkData> {
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void handleList(RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case DATE_LAYOUT:
+                handleTitle(holder, position);
+                break;
+            default:
+                handleItem(holder, position);
+                break;
+        }
+    }
+
+    public void handleItem(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof MarkViewHolder) {
+            MarkViewHolder markViewHolder = (MarkViewHolder) holder;
+            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) lists.get(position);
+            GlideUtils.getInstance().loadImage(context, markViewHolder.miv_icon, markData.thumb);
+            markViewHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
+        }
+    }
+
+    public void handleTitle(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof DateViewHolder) {
+            DateViewHolder dateViewHolder = (DateViewHolder) holder;
+            FootprintEntity.DateInfo dateInfo = (FootprintEntity.DateInfo) lists.get(position);
+            dateViewHolder.tv_date.setText(dateInfo.date);
+        }
     }
 
     @Override

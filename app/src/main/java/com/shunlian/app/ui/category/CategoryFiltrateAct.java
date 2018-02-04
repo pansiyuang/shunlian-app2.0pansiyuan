@@ -251,7 +251,9 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         locate = getStringResouce(R.string.category_dingwei);
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("keyword")))
         keyword = getIntent().getStringExtra("keyword");
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("cid")))
         cid = getIntent().getStringExtra("cid");
         sort_type = getIntent().getStringExtra("sort_type");
         categoryFiltratePresenter = new CategoryFiltratePresenter(this, this, cid, keyword);

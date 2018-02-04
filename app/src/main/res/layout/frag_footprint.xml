@@ -34,7 +34,7 @@
                     android:clipChildren="false"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
-                    app:layout_collapseMode="pin">
+                    app:layout_collapseMode="parallax">
 
                     <RelativeLayout
                         android:id="@+id/rl_date_control"
@@ -110,15 +110,17 @@
                         android:gravity="right"
                         android:orientation="vertical">
 
-                        <com.shunlian.app.widget.MyImageView
-                            android:id="@+id/miv_calendar_more"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginBottom="-15dp"
-                            android:layout_marginRight="30dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/img_shoucang_zuji_more" />
                     </LinearLayout>
+
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_calendar_more"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/calendarView"
+                        android:layout_marginRight="30dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/img_shoucang_zuji_more" />
                 </RelativeLayout>
 
             </android.support.design.widget.CollapsingToolbarLayout>

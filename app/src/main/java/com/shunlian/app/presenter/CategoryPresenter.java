@@ -46,9 +46,8 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
 
     public void getSearchGoods(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
         this.mParam = goodsSearchParam;
-
         Map<String, String> map = new HashMap<>();
-
+        LogUtil.augusLogW("yxf--"+goodsSearchParam);
         if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
             map.put("keyword", goodsSearchParam.keyword);
         }
@@ -101,6 +100,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 SearchGoodsEntity searchGoodsEntity = entity.data;
+                LogUtil.augusLogW("85yxf--"+searchGoodsEntity);
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
                 iView.getSearchGoods(searchGoodsEntity, currentPage, allPage);
