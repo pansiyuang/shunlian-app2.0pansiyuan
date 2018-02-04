@@ -54,28 +54,28 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
     private SortFragEntity.Toplist mToplist;
     public List<Integer> counts;
     private int titleCount = 1;
+    //二级分类显示条目位置对应的k:V
     public Map<Integer,SortFragEntity.SubList> titleData = new HashMap<>();
 
     public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children, SortFragEntity.Toplist toplist) {
         super(context, false, children);
         mToplist = toplist;
-        counts = new ArrayList<>();
+        counts = new ArrayList<>();//二级分类显示条目位置
         counts.add(0);
-        List<SortFragEntity.SubList> subLists = mToplist.children;
+        List<SortFragEntity.SubList> subLists = mToplist.children;//二级分类
         if (!isEmpty(subLists)) {//统计title位置
             titleData.put(counts.get(counts.size() - 1), subLists.get(0));
-            for (int i = 0; i < subLists.size(); i++) {
+            for (int i = 0; i < subLists.size(); i++) {//遍历二级分类
                 SortFragEntity.SubList subList = subLists.get(i);
-                if (!isEmpty(subList.children)) {
-                    if (i + 1 != subLists.size()) {
-                        counts.add(counts.size() + subList.children.size());
+                if (!isEmpty(subList.children)) {//判断三级分类
+                    if (i + 1 != subLists.size()) {//非最后一个列表
+                        //counts最后一次了的位置加上 上一个二级类目下的数量再加1 = 当前二级类目的位置
+                        counts.add(counts.get(counts.size() - 1) + subList.children.size()+1);
                         titleData.put(counts.get(counts.size() - 1), subLists.get(i + 1));
                     }
                 }
             }
         }
-
-
     }
 
 

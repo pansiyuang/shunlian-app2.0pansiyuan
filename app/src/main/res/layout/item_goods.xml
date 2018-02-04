@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/icon_login_logo"
+        app:iv_control_adapter="true"
+        app:iv_control_height="355"
+        app:iv_control_width="355" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textColor="@color/new_text"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:minLines="2"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="10"
+        app:tv_margin_right="10"
+        app:tv_margin_top="20" />
+
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_margin_left="10"
+        app:ll_margin_bottom="30"
+        app:ll_margin_top="20">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink_color"
+            android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_market_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/share_text"
+            android:textSize="11sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="20" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/white_ash" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/line"
+        android:background="@color/white"
+        android:gravity="center">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bg_home_pinpai_left" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="品牌推荐"
+            android:textColor="#0CA9F4"
+            android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bg_home_pinpai_right" />
+
+    </LinearLayout>
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_batch"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/line"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:text="换一批"
+        android:textColor="@color/share_text"
+        android:textSize="12sp" />
+
+</com.shunlian.app.widget.MyRelativeLayout>

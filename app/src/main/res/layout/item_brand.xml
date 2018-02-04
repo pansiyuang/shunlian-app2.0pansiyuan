@@ -1,0 +1,13 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/brand_item"
+    android:layout_width="120dp"
+    android:layout_height="68dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/iv_brand"
+        android:layout_width="80dp"
+        android:layout_height="45dp"/>
+
+</LinearLayout>

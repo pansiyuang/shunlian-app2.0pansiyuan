@@ -45,6 +45,7 @@ import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.LogisticsNameEntity;
+import com.shunlian.app.bean.MainPageEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
@@ -945,4 +946,12 @@ public interface ApiService {
      */
     @GET("member/Myfavorite/removeFavoShop")
     Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String,String> map);
+
+    /**
+     * 首页
+     * @param map
+     * @return
+     */
+    @GET("channel/index")
+    Call<BaseEntity<MainPageEntity>> firstPage(@QueryMap Map<String,String> map);
 }
