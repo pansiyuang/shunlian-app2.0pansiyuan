@@ -17,6 +17,7 @@ import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyFrameLayout;
@@ -255,6 +256,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void personCenterClick() {
+        if (!Common.isAlreadyLogin()){
+            LoginAct.startAct(this);
+            return;
+        }
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (personalCenterFrag == null) {
             personalCenterFrag = (PersonalCenterFrag) fragmentMap.get(flags[4]);
