@@ -16,12 +16,13 @@ import com.shunlian.app.adapter.first_page.BrandTitleAdapter;
 import com.shunlian.app.adapter.first_page.FirstPageGoodsAdapter;
 import com.shunlian.app.adapter.first_page.GoodsTitleAdapter;
 import com.shunlian.app.adapter.first_page.OnePlusTwoLayoutAdapter;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.MainPageEntity;
 import com.shunlian.app.presenter.MainPagePresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
@@ -204,7 +205,9 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                             i = position - 2;
                         }
                         MainPageEntity.Data data = brands.data.get(i);
-                        StoreAct.startAct(baseActivity,data.item_id);
+                        GoodsSearchParam param = new GoodsSearchParam();
+                        param.brand_ids = data.item_id;
+                        CategoryAct.startAct(baseActivity,param);
                     }
                 });
             }else {
