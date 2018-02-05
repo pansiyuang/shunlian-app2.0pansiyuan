@@ -160,7 +160,7 @@ public class GlideUtils {
                 .load(imgUrl)
 //                .error(R.mipmap.error)
 //                .placeholder(R.mipmap.error)
-                .placeholder(R.mipmap.img_guige_moren)
+                .placeholder(R.mipmap.img_zhanweitu)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
