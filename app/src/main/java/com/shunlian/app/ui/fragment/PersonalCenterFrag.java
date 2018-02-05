@@ -1,8 +1,12 @@
 package com.shunlian.app.ui.fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PersonalcenterEntity;
@@ -11,12 +15,18 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -144,7 +154,20 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.mrlayout_xiaodiandingdan)
     MyRelativeLayout mrlayout_xiaodiandingdan;
 
+    @BindView(R.id.miv_levels)
+    MyImageView miv_levels;
+
+    @BindView(R.id.mtv_persent)
+    MyTextView mtv_persent;
+
+    @BindView(R.id.mtv_all)
+    MyTextView mtv_all;
+
+    @BindView(R.id.seekbar_grow)
+    SeekBar seekbar_grow;
+
     private PersonalcenterPresenter personalcenterPresenter;
+    private Timer outTimer;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -154,7 +177,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     protected void initData() {
-
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
 
@@ -180,6 +202,14 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         mtv_name.setText(personalcenterEntity.nickname);
         mtv_equal.setText(personalcenterEntity.my_rank_info);
+        startToast(80);
+        mtv_all.setText("升级总积分null");
+        seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         switch (personalcenterEntity.level) {
             case "up":
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
@@ -192,26 +222,37 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
         }
         switch (personalcenterEntity.level) {
+            default:
+                miv_level.setImageResource(R.mipmap.v0);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
+                break;
             case "0":
                 miv_level.setImageResource(R.mipmap.v0);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
                 break;
             case "1":
                 miv_level.setImageResource(R.mipmap.v1);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
                 break;
             case "2":
                 miv_level.setImageResource(R.mipmap.v2);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v2);
                 break;
             case "3":
                 miv_level.setImageResource(R.mipmap.v3);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v3);
                 break;
             case "4":
                 miv_level.setImageResource(R.mipmap.v4);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v4);
                 break;
             case "5":
                 miv_level.setImageResource(R.mipmap.v5);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v5);
                 break;
             case "6":
                 miv_level.setImageResource(R.mipmap.v6);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v6);
                 break;
         }
         mtv_yaoqingma.setText("邀请码:" + personalcenterEntity.invite_code);
@@ -243,7 +284,30 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
         }
     }
-
+    public void startToast(final int percent) {
+        final int[] now = {0};
+        if (outTimer != null) {
+            outTimer.cancel();
+        }
+        outTimer = new Timer();
+        outTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (now[0] <percent){
+                    now[0]++;
+                    seekbar_grow.setProgress(now[0]);
+                }else {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mtv_persent.setText("当前积分null");
+                        }
+                    });
+                    outTimer.cancel();
+                }
+            }
+        }, 0,percent/10);
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
