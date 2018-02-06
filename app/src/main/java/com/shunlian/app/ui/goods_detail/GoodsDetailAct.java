@@ -878,11 +878,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                num++;
+                num += goodsCount;
                 LogUtil.zhLogW("num======"+num);
                 if (rnview != null) {
                     rnview.setVisibility(View.VISIBLE);
-                    rnview.setNumber(num - 1);
+                    rnview.setNumber(num - goodsCount);
                     rnview.setTargetNumber(num);
                 }
             }
