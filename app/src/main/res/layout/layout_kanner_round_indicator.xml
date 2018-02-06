@@ -6,9 +6,9 @@
     android:paddingTop="15dp"
     rci:rci_cornerRadius="5dp"
     rci:rci_gap="10dp"
-    rci:rci_height="8dp"
-    rci:rci_selectColor="@color/app_main_color"
-    rci:rci_strokeColor="@color/app_main_color"
+    rci:rci_height="6dp"
+    rci:rci_selectColor="@color/pink_color"
+    rci:rci_strokeColor="@color/value_70_B5B5B5"
     rci:rci_strokeWidth="1dp"
-    rci:rci_unselectColor="@color/transparent"
-    rci:rci_width="8dp" />
+    rci:rci_unselectColor="@color/value_70_B5B5B5"
+    rci:rci_width="6dp" />
