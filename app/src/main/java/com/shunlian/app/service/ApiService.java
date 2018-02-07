@@ -945,4 +945,12 @@ public interface ApiService {
      */
     @GET("member/Myfavorite/removeFavoShop")
     Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String,String> map);
+
+    /**
+     * 足迹列表足迹批量删除
+     * @param map
+     * @return
+     */
+    @GET("member/footermark/deleteBatch")
+    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String,String> map);
 }

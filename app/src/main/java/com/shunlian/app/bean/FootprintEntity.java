@@ -28,11 +28,14 @@ public class FootprintEntity {
         public String create_time;
         public String date;
         public String date_normal;
+        public boolean isSelect;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DateInfo {
         public String date;
         public String counts;
+        public String is_end;
+        public boolean isSelect;
     }
 }

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -25,25 +27,37 @@ import butterknife.BindView;
 public class FootAdapter extends BaseRecyclerAdapter<Object> {
 
     public static final int DATE_LAYOUT = 1003;
+    public boolean isEdit;
+    public OnChildClickListener mListener;
 
     public FootAdapter(Context context, List<Object> lists) {
-        super(context, false, lists);
+        super(context, true, lists);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == DATE_LAYOUT) {
-            new DateViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot_head, parent, false));
+            return new DateViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot_head, parent, false));
         }
         return new MarkViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot, parent, false));
     }
 
     @Override
     public int getItemViewType(int position) {
+        LogUtil.httpLogW("size:" + getItemCount() + "lists:" + lists.size());
         if (lists.get(position) instanceof FootprintEntity.DateInfo) {
             return DATE_LAYOUT;
         }
         return super.getItemViewType(position);
+    }
+
+    public void setEditMode(boolean edit) {
+        isEdit = edit;
+        notifyDataSetChanged();
+    }
+
+    public boolean getEditMode() {
+        return isEdit;
     }
 
     /**
@@ -80,20 +94,67 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
         }
     }
 
-    public void handleItem(RecyclerView.ViewHolder holder, int position) {
+    public void handleItem(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MarkViewHolder) {
             MarkViewHolder markViewHolder = (MarkViewHolder) holder;
-            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) lists.get(position);
+            final FootprintEntity.MarkData markData = (FootprintEntity.MarkData) lists.get(position);
             GlideUtils.getInstance().loadImage(context, markViewHolder.miv_icon, markData.thumb);
             markViewHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
+
+            if (isEdit) {
+                markViewHolder.ll_del.setVisibility(View.VISIBLE);
+            } else {
+                markViewHolder.ll_del.setVisibility(View.GONE);
+            }
+
+            if (markData.isSelect) {
+                markViewHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
+            } else {
+                markViewHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
+            }
+
+            markViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.OnItemSelect(position, markData);
+                    }
+                }
+            });
         }
     }
 
-    public void handleTitle(RecyclerView.ViewHolder holder, int position) {
+    public void handleTitle(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DateViewHolder) {
             DateViewHolder dateViewHolder = (DateViewHolder) holder;
-            FootprintEntity.DateInfo dateInfo = (FootprintEntity.DateInfo) lists.get(position);
+            final FootprintEntity.DateInfo dateInfo = (FootprintEntity.DateInfo) lists.get(position);
             dateViewHolder.tv_date.setText(dateInfo.date);
+
+            if (isEdit) {
+                dateViewHolder.miv_select.setVisibility(View.VISIBLE);
+            } else {
+                dateViewHolder.miv_select.setVisibility(View.GONE);
+            }
+            if (dateInfo.isSelect) {
+                dateViewHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
+            } else {
+                dateViewHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
+            }
+
+            if (position == 0) {
+                dateViewHolder.ll_foot.setPadding(TransformUtil.dip2px(context, 10f), 0, TransformUtil.dip2px(context, 10f), TransformUtil.dip2px(context, 15f));
+            } else {
+                dateViewHolder.ll_foot.setPadding(TransformUtil.dip2px(context, 10f), TransformUtil.dip2px(context, 15f), TransformUtil.dip2px(context, 10f), TransformUtil.dip2px(context, 15f));
+            }
+
+            dateViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.OnDateSelect(position, dateInfo);
+                    }
+                }
+            });
         }
     }
 
@@ -104,11 +165,12 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
-
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (position + 1 == getItemCount()) {
+                    if (getItemViewType(position) == DATE_LAYOUT) {
+                        return gridManager.getSpanCount();
+                    } else if (position + 1 == getItemCount()) {
                         return gridManager.getSpanCount();
                     } else {
                         return 1;
@@ -124,6 +186,9 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
 
         @BindView(R.id.tv_date)
         TextView tv_date;
+
+        @BindView(R.id.ll_foot)
+        LinearLayout ll_foot;
 
         public DateViewHolder(View itemView) {
             super(itemView);
@@ -146,5 +211,15 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
         public MarkViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnChildClickListener(OnChildClickListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnChildClickListener {
+        void OnDateSelect(int position, FootprintEntity.DateInfo dateInfo);
+
+        void OnItemSelect(int position, FootprintEntity.MarkData markData);
     }
 }

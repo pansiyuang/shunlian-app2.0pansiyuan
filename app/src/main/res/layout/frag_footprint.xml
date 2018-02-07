@@ -20,7 +20,7 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="440.5dp"
-            android:background="@android:color/transparent"
+            android:background="@color/white_ash"
             app:elevation="0dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -130,6 +130,8 @@
             android:id="@+id/recycler_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="-5dp"
+            android:background="@color/white_ash"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
