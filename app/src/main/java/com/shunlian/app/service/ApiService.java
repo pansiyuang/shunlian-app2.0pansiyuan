@@ -45,6 +45,7 @@ import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.bean.LogisticsNameEntity;
+import com.shunlian.app.bean.MainPageEntity;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
@@ -53,6 +54,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
@@ -945,6 +947,22 @@ public interface ApiService {
      */
     @GET("member/Myfavorite/removeFavoShop")
     Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String,String> map);
+
+    /**
+     * 首页
+     * @param map
+     * @return
+     */
+    @GET("channel/index")
+    Call<BaseEntity<MainPageEntity>> firstPage(@QueryMap Map<String,String> map);
+
+    /**
+     * 个人中心首页
+     * @param map
+     * @return
+     */
+    @GET("/personalcenter/home")
+    Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String,String> map);
 
     /**
      * 足迹列表足迹批量删除

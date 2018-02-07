@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.shunlian.app.utils.Common.getResources;
 
@@ -317,6 +319,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 qualityDrawable.setColor(Color.parseColor("#9414FD"));
             }else {
                 mHolder.mtv_quality_goods.setVisibility(View.GONE);
+            }
+
+            if (isEmpty(store_info.push)){
+                mHolder.mll_self_push.setVisibility(View.GONE);
+            }else {
+                mHolder.mll_self_push.setVisibility(View.VISIBLE);
             }
 
             setStoreOtherGoods(mHolder.recy_view,store_info.hot);
@@ -694,6 +702,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mllayout_preferential.setVisibility(View.GONE);
             }
             /**********天天特惠******************/
+
+            /************活动****************/
+            if (mGoodsEntity.activity != null && !isEmpty(mGoodsEntity.activity.desc)){
+                mHolder.mtv_act.setVisibility(View.VISIBLE);
+                mHolder.mtv_act.setText(mGoodsEntity.activity.desc);
+            }else {
+                mHolder.mtv_act.setVisibility(View.GONE);
+            }
         }
     }
     /**
@@ -859,8 +875,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;
 
+        @BindView(R.id.mtv_act)
+        MyTextView mtv_act;
+
         public TitleHolder(View itemView) {
             super(itemView);
+        }
+        @OnClick(R.id.mtv_act)
+        public void actTitle(){
+            GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
+            H5Act.startAct(context,activity.title,activity.link,H5Act.MODE_SONIC);
         }
     }
 
@@ -963,11 +987,36 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.tv_select_param)
         MyTextView tv_select_param;
 
+        @BindView(R.id.mtv_reason)
+        MyTextView mtv_reason;
+
+        @BindView(R.id.mtv_send_time)
+        MyTextView mtv_send_time;
+
+        @BindView(R.id.miv_reason)
+        MyImageView miv_reason;
+
+        @BindView(R.id.miv_send_time)
+        MyImageView miv_send_time;
+
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             mtv_params.setOnClickListener(this);
+            if (!isEmpty(mGoodsEntity.return_7)){
+                mtv_reason.setText(mGoodsEntity.return_7);
+                miv_reason.setVisibility(View.VISIBLE);
+            }else {
+                miv_reason.setVisibility(View.GONE);
+            }
+
+            if (!isEmpty(mGoodsEntity.send_time)){
+                mtv_send_time.setText(mGoodsEntity.send_time);
+                miv_send_time.setVisibility(View.VISIBLE);
+            }else {
+                miv_send_time.setVisibility(View.GONE);
+            }
         }
 
         /**
@@ -1143,8 +1192,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     isAttentionShop = !isAttentionShop;
                     break;
                 case R.id.mll_self_hot:
-                    setState(1);
-                    setStoreOtherGoods(recy_view,store_info.hot);
+                    if (!isEmpty(store_info.push)) {
+                        setState(1);
+                        setStoreOtherGoods(recy_view, store_info.hot);
+                    }
                     break;
                 case R.id.mll_self_push:
                     setState(2);

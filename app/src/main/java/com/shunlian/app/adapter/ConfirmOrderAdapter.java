@@ -196,7 +196,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.mtv_shippingFree.setText(String.format(getString(R.string.express),shippingFee));
             }
             List<GoodsDeatilEntity.Goods> goods = enabled.goods;
-            if (goods != null && goods.size() > 0) {
+            if (!isEmpty(goods)) {
                 mHolder.recy_view.setVisibility(View.VISIBLE);
                 mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
                         false, goods));
@@ -204,7 +204,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.recy_view.setVisibility(View.GONE);
             }
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
-            if (voucher != null && voucher.size() > 0) {//有可用优惠券，默认使用第一张
+            if (!isEmpty(voucher)) {//有可用优惠券，默认使用第一张
                 ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
                 mHolder.mtv_discount.setText(voucher1.title);
                 enabled.post_discount_price = Common.formatFloat(enabled.sub_total,voucher1.denomination);
@@ -221,9 +221,16 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 mHolder.mllayout_discount.setVisibility(View.GONE);
             }
             List<ConfirmOrderEntity.PromotionInfo> promotion_info = enabled.promotion_info;
-            if (promotion_info != null && promotion_info.size() > 0){//促销让用户选择
+            if (!isEmpty(promotion_info)){//促销让用户选择
                 if (mIsOrderBuy){
-                    mHolder.mtv_promotion.setText("");
+                    String prom_lock = enabled.prom_lock;
+                    if (!isEmpty(prom_lock) && "1".equals(prom_lock)){
+                        ConfirmOrderEntity.PromotionInfo promotionInfo = promotion_info.get(0);
+                        enabled.selectPromotionId = 0;
+                        mHolder.mtv_promotion.setText(promotionInfo.prom_title);
+                    }else {
+                        mHolder.mtv_promotion.setText("");
+                    }
                 }else {
                     mHolder.mtv_promotion.setText(enabled.promotion_total_hint);
                 }

@@ -17,6 +17,7 @@ import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyFrameLayout;
@@ -172,18 +173,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_tab_main_page:
+                setStatusBarColor(R.color.white);
                 mainPageClick();
                 break;
             case R.id.ll_tab_sort:
+                setStatusBarColor(R.color.white);
                 sortClick();
                 break;
             case R.id.ll_tab_discover:
+                setStatusBarColor(R.color.white);
                 discoverClick();
                 break;
             case R.id.ll_tab_shopping_car:
+                setStatusBarColor(R.color.white);
                 shoppingCarClick();
                 break;
             case R.id.ll_tab_person_center:
+                setStatusBarColor(R.color.pink_color);
                 personCenterClick();
                 break;
         }
@@ -250,6 +256,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void personCenterClick() {
+        if (!Common.isAlreadyLogin()){
+            LoginAct.startAct(this);
+            return;
+        }
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (personalCenterFrag == null) {
             personalCenterFrag = (PersonalCenterFrag) fragmentMap.get(flags[4]);

@@ -29,6 +29,8 @@ public class GoodsDeatilEntity {
     public String is_fav;
     public ArrayList<String> pics;
     public String has_option;
+    public String return_7;
+    public String send_time;
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
     public String member_cart_count;//详情页用户购物车角标数字
@@ -54,6 +56,15 @@ public class GoodsDeatilEntity {
     public ArrayList<Comments> comments;
 
     public TTAct tt_act;//天天特惠
+
+    public Act activity;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Act{
+        public String desc;
+        public String link;
+        public String title;
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TTAct{

@@ -36,6 +36,7 @@ public class ConfirmOrderEntity {
     public static class Enabled{
         public String store_id;
         public String store_name;
+        public String prom_lock;//促销是否强制勾选  1强制
         public List<PromotionInfo> promotion_info;
         public List<Voucher> voucher;
         public List<GoodsDeatilEntity.Goods> goods;

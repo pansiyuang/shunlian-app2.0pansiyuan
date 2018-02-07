@@ -3,6 +3,7 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
+import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,9 +13,7 @@ import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ActivityListEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.DayDayPresenter;
-import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
@@ -26,6 +25,8 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -34,18 +35,17 @@ import butterknife.BindView;
  */
 
 public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData.Good.MList> {
-    public String isStart,title,content,time,from,id;
+    public String isStart, title, content, time, from, id;
     private DayDayPresenter dayDayPresenter;
 
-
-    public DayListAdapter(Context context, boolean isShowFooter, List<ActivityListEntity.MData.Good.MList> datas,DayDayPresenter dayDayPresenter,ActivityListEntity activityListEntity) {
+    public DayListAdapter(Context context, boolean isShowFooter, List<ActivityListEntity.MData.Good.MList> datas, DayDayPresenter dayDayPresenter, ActivityListEntity activityListEntity) {
         super(context, isShowFooter, datas);
         this.isStart = activityListEntity.datas.sale;
         this.dayDayPresenter = dayDayPresenter;
-        this.title=activityListEntity.datas.title;
-        this.content=activityListEntity.datas.content;
-        this.time=activityListEntity.datas.time;
-        this.from=activityListEntity.from;
+        this.title = activityListEntity.datas.title;
+        this.content = activityListEntity.datas.content;
+        this.time = activityListEntity.datas.time;
+        this.from = activityListEntity.from;
     }
 
     @Override
@@ -64,15 +64,15 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
             oneHolder.mtv_priceA.setText(context.getResources().getString(R.string.common_yuan) + data.act_price);
             oneHolder.goods_id = data.goods_id;
             oneHolder.position = position;
-            if (position==0){
+            if (position == 0) {
                 oneHolder.mrlayout_time.setVisibility(View.VISIBLE);
                 oneHolder.view_title.setVisibility(View.VISIBLE);
                 oneHolder.mtv_titles.setText(title);
                 oneHolder.mtv_content.setText(content);
-                if ("1".equals(isStart)){//1：活动进行中   0：活动未开始
+                if ("1".equals(isStart)) {//1：活动进行中   0：活动未开始
                     oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
                     oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
-                }else {
+                } else {
                     oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
                     oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
                 }
@@ -86,18 +86,18 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                         @Override
                         public void onFinish() {
                             oneHolder.isStartDownTime = false;
-                            if (context instanceof DayDayAct){
+                            if (context instanceof DayDayAct) {
                                 DayDayAct act = (DayDayAct) context;
-                                if (act.isFinishing()){
+                                if (act.isFinishing()) {
                                     oneHolder.ddp_downTime.cancelDownTimer();
                                     return;
                                 }
-                               act.minitData();
+                                act.minitData();
                             }
                         }
                     });
                 }
-            }else {
+            } else {
                 oneHolder.mrlayout_time.setVisibility(View.GONE);
                 oneHolder.view_title.setVisibility(View.GONE);
             }
@@ -119,6 +119,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.seekbar_grow.setProgress(data.percent);
                 oneHolder.mtv_desc.setText(data.str_surplus_stock);
                 oneHolder.seekbar_grow.setVisibility(View.VISIBLE);
+//                startDownTimer(data.percent/8,oneHolder.seekbar_grow);
                 oneHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -183,7 +184,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
         @BindView(R.id.seekbar_grow)
         SeekBar seekbar_grow;
 
-        private boolean isRemind = false,isStartDownTime = false;;
+        private boolean isRemind = false, isStartDownTime = false;
         private String goods_id;
         private int position;
 

@@ -111,11 +111,11 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
         final List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
         List<SortFragEntity.SubList> children = toplist.children;
-        if (children != null && children.size() > 0){
-            for (int i = 0; i < children.size(); i++) {
+        if (!isEmpty(children)){
+            for (int i = 0; i < children.size(); i++) {//遍历二级分类
                 List<SortFragEntity.ItemList> children1 = children.get(i).children;
-                if (children1 != null && children1.size() > 0){
-                    itemLists.addAll(children1);
+                if (!isEmpty(children1)){
+                    itemLists.addAll(children1);//对应一级分类下的所有三级分类列表
                 }
             }
         }

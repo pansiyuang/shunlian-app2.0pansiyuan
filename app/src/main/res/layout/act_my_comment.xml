@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <!--title-->
-    <com.shunlian.app.widget.MyLinearLayout
+    <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mllayout_title"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
+            android:layout_centerVertical="true"
             android:src="@mipmap/icon_common_back_black"
             app:iv_control_adapter="true"
             app:iv_margin_left="8" />
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/my_comment"
+            android:layout_centerInParent="true"
             android:textColor="@color/new_text"
             android:textSize="15sp"
             app:tv_control_adapter="true"
@@ -35,6 +37,8 @@
 
         <RelativeLayout
             android:layout_width="50dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp">
 
@@ -56,7 +60,7 @@
                 android:textSize="8.5sp"
                 android:visibility="gone" />
         </RelativeLayout>
-    </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
 
     <View
         android:id="@+id/line"

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    app:rl_control_adapter="true"
+    app:rl_control_height="192">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/bg_home_tehui"
+        app:iv_control_adapter="true"
+        app:iv_control_height="172"
+        app:iv_control_width="345"
+        app:iv_margin_bottom="10"
+        app:iv_margin_left="10"
+        app:iv_margin_top="10" />
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/bg_home_xinpin"
+        app:iv_control_adapter="true"
+        app:iv_control_height="172"
+        app:iv_control_width="345"
+        app:iv_margin_bottom="10"
+        app:iv_margin_right="10"
+        app:iv_margin_top="10" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="天天特惠"
+        android:textColor="#FF3F00"
+        android:textSize="18sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="30"
+        app:tv_margin_top="30" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/miv_day"
+        android:text="爱上新品"
+        android:textColor="#01C3DB"
+        android:textSize="18sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="30"
+        app:tv_margin_top="30" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_new"
+        android:layout_toRightOf="@+id/miv_day"
+        android:text="发现实惠好货"
+        android:textColor="@color/share_text"
+        android:textSize="12sp"
+        app:tv_control_adapter="true"
+        app:tv_margin_left="30"
+        app:tv_margin_top="10" />
+
+
+    <com.shunlian.app.utils.timer.DDPDownTimerView
+        android:id="@+id/ddp_downTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mtv_day"
+        android:layout_below="@+id/mtv_day"
+        android:layout_marginTop="5dp" />
+
+</com.shunlian.app.widget.MyRelativeLayout>

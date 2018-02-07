@@ -12,12 +12,12 @@
         app:qrcv_animTime="1000"
         app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
         app:qrcv_barcodeRectHeight="140dp"
-        app:qrcv_borderColor="@color/pink_color"
+        app:qrcv_borderColor="@color/transparent"
         app:qrcv_borderSize="1dp"
-        app:qrcv_cornerColor="@color/pink_color"
+        app:qrcv_cornerColor="@color/white"
         app:qrcv_cornerLength="20dp"
         app:qrcv_cornerSize="5dp"
-        app:qrcv_customScanLineDrawable="@mipmap/scan_icon_scanline"
+        app:qrcv_customScanLineDrawable="@mipmap/img_guang"
         app:qrcv_isBarcode="false"
         app:qrcv_isCenterVertical="false"
         app:qrcv_isOnlyDecodeScanBoxArea="false"
@@ -27,61 +27,72 @@
         app:qrcv_isShowTipBackground="true"
         app:qrcv_isShowTipTextAsSingleLine="false"
         app:qrcv_isTipTextBelowRect="false"
-        app:qrcv_maskColor="#33FFFFFF"
-        app:qrcv_qrCodeTipText="将取景框对准二维\n码即可自动扫描"
-        app:qrcv_rectWidth="200dp"
-        app:qrcv_scanLineColor="@color/colorPrimaryDark"
+        app:qrcv_maskColor="@color/value_50mask"
+        app:qrcv_qrCodeTipText="请将条形码/二维码放入框内，即可自动扫描"
+        app:qrcv_rectWidth="290dp"
         app:qrcv_scanLineMargin="0dp"
         app:qrcv_scanLineSize="0.5dp"
+        app:qrcv_tipBackgroundColor="@color/transparent"
         app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_tipTextMargin="-320dp"
         app:qrcv_tipTextSize="12sp"
-        app:qrcv_toolbarHeight="56dp"
-        app:qrcv_topOffset="90dp" />
+        app:qrcv_toolbarHeight="44dp"
+        app:qrcv_topOffset="55dp" />
 
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_light"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/view"
-        android:src="@mipmap/code_open_light" />
-
-
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_album"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/view"
-        android:src="@mipmap/code_album" />
-
-
+    <!--开灯-->
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:ll_control_adapter="true"
+        app:ll_margin_bottom="89">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_shoudian" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="点开照亮"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <!--title-->
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_title"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/white"
-        android:gravity="center_vertical">
+        android:layout_height="44dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:padding="15dp"
-            android:src="@mipmap/icon_common_back_black" />
+            android:src="@mipmap/icon_common_back_white" />
 
-    </com.shunlian.app.widget.MyLinearLayout>
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_album"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingRight="20dp"
+            android:text="相册"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
 </RelativeLayout>

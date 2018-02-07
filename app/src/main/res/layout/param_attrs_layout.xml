@@ -53,14 +53,15 @@
         app:ll_margin_left="23">
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/img_xiangqing_baozhang" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_7_days_no_reason_to_return"
             android:textColor="@color/new_gray"
             android:textSize="12sp"
             app:tv_control_adapter="true"
@@ -85,6 +86,7 @@
 
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_send_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/img_xiangqing_baozhang"
@@ -92,9 +94,9 @@
             app:iv_margin_left="30" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_send_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_24_hours_delivery"
             android:textColor="@color/new_gray"
             android:textSize="12sp"
             app:tv_control_adapter="true"

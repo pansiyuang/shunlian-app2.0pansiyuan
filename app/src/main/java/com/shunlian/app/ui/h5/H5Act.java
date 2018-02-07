@@ -64,7 +64,7 @@ public class H5Act extends BaseActivity {
     SonicSessionClientImpl sonicSessionClient = null;
     private HttpDialog httpDialog;
 
-    public static void startActivity(Context context, String title, String url,int mode) {
+    public static void startAct(Context context, String title, String url,int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
         intentH5.putExtra("url", url);
         intentH5.putExtra("title", title);
