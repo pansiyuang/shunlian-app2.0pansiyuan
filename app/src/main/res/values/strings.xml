@@ -446,4 +446,6 @@
     <string name="personal_wodedian">我的店</string>
     <string name="personal_zhuangxiuwode">装修我的店</string>
     <string name="personal_mashangzhuangxiu">马上装修</string>
+    <string name="personal_member">共%s人</string>
+    <string name="personal_order">共%s单</string>
 </resources>

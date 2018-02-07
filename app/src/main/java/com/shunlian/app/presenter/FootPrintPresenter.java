@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -45,10 +46,9 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
 
     }
 
-    public void getMarkCalendar(String year, String month) {
+
+    public void getMarkCalendar() {
         Map<String, String> map = new HashMap<>();
-        map.put("year", year);
-        map.put("month", month);
         sortAndMD5(map);
 
         RequestBody requestBody = getRequestBody(map);
@@ -99,6 +99,25 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
             }
         });
     }
+
+    public void deleteBatch(String ids) {
+        if (Common.loginPrompt()) {
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("ids", ids);
+        LogUtil.augusLogW("id--" + ids);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().deleteBatch(map);
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.delSuccess(entity.message);
+            }
+        });
+    }
+
 
     @Override
     public void onRefresh() {

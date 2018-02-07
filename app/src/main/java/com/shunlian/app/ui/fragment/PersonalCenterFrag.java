@@ -2,6 +2,7 @@ package com.shunlian.app.ui.fragment;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,18 +14,19 @@ import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -157,8 +159,50 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.miv_levels)
     MyImageView miv_levels;
 
+    @BindView(R.id.miv_shezhi)
+    MyImageView miv_shezhi;
+
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
+
+    @BindView(R.id.mrlayout_yaoqing)
+    MyRelativeLayout mrlayout_yaoqing;
+
+    @BindView(R.id.mllayout_shouhuo)
+    MyLinearLayout mllayout_shouhuo;
+
+    @BindView(R.id.mrlayout_zhuangxiu)
+    MyRelativeLayout mrlayout_zhuangxiu;
+
+    @BindView(R.id.mllayout_yue)
+    MyLinearLayout mllayout_yue;
+
+    @BindView(R.id.mllayout_youhuiquan)
+    MyLinearLayout mllayout_youhuiquan;
+
+    @BindView(R.id.mllayout_dongli)
+    MyLinearLayout mllayout_dongli;
+
+    @BindView(R.id.mllayout_xiaoshou)
+    MyLinearLayout mllayout_xiaoshou;
+
     @BindView(R.id.mtv_persent)
     MyTextView mtv_persent;
+
+    @BindView(R.id.mtv_refundNum)
+    MyTextView mtv_refundNum;
+
+    @BindView(R.id.mtv_remarkNum)
+    MyTextView mtv_remarkNum;
+
+    @BindView(R.id.mtv_sendNum)
+    MyTextView mtv_sendNum;
+
+    @BindView(R.id.mtv_receiveNum)
+    MyTextView mtv_receiveNum;
+
+    @BindView(R.id.mtv_payNum)
+    MyTextView mtv_payNum;
 
     @BindView(R.id.mtv_all)
     MyTextView mtv_all;
@@ -174,10 +218,17 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         return inflater.inflate(R.layout.frag_mine, container, false);
     }
 
+    @Override
+    public void onResume() {
+        if (!isHidden()) {
+            personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
+        }
+        super.onResume();
+    }
 
     @Override
     protected void initData() {
-        personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
+
     }
 
     @Override
@@ -196,14 +247,64 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mllayout_zuji.setOnClickListener(this);
         mrlayout_xiaodianhuiyuan.setOnClickListener(this);
         mrlayout_xiaodiandingdan.setOnClickListener(this);
+        miv_shezhi.setOnClickListener(this);
+        mrlayout_yaoqing.setOnClickListener(this);
+        mrlayout_zhuangxiu.setOnClickListener(this);
+        mllayout_yue.setOnClickListener(this);
+        mllayout_youhuiquan.setOnClickListener(this);
+        mllayout_dongli.setOnClickListener(this);
+        mllayout_xiaoshou.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
+        mllayout_shouhuo.setOnClickListener(this);
     }
 
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         mtv_name.setText(personalcenterEntity.nickname);
-        mtv_equal.setText(personalcenterEntity.my_rank_info);
-        startToast(80);
-        mtv_all.setText("升级总积分null");
+        int percent=Integer.parseInt(personalcenterEntity.next_level_percent);
+        showLevel(percent, personalcenterEntity.next_level_info);
+        mtv_all.setText(personalcenterEntity.next_level_score);
+        mtv_refundNum.setVisibility(View.VISIBLE);
+        mtv_persent.setPadding(percent* TransformUtil.dip2px(baseContext,230)/100,0,0,0);
+        if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
+            mtv_refundNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {
+            mtv_refundNum.setText("9+");
+        } else {
+            mtv_refundNum.setText(personalcenterEntity.new_refund_num);
+        }
+        mtv_remarkNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.un_comment_num) <= 0) {
+            mtv_remarkNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.un_comment_num) > 9) {
+            mtv_remarkNum.setText("9+");
+        } else {
+            mtv_remarkNum.setText(personalcenterEntity.un_comment_num);
+        }
+        mtv_sendNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_send_num) <= 0) {
+            mtv_sendNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_send_num) > 9) {
+            mtv_sendNum.setText("9+");
+        } else {
+            mtv_sendNum.setText(personalcenterEntity.order_un_send_num);
+        }
+        mtv_receiveNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_receive_num) <= 0) {
+            mtv_receiveNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_receive_num) > 9) {
+            mtv_receiveNum.setText("9+");
+        } else {
+            mtv_receiveNum.setText(personalcenterEntity.order_un_receive_num);
+        }
+        mtv_payNum.setVisibility(View.VISIBLE);
+        if (Integer.parseInt(personalcenterEntity.order_un_pay_num) <= 0) {
+            mtv_payNum.setVisibility(View.GONE);
+        } else if (Integer.parseInt(personalcenterEntity.order_un_pay_num) > 9) {
+            mtv_payNum.setText("9+");
+        } else {
+            mtv_payNum.setText(personalcenterEntity.order_un_pay_num);
+        }
         seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -213,12 +314,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         switch (personalcenterEntity.level) {
             case "up":
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
+                SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269),true);
+                mtv_equal.setText(upBuilder);
                 break;
             case "down":
+                SpannableStringBuilder downBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.pink_color),true);
+                mtv_equal.setText(downBuilder);
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_xiajiantou);
                 break;
             default:
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_chiping);
+                SpannableStringBuilder defaultBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_1C8FE0),true);
+                mtv_equal.setText(defaultBuilder);
                 break;
         }
         switch (personalcenterEntity.level) {
@@ -226,29 +333,25 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_level.setImageResource(R.mipmap.v0);
                 miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
                 break;
-            case "0":
-                miv_level.setImageResource(R.mipmap.v0);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
-                break;
             case "1":
                 miv_level.setImageResource(R.mipmap.v1);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v1);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v2);
                 break;
             case "2":
                 miv_level.setImageResource(R.mipmap.v2);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v2);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v3);
                 break;
             case "3":
                 miv_level.setImageResource(R.mipmap.v3);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v3);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v4);
                 break;
             case "4":
                 miv_level.setImageResource(R.mipmap.v4);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v4);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v5);
                 break;
             case "5":
                 miv_level.setImageResource(R.mipmap.v5);
-                miv_levels.setImageResource(R.mipmap.img_personalcenter_v5);
+                miv_levels.setImageResource(R.mipmap.img_personalcenter_v6);
                 break;
             case "6":
                 miv_level.setImageResource(R.mipmap.v6);
@@ -266,8 +369,15 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_dianpu.setText(personalcenterEntity.store_fav_num);
         mtv_neirong.setText(personalcenterEntity.article_fav_num);
         mtv_zuji.setText(personalcenterEntity.footermark_fav_num);
-        mtv_xiaodianhuiyuan.setText(personalcenterEntity.team_member_num);
-        mtv_xiaodiandingdan.setText(personalcenterEntity.team_order_num);
+
+        String member = String.format(getString(R.string.personal_member), personalcenterEntity.team_member_num);
+        SpannableStringBuilder memberBuilder = Common.changeColor(member, personalcenterEntity.team_member_num, getColorResouce(R.color.pink_color),true);
+        mtv_xiaodianhuiyuan.setText(memberBuilder);
+
+        String order = String.format(getString(R.string.personal_order), personalcenterEntity.team_order_num);
+        SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color),true);
+        mtv_xiaodiandingdan.setText(orderBuilder);
+
         if (personalcenterEntity.sl_user_ranks.get(0) != null) {
             mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
             mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).number);
@@ -284,7 +394,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
         }
     }
-    public void startToast(final int percent) {
+
+    public void showLevel(final int percent, final String next_level_info) {
+        seekbar_grow.setProgress(0);
+        mtv_persent.setText("");
         final int[] now = {0};
         if (outTimer != null) {
             outTimer.cancel();
@@ -293,29 +406,25 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         outTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (now[0] <percent){
+                if (now[0] < percent) {
                     now[0]++;
                     seekbar_grow.setProgress(now[0]);
-                }else {
+                } else {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            mtv_persent.setText("当前积分null");
+                            mtv_persent.setText(next_level_info);
                         }
                     });
                     outTimer.cancel();
                 }
             }
-        }, 0,percent/10);
+        }, 500, percent / 10);
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.mtv_qiandao:
-            case R.id.miv_qiandao:
-                // TODO: 2018/2/2
-                //签到页面
-                break;
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);
                 break;
@@ -346,13 +455,42 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             case R.id.mllayout_zuji:
                 MyCollectionAct.startAct(baseContext);
                 break;
+            case R.id.miv_shezhi:
+                final PromptDialog promptDialog = new PromptDialog(getActivity());
+                promptDialog.setTvSureColor(R.color.new_text);
+                promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
+                promptDialog.setSureAndCancleListener("确定要退出登录吗？", "确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Common.clearLoginInfo();
+                        LoginAct.startAct(baseContext);
+                        promptDialog.dismiss();
+                    }
+                }, "取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        promptDialog.dismiss();
+                    }
+                }).show();
+                break;
+            case R.id.rl_more:
+            case R.id.mrlayout_yaoqing:
+            case R.id.mrlayout_zhuangxiu:
+            case R.id.mllayout_yue:
+            case R.id.mllayout_youhuiquan:
+            case R.id.mllayout_dongli:
+            case R.id.mllayout_xiaoshou:
             case R.id.mrlayout_xiaodianhuiyuan:
                 // TODO: 2018/2/2
 //                小店会员
-                break;
             case R.id.mrlayout_xiaodiandingdan:
                 // TODO: 2018/2/2
 //                小店订单
+            case R.id.mtv_qiandao:
+            case R.id.miv_qiandao:
+                // TODO: 2018/2/2
+                //签到页面
+                Common.staticToast("程序猿正在努力开发中，敬请期待...");
                 break;
         }
     }

@@ -30,6 +30,10 @@ public class PersonalcenterEntity {
     public String footermark_fav_num;
     public String team_member_num;
     public String team_order_num;
+    public String next_level_score;
+    public String next_level_percent;
+    public String next_level_info;
+    public String my_rank_label;
     public String my_rank_info;
     public String my_rank_code;
     public String invite_code;
