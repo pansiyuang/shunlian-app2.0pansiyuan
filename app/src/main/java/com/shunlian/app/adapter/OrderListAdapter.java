@@ -443,7 +443,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             final PromptDialog promptDialog = new PromptDialog((Activity) context);
             promptDialog.setSureAndCancleListener(getString(R.string.confirm_extend_goods_time),
                     getString(R.string.order_extend_once),
-                    getString(R.string.confirm_goods), new View.OnClickListener() {
+                    getString(R.string.confirm), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mAllFrag != null) {
