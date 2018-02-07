@@ -31,7 +31,7 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
     public OnChildClickListener mListener;
 
     public FootAdapter(Context context, List<Object> lists) {
-        super(context, true, lists);
+        super(context, false, lists);
     }
 
     @Override
