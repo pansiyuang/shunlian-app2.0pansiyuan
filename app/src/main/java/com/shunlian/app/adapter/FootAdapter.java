@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -44,7 +43,6 @@ public class FootAdapter extends BaseRecyclerAdapter<Object> {
 
     @Override
     public int getItemViewType(int position) {
-        LogUtil.httpLogW("size:" + getItemCount() + "lists:" + lists.size());
         if (lists.get(position) instanceof FootprintEntity.DateInfo) {
             return DATE_LAYOUT;
         }

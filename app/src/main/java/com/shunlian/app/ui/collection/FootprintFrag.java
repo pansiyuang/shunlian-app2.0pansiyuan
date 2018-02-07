@@ -109,7 +109,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
         calendarParams = new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
 
-        calendarView.shrink();
+//        calendarView.shrink();
     }
 
     @Override
@@ -360,7 +360,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         appBarLayout.setLayoutParams(params);
         calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
         calendarView.setLayoutParams(calendarParams);
-        rl_date_control.setVisibility(View.VISIBLE);
+        if (rl_date_control.getVisibility() == View.GONE) {
+            rl_date_control.setVisibility(View.VISIBLE);
+        }
         miv_calendar_more.setRotation(180f);
     }
 
@@ -371,7 +373,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         appBarLayout.setLayoutParams(params);
         calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
         calendarView.setLayoutParams(calendarParams);
-        rl_date_control.setVisibility(View.GONE);
+        if (rl_date_control.getVisibility() == View.VISIBLE) {
+            rl_date_control.setVisibility(View.GONE);
+        }
         miv_calendar_more.setRotation(0f);
     }
 
