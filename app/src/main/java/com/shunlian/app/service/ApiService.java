@@ -963,4 +963,12 @@ public interface ApiService {
      */
     @GET("/personalcenter/home")
     Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String,String> map);
+
+    /**
+     * 足迹列表足迹批量删除
+     * @param map
+     * @return
+     */
+    @GET("member/footermark/deleteBatch")
+    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String,String> map);
 }
