@@ -190,6 +190,20 @@
             android:textSize="8sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
 
+    <!--活动标识-->
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_act"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tv_control_adapter="true"
+        android:visibility="gone"
+        app:tv_margin_left="23"
+        app:tv_margin_right="23"
+        android:textSize="13sp"
+        app:tv_margin_top="27"
+        app:tv_margin_bottom="23"
+        android:textColor="@color/pink_color"/>
+
     <!--价格标识-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_common_price"
