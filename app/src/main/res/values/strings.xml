@@ -221,6 +221,7 @@
     <string name="your_footmark">您的足迹</string>
     <string name="search_history">搜索历史</string>
     <string name="search_all_order">搜索所有订单</string>
+    <string name="confirm">确认</string>
 
     <!--收获地址-->
     <string name="location">定位</string>
@@ -445,4 +446,6 @@
     <string name="personal_wodedian">我的店</string>
     <string name="personal_zhuangxiuwode">装修我的店</string>
     <string name="personal_mashangzhuangxiu">马上装修</string>
+    <string name="personal_member">共%s人</string>
+    <string name="personal_order">共%s单</string>
 </resources>

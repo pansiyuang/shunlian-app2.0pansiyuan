@@ -12,8 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FootAdapter;
+import com.shunlian.app.adapter.FootprintAdapter;
 import com.shunlian.app.bean.CalendarEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.presenter.FootPrintPresenter;
@@ -84,6 +84,10 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private int isDelAll = 2;  //0 全选  1 部分选择 2 全不选
     private boolean isSelectAll;
     private List<FootprintEntity.MarkData> delList;
+    private FootprintAdapter footprintAdapter;
+
+
+    private List<FootprintEntity.MarkData> markDataLists = new ArrayList<>();
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -262,29 +266,48 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
         if (!isEmpty(list)) {
             markDataList.addAll(list);
-            getObjectList(page);
+//            getObjectList(page);
         }
-        if (footAdapter == null) {
-            footAdapter = new FootAdapter(getContext(), objectList);
-            recycler_list.setAdapter(footAdapter);
-            footAdapter.setPageLoading(page, allPage);
-            footAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (printPresenter != null) {
-                        printPresenter.onRefresh();
-                    }
-                }
-            });
-            footAdapter.setOnChildClickListener(this);
-        } else {
-            footAdapter.setPageLoading(page, allPage);
-            if (markDataList.size() <= printPresenter.PAGE_SIZE)
-                footAdapter.notifyDataSetChanged();
-            else
-                footAdapter.notifyItemInserted(printPresenter.PAGE_SIZE);
+
+
+
+        /***************新增start******************/
+
+        if (!isEmpty(list)){
+            markDataLists.addAll(list);
         }
-        footAdapter.notifyDataSetChanged();
+
+        if (footprintAdapter == null) {
+            footprintAdapter = new FootprintAdapter(baseActivity, markDataLists,dateList);
+            recycler_list.setAdapter(footprintAdapter);
+        }else {
+            footprintAdapter.notifyDataSetChanged();
+        }
+
+        /***************新增end******************/
+
+
+//        if (footAdapter == null) {
+//            footAdapter = new FootAdapter(getContext(), objectList);
+//            recycler_list.setAdapter(footAdapter);
+//            footAdapter.setPageLoading(page, allPage);
+//            footAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+//                @Override
+//                public void onReload() {
+//                    if (printPresenter != null) {
+//                        printPresenter.onRefresh();
+//                    }
+//                }
+//            });
+//            footAdapter.setOnChildClickListener(this);
+//        } else {
+//            footAdapter.setPageLoading(page, allPage);
+//            if (markDataList.size() <= printPresenter.PAGE_SIZE)
+//                footAdapter.notifyDataSetChanged();
+//            else
+//                footAdapter.notifyItemInserted(printPresenter.PAGE_SIZE);
+//        }
+//        footAdapter.notifyDataSetChanged();
     }
 
     @Override
