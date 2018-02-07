@@ -336,7 +336,29 @@ public class Common {
         }
         return ssb;
     }
+    /**
+     * 更改源字符串的颜色
+     * @param source 源字符串
+     * @param changeStr 需要改变颜色的字符串
+     * @param color 变化的颜色
+     * @return
+     */
+    public static SpannableStringBuilder changeColor(String source, String changeStr, @ColorInt int color,boolean isMutil){
+        if (colorSpan == null||isMutil)
+            colorSpan = new ForegroundColorSpan(color);
 
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int i = source.indexOf(changeStr);
+        if (i == -1){
+            return ssb;
+        }else {
+            ssb.setSpan(colorSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
     /**
      * 更改源字符串的大小
      * @param source 源字符串

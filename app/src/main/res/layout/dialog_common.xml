@@ -10,6 +10,7 @@
         android:layout_height="133dp"
         android:background="@drawable/bg_dialog_top"
         android:gravity="center"
+        android:padding="10dp"
         android:orientation="vertical">
 
 
