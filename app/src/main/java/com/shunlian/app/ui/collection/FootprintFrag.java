@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.FootAdapter;
 import com.shunlian.app.adapter.FootprintAdapter;
 import com.shunlian.app.bean.CalendarEntity;
 import com.shunlian.app.bean.FootprintEntity;
@@ -39,7 +38,7 @@ import static com.shunlian.app.utils.FastClickListener.isFastClick;
  * 足迹
  */
 
-public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView, CalendarView.OnYearChangeListener, CalendarView.OnDateSelectedListener, CalendarView.OnStatusChangeListener, FootAdapter.OnChildClickListener {
+public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView, CalendarView.OnYearChangeListener, CalendarView.OnDateSelectedListener, CalendarView.OnStatusChangeListener, FootprintAdapter.OnChildClickListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -70,24 +69,15 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     private FootPrintPresenter printPresenter;
     private List<Calendar> markData = new ArrayList<>();
-    private FootAdapter footAdapter;
     private List<FootprintEntity.MarkData> markDataList;
+    private List<FootprintEntity.MarkData> delList;
     private List<FootprintEntity.DateInfo> dateInfoList;
-    private List<Object> objectList = new ArrayList<>();
     private GridLayoutManager manager;
     private CoordinatorLayout.LayoutParams params;
     private RelativeLayout.LayoutParams calendarParams;
-    private int totalCount = 0;
-    private int residueCount;
-    private int index = 0;
-    private int dateCount = 0;
-    private int isDelAll = 2;  //0 全选  1 部分选择 2 全不选
     private boolean isSelectAll;
-    private List<FootprintEntity.MarkData> delList;
+    private int selectStatus = 0; // 0 全选  1 部分选择 2 全不选
     private FootprintAdapter footprintAdapter;
-
-
-    private List<FootprintEntity.MarkData> markDataLists = new ArrayList<>();
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -99,8 +89,8 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         recycler_list.setHasFixedSize(false);
         printPresenter = new FootPrintPresenter(baseContext, this);
         markDataList = new ArrayList<>();
-        dateInfoList = new ArrayList<>();
         delList = new ArrayList<>();
+        dateInfoList = new ArrayList<>();
         manager = new GridLayoutManager(getContext(), 3);
         recycler_list.setLayoutManager(manager);
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false); //解决刷新item图片闪烁的问题
@@ -113,7 +103,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
         calendarParams = new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
 
-//        calendarView.shrink();
+        calendarView.shrink();
     }
 
     @Override
@@ -158,11 +148,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
      */
     @Override
     public void delete() {
-        String ids = getDelIds();
-        if (isEmpty(ids)) {
-            return;
-        }
-        printPresenter.deleteBatch(ids);
+//        String ids = getDelIds();
+//        if (isEmpty(ids)) {
+//            return;
+//        }
+//        printPresenter.deleteBatch(ids);
     }
 
     /**
@@ -175,7 +165,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         } else {
             isSelectAll = true;
         }
-        selectTotalItem(isSelectAll);
+        toSelectAll(isSelectAll);
     }
 
     /**
@@ -191,7 +181,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
      */
     @Override
     public void finishManage() {
-        selectTotalItem(false);
+        toSelectAll(false);
     }
 
     /**
@@ -201,11 +191,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
      */
     @Override
     public boolean isClickManage() {
-        if (!isEmpty(markDataList) && footAdapter != null) {
-            if (!footAdapter.getEditMode()) {
-                footAdapter.setEditMode(true);
+        if (!isEmpty(markDataList) && footprintAdapter != null) {
+            if (!footprintAdapter.getEditMode()) {
+                footprintAdapter.setEditMode(true);
             } else {
-                footAdapter.setEditMode(false);
+                footprintAdapter.setEditMode(false);
             }
             return true;
         }
@@ -255,7 +245,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     public void getMarkList(List<FootprintEntity.MarkData> list, List<FootprintEntity.DateInfo> dateList, int page, int allPage) {
         if (page == 1) {
             markDataList.clear();
-            objectList.clear();
             dateInfoList.addAll(dateList);
         }
         if (isSelectAll) {
@@ -263,97 +252,37 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                 dateInfo.isSelect = true;
             }
         }
-
         if (!isEmpty(list)) {
-            markDataList.addAll(list);
-//            getObjectList(page);
+            for (int i = 0; i < list.size(); i++) {
+                FootprintEntity.MarkData markData = list.get(i);
+                for (int j = 0; j < dateInfoList.size(); j++) {
+                    FootprintEntity.DateInfo dateInfo = dateInfoList.get(j);
+                    if (dateInfo.date.equals(markData.date_normal) && dateInfo.isSelect) {
+                        markData.isSelect = true;
+                        delList.add(markData);
+                        break;
+                    }
+                }
+                markDataList.add(markData);
+            }
         }
-
-
 
         /***************新增start******************/
 
-        if (!isEmpty(list)){
-            markDataLists.addAll(list);
-        }
-
         if (footprintAdapter == null) {
-            footprintAdapter = new FootprintAdapter(baseActivity, markDataLists,dateList);
+            footprintAdapter = new FootprintAdapter(baseActivity, markDataList, dateInfoList);
+            footprintAdapter.setOnChildClickListener(this);
             recycler_list.setAdapter(footprintAdapter);
-        }else {
+        } else {
             footprintAdapter.notifyDataSetChanged();
         }
 
         /***************新增end******************/
-
-
-//        if (footAdapter == null) {
-//            footAdapter = new FootAdapter(getContext(), objectList);
-//            recycler_list.setAdapter(footAdapter);
-//            footAdapter.setPageLoading(page, allPage);
-//            footAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-//                @Override
-//                public void onReload() {
-//                    if (printPresenter != null) {
-//                        printPresenter.onRefresh();
-//                    }
-//                }
-//            });
-//            footAdapter.setOnChildClickListener(this);
-//        } else {
-//            footAdapter.setPageLoading(page, allPage);
-//            if (markDataList.size() <= printPresenter.PAGE_SIZE)
-//                footAdapter.notifyDataSetChanged();
-//            else
-//                footAdapter.notifyItemInserted(printPresenter.PAGE_SIZE);
-//        }
-//        footAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void delSuccess(String msg) {
-        notifyList();
         Common.staticToast(msg);
-    }
-
-    public void getObjectList(int page) {
-        int childCount;
-        for (int i = index; i < dateInfoList.size(); i++) {
-            if (residueCount > 0) { //结余数量大于0
-                childCount = residueCount;
-                totalCount = childCount + totalCount;
-                residueCount = 0;
-            } else {  //否则没有结余
-                FootprintEntity.DateInfo dateInfo = dateInfoList.get(i);
-                childCount = Integer.valueOf(dateInfo.counts);
-                objectList.add(dateInfo); //添加title
-                dateCount++;
-                if (childCount + totalCount > page * 20) {  //当前日期的子数量加上总数大于当前页的总数
-                    childCount = page * 20 - totalCount;
-                    totalCount = page * 20;
-                    residueCount = Integer.valueOf(dateInfoList.get(i).counts) - childCount; //剩余的数量
-                } else {
-                    totalCount = childCount + totalCount;
-                    residueCount = 0;
-                }
-            }
-            boolean isSelect = dateInfoList.get(i).isSelect; //获取当前日期是否已经被选中
-            for (int j = 0; j < childCount; j++) {
-                FootprintEntity.MarkData mark = markDataList.get(objectList.size() - dateCount);
-                mark.isSelect = isSelect;
-                objectList.add(mark);
-                if (isSelect) {
-                    delList.add(mark);
-                }
-            }
-            if (residueCount <= 0) {
-                index++;
-            }
-            if (totalCount >= page * 20) {
-                //总数大于等于当前页乘于数量、需要加载下一页数据了
-                break;
-            }
-        }
     }
 
     @Override
@@ -404,195 +333,152 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     public void OnDateSelect(int position, FootprintEntity.DateInfo dateInfo) {
-        if (!footAdapter.isEdit) {
+        if (!footprintAdapter.getEditMode()) {
             return;
         }
-        FootprintEntity.DateInfo mDateInfo = (FootprintEntity.DateInfo) objectList.get(position);
         if (dateInfo.isSelect) {
-            dateInfo.isSelect = mDateInfo.isSelect = false;
-            setDateItemStatus(dateInfo.date, false);
+            toSelectDate(dateInfo.date, false);
         } else {
-            dateInfo.isSelect = mDateInfo.isSelect = true;
-            setDateItemStatus(dateInfo.date, true);
+            toSelectDate(dateInfo.date, true);
         }
-        setCurrentSelectStatus();
+        checkSelctStatus();
+        footprintAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void OnItemSelect(int position, FootprintEntity.MarkData markData) {
-        FootprintEntity.MarkData mMarkData = (FootprintEntity.MarkData) objectList.get(position);
-        if (!footAdapter.isEdit) {
-            GoodsDetailAct.startAct(baseActivity, mMarkData.goods_id);
+        if (!footprintAdapter.getEditMode()) {
+            GoodsDetailAct.startAct(baseActivity, markDataList.get(position).goods_id);
         } else {
             if (markData.isSelect) {
-                mMarkData.isSelect = false;
-                delItem(mMarkData.id, markData.date_normal);
+                delItem(markData.id);
             } else {
-                mMarkData.isSelect = true;
-                selectItem(mMarkData.id, markData.date_normal);
+                selectItem(markData.id);
             }
+            checkSelctStatus();
+            footprintAdapter.notifyDataSetChanged();
         }
-        setCurrentSelectStatus();
     }
 
     /**
-     * 设置当前日期的状态
-     *
-     * @param date
+     * 选择单项Item
      */
-    public void setDateItemStatus(String date, boolean isSelect) {
-        for (int i = 0; i < objectList.size(); i++) {
-            if (objectList.get(i) instanceof FootprintEntity.DateInfo && ((FootprintEntity.DateInfo) objectList.get(i)).date.equals(date)) {
-                ((FootprintEntity.DateInfo) objectList.get(i)).isSelect = isSelect;
+
+    public void selectItem(String markId) {
+        String date = "";
+        for (int i = 0; i < markDataList.size(); i++) {
+            if (markDataList.get(i).id.equals(markId)) {
+                markDataList.get(i).isSelect = true;
+                date = markDataList.get(i).date_normal;
+                delList.add(markDataList.get(i));
+                break;
             }
-            if (objectList.get(i) instanceof FootprintEntity.MarkData && ((FootprintEntity.MarkData) objectList.get(i)).date_normal.equals(date)) {
-                ((FootprintEntity.MarkData) objectList.get(i)).isSelect = isSelect;
+        }
+        if (!isEmpty(date)) {
+            if (checkSelectDate(date)) {
+                setDateStatus(date, true);
+            }
+        }
+    }
+
+    /**
+     * 取消选择Item
+     */
+
+    public void delItem(String markId) {
+        String date = "";
+        for (Iterator it = markDataList.iterator(); it.hasNext(); ) {
+            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) it.next();
+            if (markData.id.equals(markId)) {
+                delList.remove(markData);
+                break;
+            }
+        }
+        if (!isEmpty(date)) {
+            setDateStatus(date, false);
+        }
+    }
+
+    /**
+     * 选择/反选当日
+     */
+
+    public void toSelectDate(String date, boolean isSelect) {
+        for (Iterator it = markDataList.iterator(); it.hasNext(); ) {
+            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) it.next();
+            if (markData.date_normal.equals(date)) {
+                markData.isSelect = isSelect;
                 if (isSelect) {
-                    delList.add(((FootprintEntity.MarkData) objectList.get(i)));
-                } else {
-                    delList.remove(objectList.get(i));
-                }
-            }
-        }
-        footAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 选择单个Item
-     *
-     * @param markId
-     * @param date
-     * @return
-     */
-    public void selectItem(String markId, String date) {
-        boolean b = true;
-
-        for (int i = 0; i < objectList.size(); i++) {
-            FootprintEntity.MarkData markData;
-            if (objectList.get(i) instanceof FootprintEntity.MarkData) {
-                markData = (FootprintEntity.MarkData) objectList.get(i);
-                if (markData.id.equals(markId) && markData.date_normal.equals(date)) {
-                    markData.isSelect = true;
                     delList.add(markData);
-                    footAdapter.notifyItemChanged(i);
-                }
-                if (markData.date_normal.equals(date) && !markData.isSelect) {
-                    b = false;
-                }
-            }
-        }
-        if (!b) {
-            return;
-        }
-        for (int i = 0; i < objectList.size(); i++) {
-            if (objectList.get(i) instanceof FootprintEntity.DateInfo) {
-                if (((FootprintEntity.DateInfo) objectList.get(i)).date.equals(date)) {
-                    ((FootprintEntity.DateInfo) objectList.get(i)).isSelect = true;
-                    footAdapter.notifyItemChanged(i);
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * 删除单个Item
-     *
-     * @param markId
-     * @param date
-     */
-    public void delItem(String markId, String date) {
-        for (int i = 0; i < objectList.size(); i++) {
-            FootprintEntity.MarkData markData;
-            FootprintEntity.DateInfo dateInfo;
-            if (objectList.get(i) instanceof FootprintEntity.MarkData) {
-                markData = (FootprintEntity.MarkData) objectList.get(i);
-                if (markData.id.equals(markId) && markData.date_normal.equals(date)) {
-                    markData.isSelect = false;
-                    footAdapter.notifyItemChanged(i);
+                } else {
                     delList.remove(markData);
                 }
             }
-            if (objectList.get(i) instanceof FootprintEntity.DateInfo) {
-                dateInfo = (FootprintEntity.DateInfo) objectList.get(i);
-                if (dateInfo.isSelect && dateInfo.date.equals(date)) {
-                    dateInfo.isSelect = false;
-                }
-                footAdapter.notifyItemChanged(i);
-            }
         }
+        setDateStatus(date, isSelect);
     }
 
     /**
-     * 全选/反选择
-     *
-     * @param
+     * 选择/反选所有足迹
      */
 
-    public void selectTotalItem(boolean selectAll) {
-        FootprintEntity.MarkData markData;
-        FootprintEntity.DateInfo dateInfo;
+    public void toSelectAll(boolean isSelectAll) {
         delList.clear();
-        for (int i = 0; i < objectList.size(); i++) {
-            if (objectList.get(i) instanceof FootprintEntity.DateInfo) {
-                dateInfo = (FootprintEntity.DateInfo) objectList.get(i);
-                dateInfo.isSelect = selectAll;
-            }
-
-            if (objectList.get(i) instanceof FootprintEntity.MarkData) {
-                markData = (FootprintEntity.MarkData) objectList.get(i);
-                markData.isSelect = selectAll;
-                if (selectAll) {
-                    delList.add(markData);
-                }
+        for (Iterator it = markDataList.iterator(); it.hasNext(); ) {
+            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) it.next();
+            markData.isSelect = isSelectAll;
+            if (isSelectAll) {
+                delList.add(markData);
+            } else {
+                delList.remove(markData);
             }
         }
-        footAdapter.notifyDataSetChanged();
-        setCurrentSelectStatus();
+        checkSelctStatus();
     }
 
     /**
-     * 设置当前选择状态
+     * 检查当日是否全被选中
      */
-    public void setCurrentSelectStatus() {
-        if (delList.size() == 0) {
-            isDelAll = 2;
+
+    public boolean checkSelectDate(String date) {
+        for (int i = 0; i < markDataList.size(); i++) {
+            FootprintEntity.MarkData markData = markDataList.get(i);
+            if (markData.date_normal.equals(date) && !markData.isSelect) {
+                return false;
+            }
+        }
+        for (FootprintEntity.DateInfo dateInfo : dateInfoList) {
+            dateInfo.isSelect = false;
+        }
+        return true;
+    }
+
+    /**
+     * 改变当前日期状态
+     */
+    public void setDateStatus(String date, boolean isSelect) {
+        for (int i = 0; i < dateInfoList.size(); i++) {
+            if (dateInfoList.get(i).date.equals(date)) {
+                dateInfoList.get(i).isSelect = isSelect;
+            }
+        }
+    }
+
+    /**
+     * 检查所选数量改变状态
+     */
+
+    public void checkSelctStatus() {
+        if (delList.size() == 0) { //全不选
+            selectStatus = 2;
             isSelectAll = false;
         } else if (delList.size() == markDataList.size()) {
-            isDelAll = 0;
+            selectStatus = 0;
             isSelectAll = true;
         } else {
-            isDelAll = 1;
+            selectStatus = 1;
             isSelectAll = false;
         }
-        ((MyCollectionAct) baseActivity).setManageState(isDelAll);
-    }
-
-    public String getDelIds() {
-        if (isEmpty(delList)) {
-            return null;
-        }
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < delList.size(); i++) {
-            result.append(delList.get(i).id);
-            if (i != delList.size() - 1) {
-                result.append(",");
-            }
-        }
-        return result.toString();
-    }
-
-    public void notifyList() {
-        for (Iterator it = objectList.iterator(); it.hasNext(); ) {
-            Object object = it.next();
-            if (object instanceof FootprintEntity.MarkData && ((FootprintEntity.MarkData) object).isSelect) {
-                it.remove();
-            }
-
-            if (object instanceof FootprintEntity.DateInfo && ((FootprintEntity.DateInfo) object).isSelect) {
-                it.remove();
-            }
-        }
-        footAdapter.notifyDataSetChanged();
+        ((MyCollectionAct) baseActivity).setManageState(selectStatus);
     }
 }
