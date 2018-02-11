@@ -433,6 +433,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                 delList.remove(markData);
             }
         }
+        for (FootprintEntity.DateInfo dateInfo : dateInfoList) {
+            dateInfo.isSelect = isSelectAll;
+        }
         checkSelctStatus();
     }
 
@@ -446,9 +449,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             if (markData.date_normal.equals(date) && !markData.isSelect) {
                 return false;
             }
-        }
-        for (FootprintEntity.DateInfo dateInfo : dateInfoList) {
-            dateInfo.isSelect = false;
         }
         return true;
     }
