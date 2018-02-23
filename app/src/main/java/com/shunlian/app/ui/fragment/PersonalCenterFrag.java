@@ -25,7 +25,10 @@ import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.refresh.ring.RingRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -210,9 +213,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.seekbar_grow)
     SeekBar seekbar_grow;
 
+    @BindView(R.id.refreshview)
+    RingRefreshView refreshview;
+
+    @BindView(R.id.view_bg)
+    View view_bg;
+
+    @BindView(R.id.msv_out)
+    MyScrollView msv_out;
+
+
     private PersonalcenterPresenter personalcenterPresenter;
     private Timer outTimer;
-
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.frag_mine, container, false);
@@ -221,14 +233,42 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @Override
     public void onResume() {
         if (!isHidden()) {
-            personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
+            if (personalcenterPresenter==null){
+                personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
+            }else {
+                personalcenterPresenter.getApiData();
+            }
         }
         super.onResume();
     }
 
     @Override
     protected void initData() {
-
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
+        view_bg.setAlpha(0);
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (y>20){
+                    view_bg.setAlpha(1);
+                }else if (y>0){
+                    float alpha = ((float) y) / 20;
+                    view_bg.setAlpha(alpha);
+                }else {
+                    view_bg.setAlpha(0);
+                }
+            }
+        });
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                personalcenterPresenter.getApiData();
+            }
+            @Override
+            public void onLoadMore() {
+            }
+        });
     }
 
     @Override
@@ -256,16 +296,19 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mllayout_xiaoshou.setOnClickListener(this);
         rl_more.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
+        view_bg.setOnClickListener(this);
     }
 
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        refreshview.stopRefresh(true);
+//        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
-        int percent=Integer.parseInt(personalcenterEntity.next_level_percent);
+        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
         showLevel(percent, personalcenterEntity.next_level_info);
         mtv_all.setText(personalcenterEntity.next_level_score);
         mtv_refundNum.setVisibility(View.VISIBLE);
-        mtv_persent.setPadding(percent* TransformUtil.dip2px(baseContext,230)/100,0,0,0);
+        mtv_persent.setPadding(percent * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);
         if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
             mtv_refundNum.setVisibility(View.GONE);
         } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {
@@ -314,17 +357,17 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         switch (personalcenterEntity.level) {
             case "up":
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
-                SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269),true);
+                SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269), true);
                 mtv_equal.setText(upBuilder);
                 break;
             case "down":
-                SpannableStringBuilder downBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.pink_color),true);
+                SpannableStringBuilder downBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.pink_color), true);
                 mtv_equal.setText(downBuilder);
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_xiajiantou);
                 break;
             default:
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_chiping);
-                SpannableStringBuilder defaultBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_1C8FE0),true);
+                SpannableStringBuilder defaultBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_1C8FE0), true);
                 mtv_equal.setText(defaultBuilder);
                 break;
         }
@@ -371,11 +414,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_zuji.setText(personalcenterEntity.footermark_fav_num);
 
         String member = String.format(getString(R.string.personal_member), personalcenterEntity.team_member_num);
-        SpannableStringBuilder memberBuilder = Common.changeColor(member, personalcenterEntity.team_member_num, getColorResouce(R.color.pink_color),true);
+        SpannableStringBuilder memberBuilder = Common.changeColor(member, personalcenterEntity.team_member_num, getColorResouce(R.color.pink_color), true);
         mtv_xiaodianhuiyuan.setText(memberBuilder);
 
         String order = String.format(getString(R.string.personal_order), personalcenterEntity.team_order_num);
-        SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color),true);
+        SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color), true);
         mtv_xiaodiandingdan.setText(orderBuilder);
 
         if (personalcenterEntity.sl_user_ranks.get(0) != null) {

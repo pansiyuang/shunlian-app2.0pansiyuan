@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:paddingTop="60dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.refresh.ring.RingProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        app:ringmax="100"
+        app:ringImage="@mipmap/icon_jiantou"
+        app:ringProgressColor="@android:color/white"
+        app:ringWidth="1dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
+
+    <TextView
+        android:id="@+id/ring_refresh_status"
+        android:textSize="12sp"
+        android:layout_marginLeft="15dp"
+        android:text="下拉刷新"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</LinearLayout>
