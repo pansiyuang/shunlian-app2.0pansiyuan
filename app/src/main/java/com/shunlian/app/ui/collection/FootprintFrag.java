@@ -1,13 +1,17 @@
 package com.shunlian.app.ui.collection;
 
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,20 +56,17 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @BindView(R.id.miv_next)
     MyImageView miv_next;
 
-    @BindView(R.id.content)
-    CoordinatorLayout content;
-
     @BindView(R.id.rl_date_control)
     RelativeLayout rl_date_control;
-
-    @BindView(R.id.appBarLayout)
-    AppBarLayout appBarLayout;
 
     @BindView(R.id.calendarView)
     CalendarView calendarView;
 
-    @BindView(R.id.miv_calendar_more)
-    MyImageView miv_calendar_more;
+    @BindView(R.id.ll_calendar)
+    LinearLayout ll_calendar;
+
+    @BindView(R.id.miv_more)
+    MyImageView miv_more;
 
     private FootPrintPresenter printPresenter;
     private List<Calendar> markData = new ArrayList<>();
@@ -73,11 +74,14 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private List<FootprintEntity.MarkData> delList;
     private List<FootprintEntity.DateInfo> dateInfoList;
     private GridLayoutManager manager;
-    private CoordinatorLayout.LayoutParams params;
-    private RelativeLayout.LayoutParams calendarParams;
     private boolean isSelectAll;
     private int selectStatus = 0; // 0 全选  1 部分选择 2 全不选
     private FootprintAdapter footprintAdapter;
+    private LinearLayout.LayoutParams calendarParams;
+    private int hide_space;
+    private int mScrolledDistance = 0;
+    private boolean mControlsVisible = true;
+
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -86,6 +90,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     protected void initData() {
+
+        hide_space = TransformUtil.dip2px(getActivity(), 115.5f);
+
         recycler_list.setHasFixedSize(false);
         printPresenter = new FootPrintPresenter(baseContext, this);
         markDataList = new ArrayList<>();
@@ -100,17 +107,16 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         printPresenter.getMarkCalendar();
         printPresenter.getMarklist(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()), false);
 
-        params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-        calendarParams = new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-
+        calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         calendarView.shrink();
+        setShrinkParams();
     }
 
     @Override
     protected void initListener() {
         miv_next.setOnClickListener(this);
         miv_pre.setOnClickListener(this);
-        miv_calendar_more.setOnClickListener(this);
+        miv_more.setOnClickListener(this);
 
         calendarView.setOnYearChangeListener(this);
         calendarView.setOnDateSelectedListener(this);
@@ -126,10 +132,42 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                         }
                     }
                 }
+
+                int firstVisibleItem = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                if (firstVisibleItem == 0) {
+                    if (!mControlsVisible) {
+                        showViews();
+                        mControlsVisible = true;
+                    }
+                } else {
+                    if (mScrolledDistance > hide_space && mControlsVisible) {
+                        hideViews();
+                        mControlsVisible = false;
+                        mScrolledDistance = 0;
+                    } else if (mScrolledDistance < -hide_space && !mControlsVisible) {
+                        showViews();
+                        mControlsVisible = true;
+                        mScrolledDistance = 0;
+                    }
+                }
+                if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
+                    mScrolledDistance += dy;
+                }
+
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
         super.initListener();
+    }
+
+
+    private void hideViews() {
+        ll_calendar.animate().translationY(-ll_calendar.getHeight() - TransformUtil.dip2px(getActivity(), 15f)).setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    private void showViews() {
+        ll_calendar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
     }
 
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
@@ -148,11 +186,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
      */
     @Override
     public void delete() {
-//        String ids = getDelIds();
-//        if (isEmpty(ids)) {
-//            return;
-//        }
-//        printPresenter.deleteBatch(ids);
+        String ids = getDelIds();
+        if (isEmpty(ids)) {
+            return;
+        }
+        printPresenter.deleteBatch(ids);
     }
 
     /**
@@ -213,7 +251,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             case R.id.miv_next:
                 calendarView.scrollToNext();
                 break;
-            case R.id.miv_calendar_more:
+            case R.id.miv_more:
                 if (calendarView.isExpand()) {
                     calendarView.shrink();
                     rl_date_control.setVisibility(View.GONE);
@@ -267,8 +305,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             }
         }
 
-        /***************新增start******************/
-
         if (footprintAdapter == null) {
             footprintAdapter = new FootprintAdapter(baseActivity, markDataList, dateInfoList);
             footprintAdapter.setOnChildClickListener(this);
@@ -276,12 +312,27 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         } else {
             footprintAdapter.notifyDataSetChanged();
         }
-
-        /***************新增end******************/
     }
 
     @Override
     public void delSuccess(String msg) {
+        delList.clear();
+        Iterator it = dateInfoList.iterator();
+        while (it.hasNext()) {
+            FootprintEntity.DateInfo dateInfo = (FootprintEntity.DateInfo) it.next();
+            if (dateInfo.isSelect) {
+                it.remove();
+            }
+        }
+        Iterator markIt = markDataList.iterator();
+        while (markIt.hasNext()) {
+            FootprintEntity.MarkData markData = (FootprintEntity.MarkData) markIt.next();
+            if (markData.isSelect) {
+                markIt.remove();
+            }
+        }
+        footprintAdapter.initData();
+        footprintAdapter.notifyDataSetChanged();
         Common.staticToast(msg);
     }
 
@@ -307,29 +358,39 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     public void OnExpand() {
-        int height = TransformUtil.dip2px(getActivity(), 440.5f);
-        params.height = height;
-        appBarLayout.setLayoutParams(params);
-        calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
-        calendarView.setLayoutParams(calendarParams);
-        if (rl_date_control.getVisibility() == View.GONE) {
-            rl_date_control.setVisibility(View.VISIBLE);
-        }
-        miv_calendar_more.setRotation(180f);
+        setExpandParams();
     }
 
     @Override
     public void OnShrink() {
-        int height = TransformUtil.dip2px(getActivity(), 130.5f);
-        params.height = height;
-        appBarLayout.setLayoutParams(params);
+        setShrinkParams();
+    }
+
+    public void setExpandParams() {
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
+        calendarView.setLayoutParams(calendarParams);
+
+        if (rl_date_control.getVisibility() == View.GONE) {
+            rl_date_control.setVisibility(View.VISIBLE);
+        }
+        miv_more.setRotation(180f);
+        if (footprintAdapter != null) {
+            footprintAdapter.setTitleSpace(425.5f);
+        }
+    }
+
+    public void setShrinkParams() {
         calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
         calendarView.setLayoutParams(calendarParams);
         if (rl_date_control.getVisibility() == View.VISIBLE) {
             rl_date_control.setVisibility(View.GONE);
         }
-        miv_calendar_more.setRotation(0f);
+        miv_more.setRotation(0f);
+        if (footprintAdapter != null) {
+            footprintAdapter.setTitleSpace(115.5f);
+        }
     }
+
 
     @Override
     public void OnDateSelect(int position, FootprintEntity.DateInfo dateInfo) {
@@ -367,10 +428,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     public void selectItem(String markId) {
         String date = "";
         for (int i = 0; i < markDataList.size(); i++) {
-            if (markDataList.get(i).id.equals(markId)) {
-                markDataList.get(i).isSelect = true;
-                date = markDataList.get(i).date_normal;
-                delList.add(markDataList.get(i));
+            FootprintEntity.MarkData markData = markDataList.get(i);
+            if (markData.id.equals(markId)) {
+                markData.isSelect = true;
+                date = markData.date_normal;
+                delList.add(markData);
                 break;
             }
         }
@@ -390,6 +452,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         for (Iterator it = markDataList.iterator(); it.hasNext(); ) {
             FootprintEntity.MarkData markData = (FootprintEntity.MarkData) it.next();
             if (markData.id.equals(markId)) {
+                markData.isSelect = false;
                 delList.remove(markData);
                 break;
             }
@@ -480,5 +543,16 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             isSelectAll = false;
         }
         ((MyCollectionAct) baseActivity).setManageState(selectStatus);
+    }
+
+    public String getDelIds() {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < delList.size(); i++) {
+            stringBuffer.append(delList.get(i).id);
+            if (i != delList.size() - 1) {
+                stringBuffer.append(",");
+            }
+        }
+        return stringBuffer.toString();
     }
 }

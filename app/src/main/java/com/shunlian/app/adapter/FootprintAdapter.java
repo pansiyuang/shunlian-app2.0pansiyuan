@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,7 @@ import butterknife.BindView;
 public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkData> {
 
     public final int ITEM_TIME = 10;
+    public final int Head_Layout = 13;
 
     private LayoutInflater inflater;
     private List<FootprintEntity.DateInfo> mDateList;
@@ -37,13 +41,19 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
     private List<Integer> timeShowPosition = new ArrayList<>();
     public Map<Integer, FootprintEntity.DateInfo> timeDatas = new HashMap<>();
     private int titleCount;
+    private float titleSpace = 115.5f;
 
     public FootprintAdapter(Context context, List<FootprintEntity.MarkData> lists, List<FootprintEntity.DateInfo> dateList) {
         super(context, true, lists);
         inflater = LayoutInflater.from(context);
         mDateList = dateList;
+        initData();
+    }
 
-        timeShowPosition.add(0);
+    public void initData() {
+        timeShowPosition.clear();
+        timeDatas.clear();
+        timeShowPosition.add(1);
         timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), mDateList.get(0));
         for (int i = 0; i < mDateList.size(); i++) {//计算日期显示的位置
             FootprintEntity.DateInfo dateInfo = mDateList.get(i);
@@ -53,7 +63,11 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                 timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), mDateList.get(i + 1));
             }
         }
+    }
 
+    public void setTitleSpace(float f) {
+        titleSpace = f;
+        notifyDataSetChanged();
     }
 
     public void setEditMode(boolean edit) {
@@ -71,6 +85,8 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             case ITEM_TIME:
                 View view = inflater.inflate(R.layout.item_foot_head, parent, false);
                 return new TimeHolder(view);
+            case Head_Layout:
+                return new HeadHolder(inflater.inflate(R.layout.footprint_head_space, parent, false));
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -103,6 +119,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
 
     @Override
     public int getItemViewType(int position) {
+        if (position == 0) {
+            return Head_Layout;
+        }
         if (timeShowPosition.contains(position)) {
             return ITEM_TIME;
         }
@@ -144,11 +163,22 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             case ITEM_TIME:
                 handleTime(holder, position);
                 break;
+            case Head_Layout:
+                handTitle(holder);
+                break;
             default:
                 super.onBindViewHolder(holder, position);
                 break;
         }
+    }
 
+    private void handTitle(RecyclerView.ViewHolder holder) {
+        if (holder instanceof HeadHolder) {
+            HeadHolder headHolder = (HeadHolder) holder;
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context, titleSpace));
+            headHolder.ll_space.setLayoutParams(layoutParams);
+        }
     }
 
     private void handleTime(RecyclerView.ViewHolder holder, final int position) {
@@ -164,9 +194,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                     mHolder.miv_select.setVisibility(View.GONE);
                 }
 
-                if(dateInfo.isSelect){
+                if (dateInfo.isSelect) {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
-                }else{
+                } else {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
                 }
 
@@ -200,9 +230,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                     mHolder.ll_del.setVisibility(View.GONE);
                 }
 
-                if(markData.isSelect){
+                if (markData.isSelect) {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
-                }else{
+                } else {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
                 }
 
@@ -218,6 +248,14 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
         }
     }
 
+    public class HeadHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.ll_space)
+        LinearLayout ll_space;
+
+        public HeadHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
     public class FootprintHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.ll_del)
