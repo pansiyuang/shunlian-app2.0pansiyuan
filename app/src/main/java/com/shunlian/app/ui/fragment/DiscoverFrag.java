@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/11/16.
- *
+ * <p>
  * 发现页面
  */
 
@@ -37,8 +38,22 @@ public class DiscoverFrag extends BaseFragment {
     }
 
     @Override
-    protected void initData() {
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
+    }
 
+    @Override
+    protected void initData() {
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
         List<String> strings = new ArrayList<>();
         strings.add("我的评价");
 
@@ -46,7 +61,7 @@ public class DiscoverFrag extends BaseFragment {
         recy_view.setLayoutManager(manager);
 
         SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<String>
-                (baseActivity,android.R.layout.simple_list_item_1,strings) {
+                (baseActivity, android.R.layout.simple_list_item_1, strings) {
 
             @Override
             public void convert(SimpleViewHolder holder, String s, int position) {
@@ -61,13 +76,13 @@ public class DiscoverFrag extends BaseFragment {
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                onClick(view,position);
+                onClick(view, position);
             }
         });
     }
 
     private void onClick(View view, int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 MyCommentAct.startAct(baseActivity);
                 break;

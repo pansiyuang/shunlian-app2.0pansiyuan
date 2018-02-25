@@ -29,6 +29,7 @@ import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.refresh.ring.RingRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -222,6 +223,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
 
+    @BindView(R.id.rLayout_title)
+    MyRelativeLayout rLayout_title;
 
     private PersonalcenterPresenter personalcenterPresenter;
     private Timer outTimer;
@@ -243,7 +246,16 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            ImmersionBar.with(this).titleBar(rLayout_title,false).init();
+        }
+    }
+
+    @Override
     protected void initData() {
+        ImmersionBar.with(this).titleBar(rLayout_title,false).init();
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         view_bg.setAlpha(0);

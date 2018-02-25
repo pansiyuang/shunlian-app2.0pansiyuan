@@ -23,12 +23,12 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -113,6 +113,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
+    }
+
+    @Override
     protected void initViews() {
         super.initViews();
         miv_close.setVisibility(View.GONE);
@@ -127,6 +138,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     protected void initData() {
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
         editMap = new HashMap<>();
         shopCarPresenter = new ShopCarPresenter(baseContext, this);
         shopCarPresenter.initShopData();

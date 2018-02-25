@@ -30,6 +30,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -83,6 +84,17 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
+    }
+
+    @Override
     protected void initListener() {
         super.initListener();
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -101,14 +113,17 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
 
     @Override
     protected void initData() {
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
         //新增下拉刷新
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.removeMessages(0);
-                mHandler.sendEmptyMessageDelayed(0,3000);
+                pagePresenter.refreshData();
             }
 
             @Override
@@ -178,6 +193,9 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
      */
     @Override
     public void banner(List<MainPageEntity.Banner> banners) {
+        mHandler.removeMessages(0);
+//        mHandler.sendEmptyMessageDelayed(0,3000);
+        mHandler.sendEmptyMessage(0);
         if (!isEmpty(banners)) {
             isEmptyBanner = false;
             SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
