@@ -1056,14 +1056,14 @@
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="64dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_shezhi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_centerVertical="true"
             android:src="@mipmap/icon_personalcenter_shezhi" />
 
         <com.shunlian.app.widget.MyRelativeLayout

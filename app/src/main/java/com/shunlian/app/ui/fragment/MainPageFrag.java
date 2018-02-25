@@ -60,23 +60,6 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
     private boolean isEmptyBanner = true;
     private BrandAdapter brandAdapter;
 
-    //新增下拉刷新
-    Handler mHandler= new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 0:
-                    refreshview.stopRefresh(true);
-                    break;
-                case 1:
-                    refreshview.stopLoadMore(true);
-                    break;
-            }
-        }
-    };
-    //end
-
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_main, container, false);
@@ -128,8 +111,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
 
             @Override
             public void onLoadMore() {
-                mHandler.removeMessages(1);
-                mHandler.sendEmptyMessageDelayed(1,3000);
+
             }
         });
 
@@ -193,9 +175,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
      */
     @Override
     public void banner(List<MainPageEntity.Banner> banners) {
-        mHandler.removeMessages(0);
-//        mHandler.sendEmptyMessageDelayed(0,3000);
-        mHandler.sendEmptyMessage(0);
+        refreshview.stopRefresh(true);
         if (!isEmpty(banners)) {
             isEmptyBanner = false;
             SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
