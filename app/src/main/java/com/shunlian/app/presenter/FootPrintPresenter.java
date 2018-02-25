@@ -6,7 +6,6 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
-import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
@@ -90,6 +89,7 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
                 iView.getMarkList(footprintEntity.mark_data, footprintEntity.date_info, currentPage, allPage);
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
+                currentPage++;
             }
 
             @Override
@@ -125,7 +125,6 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         if (!isLoading) {
             isLoading = true;
             if (currentPage <= allPage) {
-                currentPage++;
                 getMarklist(currentYear, currentMonth, false);
             }
         }

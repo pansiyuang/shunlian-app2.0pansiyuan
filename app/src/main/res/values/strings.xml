@@ -221,6 +221,7 @@
     <string name="your_footmark">您的足迹</string>
     <string name="search_history">搜索历史</string>
     <string name="search_all_order">搜索所有订单</string>
+    <string name="confirm">确认</string>
 
     <!--收获地址-->
     <string name="location">定位</string>
