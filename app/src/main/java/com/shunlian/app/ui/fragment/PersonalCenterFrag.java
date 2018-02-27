@@ -458,6 +458,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
     }
 
+    @Override
+    public void getFail() {
+
+    }
+
     public void showLevel(final int percent, final String next_level_info) {
         seekbar_grow.setProgress(0);
         mtv_persent.setText("");
@@ -560,7 +565,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void showFailureView(int request_code) {
-
+        refreshview.stopRefresh(true);
     }
 
     @Override
