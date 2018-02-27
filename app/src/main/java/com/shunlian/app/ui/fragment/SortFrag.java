@@ -151,7 +151,7 @@ public class SortFrag extends BaseFragment implements ISortFragView{
                     int i = adapter.computeCount(position);
                     SortFragEntity.ItemList itemList = itemLists.get(position - i);
                     GoodsSearchParam param = new GoodsSearchParam();
-                    param.cid = itemList.id;
+                    param.cid = itemList.g_cid;
                     param.attr_data = itemList.attrs;
                     param.keyword = itemList.name;
                     CategoryAct.startAct(baseActivity, param);

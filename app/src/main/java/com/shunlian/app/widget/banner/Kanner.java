@@ -31,26 +31,11 @@ public class Kanner extends BaseBanner<String, Kanner> {
     }
 
     @Override
-    public View onCreateItemView(int position) {
+    public View onCreateItemView(final int position) {
         LinearLayout container = new LinearLayout(context);
         ImageView iv = new ImageView(context);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
-
-//        HomeAllEntity.Data.Banner banner = list.get(position);
-//        DIOU.imageLoader.displayImage(list.get(position), iv, DIOU.userPortraitImageOption);
         GlideUtils.getInstance().loadImage(getContext(),iv,list.get(position));
-
-//        iv.setTag(R.id.tag_typeId, banner.getType());
-//        iv.setTag(R.id.tag_itemId, banner.getItemId());
-//
-//        iv.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (MyOnclickListener.isClickable(context)) {
-//                    Common.startActivityFromAd(context,view.getTag(R.id.tag_typeId).toString(),view.getTag(R.id.tag_itemId).toString());
-//                }
-//            }
-//        });
         container.addView(iv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         return container;
     }
