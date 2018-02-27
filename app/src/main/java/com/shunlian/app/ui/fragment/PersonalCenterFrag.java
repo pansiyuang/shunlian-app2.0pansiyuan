@@ -249,12 +249,20 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden){
+//            ImmersionBar.with(this).fitsSystemWindows(true)
+//                    .statusBarColor(R.color.white)
+//                    .statusBarDarkFont(true, 0.2f)
+//                    .init();
             ImmersionBar.with(this).titleBar(rLayout_title,false).init();
         }
     }
 
     @Override
     protected void initData() {
+//        ImmersionBar.with(this).fitsSystemWindows(true)
+//                .statusBarColor(R.color.white)
+//                .statusBarDarkFont(true, 0.2f)
+//                .init();
         ImmersionBar.with(this).titleBar(rLayout_title,false).init();
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
@@ -262,10 +270,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
-                if (y>20){
+                if (y>30){
                     view_bg.setAlpha(1);
                 }else if (y>0){
-                    float alpha = ((float) y) / 20;
+                    float alpha = ((float) y) / 30;
                     view_bg.setAlpha(alpha);
                 }else {
                     view_bg.setAlpha(0);
@@ -450,6 +458,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
     }
 
+    @Override
+    public void getFail() {
+
+    }
+
     public void showLevel(final int percent, final String next_level_info) {
         seekbar_grow.setProgress(0);
         mtv_persent.setText("");
@@ -552,7 +565,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void showFailureView(int request_code) {
-
+        refreshview.stopRefresh(true);
     }
 
     @Override

@@ -505,7 +505,8 @@
                 android:textSize="10sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
-        <RelativeLayout
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrLayout_operates"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="18dp"
@@ -527,7 +528,7 @@
                 android:text="9+"
                 android:textColor="@color/white"
                 android:textSize="9sp" />
-        </RelativeLayout>
+        </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 
     <com.shunlian.app.widget.MyLinearLayout
