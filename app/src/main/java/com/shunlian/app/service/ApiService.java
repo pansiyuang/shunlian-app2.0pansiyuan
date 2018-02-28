@@ -971,4 +971,12 @@ public interface ApiService {
      */
     @GET("member/footermark/deleteBatch")
     Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String,String> map);
+
+    /**
+     * 所有品牌列表
+     * @param map
+     * @return
+     */
+    @GET("goods/brandlist")
+    Call<BaseEntity<GetListFilterEntity>> brandlist(@QueryMap Map<String,String> map);
 }
