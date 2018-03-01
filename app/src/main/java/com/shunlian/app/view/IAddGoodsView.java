@@ -5,4 +5,6 @@ package com.shunlian.app.view;
  */
 
 public interface IAddGoodsView extends IView {
+
+    void getFairishNums(String count);
 }

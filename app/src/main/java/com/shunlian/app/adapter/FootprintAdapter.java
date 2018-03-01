@@ -12,13 +12,11 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +39,7 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
     private List<Integer> timeShowPosition = new ArrayList<>();
     public Map<Integer, FootprintEntity.DateInfo> timeDatas = new HashMap<>();
     private int titleCount;
-    private float titleSpace = 115.5f;
+    private float titleSpace = 105.5f;
 
     public FootprintAdapter(Context context, List<FootprintEntity.MarkData> lists, List<FootprintEntity.DateInfo> dateList) {
         super(context, true, lists);

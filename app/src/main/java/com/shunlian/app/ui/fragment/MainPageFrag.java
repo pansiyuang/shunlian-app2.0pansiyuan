@@ -25,9 +25,12 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -45,11 +48,14 @@ import butterknife.OnClick;
  * 首页页面
  */
 
-public class MainPageFrag extends BaseFragment implements IMainPageView {
+public class MainPageFrag extends BaseFragment implements IMainPageView, View.OnClickListener {
     @BindView(R.id.refreshview)
     SlRefreshView refreshview;
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+    @BindView(R.id.mll_message)
+    MyLinearLayout mll_message;
+
     private List<DelegateAdapter.Adapter> adapterList;
     private DelegateAdapter adapter;
     private FirstPageGoodsAdapter firstPageGoodsAdapter;
@@ -69,7 +75,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             ImmersionBar.with(this).fitsSystemWindows(true)
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
@@ -92,6 +98,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                 }
             }
         });
+        mll_message.setOnClickListener(this);
     }
 
     @Override
@@ -295,5 +302,10 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
         } else {
             firstPageGoodsAdapter.notifyItemInserted(10);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        MyLittleStoreActivity.startAct(getActivity());
     }
 }

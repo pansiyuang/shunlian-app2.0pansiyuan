@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Administrator on 2018/2/27.
  */
 
-public interface IAddGoodsView extends IView {
+public interface IGoodsListView extends IView {
 
     void getValidGoods(List<GoodsDeatilEntity.Goods> goodsList,int currentPage,int totalPage);
 }

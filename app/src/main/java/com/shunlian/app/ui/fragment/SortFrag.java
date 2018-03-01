@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 import com.shunlian.app.widget.MyTextView;
@@ -151,7 +152,8 @@ public class SortFrag extends BaseFragment implements ISortFragView{
                     int i = adapter.computeCount(position);
                     SortFragEntity.ItemList itemList = itemLists.get(position - i);
                     GoodsSearchParam param = new GoodsSearchParam();
-                    param.cid = itemList.id;
+                    param.cid = itemList.g_cid;
+                    LogUtil.httpLogW("g_cid:"+param.cid);
                     param.attr_data = itemList.attrs;
                     param.keyword = itemList.name;
                     CategoryAct.startAct(baseActivity, param);

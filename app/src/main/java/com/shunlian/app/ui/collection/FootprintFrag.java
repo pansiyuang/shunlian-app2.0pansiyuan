@@ -1,8 +1,5 @@
 package com.shunlian.app.ui.collection;
 
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -36,13 +33,14 @@ import java.util.List;
 import butterknife.BindView;
 
 import static com.shunlian.app.utils.FastClickListener.isFastClick;
+import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
  * Created by Administrator on 2018/1/22.
  * 足迹
  */
 
-public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView, CalendarView.OnYearChangeListener, CalendarView.OnDateSelectedListener, CalendarView.OnStatusChangeListener, FootprintAdapter.OnChildClickListener {
+public class FootprintFrag extends CollectionFrag implements View.OnClickListener, IFootPrintView, CalendarView.OnMonthChangeListener, CalendarView.OnDateSelectedListener, CalendarView.OnStatusChangeListener, FootprintAdapter.OnChildClickListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -81,7 +79,9 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private int hide_space;
     private int mScrolledDistance = 0;
     private boolean mControlsVisible = true;
-
+    private int currentMonth;
+    private int currentYear;
+    public static Calendar mCurrentCalendar = null;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -91,7 +91,8 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @Override
     protected void initData() {
 
-        hide_space = TransformUtil.dip2px(getActivity(), 115.5f);
+        hide_space = TransformUtil.dip2px(getActivity(), 105.5f);
+
 
         recycler_list.setHasFixedSize(false);
         printPresenter = new FootPrintPresenter(baseContext, this);
@@ -106,10 +107,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
         printPresenter.getMarkCalendar();
         printPresenter.getMarklist(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()), false);
-
-        calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        calendarView.shrink();
-        setShrinkParams();
+        initCalendarView();
     }
 
     @Override
@@ -118,9 +116,12 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         miv_pre.setOnClickListener(this);
         miv_more.setOnClickListener(this);
 
-        calendarView.setOnYearChangeListener(this);
+        calendarView.setOnMonthChangeListener(this);
         calendarView.setOnDateSelectedListener(this);
         calendarView.setOnStatusChangeListener(this);
+
+        expandViewTouchDelegate(miv_more, TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 1f));
+
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -159,6 +160,20 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             }
         });
         super.initListener();
+    }
+
+    public void initCalendarView() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        currentMonth = calendar.get(java.util.Calendar.MONTH) + 1;
+        currentYear = calendar.get(java.util.Calendar.YEAR);
+        if (currentMonth == 1) {
+            calendarView.setRange(currentYear - 1, 12, currentYear, 1);
+        } else {
+            calendarView.setRange(currentYear, currentMonth - 1, currentYear, currentMonth);
+        }
+        calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        calendarView.shrink();
+        setShrinkParams();
     }
 
 
@@ -347,13 +362,25 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     }
 
     @Override
-    public void onYearChange(int year) {
-
+    public void onMonthChange(int year, int month) {
+        if (month == currentMonth && year == currentYear) {
+            miv_next.setImageDrawable(getDrawableResouce(R.mipmap.img_shoucang_zuji_right_h));
+            miv_pre.setImageDrawable(getDrawableResouce(R.mipmap.img_shoucang_zuji_left_n));
+        } else {
+            miv_next.setImageDrawable(getDrawableResouce(R.mipmap.img_shoucang_zuji_right_n));
+            miv_pre.setImageDrawable(getDrawableResouce(R.mipmap.img_shoucang_zuji_left_h));
+        }
     }
 
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
+        LogUtil.httpLogW("onDateSelected():" + isClick);
         tv_date.setText(calendar.getYear() + "年" + calendar.getMonth() + "月");
+//        printPresenter.getMarklist(String.valueOf(calendar.getYear()), String.valueOf(calendar.getMonth()), String.valueOf(calendar.getDay()), false);
+
+        if (isClick) {
+            mCurrentCalendar = calendar;
+        }
     }
 
     @Override
@@ -367,7 +394,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     }
 
     public void setExpandParams() {
-        calendarParams.height = TransformUtil.dip2px(getActivity(), 350f);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 315f);
         calendarView.setLayoutParams(calendarParams);
 
         if (rl_date_control.getVisibility() == View.GONE) {
@@ -375,19 +402,19 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         }
         miv_more.setRotation(180f);
         if (footprintAdapter != null) {
-            footprintAdapter.setTitleSpace(425.5f);
+            footprintAdapter.setTitleSpace(390.5f);
         }
     }
 
     public void setShrinkParams() {
-        calendarParams.height = TransformUtil.dip2px(getActivity(), 100f);
+        calendarParams.height = TransformUtil.dip2px(getActivity(), 90f);
         calendarView.setLayoutParams(calendarParams);
         if (rl_date_control.getVisibility() == View.VISIBLE) {
             rl_date_control.setVisibility(View.GONE);
         }
         miv_more.setRotation(0f);
         if (footprintAdapter != null) {
-            footprintAdapter.setTitleSpace(115.5f);
+            footprintAdapter.setTitleSpace(105.5f);
         }
     }
 

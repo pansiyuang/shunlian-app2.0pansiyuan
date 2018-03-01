@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.ActivityListEntity;
+import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
@@ -54,6 +55,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
@@ -721,6 +723,7 @@ public interface ApiService {
 
     /**
      * 购买套餐
+     *
      * @param body
      * @return
      */
@@ -729,6 +732,7 @@ public interface ApiService {
 
     /**
      * 选择服务类型
+     *
      * @param body
      * @return
      */
@@ -737,11 +741,12 @@ public interface ApiService {
 
     /**
      * 售后申请列表
+     *
      * @param map
      * @return
      */
     @GET("member/refund/applyList")
-    Call<BaseEntity<RefundListEntity>> refundList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<RefundListEntity>> refundList(@QueryMap Map<String, String> map);
 
     /**
      * 申请退款
@@ -763,15 +768,17 @@ public interface ApiService {
 
     /**
      * 协商历史
+     *
      * @param map
      * @return
      */
     @GET("member/refund/applyLogList")
-    Call<BaseEntity<ConsultHistoryEntity>> refundHistory(@QueryMap Map<String,String> map);
+    Call<BaseEntity<ConsultHistoryEntity>> refundHistory(@QueryMap Map<String, String> map);
 
 
     /**
      * 提交订单
+     *
      * @param body
      * @return
      */
@@ -780,7 +787,8 @@ public interface ApiService {
 
 
     /**
-     *从订单列表去支付
+     * 从订单列表去支付
+     *
      * @param body
      * @return
      */
@@ -789,14 +797,16 @@ public interface ApiService {
 
     /**
      * 退换货物流公司
+     *
      * @param map
      * @return
      */
     @GET("member/refund/refundExpressList")
-    Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<LogisticsNameEntity>> refundExpressList(@QueryMap Map<String, String> map);
 
     /**
      * 商品搜索列表
+     *
      * @param body
      * @return
      */
@@ -805,6 +815,7 @@ public interface ApiService {
 
     /**
      * 筛选条件
+     *
      * @param body
      * @return
      */
@@ -813,6 +824,7 @@ public interface ApiService {
 
     /**
      * 提交物流信息
+     *
      * @param body
      * @return
      */
@@ -821,28 +833,32 @@ public interface ApiService {
 
     /**
      * 获取提交的物流信息
+     *
      * @param map
      * @return
      */
     @GET("member/refund/getShipInfo")
-    Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String,String> map);
+    Call<BaseEntity<SubmitLogisticsInfoEntity>> getLogisticsShipInfo(@QueryMap Map<String, String> map);
 
     /**
      * 分类所有数据
+     *
      * @return
      */
     @GET("operatecategory/all")
-    Call<BaseEntity<SortFragEntity>> categoryAll(@QueryMap Map<String,String> map);
+    Call<BaseEntity<SortFragEntity>> categoryAll(@QueryMap Map<String, String> map);
 
     /**
      * 排行榜
+     *
      * @return
      */
     @GET("goods/top")
-    Call<BaseEntity<RankingListEntity>> rankingList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<RankingListEntity>> rankingList(@QueryMap Map<String, String> map);
 
     /**
      * 申请平台介入
+     *
      * @param body
      * @return
      */
@@ -851,13 +867,15 @@ public interface ApiService {
 
     /**
      * 热搜关键字与搜索历史
+     *
      * @return
      */
     @GET("/goods/hotSearch")
-    Call<BaseEntity<HotSearchEntity>> hotSearch(@QueryMap Map<String,String> map);
+    Call<BaseEntity<HotSearchEntity>> hotSearch(@QueryMap Map<String, String> map);
 
     /**
      * 搜索关键字提示
+     *
      * @return
      */
     @POST("/goods/keywordSuggest")
@@ -865,21 +883,24 @@ public interface ApiService {
 
     /**
      * 清空搜索历史
+     *
      * @return
      */
     @POST("/goods/clearSearchHistory")
-    Call<BaseEntity<EmptyEntity>> clearSearchHistory(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> clearSearchHistory(@QueryMap Map<String, String> map);
 
     /**
      * 天天特惠列表
+     *
      * @param map
      * @return
      */
     @GET("activity/ttList")
-    Call<BaseEntity<ActivityListEntity>> activityList(@QueryMap Map<String,String> map);
+    Call<BaseEntity<ActivityListEntity>> activityList(@QueryMap Map<String, String> map);
 
     /**
      * 设置提醒功能
+     *
      * @param body
      * @return
      */
@@ -888,6 +909,7 @@ public interface ApiService {
 
     /**
      * 取消提醒
+     *
      * @return
      */
     @POST("activity/cancelRemind")
@@ -895,6 +917,7 @@ public interface ApiService {
 
     /**
      * 收藏商品
+     *
      * @param body
      * @return
      */
@@ -903,6 +926,7 @@ public interface ApiService {
 
     /**
      * 收藏的店铺
+     *
      * @param body
      * @return
      */
@@ -912,6 +936,7 @@ public interface ApiService {
 
     /**
      * 获取足迹日历形式信息
+     *
      * @return
      */
     @POST("member/footermark/getmarkCalendar")
@@ -919,6 +944,7 @@ public interface ApiService {
 
     /**
      * 我的足迹列表
+     *
      * @return
      */
     @POST("member/footermark/getmarklist")
@@ -926,6 +952,7 @@ public interface ApiService {
 
     /**
      * 收藏商品搜索
+     *
      * @param body
      * @return
      */
@@ -934,6 +961,7 @@ public interface ApiService {
 
     /**
      * 收藏店铺搜索
+     *
      * @param body
      * @return
      */
@@ -942,33 +970,73 @@ public interface ApiService {
 
     /**
      * 批量删除关注的商店
+     *
      * @param map
      * @return
      */
     @GET("member/Myfavorite/removeFavoShop")
-    Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> removeFavoShop(@QueryMap Map<String, String> map);
 
     /**
      * 首页
+     *
      * @param map
      * @return
      */
     @GET("channel/index")
-    Call<BaseEntity<MainPageEntity>> firstPage(@QueryMap Map<String,String> map);
+    Call<BaseEntity<MainPageEntity>> firstPage(@QueryMap Map<String, String> map);
 
     /**
      * 个人中心首页
+     *
      * @param map
      * @return
      */
     @GET("/personalcenter/home")
-    Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String,String> map);
+    Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String, String> map);
 
     /**
      * 足迹列表足迹批量删除
+     *
      * @param map
      * @return
      */
     @GET("member/footermark/deleteBatch")
-    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String, String> map);
+
+    /**
+     * 可添加商品列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/validGoods")
+    Call<BaseEntity<AddGoodsEntity>> validGoods(@QueryMap Map<String, String> map);
+
+    /**
+     * 可添加的商品数量
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/fairishNums")
+    Call<BaseEntity<CommonEntity>> fairishNums(@QueryMap Map<String, String> map);
+
+    /**
+     * 小店页面
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/personShop")
+    Call<BaseEntity<PersonShopEntity>> getPersonShop(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("member/Personalshop/addGoods")
+    Call<BaseEntity<CommonEntity>> addGoods(@Body RequestBody body);
 }

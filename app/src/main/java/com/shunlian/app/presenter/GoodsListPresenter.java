@@ -5,7 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.view.IAddGoodsView;
+import com.shunlian.app.view.IGoodsListView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +16,11 @@ import retrofit2.Call;
  * Created by Administrator on 2018/2/27.
  */
 
-public class AddGoodsPresenter extends BasePresenter<IAddGoodsView> {
+public class GoodsListPresenter extends BasePresenter<IGoodsListView> {
     public static final int PAGE_SIZE = 20;
     private String fromStr;
 
-    public AddGoodsPresenter(Context context, IAddGoodsView iView) {
+    public GoodsListPresenter(Context context, IGoodsListView iView) {
         super(context, iView);
     }
 

@@ -166,6 +166,10 @@
     <color name="value_01C269">#01C269</color>
     <color name="value_70_B5B5B5">#B2B5B5B5</color>
 
+    <!--我的小店-->
+    <color name="value_DC002F">#DC002F</color>
+    <color name="value_FFB7C6">#FFB7C6</color>
+    <color name="value_302E56">#302E56</color>
 </resources>
 
 

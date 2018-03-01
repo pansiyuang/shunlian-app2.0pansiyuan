@@ -21,12 +21,13 @@ import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.shunlian.app.utils.LogUtil;
+
 import java.util.ArrayList;
 
 /**
  * 月视图基础控件,请使用 MonthView替换，没有任何不同，只是规范命名
  * pleased using MonthView replace BaseCalendarCardView
- * Created by huanghaibin on 2017/11/15.
  */
 public abstract class MonthView extends BaseView {
 
@@ -173,7 +174,6 @@ public abstract class MonthView extends BaseView {
                     } else {
                         mParentLayout.setSelectWeek(Util.getWeekFromDayInMonth(calendar));
                     }
-
                 }
 
                 if (mDelegate.mDateSelectedListener != null) {

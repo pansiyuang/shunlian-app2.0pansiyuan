@@ -240,6 +240,9 @@ public class GoodsDeatilEntity {
         public String send_area;             //发货地
         public String comment_num;           //评论数
         public String comment_rate;          //好评率
+        public String from;
+        public int index;
+        public boolean isSelect;
 
         @Override
         public int describeContents() {
