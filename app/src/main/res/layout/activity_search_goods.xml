@@ -44,66 +44,70 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_tag"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/tv_hot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hot_search"
-            android:textColor="@color/new_gray"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <com.shunlian.app.widget.flowlayout.TagFlowLayout
-            android:id="@+id/taglayout_hot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:max_select="1"></com.shunlian.app.widget.flowlayout.TagFlowLayout>
-
-        <TextView
-            android:id="@+id/tv_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/search_history"
-            android:textColor="@color/new_gray"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <com.shunlian.app.widget.flowlayout.TagFlowLayout
-            android:id="@+id/taglayout_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:max_select="1"></com.shunlian.app.widget.flowlayout.TagFlowLayout>
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ll_clear"
+            android:id="@+id/ll_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_clear"
-                android:layout_width="232.3dp"
-                android:layout_height="32dp"
-                android:background="@drawable/rounded_corner_6e_64px"
-                android:gravity="center"
-                android:text="@string/clear_history"
-                android:textColor="@color/value_25"
+                android:id="@+id/tv_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hot_search"
+                android:textColor="@color/new_gray"
                 android:textSize="14sp"
-               />
+                android:visibility="gone" />
+
+            <com.shunlian.app.widget.flowlayout.TagFlowLayout
+                android:id="@+id/taglayout_hot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:max_select="1"></com.shunlian.app.widget.flowlayout.TagFlowLayout>
+
+            <TextView
+                android:id="@+id/tv_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/search_history"
+                android:textColor="@color/new_gray"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <com.shunlian.app.widget.flowlayout.TagFlowLayout
+                android:id="@+id/taglayout_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:max_select="1"></com.shunlian.app.widget.flowlayout.TagFlowLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_clear"
+                    android:layout_width="232.3dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/rounded_corner_6e_64px"
+                    android:gravity="center"
+                    android:text="@string/clear_history"
+                    android:textColor="@color/value_25"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_search"

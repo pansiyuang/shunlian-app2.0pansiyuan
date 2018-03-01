@@ -79,7 +79,7 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
             GoodsHolderView goodsHolderView = (GoodsHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
 
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 36)) / 2, TransformUtil.dip2px(context, 168.5f));
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 36)), TransformUtil.dip2px(context, 168.5f));
             goodsHolderView.miv_icon.setLayoutParams(layoutParams);
 
             GlideUtils.getInstance().loadImage(context, goodsHolderView.miv_icon, goods.thumb);
@@ -100,6 +100,13 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
             } else {
                 goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_stroke_pink));
             }
+
+            if (goods.isCheck) {
+                goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_soild_pink));
+            } else {
+                goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
+            }
+
             if (goods.index > 0) {
                 goodsHolderView.tv_select.setText(String.valueOf(goods.index));
             } else {
