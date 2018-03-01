@@ -60,6 +60,12 @@ public class MainPagePresenter extends BasePresenter<IMainPageView> {
         pageData(true);
     }
 
+    public void refreshData(){
+        brandPage = 1;
+        currentPage = 1;
+        pageData(true);
+    }
+
     private void pageData(boolean isShowLoading) {
         Map<String,String> map = new HashMap<>();
         map.put("brand_page",String.valueOf(brandPage));//品牌页码

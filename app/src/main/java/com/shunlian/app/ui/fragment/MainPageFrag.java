@@ -1,5 +1,7 @@
 package com.shunlian.app.ui.fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,9 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,7 +46,8 @@ import butterknife.OnClick;
  */
 
 public class MainPageFrag extends BaseFragment implements IMainPageView {
-
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
     private List<DelegateAdapter.Adapter> adapterList;
@@ -54,11 +60,21 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
     private boolean isEmptyBanner = true;
     private BrandAdapter brandAdapter;
 
-
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_main, container, false);
         return rootView;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
     }
 
     @Override
@@ -68,9 +84,9 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (manager != null){
+                if (manager != null) {
                     int lastPosition = manager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == manager.getItemCount()){
+                    if (lastPosition + 1 == manager.getItemCount()) {
                         pagePresenter.onRefresh();
                     }
                 }
@@ -80,7 +96,28 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
 
     @Override
     protected void initData() {
-        pagePresenter = new MainPagePresenter(baseActivity,this);
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
+        //新增下拉刷新
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pagePresenter.refreshData();
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+
+        //end
+
+        pagePresenter = new MainPagePresenter(baseActivity, this);
 
         manager = new VirtualLayoutManager(baseActivity);
 
@@ -90,7 +127,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
 
         recy_view.setRecycledViewPool(pool);
 
-        pool.setMaxRecycledViews(0,20);
+        pool.setMaxRecycledViews(0, 20);
 
         recy_view.setLayoutManager(manager);
 
@@ -122,26 +159,28 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
     }
 
     @OnClick(R.id.mllayout_scan)
-    public void scan(){
-        ZXingDemoAct.startAct(baseActivity,false,0);
+    public void scan() {
+        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
     @OnClick(R.id.mllayout_search)
-    public void search(){
-        SearchGoodsActivity.startAct(baseActivity,"","sortFrag");
+    public void search() {
+        SearchGoodsActivity.startAct(baseActivity, "", "sortFrag");
     }
 
     /**
      * 首页轮播
+     *
      * @param banners
      */
     @Override
     public void banner(List<MainPageEntity.Banner> banners) {
+        refreshview.stopRefresh(true);
         if (!isEmpty(banners)) {
             isEmptyBanner = false;
             SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
             adapterList.add(new BannerAdapter(banners, baseActivity, singleLayoutHelper));
-        }else {
+        } else {
             isEmptyBanner = true;
         }
     }
@@ -159,7 +198,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
         SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
 
         OnePlusTwoLayoutAdapter onePlusTwoLayoutAdapter = new OnePlusTwoLayoutAdapter
-                (newGoods,daySpecial,baseActivity,singleLayoutHelper);
+                (newGoods, daySpecial, baseActivity, singleLayoutHelper);
         adapterList.add(onePlusTwoLayoutAdapter);
     }
 
@@ -179,7 +218,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                 brandTitleAdapter.setOnAnotherBatchListener(new BrandTitleAdapter.OnAnotherBatchListener() {
                     @Override
                     public void onBatch() {
-                        if (pagePresenter != null){
+                        if (pagePresenter != null) {
                             pagePresenter.onBatch();
                         }
                     }
@@ -199,18 +238,18 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                     @Override
                     public void onItemClick(View v, int position) {
                         int i = 0;
-                        if (!isEmptyBanner){
+                        if (!isEmptyBanner) {
                             i = position - 3;
-                        }else {
+                        } else {
                             i = position - 2;
                         }
                         MainPageEntity.Data data = brands.data.get(i);
                         GoodsSearchParam param = new GoodsSearchParam();
                         param.brand_ids = data.item_id;
-                        CategoryAct.startAct(baseActivity,param);
+                        CategoryAct.startAct(baseActivity, param);
                     }
                 });
-            }else {
+            } else {
                 brandAdapter.notifyDataSetChanged();
             }
         }
@@ -223,7 +262,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
      */
     @Override
     public void moreGoods(MainPageEntity.RecommendBrands goods) {
-        if (!isEmpty(goods.data)){
+        if (!isEmpty(goods.data)) {
             goodsLists.addAll(goods.data);
         }
         if (firstPageGoodsAdapter == null && !isEmpty(goods.data)) {
@@ -244,16 +283,16 @@ public class MainPageFrag extends BaseFragment implements IMainPageView {
                 @Override
                 public void onItemClick(View v, int position) {
                     int i = 0;
-                    if (!isEmptyBanner){
+                    if (!isEmptyBanner) {
                         i = position - itemCount - 4;
-                    }else {
+                    } else {
                         i = position - itemCount - 3;
                     }
                     MainPageEntity.Data data = goodsLists.get(i);
-                    GoodsDetailAct.startAct(baseContext,data.item_id);
+                    GoodsDetailAct.startAct(baseContext, data.item_id);
                 }
             });
-        }else {
+        } else {
             firstPageGoodsAdapter.notifyItemInserted(10);
         }
     }
