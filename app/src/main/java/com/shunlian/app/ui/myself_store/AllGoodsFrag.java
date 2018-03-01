@@ -111,7 +111,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
 
     @Override
     public void onItemClick(View view, int position) {
-        int currentIndex = 0;
+        int currentIndex = -1;
         String currentGoodsId;
         GoodsDeatilEntity.Goods goods = goodsList.get(position);
         currentGoodsId = goods.goods_id;
@@ -149,5 +149,18 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
             }
         }
         return false;
+    }
+
+    public void updateIndex(int index) {
+        GoodsDeatilEntity.Goods mGoods;
+        if (mAdapter != null) {
+            for (int i = 0; i < goodsList.size(); i++) {
+                mGoods = goodsList.get(i);
+                if (mGoods.index > index) {
+                    mGoods.index = mGoods.index - 1;
+                    mAdapter.notifyItemChanged(i);
+                }
+            }
+        }
     }
 }
