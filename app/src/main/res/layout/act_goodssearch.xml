@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:paddingLeft="19dp"
+            android:paddingRight="18dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/mtv_cancel"
+            android:layout_toRightOf="@+id/miv_close"
+            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_common_search_gray"
+                app:iv_control_adapter="true"
+                app:iv_control_height="25"
+                app:iv_control_width="25"
+                app:iv_margin_left="20" />
+
+            <TextView
+                android:id="@+id/tv_keyword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="@string/errcode_cancel"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_category"
+        android:layout_below="@+id/rl_title"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
+
+
+    <TextView
+        android:id="@+id/tv_add_goods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/img_xiaodian_tianjia"
+        android:gravity="center"
+        android:text="@string/add_some_goods"
+        android:textColor="@color/white"
+        android:textSize="11.5dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tv_selectAll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/img_shoppingcar_selected_n"
+            android:drawablePadding="7.5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="19dp"
+            android:text="全选"
+            android:visibility="gone"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_store_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="添加到我的店"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>
