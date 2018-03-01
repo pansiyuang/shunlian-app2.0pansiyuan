@@ -287,6 +287,7 @@
         <activity android:name=".ui.myself_store.MyLittleStoreActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             />
         <activity android:name=".ui.myself_store.AddStoreGoodsAct"
             android:exported="false"

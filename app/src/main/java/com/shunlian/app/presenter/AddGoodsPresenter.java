@@ -48,14 +48,14 @@ public class AddGoodsPresenter extends BasePresenter<IAddGoodsView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity commonEntity = entity.data;
-                iView.getFairishNums(commonEntity.num);
+                iView.getFairishNums(commonEntity.num, false);
             }
         });
     }
 
-    public void addStoreGoods(String goodsIds) {
+    public void addStoreGoods(String goodsIds, final boolean isJump) {
         Map<String, String> map = new HashMap<>();
-        map.put("goods_ids",goodsIds);
+        map.put("goods_ids", goodsIds);
         sortAndMD5(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().addGoods(getRequestBody(map));
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
@@ -63,7 +63,7 @@ public class AddGoodsPresenter extends BasePresenter<IAddGoodsView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity commonEntity = entity.data;
-                iView.getFairishNums(commonEntity.num);
+                iView.getFairishNums(commonEntity.num, isJump);
             }
         });
     }

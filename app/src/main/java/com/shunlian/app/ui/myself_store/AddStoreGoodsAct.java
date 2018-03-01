@@ -14,7 +14,11 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.AddGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.BrandListAct;
 import com.shunlian.app.ui.category.CategoryLetterAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IAddGoodsView;
 
 import java.util.ArrayList;
@@ -55,11 +59,14 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
     TextView tv_store_add;
 
     private String[] titles = {"全部", "推荐", "订单", "收藏", "购物车"};
-    private String[] fromList = {"ALL", "RECOMMEND", "ORDERS", "COLLECT", "SPCAR"};
-    private List<BaseFragment> goodsFrags;
-    private AddGoodsPresenter mPresenter;
-
+    private static String[] fromList = {"ALL", "RECOMMEND", "ORDERS", "COLLECT", "SPCAR"};
+    private static List<BaseFragment> goodsFrags;
     public static List<GoodsDeatilEntity.Goods> currentGoodsList;
+    private int currentCount;
+    private AddGoodsPresenter mPresenter;
+    private StringBuffer currentGoodsIds = new StringBuffer();
+    private String currentFlag = "store_goods";
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AddStoreGoodsAct.class);
@@ -105,12 +112,18 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
     protected void initListener() {
         tv_brand.setOnClickListener(this);
         tv_store_add.setOnClickListener(this);
+        tv_goods_search.setOnClickListener(this);
         super.initListener();
     }
 
     @Override
-    public void getFairishNums(String count) {
+    public void getFairishNums(String count, boolean isJump) {
+        currentCount = Integer.valueOf(count);
         tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods), count));
+        if (isJump) {
+            MyLittleStoreActivity.startAct(this);
+            finish();
+        }
     }
 
     @Override
@@ -126,13 +139,93 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_goods_search:
+                clearSelectData();
+                SearchGoodsActivity.startAct(this, "", currentFlag);
+                break;
             case R.id.tv_brand:
-                CategoryLetterAct.startAct(this, new ArrayList<GetListFilterEntity.Brand>(), new ArrayList<String>());
+                BrandListAct.startAct(this, 1000);
                 break;
             case R.id.tv_store_add:
-//                mPresenter.addStoreGoods("919,156,137,191");
+                if (currentGoodsList.size() == 0) {
+                    Common.staticToast("请选择你要添加的商品");
+                    return;
+                }
+                for (int i = 0; i < currentGoodsList.size(); i++) {
+                    currentGoodsIds.append(currentGoodsList.get(i).goods_id);
+                    if (i != currentGoodsList.size() - 1) {
+                        currentGoodsIds.append(",");
+                    }
+                }
+                mPresenter.addStoreGoods(currentGoodsIds.toString(), true);
                 break;
         }
         super.onClick(view);
+    }
+
+    public static void upDateIndexPage(String from, int index) {
+        int pageIndex = 0;
+        for (int i = 0; i < fromList.length; i++) {
+            if (fromList[i].equals(from)) {
+                pageIndex = i;
+                break;
+            }
+        }
+        for (int i = 0; i < goodsFrags.size(); i++) {
+            if (pageIndex == i) {
+                continue;
+            }
+            ((AllGoodsFrag) goodsFrags.get(i)).updateIndex(index);
+        }
+    }
+
+    public void clearSelectData() {
+        if (currentGoodsList.size() == 0) {
+            return;
+        }
+        currentGoodsList.clear();
+        for (int i = 0; i < goodsFrags.size(); i++) {
+            ((AllGoodsFrag) goodsFrags.get(i)).clearSelectData();
+        }
+    }
+
+    public boolean canAddGoods() {
+        if (currentCount <= 0) {
+            if (promptDialog == null) {
+                checkSelectDialog();
+            }
+            promptDialog.show();
+            return false;
+        }
+        return true;
+    }
+
+    public void updateAddGoodsCount() {
+        currentCount++;
+        tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods), currentCount));
+    }
+
+    public void updateDelGoodsCount() {
+        currentCount--;
+        tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods), currentCount));
+
+    }
+
+    /**
+     * 确认收货
+     */
+    public void checkSelectDialog() {
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener("", "您的店铺商品数量已经达到上限，删除后才可以添加", getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptDialog.dismiss();
+            }
+        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptDialog.dismiss();
+            }
+        });
     }
 }

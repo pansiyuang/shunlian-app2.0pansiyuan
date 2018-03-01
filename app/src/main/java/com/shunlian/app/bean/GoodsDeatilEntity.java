@@ -243,6 +243,7 @@ public class GoodsDeatilEntity {
         public String from;
         public int index;
         public boolean isSelect;
+        public boolean isCheck;
 
         @Override
         public int describeContents() {

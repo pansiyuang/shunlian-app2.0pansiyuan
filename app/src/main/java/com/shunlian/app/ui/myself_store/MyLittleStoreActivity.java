@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/2/27.
  */
 
-public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreView, View.OnClickListener{
+public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreView, View.OnClickListener {
     @BindView(R.id.recycler_goods)
     RecyclerView recycler_goods;
 
@@ -42,8 +43,17 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     @BindView(R.id.tv_add_count)
     TextView tv_add_count;
 
-    @BindView(R.id.rl_bottom)
-    RelativeLayout rl_bottom;
+    @BindView(R.id.rl_share)
+    RelativeLayout rl_share;
+
+    @BindView(R.id.tv_del)
+    TextView tv_del;
+
+    @BindView(R.id.tv_sure)
+    TextView tv_sure;
+
+    @BindView(R.id.ll_manager)
+    LinearLayout ll_manager;
 
     @BindView(R.id.tv_title)
     TextView tv_title;
@@ -54,13 +64,10 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
-    private static final int HIDE_THRESHOLD = 60;
-
-    private int mScrolledDistance = 0;
-    private boolean mControlsVisible = true;
     public PersonStorePresent mPresenter;
     private AddGoodsAdapter mAdapter;
     private List<GoodsDeatilEntity.Goods> goodsList;
+    private boolean isEdit;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MyLittleStoreActivity.class);
@@ -77,11 +84,8 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        mPresenter = new PersonStorePresent(this, this);
-        mPresenter.getPersonDetail();
-
         goodsList = new ArrayList<>();
-        mAdapter = new AddGoodsAdapter(this, false,false, goodsList);
+        mAdapter = new AddGoodsAdapter(this, false, false, goodsList);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         recycler_goods.setLayoutManager(manager);
         recycler_goods.setAdapter(mAdapter);
@@ -90,45 +94,20 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     }
 
     @Override
+    protected void onResume() {
+        mPresenter = new PersonStorePresent(this, this);
+        mPresenter.getPersonDetail();
+        mPresenter.getFairishNums();
+        super.onResume();
+    }
+
+    @Override
     protected void initListener() {
         miv_add.setOnClickListener(this);
-        recycler_goods.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                if (firstVisibleItem == 0) {
-                    if (!mControlsVisible) {
-                        onShow();
-                        mControlsVisible = true;
-                    }
-                } else {
-                    if (mScrolledDistance > HIDE_THRESHOLD && mControlsVisible) {
-                        onHide();
-                        mControlsVisible = false;
-                        mScrolledDistance = 0;
-                    } else if (mScrolledDistance < -HIDE_THRESHOLD && !mControlsVisible) {
-                        onShow();
-                        mControlsVisible = true;
-                        mScrolledDistance = 0;
-                    }
-                }
-                if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
-                    mScrolledDistance += dy;
-                }
-            }
-        });
+        tv_title_right.setOnClickListener(this);
+        tv_del.setOnClickListener(this);
+        tv_sure.setOnClickListener(this);
         super.initListener();
-    }
-
-    public void onShow(){
-        miv_add.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
-
-    public void onHide(){
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) miv_add.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        miv_add.animate().translationY(miv_add.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
     @Override
@@ -136,6 +115,15 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         switch (view.getId()) {
             case R.id.miv_add:
                 AddStoreGoodsAct.startAct(this);
+                break;
+            case R.id.tv_title_right:
+                isEdit = false;
+                tv_title_right.setVisibility(View.GONE);
+                mAdapter.setEditMode(isEdit);
+                break;
+            case R.id.tv_del:
+                break;
+            case R.id.tv_sure:
                 break;
         }
         super.onClick(view);
@@ -160,13 +148,14 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
             nei_empty.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   AddStoreGoodsAct.startAct(MyLittleStoreActivity.this);
+                    AddStoreGoodsAct.startAct(MyLittleStoreActivity.this);
                 }
             });
 
-            rl_bottom.setVisibility(View.GONE);
+            rl_share.setVisibility(View.GONE);
             tv_title_right.setVisibility(View.GONE);
             miv_add.setVisibility(View.GONE);
+            tv_add_count.setVisibility(View.GONE);
             tv_title.setText(getStringResouce(R.string.customize_my_store));
         } else {
             nei_empty.setVisibility(View.GONE);
@@ -174,8 +163,18 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
             tv_title.setText(getStringResouce(R.string.decorate_my_store));
             tv_title_right.setVisibility(View.VISIBLE);
-            rl_bottom.setVisibility(View.VISIBLE);
+            tv_title_right.setText(getStringResouce(R.string.manage));
+            tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
+
+            if (isEdit) {
+                rl_share.setVisibility(View.GONE);
+                ll_manager.setVisibility(View.VISIBLE);
+            } else {
+                rl_share.setVisibility(View.VISIBLE);
+                ll_manager.setVisibility(View.GONE);
+            }
             miv_add.setVisibility(View.VISIBLE);
+            tv_add_count.setVisibility(View.VISIBLE);
         }
     }
 

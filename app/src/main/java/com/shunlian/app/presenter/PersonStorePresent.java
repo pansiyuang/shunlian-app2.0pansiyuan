@@ -35,7 +35,6 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
 
     @Override
     protected void initApi() {
-
     }
 
     public void getPersonDetail() {
@@ -51,6 +50,7 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
             }
         });
     }
+
     public void getFairishNums() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
@@ -59,7 +59,7 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                CommonEntity commonEntity= entity.data;
+                CommonEntity commonEntity = entity.data;
                 iView.getFairishNums(commonEntity.num);
             }
         });

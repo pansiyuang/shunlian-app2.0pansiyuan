@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.myself_store;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsListPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsListView;
@@ -38,6 +40,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     private AddGoodsAdapter mAdapter;
     private List<GoodsDeatilEntity.Goods> goodsList;
     private View rootView;
+    private AddStoreGoodsAct mActivty;
 
     public static AllGoodsFrag getInstance(String from) {
         AllGoodsFrag allFrag = new AllGoodsFrag();
@@ -132,12 +135,22 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
             goods.isSelect = false;
             goods.index = -1;
             mAdapter.notifyItemChanged(position);
+
+            AddStoreGoodsAct.upDateIndexPage(currentFrom, currentIndex);
+
+            mActivty.updateAddGoodsCount();
         } else {
             if (!isContain(currentGoodsId)) {
-                goods.isSelect = true;
-                goods.index = currentGoodsList.size() + 1;
-                currentGoodsList.add(goods);
-                mAdapter.notifyItemChanged(position);
+                if (mActivty.canAddGoods()) {
+                    goods.isSelect = true;
+                    goods.index = currentGoodsList.size() + 1;
+                    currentGoodsList.add(goods);
+                    mAdapter.notifyItemChanged(position);
+
+                    mActivty.updateDelGoodsCount();
+                }
+            } else {
+                Common.staticToast("当前商品已经添加过");
             }
         }
     }
@@ -162,5 +175,26 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
                 }
             }
         }
+    }
+
+    public void clearSelectData() {
+        for (int i = 0; i < goodsList.size(); i++) {
+            if (goodsList.get(i).isSelect) {
+                goodsList.get(i).isSelect = false;
+                goodsList.get(i).index = -1;
+
+                if (mAdapter != null) {
+                    mAdapter.notifyItemChanged(i);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        if (activity instanceof AddStoreGoodsAct) {
+            mActivty = (AddStoreGoodsAct) activity;
+        }
+        super.onAttach(activity);
     }
 }
