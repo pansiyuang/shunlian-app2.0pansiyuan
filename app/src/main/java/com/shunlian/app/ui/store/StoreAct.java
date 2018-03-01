@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -38,6 +39,9 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 
 import java.util.List;
 
@@ -182,6 +186,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.mrlayout_sorts)
     MyRelativeLayout mrlayout_sorts;
 
+    @BindView(R.id.mrLayout_operates)
+    MyRelativeLayout mrLayout_operates;
+
+    private PopMenu mPopMenu;
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
     private String storeId = "26",star;
@@ -221,6 +229,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mrlayout_jianjie.setOnClickListener(this);
         mrlayout_sort.setOnClickListener(this);
         mrlayout_sorts.setOnClickListener(this);
+        mrLayout_operates.setOnClickListener(this);
         store_abLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -280,6 +289,18 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeId=getIntent().getStringExtra("storeId");
         }
         storePresenter = new StorePresenter(this, this, storeId);
+        mPopMenu = new PopMenu.Builder().attachToActivity(this)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .addMenuItem(new PopMenuItem("保存二维码", getResources().getDrawable(R.mipmap.icon_erweima)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        Toast.makeText(StoreAct.this, "你点击了第" + position + "个位置", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build();
+
     }
 
     public void storeMenu(View v) {
@@ -437,6 +458,11 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                     storePresenter.delFollowStore(storeId);
                 } else {
                     storePresenter.followStore(storeId);
+                }
+                break;
+            case R.id.mrLayout_operates:
+                if (!mPopMenu.isShowing()) {
+                    mPopMenu.show();
                 }
                 break;
         }

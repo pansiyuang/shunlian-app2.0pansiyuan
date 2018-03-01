@@ -1,7 +1,5 @@
 package com.shunlian.app.ui.fragment;
 
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

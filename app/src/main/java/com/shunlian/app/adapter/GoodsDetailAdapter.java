@@ -13,13 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
@@ -30,10 +34,13 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.RecyclerDialog;
+import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -722,6 +729,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
                 mHolder.kanner.setBanner(mGoodsEntity.pics);
+                mHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                    @Override
+                    public void onItemClick(int position) {
+                        BigImgEntity entity = new BigImgEntity();
+                        entity.itemList = mGoodsEntity.pics;
+                        entity.index = position;
+                        LookBigImgAct.startAct(context,entity);
+                    }
+                });
             }
         }
     }
@@ -738,6 +754,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         return new PicListHolder(detailView);
     }
 
+    private String re = "(w=|h=)(\\d+)";
+    private Pattern p = Pattern.compile(re);
     /**
      * 处理列表
      *
@@ -747,7 +765,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PicListHolder){
-            PicListHolder mHolder = (PicListHolder) holder;
+            final PicListHolder mHolder = (PicListHolder) holder;
             String s = null;
             GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
             String text = null;
@@ -760,7 +778,25 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 s = lists.get(position - ITEM_DIFFERENT);
             }
 
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_pic,s);
+            LogUtil.zhLogW("====s: "+s);
+
+            if (Pattern.matches(".*(w=\\d+&h=\\d+).*",s)){
+                Matcher m =p.matcher(s);
+                int w = 0;
+                int h = 0;
+                if (m.find()){
+                    w = Integer.parseInt(m.group(2));
+                }
+                if (m.find()){
+                    h = Integer.parseInt(m.group(2));
+                }
+                LogUtil.zhLogW("===w="+w+"  h="+h);
+                int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
+                int i = deviceWidth * h / w;
+                GlideUtils.getInstance()
+                        .loadOverrideImage(context,mHolder.miv_pic,s,
+                                DeviceInfoUtil.getDeviceWidth(context),i);
+            }
         }
     }
 
@@ -800,7 +836,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_pic;
         public PicListHolder(View itemView) {
             super(itemView);
-            miv_pic.setWHProportion(720,332);
         }
     }
 

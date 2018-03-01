@@ -245,6 +245,14 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             myImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             GlideUtils.getInstance().loadImage(getContext(),myImageView,(String) list.get(0));
             addView(myImageView,0,lp_vp);
+            myImageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickL != null) {
+                        onItemClickL.onItemClick(0);
+                    }
+                }
+            });
         }
         startScroll();
     }
@@ -532,9 +540,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             inflate.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (onItemClickL != null) {
-//                        onItemClickL.onItemClick(position);
-//                    }
+                    if (onItemClickL != null) {
+                        onItemClickL.onItemClick(position);
+                    }
                 }
             });
             container.addView(inflate);
@@ -606,11 +614,11 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 //        onPageChangeListener = listener;
 //    }
 
-//    private OnItemClickL onItemClickL;
+    private OnItemClickL onItemClickL;
 
-//    public void setOnItemClickL(OnItemClickL onItemClickL) {
-//        this.onItemClickL = onItemClickL;
-//    }
+    public void setOnItemClickL(OnItemClickL onItemClickL) {
+        this.onItemClickL = onItemClickL;
+    }
 
     public interface OnItemClickL {
         void onItemClick(int position);
