@@ -10,5 +10,5 @@ public interface IPersonStoreView extends IView {
 
     void getShopDetail(PersonShopEntity personShopEntity);
 
-    void getFairishNums(String count);
+    void getFairishNums(String count,boolean isDel);
 }

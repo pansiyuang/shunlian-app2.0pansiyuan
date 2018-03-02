@@ -64,13 +64,17 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (position + 1 == getItemCount()) {
-                        return gridManager.getSpanCount();
-                    }
-                    return 1;
+                    return isBottom(position) ? gridManager.getSpanCount() : 1;
                 }
             });
         }
+    }
+
+    private boolean isBottom(int position) {
+        if (position + 1 == getItemCount()){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -101,11 +105,6 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
                 goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_stroke_pink));
             }
 
-            if (goods.isCheck) {
-                goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_soild_pink));
-            } else {
-                goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
-            }
 
             if (goods.index > 0) {
                 goodsHolderView.tv_select.setText(String.valueOf(goods.index));
