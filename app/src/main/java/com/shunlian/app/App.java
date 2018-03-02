@@ -4,7 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
+
+import java.io.File;
 
 
 //                            _ooOoo_
@@ -34,7 +38,6 @@ import com.shunlian.app.utils.sideslip.ActivityHelper;
  */
 
 public class App extends Application {
-
     public static App mApp;
     private ActivityHelper mActivityHelper;
     private static Context context;
@@ -61,5 +64,6 @@ public class App extends Application {
         //注册侧滑返回生命周期回调
         mActivityHelper = new ActivityHelper();
         registerActivityLifecycleCallbacks(mActivityHelper);
+
     }
 }

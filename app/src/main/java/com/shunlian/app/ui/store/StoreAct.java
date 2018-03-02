@@ -189,7 +189,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.mrLayout_operates)
     MyRelativeLayout mrLayout_operates;
 
-    private PopMenu mPopMenu;
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
     private String storeId = "26",star;
@@ -289,18 +288,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeId=getIntent().getStringExtra("storeId");
         }
         storePresenter = new StorePresenter(this, this, storeId);
-        mPopMenu = new PopMenu.Builder().attachToActivity(this)
-                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
-                .addMenuItem(new PopMenuItem("保存二维码", getResources().getDrawable(R.mipmap.icon_erweima)))
-                .setOnItemClickListener(new PopMenuItemListener() {
-                    @Override
-                    public void onItemClick(PopMenu popMenu, int position) {
-                        Toast.makeText(StoreAct.this, "你点击了第" + position + "个位置", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-
     }
 
     public void storeMenu(View v) {
@@ -461,9 +448,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 }
                 break;
             case R.id.mrLayout_operates:
-                if (!mPopMenu.isShowing()) {
-                    mPopMenu.show();
-                }
+
                 break;
         }
     }

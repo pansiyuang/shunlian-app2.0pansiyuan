@@ -2,28 +2,26 @@ package com.shunlian.app.ui.qr_code;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Handler;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.presenter.PQrCode;
-import com.shunlian.app.presenter.PSignIn;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IQrCode;
-import com.shunlian.app.view.ISignInView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -50,6 +48,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     MyLinearLayout mllayout_fenxiangerweima;
 
     private PQrCode pQrCode;
+    private String codeUrl;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, QrCodeAct.class);
@@ -72,7 +71,18 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
 
                 break;
             case R.id.mllayout_fenxiangerweima:
+                Glide.with(this).load(codeUrl).asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        BitmapUtil.saveImageToAlbumn(getBaseContext(),resource);
+                        Common.staticToasts(getApplicationContext(),"保存成功",R.mipmap.icon_common_duihao);
+                    }
 
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        Common.staticToasts(getApplicationContext(),"保存失败",R.mipmap.icon_common_tanhao);
+                    }
+                });
                 break;
         }
     }
@@ -107,7 +117,8 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
 
     @Override
     public void setApiData(GetQrCardEntity data) {
-        GlideUtils.getInstance().loadImage(this,miv_code,data.card_path);
+        codeUrl=data.card_path;
+        GlideUtils.getInstance().loadImage(this,miv_code,codeUrl);
         String invitedNum = String.format(getString(R.string.qr_yiyaoqing), data.invited);
         SpannableStringBuilder invitedNumBuilder = Common.changeColorAndSize(invitedNum, data.invited,16,getColorResouce(R.color.pink_color) );
         mtv_yiyaoqing.setText(invitedNumBuilder);

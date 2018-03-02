@@ -354,4 +354,5 @@ public class GlideUtils {
                 .skipMemoryCache(true)//跳过内存缓存
                 .into(imageView);
     }
+
 }

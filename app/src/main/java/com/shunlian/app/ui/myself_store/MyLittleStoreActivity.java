@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AddGoodsAdapter;
@@ -17,6 +18,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.presenter.PersonStorePresent;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
@@ -24,6 +26,9 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonStoreView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,6 +78,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     private StringBuffer stringBuffer = new StringBuffer();
     private boolean isEdit;
     private PromptDialog promptDialog;
+    private PopMenu mPopMenu;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MyLittleStoreActivity.class);
@@ -100,6 +106,17 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         recycler_goods.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this, 12), true));
 
         mAdapter.setOnItemClickListener(this);
+        mPopMenu = new PopMenu.Builder().attachToActivity(this)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .addMenuItem(new PopMenuItem("保存二维码", getResources().getDrawable(R.mipmap.icon_erweima)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        Toast.makeText(MyLittleStoreActivity.this, "你点击了第" + position + "个位置", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build();
     }
 
     @Override
@@ -116,6 +133,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         tv_title_right.setOnClickListener(this);
         tv_del.setOnClickListener(this);
         tv_sure.setOnClickListener(this);
+        rl_share.setOnClickListener(this);
         super.initListener();
     }
 
@@ -124,6 +142,11 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         switch (view.getId()) {
             case R.id.miv_add:
                 AddStoreGoodsAct.startAct(this);
+                break;
+            case R.id.rl_share:
+                if (!mPopMenu.isShowing()) {
+                    mPopMenu.show();
+                }
                 break;
             case R.id.tv_title_right:
                 showManager(true);

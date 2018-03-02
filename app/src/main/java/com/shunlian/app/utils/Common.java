@@ -31,6 +31,8 @@ import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.text.Spannable;
@@ -52,6 +54,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -66,6 +69,37 @@ public class Common {
     private static SpannableStringBuilder ssb;
     private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
+
+
+    public static long getMemoryFreeSize(Context context) {
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(info);
+        return info.availMem;
+//        Log.i(tag,"系统剩余内存:"+(info.availMem /1024)+"k");
+//        Log.i(tag,"系统是否处于低内存运行："+info.lowMemory);
+//        Log.i(tag,"当系统剩余内存低于"+info.threshold+"时就看成低内存运行");
+    }
+
+    public static long getSDFreeSize() {
+        //取得SD卡文件路径
+        File path = Environment.getExternalStorageDirectory();
+        StatFs sf = new StatFs(path.getPath());
+        //获取单个数据块的大小(Byte)
+        long blockSize = sf.getBlockSize();
+        //空闲的数据块的数量
+        long freeBlocks = sf.getAvailableBlocks();
+        //返回SD卡空闲大小
+        return freeBlocks * blockSize;  //单位Byte
+        //return (freeBlocks * blockSize)/1024;   //单位KB
+//        return (freeBlocks * blockSize)/1024 /1024; //单位MB
+    }
+
+    //判断是否有sd卡
+    public static boolean hasSD() {
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+    }
 
     //获取经纬度
     public static Location getGPS(final Activity activity) {
