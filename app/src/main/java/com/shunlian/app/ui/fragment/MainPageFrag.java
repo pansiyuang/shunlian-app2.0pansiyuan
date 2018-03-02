@@ -304,6 +304,6 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
 
     @Override
     public void onClick(View v) {
-        MyLittleStoreActivity.startAct(getActivity());
+
     }
 }

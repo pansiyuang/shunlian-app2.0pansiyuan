@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
@@ -549,6 +550,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.rl_more:
             case R.id.mrlayout_zhuangxiu:
+                MyLittleStoreActivity.startAct(getActivity());
+                break;
             case R.id.mllayout_yue:
             case R.id.mllayout_youhuiquan:
             case R.id.mllayout_dongli:
