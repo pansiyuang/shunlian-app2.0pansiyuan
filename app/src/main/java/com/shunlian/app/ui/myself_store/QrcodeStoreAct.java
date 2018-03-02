@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.QrcodeStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.presenter.PersonShopPresent;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -29,7 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/3/2.
  */
 
-public class QrcodeStoreAct extends BaseActivity implements IPersonShopView {
+public class QrcodeStoreAct extends BaseActivity implements IPersonShopView, BaseRecyclerAdapter.OnItemClickListener {
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -38,6 +41,9 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView {
 
     @BindView(R.id.miv_level)
     MyImageView miv_level;
+
+    @BindView(R.id.miv_honour)
+    MyImageView miv_honour;
 
     @BindView(R.id.tv_store_name)
     TextView tv_store_name;
@@ -68,16 +74,12 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView {
 
         currentMemberId = getIntent().getStringExtra("memberId");
 
-        goodsList = new ArrayList<>();
-        mAdapter = new QrcodeStoreAdapter(this, goodsList);
         recycler_list.setLayoutManager(new GridLayoutManager(this, 2));
-        recycler_list.setAdapter(mAdapter);
         recycler_list.setNestedScrollingEnabled(false);
 
         mPresenter = new PersonShopPresent(this, this);
         mPresenter.getPersonShopData(currentMemberId);
     }
-
 
     @Override
     public void showFailureView(int request_code) {
@@ -94,13 +96,27 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView {
         tv_title.setText(personShopEntity.nickname + "的小店");
         tv_store_name.setText(personShopEntity.nickname + "的小店");
         setMiv_level(personShopEntity.level);
+        setMivHonour(personShopEntity.member_role);
 
         GlideUtils.getInstance().loadImage(this, miv_icon, personShopEntity.avatarl);
 
-        goodsList.clear();
-        if (!isEmpty(personShopEntity.goods_list)) {
-            goodsList.addAll(personShopEntity.goods_list);
-            mAdapter.notifyDataSetChanged();
+        goodsList = personShopEntity.goods_list;
+        mAdapter = new QrcodeStoreAdapter(this, personShopEntity.goods_list, personShopEntity.qrcode);
+        mAdapter.setOnItemClickListener(this);
+        recycler_list.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void setMivHonour(String type) {
+        switch (type) {
+            case "1":
+                miv_honour.setImageResource(R.mipmap.img_chuangkejingying);
+                miv_honour.setVisibility(View.VISIBLE);
+                break;
+            case "2":
+                miv_honour.setImageResource(R.mipmap.img_jingyingdaoshi);
+                miv_honour.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -128,5 +144,11 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView {
                 miv_level.setImageResource(R.mipmap.v6);
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        GoodsDeatilEntity.Goods goods = goodsList.get(position);
+        GoodsDetailAct.startAct(this, goods.goods_id);
     }
 }
