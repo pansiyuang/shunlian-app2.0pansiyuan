@@ -12,10 +12,14 @@ import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -133,6 +137,8 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
             intent.putExtra("result", result);
             setResult(RESULT_CODE, intent);
             finish();
+        } else {
+            switch2Jump(result);
         }
     }
 
@@ -172,12 +178,39 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
                             intent.putExtra("result", result);
                             setResult(RESULT_CODE, intent);
                             finish();
-                        }else {
+                        } else {
                             Common.staticToast(result);
                         }
                     }
                 }
             }.execute();
         }
+    }
+
+    public void switch2Jump(String url) {
+        String type = getURLParameterValue(url, "type");
+        String memberId = getURLParameterValue(url, "item_id");
+        LogUtil.httpLogW("type:" + type);
+        LogUtil.httpLogW("memberId:" + memberId);
+        if (TextUtils.isEmpty(type)) {
+            return;
+        }
+        switch (type) {
+            case "myshop":
+                if (!TextUtils.isEmpty(memberId)) {
+                    QrcodeStoreAct.startAct(this, memberId);
+                    finish();
+                }
+                break;
+        }
+    }
+
+    public static String getURLParameterValue(String url, String parameter) {
+        Matcher accessMatcher = Pattern.compile(parameter + "=(.+?)(?:&|$)").matcher(url);
+        String parameterValue = null;
+        if (accessMatcher.find()) {
+            parameterValue = accessMatcher.group(1);
+        }
+        return parameterValue;
     }
 }
