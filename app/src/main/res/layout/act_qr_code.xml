@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shunlian.app.ui.store.StoreIntroduceAct">
+
+    <include layout="@layout/block_title_whitebg" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:text="@string/qr_yaoqingpengyouchuangye"
+                android:textColor="@color/new_text"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/qr_yongweixinsaoyisao"
+                android:textColor="@color/share_text"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_code"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="25dp"
+                android:scaleType="fitXY" />
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="25dp">
+
+                <com.shunlian.app.widget.MyLinearLayout
+                    android:id="@+id/mllayout_yaoqingweixin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="right">
+                    <com.shunlian.app.widget.MyImageView
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:src="@mipmap/icon_weixin"
+                        android:scaleType="fitXY"
+                        android:layout_marginRight="30dp"/>
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="14dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/share_text"
+                        android:text="@string/qr_yaoqingweixinhaoyou"/>
+                </com.shunlian.app.widget.MyLinearLayout>
+
+                <com.shunlian.app.widget.MyLinearLayout
+                    android:id="@+id/mllayout_fenxiangerweima"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <com.shunlian.app.widget.MyImageView
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:src="@mipmap/icon_chuangye_download"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="42dp"/>
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="14dp"
+                        android:textColor="@color/share_text"
+                        android:text="@string/qr_baocunerweimadaoxiangce"/>
+                </com.shunlian.app.widget.MyLinearLayout>
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_yiyaoqing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/my_gray_one"
+                android:textSize="14sp"
+                android:layout_marginTop="60dp"/>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_chakanxiaodian"
+                android:layout_width="330dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="@string/qr_chakanxiaodianhuiyuan"
+                android:background="@drawable/bg_common_round_nobord"
+                android:layout_marginTop="40dp"/>
+
+        </com.shunlian.app.widget.MyLinearLayout>
+    </ScrollView>
+</com.shunlian.app.widget.MyLinearLayout>

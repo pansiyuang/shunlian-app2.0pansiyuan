@@ -22,7 +22,8 @@
         android:textColor="@color/my_dark_grey"
         android:textSize="18sp" />
 
-    <RelativeLayout
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_news"
         android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
@@ -47,5 +48,10 @@
             android:text="9+"
             android:textColor="@color/white"
             android:textSize="9sp" />
-    </RelativeLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_two"
+        android:layout_alignParentBottom="true"/>
 </com.shunlian.app.widget.MyRelativeLayout>

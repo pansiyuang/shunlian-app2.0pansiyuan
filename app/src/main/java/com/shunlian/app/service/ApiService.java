@@ -26,6 +26,8 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.CheckInRespondEntity;
+import com.shunlian.app.bean.CheckInStateEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
@@ -39,6 +41,7 @@ import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.HotSearchEntity;
@@ -103,7 +106,14 @@ import retrofit2.http.Url;
 
 public interface ApiService {
 
+    @GET("user/getQrCard")
+    Call<BaseEntity<GetQrCardEntity>> userGetQrCard(@QueryMap Map<String, String> map);
 
+    @GET("member/checkin/respond")
+    Call<BaseEntity<CheckInRespondEntity>> checkinRespond(@QueryMap Map<String, String> map);
+
+    @GET("member/checkin/status")
+    Call<BaseEntity<CheckInStateEntity>> checkinStatus(@QueryMap Map<String, String> map);
     /**
      * 测试
      *

@@ -61,15 +61,14 @@ import java.util.regex.Pattern;
  */
 
 public class Common {
-    private static Toast toast,toasts;
-    private static MyTextView mtv_toast,mtv_toasts;
-    private static AbsoluteSizeSpan sizeSpan;
+    private static Toast toast, toasts;
+    private static MyTextView mtv_toast, mtv_toasts;
     private static SpannableStringBuilder ssb;
     private static PromptDialog promptDialog;
-    private static ForegroundColorSpan colorSpan;
     private static MyImageView miv_logo;
+
     //获取经纬度
-    public static Location getGPS(final Activity activity){
+    public static Location getGPS(final Activity activity) {
         // 获取位置管理服务
         LocationManager locationManager;
         String serviceName = Context.LOCATION_SERVICE;
@@ -86,23 +85,22 @@ public class Common {
 //        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
 
         Location location = null;
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // 通过GPS获取位置
             //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-            if(location == null){
-                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            if (location == null) {
+                if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
                     //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
                 }
             }
             return location;
-        }
-        else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+        } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
             //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             return location;
-        } else{
+        } else {
             promptDialog = new PromptDialog(activity);
             promptDialog.setTvSureColor(R.color.new_text);
             promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
@@ -122,6 +120,7 @@ public class Common {
             return null;
         }
     }
+
     /**
      * 获取全局上下文
      *
@@ -164,7 +163,7 @@ public class Common {
         toast.show();
     }
 
-    public static void staticToasts(Context context,String content,int imgSource) {
+    public static void staticToasts(Context context, String content, int imgSource) {
         if (toasts == null) {
             View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
             mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
@@ -182,6 +181,7 @@ public class Common {
         }
         toasts.show();
     }
+
     //隐藏虚拟键盘
     public static void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -236,29 +236,31 @@ public class Common {
             return;
         }
         SpannableString sp = new SpannableString(str);
-        sp.setSpan(new AbsoluteSizeSpan(size,true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sp.setSpan(new AbsoluteSizeSpan(size, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.setText(sp, TextView.BufferType.SPANNABLE);
     }
 
     /**
      * 格式化float 四舍五入保留两位小数
+     *
      * @param f
      * @return
      */
     public static String formatFloat(float f) {
-        DecimalFormat decimalFormat=new DecimalFormat(".00");
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
         String format = decimalFormat.format(f);
         return format;
     }
 
     /**
      * 格式化float 四舍五入保留两位小数
+     *
      * @param f
      * @return
      */
-    public static String formatFloat(String f){
+    public static String formatFloat(String f) {
         float v = 0;
-        if (!TextUtils.isEmpty(f)){
+        if (!TextUtils.isEmpty(f)) {
             v = Float.parseFloat(f);
         }
         return formatFloat(v);
@@ -266,25 +268,27 @@ public class Common {
 
     /**
      * 格式化float 四舍五入保留两位小数
+     *
      * @param
      * @return
      */
-    public static String formatFloat(float f1,float f2){
+    public static String formatFloat(float f1, float f2) {
         return formatFloat(f1 - f2);
     }
 
     /**
      * 格式化float 四舍五入保留两位小数
+     *
      * @param
      * @return
      */
-    public static String formatFloat(String f1,String f2){
+    public static String formatFloat(String f1, String f2) {
         float v1 = 0;
-        if (!TextUtils.isEmpty(f1)){
+        if (!TextUtils.isEmpty(f1)) {
             v1 = Float.parseFloat(f1);
         }
         float v2 = 0;
-        if (!TextUtils.isEmpty(f2)){
+        if (!TextUtils.isEmpty(f2)) {
             v2 = Float.parseFloat(f2);
         }
         return formatFloat(v1 - v2);
@@ -292,16 +296,16 @@ public class Common {
 
     /**
      * 将点后面的字变小
+     *
      * @param source
      * @param textSize 需要变小的文字大小
      * @return
      */
-    public static SpannableStringBuilder dotAfterSmall(String source,int textSize){
-        if (TextUtils.isEmpty(source)){
+    public static SpannableStringBuilder dotAfterSmall(String source, int textSize) {
+        if (TextUtils.isEmpty(source)) {
             return null;
         }
-        if (sizeSpan == null)
-            sizeSpan = new AbsoluteSizeSpan(textSize,true);
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(textSize, true);
         if (ssb == null)
             ssb = new SpannableStringBuilder();
         ssb.clear();
@@ -315,82 +319,88 @@ public class Common {
 
     /**
      * 更改源字符串的颜色
-     * @param source 源字符串
+     *
+     * @param source    源字符串
      * @param changeStr 需要改变颜色的字符串
-     * @param color 变化的颜色
+     * @param color     变化的颜色
      * @return
      */
-    public static SpannableStringBuilder changeColor(String source, String changeStr, @ColorInt int color){
-        if (colorSpan == null)
-            colorSpan = new ForegroundColorSpan(color);
-
+    public static SpannableStringBuilder changeColor(String source, String changeStr, @ColorInt int color) {
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
         if (ssb == null)
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
         int i = source.indexOf(changeStr);
-        if (i == -1){
+        if (i == -1) {
             return ssb;
-        }else {
-            ssb.setSpan(colorSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            ssb.setSpan(colorSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
     }
-    /**
-     * 更改源字符串的颜色
-     * @param source 源字符串
-     * @param changeStr 需要改变颜色的字符串
-     * @param color 变化的颜色
-     * @return
-     */
-    public static SpannableStringBuilder changeColor(String source, String changeStr, @ColorInt int color,boolean isMutil){
-        if (colorSpan == null||isMutil)
-            colorSpan = new ForegroundColorSpan(color);
 
-        if (ssb == null)
-            ssb = new SpannableStringBuilder();
-        ssb.clear();
-        ssb.append(source);
-        int i = source.indexOf(changeStr);
-        if (i == -1){
-            return ssb;
-        }else {
-            ssb.setSpan(colorSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return ssb;
-    }
     /**
      * 更改源字符串的大小
-     * @param source 源字符串
+     *
+     * @param source    源字符串
      * @param changeStr 需要改变大小的字符串
-     * @param textSize 变化的文字大小  单位dip
+     * @param textSize  变化的文字大小  单位dip
      * @return
      */
-    public static SpannableStringBuilder changeTextSize(String source, String changeStr,int textSize){
-        if (sizeSpan == null)
-            sizeSpan = new AbsoluteSizeSpan(textSize,true);
+    public static SpannableStringBuilder changeTextSize(String source, String changeStr, int textSize) {
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(textSize, true);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int i = source.indexOf(changeStr);
+        if (i == -1) {
+            return ssb;
+        } else {
+            ssb.setSpan(sizeSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 更改源字符串的大小和颜色
+     *
+     * @param source    源字符串
+     * @param changeStr 需要改变大小的字符串
+     * @param textSize  变化的文字大小  单位dip
+     * @return
+     */
+    public static SpannableStringBuilder changeColorAndSize(String source, String changeStr, int textSize, @ColorInt int color) {
+
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+
+
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(textSize, true);
 
         if (ssb == null)
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
         int i = source.indexOf(changeStr);
-        if (i == -1){
+        if (i == -1) {
             return ssb;
-        }else {
-            ssb.setSpan(sizeSpan,i,i + changeStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            ssb.setSpan(colorSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(sizeSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
     }
 
     /**
      * 判断是否已经登录，登录返回true 否则false
+     *
      * @return
      */
-    public static boolean isAlreadyLogin(){
+    public static boolean isAlreadyLogin() {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
-        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(member_id)){
+        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(member_id)) {
             return true;
         }
         return false;
@@ -398,10 +408,11 @@ public class Common {
 
     /**
      * 如果没有登录提示《请先登录》 并返回true
+     *
      * @return
      */
-    public static boolean loginPrompt(){
-        if (!isAlreadyLogin()){
+    public static boolean loginPrompt() {
+        if (!isAlreadyLogin()) {
             Common.staticToast(getResources().getString(R.string.plase_login));
             return true;
         }
@@ -411,17 +422,18 @@ public class Common {
     /**
      * 清空登录信息
      */
-    public static void clearLoginInfo(){
+    public static void clearLoginInfo() {
         SharedPrefUtil.clearSharedPreferences();
     }
 
     /**
      * 判断应用是否在运行
+     *
      * @param context
      * @return
      */
-    public static boolean isRun(Context context){
-        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+    public static boolean isRun(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
         boolean isAppRunning = false;
         String MY_PKG_NAME = "com.ad";

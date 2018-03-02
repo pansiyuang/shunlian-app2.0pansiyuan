@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/block_title_whitebg" />
+
+
+    <com.shunlian.app.widget.MyScrollView
+        android:id="@+id/msv_sign"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="238dp"
+                android:background="@mipmap/img_qiandao_beijing">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/img_1" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_scores"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/miv_sign"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_score"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="您的积分1231"
+                    android:textColor="@color/value_FE7894"
+                    android:textSize="14sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="52dp"
+                    android:layout_toRightOf="@id/miv_sign"
+                    android:textColor="@color/value_F9E55E"
+                    android:textSize="36sp" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_titles"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_goods"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
+
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyScrollView>
+</com.shunlian.app.widget.MyLinearLayout>

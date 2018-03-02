@@ -284,6 +284,14 @@
             android:exported="false"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".ui.sign.SignInAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.qr_code.QrCodeAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
