@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -27,9 +28,11 @@ import butterknife.BindView;
 public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
     public static final int FOOT_VIEW = 10003;
+    private String qrcodeUrl;
 
-    public QrcodeStoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists) {
+    public QrcodeStoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists, String url) {
         super(context, false, lists);
+        this.qrcodeUrl = url;
     }
 
     @Override
@@ -93,6 +96,9 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     public void handFoot(RecyclerView.ViewHolder holder) {
         if (holder instanceof FootHolderView) {
             FootHolderView footHolderView = (FootHolderView) holder;
+            if (!isEmpty(qrcodeUrl)) {
+                GlideUtils.getInstance().loadImage(context, footHolderView.miv_qrcode, qrcodeUrl);
+            }
         }
     }
 
@@ -101,14 +107,17 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             GoodsHolderView goodsHolderView = (GoodsHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
 
-            int space = TransformUtil.dip2px(context, 12);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - (space * 3)) / 2, TransformUtil.dip2px(context, 168.5f));
-            if (position % 2 == 1) { //右边item
-                layoutParams.setMargins(0, space, space, 0);
-            } else {//左边item
-                layoutParams.setMargins(space, space, space, 0);
-            }
+//            int space = TransformUtil.dip2px(context, 12);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - 72) / 2, TransformUtil.dip2px(context, 168.5f));
             goodsHolderView.miv_icon.setLayoutParams(layoutParams);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            if (position % 2 == 1) {
+                params.setMargins(0, 24, 24, 0);
+            } else {
+                params.setMargins(24, 24, 24, 0);
+            }
+            goodsHolderView.rl_rootView.setLayoutParams(params);
 
             GlideUtils.getInstance().loadImage(context, goodsHolderView.miv_icon, goods.thumb);
             goodsHolderView.tv_goods_title.setText(goods.title);
@@ -122,11 +131,11 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
-        @BindView(R.id.rl_rootView)
-        RelativeLayout rl_rootView;
-
         @BindView(R.id.tv_goods_title)
         TextView tv_goods_title;
+
+        @BindView(R.id.rl_rootView)
+        RelativeLayout rl_rootView;
 
         @BindView(R.id.tv_price)
         TextView tv_price;

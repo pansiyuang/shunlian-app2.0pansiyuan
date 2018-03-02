@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AddGoodsAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.LittleStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.presenter.PersonStorePresent;
@@ -67,7 +68,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     NetAndEmptyInterface nei_empty;
 
     public PersonStorePresent mPresenter;
-    private AddGoodsAdapter mAdapter;
+    private LittleStoreAdapter mAdapter;
     private List<GoodsDeatilEntity.Goods> goodsList;
     private List<String> selectList;
     private StringBuffer stringBuffer = new StringBuffer();
@@ -91,7 +92,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
         goodsList = new ArrayList<>();
         selectList = new ArrayList<>();
-        mAdapter = new AddGoodsAdapter(this, false, false, goodsList);
+        mAdapter = new LittleStoreAdapter(this, goodsList);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         recycler_goods.setLayoutManager(manager);
         recycler_goods.setAdapter(mAdapter);
