@@ -23,6 +23,7 @@ package com.shunlian.app.service;
 //                佛祖保佑                 永无BUG
 
 import com.shunlian.app.bean.ActivityListEntity;
+import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
@@ -57,6 +58,7 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
+import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
@@ -980,5 +982,49 @@ public interface ApiService {
      * @return
      */
     @GET("member/footermark/deleteBatch")
-    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String, String> map);
+
+    /**
+     * 可添加商品列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/validGoods")
+    Call<BaseEntity<AddGoodsEntity>> validGoods(@QueryMap Map<String, String> map);
+
+    /**
+     * 可添加的商品数量
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/fairishNums")
+    Call<BaseEntity<CommonEntity>> fairishNums(@QueryMap Map<String, String> map);
+
+    /**
+     * 小店页面
+     *
+     * @param map
+     * @return
+     */
+    @GET("member/Personalshop/personShop")
+    Call<BaseEntity<PersonShopEntity>> getPersonShop(@QueryMap Map<String, String> map);
+
+    /**
+     * 添加商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("member/Personalshop/addGoods")
+    Call<BaseEntity<CommonEntity>> addGoods(@Body RequestBody body);
+
+    /**
+     * 所有品牌列表
+     * @param map
+     * @return
+     */
+    @GET("goods/brandlist")
+    Call<BaseEntity<GetListFilterEntity>> brandlist(@QueryMap Map<String,String> map);
 }

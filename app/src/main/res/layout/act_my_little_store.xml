@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/value_302E56"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_layout"
+        layout="@layout/title_common_layout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_goods"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_layout"
+        android:layout_marginBottom="50dp"
+        android:overScrollMode="never"></android.support.v7.widget.RecyclerView>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_layout"
+        android:visibility="gone" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_add"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_above="@+id/rl_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="46.5dp"
+        android:layout_marginRight="6.5dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/img_xiaodain_jiahao"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_add_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_share"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/img_xiaodian_tianjia"
+        android:gravity="center"
+        android:text="@string/add_some_goods"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_share"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/pink_color"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@mipmap/icon_xiaodian_fenxiang"
+            android:drawablePadding="7dp"
+            android:gravity="center"
+            android:text="@string/share_my_store"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_manager"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_del"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/value_4D"
+            android:gravity="center"
+            android:text="@string/del"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="@string/RegisterTwoAct_finish"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </LinearLayout>
+</RelativeLayout>

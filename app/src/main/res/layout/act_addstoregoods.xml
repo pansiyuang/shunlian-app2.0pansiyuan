@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_layout"
+        layout="@layout/title_common_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_layout"
+        android:background="@color/pink_color"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tv_goods_search"
+            android:layout_width="match_parent"
+            android:layout_height="25.5dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_brand"
+            android:background="@drawable/rounded_corned_solid_dc002f_51px"
+            android:drawableLeft="@mipmap/icon_xiaodian_soushuo"
+            android:drawablePadding="7.5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="14dp"
+            android:text="@string/input_search_goods"
+            android:textColor="@color/value_FFB7C6"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15.5dp"
+            android:drawablePadding="5dp"
+            android:drawableRight="@mipmap/icon_xiaodian_fanhui"
+            android:text="@string/category_pinpai"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_search"
+        android:layout_centerHorizontal="true"
+        app:tabBackground="@color/white"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/pink_color"
+        app:tabSelectedTextColor="@color/pink_color"
+        app:tabTextColor="@color/new_text"></android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_goods"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tab_layout"
+        android:layout_marginBottom="48dp" />
+
+    <TextView
+        android:id="@+id/tv_add_goods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/img_xiaodian_tianjia"
+        android:gravity="center"
+        android:text="@string/add_some_goods"
+        android:textColor="@color/white"
+        android:textSize="11.5dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tv_selectAll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/img_shoppingcar_selected_n"
+            android:drawablePadding="7.5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="19dp"
+            android:text="全选"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_store_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/pink_color"
+            android:gravity="center"
+            android:text="添加到我的店"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+</RelativeLayout>

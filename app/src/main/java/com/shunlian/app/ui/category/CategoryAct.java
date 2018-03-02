@@ -129,6 +129,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             searchParam = new GoodsSearchParam();
         }
         tv_keyword.setText(searchParam.keyword);
+        searchParam.keyword = "";
         presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam, true);
         mGoods = new ArrayList<>();

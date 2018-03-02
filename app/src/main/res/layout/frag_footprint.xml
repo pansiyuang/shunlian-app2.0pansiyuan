@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_ash"
     android:orientation="vertical">
 
     <View
@@ -10,121 +11,10 @@
         android:layout_height="0.5dp"
         android:background="@color/bg_gray_two" />
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/content"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="440.5dp"
-            android:background="@color/white_ash"
-            app:elevation="0dp">
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    app:layout_collapseMode="parallax">
-
-                    <RelativeLayout
-                        android:id="@+id/rl_date_control"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:background="@color/white"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp">
-
-                        <TextView
-                            android:id="@+id/tv_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="2018年1月"
-                            android:textColor="@color/new_text"
-                            android:textSize="15sp" />
-
-                        <com.shunlian.app.widget.MyImageView
-                            android:id="@+id/miv_pre"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="20dp"
-                            android:layout_toLeftOf="@+id/miv_next"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/img_shoucang_zuji_left_h" />
-
-                        <com.shunlian.app.widget.MyImageView
-                            android:id="@+id/miv_next"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/img_shoucang_zuji_right_h" />
-                    </RelativeLayout>
-
-                    <View
-                        android:id="@+id/view_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_below="@+id/rl_date_control"
-                        android:background="@color/bg_gray_two" />
-
-                    <com.shunlian.app.widget.calendar.CalendarView
-                        android:id="@+id/calendarView"
-                        android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        android:layout_below="@+id/view_line"
-                        android:background="@color/white"
-                        app:calendar_height="50dp"
-                        app:current_month_text_color="@color/new_text"
-                        app:month_view="com.shunlian.app.widget.calendar.CustomMonthView"
-                        app:other_month_text_color="@color/color_value_6c"
-                        app:scheme_text_color="@color/new_text"
-                        app:selected_text_color="@color/white"
-                        app:selected_theme_color="@color/pink_color"
-                        app:week_text_color="@color/new_gray"
-                        app:week_view="com.shunlian.app.widget.calendar.CustomWeekView"
-                        app:year_view_day_text_color="@color/my_dark_grey"
-                        app:year_view_day_text_size="9sp"
-                        app:year_view_month_text_color="@color/white"
-                        app:year_view_month_text_size="20sp"
-                        app:year_view_scheme_color="#f17706" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="15dp"
-                        android:layout_below="@+id/calendarView"
-                        android:layout_marginBottom="15dp"
-                        android:background="@color/white"
-                        android:gravity="right"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-
-                    <com.shunlian.app.widget.MyImageView
-                        android:id="@+id/miv_calendar_more"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/calendarView"
-                        android:layout_marginRight="30dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/img_shoucang_zuji_more" />
-                </RelativeLayout>
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+        android:clipChildren="false">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_list"
@@ -132,6 +22,95 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="-5dp"
             android:background="@color/white_ash"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </android.support.design.widget.CoordinatorLayout>
+            android:overScrollMode="never" />
+
+        <LinearLayout
+            android:id="@+id/ll_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clipChildren="false"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_date_control"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="2018年1月"
+                    android:textColor="@color/new_text"
+                    android:textSize="15sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_pre"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_toLeftOf="@+id/miv_next"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/img_shoucang_zuji_left_n" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_next"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/img_shoucang_zuji_right_h" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/bg_gray_two" />
+
+            <com.shunlian.app.widget.calendar.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="315dp"
+                app:calendar_height="45dp"
+                app:current_month_text_color="@color/new_text"
+                app:month_view="com.shunlian.app.widget.calendar.CustomMonthView"
+                app:other_month_text_color="@color/color_value_6c"
+                app:scheme_text_color="@color/new_text"
+                app:selected_text_color="@color/white"
+                app:selected_theme_color="@color/pink_color"
+                app:week_text_color="@color/new_gray"
+                app:week_view="com.shunlian.app.widget.calendar.CustomWeekView"
+                app:year_view_day_text_color="@color/my_dark_grey"
+                app:year_view_day_text_size="9sp"
+                app:year_view_month_text_color="@color/white"
+                app:year_view_month_text_size="20sp"
+                app:year_view_scheme_color="#f17706" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_alignParentBottom="true"
+                android:gravity="bottom|right"
+                android:orientation="vertical">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_more"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/img_shoucang_zuji_more" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

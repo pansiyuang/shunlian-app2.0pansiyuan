@@ -10,9 +10,12 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.category.BrandListAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
+import com.shunlian.app.ui.myself_store.GoodsSearchAct;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
@@ -56,6 +59,8 @@ public class DiscoverFrag extends BaseFragment {
                 .init();
         List<String> strings = new ArrayList<>();
         strings.add("我的评价");
+        strings.add("品牌列表");
+        strings.add("搜索列表");
 
         LinearLayoutManager manager = new LinearLayoutManager(baseContext);
         recy_view.setLayoutManager(manager);
@@ -71,7 +76,7 @@ public class DiscoverFrag extends BaseFragment {
             }
         };
 
-//        recy_view.setAdapter(simpleRecyclerAdapter);
+        recy_view.setAdapter(simpleRecyclerAdapter);
 
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -85,6 +90,14 @@ public class DiscoverFrag extends BaseFragment {
         switch (position) {
             case 0:
                 MyCommentAct.startAct(baseActivity);
+                break;
+            case 1:
+                BrandListAct.startAct(baseActivity,666);
+                break;
+            case 2:
+                GoodsSearchParam param = new GoodsSearchParam();
+                param.keyword="衣服";
+                GoodsSearchAct.startAct(baseActivity,param);
                 break;
         }
     }

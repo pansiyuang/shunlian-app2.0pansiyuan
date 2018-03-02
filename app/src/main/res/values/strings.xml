@@ -457,4 +457,13 @@
     <string name="qr_yiyaoqing">已邀请%s人</string>
     <string name="qr_chakanxiaodianhuiyuan">查看小店会员 ></string>
 
+
+    <!-- 我的小店 -->
+    <string name="share_my_store">分享我的店</string>
+    <string name="add_some_goods">还可以添加%s个商品</string>
+    <string name="add_goods">添加商品</string>
+    <string name="input_search_goods">输入您想找的商品</string>
+    <string name="decorate_my_store">装修我的店</string>
+    <string name="customize_my_store">自定义我的小店</string>
+    <string name="store_empty">您的店铺还没有商品,赶紧去添加吧</string>
 </resources>

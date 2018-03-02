@@ -7,6 +7,8 @@ import android.graphics.Paint;
 
 import com.shunlian.app.R;
 
+import static com.shunlian.app.ui.collection.FootprintFrag.mCurrentCalendar;
+
 /**
  * 简单月视图
  */
@@ -44,8 +46,12 @@ public class CustomMonthView extends MonthView {
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme) {
         int cx = x + mItemWidth / 2;
         int cy = y + mItemHeight / 2;
-        mSelectedPaint.setColor(getContext().getResources().getColor(R.color.pink_color));
-        canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+
+        if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
+            mSelectedPaint.setColor(getContext().getResources().getColor(R.color.pink_color));
+            canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+        }
+
         if (hasScheme) {
             cy = y + mItemHeight / 2 + margin + mRadius;
             canvas.drawCircle(cx, cy, markRadius, markPaint);
@@ -66,6 +72,11 @@ public class CustomMonthView extends MonthView {
         int cx = x + mItemWidth / 2;
 
         if (isSelected) {
+            if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
+                mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
+            } else {
+                mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+            }
             canvas.drawText(String.valueOf(calendar.getDay()),
                     cx,
                     baselineY,

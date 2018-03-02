@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -52,7 +53,7 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
 
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getmarkCalendar(requestBody);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -69,11 +70,18 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
     }
 
     public void getMarklist(String year, String month, boolean isShowLoading) {
+        getMarklist(year, month, "", isShowLoading);
+    }
+
+    public void getMarklist(String year, String month, String day, boolean isShowLoading) {
         currentYear = year;
         currentMonth = month;
         Map<String, String> map = new HashMap<>();
         map.put("year", year);
         map.put("month", month);
+        if (!TextUtils.isEmpty(day)) {
+            map.put("day", day);
+        }
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
@@ -109,7 +117,7 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         LogUtil.augusLogW("id--" + ids);
         sortAndMD5(map);
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().deleteBatch(map);
-        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -117,7 +125,6 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
             }
         });
     }
-
 
     @Override
     public void onRefresh() {

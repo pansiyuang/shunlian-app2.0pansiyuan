@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import static com.shunlian.app.ui.collection.FootprintFrag.mCurrentCalendar;
+
 /**
  * 简单周视图
  */
@@ -32,9 +34,12 @@ public class CustomWeekView extends WeekView {
 
     @Override
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, boolean hasScheme) {
+
         int cx = x + mItemWidth / 2;
         int cy = mItemHeight / 2;
-        canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+        if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
+            canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+        }
         if (hasScheme) {
             cy = mItemHeight / 2 + margin + mRadius;
             canvas.drawCircle(cx, cy, markRadius, markPaint);
@@ -54,6 +59,11 @@ public class CustomWeekView extends WeekView {
         float baselineY = mTextBaseLine;
         int cx = x + mItemWidth / 2;
         if (isSelected) {
+            if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
+                mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
+            }else{
+                mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+            }
             canvas.drawText(String.valueOf(calendar.getDay()),
                     cx,
                     baselineY,
