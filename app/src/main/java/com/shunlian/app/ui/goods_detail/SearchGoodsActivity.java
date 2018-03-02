@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.SearchGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.collection.SearchResultAct;
+import com.shunlian.app.ui.myself_store.GoodsSearchAct;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -94,11 +95,11 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         context.startActivityForResult(new Intent(context, SearchGoodsActivity.class), SEARCH_REQUEST_CODE);
     }
 
-    public static void startActivityForResult(Activity context,boolean isShowHotSearch,String flag) {
+    public static void startActivityForResult(Activity context, boolean isShowHotSearch, String flag) {
         Intent intent = new Intent(context, SearchGoodsActivity.class);
-        intent.putExtra("isShowHotSearch",isShowHotSearch);
-        intent.putExtra("flag",flag);
-        context.startActivityForResult(intent,SEARCH_REQUEST_CODE);
+        intent.putExtra("isShowHotSearch", isShowHotSearch);
+        intent.putExtra("flag", flag);
+        context.startActivityForResult(intent, SEARCH_REQUEST_CODE);
     }
 
     public static void startAct(Activity context, String keyWord, String flag) {
@@ -135,39 +136,39 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 edt_goods_search.setSelection(currentKeyWord.length());
             }
         }
-        if (!isShowHotSearch){
+        if (!isShowHotSearch) {
             save_goods_history = SharedPrefUtil.COLLECTION_GOODS_HISTORY
-                    .concat(SharedPrefUtil.getSharedPrfString("member_id",""));
+                    .concat(SharedPrefUtil.getSharedPrfString("member_id", ""));
             save_shop_history = SharedPrefUtil.COLLECTION_STORE_HISTORY
-                    .concat(SharedPrefUtil.getSharedPrfString("member_id",""));
+                    .concat(SharedPrefUtil.getSharedPrfString("member_id", ""));
             setHistoryAdapter();
         }
 
         initKeywordSuggest();
     }
 
-    private void setHistoryAdapter(){
+    private void setHistoryAdapter() {
         histotyTags.clear();
         edt_goods_search.setHint(getStringResouce(R.string.search_collection));
         String cacheSharedPrf = null;
-        LogUtil.zhLogW("==currentFlag=========="+currentFlag);
+        LogUtil.zhLogW("==currentFlag==========" + currentFlag);
         if ("goods".equals(currentFlag)) {
             cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_goods_history, "");
-        }else if ("shop".equals(currentFlag)){
+        } else if ("shop".equals(currentFlag)) {
             cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_shop_history, "");
         }
-        if (!isEmpty(cacheSharedPrf)){
+        if (!isEmpty(cacheSharedPrf)) {
             taglayout_history.setVisibility(View.VISIBLE);
             tv_history.setVisibility(View.VISIBLE);
             ll_clear.setVisibility(View.VISIBLE);
             String[] split = cacheSharedPrf.split(",");
-            for (String s : split){
-                if (isEmpty(s)){
+            for (String s : split) {
+                if (isEmpty(s)) {
                     continue;
                 }
                 histotyTags.add(s);
             }
-        }else {
+        } else {
             taglayout_history.setVisibility(View.GONE);
             tv_history.setVisibility(View.GONE);
             ll_clear.setVisibility(View.GONE);
@@ -187,7 +188,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 String s = histotyTags.get(position);
-                SearchResultAct.startAct(SearchGoodsActivity.this,s,currentFlag);
+                SearchResultAct.startAct(SearchGoodsActivity.this, s, currentFlag);
                 finish();
                 return true;
             }
@@ -213,10 +214,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                LogUtil.httpLogW("currentFlag11:" + currentFlag);
                 if ("sortFrag".equals(currentFlag)) {
                     GoodsSearchParam param = new GoodsSearchParam();
                     param.keyword = mTips.get(position);
                     CategoryAct.startAct(SearchGoodsActivity.this, param);
+                } else if ("store_goods".equals(currentFlag)) {
+                    GoodsSearchParam param = new GoodsSearchParam();
+                    param.keyword = mTips.get(position);
+                    GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
                 } else {
                     Intent intent = new Intent();
                     intent.putExtra("keyword", mTips.get(position));
@@ -248,7 +254,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                                         .getCacheSharedPrf(save_goods_history, "");
                                 String concat = cacheSharedPrf.concat(text.toString().concat(","));
                                 SharedPrefUtil.saveCacheSharedPrf(save_goods_history, concat);
-                            }else {
+                            } else {
                                 String cacheSharedPrf = SharedPrefUtil
                                         .getCacheSharedPrf(save_shop_history, "");
                                 String concat = cacheSharedPrf.concat(text.toString().concat(","));
@@ -259,7 +265,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                             finish();
                         }
                         return true;
-                    }else {
+                    } else {
                         if (!isEmpty(text)) {
                             if ("sortFrag".equals(currentFlag)) {
                                 GoodsSearchParam param = new GoodsSearchParam();
@@ -287,11 +293,11 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                     public void onClick(View v) {
                         if (isShowHotSearch) {
                             presenter.clearSearchHistory();
-                        }else {
-                            if ("goods".equals(currentFlag)){
-                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history,"");
-                            }else if ("shop".equals(currentFlag)){
-                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history,"");
+                        } else {
+                            if ("goods".equals(currentFlag)) {
+                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history, "");
+                            } else if ("shop".equals(currentFlag)) {
+                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history, "");
                             }
                             clearSuccess("");
                         }
@@ -342,11 +348,16 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        LogUtil.httpLogW("currentFlag33:" + currentFlag);
                         if ("sortFrag".equals(currentFlag)) {
                             GoodsSearchParam param = new GoodsSearchParam();
                             param.keyword = entity.hot_keywords.get(position);
                             CategoryAct.startAct(SearchGoodsActivity.this, param);
-                        } else {
+                        } else if ("store_goods".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.hot_keywords.get(position);
+                            GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
+                        }  else {
                             Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
                             intent.putExtra("keyword", entity.hot_keywords.get(position));
                             setResult(RESULT_OK, intent);
@@ -369,10 +380,15 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        LogUtil.httpLogW("currentFlag22:" + currentFlag);
                         if ("sortFrag".equals(currentFlag)) {
                             GoodsSearchParam param = new GoodsSearchParam();
                             param.keyword = entity.history_list.get(position);
                             CategoryAct.startAct(SearchGoodsActivity.this, param);
+                        } else if ("store_goods".equals(currentFlag)) {
+                            GoodsSearchParam param = new GoodsSearchParam();
+                            param.keyword = entity.history_list.get(position);
+                            GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
                         } else {
                             Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
                             intent.putExtra("keyword", entity.history_list.get(position));
@@ -398,7 +414,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
     }
 
     @Override
-    public void  clearSuccess(String str) {
+    public void clearSuccess(String str) {
         histotyTags.clear();
         historyAdapter.notifyDataChanged();
         tv_history.setVisibility(View.GONE);
