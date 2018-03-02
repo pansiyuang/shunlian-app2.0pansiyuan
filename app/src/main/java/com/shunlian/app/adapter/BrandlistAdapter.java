@@ -42,7 +42,7 @@ public class BrandlistAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Br
                 if (!item.first_letter.equals(item1.first_letter)){
                     mHolder.view_line.setVisibility(View.VISIBLE);
                     mHolder.mtv_initials.setVisibility(View.VISIBLE);
-                    mHolder.mtv_initials.setText(item.first_letter);
+                    mHolder.mtv_initials.setText(item.first_letter.toUpperCase());
                 }else {
                     mHolder.view_line.setVisibility(View.GONE);
                     mHolder.mtv_initials.setVisibility(View.GONE);
@@ -50,7 +50,7 @@ public class BrandlistAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Br
             }else {
                 mHolder.view_line.setVisibility(View.GONE);
                 mHolder.mtv_initials.setVisibility(View.VISIBLE);
-                mHolder.mtv_initials.setText(item.first_letter);
+                mHolder.mtv_initials.setText(item.first_letter.toUpperCase());
             }
         }
     }
