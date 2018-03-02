@@ -211,9 +211,6 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
 
     }
 
-    /**
-     * 确认收货
-     */
     public void checkSelectDialog() {
         promptDialog = new PromptDialog(this);
         promptDialog.setSureAndCancleListener("", "您的店铺商品数量已经达到上限，删除后才可以添加", getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {

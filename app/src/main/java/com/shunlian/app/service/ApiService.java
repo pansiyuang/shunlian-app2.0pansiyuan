@@ -1021,6 +1021,15 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> addGoods(@Body RequestBody body);
 
     /**
+     * 删除商品
+     *
+     * @param body
+     * @return
+     */
+    @POST("member/Personalshop/delGoods")
+    Call<BaseEntity<CommonEntity>> delGoods(@Body RequestBody body);
+
+    /**
      * 所有品牌列表
      * @param map
      * @return

@@ -69,6 +69,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
             }
         });
         ((DefaultItemAnimator) recy_view.getItemAnimator()).setSupportsChangeAnimations(false);
+
         return rootView;
     }
 

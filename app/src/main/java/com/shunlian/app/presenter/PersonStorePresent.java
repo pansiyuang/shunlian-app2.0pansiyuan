@@ -60,7 +60,22 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity commonEntity = entity.data;
-                iView.getFairishNums(commonEntity.num);
+                iView.getFairishNums(commonEntity.num,false);
+            }
+        });
+    }
+
+    public void delStorGoods(String goodsIds){
+        Map<String, String> map = new HashMap<>();
+        map.put("goods_ids", goodsIds);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().delGoods(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getFairishNums(commonEntity.num,true);
             }
         });
     }
