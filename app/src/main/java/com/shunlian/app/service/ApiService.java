@@ -1036,4 +1036,12 @@ public interface ApiService {
      */
     @GET("goods/brandlist")
     Call<BaseEntity<GetListFilterEntity>> brandlist(@QueryMap Map<String,String> map);
+
+    /**
+     * 小店展示页面
+     * @param map
+     * @return
+     */
+    @GET("myshop/personShop")
+    Call<BaseEntity<PersonShopEntity>> personShop(@QueryMap Map<String,String> map);
 }

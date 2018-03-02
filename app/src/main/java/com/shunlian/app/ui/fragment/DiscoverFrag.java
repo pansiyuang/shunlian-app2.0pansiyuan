@@ -16,6 +16,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.BrandListAct;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.myself_store.GoodsSearchAct;
+import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class DiscoverFrag extends BaseFragment {
         strings.add("我的评价");
         strings.add("品牌列表");
         strings.add("搜索列表");
+        strings.add("二维码小店");
 
         LinearLayoutManager manager = new LinearLayoutManager(baseContext);
         recy_view.setLayoutManager(manager);
@@ -92,12 +94,15 @@ public class DiscoverFrag extends BaseFragment {
                 MyCommentAct.startAct(baseActivity);
                 break;
             case 1:
-                BrandListAct.startAct(baseActivity,666);
+                BrandListAct.startAct(baseActivity);
                 break;
             case 2:
                 GoodsSearchParam param = new GoodsSearchParam();
                 param.keyword="衣服";
                 GoodsSearchAct.startAct(baseActivity,param);
+                break;
+            case 3:
+                QrcodeStoreAct.startAct(getActivity(),"90000003");
                 break;
         }
     }

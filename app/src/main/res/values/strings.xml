@@ -466,4 +466,5 @@
     <string name="decorate_my_store">装修我的店</string>
     <string name="customize_my_store">自定义我的小店</string>
     <string name="store_empty">您的店铺还没有商品,赶紧去添加吧</string>
+    <string name="to_mainpage">去首页</string>
 </resources>

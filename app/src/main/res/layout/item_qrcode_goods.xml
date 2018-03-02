@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_rootView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="12dp"
     android:background="@color/white"
-    android:paddingBottom="12.5dp">
+    android:paddingBottom="12dp">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_icon"
@@ -12,28 +15,16 @@
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/tv_select"
-        android:layout_width="14.5dp"
-        android:layout_height="14.5dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="7dp"
-        android:background="@drawable/oval_stroke_pink"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="9sp"
-        android:visibility="gone" />
-
-    <TextView
         android:id="@+id/tv_goods_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/miv_icon"
+        android:ellipsize="end"
         android:paddingBottom="9sp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="9dp"
         android:singleLine="true"
-        android:ellipsize="end"
         android:textColor="@color/new_text"
         android:textSize="11sp" />
 
@@ -43,16 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_goods_title"
         android:paddingLeft="5dp"
-        android:textColor="@color/pink_color"
-        android:textSize="11sp" />
-
-    <TextView
-        android:id="@+id/tv_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/miv_icon"
-        android:layout_below="@+id/tv_goods_title"
-        android:paddingRight="5dp"
         android:textColor="@color/pink_color"
         android:textSize="11sp" />
 </RelativeLayout>

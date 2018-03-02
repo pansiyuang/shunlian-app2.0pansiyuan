@@ -15,4 +15,6 @@ public class PersonShopEntity {
     public String level;
     public List<GoodsDeatilEntity.Goods> goods_list;
     public String qrcode;
+    public String member_role;
+    public String share_link;
 }

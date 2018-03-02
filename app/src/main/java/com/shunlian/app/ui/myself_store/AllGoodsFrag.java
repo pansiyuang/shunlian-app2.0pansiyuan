@@ -15,10 +15,12 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsListPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsListView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ import static com.shunlian.app.ui.myself_store.AddStoreGoodsAct.currentGoodsList
 public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, BaseRecyclerAdapter.OnItemClickListener {
 
     RecyclerView recy_view;
+    NetAndEmptyInterface emptyInterface;
 
     private GridLayoutManager manager;
     private String currentFrom;
@@ -55,6 +58,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_all_goods, container, false);
         recy_view = (RecyclerView) rootView.findViewById(R.id.recy_view);
+        emptyInterface = (NetAndEmptyInterface) rootView.findViewById(R.id.nei_empty);
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -108,6 +112,12 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     public void getValidGoods(List<GoodsDeatilEntity.Goods> goods, int currentPage, int totalPage) {
         if (currentPage == 1) {
             goodsList.clear();
+
+            if (isEmpty(goods)) {
+                showEmptyView(true);
+            } else {
+                showEmptyView(false);
+            }
         }
         goodsList.addAll(goods);
         mAdapter.notifyDataSetChanged();
@@ -188,6 +198,24 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
                     mAdapter.notifyItemChanged(i);
                 }
             }
+        }
+    }
+
+    public void showEmptyView(boolean isShowEmpty) {
+        if (isShowEmpty) {
+            emptyInterface.setImageResource(R.mipmap.img_xiaodian_kongyemian).setText("您还没有相关订单商品，赶紧去下单吧。");
+            emptyInterface.setButtonText(getStringResouce(R.string.to_mainpage));
+            emptyInterface.setVisibility(View.VISIBLE);
+            emptyInterface.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.startAct(baseContext, "mainPage");
+                }
+            });
+            recy_view.setVisibility(View.GONE);
+        } else {
+            emptyInterface.setVisibility(View.GONE);
+            recy_view.setVisibility(View.VISIBLE);
         }
     }
 

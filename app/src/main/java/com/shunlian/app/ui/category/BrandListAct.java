@@ -10,8 +10,11 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.BrandlistAdapter;
 import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.presenter.BrandListPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.myself_store.GoodsSearchAct;
 import com.shunlian.app.view.IBrandListView;
 import com.shunlian.app.widget.WaveSideBar;
 
@@ -24,7 +27,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/2/28.
  */
 
-public class BrandListAct extends BaseActivity implements IBrandListView{
+public class BrandListAct extends BaseActivity implements IBrandListView {
 
 
     @BindView(R.id.rv_contacts)
@@ -36,9 +39,9 @@ public class BrandListAct extends BaseActivity implements IBrandListView{
     private List<GetListFilterEntity.Brand.Item> mLogisticsName = new ArrayList<>();
     private LinearLayoutManager manager;
 
-    public static void startAct(Activity activity,int requestCode){
+    public static void startAct(Activity activity) {
         Intent intent = new Intent(activity, BrandListAct.class);
-        activity.startActivityForResult(intent,requestCode);
+        activity.startActivity(intent);
     }
 
     @Override
@@ -51,14 +54,14 @@ public class BrandListAct extends BaseActivity implements IBrandListView{
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        BrandListPresenter presenter = new BrandListPresenter(this,this);
+        BrandListPresenter presenter = new BrandListPresenter(this, this);
         manager = new LinearLayoutManager(this);
         rv_contacts.setLayoutManager(manager);
 
         side_bar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
             @Override
             public void onSelectIndexItem(String index) {
-                for (int i=0; i<mLogisticsName.size(); i++) {
+                for (int i = 0; i < mLogisticsName.size(); i++) {
                     if (mLogisticsName.get(i).first_letter.equalsIgnoreCase(index)) {
                         manager.scrollToPositionWithOffset(i, 0);
                         return;
@@ -71,7 +74,7 @@ public class BrandListAct extends BaseActivity implements IBrandListView{
     @Override
     public void setBrandList(ArrayList<String> letters, List<GetListFilterEntity.Brand> brands) {
         side_bar.setIndexItems(letters);
-        for(GetListFilterEntity.Brand nameItem : brands){
+        for (GetListFilterEntity.Brand nameItem : brands) {
             List<GetListFilterEntity.Brand.Item> item_list = nameItem.item_list;
             mLogisticsName.addAll(item_list);
         }
@@ -82,11 +85,9 @@ public class BrandListAct extends BaseActivity implements IBrandListView{
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String name = mLogisticsName.get(position).id;
-                Intent intent = new Intent();
-                intent.putExtra("name",name);
-                setResult(Activity.RESULT_OK,intent);
-                finish();
+                GoodsSearchParam param = new GoodsSearchParam();
+                param.keyword = mLogisticsName.get(position).brand_name;
+                GoodsSearchAct.startAct(BrandListAct.this,param);
             }
         });
     }

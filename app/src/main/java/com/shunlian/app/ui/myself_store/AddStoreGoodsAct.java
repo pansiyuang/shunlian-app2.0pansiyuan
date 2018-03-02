@@ -144,7 +144,7 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
                 SearchGoodsActivity.startAct(this, "", currentFlag);
                 break;
             case R.id.tv_brand:
-                BrandListAct.startAct(this, 1000);
+                BrandListAct.startAct(this);
                 break;
             case R.id.tv_store_add:
                 if (currentGoodsList.size() == 0) {
