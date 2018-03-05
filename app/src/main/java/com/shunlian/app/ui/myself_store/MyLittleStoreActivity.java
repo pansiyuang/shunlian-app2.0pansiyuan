@@ -90,6 +90,8 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        tv_title.setText(getStringResouce(R.string.decorate_my_store));
+
         goodsList = new ArrayList<>();
         selectList = new ArrayList<>();
         mAdapter = new LittleStoreAdapter(this, goodsList);
@@ -181,27 +183,24 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     public void showEmptyView(boolean isShowEmpty) {
         if (isShowEmpty) {
             nei_empty.setImageResource(R.mipmap.img_xiaodian_kongyemian).setText(getStringResouce(R.string.store_empty));
-            nei_empty.setButtonText(getStringResouce(R.string.add_goods));
-            nei_empty.setVisibility(View.VISIBLE);
-            recycler_goods.setVisibility(View.GONE);
-            nei_empty.setOnClickListener(new View.OnClickListener() {
+            nei_empty.setButtonText(getStringResouce(R.string.add_goods)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AddStoreGoodsAct.startAct(MyLittleStoreActivity.this);
                 }
             });
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_goods.setVisibility(View.GONE);
 
             rl_share.setVisibility(View.GONE);
             ll_manager.setVisibility(View.GONE);
             tv_title_right.setVisibility(View.GONE);
             miv_add.setVisibility(View.GONE);
             tv_add_count.setVisibility(View.GONE);
-            tv_title.setText(getStringResouce(R.string.customize_my_store));
         } else {
             nei_empty.setVisibility(View.GONE);
             recycler_goods.setVisibility(View.VISIBLE);
 
-            tv_title.setText(getStringResouce(R.string.decorate_my_store));
             tv_title_right.setVisibility(View.VISIBLE);
             tv_title_right.setText(getStringResouce(R.string.manage));
             tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
@@ -265,6 +264,9 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     @Override
     public void onItemClick(View view, int position) {
+        if (!isEdit) {
+            return;
+        }
         GoodsDeatilEntity.Goods goods = goodsList.get(position);
         int currentIndex = goods.index;
         if (goods.isSelect) {

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -18,7 +21,9 @@ import com.shunlian.app.ui.category.BrandListAct;
 import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAddGoodsView;
 
 import java.util.ArrayList;
@@ -30,7 +35,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/2/27.
  */
 
-public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, View.OnClickListener {
+public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, View.OnClickListener, ViewPager.OnPageChangeListener {
     @BindView(R.id.tv_title)
     TextView tv_title;
 
@@ -57,6 +62,9 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
 
     @BindView(R.id.tv_store_add)
     TextView tv_store_add;
+
+    @BindView(R.id.ll_bottom)
+    LinearLayout ll_bottom;
 
     private String[] titles = {"全部", "推荐", "订单", "收藏", "购物车"};
     private static String[] fromList = {"ALL", "RECOMMEND", "ORDERS", "COLLECT", "SPCAR"};
@@ -113,6 +121,7 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
         tv_brand.setOnClickListener(this);
         tv_store_add.setOnClickListener(this);
         tv_goods_search.setOnClickListener(this);
+        vp_goods.addOnPageChangeListener(this);
         super.initListener();
     }
 
@@ -224,5 +233,33 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
                 promptDialog.dismiss();
             }
         });
+    }
+
+    public void showBottomLayout(boolean isShow) {
+        if (isShow) {
+            ll_bottom.setVisibility(View.VISIBLE);
+            tv_add_goods.setVisibility(View.VISIBLE);
+            vp_goods.setPadding(0, 0, 0, TransformUtil.dip2px(this, 48));
+        } else {
+            ll_bottom.setVisibility(View.GONE);
+            tv_add_goods.setVisibility(View.GONE);
+            vp_goods.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        AllGoodsFrag frag = (AllGoodsFrag) goodsFrags.get(position);
+        showBottomLayout(frag.isShowEmpty());
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

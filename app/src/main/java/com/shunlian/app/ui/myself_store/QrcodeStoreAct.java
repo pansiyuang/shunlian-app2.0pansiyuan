@@ -36,18 +36,6 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView, Bas
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    @BindView(R.id.miv_icon)
-    CircleImageView miv_icon;
-
-    @BindView(R.id.miv_level)
-    MyImageView miv_level;
-
-    @BindView(R.id.miv_honour)
-    MyImageView miv_honour;
-
-    @BindView(R.id.tv_store_name)
-    TextView tv_store_name;
-
     @BindView(R.id.tv_title)
     TextView tv_title;
 
@@ -94,56 +82,12 @@ public class QrcodeStoreAct extends BaseActivity implements IPersonShopView, Bas
     @Override
     public void getPersonShop(PersonShopEntity personShopEntity) {
         tv_title.setText(personShopEntity.nickname + "的小店");
-        tv_store_name.setText(personShopEntity.nickname + "的小店");
-        setMiv_level(personShopEntity.level);
-        setMivHonour(personShopEntity.member_role);
-
-        GlideUtils.getInstance().loadImage(this, miv_icon, personShopEntity.avatarl);
 
         goodsList = personShopEntity.goods_list;
-        mAdapter = new QrcodeStoreAdapter(this, personShopEntity.goods_list, personShopEntity.qrcode);
+        mAdapter = new QrcodeStoreAdapter(this, personShopEntity.goods_list,personShopEntity.nickname, personShopEntity.avatarl,personShopEntity.level,personShopEntity.member_role, personShopEntity.qrcode);
         mAdapter.setOnItemClickListener(this);
         recycler_list.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-    }
-
-    public void setMivHonour(String type) {
-        switch (type) {
-            case "1":
-                miv_honour.setImageResource(R.mipmap.img_chuangkejingying);
-                miv_honour.setVisibility(View.VISIBLE);
-                break;
-            case "2":
-                miv_honour.setImageResource(R.mipmap.img_jingyingdaoshi);
-                miv_honour.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    public void setMiv_level(String level) {
-        switch (level) {
-            default:
-                miv_level.setImageResource(R.mipmap.v0);
-                break;
-            case "1":
-                miv_level.setImageResource(R.mipmap.v1);
-                break;
-            case "2":
-                miv_level.setImageResource(R.mipmap.v2);
-                break;
-            case "3":
-                miv_level.setImageResource(R.mipmap.v3);
-                break;
-            case "4":
-                miv_level.setImageResource(R.mipmap.v4);
-                break;
-            case "5":
-                miv_level.setImageResource(R.mipmap.v5);
-                break;
-            case "6":
-                miv_level.setImageResource(R.mipmap.v6);
-                break;
-        }
     }
 
     @Override
