@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.LogUtil;
 
 import java.util.Stack;
@@ -28,7 +29,9 @@ public class ActivityHelper implements Application.ActivityLifecycleCallbacks {
             mActivityStack = new Stack<>();
         }
         LogUtil.logError("onActivityCreated=====name="+activity.getClass().getSimpleName());
-        if (!(activity instanceof ConfirmOrderAct) && !(activity instanceof PayListActivity)){
+        if (!(activity instanceof ConfirmOrderAct) &&
+                !(activity instanceof PayListActivity) &&
+                !(activity instanceof SearchGoodsActivity)){
             LogUtil.logError("mActivityStack=====add="+activity.getClass().getSimpleName());
             mActivityStack.add(activity);
         }

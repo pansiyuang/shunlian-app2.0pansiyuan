@@ -48,6 +48,11 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
 
     public void getSearchGoods(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
         this.mParam = goodsSearchParam;
+        currentPage = 1;
+        requestData(goodsSearchParam, isShowLoading);
+    }
+
+    private void requestData(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
         Map<String, String> map = new HashMap<>();
         LogUtil.augusLogW("yxf--"+goodsSearchParam);
         if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
@@ -107,6 +112,19 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
                 iView.getSearchGoods(searchGoodsEntity, currentPage, allPage);
+                currentPage++;
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
             }
         });
     }
@@ -124,10 +142,9 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
     public void onRefresh() {
         super.onRefresh();
         if (!isLoading) {
-            isLoading = true;
             if (currentPage <= allPage) {
-                currentPage++;
-                getSearchGoods(mParam, false);
+                isLoading = true;
+                requestData(mParam, false);
             }
         }
     }
