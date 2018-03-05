@@ -21,6 +21,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.NetworkUtils;
@@ -86,7 +87,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         if (!(this instanceof MainActivity) &&
                 !(this instanceof ConfirmOrderAct) &&
-                !(this instanceof PayListActivity)) {
+                !(this instanceof PayListActivity) &&
+                !(this instanceof SearchGoodsActivity)) {
             openSideslipCallback();
         }
         immersionBar = ImmersionBar.with(this);
