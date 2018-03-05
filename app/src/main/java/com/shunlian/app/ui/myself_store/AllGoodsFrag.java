@@ -44,6 +44,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     private List<GoodsDeatilEntity.Goods> goodsList;
     private View rootView;
     private AddStoreGoodsAct mActivty;
+    private boolean showEmpty;
 
     public static AllGoodsFrag getInstance(String from) {
         AllGoodsFrag allFrag = new AllGoodsFrag();
@@ -119,8 +120,10 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
                 showEmptyView(false);
             }
         }
-        goodsList.addAll(goods);
-        mAdapter.notifyDataSetChanged();
+        if (!isEmpty(goods)) {
+            goodsList.addAll(goods);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -213,10 +216,13 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
                 }
             });
             recy_view.setVisibility(View.GONE);
+            showEmpty = false;
         } else {
             emptyInterface.setVisibility(View.GONE);
             recy_view.setVisibility(View.VISIBLE);
+            showEmpty = true;
         }
+        mActivty.showBottomLayout(showEmpty);
     }
 
     @Override
@@ -225,5 +231,9 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
             mActivty = (AddStoreGoodsAct) activity;
         }
         super.onAttach(activity);
+    }
+
+    public boolean isShowEmpty() {
+        return showEmpty;
     }
 }

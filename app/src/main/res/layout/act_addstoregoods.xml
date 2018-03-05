@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tab_layout"
-        android:layout_marginBottom="48dp" />
+        android:paddingBottom="48dp" />
 
     <TextView
         android:id="@+id/tv_add_goods"
@@ -74,12 +74,14 @@
         android:gravity="center"
         android:text="@string/add_some_goods"
         android:textColor="@color/white"
-        android:textSize="11.5dp" />
+        android:textSize="11.5dp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true">
 
         <TextView

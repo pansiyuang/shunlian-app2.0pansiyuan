@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:id="@+id/rl_rootView"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:paddingBottom="12.5dp">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="168.5dp"
         android:scaleType="centerCrop" />
 
@@ -28,12 +29,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/miv_icon"
+        android:ellipsize="end"
         android:paddingBottom="9sp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="9dp"
         android:singleLine="true"
-        android:ellipsize="end"
         android:textColor="@color/new_text"
         android:textSize="11sp" />
 
