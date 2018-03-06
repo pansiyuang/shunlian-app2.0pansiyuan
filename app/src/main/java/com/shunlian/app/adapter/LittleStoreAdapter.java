@@ -47,10 +47,8 @@ public class LittleStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             LittleStoreHolderView littleHolderView = (LittleStoreHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
 
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 36)) / 2, TransformUtil.dip2px(context, 168.5f));
-            littleHolderView.miv_icon.setLayoutParams(layoutParams);
-
             GlideUtils.getInstance().loadImage(context, littleHolderView.miv_icon, goods.thumb);
+
             littleHolderView.tv_goods_title.setText(goods.title);
             if (!isEmpty(goods.price)) {
                 littleHolderView.tv_price.setText(getString(R.string.common_yuan) + " " + goods.price);

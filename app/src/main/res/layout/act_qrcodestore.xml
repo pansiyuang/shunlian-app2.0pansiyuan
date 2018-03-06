@@ -6,60 +6,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/title_common_layout" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/img_xiaodian_toubu"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <FrameLayout
-                android:id="@+id/fr_icon"
-                android:layout_width="58dp"
-                android:layout_height="58dp"
-                android:layout_centerHorizontal="true">
-
-                <com.shunlian.app.widget.circle.CircleImageView
-                    android:id="@+id/miv_icon"
-                    android:layout_width="58dp"
-                    android:layout_height="58dp"
-                    android:scaleType="centerCrop" />
-
-                <com.shunlian.app.widget.MyImageView
-                    android:id="@+id/miv_level"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:src="@mipmap/v0" />
-            </FrameLayout>
-
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_honour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/fr_icon"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/fr_icon"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/img_jingyingdaoshi"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tv_store_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="13.5dp"
-            android:text="我的小店"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"
         android:layout_width="match_parent"

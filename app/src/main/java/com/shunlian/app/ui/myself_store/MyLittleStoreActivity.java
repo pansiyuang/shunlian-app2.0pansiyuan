@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.AddGoodsAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.LittleStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -26,6 +25,7 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonStoreView;
@@ -101,6 +101,8 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        tv_title.setText(getStringResouce(R.string.decorate_my_store));
 
         goodsList = new ArrayList<>();
         selectList = new ArrayList<>();
@@ -189,6 +191,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 }
                 break;
             case R.id.tv_title_right:
+                isEdit = true;
                 showManager(true);
                 mAdapter.setEditMode(true);
                 break;
@@ -203,6 +206,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 promptDialog.show();
                 break;
             case R.id.tv_sure:
+                isEdit = false;
                 mAdapter.setEditMode(false);
                 showManager(false);
                 resetSelectData();
@@ -213,14 +217,12 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     public void showManager(boolean isShow) {
         if (isShow) {
-            isEdit = false;
             tv_title_right.setVisibility(View.GONE);
             rl_share.setVisibility(View.GONE);
             miv_add.setVisibility(View.GONE);
             tv_add_count.setVisibility(View.GONE);
             ll_manager.setVisibility(View.VISIBLE);
         } else {
-            isEdit = true;
             tv_title_right.setVisibility(View.VISIBLE);
             rl_share.setVisibility(View.VISIBLE);
             miv_add.setVisibility(View.VISIBLE);
@@ -243,31 +245,30 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     public void showEmptyView(boolean isShowEmpty) {
         if (isShowEmpty) {
             nei_empty.setImageResource(R.mipmap.img_xiaodian_kongyemian).setText(getStringResouce(R.string.store_empty));
-            nei_empty.setButtonText(getStringResouce(R.string.add_goods));
-            nei_empty.setVisibility(View.VISIBLE);
-            recycler_goods.setVisibility(View.GONE);
-            nei_empty.setOnClickListener(new View.OnClickListener() {
+            nei_empty.setButtonText(getStringResouce(R.string.add_goods)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AddStoreGoodsAct.startAct(MyLittleStoreActivity.this);
                 }
             });
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_goods.setVisibility(View.GONE);
 
             rl_share.setVisibility(View.GONE);
             ll_manager.setVisibility(View.GONE);
             tv_title_right.setVisibility(View.GONE);
             miv_add.setVisibility(View.GONE);
             tv_add_count.setVisibility(View.GONE);
-            tv_title.setText(getStringResouce(R.string.customize_my_store));
         } else {
             nei_empty.setVisibility(View.GONE);
             recycler_goods.setVisibility(View.VISIBLE);
 
-            tv_title.setText(getStringResouce(R.string.decorate_my_store));
             tv_title_right.setVisibility(View.VISIBLE);
             tv_title_right.setText(getStringResouce(R.string.manage));
             tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
 
+
+            LogUtil.httpLogW("isEdit:" + isEdit);
             if (isEdit) {
                 rl_share.setVisibility(View.GONE);
                 ll_manager.setVisibility(View.VISIBLE);
@@ -307,6 +308,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         tv_add_count.setText(String.format(getStringResouce(R.string.add_some_goods), count));
 
         if (isDel) {
+            isEdit = false;
             if (promptDialog != null) {
                 promptDialog.dismiss();
             }
@@ -331,6 +333,9 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     @Override
     public void onItemClick(View view, int position) {
+        if (!isEdit) {
+            return;
+        }
         GoodsDeatilEntity.Goods goods = goodsList.get(position);
         int currentIndex = goods.index;
         if (goods.isSelect) {
@@ -353,6 +358,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     }
 
     public void delGoods() {
+        stringBuffer.setLength(0);
         for (int i = 0; i < selectList.size(); i++) {
             stringBuffer.append(goodsList.get(i).goods_id);
             if (i != selectList.size() - 1) {

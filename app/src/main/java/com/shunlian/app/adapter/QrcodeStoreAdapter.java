@@ -16,6 +16,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -27,17 +28,28 @@ import butterknife.BindView;
 
 public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
+    public static final int HEAD_VIEW = 10002;
     public static final int FOOT_VIEW = 10003;
+    private String mName;
+    private String mAvatar;
+    private String mLevel;
+    private String mRole;
     private String qrcodeUrl;
 
-    public QrcodeStoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists, String url) {
+    public QrcodeStoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists, String nickName, String avatar, String level, String memberRole, String url) {
         super(context, false, lists);
+        this.mName = nickName;
+        this.mAvatar = avatar;
+        this.mLevel = level;
+        this.mRole = memberRole;
         this.qrcodeUrl = url;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == FOOT_VIEW) {
+        if (viewType == HEAD_VIEW) {
+            return new HeadHolderView(LayoutInflater.from(context).inflate(R.layout.head_qrcode_store, parent, false));
+        } else if (viewType == FOOT_VIEW) {
             return new FootHolderView(LayoutInflater.from(context).inflate(R.layout.bottom_qrcode_store, parent, false));
         } else {
             return new GoodsHolderView(LayoutInflater.from(context).inflate(R.layout.item_qrcode_goods, parent, false));
@@ -60,7 +72,7 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 @Override
                 public int getSpanSize(int position) {
                     int itemType = getItemViewType(position);
-                    if (itemType == FOOT_VIEW) {
+                    if (itemType == FOOT_VIEW || itemType == HEAD_VIEW) {
                         return ((GridLayoutManager) manager).getSpanCount();
                     }
                     return 1;
@@ -72,7 +84,9 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
     @Override
     public int getItemViewType(int position) {
-        if (position + 1 == getItemCount()) {
+        if (position == 0) {
+            return HEAD_VIEW;
+        } else if (position == getItemCount() - 1) {
             return FOOT_VIEW;
         }
         return super.getItemViewType(position);
@@ -80,7 +94,7 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 1;
+        return super.getItemCount() + 2;
     }
 
 
@@ -88,8 +102,20 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == FOOT_VIEW) {
             handFoot(holder);
+        } else if (getItemViewType(position) == HEAD_VIEW) {
+            handHead(holder);
         } else {
             handItem(holder, position);
+        }
+    }
+
+    public void handHead(RecyclerView.ViewHolder holder) {
+        if (holder instanceof HeadHolderView) {
+            HeadHolderView headHolderView = (HeadHolderView) holder;
+            headHolderView.tv_store_name.setText(mName);
+            GlideUtils.getInstance().loadImage(context, headHolderView.miv_circle_icon, mAvatar);
+            setMiv_level(mLevel, headHolderView.miv_level);
+            setMivHonour(mRole, headHolderView.miv_honour);
         }
     }
 
@@ -105,17 +131,18 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     public void handItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GoodsHolderView) {
             GoodsHolderView goodsHolderView = (GoodsHolderView) holder;
-            GoodsDeatilEntity.Goods goods = lists.get(position);
+            GoodsDeatilEntity.Goods goods = lists.get(position - 1);
 
-//            int space = TransformUtil.dip2px(context, 12);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - 72) / 2, TransformUtil.dip2px(context, 168.5f));
+            int width = TransformUtil.dip2px(context, (DeviceInfoUtil.getDeviceWidth(context) - 72) / 2);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, TransformUtil.dip2px(context, 168.5f));
             goodsHolderView.miv_icon.setLayoutParams(layoutParams);
 
+            int space = TransformUtil.dip2px(context, 12);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             if (position % 2 == 1) {
-                params.setMargins(0, 24, 24, 0);
+                params.setMargins(space, space, space, 0);
             } else {
-                params.setMargins(24, 24, 24, 0);
+                params.setMargins(0, space, space, 0);
             }
             goodsHolderView.rl_rootView.setLayoutParams(params);
 
@@ -153,6 +180,25 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         }
     }
 
+    public class HeadHolderView extends BaseRecyclerViewHolder {
+
+        @BindView(R.id.miv_circle_icon)
+        CircleImageView miv_circle_icon;
+
+        @BindView(R.id.miv_level)
+        MyImageView miv_level;
+
+        @BindView(R.id.miv_honour)
+        MyImageView miv_honour;
+
+        @BindView(R.id.tv_store_name)
+        TextView tv_store_name;
+
+        public HeadHolderView(View itemView) {
+            super(itemView);
+        }
+    }
+
     public class FootHolderView extends BaseRecyclerViewHolder {
 
         @BindView(R.id.miv_qrcode)
@@ -160,6 +206,45 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
         public FootHolderView(View itemView) {
             super(itemView);
+        }
+    }
+
+    public void setMivHonour(String type, MyImageView miv_honour) {
+        switch (type) {
+            case "1":
+                miv_honour.setImageResource(R.mipmap.img_chuangkejingying);
+                miv_honour.setVisibility(View.VISIBLE);
+                break;
+            case "2":
+                miv_honour.setImageResource(R.mipmap.img_jingyingdaoshi);
+                miv_honour.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    public void setMiv_level(String level, MyImageView miv_level) {
+        switch (level) {
+            default:
+                miv_level.setImageResource(R.mipmap.v0);
+                break;
+            case "1":
+                miv_level.setImageResource(R.mipmap.v1);
+                break;
+            case "2":
+                miv_level.setImageResource(R.mipmap.v2);
+                break;
+            case "3":
+                miv_level.setImageResource(R.mipmap.v3);
+                break;
+            case "4":
+                miv_level.setImageResource(R.mipmap.v4);
+                break;
+            case "5":
+                miv_level.setImageResource(R.mipmap.v5);
+                break;
+            case "6":
+                miv_level.setImageResource(R.mipmap.v6);
+                break;
         }
     }
 }

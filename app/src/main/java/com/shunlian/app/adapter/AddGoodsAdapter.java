@@ -71,7 +71,7 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
     }
 
     private boolean isBottom(int position) {
-        if (position + 1 == getItemCount()){
+        if (position + 1 == getItemCount()) {
             return true;
         }
         return false;
@@ -82,9 +82,6 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
         if (holder instanceof GoodsHolderView) {
             GoodsHolderView goodsHolderView = (GoodsHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((DeviceInfoUtil.getDeviceWidth(context) - TransformUtil.dip2px(context, 36)), TransformUtil.dip2px(context, 168.5f));
-            goodsHolderView.miv_icon.setLayoutParams(layoutParams);
 
             GlideUtils.getInstance().loadImage(context, goodsHolderView.miv_icon, goods.thumb);
             goodsHolderView.tv_goods_title.setText(goods.title);
@@ -129,6 +126,9 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
 
         @BindView(R.id.tv_select)
         TextView tv_select;
+
+        @BindView(R.id.rl_rootView)
+        RelativeLayout rl_rootView;
 
         public GoodsHolderView(View itemView) {
             super(itemView);

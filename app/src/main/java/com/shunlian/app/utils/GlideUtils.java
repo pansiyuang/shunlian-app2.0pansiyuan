@@ -80,6 +80,7 @@ public class GlideUtils {
             Glide.with(context)
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
+                    .dontAnimate()
                     .placeholder(R.mipmap.img_guige_moren)
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
