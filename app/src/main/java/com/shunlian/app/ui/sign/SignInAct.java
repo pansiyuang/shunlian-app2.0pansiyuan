@@ -91,6 +91,9 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
     public void anim(final String scores) {
         final float[] alpha = {0};
         final Timer timeAnim = new Timer();
+        if (handler == null) {
+            handler = new Handler();
+        }
         timeAnim.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -103,9 +106,6 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
                 });
             }
         }, 0, 50);
-        if (handler == null) {
-            handler = new Handler();
-        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
