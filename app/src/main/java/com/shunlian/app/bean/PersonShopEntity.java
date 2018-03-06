@@ -16,5 +16,14 @@ public class PersonShopEntity {
     public List<GoodsDeatilEntity.Goods> goods_list;
     public String qrcode;
     public String member_role;
-    public String share_link;
+    public ShareInfo shareInfo;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class ShareInfo {
+        public String title;
+        public String desc;
+        public String img;
+        public String qrcode_img;
+        public String wx_link;
+    }
 }

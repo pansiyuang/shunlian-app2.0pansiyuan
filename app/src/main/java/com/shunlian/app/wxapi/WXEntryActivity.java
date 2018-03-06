@@ -2,22 +2,39 @@ package com.shunlian.app.wxapi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.BindingPhoneAct;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXImageObject;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import static com.shunlian.app.utils.BitmapUtil.SAVE_PIC_PATH;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,WXEntryView {
 
@@ -28,13 +45,16 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     private MyHandler mHandler;
     private String currentDesc;
     private String currTitle;
+    private String shareLink;
     private String currentType;
     private String currentGoodsId;
     private WXEntryPresenter wxEntryPresenter;
 
-    public static void startAct(Context context,String flag){
+
+    public static void startAct(Context context, String flag, ShareInfoParam shareInfoParam){
         Intent intent = new Intent(context,WXEntryActivity.class);
         intent.putExtra("flag",flag);
+        intent.putExtra("shareInfoParam", shareInfoParam);
         context.startActivity(intent);
     }
 
@@ -78,33 +98,143 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             flag = getIntent().getExtras().getString("flag");
             //tv_nick.setText("");
             SharedPrefUtil.saveSharedPrfString("flag", flag);
-            final String shareLink, desc;
-            if (getIntent().getStringExtra("shareLink") != null) {
-                shareLink = getIntent().getExtras().getString("shareLink");
-            } else {
-                shareLink = "www.shunliandongli.com";
-            }
-            if (getIntent().getStringExtra("desc") != null) {
-                desc = getIntent().getExtras().getString("desc");
-            } else {
-                desc = "顺联动力商城";
-            }
-            currentDesc = desc;
-            if (getIntent().getStringExtra("title") != null) {
-                currTitle = getIntent().getExtras().getString("title");
-            } else {
-                currTitle = "顺联动力";
-            }
 
             currentType = getIntent().getStringExtra("type");
             currentGoodsId = getIntent().getStringExtra("goodsId");
 
+
+            if (getIntent().getSerializableExtra("shareInfoParam")!=null){
+                ShareInfoParam shareInfoParam= (ShareInfoParam) getIntent().getSerializableExtra("shareInfoParam");
+                if (!TextUtils.isEmpty(shareInfoParam.photo)) {
+//                    sharePicture(SendMessageToWX.Req.WXSceneSession,shareInfoParam.photo);
+
+                    Glide.with(this).load(shareInfoParam.photo).asBitmap().into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            sharePicture(SendMessageToWX.Req.WXSceneSession,resource);
+                        }
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            Common.staticToasts(getBaseContext(),"分享失败",R.mipmap.icon_common_tanhao);
+                        }
+                    });
+                }else {
+                    if (!TextUtils.isEmpty(shareInfoParam.title)) {
+                        currTitle = shareInfoParam.title;
+                    } else {
+                        currTitle = "顺联动力";
+                    }
+                    if (!TextUtils.isEmpty(shareInfoParam.desc)) {
+                        currentDesc = shareInfoParam.desc;
+                    } else {
+                        currentDesc = "顺联动力商城";
+                    }
+                    if (!TextUtils.isEmpty(shareInfoParam.shareLink)) {
+                        shareLink = shareInfoParam.shareLink;
+                    } else {
+                        shareLink = "www.shunliandongli.com";
+                    }
+                    if (!TextUtils.isEmpty(shareInfoParam.img)){
+                        String mImg=shareInfoParam.img;
+                        Glide.with(this).load(mImg).asBitmap().into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                if (flag.equals("shareFriend")) {
+                                    shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession, currTitle, currentDesc, resource, "friend");
+                                }
+//                            else if (flag.equals("shareCircle")) {
+//                                shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline, currTitle, desc, img, "circle");
+//                            } else {
+//                                getQRCodeImageUrl(flag);
+//                            }
+                            }
+
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                Bitmap img = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                                if (flag.equals("shareFriend")) {
+                                    shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession, currTitle, currentDesc, img, "friend");
+                                }
+//                            else if (flag.equals("shareCircle")) {
+//                                shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneTimeline, currTitle, desc, img, "circle");
+//                            } else {
+//                                getQRCodeImageUrl(flag);
+//                            }
+                            }
+                        });
+                    }else {
+                        Bitmap img = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        if (flag.equals("shareFriend")) {
+                            shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession, currTitle, currentDesc, img, "friend");
+                        }
+                    }
+                }
+            }
             if (flag.equals("login") || flag.equals("bind")) {
                 login();
             }
         }
     }
+    /**
+     * 构造一个用于请求的唯一标识
+     *
+     * @param type 分享的内容类型
+     * @return
+     */
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
 
+    /**
+     * 分享图片
+     */
+    private void sharePicture(int shareType,Bitmap bitmap) {
+
+        WXImageObject imgObj = new WXImageObject(bitmap);
+//        imgObj.setImagePath(SAVE_PIC_PATH);
+//        imgObj.setImagePath(photoUrl);
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = imgObj;
+//        Bitmap bmp = BitmapFactory.decodeFile(SAVE_PIC_PATH);
+//        Bitmap thumbBmp = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
+//        bitmap.recycle();
+
+        //设置缩略图
+        Bitmap mBp = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
+//        bitmap.recycle();//不能及时回收，后面可能还有保存图片操作
+        msg.thumbData = TransformUtil.bmpToByteArray(mBp, true);// 设置缩略图
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("img");
+        req.message = msg;
+        req.scene = shareType;
+        api.sendReq(req);
+        finish();
+    }
+    /**
+     * @param url 要分享的链接
+     */
+    private void shareUrl2Circle(final String url, int type, String title, String desc, Bitmap img, String flag) {
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = url;
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        if ("circle".equals(flag)) {
+//            msg.title = desc;
+            msg.title = title;
+        } else if ("friend".equals(flag)) {
+            msg.title = title;
+            msg.description = desc;
+        }
+        if (img!=null){
+            img = BitmapUtil.createBitmapThumbnail(img);
+            msg.setThumbImage(img);
+        }
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = type;
+        api.sendReq(req);
+        finish();
+    }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

@@ -1,10 +1,12 @@
 package com.shunlian.app.ui.myself_store;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,10 +19,12 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.LittleStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.PersonShopEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PersonStorePresent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
@@ -30,6 +34,7 @@ import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -80,6 +85,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     private boolean isEdit;
     private PromptDialog promptDialog;
     private PopMenu mPopMenu;
+    private String shareTitle,shareDesc,shareImg,shareQrImg,shareLink;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MyLittleStoreActivity.class);
@@ -114,12 +120,45 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 .setOnItemClickListener(new PopMenuItemListener() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
-                        Toast.makeText(MyLittleStoreActivity.this, "你点击了第" + position + "个位置", Toast.LENGTH_SHORT).show();
+                        switch (position){
+                            case 0:
+                                ShareInfoParam shareInfoParam=new ShareInfoParam();
+                                shareInfoParam.title=shareTitle;
+                                shareInfoParam.shareLink=shareLink;
+                                shareInfoParam.desc=shareDesc;
+                                shareInfoParam.img=shareImg;
+                                WXEntryActivity.startAct(MyLittleStoreActivity.this,"shareFriend",shareInfoParam);
+                                break;
+                            case 1:
+                                copyText();
+                                break;
+                            case 2:
+                                GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
+                                break;
+                        }
                     }
                 })
                 .build();
     }
 
+    private void copyText() {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+//        if (!TextUtils.isEmpty(shareTitle)) {
+//            sb.append(shareTitle);
+//            sb.append("\n");
+//        }
+        if (!TextUtils.isEmpty(shareDesc)) {
+            sb.append(shareDesc);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(shareLink)) {
+            sb.append(shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        Common.staticToasts(MyLittleStoreActivity.this,"复制链接成功",R.mipmap.icon_common_duihao);
+    }
     @Override
     protected void onResume() {
         mPresenter = new PersonStorePresent(this, this);
@@ -246,6 +285,13 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     @Override
     public void getShopDetail(PersonShopEntity personShopEntity) {
         goodsList.clear();
+        if (personShopEntity.shareInfo!=null){
+          shareDesc=personShopEntity.shareInfo.desc;
+          shareImg=personShopEntity.shareInfo.img;
+          shareLink=personShopEntity.shareInfo.wx_link;
+          shareQrImg=personShopEntity.shareInfo.qrcode_img;
+          shareTitle=personShopEntity.shareInfo.title;
+        }
         if (!isEmpty(personShopEntity.goods_list)) {
             goodsList.addAll(personShopEntity.goods_list);
             mAdapter.notifyDataSetChanged();
