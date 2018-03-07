@@ -101,7 +101,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 RegisterOneAct.stratAct(baseContext);
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity, "login");
+                WXEntryActivity.startAct(baseActivity, "login",null);
                 break;
         }
     }

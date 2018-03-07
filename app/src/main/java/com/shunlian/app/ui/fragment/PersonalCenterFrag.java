@@ -11,12 +11,16 @@ import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.presenter.PSignIn;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
+import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.PromptDialog;
@@ -377,17 +381,17 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         switch (personalcenterEntity.level) {
             case "up":
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
-                SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269), true);
+                SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269));
                 mtv_equal.setText(upBuilder);
                 break;
             case "down":
-                SpannableStringBuilder downBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.pink_color), true);
+                SpannableStringBuilder downBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.pink_color));
                 mtv_equal.setText(downBuilder);
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_xiajiantou);
                 break;
             default:
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_chiping);
-                SpannableStringBuilder defaultBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_1C8FE0), true);
+                SpannableStringBuilder defaultBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_1C8FE0));
                 mtv_equal.setText(defaultBuilder);
                 break;
         }
@@ -434,11 +438,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_zuji.setText(personalcenterEntity.footermark_fav_num);
 
         String member = String.format(getString(R.string.personal_member), personalcenterEntity.team_member_num);
-        SpannableStringBuilder memberBuilder = Common.changeColor(member, personalcenterEntity.team_member_num, getColorResouce(R.color.pink_color), true);
+        SpannableStringBuilder memberBuilder = Common.changeColor(member, personalcenterEntity.team_member_num, getColorResouce(R.color.pink_color));
         mtv_xiaodianhuiyuan.setText(memberBuilder);
 
         String order = String.format(getString(R.string.personal_order), personalcenterEntity.team_order_num);
-        SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color), true);
+        SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color));
         mtv_xiaodiandingdan.setText(orderBuilder);
 
         if (personalcenterEntity.sl_user_ranks.get(0) != null) {
@@ -541,9 +545,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     }
                 }).show();
                 break;
-            case R.id.rl_more:
             case R.id.mrlayout_yaoqing:
+                QrCodeAct.startAct(baseContext);
+                break;
+            case R.id.rl_more:
             case R.id.mrlayout_zhuangxiu:
+                MyLittleStoreActivity.startAct(getActivity());
+                break;
             case R.id.mllayout_yue:
             case R.id.mllayout_youhuiquan:
             case R.id.mllayout_dongli:
@@ -554,11 +562,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             case R.id.mrlayout_xiaodiandingdan:
                 // TODO: 2018/2/2
 //                小店订单
+                break;
             case R.id.mtv_qiandao:
             case R.id.miv_qiandao:
-                // TODO: 2018/2/2
-                //签到页面
-                Common.staticToast("程序猿正在努力开发中，敬请期待...");
+                SignInAct.startAct(baseContext);
                 break;
         }
     }

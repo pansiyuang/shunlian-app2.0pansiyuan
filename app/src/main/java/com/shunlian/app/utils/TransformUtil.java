@@ -35,6 +35,7 @@ import android.widget.ImageView;
 
 import com.shunlian.app.R;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 
 import static android.graphics.BitmapFactory.decodeResource;
@@ -346,5 +347,23 @@ public class TransformUtil {
         BigDecimal result4 = new BigDecimal(teraBytes);
 
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
+    }
+
+    public static byte[] bmpToByteArray(Bitmap var0, boolean var1) {
+        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
+        var0.compress(Bitmap.CompressFormat.PNG, 100, var2);
+        if(var1) {
+            var0.recycle();
+        }
+
+        byte[] var4 = var2.toByteArray();
+
+        try {
+            var2.close();
+        } catch (Exception var3) {
+            var3.printStackTrace();
+        }
+
+        return var4;
     }
 }

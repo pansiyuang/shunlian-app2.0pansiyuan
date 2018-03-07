@@ -1,5 +1,6 @@
 package com.shunlian.mylibrary;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
@@ -12,6 +13,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +77,167 @@ public class ImmersionBar {
     }
 
     /**
+     * 初始化Activity
+     * With immersion bar.
+     *
+     * @param activity the activity
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(Activity activity) {
+        return new ImmersionBar(activity);
+    }
+
+    /**
+     * 调用该方法必须保证加载Fragment的Activity先初始化
+     * With immersion bar.
+     *
+     * @param fragment the fragment
+     * @return the immersion bar
+     */
+    public static ImmersionBar with(Fragment fragment) {
+        return new ImmersionBar(fragment);
+    }
+
+    /**
+     * 设置状态栏字体图标为深色，需要MIUIV6以上
+     *
+     * @return boolean 成功执行返回true
+     */
+    private static void setMIUIStatusBarDarkFont(Window window, boolean darkFont) {
+        if (window != null) {
+            Class clazz = window.getClass();
+            try {
+                int darkModeFlag;
+                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (darkFont) {
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
+                } else {
+                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Has navigtion bar boolean.
+     * 判断是否存在导航栏
+     *
+     * @param activity the activity
+     * @return the boolean
+     */
+    @TargetApi(14)
+    public static boolean hasNavigationBar(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.hasNavigtionBar();
+    }
+
+    /**
+     * Gets navigation bar height.
+     * 获得导航栏的高度
+     *
+     * @param activity the activity
+     * @return the navigation bar height
+     */
+    @TargetApi(14)
+    public static int getNavigationBarHeight(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.getNavigationBarHeight();
+    }
+
+    @SuppressLint("NewApi")
+    public static boolean checkDeviceHasNavigationBar(Activity activity) {
+        WindowManager windowManager = activity.getWindowManager();
+        Display d = windowManager.getDefaultDisplay();
+
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            d.getRealMetrics(realDisplayMetrics);
+        }
+
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        d.getMetrics(displayMetrics);
+
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+    }
+
+    /**
+     * Gets navigation bar width.
+     * 获得导航栏的宽度
+     *
+     * @param activity the activity
+     * @return the navigation bar width
+     */
+    @TargetApi(14)
+    public static int getNavigationBarWidth(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.getNavigationBarWidth();
+    }
+
+    /**
+     * Is navigation at bottom boolean.
+     * 判断导航栏是否在底部
+     *
+     * @param activity the activity
+     * @return the boolean
+     */
+    @TargetApi(14)
+    public static boolean isNavigationAtBottom(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.isNavigationAtBottom();
+    }
+
+    /**
+     * Gets status bar height.
+     * 或得状态栏的高度
+     *
+     * @param activity the activity
+     * @return the status bar height
+     */
+    @TargetApi(14)
+    public static int getStatusBarHeight(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.getStatusBarHeight();
+    }
+
+    /**
+     * Gets action bar height.
+     * 或得ActionBar得高度
+     *
+     * @param activity the activity
+     * @return the action bar height
+     */
+    @TargetApi(14)
+    public static int getActionBarHeight(Activity activity) {
+        BarConfig config = new BarConfig(activity);
+        return config.getActionBarHeight();
+    }
+
+    /**
+     * 判断手机支不支持状态栏字体变色
+     * Is support status bar dark font boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isSupportStatusBarDarkFont() {
+        if (OSUtils.isMIUI6More() || OSUtils.isFlymeOS4More()
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
+            return true;
+        } else
+            return false;
+    }
+
+    /**
      * 初始化沉浸式默认参数
      * Init params.
      *
@@ -99,28 +263,6 @@ public class ImmersionBar {
         } else {
             mBarParams = mMap.get(name);
         }
-    }
-
-    /**
-     * 初始化Activity
-     * With immersion bar.
-     *
-     * @param activity the activity
-     * @return the immersion bar
-     */
-    public static ImmersionBar with(Activity activity) {
-        return new ImmersionBar(activity);
-    }
-
-    /**
-     * 调用该方法必须保证加载Fragment的Activity先初始化
-     * With immersion bar.
-     *
-     * @param fragment the fragment
-     * @return the immersion bar
-     */
-    public static ImmersionBar with(Fragment fragment) {
-        return new ImmersionBar(fragment);
     }
 
     /**
@@ -518,7 +660,6 @@ public class ImmersionBar {
         mBarParams.navigationBarAlpha = barAlpha;
         return this;
     }
-
 
     /**
      * 状态栏根据透明度最后变换成的颜色
@@ -1458,7 +1599,6 @@ public class ImmersionBar {
         }
     }
 
-
     /**
      * 通过状态栏高度动态设置状态栏布局
      */
@@ -1521,123 +1661,6 @@ public class ImmersionBar {
                 KeyboardPatch.patch(mActivity).disable(mBarParams.keyboardMode);
             }
         }
-    }
-
-    /**
-     * 设置状态栏字体图标为深色，需要MIUIV6以上
-     *
-     * @return boolean 成功执行返回true
-     */
-    private static void setMIUIStatusBarDarkFont(Window window, boolean darkFont) {
-        if (window != null) {
-            Class clazz = window.getClass();
-            try {
-                int darkModeFlag;
-                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-                darkModeFlag = field.getInt(layoutParams);
-                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                if (darkFont) {
-                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
-                } else {
-                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Has navigtion bar boolean.
-     * 判断是否存在导航栏
-     *
-     * @param activity the activity
-     * @return the boolean
-     */
-    @TargetApi(14)
-    public static boolean hasNavigationBar(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.hasNavigtionBar();
-    }
-
-    /**
-     * Gets navigation bar height.
-     * 获得导航栏的高度
-     *
-     * @param activity the activity
-     * @return the navigation bar height
-     */
-    @TargetApi(14)
-    public static int getNavigationBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.getNavigationBarHeight();
-    }
-
-    /**
-     * Gets navigation bar width.
-     * 获得导航栏的宽度
-     *
-     * @param activity the activity
-     * @return the navigation bar width
-     */
-    @TargetApi(14)
-    public static int getNavigationBarWidth(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.getNavigationBarWidth();
-    }
-
-    /**
-     * Is navigation at bottom boolean.
-     * 判断导航栏是否在底部
-     *
-     * @param activity the activity
-     * @return the boolean
-     */
-    @TargetApi(14)
-    public static boolean isNavigationAtBottom(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.isNavigationAtBottom();
-    }
-
-    /**
-     * Gets status bar height.
-     * 或得状态栏的高度
-     *
-     * @param activity the activity
-     * @return the status bar height
-     */
-    @TargetApi(14)
-    public static int getStatusBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.getStatusBarHeight();
-    }
-
-    /**
-     * Gets action bar height.
-     * 或得ActionBar得高度
-     *
-     * @param activity the activity
-     * @return the action bar height
-     */
-    @TargetApi(14)
-    public static int getActionBarHeight(Activity activity) {
-        BarConfig config = new BarConfig(activity);
-        return config.getActionBarHeight();
-    }
-
-    /**
-     * 判断手机支不支持状态栏字体变色
-     * Is support status bar dark font boolean.
-     *
-     * @return the boolean
-     */
-    public static boolean isSupportStatusBarDarkFont() {
-        if (OSUtils.isMIUI6More() || OSUtils.isFlymeOS4More()
-                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
-            return true;
-        } else
-            return false;
     }
 
     /**

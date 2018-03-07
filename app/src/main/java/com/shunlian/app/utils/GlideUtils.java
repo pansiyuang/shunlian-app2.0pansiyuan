@@ -346,13 +346,20 @@ public class GlideUtils {
         Glide.with(context).pauseRequests();
     }
 
-    //Glide下载图片
-    public void downPicture(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url)
-                .asBitmap()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
-                .skipMemoryCache(true)//跳过内存缓存
-                .into(imageView);
+    //Glide保存图片
+    public void savePicture(final Context context, String url) {
+        Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                BitmapUtil.saveImageToAlbumn(context,resource);
+                Common.staticToasts(context,"保存成功",R.mipmap.icon_common_duihao);
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                Common.staticToasts(context,"保存失败",R.mipmap.icon_common_tanhao);
+            }
+        });
     }
+
 }

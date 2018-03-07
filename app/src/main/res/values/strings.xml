@@ -449,6 +449,15 @@
     <string name="personal_member">共%s人</string>
     <string name="personal_order">共%s单</string>
 
+    <!--邀请朋友创业-->
+    <string name="qr_yaoqingpengyouchuangye">邀请朋友创业</string>
+    <string name="qr_yongweixinsaoyisao">用微信扫一扫或者顺联动力APP扫一扫</string>
+    <string name="qr_yaoqingweixinhaoyou">邀请微信好友</string>
+    <string name="qr_baocunerweimadaoxiangce">保存二维码到相册</string>
+    <string name="qr_yiyaoqing">已邀请%s人</string>
+    <string name="qr_chakanxiaodianhuiyuan">查看小店会员 ></string>
+
+
     <!-- 我的小店 -->
     <string name="share_my_store">分享我的店</string>
     <string name="add_some_goods">还可以添加%s个商品</string>
