@@ -221,7 +221,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         }
         childViewHolder.tv_content.setText(promotion.hint);
 
-        goodsAdapter = new EnableGoodsAdapter(mContext, false, promotion.goods, promotion);
+        goodsAdapter = new EnableGoodsAdapter(mContext,carFrag, false, promotion.goods, promotion);
         linearLayoutManager = new LinearLayoutManager(mContext);
         childViewHolder.recycler_goods.setLayoutManager(linearLayoutManager);
         childViewHolder.recycler_goods.setNestedScrollingEnabled(false);

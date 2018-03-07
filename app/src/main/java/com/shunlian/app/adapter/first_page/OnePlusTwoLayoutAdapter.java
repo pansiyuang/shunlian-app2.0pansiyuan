@@ -82,6 +82,7 @@ public class OnePlusTwoLayoutAdapter extends DelegateAdapter.Adapter {
                 public void onFinish() {
                     ddp_downTime.cancelDownTimer();
                 }
+
             });
             ddp_downTime.startDownTimer();
 

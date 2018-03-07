@@ -11,41 +11,48 @@
         android:paddingBottom="7.5dp"
         android:paddingTop="7.5dp">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_select"
-            android:layout_width="37dp"
-            android:layout_height="37dp"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:src="@mipmap/img_login_choice" />
+        <LinearLayout
+            android:id="@+id/ll_miv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_select"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:src="@mipmap/img_login_choice" />
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_goods"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="2.5dp"
-            android:layout_toRightOf="@id/miv_select"
-            android:scaleType="centerCrop" />
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_goods"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="2.5dp"
+                android:layout_toRightOf="@+id/miv_select"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/rl_goods_param"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/miv_goods"
+            android:layout_alignTop="@+id/ll_miv"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/miv_goods"
+            android:layout_toRightOf="@+id/ll_miv"
+            android:minHeight="100dp"
             android:paddingRight="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_goods_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
-                android:text="Dior/迪奥小姐花漾淡香氛30ml /50ml香水享精美礼盒包装"
+                android:maxLines="2"
                 android:textColor="@color/new_text"
                 android:textSize="13sp" />
 
@@ -57,74 +64,83 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="淡粉色，30ml"
                 android:textColor="@color/share_text"
                 android:textSize="12sp" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tv_goods_param"
+                android:layout_above="@+id/tv_goods_price"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_goods_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/pink_color"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_markdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/pink_color"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_active"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/pink_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/tv_goods_notice"
+                android:id="@+id/tv_goods_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_goods_param"
+                android:layout_alignParentBottom="true"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="已降价9.99元"
                 android:textColor="@color/pink_color"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="@color/share_text"
                 android:textSize="13sp" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_goods_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/miv_goods"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/miv_goods"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="¥  219"
-            android:textColor="@color/pink_color"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/tv_goods_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/miv_goods"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="x1"
-            android:textColor="@color/share_text"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/tv_edit_del"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:layout_alignBottom="@id/miv_goods"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/rounded_rectangle_pink_4px"
-            android:gravity="center"
-            android:text="@string/del"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/ll_goods_edit"
+        <RelativeLayout
+            android:id="@+id/rl_goods_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/miv_goods"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@+id/ll_miv"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/ll_count"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal">
@@ -162,11 +178,35 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_edit_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="¥  219"
+                android:textColor="@color/pink_color"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_edit_del"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_rectangle_pink_4px"
+                android:gravity="center"
+                android:text="@string/del"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="visible" />
+
+            <TextView
                 android:id="@+id/tv_edit_param"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_goods_title"
-                android:layout_marginTop="4dp"
+                android:layout_below="@+id/ll_count"
+                android:layout_marginTop="6dp"
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="淡粉色，30ml"
@@ -175,9 +215,10 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:id="@+id/rl_goods_parm"
+                android:id="@+id/rl_goods_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_count"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_rectangle_gray_6px"
                 android:padding="4dp">
@@ -199,7 +240,7 @@
                     android:layout_centerVertical="true"
                     android:src="@mipmap/icon_common_arrowdowns" />
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

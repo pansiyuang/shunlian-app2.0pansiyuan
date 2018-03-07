@@ -241,8 +241,11 @@ public class GoodsDeatilEntity {
         public String comment_num;           //评论数
         public String comment_rate;          //好评率
         public String from;
+        public EveryDay every_day;
         public int index;
         public boolean isSelect;
+        public String every_day_ing;
+        public String reduced;
 
         @Override
         public int describeContents() {
@@ -284,6 +287,12 @@ public class GoodsDeatilEntity {
             dest.writeString(this.send_area);
             dest.writeString(this.comment_num);
             dest.writeString(this.comment_rate);
+            dest.writeString(this.from);
+            dest.writeParcelable(this.every_day, flags);
+            dest.writeInt(this.index);
+            dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
+            dest.writeString(this.every_day_ing);
+            dest.writeString(this.reduced);
         }
 
         public Goods() {
@@ -324,6 +333,12 @@ public class GoodsDeatilEntity {
             this.send_area = in.readString();
             this.comment_num = in.readString();
             this.comment_rate = in.readString();
+            this.from = in.readString();
+            this.every_day = in.readParcelable(EveryDay.class.getClassLoader());
+            this.index = in.readInt();
+            this.isSelect = in.readByte() != 0;
+            this.every_day_ing = in.readString();
+            this.reduced = in.readString();
         }
 
         public static final Parcelable.Creator<Goods> CREATOR = new Parcelable.Creator<Goods>() {
@@ -335,6 +350,44 @@ public class GoodsDeatilEntity {
             @Override
             public Goods[] newArray(int size) {
                 return new Goods[size];
+            }
+        };
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class EveryDay implements Parcelable {
+        public String title;
+        public String left_time;
+        public String remind;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.left_time);
+            dest.writeString(this.remind);
+        }
+
+        public EveryDay() {
+        }
+
+        protected EveryDay(Parcel in) {
+            this.left_time = in.readString();
+            this.remind = in.readString();
+        }
+
+        public static final Parcelable.Creator<EveryDay> CREATOR = new Parcelable.Creator<EveryDay>() {
+            @Override
+            public EveryDay createFromParcel(Parcel source) {
+                return new EveryDay(source);
+            }
+
+            @Override
+            public EveryDay[] newArray(int size) {
+                return new EveryDay[size];
             }
         };
     }
@@ -559,6 +612,7 @@ public class GoodsDeatilEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Promotion {
+        public String prom_status;
         public String prom_id;               //活动id
         public String prom_label;            //活动label
         public String prom_type;             //活动类型
