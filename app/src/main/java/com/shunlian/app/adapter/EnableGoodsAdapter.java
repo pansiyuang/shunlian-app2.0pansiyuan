@@ -100,7 +100,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_prefer.setText(mPromotion.title_label);
         enableViewHolder.tv_discount.setText(mPromotion.prom_title);
         if ("1".equals(goods.every_day_ing)) {
-            enableViewHolder.tv_active.setText(everyDay.title + " " + everyDay.remind);
+            enableViewHolder.tv_active.setText(everyDay.remind + " " + everyDay.left_time);
             enableViewHolder.tv_active.setVisibility(View.VISIBLE);
 
             enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);

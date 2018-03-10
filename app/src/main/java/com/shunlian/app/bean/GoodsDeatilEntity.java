@@ -356,7 +356,6 @@ public class GoodsDeatilEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EveryDay implements Parcelable {
-        public String title;
         public String left_time;
         public String remind;
 

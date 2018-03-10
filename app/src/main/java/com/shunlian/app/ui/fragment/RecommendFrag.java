@@ -2,12 +2,10 @@ package com.shunlian.app.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,9 +18,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRecommmendView;
 
