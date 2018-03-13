@@ -43,13 +43,13 @@
             android:layout_alignTop="@+id/ll_miv"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/ll_miv"
-            android:minHeight="100dp"
             android:paddingRight="10dp"
+            android:minHeight="100dp"
             android:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_goods_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
@@ -68,10 +68,10 @@
                 android:textSize="12sp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/ll_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_goods_param"
-                android:layout_above="@+id/tv_goods_price"
                 android:orientation="vertical">
 
                 <TextView
@@ -110,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_below="@+id/ll_all"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lines="1"
@@ -120,6 +121,7 @@
                 android:id="@+id/tv_goods_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_all"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
