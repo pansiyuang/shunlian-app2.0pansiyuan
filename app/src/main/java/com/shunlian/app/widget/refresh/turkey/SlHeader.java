@@ -5,8 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.widget.MyImageView;
@@ -18,7 +17,7 @@ import com.shunlian.app.widget.refreshlayout.OnHeaderListener;
  * Created by zhouweilong on 2016/10/24.
  */
 
-public class SlHeader extends RelativeLayout implements OnHeaderListener {
+public class SlHeader extends FrameLayout implements OnHeaderListener {
     private static final int DONE = 0;
     private static final int PULL_TO_REFRESH = 1;
     private static final int RELEASE_TO_REFRESH = 2;
