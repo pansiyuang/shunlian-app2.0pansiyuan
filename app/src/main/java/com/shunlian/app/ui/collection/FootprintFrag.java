@@ -374,12 +374,14 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
-        LogUtil.httpLogW("onDateSelected():" + isClick);
         tv_date.setText(calendar.getYear() + "年" + calendar.getMonth() + "月");
 //        printPresenter.getMarklist(String.valueOf(calendar.getYear()), String.valueOf(calendar.getMonth()), String.valueOf(calendar.getDay()), false);
-
         if (isClick) {
-            mCurrentCalendar = calendar;
+            if (isEmpty(calendar.getScheme())) {
+                Common.staticToast("当前日期没有足迹");
+            } else {
+                mCurrentCalendar = calendar;
+            }
         }
     }
 

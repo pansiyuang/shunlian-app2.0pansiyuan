@@ -157,13 +157,15 @@
                     android:textColor="@color/my_gray_one"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/tv_goods_count"
+                <EditText
+                    android:id="@+id/edt_goods_count"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rectangle_gray"
                     android:gravity="center"
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
                     android:text="1"
                     android:textColor="@color/new_text"
                     android:textSize="15sp" />

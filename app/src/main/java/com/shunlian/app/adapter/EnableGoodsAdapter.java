@@ -2,10 +2,15 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -93,7 +98,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.tv_edit_param.setText(goods.sku);
         enableViewHolder.tv_goods_attribute.setText(goods.sku);
         enableViewHolder.tv_goods_num.setText("x" + goods.qty);
-        enableViewHolder.tv_goods_count.setText(goods.qty);
+        enableViewHolder.edt_goods_count.setText(goods.qty);
         enableViewHolder.tv_goods_price.setText("¥" + goods.price);
         enableViewHolder.tv_edit_price.setText("¥" + goods.price);
 
@@ -130,14 +135,12 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                     Common.staticToast("不能超出库存数量");
                     return;
                 }
-                enableViewHolder.tv_goods_count.setText(String.valueOf(count));
+                enableViewHolder.edt_goods_count.setText(String.valueOf(count));
                 onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
             }
         });
 
-        enableViewHolder.tv_goods_min.setOnClickListener(new View.OnClickListener()
-
-        {
+        enableViewHolder.tv_goods_min.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFastClick()) {
@@ -147,16 +150,53 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 if (count <= 0) {
                     return;
                 }
-                enableViewHolder.tv_goods_count.setText(String.valueOf(count));
+                enableViewHolder.edt_goods_count.setText(String.valueOf(count));
                 if (onGoodsChangeListener != null) {
                     onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
                 }
             }
         });
 
-        enableViewHolder.miv_select.setOnClickListener(new View.OnClickListener()
+        enableViewHolder.edt_goods_count.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isEmpty(s.toString())) {
+                    if (Integer.valueOf(s.toString()) > stock) {
+                        Common.staticToast("最多只能添加" + stock + "件商品哦");
+                        enableViewHolder.edt_goods_count.setText(stock + "");
+                        enableViewHolder.edt_goods_count.setSelection(String.valueOf(stock).length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        enableViewHolder.edt_goods_count.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (onGoodsChangeListener != null) {
+                        String s = enableViewHolder.edt_goods_count.getText().toString();
+                        if (isEmpty(s)) {
+                            s = goods.qty;
+                        }
+                        onGoodsChangeListener.OnChangeCount(goods.cart_id, Integer.valueOf(s));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        enableViewHolder.miv_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if ("1".equals(goods.is_check)) {
@@ -259,8 +299,8 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @BindView(R.id.tv_goods_num)
         TextView tv_goods_num;
 
-        @BindView(R.id.tv_goods_count)
-        TextView tv_goods_count;
+        @BindView(R.id.edt_goods_count)
+        EditText edt_goods_count;
 
         @BindView(R.id.rl_goods_attribute)
         RelativeLayout rl_goods_attribute;
