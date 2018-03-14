@@ -118,16 +118,40 @@
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
 
-    <com.shunlian.app.widget.MyTextView
+    <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="13dp"
-        android:text="@string/pay_nikeneng"
-        android:textColor="@color/new_text"
-        android:textSize="15sp" />
+        android:layout_marginTop="26dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/light_gray_three" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/pay_nikeneng"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/light_gray_three" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_goods"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_goods"/>
+        android:layout_marginTop="15dp" />
 </com.shunlian.app.widget.MyLinearLayout>

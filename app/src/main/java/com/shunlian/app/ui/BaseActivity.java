@@ -198,17 +198,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkBroadcast = new NetworkBroadcast();
-        registerReceiver(networkBroadcast, filter);
-        networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
+        if (!(this instanceof PayListActivity)){
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            networkBroadcast = new NetworkBroadcast();
+            registerReceiver(networkBroadcast, filter);
+            networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
 
-            @Override
-            public void updateUI(boolean isShow) {
-                showPopup(isShow);
-            }
-        });
+                @Override
+                public void updateUI(boolean isShow) {
+                    showPopup(isShow);
+                }
+            });
+        }
     }
 
     public void showPopup(boolean isShow){
@@ -448,8 +450,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        if (networkBroadcast != null){
+        if (networkBroadcast != null && !(this instanceof PayListActivity)){
             unregisterReceiver(networkBroadcast);
+            networkBroadcast = null;
         }
         dismissDialog(false);
     }
