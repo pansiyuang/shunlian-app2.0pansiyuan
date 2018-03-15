@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
+import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
@@ -1044,4 +1045,31 @@ public interface ApiService {
      */
     @GET("myshop/personShop")
     Call<BaseEntity<PersonShopEntity>> personShop(@QueryMap Map<String,String> map);
+
+    /**
+     * 精选列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/home")
+    Call<BaseEntity<ArticleEntity>> niceList(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选文章点赞
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/like")
+    Call<BaseEntity<EmptyEntity>> userLike(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选文章点赞
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/unlike ")
+    Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
 }
