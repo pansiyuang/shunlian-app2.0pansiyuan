@@ -1,12 +1,21 @@
 package com.shunlian.app.ui.fragment;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.DiscoverFlashAdapter;
+import com.shunlian.app.bean.DiscoveryNavEntity;
+import com.shunlian.app.presenter.PDiscover;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.discover.DiscoverGuanzhuFrag;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
@@ -14,18 +23,25 @@ import com.shunlian.app.ui.discover.DiscoverQuanZiFrag;
 import com.shunlian.app.ui.discover.DiscoverSucaikuFrag;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.discover.DiscoversFrag;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.view.IDiscover;
+import com.shunlian.app.view.IFootPrintView;
+import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.refresh.ring.RingRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.shunlian.app.R2.color.new_text;
-import static com.shunlian.app.R2.color.pink_color;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -33,7 +49,7 @@ import static com.shunlian.app.R2.color.pink_color;
  * 发现页面
  */
 
-public class DiscoverFrag extends BaseFragment {
+public class DiscoverFrag extends BaseFragment implements IDiscover {
     public final String FLAG_JINGXUAN = "flag_jingxuan";
     public final String FLAG_GUANZHU = "flag_guanzhu";
     public final String FLAG_GOUMAIXINDE = "flag_goumaixinde";
@@ -59,13 +75,45 @@ public class DiscoverFrag extends BaseFragment {
     View view_quanzi;
     @BindView(R.id.view_sucaiku)
     View view_sucaiku;
+
+    @BindView(R.id.rv_flash)
+    RecyclerView rv_flash;
+
+    @BindView(R.id.rv_content)
+    RecyclerView rv_content;
+
+    @BindView(R.id.mrlayout_jingxuan)
+    MyRelativeLayout mrlayout_jingxuan;
+
+    @BindView(R.id.mrlayout_guanzhu)
+    MyRelativeLayout mrlayout_guanzhu;
+
+    @BindView(R.id.mrlayout_goumaixinde)
+    MyRelativeLayout mrlayout_goumaixinde;
+
+    @BindView(R.id.mrlayout_quanzi)
+    MyRelativeLayout mrlayout_quanzi;
+
+    @BindView(R.id.mrlayout_sucaiku)
+    MyRelativeLayout mrlayout_sucaiku;
+
+    @BindView(R.id.mAppbar)
+    AppBarLayout mAppbar;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
+    @BindView(R.id.refreshview)
+    RingRefreshView refreshview;
     private Map<String, DiscoversFrag> fragments;
     private DiscoverGuanzhuFrag guanzhuFrag;
     private DiscoverJingxuanFrag jingxuanFrag;
     private DiscoverSucaikuFrag sucaikuFrag;
     private DiscoverXindeFrag xindeFrag;
     private DiscoverQuanZiFrag quanZiFrag;
-    private String currentFrag = FLAG_JINGXUAN;//当前frag
+    private DiscoverFlashAdapter flashAdapter;
+    private PDiscover pDiscover;
+    private String flag_jingxuan, flag_guanzhu, flag_xinde, flag_quanzi, flag_sucaiku;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -91,6 +139,28 @@ public class DiscoverFrag extends BaseFragment {
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         fragments = new HashMap<>();
+        pDiscover=new PDiscover(getContext(),this);
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pDiscover.initData();
+            }
+            @Override
+            public void onLoadMore() {
+            }
+        });
+
+//        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//
+////                rv_content.setNestedScrollingEnabled(verticalOffset!=0);
+//                LogUtil.augusLogW("yxf---"+verticalOffset);
+//            }
+//        });
+
     }
 
 
@@ -104,11 +174,10 @@ public class DiscoverFrag extends BaseFragment {
         switchContent(jingxuanFrag);
     }
 
-    @OnClick(R.id.mllayout_jingxuan)
+    @OnClick(R.id.mrlayout_jingxuan)
     public void jingXuan() {
-        currentFrag = FLAG_JINGXUAN;
         showSataus(0);
-        jingXuanFrag();
+        judge(flag_jingxuan);
     }
 
     public void guanZhuFrag() {
@@ -123,9 +192,8 @@ public class DiscoverFrag extends BaseFragment {
 
     @OnClick(R.id.mrlayout_guanzhu)
     public void guanZhu() {
-        currentFrag = FLAG_GUANZHU;
         showSataus(1);
-        guanZhuFrag();
+        judge(flag_guanzhu);
     }
 
     public void xindeFrag() {
@@ -140,9 +208,8 @@ public class DiscoverFrag extends BaseFragment {
 
     @OnClick(R.id.mrlayout_goumaixinde)
     public void xinde() {
-        currentFrag = FLAG_GOUMAIXINDE;
         showSataus(2);
-        xindeFrag();
+        judge(flag_xinde);
     }
 
     public void quanziFrag() {
@@ -157,9 +224,8 @@ public class DiscoverFrag extends BaseFragment {
 
     @OnClick(R.id.mrlayout_quanzi)
     public void quanzi() {
-        currentFrag = FLAG_QUANZI;
         showSataus(3);
-        quanziFrag();
+        judge(flag_quanzi);
     }
 
     public void sucaikuFrag() {
@@ -174,9 +240,28 @@ public class DiscoverFrag extends BaseFragment {
 
     @OnClick(R.id.mrlayout_sucaiku)
     public void sucaiku() {
-        currentFrag = FLAG_SUCAIKU;
         showSataus(4);
-        sucaikuFrag();
+        judge(flag_sucaiku);
+    }
+
+    public void judge(String flag) {
+        switch (flag) {
+            case "nice":
+                jingXuanFrag();
+                break;
+            case "focus":
+                guanZhuFrag();
+                break;
+            case "experience":
+                xindeFrag();
+                break;
+            case "circle":
+                quanziFrag();
+                break;
+            case "material":
+                sucaikuFrag();
+                break;
+        }
     }
 
     private void showSataus(int status) {
@@ -223,5 +308,111 @@ public class DiscoverFrag extends BaseFragment {
                 ft.commit();
             }
         }
+    }
+
+    @Override
+    public void setNavData(final DiscoveryNavEntity navEntity) {
+        refreshview.stopRefresh(true);
+        List<DiscoveryNavEntity.Flash> flashs=new ArrayList<>();
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        flashs.addAll(navEntity.flash_list);
+        DiscoverFlashAdapter flashAdapters = new DiscoverFlashAdapter(getContext(), false, flashs);
+        LinearLayoutManager flashManagers = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rv_content.setLayoutManager(flashManagers);
+//        rv_content.setNestedScrollingEnabled(false);
+        rv_content.setAdapter(flashAdapters);
+
+
+        if (flashAdapter == null) {
+            flashAdapter = new DiscoverFlashAdapter(getContext(), false, navEntity.flash_list);
+            LinearLayoutManager flashManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            rv_flash.setLayoutManager(flashManager);
+            rv_flash.setAdapter(flashAdapter);
+            flashAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(getContext(), navEntity.flash_list.get(position).id);
+                }
+            });
+        } else {
+            flashAdapter.notifyDataSetChanged();
+        }
+        if (navEntity.nav_list != null && navEntity.nav_list.size() > 0) {
+            switch (navEntity.nav_list.size()) {
+                case 1:
+                    mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
+                    mrlayout_jingxuan.setVisibility(View.VISIBLE);
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    break;
+                case 2:
+                    mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
+                    mrlayout_jingxuan.setVisibility(View.VISIBLE);
+                    mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
+                    mrlayout_guanzhu.setVisibility(View.VISIBLE);
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;
+                    break;
+                case 3:
+                    mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
+                    mrlayout_jingxuan.setVisibility(View.VISIBLE);
+                    mtv_goumaixinde.setText(navEntity.nav_list.get(2).name);
+                    mrlayout_goumaixinde.setVisibility(View.VISIBLE);
+                    mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
+                    mrlayout_guanzhu.setVisibility(View.VISIBLE);
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;
+                    flag_xinde = navEntity.nav_list.get(2).code;
+                    break;
+                case 4:
+                    mtv_quanzi.setText(navEntity.nav_list.get(3).name);
+                    mrlayout_quanzi.setVisibility(View.VISIBLE);
+                    mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
+                    mrlayout_jingxuan.setVisibility(View.VISIBLE);
+                    mtv_goumaixinde.setText(navEntity.nav_list.get(2).name);
+                    mrlayout_goumaixinde.setVisibility(View.VISIBLE);
+                    mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
+                    mrlayout_guanzhu.setVisibility(View.VISIBLE);
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;
+                    flag_xinde = navEntity.nav_list.get(2).code;
+                    flag_quanzi = navEntity.nav_list.get(3).code;
+                    break;
+                case 5:
+                    mtv_sucaiku.setText(navEntity.nav_list.get(4).name);
+                    mrlayout_sucaiku.setVisibility(View.VISIBLE);
+                    mtv_quanzi.setText(navEntity.nav_list.get(3).name);
+                    mrlayout_quanzi.setVisibility(View.VISIBLE);
+                    mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
+                    mrlayout_jingxuan.setVisibility(View.VISIBLE);
+                    mtv_goumaixinde.setText(navEntity.nav_list.get(2).name);
+                    mrlayout_goumaixinde.setVisibility(View.VISIBLE);
+                    mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
+                    mrlayout_guanzhu.setVisibility(View.VISIBLE);
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;
+                    flag_xinde = navEntity.nav_list.get(2).code;
+                    flag_quanzi = navEntity.nav_list.get(3).code;
+                    flag_sucaiku = navEntity.nav_list.get(4).code;
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+        refreshview.stopRefresh(true);
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }
