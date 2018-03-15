@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
@@ -30,10 +29,10 @@
                 android:id="@+id/view_jingxuan"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp"
-                android:background="@color/pink_color" />
+                android:background="@color/pink_color"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"/>
 
         </com.shunlian.app.widget.MyLinearLayout>
 
@@ -58,11 +57,11 @@
                 android:id="@+id/view_guanzhu"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/pink_color"
-                android:visibility="invisible" />
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:visibility="invisible"/>
 
         </com.shunlian.app.widget.MyLinearLayout>
 
@@ -87,10 +86,10 @@
                 android:id="@+id/view_goumaixinde"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/pink_color"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:visibility="invisible" />
 
         </com.shunlian.app.widget.MyLinearLayout>
@@ -116,14 +115,13 @@
                 android:id="@+id/view_quanzi"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/pink_color"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:visibility="invisible" />
 
         </com.shunlian.app.widget.MyLinearLayout>
-
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mrlayout_sucaiku"
             android:layout_width="0dp"
@@ -145,17 +143,12 @@
                 android:id="@+id/view_sucaiku"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/pink_color"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:visibility="invisible" />
 
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyLinearLayout>
-
-    <FrameLayout
-        android:id="@+id/flayout_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</com.shunlian.app.widget.MyLinearLayout>
+</RelativeLayout>
