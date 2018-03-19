@@ -11,6 +11,7 @@ import java.util.List;
 public class CommonEntity {
     public String fid;//商品收藏id
     public String message;
+    public String new_likes;//点赞数量
     public String praise_total;//总赞数
     public List<String> suggest_list; // 搜索关键字提示接口
     public List<CalendarEntity> calendar; //获取足迹日历形式信息接口

@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -422,6 +423,27 @@ public class Common {
         } else {
             ssb.setSpan(colorSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ssb.setSpan(sizeSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ssb;
+    }
+
+    /**
+     * 文字加粗
+     * @param source    源字符串
+     * @param changeStr 需要加粗的字符串
+     * @return
+     */
+    public static SpannableStringBuilder changetextbold(String source, String changeStr) {
+        BoldTextSpan boldTextSpan = new BoldTextSpan();
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        int i = source.indexOf(changeStr);
+        if (i == -1) {
+            return ssb;
+        } else {
+            ssb.setSpan(boldTextSpan, i, i + changeStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return ssb;
     }
