@@ -65,11 +65,11 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             @Override
             public void onClick(View view) {
                 PADiscoverSucaiku paDiscoverSucaiku=new PADiscoverSucaiku(context,DiscoverSucaikuAdapter.this);
-//                if ("1".equals(content.praise)){
-                    paDiscoverSucaiku.dianZan(content.id,content.praise,position);
-//                }else {
-//
-//                }
+                if ("1".equals(content.praise)){
+                    paDiscoverSucaiku.dianZan(content.id,"2",position);
+                }else {
+                    paDiscoverSucaiku.dianZan(content.id,"1",position);
+                }
             }
         });
 
