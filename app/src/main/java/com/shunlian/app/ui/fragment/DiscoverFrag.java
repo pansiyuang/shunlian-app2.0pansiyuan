@@ -105,6 +105,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover {
 
     @BindView(R.id.refreshview)
     RingRefreshView refreshview;
+
     private Map<String, DiscoversFrag> fragments;
     private DiscoverGuanzhuFrag guanzhuFrag;
     private DiscoverJingxuanFrag jingxuanFrag;

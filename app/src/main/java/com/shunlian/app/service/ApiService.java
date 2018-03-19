@@ -37,6 +37,7 @@ import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
@@ -1053,4 +1054,21 @@ public interface ApiService {
      */
     @GET("discovery/nice/nav")
     Call<BaseEntity<DiscoveryNavEntity>> discoveryNav(@QueryMap Map<String,String> map);
+
+    /**
+     * 素材前台列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/material/list")
+    Call<BaseEntity<DiscoveryMaterialEntity>> discoveryMaterial(@QueryMap Map<String,String> map);
+
+    /**
+     * 素材点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/material/praise")
+    Call<BaseEntity<CommonEntity>> discoveryPraise(@Body RequestBody body);
 }
