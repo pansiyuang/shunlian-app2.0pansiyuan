@@ -65,7 +65,7 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
     @Override
     public void setApiData(DiscoveryMaterialEntity data) {
         if (discoverSucaikuAdapter == null) {
-            discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, data.list);
+            discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, data.list,getActivity());
             linearLayoutManager = new LinearLayoutManager(getContext());
             rv_sucaiku.setLayoutManager(linearLayoutManager);
             rv_sucaiku.setAdapter(discoverSucaikuAdapter);

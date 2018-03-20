@@ -2,6 +2,7 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ public class PromptDialog {
     private TextView tvSure;
     private TextView tvCancle;
     private TextView tvMessage;
+    private TextView tv_messages;
     private MyTextView mtv_describe;
 
     public PromptDialog(Activity ctx) {
@@ -37,6 +39,7 @@ public class PromptDialog {
         tvSure = (TextView) logoutDialog.findViewById(R.id.tv_sure);
         tvCancle = (TextView) logoutDialog.findViewById(R.id.tv_cancel);
         tvMessage = (TextView) logoutDialog.findViewById(R.id.tv_message);
+        tv_messages = (TextView) logoutDialog.findViewById(R.id.tv_messages);
         mtv_describe = (MyTextView) logoutDialog.findViewById(R.id.mtv_describe);
     }
 
@@ -96,6 +99,15 @@ public class PromptDialog {
     public void setTvMessage(CharSequence text) {
         if (tvMessage != null) {
             tvMessage.setText(text);
+        }
+    }
+
+    public void setTvMessages(CharSequence text,CharSequence texts) {
+        if (tvMessage != null) {
+            tvMessage.setText(text);
+        }
+        if (tv_messages != null) {
+            tv_messages.setText(texts);
         }
     }
 
@@ -186,7 +198,22 @@ public class PromptDialog {
         return this;
     }
 
-
+    public PromptDialog setSureAndCancleListener(CharSequence titel,CharSequence tite2,CharSequence describe, CharSequence tvSureText,
+                                                 View.OnClickListener sureListener,
+                                                 CharSequence tvCancleText, View.OnClickListener cancleListener) {
+        tv_messages.setVisibility(View.VISIBLE);
+        setTvMessages(titel,tite2);
+        setTvSureText(tvSureText);
+        setTvDescribe(describe);
+        if (tvSure != null) {
+            tvSure.setOnClickListener(sureListener);
+        }
+        setTvCancleText(tvCancleText);
+        if (tvCancle != null) {
+            tvCancle.setOnClickListener(cancleListener);
+        }
+        return this;
+    }
     public void show() {
         if (!ctx.isFinishing()&&logoutDialog!=null&&!logoutDialog.isShowing()) {
             logoutDialog.show();

@@ -24,6 +24,16 @@
             android:textColor="@color/new_text"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/tv_messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:text="确定要删除吗确定要删除吗？"
+            android:gravity="center"
+            android:textColor="@color/new_text"
+            android:textSize="16sp"
+            android:visibility="gone"/>
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_describe"
             android:layout_width="match_parent"

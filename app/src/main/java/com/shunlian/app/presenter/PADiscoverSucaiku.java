@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
@@ -43,7 +44,7 @@ public class PADiscoverSucaiku extends BasePresenter<IADiscoverSucaiku> {
     protected void initApi() {
 
     }
-    public void dianZan(String material_id, String status, final int position){
+    public void dianZan(String material_id, String status, final DiscoverSucaikuAdapter.SucaikuHolder viewHolder){
         Map<String, String> map = new HashMap<>();
         map.put("material_id", material_id);
         map.put("status", status);
@@ -53,7 +54,7 @@ public class PADiscoverSucaiku extends BasePresenter<IADiscoverSucaiku> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.dianZan(position);
+                iView.dianZan(viewHolder);
             }
         });
     }

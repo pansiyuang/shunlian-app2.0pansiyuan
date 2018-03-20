@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -37,17 +37,7 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MViewHolder viewHolder = (MViewHolder) holder;
-        GlideUtils.getInstance().loadCornerImage(context,viewHolder.miv_pic,lists.get(position),8);
-        int siglePicWidth = Common.getScreenWidth((Activity) context) - 28;
-        int picWidth = (Common.getScreenWidth((Activity) context) - 12 - 18) / 3;
-
-        if (lists.size() == 1) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(siglePicWidth,((TransformUtil.dip2px(context,180))));
-            viewHolder.miv_pic.setLayoutParams(params);
-        } else {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
-            viewHolder.miv_pic.setLayoutParams(params);
-        }
+        GlideUtils.getInstance().loadCornerImage(context,viewHolder.miv_pic,lists.get(position),4);
     }
 
     @Override
@@ -65,6 +55,11 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
 
         public MViewHolder(View itemView) {
             super(itemView);
+//            int picWidth = (Common.getScreenWidth((Activity) context) - 18 - 40) / 3;
+//
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
+//            miv_pic.setLayoutParams(params);
+//
             itemView.setOnClickListener(this);
         }
 

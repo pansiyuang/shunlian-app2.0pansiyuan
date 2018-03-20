@@ -6,7 +6,8 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:paddingTop="19dp">
 
 
     <com.shunlian.app.widget.MyTextView
@@ -15,6 +16,14 @@
         android:layout_height="wrap_content"
         android:textColor="@color/new_text"
         android:textSize="16sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_pics"
@@ -27,15 +36,6 @@
         android:layout_height="34dp"
         android:layout_marginTop="23dp">
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_share"
-            android:layout_width="269dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/pink_color"
-            android:textSize="14sp"
-            android:text="@string/discover_qufenxiang"
-            android:background="@drawable/bg_go_share"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_zan"
@@ -52,9 +52,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="5dp"
+            android:padding="8dp"
             android:layout_toLeftOf="@id/mtv_zan"
             android:src="@mipmap/icon_found_zan_n" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_toLeftOf="@id/miv_zan"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp"
+            android:text="@string/discover_qufenxiang"
+            android:background="@drawable/bg_go_share"/>
     </com.shunlian.app.widget.MyRelativeLayout>
 
 </com.shunlian.app.widget.MyLinearLayout>

@@ -9,6 +9,7 @@ import android.view.View;
  */
 
 public class GrideItemDecoration extends RecyclerView.ItemDecoration {
+    //适用于2列，三列目前有问题
     private final int spaceLeft;
     private final int spaceTop;
     private final int spaceRight;
