@@ -11,12 +11,9 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.FindCommentDetailAdapter;
-import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
@@ -24,8 +21,6 @@ import com.shunlian.app.view.IFindCommentDetailView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -55,10 +50,6 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     MyTextView mtv_title;
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
-    private FindCommentDetailAdapter adapter;
-    private FindCommentListEntity.ItemComment itemComment;
-    private int currentTouchItem = -1;
-    private List<FindCommentListEntity.ItemComment> mLikesBeans;
 
     public static void startAct(Context context,String comment_id){
         Intent intent = new Intent(context, CommentDetailAct.class);
@@ -137,68 +128,27 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     }
 
     @Override
-    public void commentDetailList(final List<FindCommentListEntity.ItemComment> likesBeans, int page, int allpage) {
-        this.mLikesBeans = likesBeans;
-        if (adapter == null) {
-            met_text.setHint("@"+likesBeans.get(0).nickname);
-            adapter = new FindCommentDetailAdapter(this, likesBeans);
-            recy_view.setAdapter(adapter);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (presenter != null){
-                        presenter.onRefresh();
-                    }
-                }
-            });
-
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    currentTouchItem = position;
-                    LogUtil.zhLogW("====currentTouchItem======"+currentTouchItem);
-                    itemComment = likesBeans.get(position);
-                    if ("1".equals(itemComment.delete_enable)){//删除评论
-                        delComment();
-                    }else{
-                        setEdittextFocusable(true,met_text);
-                        met_text.setHint("@".concat(itemComment.nickname));
-                        if (!isSoftShowing()) {
-                            Common.showKeyboard(met_text);
-                        }else {
-                            Common.hideKeyboard(met_text);
-                        }
-                    }
-
-                }
-            });
-
-            adapter.setPointFabulousListener(new FindCommentDetailAdapter.OnPointFabulousListener() {
-                @Override
-                public void onPointFabulous(int position) {
-                    if (presenter != null){
-                        if (presenter != null){
-                            currentTouchItem = position;
-                            FindCommentListEntity.ItemComment itemComment = mLikesBeans.get(position);
-                            LogUtil.zhLogW(itemComment.item_id+"<====>"+itemComment.had_like);
-                            presenter.pointFabulous(itemComment.item_id,itemComment.had_like);
-                        }
-                    }
-                }
-            });
+    public void showorhideKeyboard(String hint){
+        setEdittextFocusable(true,met_text);
+        met_text.setHint(hint);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
         }else {
-            adapter.notifyDataSetChanged();
+            Common.hideKeyboard(met_text);
         }
-        adapter.setPageLoading(page,allpage);
     }
 
-    private void delComment() {
+    /**
+     * 删除提示
+     */
+    @Override
+    public void delPrompt() {
         final PromptDialog dialog = new PromptDialog(this);
         dialog.setSureAndCancleListener("确认删除评论吗？", "确认", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (presenter != null){
-                    presenter.delComment(itemComment.item_id);
+                    presenter.delComment();
                 }
                 dialog.dismiss();
             }
@@ -208,26 +158,6 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 dialog.dismiss();
             }
         }).show();
-    }
-
-
-    /**
-     * 刷新item
-     * @param itemComment
-     */
-    @Override
-    public void refreshItem(FindCommentListEntity.ItemComment itemComment) {
-        mLikesBeans.add(0,itemComment);
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 删除成功
-     */
-    @Override
-    public void delSuccess() {
-        mLikesBeans.remove(currentTouchItem);
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -244,16 +174,23 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     }
 
     /**
-     * 点赞
+     * 设置adapter
      *
-     * @param new_likes
+     * @param adapter
      */
     @Override
-    public void setPointFabulous(String new_likes) {
-        FindCommentListEntity.ItemComment itemComment = mLikesBeans.get(currentTouchItem);
-        itemComment.likes = new_likes;
-        itemComment.had_like = "0".equals(itemComment.had_like) ? "1" : "0";
-        adapter.notifyDataSetChanged();
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
+    }
+
+    /**
+     * 设置hint
+     *
+     * @param hint
+     */
+    @Override
+    public void setHint(String hint) {
+        met_text.setHint(hint);
     }
 
     private boolean isSoftShowing() {
@@ -262,20 +199,13 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         //获取View可见区域的bottom
         Rect rect = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-
         return screenHeight - rect.bottom != 0;
     }
 
     @OnClick(R.id.mtv_send)
     public void send(){
         String s = met_text.getText().toString();
-        String pid = "";
-        if (itemComment != null){
-            pid = itemComment.item_id;
-        }else {
-            pid = mLikesBeans.get(0).item_id;
-        }
-        presenter.sendComment(s,pid);
+        presenter.sendComment(s);
         met_text.setText("");
         met_text.setHint("添加评论");
         setEdittextFocusable(false,met_text);

@@ -13,6 +13,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
@@ -152,6 +154,9 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
             GridLayoutManager manager = new GridLayoutManager(context,3);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
+            int i = TransformUtil.dip2px(context, 6);
+            GrideItemDecoration grideItemDecoration = new GrideItemDecoration(0,i,i,0,true);
+            recy_view.addItemDecoration(grideItemDecoration);
         }
     }
 }

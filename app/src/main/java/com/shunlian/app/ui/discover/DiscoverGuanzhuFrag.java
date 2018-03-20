@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.discover;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,6 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.GuanzhuAdapter;
 import com.shunlian.app.bean.GuanzhuEntity;
-import com.shunlian.app.presenter.GuanzhuPresenter;
-import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGuanzhuView;
 
 import java.util.List;
@@ -31,14 +27,14 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
 
     @Override
     protected void initData() {
-//        CommentListAct.startAct(baseActivity,"1");
+        CommentListAct.startAct(baseActivity,"1");
 
-        GuanzhuPresenter presenter = new GuanzhuPresenter(baseContext,this);
-        LinearLayoutManager manager = new LinearLayoutManager(baseActivity);
-        recy_view.setLayoutManager(manager);
-        int space = TransformUtil.dip2px(baseActivity, 10);
-        recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getColorResouce(R.color.white_ash)));
+//        GuanzhuPresenter presenter = new GuanzhuPresenter(baseContext,this);
+//        LinearLayoutManager manager = new LinearLayoutManager(baseActivity);
+//        recy_view.setLayoutManager(manager);
+//        int space = TransformUtil.dip2px(baseActivity, 10);
+//        recy_view.addItemDecoration(new VerticalItemDecoration(space,
+//                0,0,getColorResouce(R.color.white_ash)));
     }
 
     /**

@@ -23,7 +23,6 @@ public class FindCommentListEntity {
         public String avatar;
         public String nickname;
         public String level;
-//        public String comment_id;
         public String content;
         public String likes;
         public String had_like;

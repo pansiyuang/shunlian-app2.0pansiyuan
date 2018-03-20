@@ -137,8 +137,10 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         mHolder.mtv_content.setText(itemComment.content);
 
         if ("1".equals(itemComment.had_like)){
+            mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
             mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
         }else {
+            mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
             mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
         }
 
@@ -150,39 +152,42 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         }else {
             mHolder.ll_sub_bg.setVisibility(View.VISIBLE);
             mHolder.miv_sanjiao.setVisibility(View.VISIBLE);
-
-
-            mHolder.ll_sub_bg.removeAllViews();
-            for (int j = 0; j < reply_list.size(); j++) {
-                SubCommentItemView view = new SubCommentItemView(context);
-                FindCommentListEntity.ReplyList replyList = reply_list.get(j);
-                if (!isEmpty(replyList.at)){
-                    String source = replyList.at.concat(replyList.reply);
-                    SpannableStringBuilder changetextbold = Common.changetextbold(source, replyList.at);
-                    view.setContent(changetextbold);
-                }else {
-                    view.setContent(replyList.reply);
-                }
-                view.setHeadPic(replyList.reply_avatar)
-                        .setName(replyList.reply_by)
-                        .setTime(replyList.reply_time);
-                if ("1".equals(itemComment.has_more_reply)){
-                    if (j+1 == reply_list.size()){
-                        view.setMoreCount(true,itemComment.reply_count);
-                    }else {
-                        view.setMoreCount(false,null);
-                    }
-                }else {
-                    view.setMoreCount(false,null);
-                }
-                mHolder.ll_sub_bg.addView(view);
-            }
+            //回复
+            reply(mHolder, itemComment, reply_list);
         }
 
         if (position==1 || position == mHotCommentCount + (mHotCommentCount == 0 ? 1 : 2)){
             mHolder.view_line.setVisibility(View.GONE);
         }else {
             mHolder.view_line.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void reply(FindCommentListHolder mHolder, FindCommentListEntity.ItemComment itemComment, List<FindCommentListEntity.ReplyList> reply_list) {
+        mHolder.ll_sub_bg.removeAllViews();
+        for (int j = 0; j < reply_list.size(); j++) {
+            SubCommentItemView view = new SubCommentItemView(context);
+            FindCommentListEntity.ReplyList replyList = reply_list.get(j);
+            if (!isEmpty(replyList.at)){
+                String source = replyList.at.concat(replyList.reply);
+                SpannableStringBuilder changetextbold = Common.changetextbold(source, replyList.at);
+                view.setContent(changetextbold);
+            }else {
+                view.setContent(replyList.reply);
+            }
+            view.setHeadPic(replyList.reply_avatar)
+                    .setName(replyList.reply_by)
+                    .setTime(replyList.reply_time);
+            if ("1".equals(itemComment.has_more_reply)){
+                if (j+1 == reply_list.size()){
+                    view.setMoreCount(true,itemComment.reply_count);
+                }else {
+                    view.setMoreCount(false,null);
+                }
+            }else {
+                view.setMoreCount(false,null);
+            }
+            mHolder.ll_sub_bg.addView(view);
         }
     }
 

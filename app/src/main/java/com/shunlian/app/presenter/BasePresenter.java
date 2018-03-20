@@ -393,4 +393,25 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }
         return false;
     }
+
+    /**
+     * 判断集合内容是否为空
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list){
+        if (list == null){
+            return true;
+        }
+
+        if (list.size() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    protected boolean isEmpty(CharSequence sequence){
+        return TextUtils.isEmpty(sequence);
+    }
 }
