@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ProgressView;
 
@@ -344,6 +342,37 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             super(itemView);
             Unbinder bind = ButterKnife.bind(this, itemView);
             unbinders.add(bind);
+        }
+    }
+
+    /**
+     * 显示view
+     *
+     * @param views
+     */
+    protected void visible(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 隐藏view
+     *
+     * @param views
+     */
+    protected void gone(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                }
+            }
         }
     }
 }

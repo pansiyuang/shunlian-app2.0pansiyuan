@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.shunlian.app.widget.circle.CircleImageView
+        android:id="@+id/civ_head"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_shop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/civ_head"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="中国杭州森马旗舰.."
+        android:textColor="@color/new_text"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_shop_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="曾经购买过"
+        android:textColor="@color/color_value_6c"
+        android:textSize="10sp" />
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/civ_head"
+        android:layout_alignTop="@+id/civ_head"
+        android:src="@mipmap/img_found_choiceshop_n" />
+</RelativeLayout>
