@@ -102,6 +102,25 @@ public class Common {
                 Environment.MEDIA_MOUNTED);
     }
 
+    /**
+     * 获取屏幕宽
+     *
+     * @param ac
+     * @return
+     */
+    public static int getScreenWidth(Activity ac) {
+        return ac.getWindowManager().getDefaultDisplay().getWidth();
+    }
+
+    /**
+     * 获取屏幕高
+     *
+     * @param ac
+     * @return
+     */
+    public static int getScreenHeight(Activity ac) {
+        return ac.getWindowManager().getDefaultDisplay().getHeight();
+    }
     //获取经纬度
     public static Location getGPS(final Activity activity) {
         // 获取位置管理服务

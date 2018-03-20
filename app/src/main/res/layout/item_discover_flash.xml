@@ -18,7 +18,7 @@
         android:layout_width="168dp"
         android:layout_height="match_parent"
         android:id="@+id/miv_photo"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:layout_toLeftOf="@id/view_right"
         android:layout_toRightOf="@id/view_left"/>
     <com.shunlian.app.widget.MyTextView

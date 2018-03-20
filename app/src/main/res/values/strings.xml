@@ -470,5 +470,9 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
+    <string name="discover_qufenxiang">去分享</string>
+    <string name="discover_quweixinfenxiang">去微信分享</string>
+    <string name="discover_wenzifuzhi">素材库文字已复制</string>
+    <string name="discover_tupianbaocun">素材库图片已保存到手机相册</string>
 
 </resources>
