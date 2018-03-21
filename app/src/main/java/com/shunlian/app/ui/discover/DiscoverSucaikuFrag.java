@@ -12,6 +12,8 @@ import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PDiscoverSucaiku;
 import com.shunlian.app.view.IDiscoverSucaiku;
 
+import java.util.List;
+
 import butterknife.BindView;
 
 
@@ -63,9 +65,9 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
     }
 
     @Override
-    public void setApiData(DiscoveryMaterialEntity data) {
+    public void setApiData(DiscoveryMaterialEntity data, List<DiscoveryMaterialEntity.Content> datas) {
         if (discoverSucaikuAdapter == null) {
-            discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, data.list,getActivity());
+            discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, datas);
             linearLayoutManager = new LinearLayoutManager(getContext());
             rv_sucaiku.setLayoutManager(linearLayoutManager);
             rv_sucaiku.setAdapter(discoverSucaikuAdapter);

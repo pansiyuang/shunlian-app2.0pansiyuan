@@ -336,7 +336,12 @@
         <activity android:name=".ui.discover.FindSelectShopAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".ui.discover.quanzi.DiscoverTieziAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
