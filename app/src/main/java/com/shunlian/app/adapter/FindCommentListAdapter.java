@@ -33,11 +33,13 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
     private final int ITEM_TITLE = 10;
     public int mHotCommentCount;
+    private String mCommentType;
     private OnPointFabulousListener mFabulousListener;
 
-    public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists, int hotCommentCount) {
+    public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists, int hotCommentCount, String comment_type) {
         super(context, true, lists);
         mHotCommentCount = hotCommentCount;
+        mCommentType = comment_type;
     }
 
     @Override
@@ -84,23 +86,27 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         if (holder instanceof FindTitleHolder){
             FindTitleHolder mHolder = (FindTitleHolder) holder;
 
-            if (mHotCommentCount != 0){
-                int icon = 0;
-                String title = "";
-                if (position == 0){
-                    icon = R.mipmap.icon_pinglun;
-                    title = "热门评论";
+            if ("all".equals(mCommentType)){
+                if (mHotCommentCount != 0){
+                    int icon = 0;
+                    String title = "";
+                    if (position == 0){
+                        icon = R.mipmap.icon_pinglun;
+                        title = "热门评论";
+                    }else {
+                        icon = R.mipmap.icon_zuixin;
+                        title = "最新评论";
+                    }
+                    mHolder.miv_icon.setImageResource(icon);
+                    mHolder.mtv_title.setText(title);
                 }else {
-                    icon = R.mipmap.icon_zuixin;
-                    title = "最新评论";
+                    mHolder.miv_icon.setImageResource(R.mipmap.icon_zuixin);
+                    mHolder.mtv_title.setText("最新评论");
                 }
-                mHolder.miv_icon.setImageResource(icon);
-                mHolder.mtv_title.setText(title);
             }else {
-                mHolder.miv_icon.setImageResource(R.mipmap.icon_zuixin);
-                mHolder.mtv_title.setText("最新评论");
+                mHolder.miv_icon.setImageResource(R.mipmap.icon_found_jingxuan);
+                mHolder.mtv_title.setText("精选评论");
             }
-
         }
     }
 
@@ -259,9 +265,11 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     }
                     break;
                 case R.id.ll_sub_bg:
-                    FindCommentListEntity.ItemComment itemComment = lists
-                            .get(FindCommentListAdapter.this.getPosition(getAdapterPosition()));
-                    CommentDetailAct.startAct(context,itemComment.item_id);
+                    if ("all".equals(mCommentType)) {
+                        FindCommentListEntity.ItemComment itemComment = lists
+                                .get(FindCommentListAdapter.this.getPosition(getAdapterPosition()));
+                        CommentDetailAct.startAct(context, itemComment.item_id);
+                    }
                     break;
                 default:
                     if (listener != null){

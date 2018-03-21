@@ -9,4 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never" />
+
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.shunlian.app.widget.empty.NetAndEmptyInterface
+            android:id="@+id/nei_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
 </RelativeLayout>

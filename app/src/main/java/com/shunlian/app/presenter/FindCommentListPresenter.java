@@ -77,7 +77,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 currentPage = Integer.parseInt(data.page);
                 allPage = Integer.parseInt(data.total_page);
                 mItemComments.addAll(data.comment_list);
-                setCommentList(currentPage, allPage);
+                setCommentList(currentPage, allPage,data.comment_type);
                 iView.setCommentAllCount(data.count);
                 currentPage++;
             }
@@ -96,9 +96,9 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         });
     }
 
-    private void setCommentList(int currentPage, int allPage) {
+    private void setCommentList(int currentPage, int allPage, final String comment_type) {
         if (adapter == null) {
-            adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount);
+            adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount,comment_type);
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
@@ -116,7 +116,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     if ("1".equals(itemComment.delete_enable)) {//删除
                         iView.delPrompt();
                     } else {
-                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                        if ("all".equals(comment_type))
+                            iView.showorhideKeyboard("@".concat(itemComment.nickname));
                     }
                 }
             });
