@@ -2,12 +2,10 @@ package com.shunlian.app.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,25 +18,16 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRecommmendView;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public class RecommendFrag extends BaseLazyFragment implements View.OnClickListener, IRecommmendView, BaseRecyclerAdapter.OnItemClickListener, RecommmendAdapter.OnGoodsBuyOnclickListener {
 
-    @BindView(R.id.recycler_recommmend)
     RecyclerView recycler_recommmend;
-
-    @BindView(R.id.tv_meger_tag)
     TextView tv_meger_tag;
-
-    @BindView(R.id.tv_meger_pro)
     TextView tv_meger_pro;
 
     private RecommmendPresenter recommmendPresenter;
@@ -66,14 +55,18 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.frag_recommmend, container, false);
+        recycler_recommmend = (RecyclerView) view.findViewById(R.id.recycler_recommmend);
+        tv_meger_tag = (TextView) view.findViewById(R.id.tv_meger_tag);
+        tv_meger_pro = (TextView) view.findViewById(R.id.tv_meger_pro);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(baseContext, 2);
+        recycler_recommmend.setNestedScrollingEnabled(false);
+        recycler_recommmend.setLayoutManager(gridLayoutManager);
         return view;
     }
 
     @Override
     protected void initData() {
-        currentCateId = getArguments().getString("cateId");
-        mJoinSign = getArguments().getString("joinSign");
-        recycler_recommmend.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseContext, 5f), false));
     }
 
 
@@ -84,9 +77,6 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
             return;
         }
         adapter = new RecommmendAdapter(baseContext, false, goodsList);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(baseContext, 2);
-        recycler_recommmend.setNestedScrollingEnabled(false);
-        recycler_recommmend.setLayoutManager(gridLayoutManager);
         recycler_recommmend.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         adapter.setOnGoodsBuyOnclickListener(this);
@@ -113,6 +103,10 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
 
     @Override
     protected void onFragmentFirstVisible() {
+        currentCateId = getArguments().getString("cateId");
+        mJoinSign = getArguments().getString("joinSign");
+        recycler_recommmend.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseContext, 5f), false));
+
         recommmendPresenter = new RecommmendPresenter(baseContext, this);
         recommmendPresenter.getRecommmendGoods(mJoinSign, currentCateId);
     }

@@ -43,13 +43,13 @@
             android:layout_alignTop="@+id/ll_miv"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/ll_miv"
-            android:paddingRight="10dp"
             android:minHeight="100dp"
+            android:paddingRight="10dp"
             android:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_goods_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
@@ -69,7 +69,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_all"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_goods_param"
                 android:orientation="vertical">
@@ -121,9 +121,9 @@
                 android:id="@+id/tv_goods_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ll_all"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:layout_below="@+id/ll_all"
                 android:layout_marginRight="10dp"
                 android:ellipsize="end"
                 android:lines="1"
@@ -157,13 +157,15 @@
                     android:textColor="@color/my_gray_one"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/tv_goods_count"
+                <EditText
+                    android:id="@+id/edt_goods_count"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rectangle_gray"
                     android:gravity="center"
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
                     android:text="1"
                     android:textColor="@color/new_text"
                     android:textSize="15sp" />

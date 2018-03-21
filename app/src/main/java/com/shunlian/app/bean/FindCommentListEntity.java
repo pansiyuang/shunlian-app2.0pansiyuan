@@ -14,6 +14,7 @@ public class FindCommentListEntity {
     public String total_page;
     public String page;
     public String page_size;
+    public String comment_type;//精选评论selection、所有all
     public List<ItemComment> top_list;
     public List<ItemComment> comment_list;
 
@@ -23,7 +24,6 @@ public class FindCommentListEntity {
         public String avatar;
         public String nickname;
         public String level;
-//        public String comment_id;
         public String content;
         public String likes;
         public String had_like;

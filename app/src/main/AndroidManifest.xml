@@ -310,6 +310,22 @@
         <activity android:name=".ui.myself_store.QrcodeStoreAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.SearchArticleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.h5.ArticleH5Act"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.TagDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.ExperiencePublishActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.discover.CommentListAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"

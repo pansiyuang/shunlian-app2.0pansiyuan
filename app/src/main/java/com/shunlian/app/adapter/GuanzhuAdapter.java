@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -11,8 +12,12 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
@@ -27,6 +32,8 @@ import butterknife.BindView;
 
 public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicListBean> {
 
+    private OnFollowShopListener mShopListener;
+
     public GuanzhuAdapter(Context context, List<GuanzhuEntity.DynamicListBean> lists) {
         super(context, true, lists);
     }
@@ -39,73 +46,92 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof GuanzhuHolder){
+        if (holder instanceof GuanzhuHolder) {
             GuanzhuEntity.DynamicListBean dy = lists.get(position);
             GuanzhuHolder mHolder = (GuanzhuHolder) holder;
-            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,dy.store_logo);
+            GlideUtils.getInstance().loadImage(context, mHolder.civ_head, dy.store_logo);
             mHolder.mtv_name.setText(dy.store_name);
             String full_title = "";
-            if ("new_sales".equals(dy.type)){//上新
-                gone(mHolder.miv_pic,mHolder.mtv_title,mHolder.ll_Statistics);
-                visible(mHolder.recy_view,mHolder.mtv_babyNum);
+            if ("new_sales".equals(dy.type)) {//上新
+                gone(mHolder.miv_pic, mHolder.mtv_title, mHolder.ll_Statistics);
+                visible(mHolder.recy_view, mHolder.mtv_babyNum);
                 full_title = dy.add_time;
-                setPicMatrix(mHolder,dy.goods_list);
-            }else {
-                visible(mHolder.miv_pic,mHolder.mtv_title,mHolder.ll_Statistics);
-                gone(mHolder.recy_view,mHolder.mtv_babyNum);
+                setPicMatrix(mHolder, dy.goods_list);
+            } else {
+                visible(mHolder.miv_pic, mHolder.mtv_title, mHolder.ll_Statistics);
+                gone(mHolder.recy_view, mHolder.mtv_babyNum);
                 mHolder.mtv_title.setText(dy.title);
-                GlideUtils.getInstance().loadImage(context,mHolder.miv_pic,dy.thumb);
+                GlideUtils.getInstance().loadImage(context, mHolder.miv_pic, dy.thumb);
                 full_title = dy.full_title;
                 mHolder.mtv_fx_count.setText(dy.forwards);
                 mHolder.mtv_pl_count.setText(dy.comments);
                 mHolder.mtv_zan_count.setText(dy.likes);
             }
             String tags = getTags(dy.tags);
-            if (!isEmpty(tags)){
+            if (!isEmpty(tags)) {
                 SpannableStringBuilder sb = Common
                         .changeColor(tags.concat(full_title), tags, getColor(R.color.value_299FFA));
                 mHolder.mtv_desc.setText(sb);
-            }else {
+            } else {
                 mHolder.mtv_desc.setText(full_title);
+            }
+
+            GradientDrawable gradientDrawable = (GradientDrawable) mHolder.mtv_follow.getBackground();
+            LogUtil.zhLogW("handleList=====has_follow=="+dy.has_follow);
+            if ("1".equals(dy.has_follow)){
+                gradientDrawable.setColor(getColor(R.color.white));
+                mHolder.mtv_follow.setTextColor(getColor(R.color.pink_color));
+                mHolder.mtv_follow.setText("已关注");
+            }else {
+                gradientDrawable.setColor(getColor(R.color.pink_color));
+                mHolder.mtv_follow.setTextColor(getColor(R.color.white));
+                mHolder.mtv_follow.setText("关注");
             }
         }
     }
 
-    private void setPicMatrix(GuanzhuHolder mHolder, List<GuanzhuEntity.TagsBean> goods_list) {
-        if (!isEmpty(goods_list)){
+    private void setPicMatrix(GuanzhuHolder mHolder, final List<GuanzhuEntity.TagsBean> goods_list) {
+        if (!isEmpty(goods_list)) {
             String formatNum = "%s件宝贝";
             SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter<GuanzhuEntity.TagsBean>
-                    (context,R.layout.item_detail,goods_list) {
+                    (context, R.layout.item_detail, goods_list) {
 
                 @Override
                 public void convert(SimpleViewHolder holder, GuanzhuEntity.TagsBean tagsBean, int position) {
+                    holder.addOnClickListener(R.id.miv_pic);
                     MyImageView miv_pic = holder.getView(R.id.miv_pic);
-                    miv_pic.setWHProportion(206,206);
-                    GlideUtils.getInstance().loadImage(context,miv_pic,tagsBean.thumb);
+                    miv_pic.setWHProportion(206, 206);
+                    GlideUtils.getInstance().loadImage(context, miv_pic, tagsBean.thumb);
                 }
             };
             mHolder.recy_view.setAdapter(adapter);
-            mHolder.mtv_babyNum.setText(String.format(formatNum,String.valueOf(goods_list.size())));
-        }else {
+            mHolder.mtv_babyNum.setText(String.format(formatNum, String.valueOf(goods_list.size())));
+            adapter.setOnItemClickListener(new com.shunlian.app.listener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GuanzhuEntity.TagsBean tagsBean = goods_list.get(position);
+                    GoodsDetailAct.startAct(context, tagsBean.id);
+                }
+            });
+        } else {
             gone(mHolder.mtv_babyNum);
         }
     }
 
-    private String getTags(List<GuanzhuEntity.TagsBean> tagsBeans){
-        if (!isEmpty(tagsBeans)){
+    private String getTags(List<GuanzhuEntity.TagsBean> tagsBeans) {
+        if (!isEmpty(tagsBeans)) {
             StringBuilder sb = new StringBuilder();
             String format = "#%s#";
             for (int i = 0; i < tagsBeans.size(); i++) {
                 GuanzhuEntity.TagsBean tagsBean = tagsBeans.get(i);
-                sb.append(String.format(format,tagsBean.name));
+                sb.append(String.format(format, tagsBean.name));
             }
             return sb.toString();
         }
-
         return null;
     }
 
-    public class GuanzhuHolder extends BaseRecyclerViewHolder{
+    public class GuanzhuHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.civ_head)
         CircleImageView civ_head;
 
@@ -147,11 +173,49 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
 
         public GuanzhuHolder(View itemView) {
             super(itemView);
-            mtv_follow.setWHProportion(125,44);
-            miv_pic.setWHProportion(720,384);
-            GridLayoutManager manager = new GridLayoutManager(context,3);
+            mtv_follow.setWHProportion(125, 44);
+            miv_pic.setWHProportion(720, 384);
+            GridLayoutManager manager = new GridLayoutManager(context, 3);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
+            int i = TransformUtil.dip2px(context, 6);
+            GrideItemDecoration grideItemDecoration = new GrideItemDecoration(0, i, i, 0, true);
+            recy_view.addItemDecoration(grideItemDecoration);
+            mtv_follow.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.mtv_follow:
+                    if (mShopListener != null){
+                        mShopListener.onFollow(getAdapterPosition());
+                    }
+                    break;
+                default:
+                    if (listener != null){
+                        listener.onItemClick(v,getAdapterPosition());
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void setOnFollowShopListener(OnFollowShopListener shopListener){
+
+        mShopListener = shopListener;
+    }
+
+    /**
+     * 关注店铺监听
+     */
+    public interface OnFollowShopListener{
+        void onFollow(int position);
     }
 }

@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.FindSelectShopAdapter;
 import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.presenter.FindSelectShopPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFindSelectShopView;
@@ -46,6 +47,7 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
     private List<FindSelectShopEntity.StoreList> mStoreLists;
     private FindSelectShopAdapter adapter;
     private String format = "（%s/%s）";
+    private FindSelectShopPresenter presenter;
 
     public static void startAct(Activity activity){
         activity.startActivityForResult(new Intent(activity,FindSelectShopAct.class),REQUEST_CODE);
@@ -60,7 +62,7 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        FindSelectShopPresenter presenter = new FindSelectShopPresenter(this,this);
+        presenter = new FindSelectShopPresenter(this,this);
         GridLayoutManager manager = new GridLayoutManager(this,3);
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 30);
@@ -101,6 +103,15 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
         });
     }
 
+    /**
+     * 关注成功
+     */
+    @Override
+    public void followSuccess() {
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
 
     private String selectCount(){
         int count = 0;
@@ -124,6 +135,28 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
                     String.valueOf(mStoreLists.size())));
             adapter.notifyDataSetChanged();
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+        }
+    }
+
+    @OnClick(R.id.mbt_follow)
+    public void follow(){
+        if (Integer.parseInt(selectCount()) < 3){
+            Common.staticToasts(this,"最少关注三家店铺",R.mipmap.icon_common_tanhao);
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mStoreLists.size(); i++) {
+            FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
+            if (storeList.isSelect){
+                sb.append(storeList.id);
+                if (i + 1 != mStoreLists.size()){
+                    sb.append(",");
+                }
+            }
+        }
+
+        if (presenter != null){
+            presenter.followStore(sb.toString());
         }
     }
 }

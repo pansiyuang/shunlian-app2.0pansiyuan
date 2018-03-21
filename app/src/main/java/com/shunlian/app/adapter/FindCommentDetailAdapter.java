@@ -19,6 +19,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,59 +32,13 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
 
     private final LayoutInflater inflater;
     private OnPointFabulousListener mFabulousListener;
+    private List<FindCommentListEntity.LastLikesBean> last_likes = new ArrayList<>();
+    private SimpleRecyclerAdapter adapter;
 
     public FindCommentDetailAdapter(Context context, List<FindCommentListEntity.ItemComment> lists) {
         super(context, true, lists);
         inflater = LayoutInflater.from(context);
     }
-
-    /*private void handleTitle(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof FindCommentDetailTitleHolder){
-            FindCommentDetailTitleHolder mHolder = (FindCommentDetailTitleHolder) holder;
-            FindCommentListEntity.ItemComment lastLikesBean = lists.get(0);
-
-            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,lastLikesBean.avatar);
-
-            mHolder.mtv_name.setText(lastLikesBean.nickname);
-
-            String level = lastLikesBean.level;
-            Bitmap bitmap = TransformUtil.convertVIP(context, level);
-            mHolder.miv_vip.setImageBitmap(bitmap);
-
-            mHolder.mtv_zan_count1.setText(lastLikesBean.likes);
-
-            mHolder.mtv_time.setText(lastLikesBean.add_time);
-
-            mHolder.mtv_content.setText(lastLikesBean.content);
-
-            if ("1".equals(lastLikesBean.had_like)){
-                mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_h);
-            }else {
-                mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_n);
-            }
-
-            SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter
-                    <FindCommentListEntity.LastLikesBean>
-                    (context,R.layout.item_pic_circle,lastLikesBean.last_likes) {
-
-                @Override
-                public void convert(SimpleViewHolder holder,
-                                    FindCommentListEntity.LastLikesBean lastLikesBean,
-                                    int position) {
-                    CircleImageView miv_pic = holder.getView(R.id.civ_pic);
-                    int w = TransformUtil.dip2px(context, 25);
-                    int m = TransformUtil.dip2px(context, 2);
-                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) miv_pic.getLayoutParams();
-                    layoutParams.width = w;
-                    layoutParams.height = w;
-                    layoutParams.rightMargin = m;
-                    miv_pic.setLayoutParams(layoutParams);
-                    GlideUtils.getInstance().loadImage(context,miv_pic,lastLikesBean.avatar);
-                }
-            };
-            mHolder.recy_view.setAdapter(adapter);
-        }
-    }*/
 
     @Override
     public int getItemCount() {
@@ -110,8 +65,6 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             Bitmap bitmap = TransformUtil.convertVIP(context, level);
             mHolder.miv_vip.setImageBitmap(bitmap);
 
-            mHolder.mtv_zan_count.setText(lastLikesBean.likes);
-
             mHolder.mtv_time.setText(lastLikesBean.add_time);
 
             if (!isEmpty(lastLikesBean.at)){
@@ -126,30 +79,38 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 mHolder.itemView.setBackgroundColor(getColor(R.color.white));
                 gone(mHolder.mtv_zan_count,mHolder.miv_zan);
                 visible(mHolder.ll_head_portrait);
+                mHolder.mtv_zan_count1.setText(lastLikesBean.likes);
                 if ("1".equals(lastLikesBean.had_like)){
                     mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_h);
+                    mHolder.mtv_zan_count1.setTextColor(getColor(R.color.pink_color));
                 }else {
+                    mHolder.mtv_zan_count1.setTextColor(getColor(R.color.share_text));
                     mHolder.miv_zan1.setImageResource(R.mipmap.img_pingjia_zan_n);
                 }
-                setHeadPic(mHolder, lastLikesBean);
+                if (last_likes.size() == 0) {
+                    last_likes.addAll(lastLikesBean.last_likes);
+                }
+                setHeadPic(mHolder);
 
             }else {
                 mHolder.itemView.setBackgroundColor(getColor(R.color.white_ash));
                 visible(mHolder.mtv_zan_count,mHolder.miv_zan);
                 gone(mHolder.ll_head_portrait);
+                mHolder.mtv_zan_count.setText(lastLikesBean.likes);
                 if ("1".equals(lastLikesBean.had_like)){
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
                     mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
                 }else {
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
                     mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
                 }
             }
         }
     }
 
-    private void setHeadPic(FindCommentDetailHolder mHolder, final FindCommentListEntity.ItemComment lastLikesBean) {
-        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter
-                <FindCommentListEntity.LastLikesBean>
-                (context, R.layout.item_pic_circle,lastLikesBean.last_likes) {
+    private void setHeadPic(FindCommentDetailHolder mHolder) {
+        adapter = new SimpleRecyclerAdapter<FindCommentListEntity.LastLikesBean>
+                (context, R.layout.item_pic_circle,last_likes) {
 
             @Override
             public void convert(SimpleViewHolder holder,
@@ -167,6 +128,16 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             }
         };
         mHolder.recy_view.setAdapter(adapter);
+    }
+
+    public void setHeadPic(List<FindCommentListEntity.LastLikesBean> last_likes) {
+        if (!isEmpty(last_likes)){
+            this.last_likes.clear();
+            this.last_likes.addAll(last_likes);
+            if (adapter != null){
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public class FindCommentDetailHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -205,14 +176,18 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
         RecyclerView recy_view;
         public FindCommentDetailHolder(View itemView) {
             super(itemView);
-            mtv_zan_count.setOnClickListener(this);
             int i = TransformUtil.dip2px(context, 20);
             TransformUtil.expandViewTouchDelegate(mtv_zan_count,i,i,i,i);
             TransformUtil.expandViewTouchDelegate(mtv_zan_count1,i,i,i,i);
-            mtv_zan_count1.setOnClickListener(this);
+
             LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
+
+
+            itemView.setOnClickListener(this);
+            mtv_zan_count.setOnClickListener(this);
+            mtv_zan_count1.setOnClickListener(this);
         }
 
         /**

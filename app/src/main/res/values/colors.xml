@@ -176,10 +176,11 @@
     <color name="value_FFB7C6">#FFB7C6</color>
     <color name="value_302E56">#302E56</color>
     <color name="value_22113F">#22113F</color>
+    <color name="value_299FFA">#299FFA</color>
+    <color name="value_878B8A">#878B8A</color>
     <color name="value_4D">#4D4D4D</color>
 
     <!--发现-->
-    <color name="value_299FFA">#299FFA</color>
     <color name="value_BDBDBD">#BDBDBD</color>
     <color name="value_B3B2B8">#B3B2B8</color>
     <color name="value_878B8A">#878B8A</color>

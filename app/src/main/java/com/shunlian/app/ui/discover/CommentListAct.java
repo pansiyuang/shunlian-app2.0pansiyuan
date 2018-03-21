@@ -11,8 +11,6 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.FindCommentListAdapter;
-import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -24,8 +22,6 @@ import com.shunlian.app.view.IFindCommentListView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -55,11 +51,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     MyTextView mtv_title;
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
-    private FindCommentListAdapter adapter;
-    private FindCommentListEntity.ItemComment itemComment;
-    private int currentTouchItem = -1;
-    private List<FindCommentListEntity.ItemComment> mItemComments;
-    private int mHotCommentCount;
 
     public static void startAct(Activity activity,String article_id){
         Intent intent = new Intent(activity, CommentListAct.class);
@@ -116,7 +107,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
 
         String article_id = getIntent().getStringExtra("article_id");
-        presenter = new FindCommentListPresenter(this,this,article_id);
+        presenter = new FindCommentListPresenter(this,this, article_id);
 
 
         manager = new LinearLayoutManager(this);
@@ -142,118 +133,6 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     }
 
-    @Override
-    public void setCommentList(final List<FindCommentListEntity.ItemComment> itemComments,
-                               int hotCommentCount, int page, int allPage) {
-        mItemComments = itemComments;
-        mHotCommentCount = hotCommentCount;
-        if (adapter == null) {
-            adapter = new FindCommentListAdapter(this, itemComments, hotCommentCount);
-            recy_view.setAdapter(adapter);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (presenter != null){
-                        presenter.onRefresh();
-                    }
-                }
-            });
-
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    position = adapter.getPosition(position);
-                    currentTouchItem = position;
-                    itemComment = itemComments.get(position);
-                    if ("1".equals(itemComment.delete_enable)){//删除
-                        deleteComment();
-                    }else {
-                        setEdittextFocusable(true, met_text);
-                        met_text.setHint("@".concat(itemComment.nickname));
-                        if (!isSoftShowing()) {
-                            Common.showKeyboard(met_text);
-                        } else {
-                            Common.hideKeyboard(met_text);
-                        }
-                    }
-                }
-            });
-
-
-            adapter.setPointFabulousListener(new FindCommentListAdapter.OnPointFabulousListener() {
-                @Override
-                public void onPointFabulous(int position) {
-                    if (presenter != null){
-                        position = adapter.getPosition(position);
-                        currentTouchItem = position;
-                        FindCommentListEntity.ItemComment itemComment = itemComments.get(position);
-                        presenter.pointFabulous(itemComment.item_id,itemComment.had_like);
-                    }
-                }
-            });
-        }else {
-            adapter.notifyDataSetChanged();
-        }
-        adapter.setPageLoading(page,allPage);
-    }
-
-    private void deleteComment() {
-        final PromptDialog dialog = new PromptDialog(this);
-        dialog.setSureAndCancleListener("确认删除评论吗？", "确认", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (presenter != null){
-                    presenter.delComment(itemComment.item_id);
-                }
-                dialog.dismiss();
-            }
-        }, "取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }).show();
-
-    }
-
-    /**
-     * 刷新item
-     * @param itemComment
-     */
-    @Override
-    public void refreshItem(FindCommentListEntity.ItemComment itemComment) {
-        Common.staticToasts(this,"发布成功",R.mipmap.icon_common_duihao);
-        if (currentTouchItem != -1) {
-            mItemComments.remove(currentTouchItem);
-            mItemComments.add(currentTouchItem, itemComment);
-        }else {
-            mItemComments.add(mHotCommentCount,itemComment);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 设置点赞数量
-     *
-     * @param num
-     */
-    @Override
-    public void setPointFabulous(String num) {
-        FindCommentListEntity.ItemComment itemComment = mItemComments.get(currentTouchItem);
-        itemComment.likes = num;
-        itemComment.had_like = "0".equals(itemComment.had_like) ? "1" : "0";
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 删除成功
-     */
-    @Override
-    public void delSuccess() {
-        mItemComments.remove(currentTouchItem);
-        adapter.notifyDataSetChanged();
-    }
-
     /**
      * 设置评论总数
      *
@@ -267,24 +146,65 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         mtv_msg_count.setText(count);
     }
 
+    /**
+     * 设置adapter
+     *
+     * @param adapter
+     */
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
+    }
+
+    /**
+     * 删除提示
+     */
+    @Override
+    public void delPrompt() {
+        final PromptDialog dialog = new PromptDialog(this);
+        dialog.setSureAndCancleListener("确认删除评论吗？", "确认", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (presenter != null){
+                    presenter.delComment();
+                }
+                dialog.dismiss();
+            }
+        }, "取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
+    /**
+     * 软键盘处理
+     */
+    @Override
+    public void showorhideKeyboard(String hint) {
+        setEdittextFocusable(true, met_text);
+        met_text.setHint(hint);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
+        } else {
+            Common.hideKeyboard(met_text);
+        }
+    }
+
     private boolean isSoftShowing() {
         //获取当前屏幕内容的高度
         int screenHeight = getWindow().getDecorView().getHeight();
         //获取View可见区域的bottom
         Rect rect = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-
         return screenHeight - rect.bottom != 0;
     }
 
     @OnClick(R.id.mtv_send)
     public void send(){
         String s = met_text.getText().toString();
-        String pid = "";
-        if (itemComment != null){
-            pid = itemComment.item_id;
-        }
-        presenter.sendComment(s,pid);
+        presenter.sendComment(s);
         met_text.setText("");
         met_text.setHint("添加评论");
         setEdittextFocusable(false,met_text);

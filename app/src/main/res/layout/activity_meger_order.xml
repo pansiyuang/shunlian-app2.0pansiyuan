@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingTop="2dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingTop="2dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
@@ -61,25 +61,26 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:textColor="@color/white"
-                android:visibility="gone"
-                android:textSize="9sp" />
+                android:textSize="9sp"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 
-    <com.shunlian.app.widget.PagerSlidingTabStrip
-        android:id="@+id/strip_tab"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/rl_title"
-        android:background="@color/white"
-        app:allowAlignment="true"
-        app:allowWidthFull="false" />
+        app:tabMode="scrollable"
+        app:tabIndicatorColor="@color/transparent"
+        app:tabSelectedTextColor="@color/pink_color"
+        app:tabTextColor="@color/new_text"></android.support.design.widget.TabLayout>
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@+id/strip_tab"
+        android:layout_below="@+id/tab_layout"
         android:background="@color/bg_gray_two" />
 
     <android.support.v4.view.ViewPager
@@ -88,6 +89,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/line"
+        android:overScrollMode="never"
         android:background="@color/white" />
 
     <RelativeLayout

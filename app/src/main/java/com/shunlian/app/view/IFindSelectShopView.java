@@ -11,4 +11,9 @@ import java.util.List;
 public interface IFindSelectShopView extends IView {
 
     void setList(List<FindSelectShopEntity.StoreList> storeLists);
+
+    /**
+     * 关注成功
+     */
+    void followSuccess();
 }
