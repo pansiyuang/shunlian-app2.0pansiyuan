@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.myself_store;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -70,6 +71,7 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
     private StringBuffer currentGoodsIds = new StringBuffer();
     private String currentFlag = "store_goods";
     private PromptDialog promptDialog;
+    private String currentFrom;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AddStoreGoodsAct.class);
@@ -87,6 +89,8 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
         setStatusBarFontDark();
 
         tv_title.setText(getStringResouce(R.string.add_goods));
+
+        currentFrom = getIntent().getStringExtra("currentFrom");
 
         //设置tablayout标签的显示方式
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
@@ -128,6 +132,10 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
             MyLittleStoreActivity.startAct(this);
             finish();
         }
+    }
+
+    public String getCurrentFrom() {
+        return currentFrom;
     }
 
     @Override

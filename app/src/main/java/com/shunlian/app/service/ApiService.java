@@ -1215,4 +1215,13 @@ public interface ApiService {
      */
     @POST("discovery/material/praise")
     Call<BaseEntity<CommonEntity>> discoveryPraise(@Body RequestBody body);
+
+    /**
+     * 发表心得
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/create")
+    Call<BaseEntity<EmptyEntity>> createExperience(@Body RequestBody body);
 }

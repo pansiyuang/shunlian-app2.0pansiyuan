@@ -40,6 +40,7 @@ public class SingleImgAdapter extends BaseAdapter {
     private int parentPosition;
     private int screenWidth;
     private PhotoPickerIntent intent;
+    private int MAX_SIZE = 5;
 
     public SingleImgAdapter(Context context, List<ImageEntity> data, int position) {
         this.mContext = context;
@@ -55,6 +56,10 @@ public class SingleImgAdapter extends BaseAdapter {
         intent = new PhotoPickerIntent(context);
         intent.setSelectModel(SelectModel.MULTI);
         intent.setShowCarema(true);
+    }
+
+    public void setMaxSize(int maxSize) {
+        this.MAX_SIZE = maxSize;
     }
 
     @Override
@@ -115,7 +120,7 @@ public class SingleImgAdapter extends BaseAdapter {
                     if (mContext instanceof CreatCommentActivity) {
                         ((CreatCommentActivity) mContext).openAlbum(parentPosition);
                     } else {
-                        intent.setMaxTotal(5 - pics.size()); // 最多选择照片数量，默认为9
+                        intent.setMaxTotal(MAX_SIZE - pics.size()); // 最多选择照片数量，默认为9
                         ((Activity) mContext).startActivityForResult(intent, REQUEST_CAMERA_CODE);
                     }
                 }
@@ -139,7 +144,7 @@ public class SingleImgAdapter extends BaseAdapter {
         for (ImageEntity imageEntity : pics) {
             if (!TextUtils.isEmpty(imageEntity.imgPath)) {
                 result.add(imageEntity.imgPath);
-            }else if(!TextUtils.isEmpty(imageEntity.imgUrl)){
+            } else if (!TextUtils.isEmpty(imageEntity.imgUrl)) {
                 result.add(imageEntity.imgUrl);
             }
         }

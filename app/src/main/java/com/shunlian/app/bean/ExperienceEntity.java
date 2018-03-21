@@ -33,8 +33,9 @@ public class ExperienceEntity {
         public String praise;
         public MemberInfo member_info;
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MemberInfo{
+    public static class MemberInfo {
         public String member_id;
         public String nickname;
         public String avatar;
