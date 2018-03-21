@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_bg"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="-23dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="69dp"
+            android:text="考拉数据哥"
+            android:textColor="@color/pink_color"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="21dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="考拉数据官方小编考拉数据官方小编。考拉数据官方小编考拉数据官方小编。考拉数据官方小编考拉数据官方小编。"
+            android:textColor="@color/new_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_above="@+id/ll_title"
+        android:layout_marginBottom="-9dp"
+        android:layout_marginLeft="23dp"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

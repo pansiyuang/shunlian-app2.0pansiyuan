@@ -214,21 +214,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                LogUtil.httpLogW("currentFlag11:" + currentFlag);
-                if ("sortFrag".equals(currentFlag)) {
-                    GoodsSearchParam param = new GoodsSearchParam();
-                    param.keyword = mTips.get(position);
-                    CategoryAct.startAct(SearchGoodsActivity.this, param);
-                } else if ("store_goods".equals(currentFlag)) {
-                    GoodsSearchParam param = new GoodsSearchParam();
-                    param.keyword = mTips.get(position);
-                    GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
-                } else {
-                    Intent intent = new Intent();
-                    intent.putExtra("keyword", mTips.get(position));
-                    setResult(RESULT_OK, intent);
-                }
-                finish();
+                switchToJump(mTips.get(position));
             }
         });
     }
@@ -266,18 +252,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                         }
                         return true;
                     } else {
-                        if (!isEmpty(text)) {
-                            if ("sortFrag".equals(currentFlag)) {
-                                GoodsSearchParam param = new GoodsSearchParam();
-                                param.keyword = text.toString();
-                                CategoryAct.startAct(SearchGoodsActivity.this, param);
-                            } else {
-                                Intent intent = new Intent();
-                                intent.putExtra("keyword", text.toString());
-                                setResult(RESULT_OK, intent);
-                            }
-                            finish();
-                        }
+                        switchToJump(text.toString());
                         return true;
                     }
                 }
@@ -348,21 +323,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        LogUtil.httpLogW("currentFlag33:" + currentFlag);
-                        if ("sortFrag".equals(currentFlag)) {
-                            GoodsSearchParam param = new GoodsSearchParam();
-                            param.keyword = entity.hot_keywords.get(position);
-                            CategoryAct.startAct(SearchGoodsActivity.this, param);
-                        } else if ("store_goods".equals(currentFlag)) {
-                            GoodsSearchParam param = new GoodsSearchParam();
-                            param.keyword = entity.hot_keywords.get(position);
-                            GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
-                        }  else {
-                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
-                            intent.putExtra("keyword", entity.hot_keywords.get(position));
-                            setResult(RESULT_OK, intent);
-                        }
-                        finish();
+                        switchToJump(entity.hot_keywords.get(position));
                     }
                 });
                 return view;
@@ -380,21 +341,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        LogUtil.httpLogW("currentFlag22:" + currentFlag);
-                        if ("sortFrag".equals(currentFlag)) {
-                            GoodsSearchParam param = new GoodsSearchParam();
-                            param.keyword = entity.history_list.get(position);
-                            CategoryAct.startAct(SearchGoodsActivity.this, param);
-                        } else if ("store_goods".equals(currentFlag)) {
-                            GoodsSearchParam param = new GoodsSearchParam();
-                            param.keyword = entity.history_list.get(position);
-                            GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
-                        } else {
-                            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
-                            intent.putExtra("keyword", entity.history_list.get(position));
-                            setResult(RESULT_OK, intent);
-                        }
-                        finish();
+                        switchToJump(entity.history_list.get(position));
                     }
                 });
                 return view;
@@ -471,5 +418,24 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         } else {
             changeSearchMode(false);
         }
+    }
+
+    public void switchToJump(String tag) {
+        if (isEmpty(tag)) {
+            return;
+        }
+        GoodsSearchParam param = new GoodsSearchParam();
+        if ("sortFrag".equals(currentFlag)) {
+            param.keyword = tag;
+            CategoryAct.startAct(SearchGoodsActivity.this, param);
+        } else if ("store_goods".equals(currentFlag)) {
+            param.keyword = tag;
+            GoodsSearchAct.startAct(SearchGoodsActivity.this, param);
+        } else {
+            Intent intent = new Intent(SearchGoodsActivity.this, CategoryAct.class);
+            intent.putExtra("keyword", tag);
+            setResult(RESULT_OK, intent);
+        }
+        finish();
     }
 }

@@ -5,23 +5,18 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.AddGoodsPagerAdapter;
-import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.AddGoodsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.BrandListAct;
-import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAddGoodsView;
@@ -106,7 +101,7 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
         for (String from : fromList) {
             goodsFrags.add(AllGoodsFrag.getInstance(from));
         }
-        vp_goods.setAdapter(new AddGoodsPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
+        vp_goods.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), goodsFrags, titles));
         tab_layout.setupWithViewPager(vp_goods);
 
         vp_goods.setOffscreenPageLimit(5);

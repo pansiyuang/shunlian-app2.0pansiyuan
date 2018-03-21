@@ -5,29 +5,33 @@ import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.support.design.widget.TabLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.ViewPageFragmentAdapter;
+import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.MegerPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.fragment.RecommendFrag;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMegerView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.PagerSlidingTabStrip;
 import com.shunlian.app.widget.ParamDialog;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.App.getContext;
 
 /**
  * Created by Administrator on 2017/12/8.
@@ -47,8 +51,8 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     @BindView(R.id.tv_number)
     TextView tv_number;
 
-    @BindView(R.id.strip_tab)
-    PagerSlidingTabStrip strip_tab;
+    @BindView(R.id.tab_layout)
+    TabLayout tab_layout;
 
     @BindView(R.id.vp_meger)
     ViewPager vp_meger;
@@ -63,10 +67,11 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     TextView tv_to_shopcar;
 
     public MegerPresenter megerPresenter;
-    public ViewPageFragmentAdapter viewPageFragmentAdapter;
     private String currentNeedId;
     private GoodsDeatilEntity.Goods currentGoods;
     private ParamDialog paramDialog;
+    private String[] titles;
+    private static List<BaseFragment> mFrags;
 
     public static void startAct(Context context, String needId) {
         Intent intent = new Intent(context, MegerOrderActivity.class);
@@ -89,7 +94,6 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
             megerPresenter = new MegerPresenter(this, this);
             megerPresenter.getMegercCates(currentNeedId);
         }
-        viewPageFragmentAdapter = new ViewPageFragmentAdapter(getSupportFragmentManager(), strip_tab, vp_meger);
     }
 
     @Override
@@ -110,22 +114,37 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
 
     @Override
     public void getCateEntity(CateEntity cateEntity) {
-        List<CateEntity.Cate> cateList = cateEntity.cates;
-        strip_tab.removeAllTab();//清除所有
 
+        List<CateEntity.Cate> cateList = cateEntity.cates;
+        mFrags = new ArrayList<>();
         if (isEmpty(cateList)) {
             CateEntity.Cate item = new CateEntity.Cate();
             item.cate_id = "0";
             item.cate_name = "全部";
-            viewPageFragmentAdapter.addTab(item.cate_name, item.cate_id, RecommendFrag.getInstance(currentNeedId, item.cate_id));
+
+            titles = new String[1];
+            titles[0] = item.cate_name;
+            mFrags.add(RecommendFrag.getInstance(currentNeedId, item.cate_id));
+            tab_layout.addTab(tab_layout.newTab().setText(item.cate_name));
         } else {
+            titles = new String[cateList.size()];
             for (int i = 0; i < cateList.size(); i++) {
                 CateEntity.Cate cate = cateList.get(i);
-                LogUtil.httpLogW("cateList:" + cateList.size() + "   cate_id:" + cate.cate_id);
-                viewPageFragmentAdapter.addTab(cate.cate_name, cate.cate_id, RecommendFrag.getInstance(currentNeedId, cate.cate_id));
+                mFrags.add(RecommendFrag.getInstance(currentNeedId, cate.cate_id));
+                tab_layout.addTab(tab_layout.newTab().setText(cate.cate_name));
+                titles[i] = cate.cate_name;
             }
         }
-        strip_tab.needTabStrip();
+        vp_meger.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), mFrags, titles));
+        tab_layout.setupWithViewPager(vp_meger);
+        vp_meger.setOffscreenPageLimit(mFrags.size());
+        tab_layout.post(new Runnable() {
+            @Override
+            public void run() {
+                setTabPadding();
+                tab_layout.setBackgroundColor(getColorResouce(R.color.white));
+            }
+        });
 
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
         tv_meger_min.setText(cateEntity.hint);
@@ -191,5 +210,43 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
                 break;
         }
         super.onClick(view);
+    }
+
+    public void setTabPadding() {
+        try {
+            //拿到tabLayout的mTabStrip属性
+            Field mTabStripField = tab_layout.getClass().getDeclaredField("mTabStrip");
+            mTabStripField.setAccessible(true);
+            LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tab_layout);
+            int margin = TransformUtil.dip2px(getContext(), 12.5f);
+            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                View tabView = mTabStrip.getChildAt(i);
+                //拿到tabView的mTextView属性
+                Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                mTextViewField.setAccessible(true);
+                TextView mTextView = (TextView) mTextViewField.get(tabView);
+                tabView.setPadding(0, 0, 0, 0);
+                //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                int width = 0;
+                width = mTextView.getWidth();
+                if (width == 0) {
+                    mTextView.measure(0, 0);
+                    width = mTextView.getMeasuredWidth();
+                }
+                //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                params.width = width;
+                params.leftMargin = margin;
+                params.rightMargin = margin;
+                tabView.setLayoutParams(params);
+
+                tabView.invalidate();
+            }
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

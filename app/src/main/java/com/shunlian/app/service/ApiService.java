@@ -25,6 +25,8 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
+import com.shunlian.app.bean.ArticleDetailEntity;
+import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
@@ -43,6 +45,7 @@ import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.bean.FootprintEntity;
@@ -1053,6 +1056,33 @@ public interface ApiService {
     Call<BaseEntity<PersonShopEntity>> personShop(@QueryMap Map<String,String> map);
 
     /**
+     * 精选列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/home")
+    Call<BaseEntity<ArticleEntity>> niceList(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选文章点赞
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/like")
+    Call<BaseEntity<EmptyEntity>> userLike(@QueryMap Map<String, String> map);
+
+    /**
+     * 精选文章点赞
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/unlike ")
+    Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
+
+    /**
      * 发现评论列表
      * @param map
      * @return
@@ -1114,6 +1144,60 @@ public interface ApiService {
      */
     @GET("discovery/nice/nav")
     Call<BaseEntity<DiscoveryNavEntity>> discoveryNav(@QueryMap Map<String,String> map);
+
+    /**
+     * 换一换猜你喜欢
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/otherTopics")
+    Call<BaseEntity<ArticleEntity>> othersTopics(@QueryMap Map<String, String> map);
+
+    /**
+     * 心得列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/experience/list")
+    Call<BaseEntity<ExperienceEntity>> experienceList(@QueryMap Map<String, String> map);
+
+    /**
+     * 心得点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/praise")
+    Call<BaseEntity<EmptyEntity>> praiseExperience(@Body RequestBody body);
+
+    /**
+     * 文章搜索接口
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/nice/search")
+    Call<BaseEntity<ArticleEntity>> searchArticle(@Body RequestBody body);
+
+    /**
+     * 文章详情
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/detailForApp")
+    Call<BaseEntity<ArticleDetailEntity>> niceDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 标签详情
+     *
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/tagDetail")
+    Call<BaseEntity<ArticleEntity>> tagDetail(@QueryMap Map<String, String> map);
 
     /**
      * 素材前台列表
