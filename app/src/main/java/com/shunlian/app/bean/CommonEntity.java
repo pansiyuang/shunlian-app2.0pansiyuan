@@ -15,4 +15,8 @@ public class CommonEntity {
     public List<String> suggest_list; // 搜索关键字提示接口
     public List<CalendarEntity> calendar; //获取足迹日历形式信息接口
     public String num;  //可添加的商品数量接口
+
+    public String new_likes;//点赞数量
+    public List<FindCommentListEntity.LastLikesBean> last_likes;//点赞人的头像
+
 }

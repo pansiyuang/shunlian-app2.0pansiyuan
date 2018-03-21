@@ -3,54 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
+
+
+
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.shunlian.app.widget.MyLinearLayout
+        <com.shunlian.app.widget.empty.NetAndEmptyInterface
+            android:id="@+id/nei_empty"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"/>
 
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/panel_black" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/pink_color" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/my_yellow" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/group_coffee" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/panel_black" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/pink_color" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/my_yellow" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/group_coffee" />
-        </com.shunlian.app.widget.MyLinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+
+
 </RelativeLayout>

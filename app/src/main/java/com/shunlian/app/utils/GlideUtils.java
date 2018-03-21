@@ -218,6 +218,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCornerImage(Context context, ImageView imageView, String imgUrl,int radius) {
+//      图片属性为 android:scaleType="fitXY"，圆角图片才有效
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)

@@ -34,21 +34,26 @@ import com.shunlian.app.bean.CheckInStateEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
+import com.shunlian.app.bean.CommentDetailEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ExperienceEntity;
+import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -84,6 +89,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
 
@@ -1077,6 +1083,61 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
 
     /**
+     * 发现评论列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/commentList")
+    Call<BaseEntity<FindCommentListEntity>> findcommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 发布评论
+     * @return
+     */
+    @POST("discovery/user/comment")
+    Call<BaseEntity<UseCommentEntity>> sendComment(@Body RequestBody body);
+
+    /**
+     * 推荐关注
+     * @param map
+     * @return
+     */
+    @GET("discovery/focus/recommendStore")
+    Call<BaseEntity<FindSelectShopEntity>> recommendFollow(@QueryMap Map<String,String> map);
+
+    /**
+     * 评论详情
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/commentDetail")
+    Call<BaseEntity<CommentDetailEntity>> commentDetail(@QueryMap Map<String,String> map);
+
+    /**
+     * 发现关注
+     * @param map
+     * @return
+     */
+    @GET("discovery/focus/home")
+    Call<BaseEntity<GuanzhuEntity>> foucsHome(@QueryMap Map<String,String> map);
+
+    /**
+     * 点赞
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/likeCommentOrReply")
+    Call<BaseEntity<CommonEntity>> pointFabulous(@QueryMap Map<String,String> map);
+
+    /**
+     * 删除评论
+     * @param map
+     * @return
+     */
+    @GET("discovery/user/deleteComment")
+    Call<BaseEntity<EmptyEntity>> delComment(@QueryMap Map<String,String> map);
+
+    /**
      * 导航信息
      * @param map
      * @return
@@ -1137,4 +1198,21 @@ public interface ApiService {
      */
     @GET("discovery/nice/tagDetail")
     Call<BaseEntity<ArticleEntity>> tagDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 素材前台列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/material/list")
+    Call<BaseEntity<DiscoveryMaterialEntity>> discoveryMaterial(@QueryMap Map<String,String> map);
+
+    /**
+     * 素材点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/material/praise")
+    Call<BaseEntity<CommonEntity>> discoveryPraise(@Body RequestBody body);
 }

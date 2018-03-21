@@ -474,4 +474,9 @@
     <string name="search_article">搜索文章</string>
     <string name="upload_pic">上传照片</string>
     <string name="non_mandatory">(非必填)</string>
+    <string name="discover_qufenxiang">去分享</string>
+    <string name="discover_quweixinfenxiang">去微信分享</string>
+    <string name="discover_wenzifuzhi">素材库文字已复制</string>
+    <string name="discover_tupianbaocun">素材库图片已保存到手机相册</string>
+
 </resources>

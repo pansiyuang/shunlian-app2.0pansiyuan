@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_all_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_shoppingcar_selected_n" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_all_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="全选"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="（00/00）"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/white"
+        android:text="关注你可能感兴趣的店铺"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:gravity="center"
+        android:background="@color/white"
+        android:text="· 基于你的购买行为推荐 ·"
+        android:textColor="@color/color_value_6c"
+        android:textSize="11sp" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:layout_weight="1" />
+
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbt_follow"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/pink_color"
+        android:gravity="center"
+        android:text="立刻关注"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</LinearLayout>
