@@ -35,10 +35,8 @@ import butterknife.BindView;
  */
 
 public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMaterialEntity.Content> implements IADiscoverSucaiku {
-    private Activity activity;
-    public DiscoverSucaikuAdapter(Context context, boolean isShowFooter, List<DiscoveryMaterialEntity.Content> list,Activity activity) {
+    public DiscoverSucaikuAdapter(Context context, boolean isShowFooter, List<DiscoveryMaterialEntity.Content> list) {
         super(context, isShowFooter, list);
-        this.activity=activity;
     }
 
     @Override
@@ -122,7 +120,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             @Override
             public void onClick(View view) {
                 if (viewHolder.promptDialog==null){
-                    viewHolder.promptDialog = new PromptDialog(activity);
+                    viewHolder.promptDialog = new PromptDialog((Activity) context);
                     viewHolder.promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi), getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

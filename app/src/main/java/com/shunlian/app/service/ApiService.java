@@ -40,8 +40,11 @@ import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.DiscoveryCircleEntity;
+import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
+import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -1215,6 +1218,30 @@ public interface ApiService {
      */
     @POST("discovery/material/praise")
     Call<BaseEntity<CommonEntity>> discoveryPraise(@Body RequestBody body);
+
+    /**
+     * 前台话题列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/circle/list")
+    Call<BaseEntity<DiscoveryCircleEntity>> discoveryCircle(@QueryMap Map<String,String> map);
+
+    /**
+     * 前台话题列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/circle/InvList")
+    Call<BaseEntity<DiscoveryTieziEntity>> discoveryList(@QueryMap Map<String,String> map);
+
+    /**
+     * 前台帖子评论列表
+     * @param map
+     * @return
+     */
+    @GET("discovery/circle/commentList")
+    Call<BaseEntity<DiscoveryCommentListEntity>> discoveryCommentList(@QueryMap Map<String,String> map);
 
     /**
      * 发表心得
