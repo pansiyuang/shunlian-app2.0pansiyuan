@@ -38,6 +38,7 @@ import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -1072,4 +1073,12 @@ public interface ApiService {
      */
     @GET("discovery/user/unlike ")
     Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
+
+    /**
+     * 导航信息
+     * @param map
+     * @return
+     */
+    @GET("discovery/nice/nav")
+    Call<BaseEntity<DiscoveryNavEntity>> discoveryNav(@QueryMap Map<String,String> map);
 }
