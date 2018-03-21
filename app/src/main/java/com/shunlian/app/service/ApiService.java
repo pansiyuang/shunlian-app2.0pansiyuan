@@ -1242,4 +1242,13 @@ public interface ApiService {
      */
     @GET("discovery/circle/commentList")
     Call<BaseEntity<DiscoveryCommentListEntity>> discoveryCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表心得
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/create")
+    Call<BaseEntity<EmptyEntity>> createExperience(@Body RequestBody body);
 }

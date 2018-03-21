@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.myself_store;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,6 +26,7 @@ import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.shunlian.app.ui.myself_store.AddStoreGoodsAct.currentGoodsList;
 
 
@@ -132,6 +134,16 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
         String currentGoodsId;
         GoodsDeatilEntity.Goods goods = goodsList.get(position);
         currentGoodsId = goods.goods_id;
+        String from = ((AddStoreGoodsAct) getActivity()).getCurrentFrom();
+
+        if (!isEmpty(from)) {
+            Intent intent = new Intent();
+            intent.putExtra("goods", goods);
+            getActivity().setResult(RESULT_OK, intent);
+            getActivity().finish();
+            return;
+        }
+
         if (goods.isSelect) {
             for (int i = 0; i < currentGoodsList.size(); i++) {
                 if (currentGoodsId.equals(currentGoodsList.get(i).goods_id)) {

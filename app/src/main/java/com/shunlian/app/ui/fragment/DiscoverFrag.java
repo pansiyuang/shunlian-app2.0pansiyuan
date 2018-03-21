@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
+import com.shunlian.app.ui.discover.ExperiencePublishActivity;
 import com.shunlian.app.ui.discover.SearchArticleActivity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
@@ -75,6 +76,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     View view_sucaiku;
     @BindView(R.id.miv_search)
     MyImageView miv_search;
+
+    @BindView(R.id.miv_experience_publish)
+    MyImageView miv_experience_publish;
 
     @BindView(R.id.rv_flash)
     RecyclerView rv_flash;
@@ -167,6 +171,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     @Override
     protected void initListener() {
         miv_search.setOnClickListener(this);
+        miv_experience_publish.setOnClickListener(this);
         super.initListener();
     }
 
@@ -427,6 +432,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
         switch (v.getId()){
             case R.id.miv_search:
                 SearchArticleActivity.startAct(getActivity());
+                break;
+            case R.id.miv_experience_publish:
+                ExperiencePublishActivity.startAct(getActivity());
                 break;
         }
     }
