@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/my_line_gray">
+    android:background="@color/white">
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_title"
@@ -240,6 +240,11 @@
                     </com.shunlian.app.widget.MyRelativeLayout>
                 </com.shunlian.app.widget.MyLinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white_ash" />
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
@@ -253,22 +258,20 @@
             android:id="@+id/refreshview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            >
-        </com.shunlian.app.widget.refresh.ring.RingRefreshView>
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            </android.support.v4.widget.NestedScrollView>
-                <FrameLayout
-                    android:id="@+id/flayout_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:visibility="gone"></com.shunlian.app.widget.refresh.ring.RingRefreshView>
 
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/flayout_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 </com.shunlian.app.widget.MyRelativeLayout>

@@ -3,8 +3,10 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.view.IDiscoverQuanzi;
 import com.shunlian.app.view.IDiscoverSucaiku;
 
 import java.util.ArrayList;
@@ -18,15 +20,15 @@ import retrofit2.Call;
  * Created by Administrator on 2017/10/20.
  */
 
-public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
+public class PDiscoverQuanzi extends BasePresenter<IDiscoverQuanzi> {
     private int pageSize=20;
     private boolean isFirst=true;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
     private boolean babyIsLoading;
-    private List<DiscoveryMaterialEntity.Content> mDatas = new ArrayList<>();
+    private List<DiscoveryCircleEntity.Mdata.Content> mDatas = new ArrayList<>();
 
-    public PDiscoverSucaiku(Context context, IDiscoverSucaiku iView) {
+    public PDiscoverQuanzi(Context context, IDiscoverQuanzi iView) {
         super(context, iView);
         getApiData(babyPage);
     }
@@ -58,17 +60,17 @@ public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
         map.put("pageSize", String.valueOf(pageSize));
         sortAndMD5(map);
 
-        Call<BaseEntity<DiscoveryMaterialEntity>> baseEntityCall = getApiService().discoveryMaterial(map);
-        getNetData(isFirst,baseEntityCall, new SimpleNetDataCallback<BaseEntity<DiscoveryMaterialEntity>>() {
+        Call<BaseEntity<DiscoveryCircleEntity>> baseEntityCall = getApiService().discoveryCircle(map);
+        getNetData(isFirst,baseEntityCall, new SimpleNetDataCallback<BaseEntity<DiscoveryCircleEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<DiscoveryMaterialEntity> entity) {
+            public void onSuccess(BaseEntity<DiscoveryCircleEntity> entity) {
                 super.onSuccess(entity);
-                DiscoveryMaterialEntity data =entity.data;
+                DiscoveryCircleEntity data =entity.data;
                 babyIsLoading = false;
                 babyPage++;
-                babyAllPage = Integer.parseInt(data.total_page);
-                mDatas.addAll(data.list);
-                iView.setApiData(data,mDatas);
+                babyAllPage = Integer.parseInt(data.list.total_page);
+                mDatas.addAll(data.list.list);
+                iView.setApiData(data.list,mDatas);
                 isFirst=false;
             }
         });

@@ -474,5 +474,10 @@
     <string name="discover_quweixinfenxiang">去微信分享</string>
     <string name="discover_wenzifuzhi">素材库文字已复制</string>
     <string name="discover_tupianbaocun">素材库图片已保存到手机相册</string>
+    <string name="discover_remenhuati">·热门话题·</string>
+    <string name="discover_zuixinhuati">·最新话题·</string>
+    <string name="discover_remen">热门动态</string>
+    <string name="discover_zuixin">最新动态</string>
+    <string name="discover_jinxuanpinglun">精选评论</string>
 
 </resources>

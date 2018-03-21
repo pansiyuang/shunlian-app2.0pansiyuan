@@ -5,8 +5,6 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
     android:paddingTop="19dp">
 
 
@@ -15,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/new_text"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_pic"
@@ -23,18 +23,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
         android:adjustViewBounds="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_pics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="19dp" />
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:layout_marginTop="23dp">
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
 
         <com.shunlian.app.widget.MyTextView
@@ -67,5 +74,8 @@
             android:text="@string/discover_qufenxiang"
             android:background="@drawable/bg_go_share"/>
     </com.shunlian.app.widget.MyRelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/white_ash"/>
 </com.shunlian.app.widget.MyLinearLayout>
