@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.ui.discover.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -33,6 +35,7 @@ import butterknife.BindView;
 public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicListBean> {
 
     private OnFollowShopListener mShopListener;
+    private OnShareLikeListener mShareLikeListener;
 
     public GuanzhuAdapter(Context context, List<GuanzhuEntity.DynamicListBean> lists) {
         super(context, true, lists);
@@ -66,6 +69,13 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 mHolder.mtv_fx_count.setText(dy.forwards);
                 mHolder.mtv_pl_count.setText(dy.comments);
                 mHolder.mtv_zan_count.setText(dy.likes);
+                if ("1".equals(dy.has_like)){//点赞
+                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
+                }else {
+                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
+                }
             }
             String tags = getTags(dy.tags);
             if (!isEmpty(tags)) {
@@ -171,6 +181,15 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
         @BindView(R.id.miv_zan)
         MyImageView miv_zan;
 
+        @BindView(R.id.ll_fenxiang)
+        LinearLayout ll_fenxiang;
+
+        @BindView(R.id.ll_pinglun)
+        LinearLayout ll_pinglun;
+
+        @BindView(R.id.ll_zan)
+        LinearLayout ll_zan;
+
         public GuanzhuHolder(View itemView) {
             super(itemView);
             mtv_follow.setWHProportion(125, 44);
@@ -183,6 +202,9 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
             recy_view.addItemDecoration(grideItemDecoration);
             mtv_follow.setOnClickListener(this);
             itemView.setOnClickListener(this);
+            ll_zan.setOnClickListener(this);
+            ll_pinglun.setOnClickListener(this);
+            ll_fenxiang.setOnClickListener(this);
         }
 
         /**
@@ -196,6 +218,20 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 case R.id.mtv_follow:
                     if (mShopListener != null){
                         mShopListener.onFollow(getAdapterPosition());
+                    }
+                    break;
+                case R.id.ll_zan://点赞
+                    if (mShopListener != null){
+                        mShareLikeListener.onItemPosition(getAdapterPosition(),false);
+                    }
+                    break;
+                case R.id.ll_pinglun://评论
+                    GuanzhuEntity.DynamicListBean dy = lists.get(getAdapterPosition());
+                    CommentListAct.startAct((Activity) context,dy.id);
+                    break;
+                case R.id.ll_fenxiang://分享
+                    if (mShopListener != null){
+                        mShareLikeListener.onItemPosition(getAdapterPosition(),true);
                     }
                     break;
                 default:
@@ -217,5 +253,19 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
      */
     public interface OnFollowShopListener{
         void onFollow(int position);
+    }
+
+    public void setOnShareLikeListener(OnShareLikeListener shareLikeListener){
+
+        mShareLikeListener = shareLikeListener;
+    }
+
+    public interface OnShareLikeListener{
+        /**
+         *
+         * @param position 条目位置
+         * @param isShare 点击是否是分享按钮
+         */
+        void onItemPosition(int position,boolean isShare);
     }
 }

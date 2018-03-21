@@ -6,6 +6,7 @@ import android.view.View;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.GuanzhuAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -31,6 +32,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     private GuanzhuAdapter adapter;
     private final String page_size = "10";
     private int operationId = 0;
+    private int currentPosition;
 
     public GuanzhuPresenter(Context context, IGuanzhuView iView) {
         super(context, iView);
@@ -110,8 +112,25 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                 public void onItemClick(View view, int position) {
                     operationId = position;
                     GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
-                    if (!"new_sales".equals(dynamicListBean.type)){
+                    if (!"new_sales".equals(dynamicListBean.type)){//文章
 
+                    }
+                }
+            });
+
+            adapter.setOnShareLikeListener(new GuanzhuAdapter.OnShareLikeListener() {
+                @Override
+                public void onItemPosition(int position, boolean isShare) {
+                    currentPosition = position;
+                    if (isShare){//分享
+
+                    }else {//点赞
+                        GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
+                        if ("1".equals(dynamicListBean.has_like)){
+                            articleUnLike(dynamicListBean.id);
+                        }else {
+                            articleLike(dynamicListBean.id);
+                        }
                     }
                 }
             });
@@ -203,6 +222,54 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 Common.staticToast(message);
+            }
+        });
+    }
+
+
+    public void articleLike(final String articleId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", articleId);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userLike(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                changeLikeNum(entity.data.new_likes);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast("点赞失败");
+            }
+        });
+    }
+
+    private void changeLikeNum(String new_likes) {
+        GuanzhuEntity.DynamicListBean dy = mListBeans.get(currentPosition);
+        dy.likes = new_likes;
+        dy.has_like = "1".equals(dy.has_like)?"0":"1";
+        adapter.notifyDataSetChanged();
+    }
+
+    public void articleUnLike(final String articleId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", articleId);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userUnLike(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                changeLikeNum(entity.data.new_likes);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast("取消点赞失败");
             }
         });
     }
