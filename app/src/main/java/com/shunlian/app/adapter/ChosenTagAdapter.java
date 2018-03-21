@@ -44,12 +44,18 @@ public class ChosenTagAdapter extends BaseRecyclerAdapter<ArticleEntity.Tag> {
         tagHolderView.tv_tag.setLayoutParams(params);
     }
 
-    public class TagHolderView extends BaseRecyclerViewHolder {
+    public class TagHolderView extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_tag)
         TextView tv_tag;
 
         public TagHolderView(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(v, getAdapterPosition());
         }
     }
 }

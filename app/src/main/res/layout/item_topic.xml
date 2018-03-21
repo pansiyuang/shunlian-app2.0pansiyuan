@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="顺联动商城土八鲜旗舰店"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
@@ -35,7 +34,6 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="10万+人关注"
             android:textColor="@color/new_gray"
             android:textSize="14sp" />
     </LinearLayout>

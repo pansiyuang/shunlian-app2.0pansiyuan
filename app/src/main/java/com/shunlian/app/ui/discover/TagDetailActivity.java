@@ -1,18 +1,30 @@
 package com.shunlian.app.ui.discover;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.TagDetailAdapter;
+import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.banner.Kanner;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -20,10 +32,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/3/19.
  */
 
-public class TagListActivity extends BaseActivity {
-
-    @BindView(R.id.miv_is_fav)
-    MyImageView miv_is_fav;
+public class TagDetailActivity extends BaseActivity implements IChosenView, TagDetailAdapter.OnLayoutSizeListener {
 
     @BindView(R.id.miv_more)
     MyImageView miv_more;
@@ -31,34 +40,58 @@ public class TagListActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.mll_item)
-    MyLinearLayout mll_item;
-
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
-    @BindView(R.id.line)
-    View line;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
 
     @BindView(R.id.recycler_tags)
     RecyclerView recycler_tags;
 
-    private int bannerHeight;
     public int offset;
-    private String favId;
     private LinearLayoutManager manager;
     private int totalDy;
-    private int screenWidth;
+    private int layoutHeight;
+    private ChosenPresenter mPresent;
+    private TagDetailAdapter mAdapter;
+    private ArticleEntity.Tag mTag;
+    private List<ArticleEntity.Article> articleList;
+    private String currentId;
+    private int mIndex = 1;
+
+    public static void startAct(Context context, String tagId) {
+        Intent intent = new Intent(context, TagDetailActivity.class);
+        intent.putExtra("tagId", tagId);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_tag_list;
+        return R.layout.act_tag_detail;
     }
 
     @Override
     protected void initData() {
         defToolbar();
+
+        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+        offset = toolbarParams.height;
+
+        currentId = getIntent().getStringExtra("tagId");
+        if (isEmpty(currentId)) {
+            return;
+        }
+        mPresent = new ChosenPresenter(this, this);
+        mPresent.getTagDetail(true, currentId);
+
+        manager = new LinearLayoutManager(this);
+        articleList = new ArrayList<>();
+        recycler_tags.setLayoutManager(manager);
+        recycler_tags.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 10), 0, 0));
+        ((SimpleItemAnimator) recycler_tags.getItemAnimator()).setSupportsChangeAnimations(false);
     }
+
 
     @Override
     protected void initListener() {
@@ -70,12 +103,12 @@ public class TagListActivity extends BaseActivity {
                 if (manager != null) {
                     int firstPosition = manager.findFirstVisibleItemPosition();
                     View firstView = manager.findViewByPosition(firstPosition);
-                    if (firstView instanceof Kanner) {
+                    if (firstView instanceof RelativeLayout) {
                         totalDy += dy;
-                        setBgColor(firstPosition, totalDy);
+                        setBgColor(totalDy);
                     } else {
                         setToolbar();
-                        totalDy = screenWidth;
+                        totalDy = layoutHeight;
                     }
                 }
             }
@@ -88,23 +121,18 @@ public class TagListActivity extends BaseActivity {
         }
         immersionBar.titleBar(toolbar, false)
                 .statusBarDarkFont(true, 0.2f)
-                .addTag(GoodsDetailAct.class.getName())
-                .init();
+                .addTag(GoodsDetailAct.class.getName()).init();
     }
 
-    public void setBgColor(int position, int totalDy) {
-        ImmersionBar immersionBar = ImmersionBar.with(this)
-                .addViewSupportTransformColor(toolbar, R.color.white);
-        if (totalDy <= bannerHeight) {
+    public void setBgColor(int totalDy) {
+        ImmersionBar immersionBar = ImmersionBar.with(this).addViewSupportTransformColor(toolbar, R.color.white);
+        if (totalDy <= layoutHeight) {
             if (totalDy <= 0) {
                 totalDy = 0;
             }
-            float alpha = (float) totalDy / bannerHeight;
-            immersionBar.statusBarAlpha(alpha)
-                    .addTag(GoodsDetailAct.class.getName())
-                    .init();
-            mll_item.setAlpha(alpha);
-
+            float alpha = (float) totalDy / layoutHeight;
+            immersionBar.statusBarAlpha(alpha).addTag(GoodsDetailAct.class.getName()).init();
+            tv_title.setAlpha(alpha);
             float v = 1.0f - alpha * 2;
             if (v <= 0) {
                 v = alpha * 2 - 1;
@@ -113,12 +141,7 @@ public class TagListActivity extends BaseActivity {
                 setImg(1, 2);
             }
             miv_close.setAlpha(v);
-            miv_is_fav.setAlpha(v);
             miv_more.setAlpha(v);
-            if (alpha < 1.0f)
-                line.setVisibility(View.INVISIBLE);
-            else
-                line.setVisibility(View.VISIBLE);
         } else {
             setToolbar();
         }
@@ -126,36 +149,99 @@ public class TagListActivity extends BaseActivity {
 
     public void setToolbar() {
         setImg(2, 1);
-        immersionBar.statusBarAlpha(1.0f)
-                .addTag(GoodsDetailAct.class.getName())
-                .init();
-        mll_item.setAlpha(1.0f);
+        immersionBar.statusBarAlpha(1.0f).addTag(GoodsDetailAct.class.getName()).init();
         miv_close.setAlpha(1.0f);
-        miv_is_fav.setAlpha(1.0f);
         miv_more.setAlpha(1.0f);
-        line.setVisibility(View.VISIBLE);
+        tv_title.setAlpha(1.0f);
     }
 
     private void setImg(int status, int oldStatus) {
         if (status != oldStatus) {
             if (status == 1) {
                 miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_more_souchag_h);
-                }
                 miv_more.setImageResource(R.mipmap.icon_more_gengduo);
             } else {
                 miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-                if (TextUtils.isEmpty(favId) || "0".equals(favId)) {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_n);
-                } else {
-                    miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
-                }
-
                 miv_more.setImageResource(R.mipmap.icon_more_n);
             }
         }
+    }
+
+    @Override
+    public void getNiceList(ArticleEntity articleEntity, int currentPage, int totalPage) {
+        if (currentPage == 1) {
+            articleList.clear();
+            mTag = articleEntity.tag_obj;
+            tv_title.setText(mTag.name);
+        }
+        if (!isEmpty(articleEntity.article_list)) {
+            articleList.addAll(articleEntity.article_list);
+        }
+        if (mAdapter == null) {
+            mAdapter = new TagDetailAdapter(this, articleList, mTag);
+            mAdapter.setOnLayoutSizeListener(this);
+            recycler_tags.setAdapter(mAdapter);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void toLikeArticle(String articleId) {
+        mPresent.articleLike(articleId);
+    }
+
+    public void toUnLikeArticle(String articleId) {
+        mPresent.articleUnLike(articleId);
+    }
+
+    public void toGetOtherTopiscList() {
+        mPresent.getOthersTopicList(String.valueOf(mIndex));
+    }
+
+
+    @Override
+    public void likeArticle(String articleId) {
+        for (int i = 0; i < articleList.size(); i++) {
+            ArticleEntity.Article article = articleList.get(i);
+            if (articleId.equals(articleList.get(i).id)) {
+                int likeCount = Integer.valueOf(article.likes) + 1;
+                article.likes = likeCount + "";
+                break;
+            }
+        }
+        mAdapter.updateEvaluate(articleId, "1");
+    }
+
+    @Override
+    public void unLikeArticle(String articleId) {
+        for (int i = 0; i < articleList.size(); i++) {
+            ArticleEntity.Article article = articleList.get(i);
+            if (articleId.equals(articleList.get(i).id)) {
+                int likeCount = Integer.valueOf(article.likes) - 1;
+                article.likes = likeCount + "";
+                break;
+            }
+        }
+        mAdapter.updateEvaluate(articleId, "0");
+    }
+
+    @Override
+    public void getOtherTopics(List<ArticleEntity.Topic> topic_list) {
+        mAdapter.notityTopicData(topic_list);
+        mIndex++;
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void OnTopSize(int height) {
+        layoutHeight = height - offset - ImmersionBar.getStatusBarHeight(this);
     }
 }

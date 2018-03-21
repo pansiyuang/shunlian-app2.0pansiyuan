@@ -4,6 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_tags"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_ash"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_close"
                 android:layout_width="wrap_content"
@@ -23,15 +30,13 @@
                 android:paddingLeft="12dp"
                 android:src="@mipmap/icon_more_fanhui" />
 
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_is_fav"
+            <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_toLeftOf="@+id/miv_more"
-                android:src="@mipmap/icon_more_souchag_n"
-                app:iv_control_adapter="true"
-                app:iv_margin_right="23" />
+                android:layout_centerInParent="true"
+                android:textColor="@color/my_dark_grey"
+                android:textSize="18sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_more"
@@ -43,20 +48,7 @@
                 app:iv_control_adapter="true"
                 app:iv_margin_right="23" />
 
-            <View
-                android:id="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/light_gray_three"
-                android:visibility="invisible" />
         </com.shunlian.app.widget.MyRelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_tags"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 </RelativeLayout>

@@ -17,6 +17,7 @@ public class ArticleEntity {
     public String page_size;
     public List<Article> article_list;
     public List<Topic> topic_list;
+    public Tag tag_obj;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Article {
@@ -31,12 +32,20 @@ public class ArticleEntity {
         public String comments;
         public String forwards;
         public String had_like;
+        public List<Topic> topic_list;
+        public String[] title_keywords;
+        public String[] full_title_keywords;
+        public String pub_time;
+        public String pub_by;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Tag {
         public String id;
         public String name;
+        public String description;
+        public String bg_img;
+        public String head_img;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

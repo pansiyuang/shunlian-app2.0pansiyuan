@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_common_layout" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/edt_content"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_corner_solid_gray_3px"
+                android:gravity="left"
+                android:hint="快说说你的心得吧~"
+                android:padding="10dp"
+                android:textColor="@color/new_text"
+                android:textColorHint="@color/my_gray_one"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_content_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/edt_content"
+                android:layout_marginTop="10dp"
+                android:text="0/300"
+                android:textColor="@color/new_gray" />
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_content_count"
+                android:layout_marginTop="15dp"
+                android:text="@string/upload_pic"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <GridView
+                android:id="@+id/grid_imgs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:horizontalSpacing="4dp"
+                android:numColumns="5"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="13dp"
+                android:verticalSpacing="4dp" />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/grid_imgs"
+                android:layout_marginTop="25dp"
+                android:text="@string/add_goods"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/grid_imgs"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@+id/tv2"
+                android:text="@string/non_mandatory"
+                android:textColor="@color/new_gray"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_add_goods"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/tv2"
+                android:layout_marginBottom="158dp"
+                android:layout_marginTop="13dp"
+                android:background="@color/value_f5">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/img_found_xinde_addproduct" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/miv1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="(只能添加1个商品)"
+                    android:textColor="@color/my_gray_one"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,9 +1,8 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -12,13 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
+import com.shunlian.app.ui.discover.TagDetailActivity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -32,48 +34,101 @@ import static com.shunlian.app.utils.FastClickListener.isFastClick;
  */
 
 public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
-    public static final int LAYOUT_SMALL = 10004;
-    public static final int LAYOUT_BIG = 10005;
     private DiscoverJingxuanFrag mFragment;
+    private ChangeTopicAdapter mAdapter;
 
     public ArticleAdapter(Context context, List<ArticleEntity.Article> lists, DiscoverJingxuanFrag frag) {
-        super(context, false, lists);
+        super(context, true, lists);
         this.mFragment = frag;
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case LAYOUT_SMALL:
-                return new SmallHolderView(LayoutInflater.from(context).inflate(R.layout.item_chosen_small, parent, false));
-            case LAYOUT_BIG:
-                return new BigHolderView(LayoutInflater.from(context).inflate(R.layout.item_chosen_big, parent, false));
-            default:
-                return super.onCreateViewHolder(parent, viewType);
-        }
+        return new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chosen, parent, false));
     }
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == LAYOUT_SMALL) {
-            handleSmall(holder, position);
-        } else if (getItemViewType(position) == LAYOUT_BIG) {
-            handleBig(holder, position);
+        if (holder instanceof ArticleViewHolder) {
+            ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+            final ArticleEntity.Article article = lists.get(position);
+
+            if ("0".equals(article.thumb_type)) {
+                articleViewHolder.rl_small.setVisibility(View.VISIBLE);
+                articleViewHolder.ll_big.setVisibility(View.GONE);
+            } else {
+                articleViewHolder.ll_big.setVisibility(View.VISIBLE);
+                articleViewHolder.rl_small.setVisibility(View.GONE);
+            }
+
+            articleViewHolder.tv_small_title.setText(article.title);
+            articleViewHolder.tv_big_title.setText(article.title);
+            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb);
+            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb);
+            articleViewHolder.tv_share_count.setText(article.forwards);
+            articleViewHolder.tv_comment_count.setText(article.comments);
+            if ("0".equals(article.had_like)) {
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
+            } else {
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_h);
+            }
+            articleViewHolder.tv_evaluate_count.setText(article.likes);
+
+            if (!isEmpty(article.tags)) {
+                articleViewHolder.tv_small_content.setMovementMethod(LinkMovementMethod.getInstance());
+                articleViewHolder.tv_small_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
+                articleViewHolder.tv_big_content.setMovementMethod(LinkMovementMethod.getInstance());
+                articleViewHolder.tv_big_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
+            }
+
+            articleViewHolder.ll_evaluate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isFastClick()) {
+                        return;
+                    }
+                    if ("0".equals(article.had_like)) {
+                        mFragment.toLikeArticle(article.id);
+                    } else {
+                        mFragment.toUnLikeArticle(article.id);
+                    }
+                }
+            });
+
+            articleViewHolder.miv_change.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isFastClick()) {
+                        return;
+                    }
+                    mFragment.toGetOtherTopiscList();
+                }
+            });
+
+            setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);
         }
     }
 
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
     @Override
-    public int getItemViewType(int position) {
-        ArticleEntity.Article article = lists.get(position);
-        if ("0".equals(article.thumb_type)) {
-            return LAYOUT_SMALL;
-        } else {
-            return LAYOUT_BIG;
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_footmark));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
+    }
+
+    public void notityTopicData(List<ArticleEntity.Topic> mTopics) {
+        if (!isEmpty(mTopics) && mAdapter != null) {
+            mAdapter.setData(mTopics);
         }
     }
 
@@ -87,78 +142,21 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         }
     }
 
-    public void handleSmall(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof SmallHolderView) {
-            SmallHolderView smallHolderView = (SmallHolderView) holder;
-            final ArticleEntity.Article article = lists.get(position);
-            smallHolderView.tv_title.setText(article.title);
-            GlideUtils.getInstance().loadImage(context, smallHolderView.miv_icon, article.thumb);
-            smallHolderView.tv_share_count.setText(article.forwards);
-            smallHolderView.tv_comment_count.setText(article.comments);
-            if ("0".equals(article.had_like)) {
-                smallHolderView.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
-            } else {
-                smallHolderView.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_h);
-            }
-            smallHolderView.tv_evaluate_count.setText(article.likes);
+    public void setTopicData(List<ArticleEntity.Topic> topicData, LinearLayout linearLayout, RecyclerView recyclerView) {
+        if (isEmpty(topicData)) {
+            linearLayout.setVisibility(View.GONE);
+        } else {
+            linearLayout.setVisibility(View.VISIBLE);
 
-            if (!isEmpty(article.tags)) {
-                smallHolderView.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
-                smallHolderView.tv_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
-            }
-            smallHolderView.ll_evaluate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFastClick()) {
-                        return;
-                    }
-                    if ("0".equals(article.had_like)) {
-                        mFragment.toLikeArticle(article.id);
-                    } else {
-                        mFragment.toUnLikeArticle(article.id);
-                    }
-                }
-            });
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
+            mAdapter = new ChangeTopicAdapter(context, topicData);
+            recyclerView.setAdapter(mAdapter);
         }
     }
 
-    public void handleBig(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BigHolderView) {
-            BigHolderView bigHolderView = (BigHolderView) holder;
-            final ArticleEntity.Article article = lists.get(position);
-            bigHolderView.tv_title.setText(article.title);
-            GlideUtils.getInstance().loadImage(context, bigHolderView.miv_icon, article.thumb);
-            bigHolderView.tv_share_count.setText(article.forwards);
-            bigHolderView.tv_comment_count.setText(article.comments);
-            if ("0".equals(article.had_like)) {
-                bigHolderView.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
-            } else {
-                bigHolderView.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_h);
-            }
-            bigHolderView.tv_evaluate_count.setText(article.likes);
-
-            if (!isEmpty(article.tags)) {
-                bigHolderView.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
-                bigHolderView.tv_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
-            }
-
-            bigHolderView.ll_evaluate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFastClick()) {
-                        return;
-                    }
-                    if ("0".equals(article.had_like)) {
-                        mFragment.toLikeArticle(article.id);
-                    } else {
-                        mFragment.toUnLikeArticle(article.id);
-                    }
-                }
-            });
-        }
-    }
-
-    private SpannableStringBuilder addClickablePart(List<ArticleEntity.Tag> mTags, String content) {
+    private SpannableStringBuilder addClickablePart(final List<ArticleEntity.Tag> mTags, String content) {
         StringBuffer sb = new StringBuffer();
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         for (int i = 0; i < mTags.size(); i++) {
@@ -171,12 +169,14 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         String[] str = sb.toString().split(" ");
 
         for (int i = 0; i < str.length; i++) {
+            final int index = i;
             final String name = str[i];
             final int start = sb.toString().indexOf(name);
             ssb.setSpan(new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
                     //点击事件
+                    TagDetailActivity.startAct(context, mTags.get(index).id);
                 }
 
                 @Override
@@ -190,16 +190,25 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         return ssb.append(content);
     }
 
-    public class SmallHolderView extends BaseRecyclerViewHolder {
+    public class ArticleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.tv_title)
-        TextView tv_title;
+        @BindView(R.id.tv_small_title)
+        TextView tv_small_title;
 
-        @BindView(R.id.miv_icon)
-        MyImageView miv_icon;
+        @BindView(R.id.miv_small_icon)
+        MyImageView miv_small_icon;
 
-        @BindView(R.id.tv_content)
-        TextView tv_content;
+        @BindView(R.id.tv_small_content)
+        TextView tv_small_content;
+
+        @BindView(R.id.tv_big_title)
+        TextView tv_big_title;
+
+        @BindView(R.id.miv_big_icon)
+        MyImageView miv_big_icon;
+
+        @BindView(R.id.tv_big_content)
+        TextView tv_big_content;
 
         @BindView(R.id.ll_share)
         LinearLayout ll_share;
@@ -228,52 +237,31 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         @BindView(R.id.tv_evaluate_count)
         TextView tv_evaluate_count;
 
+        @BindView(R.id.ll_change)
+        LinearLayout ll_change;
 
-        public SmallHolderView(View itemView) {
+        @BindView(R.id.miv_change)
+        MyImageView miv_change;
+
+        @BindView(R.id.recycler_change)
+        RecyclerView recycler_change;
+
+        @BindView(R.id.rl_small)
+        RelativeLayout rl_small;
+
+        @BindView(R.id.ll_big)
+        LinearLayout ll_big;
+
+        public ArticleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
-    }
 
-    public class BigHolderView extends BaseRecyclerViewHolder {
-
-        @BindView(R.id.tv_title)
-        TextView tv_title;
-
-        @BindView(R.id.miv_icon)
-        MyImageView miv_icon;
-
-        @BindView(R.id.tv_content)
-        TextView tv_content;
-
-        @BindView(R.id.ll_share)
-        LinearLayout ll_share;
-
-        @BindView(R.id.miv_share)
-        MyImageView miv_share;
-
-        @BindView(R.id.tv_share_count)
-        TextView tv_share_count;
-
-        @BindView(R.id.ll_comment)
-        LinearLayout ll_comment;
-
-        @BindView(R.id.miv_comment)
-        MyImageView miv_comment;
-
-        @BindView(R.id.tv_comment_count)
-        TextView tv_comment_count;
-
-        @BindView(R.id.ll_evaluate)
-        LinearLayout ll_evaluate;
-
-        @BindView(R.id.miv_evaluate)
-        MyImageView miv_evaluate;
-
-        @BindView(R.id.tv_evaluate_count)
-        TextView tv_evaluate_count;
-
-        public BigHolderView(View itemView) {
-            super(itemView);
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 }

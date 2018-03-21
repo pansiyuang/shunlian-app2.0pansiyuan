@@ -5,14 +5,17 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corner_white_8px"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/rl_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
@@ -52,6 +55,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_big"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_white_8px"
@@ -94,8 +98,6 @@
             android:id="@+id/view_line"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_below="@+id/miv_icon"
-            android:layout_marginTop="14dp"
             android:background="@color/bg_gray_two" />
 
         <LinearLayout

@@ -470,5 +470,8 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
-
+    <string name="article">文章</string>
+    <string name="search_article">搜索文章</string>
+    <string name="upload_pic">上传照片</string>
+    <string name="non_mandatory">(非必填)</string>
 </resources>

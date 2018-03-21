@@ -7,13 +7,13 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
+import com.shunlian.app.ui.discover.SearchArticleActivity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
 import com.shunlian.app.ui.BaseFragment;
@@ -24,10 +24,8 @@ import com.shunlian.app.ui.discover.DiscoverSucaikuFrag;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.discover.DiscoversFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscover;
-import com.shunlian.app.view.IFootPrintView;
-import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.refresh.ring.RingRefreshView;
@@ -49,7 +47,7 @@ import butterknife.OnClick;
  * 发现页面
  */
 
-public class DiscoverFrag extends BaseFragment implements IDiscover {
+public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClickListener {
     public final String FLAG_JINGXUAN = "flag_jingxuan";
     public final String FLAG_GUANZHU = "flag_guanzhu";
     public final String FLAG_GOUMAIXINDE = "flag_goumaixinde";
@@ -75,6 +73,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover {
     View view_quanzi;
     @BindView(R.id.view_sucaiku)
     View view_sucaiku;
+    @BindView(R.id.miv_search)
+    MyImageView miv_search;
 
     @BindView(R.id.rv_flash)
     RecyclerView rv_flash;
@@ -163,6 +163,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover {
 
     }
 
+    @Override
+    protected void initListener() {
+        miv_search.setOnClickListener(this);
+        super.initListener();
+    }
 
     public void jingXuanFrag() {
         if (jingxuanFrag == null) {
@@ -414,5 +419,14 @@ public class DiscoverFrag extends BaseFragment implements IDiscover {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.miv_search:
+                SearchArticleActivity.startAct(getActivity());
+                break;
+        }
     }
 }
