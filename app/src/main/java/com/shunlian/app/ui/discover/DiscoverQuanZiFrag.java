@@ -15,6 +15,11 @@ import com.shunlian.app.ui.discover.quanzi.DiscoverTieziAct;
 import com.shunlian.app.view.IDiscoverQuanzi;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.Kanner;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedRingHeader;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.contain.DefaultOnRefreshHeaderView;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +32,14 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
     RecyclerView rv_new;
     @BindView(R.id.kanner)
     Kanner kanner;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
     private PDiscoverQuanzi pDiscoverQuanzi;
     private LinearLayoutManager linearLayoutManager;
     private DiscoverNewAdapter newAdapter;
+
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -39,6 +49,9 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
     @Override
     protected void initData() {
         pDiscoverQuanzi = new PDiscoverQuanzi(getContext(), this);
+        NestedSlHeader header = new NestedSlHeader(getContext());
+        lay_refresh.setRefreshHeaderView(header);
+
     }
 
     @Override
@@ -57,6 +70,12 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                 }
             }
         });
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pDiscoverQuanzi.resetBaby();
+            }
+        });
     }
 
     /**
@@ -71,6 +90,7 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
 
     @Override
     public void setApiData(final DiscoveryCircleEntity.Mdata data, final List<DiscoveryCircleEntity.Mdata.Content> mdatas) {
+        lay_refresh.setRefreshing(false);
         if (newAdapter == null) {
             newAdapter = new DiscoverNewAdapter(getContext(), true, mdatas);
             linearLayoutManager = new LinearLayoutManager(getContext());
@@ -107,7 +127,7 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
 
     @Override
     public void showFailureView(int request_code) {
-
+        lay_refresh.setRefreshing(false);
     }
 
     @Override

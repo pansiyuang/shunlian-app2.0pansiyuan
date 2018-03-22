@@ -1,15 +1,17 @@
-package com.shunlian.app.widget.refresh.turkey;
+package com.shunlian.app.widget.nestedrefresh;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.refreshlayout.OnHeaderListener;
+import com.shunlian.app.widget.nestedrefresh.base.BaseHeader;
+import com.shunlian.app.widget.refresh.turkey.FirstSetpView;
+import com.shunlian.app.widget.refresh.turkey.SecondStepView;
 
 
 /**
@@ -17,23 +19,24 @@ import com.shunlian.app.widget.refreshlayout.OnHeaderListener;
  * Created by zhouweilong on 2016/10/24.
  */
 
-public class SlHeader extends FrameLayout implements OnHeaderListener {
+public class NestedSlHeader extends BaseHeader {
     private static final int DONE = 0;
     private static final int PULL_TO_REFRESH = 1;
     private static final int RELEASE_TO_REFRESH = 2;
     private static final int REFRESHING = 3;
 
-    private  AnimationDrawable secondAnimation;
-    private  int headerViewHeight;
-    private  SecondStepView secondStepView;
-    private  FirstSetpView firstSetpView;
-//    private  TextView tv_pull_to_refresh;
+    private AnimationDrawable secondAnimation;
+    private int headerViewHeight;
+    private SecondStepView secondStepView;
+    private FirstSetpView firstSetpView;
+    //    private  TextView tv_pull_to_refresh;
     private MyImageView miv_release;
-    private  View headerView;
+    private View headerView;
+    private boolean isDone=false;
 
-    public SlHeader(Context context) {
+    public NestedSlHeader(Context context) {
         super(context);
-        headerView=LayoutInflater.from(context).inflate(R.layout.sl_refresh_view, this, true);
+        headerView = LayoutInflater.from(context).inflate(R.layout.sl_refresh_view, this, true);
         miv_release = (MyImageView) headerView.findViewById(R.id.miv_release);
         firstSetpView = (FirstSetpView) headerView.findViewById(R.id.first_step_view);
         secondStepView = (SecondStepView) headerView.findViewById(R.id.second_step_view);
@@ -42,6 +45,7 @@ public class SlHeader extends FrameLayout implements OnHeaderListener {
         measureView(headerView);
         changeHeaderByState(DONE);
     }
+
     private void measureView(View child) {
         ViewGroup.LayoutParams p = child.getLayoutParams();
         if (p == null) {
@@ -60,40 +64,85 @@ public class SlHeader extends FrameLayout implements OnHeaderListener {
         }
         child.measure(childWidthSpec, childHeightSpec);
     }
-    @Override
-    public void onRefreshBefore(int scrollY, int refreshHeight, int headerHeight) {
-        firstSetpView.setCurrentProgress(Math.abs(scrollY)/(1.0f*getHeight()));
-        firstSetpView.postInvalidate();
-        changeHeaderByState(PULL_TO_REFRESH);
-    }
 
     @Override
-    public void onRefreshAfter(int scrollY, int refreshHeight, int headerHeight) {
-        changeHeaderByState(RELEASE_TO_REFRESH);
-    }
-
-    @Override
-    public void onRefreshReady(int scrollY, int refreshHeight, int headerHeight) {
-
-    }
-
-    @Override
-    public void onRefreshing(int scrollY, int refreshHeight, int headerHeight) {
+    public void onRefresh() {
         changeHeaderByState(REFRESHING);
+//        ivSuccess.setVisibility(GONE);
+//        ivArrow.clearAnimation();
+//        ivArrow.setVisibility(GONE);
+//        progressBar.setVisibility(VISIBLE);
+//        tvRefresh.setText("REFRESHING");
     }
 
     @Override
-    public void onRefreshComplete(int scrollY, int refreshHeight, int headerHeight, boolean isRefreshSuccess) {
-        changeHeaderByState(DONE);
+    public void onPrepare() {
+        Log.d("TwitterRefreshHeader", "onPrepare()");
     }
 
     @Override
-    public void onRefreshCancel(int scrollY, int refreshHeight, int headerHeight) {
+    public void onDrag(int y, int offset) {
+        if (y > 0) {
+//            ivArrow.setVisibility(VISIBLE);
+//            progressBar.setVisibility(GONE);
+//            ivSuccess.setVisibility(GONE);
+            if (y > offset) {
+//                tvRefresh.setText("RELEASE TO REFRESH");
+//                if (!rotated) {
+//                    ivArrow.clearAnimation();
+//                    ivArrow.startAnimation(rotateUp);
+//                    rotated = true;
+//                }
+                changeHeaderByState(RELEASE_TO_REFRESH);
+            } else {
+//                if (rotated) {
+//                    ivArrow.clearAnimation();
+//                    ivArrow.startAnimation(rotateDown);
+//                    rotated = false;
+//                }
+//
+//                tvRefresh.setText("SWIPE TO REFRESH");
+                firstSetpView.setCurrentProgress(Math.abs(y) / (1.0f * getHeight()));
+                firstSetpView.postInvalidate();
+                if (!isDone)
+                changeHeaderByState(PULL_TO_REFRESH);
+            }
+        }else {
+            isDone=false;
+        }
+
+
+    }
+
+    @Override
+    public void onRelease() {
+        Log.d("TwitterRefreshHeader", "onRelease()");
+    }
+
+    @Override
+    public void onComplete() {
+        changeHeaderByState(DONE);
+        isDone=true;
+//        rotated = false;
+//        ivSuccess.setVisibility(VISIBLE);
+//        ivArrow.clearAnimation();
+//        ivArrow.setVisibility(GONE);
+//        progressBar.setVisibility(GONE);
+//        tvRefresh.setText("COMPLETE");
+    }
+
+    @Override
+    public void onReset() {
+//        rotated = false;
+//        ivSuccess.setVisibility(GONE);
+//        ivArrow.clearAnimation();
+//        ivArrow.setVisibility(GONE);
+//        progressBar.setVisibility(GONE);
         changeHeaderByState(DONE);
     }
 
 
-    private void changeHeaderByState(int state){
+    private void changeHeaderByState(int state) {
         switch (state) {
             case DONE:
                 headerView.setPadding(0, -headerViewHeight, 0, 0);

@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lay_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.shunlian.app.widget.MyLinearLayout
+    android:layout_height="match_parent"
+    app:mode="follow">
+    <!--app:header="@layout/layout_default_header"-->
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="@string/discover_remenhuati"
-            android:textColor="@color/new_text"
-            android:textSize="16sp" />
-
-        <!--轮播-->
-        <com.shunlian.app.widget.banner.Kanner
-            android:id="@+id/kanner"
+        <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:bb_delay="5"
-            app:bb_period="3"
-            app:bb_scale="0.4"
-            android:layout_marginTop="25dp"/>
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="@string/discover_zuixinhuati"
-            android:textColor="@color/new_text"
-            android:textSize="16sp" />
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/discover_remenhuati"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_new"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-    </com.shunlian.app.widget.MyLinearLayout>
+            <!--轮播-->
+            <com.shunlian.app.widget.banner.Kanner
+                android:id="@+id/kanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:bb_delay="5"
+                app:bb_period="3"
+                app:bb_scale="0.4" />
 
-</android.support.v4.widget.NestedScrollView>
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="@string/discover_zuixinhuati"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_new"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </com.shunlian.app.widget.MyLinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
