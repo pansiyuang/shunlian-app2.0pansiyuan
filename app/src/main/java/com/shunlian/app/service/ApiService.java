@@ -1074,7 +1074,7 @@ public interface ApiService {
      * @return
      */
     @GET("discovery/user/like")
-    Call<BaseEntity<EmptyEntity>> userLike(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> userLike(@QueryMap Map<String, String> map);
 
     /**
      * 精选文章点赞
@@ -1083,7 +1083,7 @@ public interface ApiService {
      * @return
      */
     @GET("discovery/user/unlike ")
-    Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> userUnLike(@QueryMap Map<String, String> map);
 
     /**
      * 发现评论列表
@@ -1242,4 +1242,13 @@ public interface ApiService {
      */
     @GET("discovery/circle/commentList")
     Call<BaseEntity<DiscoveryCommentListEntity>> discoveryCommentList(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表心得
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/create")
+    Call<BaseEntity<EmptyEntity>> createExperience(@Body RequestBody body);
 }

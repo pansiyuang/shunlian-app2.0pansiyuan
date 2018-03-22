@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IChosenView;
@@ -92,10 +92,10 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
         Map<String, String> map = new HashMap<>();
         map.put("id", articleId);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().userLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userLike(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.likeArticle(articleId);
             }
@@ -112,10 +112,10 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
         Map<String, String> map = new HashMap<>();
         map.put("id", articleId);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().userUnLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userUnLike(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.unLikeArticle(articleId);
             }
