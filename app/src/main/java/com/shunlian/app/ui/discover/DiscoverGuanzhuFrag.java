@@ -11,10 +11,15 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.GuanzhuPresenter;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGuanzhuView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +39,9 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
 
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
     private LinearLayoutManager manager;
     private GuanzhuPresenter presenter;
 
@@ -44,8 +52,9 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
 
     @Override
     protected void initData() {
-//        CommentListAct.startAct(baseActivity,"1");
-//        FindSelectShopAct.startAct(baseActivity);
+
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         presenter = new GuanzhuPresenter(baseActivity,this);
         manager = new LinearLayoutManager(baseActivity);
@@ -54,6 +63,9 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
                 0,0,getColorResouce(R.color.white_ash)));
         EventBus.getDefault().register(this);//注册
+        if (!Common.isAlreadyLogin()){
+            LoginAct.startAct(baseContext);
+        }
     }
 
     @Override
@@ -74,6 +86,15 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
             }
         });
 
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (presenter != null){
+                    presenter.refreshData();
+                }
+            }
+        });
+
     }
 
     /**
@@ -88,7 +109,9 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null){
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -101,6 +124,10 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
                     .setButtonText("马上去关注").setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!Common.isAlreadyLogin()){
+                        LoginAct.startAct(baseContext);
+                        return;
+                    }
                     FindSelectShopAct.startAct(baseActivity);
                 }
             });
@@ -113,7 +140,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(DefMessageEvent event){
-        if (event.isRefGuanzhu){
+        if (event.isRefGuanzhu || event.loginSuccess){
             if (presenter != null){
                 presenter.refreshData();
             }
@@ -129,6 +156,16 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
         recy_view.setAdapter(adapter);
+    }
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null){
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override

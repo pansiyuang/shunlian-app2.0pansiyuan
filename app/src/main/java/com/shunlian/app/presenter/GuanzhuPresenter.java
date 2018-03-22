@@ -11,7 +11,6 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IGuanzhuView;
 
 import java.util.ArrayList;
@@ -76,12 +75,21 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                 allPage = Integer.parseInt(data.total_page);
                 mListBeans.addAll(data.dynamic_list);
                 setGuanzhuList(currentPage,allPage);
+                if (currentPage == 1){
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
 
             @Override
             public void onFailure() {
                 super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
                 isLoading = false;
             }
         });
@@ -98,7 +106,6 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                     //是否关注，1是，0否
                     GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                     String store_id = dynamicListBean.store_id;
-                    LogUtil.zhLogW("has_follow======="+dynamicListBean.has_follow);
                     if ("1".equals(dynamicListBean.has_follow)){
                         delFollowStore(store_id);
                     }else {
@@ -193,7 +200,6 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         }else {
             dy.has_follow = "0";
         }
-        LogUtil.zhLogW("followResult======="+b);
         adapter.notifyDataSetChanged();
     }
 

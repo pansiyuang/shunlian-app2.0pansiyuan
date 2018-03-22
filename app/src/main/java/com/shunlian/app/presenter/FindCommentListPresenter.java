@@ -33,6 +33,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private FindCommentListAdapter adapter;
     private int currentTouchItem = -1;
     private FindCommentListEntity.ItemComment itemComment;
+    private String comment_type;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -77,7 +78,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                 currentPage = Integer.parseInt(data.page);
                 allPage = Integer.parseInt(data.total_page);
                 mItemComments.addAll(data.comment_list);
-                setCommentList(currentPage, allPage,data.comment_type);
+                comment_type = data.comment_type;
+                setCommentList(currentPage, allPage);
                 iView.setCommentAllCount(data.count);
                 currentPage++;
             }
@@ -96,7 +98,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         });
     }
 
-    private void setCommentList(int currentPage, int allPage, final String comment_type) {
+    private void setCommentList(int currentPage, int allPage) {
         if (adapter == null) {
             adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount,comment_type);
             iView.setAdapter(adapter);
@@ -116,7 +118,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     if ("1".equals(itemComment.delete_enable)) {//删除
                         iView.delPrompt();
                     } else {
-                        if ("all".equals(comment_type))
+                        if (getIsAllType())
                             iView.showorhideKeyboard("@".concat(itemComment.nickname));
                     }
                 }
@@ -186,7 +188,11 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     }
 
     @Override
-    protected void refreshItem(FindCommentListEntity.ItemComment insert_item) {
+    protected void refreshItem(FindCommentListEntity.ItemComment insert_item, String message) {
+        if (!getIsAllType()){
+            Common.staticToasts(context, message, R.mipmap.icon_common_duihao);
+            return;
+        }
         Common.staticToasts(context, "发布成功", R.mipmap.icon_common_duihao);
         if (currentTouchItem != -1) {
             mItemComments.remove(currentTouchItem);
@@ -206,5 +212,16 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
     public void delComment() {
         delComment(itemComment.item_id);
+    }
+
+    /**
+     * 评论类型，true是all，否则精选
+     * @return
+     */
+    private boolean getIsAllType(){
+        if ("all".equals(comment_type))
+            return true;
+        else
+            return false;
     }
 }

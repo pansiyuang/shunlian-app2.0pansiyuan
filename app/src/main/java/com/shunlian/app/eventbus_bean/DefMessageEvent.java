@@ -8,5 +8,6 @@ package com.shunlian.app.eventbus_bean;
 public class DefMessageEvent {
 
     public boolean isRefGuanzhu;//是否刷新关注页面
+    public boolean loginSuccess;//登录成功
 
 }

@@ -13,4 +13,9 @@ public interface IGuanzhuView extends IView {
      * @param adapter
      */
     void setAdapter(BaseRecyclerAdapter adapter);
+
+    /**
+     * 刷新完成
+     */
+    void refreshFinish();
 }
