@@ -29,6 +29,7 @@ import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.refresh.ring.RingRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -83,9 +84,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     @BindView(R.id.rv_flash)
     RecyclerView rv_flash;
 
-    @BindView(R.id.rv_content)
-    RecyclerView rv_content;
-
     @BindView(R.id.mrlayout_jingxuan)
     MyRelativeLayout mrlayout_jingxuan;
 
@@ -103,12 +101,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     @BindView(R.id.mAppbar)
     AppBarLayout mAppbar;
-
-    @BindView(R.id.nestedScrollView)
-    NestedScrollView nestedScrollView;
-
-    @BindView(R.id.refreshview)
-    RingRefreshView refreshview;
 
     private Map<String, DiscoversFrag> fragments;
     private DiscoverGuanzhuFrag guanzhuFrag;
@@ -166,6 +158,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //            }
 //        });
         jingXuanFrag();
+
     }
 
     @Override
@@ -323,25 +316,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     @Override
     public void setNavData(final DiscoveryNavEntity navEntity) {
-        refreshview.stopRefresh(true);
-        List<DiscoveryNavEntity.Flash> flashs=new ArrayList<>();
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        flashs.addAll(navEntity.flash_list);
-        DiscoverFlashAdapter flashAdapters = new DiscoverFlashAdapter(getContext(), false, flashs);
-        LinearLayoutManager flashManagers = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rv_content.setLayoutManager(flashManagers);
-//        rv_content.setNestedScrollingEnabled(false);
-        rv_content.setAdapter(flashAdapters);
-
-
         if (flashAdapter == null) {
             flashAdapter = new DiscoverFlashAdapter(getContext(), false, navEntity.flash_list);
             LinearLayoutManager flashManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -419,7 +393,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     @Override
     public void showFailureView(int request_code) {
-        refreshview.stopRefresh(true);
+
     }
 
     @Override

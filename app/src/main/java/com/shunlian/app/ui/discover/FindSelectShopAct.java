@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FindSelectShopAdapter;
 import com.shunlian.app.bean.FindSelectShopEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.FindSelectShopPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -18,6 +19,8 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFindSelectShopView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -43,14 +46,13 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
 
-    public static final int REQUEST_CODE = 600;
     private List<FindSelectShopEntity.StoreList> mStoreLists;
     private FindSelectShopAdapter adapter;
     private String format = "（%s/%s）";
     private FindSelectShopPresenter presenter;
 
     public static void startAct(Activity activity){
-        activity.startActivityForResult(new Intent(activity,FindSelectShopAct.class),REQUEST_CODE);
+        activity.startActivity(new Intent(activity,FindSelectShopAct.class));
     }
 
     @Override
@@ -108,7 +110,9 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
      */
     @Override
     public void followSuccess() {
-        setResult(Activity.RESULT_OK);
+        DefMessageEvent event = new DefMessageEvent();
+        event.isRefGuanzhu = true;//通知关注界面刷新数据
+        EventBus.getDefault().post(event);
         finish();
     }
 

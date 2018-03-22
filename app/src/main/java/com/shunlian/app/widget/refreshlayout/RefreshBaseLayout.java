@@ -148,4 +148,5 @@ public class RefreshBaseLayout extends ViewGroup {
         // 计算到达内容最底部时ViewGroup的滑动距离
         bottomScroll = contentHeight - getMeasuredHeight();
     }
+
 }

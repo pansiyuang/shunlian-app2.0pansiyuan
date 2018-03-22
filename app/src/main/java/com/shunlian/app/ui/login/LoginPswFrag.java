@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
@@ -23,6 +24,8 @@ import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.wxapi.WXEntryActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -164,6 +167,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
         baseActivity.finish();
     }
 

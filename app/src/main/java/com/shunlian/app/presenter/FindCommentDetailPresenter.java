@@ -10,7 +10,6 @@ import com.shunlian.app.bean.CommentDetailEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.ui.discover.CommentDetailAct;
 import com.shunlian.app.view.IFindCommentDetailView;
 
 import java.util.ArrayList;
@@ -32,12 +31,10 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     private FindCommentDetailAdapter adapter;
     private FindCommentListEntity.ItemComment itemComment;
     private List<FindCommentListEntity.ItemComment> mReplyListBeans = new ArrayList<>();
-    private final CommentDetailAct mDetailAct;
     private int currentTouchItem = -1;
 
     public FindCommentDetailPresenter(Context context, IFindCommentDetailView iView, String comment_id) {
         super(context, iView);
-        mDetailAct = (CommentDetailAct) context;
         mComment_id = comment_id;
         initApi();
     }
@@ -190,7 +187,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     }
 
     @Override
-    protected void refreshItem(FindCommentListEntity.ItemComment insert_item) {
+    protected void refreshItem(FindCommentListEntity.ItemComment insert_item, String message) {
         mReplyListBeans.add(1, insert_item);
         adapter.notifyDataSetChanged();
     }

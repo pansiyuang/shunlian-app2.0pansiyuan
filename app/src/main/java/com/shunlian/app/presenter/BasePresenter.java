@@ -187,7 +187,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param callback
      * @param <T>
      */
-    protected <T> void  getNetData(final int emptyCode, final int failureCode, final boolean isLoading, final Call<BaseEntity<T>> tCall, final INetDataCallback<BaseEntity<T>> callback){
+    protected <T> void  getNetData(final int emptyCode, final int failureCode,
+                                   final boolean isLoading, final Call<BaseEntity<T>> tCall,
+                                   final INetDataCallback<BaseEntity<T>> callback){
         if (tCall == null || callback == null)
             return;
 
@@ -240,7 +242,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         });
     }
 
-    private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading) {
+    private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,
+                                 final int emptyCode,final int failureCode,final boolean isLoading) {
         if (code != Code.CODE_REFRESH_TOKEN_VALIDE) {
             Common.staticToast(message);
         }

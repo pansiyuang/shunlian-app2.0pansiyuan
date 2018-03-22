@@ -118,6 +118,7 @@ public class RefreshLayout extends RefreshInterceptLauyout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:

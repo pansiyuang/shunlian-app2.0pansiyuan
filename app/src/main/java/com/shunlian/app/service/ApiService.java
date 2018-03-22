@@ -1074,7 +1074,7 @@ public interface ApiService {
      * @return
      */
     @GET("discovery/user/like")
-    Call<BaseEntity<EmptyEntity>> userLike(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> userLike(@QueryMap Map<String, String> map);
 
     /**
      * 精选文章点赞
@@ -1083,7 +1083,7 @@ public interface ApiService {
      * @return
      */
     @GET("discovery/user/unlike ")
-    Call<BaseEntity<EmptyEntity>> userUnLike(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> userUnLike(@QueryMap Map<String, String> map);
 
     /**
      * 发现评论列表
