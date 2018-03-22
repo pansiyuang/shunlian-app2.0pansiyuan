@@ -484,5 +484,7 @@
     <string name="discover_remen">热门动态</string>
     <string name="discover_zuixin">最新动态</string>
     <string name="discover_jinxuanpinglun">精选评论</string>
+    <string name="continue_to_publish">继续发布</string>
+    <string name="max_pic_size">最多%s张</string>
 
 </resources>

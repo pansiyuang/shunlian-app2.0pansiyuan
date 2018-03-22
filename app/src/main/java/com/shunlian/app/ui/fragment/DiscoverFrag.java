@@ -165,7 +165,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //                LogUtil.augusLogW("yxf---"+verticalOffset);
 //            }
 //        });
-
+        jingXuanFrag();
     }
 
     @Override

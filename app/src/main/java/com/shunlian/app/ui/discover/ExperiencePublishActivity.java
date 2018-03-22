@@ -3,6 +3,10 @@ package com.shunlian.app.ui.discover;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -11,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.CommonImgAdapter;
 import com.shunlian.app.adapter.SingleImgAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ImageEntity;
@@ -21,7 +26,10 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IExperiencePublishView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -33,11 +41,13 @@ import butterknife.BindView;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+import static com.shunlian.app.adapter.CommonImgAdapter.REQUEST_CAMERA_CODE;
+
 /**
  * Created by Administrator on 2018/3/21.
  */
 
-public class ExperiencePublishActivity extends BaseActivity implements IExperiencePublishView, View.OnClickListener {
+public class ExperiencePublishActivity extends BaseActivity implements IExperiencePublishView, View.OnClickListener, TextWatcher {
 
     public static final String FROM_EXPERIENCE_PUBLISH = "experience_publish";
     public static final int PUBLISH_REQUEST = 10003;
@@ -48,8 +58,8 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     @BindView(R.id.tv_content_count)
     TextView tv_content_count;
 
-    @BindView(R.id.grid_imgs)
-    GridView grid_imgs;
+    @BindView(R.id.recycler_imgs)
+    RecyclerView recycler_imgs;
 
     @BindView(R.id.rl_add_goods)
     RelativeLayout rl_add_goods;
@@ -72,10 +82,13 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
     @BindView(R.id.tv_goods_title)
     TextView tv_goods_title;
 
-    private SingleImgAdapter singleImgAdapter;
+    private CommonImgAdapter mImgAdapter;
     private List<ImageEntity> listExplains = new ArrayList();
     private List<ImageEntity> imgList = new ArrayList();
     private ExperiencePublishPresenter mPresenter;
@@ -103,9 +116,12 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
         tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
         tv_title_right.setVisibility(View.VISIBLE);
         mPresenter = new ExperiencePublishPresenter(this, this);
-        singleImgAdapter = new SingleImgAdapter(this, listExplains);
-        singleImgAdapter.setMaxSize(9);
-        grid_imgs.setAdapter(singleImgAdapter);
+
+        GridLayoutManager manager = new GridLayoutManager(this, 4);
+        mImgAdapter = new CommonImgAdapter(this, listExplains, 9);
+        recycler_imgs.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this, 5), false));
+        recycler_imgs.setLayoutManager(manager);
+        recycler_imgs.setAdapter(mImgAdapter);
     }
 
     @Override
@@ -113,13 +129,15 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
         rl_add_goods.setOnClickListener(this);
         miv_del.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
+        edt_content.addTextChangedListener(this);
         super.initListener();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK) {
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             index = 0;
             imgList.clear();
@@ -198,7 +216,7 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                 imageEntity.imgUrl = picturePath;
                 listExplains.add(imageEntity);
             }
-            singleImgAdapter.notifyDataSetChanged();
+            mImgAdapter.notifyDataSetChanged();
         }
         picstr.delete(0, picstr.length());
         for (int i = 0; i < pics.size(); i++) {
@@ -214,7 +232,7 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
             imgList.get(i).imgUrl = picEntity.relativePath.get(i);
         }
         listExplains.addAll(imgList);
-        singleImgAdapter.setData(listExplains);
+        mImgAdapter.setData(listExplains);
     }
 
     @Override
@@ -224,7 +242,7 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
 
     @Override
     public void creatExperienctSuccess() {
-        Common.staticToast("发布成功");
+        Common.staticToasts(this, "发布成功", R.mipmap.icon_common_duihao);
         finish();
     }
 
@@ -238,6 +256,9 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                 break;
             case R.id.miv_del:
                 showGoodsLayout(false);
+                break;
+            case R.id.miv_close:
+                backSelect();
                 break;
             case R.id.tv_title_right:
                 String content = edt_content.getText().toString();
@@ -257,5 +278,44 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                 break;
         }
         super.onClick(view);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String str = edt_content.getText().toString();
+        tv_content_count.setText(str.length() + "/300");
+    }
+
+    private void backSelect() {
+        final PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                .setSureAndCancleListener(getStringResouce(R.string.ready_to_cancel_comment),
+                        getStringResouce(R.string.continue_to_publish), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                promptDialog.dismiss();
+                            }
+                        }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                promptDialog.dismiss();
+                                finish();
+                            }
+                        }).show();
+    }
+
+    @Override
+    protected void onStop() {
+        Common.hideKeyboard(edt_content);
+        super.onStop();
     }
 }

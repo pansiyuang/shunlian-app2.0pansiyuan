@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -56,7 +58,6 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_footmark));
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);
@@ -97,9 +98,14 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                 }
             }
 
-            GlideUtils.getInstance().loadImage(context, holderView.miv_icon, goods.thumb);
-            holderView.tv_title.setText(goods.title);
-            holderView.tv_price.setText(goods.price);
+            if (isEmpty(goods.id)) {
+                holderView.ll_goods.setVisibility(View.GONE);
+            } else {
+                GlideUtils.getInstance().loadImage(context, holderView.miv_icon, goods.thumb);
+                holderView.tv_title.setText(goods.title);
+                holderView.tv_price.setText(goods.price);
+                holderView.ll_goods.setVisibility(View.VISIBLE);
+            }
 
             holderView.tv_comment_count.setText(experience.comment_num);
             holderView.tv_evaluate_count.setText(experience.praise_num);
@@ -171,6 +177,9 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
 
         @BindView(R.id.tv_evaluate_count)
         TextView tv_evaluate_count;
+
+        @BindView(R.id.ll_goods)
+        LinearLayout ll_goods;
 
         public ExperienceHolderView(View itemView) {
             super(itemView);
