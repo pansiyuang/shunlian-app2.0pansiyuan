@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -18,6 +19,8 @@ import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -148,6 +151,9 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        DefMessageEvent event = new DefMessageEvent();
+        event.loginSuccess = true;
+        EventBus.getDefault().post(event);
         finish();
     }
 

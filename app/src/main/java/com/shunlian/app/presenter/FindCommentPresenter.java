@@ -40,12 +40,12 @@ public abstract class FindCommentPresenter<T extends IFindCommentView> extends B
             @Override
             public void onSuccess(BaseEntity<UseCommentEntity> entity) {
                 super.onSuccess(entity);
-                refreshItem(entity.data.insert_item);
+                refreshItem(entity.data.insert_item,entity.message);
             }
         });
     }
 
-    protected abstract void refreshItem(FindCommentListEntity.ItemComment insert_item);
+    protected abstract void refreshItem(FindCommentListEntity.ItemComment insert_item, String message);
 
     public void delComment(String comment_id) {
         Map<String,String> map = new HashMap<>();
