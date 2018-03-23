@@ -486,5 +486,8 @@
     <string name="discover_jinxuanpinglun">精选评论</string>
     <string name="continue_to_publish">继续发布</string>
     <string name="max_pic_size">最多%s张</string>
+    <string name="discover_miaoshuyixiazhao">描述一下照片...</string>
+    <string name="discover_fabiaozhaopian">发表照片</string>
+    <string name="discover_canyuhuodong">参与活动</string>
 
 </resources>
