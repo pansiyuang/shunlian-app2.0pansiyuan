@@ -15,10 +15,7 @@
             android:id="@+id/rl_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:padding="10dp"
             android:visibility="gone">
 
             <TextView
@@ -35,7 +32,7 @@
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_small_icon"
-                android:layout_width="108dp"
+                android:layout_width="107.5dp"
                 android:layout_height="95dp"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerCrop" />

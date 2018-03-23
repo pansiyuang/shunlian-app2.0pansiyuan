@@ -69,7 +69,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
 
         if (!isEmpty(list)) {
             experienceList.addAll(list);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(0,experienceList.size());
         }
     }
 
@@ -86,7 +86,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
                 }
                 experience.praise = currentStatus;
                 experience.praise_num = String.valueOf(count);
-                mAdapter.notifyItemChanged(i);
+                mAdapter.notifyItemRangeChanged(0,experienceList.size());
             }
         }
     }

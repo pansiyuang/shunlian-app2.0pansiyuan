@@ -146,13 +146,6 @@ public class CommonImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
     public void handlerAdd(RecyclerView.ViewHolder holder) {
         final AddViewHolder addViewHolder = (AddViewHolder) holder;
         addViewHolder.tv_max_count.setText(String.format(getString(R.string.max_pic_size), MAX_SIZE));
-        addViewHolder.miv_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.setMaxTotal(MAX_SIZE - mList.size()); // 最多选择照片数量，默认为9
-                ((Activity) context).startActivityForResult(intent, REQUEST_CAMERA_CODE);
-            }
-        });
     }
 
     public class ImagViewholder extends BaseRecyclerViewHolder {
@@ -198,6 +191,13 @@ public class CommonImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
                     RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) rl_rootView.getLayoutParams();
                     params.height = picWidth;
                     rl_rootView.setLayoutParams(params);
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intent.setMaxTotal(MAX_SIZE - mList.size()); // 最多选择照片数量，默认为9
+                    ((Activity) context).startActivityForResult(intent, REQUEST_CAMERA_CODE);
                 }
             });
         }

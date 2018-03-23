@@ -219,6 +219,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             isSelectAll = true;
         }
         toSelectAll(isSelectAll);
+        footprintAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -521,13 +522,12 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             markData.isSelect = isSelectAll;
             if (isSelectAll) {
                 delList.add(markData);
-            } else {
-                delList.remove(markData);
             }
         }
         for (FootprintEntity.DateInfo dateInfo : dateInfoList) {
             dateInfo.isSelect = isSelectAll;
         }
+        LogUtil.httpLogW("选中全部：" + isSelectAll + "     delList:" + delList.size());
         checkSelctStatus();
     }
 
@@ -562,12 +562,15 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     public void checkSelctStatus() {
         if (delList.size() == 0) { //全不选
+            LogUtil.httpLogW("全不选");
             selectStatus = 2;
             isSelectAll = false;
         } else if (delList.size() == markDataList.size()) {
+            LogUtil.httpLogW("全选");
             selectStatus = 0;
             isSelectAll = true;
         } else {
+            LogUtil.httpLogW("选部分");
             selectStatus = 1;
             isSelectAll = false;
         }

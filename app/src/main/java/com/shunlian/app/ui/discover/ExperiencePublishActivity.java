@@ -8,6 +8,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.MovementMethod;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -178,7 +180,6 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
 
             @Override
             public void onSuccess(File file) {
-                LogUtil.httpLogW("onSuccess:" + file.length());
                 ImageEntity imageEntity = new ImageEntity(list.get(index));
                 imageEntity.file = file;
                 imgList.add(imageEntity);
@@ -314,6 +315,13 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                             }
                         }).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backSelect();
+    }
+
 
     @Override
     protected void onStop() {
