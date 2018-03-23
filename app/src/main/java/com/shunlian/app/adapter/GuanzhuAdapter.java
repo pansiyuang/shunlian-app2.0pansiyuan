@@ -89,18 +89,18 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
             if ("1".equals(dy.has_follow)){
                 gradientDrawable.setColor(getColor(R.color.white));
                 mHolder.mtv_follow.setTextColor(getColor(R.color.pink_color));
-                mHolder.mtv_follow.setText("已关注");
+                mHolder.mtv_follow.setText(getString(R.string.discover_alear_follow));
             }else {
                 gradientDrawable.setColor(getColor(R.color.pink_color));
                 mHolder.mtv_follow.setTextColor(getColor(R.color.white));
-                mHolder.mtv_follow.setText("关注");
+                mHolder.mtv_follow.setText(getString(R.string.discover_follow));
             }
         }
     }
 
     private void setPicMatrix(GuanzhuHolder mHolder, final List<GuanzhuEntity.TagsBean> goods_list) {
         if (!isEmpty(goods_list)) {
-            String formatNum = "%s件宝贝";
+            String formatNum = getString(R.string.discover_baby);
             SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter<GuanzhuEntity.TagsBean>
                     (context, R.layout.item_detail, goods_list) {
 

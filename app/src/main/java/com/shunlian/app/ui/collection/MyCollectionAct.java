@@ -257,13 +257,16 @@ public class MyCollectionAct extends BaseActivity {
         if (state == 0){
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            isSelectAll = true;
         }else if (1 == state){
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            isSelectAll = false;
         }else {
             mtv_delete.setClickable(false);
             mtv_delete.setBackgroundColor(color_value_6c);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            isSelectAll = false;
         }
     }
 

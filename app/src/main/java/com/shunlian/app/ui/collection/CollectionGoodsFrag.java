@@ -109,7 +109,6 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         //分类
         GridLayoutManager gridLayoutManager = new GridLayoutManager(baseActivity,3);
         recycle_category.setLayoutManager(gridLayoutManager);
-
     }
 
     /**
@@ -279,7 +278,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     CollectionGoodsEntity.Goods goods = goodsLists.get(position);
                     if (adapter.isShowSelect) {
                         goods.isSelect = !goods.isSelect;
-                        adapter.notifyItemChanged(position);
+                        adapter.notifyDataSetChanged();
                         ((MyCollectionAct) baseActivity).setManageState(selectState());
                     }else {
                         GoodsDetailAct.startAct(baseActivity,goods.goods_id);
@@ -449,12 +448,15 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     hasSlect = 1;
                 }
                 if (hasSlect == 1 && notSlect == 1){
+                    isAllSelect = false;
                     return 1;//部分选择
                 }
             }
             if (hasSlect == 0 && notSlect == 1){
+                isAllSelect = false;
                 return 2;//全不选
             }
+            isAllSelect = true;
             return 0;//全选
         }
         return -1;

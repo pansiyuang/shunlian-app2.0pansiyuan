@@ -120,8 +120,9 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
             visible(nestedScrollView);
             gone(recy_view);
             nei_empty.setImageResource(R.mipmap.img_empty_faxian)
-                    .setText("咦？还没有关注哦")
-                    .setButtonText("马上去关注").setOnClickListener(new View.OnClickListener() {
+                    .setText(getStringResouce(R.string.discover_notfollow))
+                    .setButtonText(getStringResouce(R.string.discover_gofollow))
+                    .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (!Common.isAlreadyLogin()){
