@@ -3,6 +3,7 @@ package com.shunlian.app.ui.discover;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -121,6 +122,7 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
         mImgAdapter = new CommonImgAdapter(this, listExplains, 9);
         recycler_imgs.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this, 5), false));
         recycler_imgs.setLayoutManager(manager);
+        ((DefaultItemAnimator) recycler_imgs.getItemAnimator()).setSupportsChangeAnimations(false);
         recycler_imgs.setAdapter(mImgAdapter);
     }
 
