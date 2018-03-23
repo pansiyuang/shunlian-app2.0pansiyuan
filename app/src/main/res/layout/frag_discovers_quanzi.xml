@@ -24,15 +24,30 @@
                 android:textColor="@color/new_text"
                 android:textSize="16sp" />
 
-            <!--轮播-->
-            <com.shunlian.app.widget.banner.Kanner
-                android:id="@+id/kanner"
+            <com.shunlian.app.widget.MyRelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                app:bb_delay="5"
-                app:bb_period="3"
-                app:bb_scale="0.4" />
+                android:layout_height="144dp"
+                android:layout_marginTop="25dp">
+                <!--轮播-->
+                <com.shunlian.app.widget.banner.DiscoverKanner
+                    android:id="@+id/kanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:bb_delay="5"
+                    app:bb_period="3"
+                    app:bb_scale="0.4" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/dim50"/>
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </com.shunlian.app.widget.MyRelativeLayout>
 
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"

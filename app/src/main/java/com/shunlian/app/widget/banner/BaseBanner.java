@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -44,7 +45,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     protected Context context;
     protected DisplayMetrics dm;
     protected float pi;
-    /** ViewPager */
+    /**
+     * ViewPager
+     */
     protected ViewPager vp;
     protected LayoutParams lp_vp;
     protected List<E> list = new ArrayList<>();
@@ -59,24 +62,33 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     protected int scrollSpeed = 450;
     protected Class<? extends ViewPager.PageTransformer> transformerClass;
 
-    /** top parent of indicators */
+    /**
+     * top parent of indicators
+     */
     protected RelativeLayout rl_bottom_bar_parent;
     protected int itemWidth;
     protected int itemHeight;
 
-    /** container of indicators and title */
+    /**
+     * container of indicators and title
+     */
     protected LinearLayout ll_bottom_bar;
     protected boolean isBarShowWhenLast;
 
-    /** container of indicators */
+    /**
+     * container of indicators
+     */
     protected LinearLayout ll_indicator_container;
 
-    /** title */
+    /**
+     * title
+     */
     protected TextView tv_title;
 
-    private MyTextView titleOne,titleTwo;
+    private MyTextView titleOne, titleTwo;
 
     private List<StoreIndexEntity.Body.Datas> mDatas;
+    private List<DiscoveryCircleEntity.Mdata.Banner> mDatass;
 
     private float slideBackWidth;//侧滑宽度
     private boolean isSlideBackDispatch;//是否进行侧滑兼容处理
@@ -86,6 +98,44 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             scrollToNextItem(currentPositon);
         }
     };
+    private boolean isSlideBackLock;//侧滑是否关闭
+    //listener
+    private ViewPager.OnPageChangeListener onPageChangeListener;
+    private ViewPager.OnPageChangeListener internelPageListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (onPageChangeListener != null) {
+                onPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            currentPositon = position % list.size();
+
+            setCurrentIndicator(currentPositon);
+
+            textChange(currentPositon + 1);
+
+            textChanges(currentPositon);
+
+            onTitleSlect(tv_title, currentPositon);
+            ll_bottom_bar.setVisibility(currentPositon == list.size() - 1 && !isBarShowWhenLast ? GONE : VISIBLE);
+
+            lastPositon = currentPositon;
+            if (onPageChangeListener != null) {
+                onPageChangeListener.onPageSelected(position);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (onPageChangeListener != null) {
+                onPageChangeListener.onPageScrollStateChanged(state);
+            }
+        }
+    };
+    private OnItemClickL onItemClickL;
 
     public BaseBanner(Context context) {
         this(context, null, 0);
@@ -98,7 +148,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     public BaseBanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
-        if (context instanceof BaseActivity){
+        if (context instanceof BaseActivity) {
             isSlideBackDispatch = true;
             handlerSlideBack();
         }
@@ -215,13 +265,19 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         }
     }
 
-    /** create viewpager item layout */
+    /**
+     * create viewpager item layout
+     */
     public abstract View onCreateItemView(int position);
 
-    /** create indicator */
+    /**
+     * create indicator
+     */
     public abstract View onCreateIndicator();
 
-    /** set indicator show status, select or unselect */
+    /**
+     * set indicator show status, select or unselect
+     */
     public abstract void setCurrentIndicator(int position);
 
     /**
@@ -232,19 +288,29 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     public void onTitleSlect(TextView tv, int position) {
     }
 
-    public void textChange(int currentPositon){
-        titleOne.setText(currentPositon+"/"+mDatas.size());
-        titleTwo.setText(mDatas.get(currentPositon-1).description);
+    public void textChange(int currentPositon) {
+        if (mDatas != null && mDatas.size() > 1) {
+            titleOne.setText(currentPositon + "/" + mDatas.size());
+            titleTwo.setText(mDatas.get(currentPositon - 1).description);
+        }
     }
-    /** set data source list */
+
+    public void textChanges(int currentPositon) {
+        if (mDatass != null && mDatass.size() > 1) {
+            titleTwo.setText(mDatass.get(currentPositon).title);
+        }
+    }
+    /**
+     * set data source list
+     */
     public void setBanner(List<E> list) {
         this.list = list;
-        if (list != null && list.size() == 1){
+        if (list != null && list.size() == 1) {
             removeAllViews();
             MyImageView myImageView = new MyImageView(getContext());
             myImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            GlideUtils.getInstance().loadImage(getContext(),myImageView,(String) list.get(0));
-            addView(myImageView,0,lp_vp);
+            GlideUtils.getInstance().loadImage(getContext(), myImageView, (String) list.get(0));
+            addView(myImageView, 0, lp_vp);
             myImageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -257,96 +323,153 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         startScroll();
     }
 
-    public void setBanners(List<E> list,MyTextView mtv_one,MyTextView mtv_two) {
+    public void setBanners(List<E> list, MyTextView mtv_one, MyTextView mtv_two) {
         this.list = list;
-        mDatas= (List<StoreIndexEntity.Body.Datas>) list;
-        titleOne=mtv_one;
+        mDatas = (List<StoreIndexEntity.Body.Datas>) list;
+        titleOne = mtv_one;
         titleOne.setVisibility(VISIBLE);
-        titleTwo=mtv_two;
-        if (mDatas != null && mDatas.size() == 1){
+        titleTwo = mtv_two;
+        if (mDatas != null && mDatas.size() == 1) {
             removeAllViews();
             MyImageView myImageView = new MyImageView(getContext());
             myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            GlideUtils.getInstance().loadImage(getContext(),myImageView,mDatas.get(0).whole_thumb);
+            GlideUtils.getInstance().loadImage(getContext(), myImageView, mDatas.get(0).whole_thumb);
             titleOne.setVisibility(GONE);
             titleTwo.setText(mDatas.get(0).description);
-            addView(myImageView,0,lp_vp);
+            addView(myImageView, 0, lp_vp);
+            myImageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickL != null) {
+                        onItemClickL.onItemClick(0);
+                    }
+                }
+            });
         }
         startScroll();
     }
-    /** set scroll delay before start scroll,unit second,default 5 seconds */
+
+    public void setBanners(List<E> list, MyTextView mtv_two) {
+        this.list = list;
+        mDatass = (List<DiscoveryCircleEntity.Mdata.Banner>) list;
+        titleTwo = mtv_two;
+        if (mDatass != null && mDatass.size() == 1) {
+            removeAllViews();
+            MyImageView myImageView = new MyImageView(getContext());
+            myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            GlideUtils.getInstance().loadImage(getContext(), myImageView, mDatass.get(0).img);
+            titleTwo.setText(mDatass.get(0).title);
+            addView(myImageView, 0, lp_vp);
+            myImageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickL != null) {
+                        onItemClickL.onItemClick(0);
+                    }
+                }
+            });
+        }
+        startScroll();
+    }
+    /**
+     * set scroll delay before start scroll,unit second,default 5 seconds
+     */
     public T setDelay(long delay) {
         this.delay = delay;
         return (T) this;
     }
 
-    /** set scroll period,unit second,default 5 seconds */
+    /**
+     * set scroll period,unit second,default 5 seconds
+     */
     public T setPeriod(long period) {
         this.period = period;
         return (T) this;
     }
 
-    /** set auto scroll enable for LoopViewPager,default true */
+    /**
+     * set auto scroll enable for LoopViewPager,default true
+     */
     public T setAutoScrollEnable(boolean isAutoScrollEnable) {
         this.isAutoScrollEnable = isAutoScrollEnable;
         return (T) this;
     }
 
-    /** set page transformer,only valid for API 3.0 and up since V1.1.0 */
+    /**
+     * set page transformer,only valid for API 3.0 and up since V1.1.0
+     */
     public T setTransformerClass(Class<? extends ViewPager.PageTransformer> transformerClass) {
         this.transformerClass = transformerClass;
         return (T) this;
     }
 
-    /** set bootom bar color,default transparent */
+    /**
+     * set bootom bar color,default transparent
+     */
     public T setBarColor(int barColor) {
         ll_bottom_bar.setBackgroundColor(barColor);
         return (T) this;
     }
 
-    /** set bottom bar show or not when the position is the last,default true */
+    /**
+     * set bottom bar show or not when the position is the last,default true
+     */
     public T setBarShowWhenLast(boolean isBarShowWhenLast) {
         this.isBarShowWhenLast = isBarShowWhenLast;
         return (T) this;
     }
 
-    /** set bottom bar padding,unit dp */
+    /**
+     * set bottom bar padding,unit dp
+     */
     public T barPadding(float left, float top, float right, float bottom) {
         ll_bottom_bar.setPadding(dp2px(left), dp2px(top), dp2px(right), dp2px(bottom));
         return (T) this;
     }
 
-    /** set title text color,default "#ffffff" */
+    /**
+     * set title text color,default "#ffffff"
+     */
     public T setTextColor(int textColor) {
         tv_title.setTextColor(textColor);
         return (T) this;
     }
 
-    /** set title text size,unit sp,default 14sp */
+    /**
+     * set title text size,unit sp,default 14sp
+     */
     public T setTextSize(float textSize) {
         tv_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         return (T) this;
     }
 
-    /** set title show or not,default true */
+    /**
+     * set title show or not,default true
+     */
     public T setTitleShow(boolean isTitleShow) {
         tv_title.setVisibility(isTitleShow ? VISIBLE : INVISIBLE);
         return (T) this;
     }
 
-    /** set indicator show or not,default true */
+    /**
+     * set indicator show or not,default true
+     */
     public T setIndicatorShow(boolean isIndicatorShow) {
         ll_indicator_container.setVisibility(isIndicatorShow ? VISIBLE : INVISIBLE);
         return (T) this;
     }
 
-    /** scroll to next item */
+    /**
+     * scroll to next item
+     */
     private void scrollToNextItem(int position) {
         position++;
         vp.setCurrentItem(position);
     }
 
-    /** set viewpager */
+    /**
+     * set viewpager
+     */
     private void setViewPager() {
         innerAdapter = new InnerBannerAdapter();
         vp.setAdapter(innerAdapter);
@@ -376,47 +499,13 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         vp.addOnPageChangeListener(internelPageListener);
     }
 
-    private ViewPager.OnPageChangeListener internelPageListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (onPageChangeListener != null) {
-                onPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            currentPositon = position % list.size();
-
-            setCurrentIndicator(currentPositon);
-            if (mDatas!=null&&mDatas.size()>1){
-                textChange(currentPositon+1);
-            }
-            onTitleSlect(tv_title, currentPositon);
-            ll_bottom_bar.setVisibility(currentPositon == list.size() - 1 && !isBarShowWhenLast ? GONE : VISIBLE);
-
-            lastPositon = currentPositon;
-            if (onPageChangeListener != null) {
-                onPageChangeListener.onPageSelected(position);
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            if (onPageChangeListener != null) {
-                onPageChangeListener.onPageScrollStateChanged(state);
-            }
-        }
-    };
-
-
     public void startScroll() {
         if (list == null) {
             throw new IllegalStateException("Data source is empty,you must setBanner(List<E> list) before startScroll()");
         }
-        if (mDatas!=null&&mDatas.size()>1){
-            textChange(currentPositon+1);
-        }
+        textChange(currentPositon + 1);
+
+        textChanges(currentPositon);
         onTitleSlect(tv_title, currentPositon);
         setViewPager();
         //create indicator
@@ -429,7 +518,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         goOnScroll();
     }
 
-    /** for LoopViewPager */
+    /**
+     * for LoopViewPager
+     */
     public void goOnScroll() {
         if (!isValid()) {
             return;
@@ -444,7 +535,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             stse.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    handler.obtainMessage().sendToTarget();}}, delay, period, TimeUnit.SECONDS);
+                    handler.obtainMessage().sendToTarget();
+                }
+            }, delay, period, TimeUnit.SECONDS);
             isAutoScrolling = true;
             Log.d(TAG, this.getClass().getSimpleName() + "--->goOnScroll()");
         } else {
@@ -452,7 +545,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         }
     }
 
-    /** for LoopViewPager */
+    /**
+     * for LoopViewPager
+     */
     public void pauseScroll() {
         if (stse != null) {
             stse.shutdown();
@@ -468,20 +563,18 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return vp;
     }
 
-    private boolean isSlideBackLock;//侧滑是否关闭
-
-    private void handlerSlideBack(){
+    private void handlerSlideBack() {
         if (isSlideBackDispatch) {
             BaseActivity ba = (BaseActivity) getContext();
             slideBackWidth = DeviceInfoUtil.getDeviceWidth(context)
                     * ba.getSlideBackEdgePercent();
             isSlideBackLock = ba.getIsSlideBackLock();
             if (!isSlideBackLock)
-                ba.setSlideBackListener(new OnSlideListenerAdapter(){
+                ba.setSlideBackListener(new OnSlideListenerAdapter() {
                     @Override
                     public void onSlide(float percent) {
                         super.onSlide(percent);
-                        if (percent == 0){
+                        if (percent == 0) {
                             goOnScroll();
                         }
                     }
@@ -500,7 +593,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             case MotionEvent.ACTION_DOWN:
                 pauseScroll();
                 float currentScrollPosition = ev.getX();
-                if (isSlideBackDispatch && !isSlideBackLock && currentScrollPosition < slideBackWidth){
+                if (isSlideBackDispatch && !isSlideBackLock && currentScrollPosition < slideBackWidth) {
                     return false;
                 }
 //                LogUtil.zhLogW("dispatchTouchEvent--->ACTION_DOWN");
@@ -526,6 +619,61 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         } else {
             goOnScroll();
         }
+    }
+
+    /**
+     * set scroll speed
+     */
+    private void setScrollSpeed() {
+        try {
+            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+            FixedSpeedScroller myScroller = new FixedSpeedScroller(context, interpolator, scrollSpeed);
+            mScroller.set(vp, myScroller);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected int dp2px(float dp) {
+        float scale = this.context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5F);
+    }
+
+    private float sp2px(float sp) {
+        final float scale = this.context.getResources().getDisplayMetrics().scaledDensity;
+        return sp * scale;
+    }
+
+    protected boolean isLoopViewPager() {
+        return vp instanceof LoopViewPager;
+    }
+
+    protected boolean isValid() {
+        if (vp == null) {
+            Log.e(TAG, "ViewPager is not exist!");
+            return false;
+        }
+
+        if (list == null || list.size() == 0) {
+            Log.e(TAG, "DataList must be not empty!");
+            return false;
+        }
+
+        return true;
+    }
+
+//    public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+//        onPageChangeListener = listener;
+//    }
+
+    public void setOnItemClickL(OnItemClickL onItemClickL) {
+        this.onItemClickL = onItemClickL;
+    }
+
+    public interface OnItemClickL {
+        void onItemClick(int position);
     }
 
     private class InnerBannerAdapter extends PagerAdapter {
@@ -563,64 +711,5 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
-    }
-
-    /** set scroll speed */
-    private void setScrollSpeed() {
-        try {
-            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
-            mScroller.setAccessible(true);
-            AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-            FixedSpeedScroller myScroller = new FixedSpeedScroller(context, interpolator, scrollSpeed);
-            mScroller.set(vp, myScroller);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected int dp2px(float dp) {
-        float scale = this.context.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5F);
-    }
-
-    private float sp2px(float sp) {
-        final float scale = this.context.getResources().getDisplayMetrics().scaledDensity;
-        return sp * scale;
-    }
-
-
-    protected boolean isLoopViewPager() {
-        return vp instanceof LoopViewPager;
-    }
-
-    protected boolean isValid() {
-        if (vp == null) {
-            Log.e(TAG, "ViewPager is not exist!");
-            return false;
-        }
-
-        if (list == null || list.size() == 0) {
-            Log.e(TAG, "DataList must be not empty!");
-            return false;
-        }
-
-        return true;
-    }
-
-    //listener
-    private ViewPager.OnPageChangeListener onPageChangeListener;
-
-//    public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-//        onPageChangeListener = listener;
-//    }
-
-    private OnItemClickL onItemClickL;
-
-    public void setOnItemClickL(OnItemClickL onItemClickL) {
-        this.onItemClickL = onItemClickL;
-    }
-
-    public interface OnItemClickL {
-        void onItemClick(int position);
     }
 }

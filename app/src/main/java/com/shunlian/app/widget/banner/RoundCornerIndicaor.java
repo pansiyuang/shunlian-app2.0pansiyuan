@@ -16,7 +16,9 @@ import com.shunlian.app.R;
 
 import java.util.ArrayList;
 
-/** A pratice demo use GradientDrawable to realize the effect of JakeWharton's CirclePageIndicator */
+/**
+ * A pratice demo use GradientDrawable to realize the effect of JakeWharton's CirclePageIndicator
+ */
 public class RoundCornerIndicaor extends View implements PageIndicator {
     private Context context;
     private ViewPager vp;
@@ -64,6 +66,7 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         ta.recycle();
     }
 
+
     @Override
     public void setViewPager(ViewPager vp) {
         if (isValid(vp)) {
@@ -102,52 +105,6 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         }
     }
 
-    public void setCurrentItem(int item) {
-        if (isValid(vp)) {
-            vp.setCurrentItem(item);
-        }
-    }
-
-    public void setIndicatorWidth(int indicatorWidth) {
-        this.indicatorWidth = indicatorWidth;
-        invalidate();
-    }
-
-    public void setIndicatorHeight(int indicatorHeight) {
-        this.indicatorHeight = indicatorHeight;
-        invalidate();
-    }
-
-    public void setIndicatorGap(int indicatorGap) {
-        this.indicatorGap = indicatorGap;
-        invalidate();
-    }
-
-    public void setCornerRadius(int cornerRadius) {
-        this.cornerRadius = cornerRadius;
-        invalidate();
-    }
-
-    public void setSelectColor(int selectColor) {
-        this.selectColor = selectColor;
-        invalidate();
-    }
-
-    public void setUnselectColor(int unselectColor) {
-        this.unselectColor = unselectColor;
-        invalidate();
-    }
-
-    public void setStrokeWidth(int strokeWidth) {
-        this.strokeWidth = strokeWidth;
-        invalidate();
-    }
-
-    public void setStrokeColor(int strokeColor) {
-        this.strokeColor = strokeColor;
-        invalidate();
-    }
-
     public void setIsSnap(boolean isSnap) {
         this.isSnap = isSnap;
     }
@@ -160,36 +117,82 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         return currentItem;
     }
 
+    public void setCurrentItem(int item) {
+        if (isValid(vp)) {
+            vp.setCurrentItem(item);
+        }
+    }
+
     public int getIndicatorWidth() {
         return indicatorWidth;
+    }
+
+    public void setIndicatorWidth(int indicatorWidth) {
+        this.indicatorWidth = indicatorWidth;
+        invalidate();
     }
 
     public int getIndicatorHeight() {
         return indicatorHeight;
     }
 
+    public void setIndicatorHeight(int indicatorHeight) {
+        this.indicatorHeight = indicatorHeight;
+        invalidate();
+    }
+
     public int getIndicatorGap() {
         return indicatorGap;
+    }
+
+    public void setIndicatorGap(int indicatorGap) {
+        this.indicatorGap = indicatorGap;
+        invalidate();
     }
 
     public int getCornerRadius() {
         return cornerRadius;
     }
 
+    public void setCornerRadius(int cornerRadius) {
+        this.cornerRadius = cornerRadius;
+        invalidate();
+    }
+
     public int getSelectColor() {
         return selectColor;
+    }
+
+    public void setSelectColor(int selectColor) {
+        this.selectColor = selectColor;
+        invalidate();
     }
 
     public int getUnselectColor() {
         return unselectColor;
     }
 
+    public void setUnselectColor(int unselectColor) {
+        this.unselectColor = unselectColor;
+        invalidate();
+    }
+
     public int getStrokeWidth() {
         return strokeWidth;
     }
 
+    public void setStrokeWidth(int strokeWidth) {
+        this.strokeWidth = strokeWidth;
+        invalidate();
+    }
+
     public int getStrokeColor() {
         return strokeColor;
+    }
+
+    public void setStrokeColor(int strokeColor) {
+        this.strokeColor = strokeColor;
+        invalidate();
     }
 
     public boolean isSnap() {
@@ -223,7 +226,9 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         }
     }
 
-    /** 在ViewPager.OnPageChangeListener的onPageSelected方法中调用,不要同时调用onPageScrolled,会出现闪烁情况 */
+    /**
+     * 在ViewPager.OnPageChangeListener的onPageSelected方法中调用,不要同时调用onPageScrolled,会出现闪烁情况
+     */
     public void onPageSelected(int position) {
         if (isSnap) {
             currentItem = position;
@@ -287,7 +292,9 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
-    /** 确定View的宽度大小 */
+    /**
+     * 确定View的宽度大小
+     */
     private int measureWidth(int widthMeasureSpec) {
         int result;
         int specMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -306,7 +313,9 @@ public class RoundCornerIndicaor extends View implements PageIndicator {
         return result;
     }
 
-    /** 确定View的高度大小 */
+    /**
+     * 确定View的高度大小
+     */
     private int measureHeight(int heightMeasureSpec) {
         int result;
         int specMode = MeasureSpec.getMode(heightMeasureSpec);

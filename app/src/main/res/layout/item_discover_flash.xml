@@ -21,6 +21,12 @@
         android:scaleType="fitXY"
         android:layout_toLeftOf="@id/view_right"
         android:layout_toRightOf="@id/view_left"/>
+    <View
+        android:layout_width="168dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_discover_flash"
+        android:layout_toLeftOf="@id/view_right"
+        android:layout_toRightOf="@id/view_left"/>
     <com.shunlian.app.widget.MyTextView
         android:layout_width="158dp"
         android:layout_height="wrap_content"
