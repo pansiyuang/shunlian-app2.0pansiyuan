@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.quanzi;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,29 +10,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonImgAdapter;
-import com.shunlian.app.adapter.SingleImgAdapter;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.presenter.ExperiencePublishPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IExperiencePublishView;
-import com.shunlian.app.widget.MyImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,14 +36,12 @@ import top.zibin.luban.OnCompressListener;
 
 import static com.shunlian.app.adapter.CommonImgAdapter.REQUEST_CAMERA_CODE;
 
-/**
- * Created by Administrator on 2018/3/21.
- */
+public class DiscoverPublishPhotoAct extends BaseActivity implements IExperiencePublishView, View.OnClickListener, TextWatcher {
+    @BindView(R.id.tv_title)
+    TextView tv_title;
 
-public class ExperiencePublishActivity extends BaseActivity implements IExperiencePublishView, View.OnClickListener, TextWatcher {
-
-    public static final String FROM_EXPERIENCE_PUBLISH = "experience_publish";
-    public static final int PUBLISH_REQUEST = 10003;
+    @BindView(R.id.tv_title_right)
+    TextView tv_title_right;
 
     @BindView(R.id.edt_content)
     EditText edt_content;
@@ -62,57 +52,38 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     @BindView(R.id.recycler_imgs)
     RecyclerView recycler_imgs;
 
-    @BindView(R.id.rl_add_goods)
-    RelativeLayout rl_add_goods;
-
-    @BindView(R.id.ll_goods)
-    LinearLayout ll_goods;
-
-    @BindView(R.id.miv_icon)
-    MyImageView miv_icon;
-
-    @BindView(R.id.tv_title)
-    TextView tv_title;
-
-    @BindView(R.id.tv_price)
-    TextView tv_price;
-
-    @BindView(R.id.miv_del)
-    MyImageView miv_del;
-
-    @BindView(R.id.tv_title_right)
-    TextView tv_title_right;
-
-    @BindView(R.id.miv_close)
-    MyImageView miv_close;
-
-    @BindView(R.id.tv_goods_title)
-    TextView tv_goods_title;
-
     private CommonImgAdapter mImgAdapter;
     private List<ImageEntity> listExplains = new ArrayList();
     private List<ImageEntity> imgList = new ArrayList();
     private ExperiencePublishPresenter mPresenter;
     private StringBuilder picstr = new StringBuilder();
-    private GoodsDeatilEntity.Goods currentGoods;
     private int index;
+    private String circle_id;
 
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, ExperiencePublishActivity.class);
+    public static void startAct(Context context, String circle_id) {
+        Intent intent = new Intent(context, DiscoverPublishPhotoAct.class);
+        intent.putExtra("circle_id", circle_id);
         context.startActivity(intent);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.act_experience_publish;
+        return R.layout.act_discover_publish_photo;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        edt_content.addTextChangedListener(this);
+        tv_title_right.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
-        tv_title.setText(getString(R.string.publish_experience));
+        circle_id = getIntent().getStringExtra("circle_id");
+        tv_title.setText(getStringResouce(R.string.discover_fabiaozhaopian));
         tv_title_right.setText(getString(R.string.comment_release));
         tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
         tv_title_right.setVisibility(View.VISIBLE);
@@ -127,16 +98,6 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     }
 
     @Override
-    protected void initListener() {
-        rl_add_goods.setOnClickListener(this);
-        miv_del.setOnClickListener(this);
-        tv_title_right.setOnClickListener(this);
-        miv_close.setOnClickListener(this);
-        edt_content.addTextChangedListener(this);
-        super.initListener();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK) {
@@ -144,29 +105,8 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
             index = 0;
             imgList.clear();
             compressImgs(index, picturePaths);
-        } else if (requestCode == ExperiencePublishActivity.PUBLISH_REQUEST && resultCode == Activity.RESULT_OK) {
-            currentGoods = data.getParcelableExtra("goods");
-            showGoodsLayout(true);
         }
     }
-
-    public void showGoodsLayout(boolean isShow) {
-        if (isShow) {
-            rl_add_goods.setVisibility(View.GONE);
-            ll_goods.setVisibility(View.VISIBLE);
-
-            if (currentGoods != null) {
-                GlideUtils.getInstance().loadImage(this, miv_icon, currentGoods.thumb);
-                tv_goods_title.setText(currentGoods.title);
-                tv_price.setText(currentGoods.price);
-            }
-        } else {
-            rl_add_goods.setVisibility(View.VISIBLE);
-            ll_goods.setVisibility(View.GONE);
-            currentGoods = null;
-        }
-    }
-
 
     public void compressImgs(int i, final List<String> list) {
         Luban.with(this).load(list.get(i)).putGear(3).setCompressListener(new OnCompressListener() {
@@ -198,12 +138,12 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     }
 
     @Override
-    public void showFailureView(int request_code) {
+    public void showFailureView(int rquest_code) {
 
     }
 
     @Override
-    public void showDataEmptyView(int request_code) {
+    public void showDataEmptyView(int rquest_code) {
 
     }
 
@@ -251,14 +191,6 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.rl_add_goods:
-                Intent intent = new Intent(this, AddStoreGoodsAct.class);
-                intent.putExtra("currentFrom", FROM_EXPERIENCE_PUBLISH);
-                startActivityForResult(intent, PUBLISH_REQUEST);
-                break;
-            case R.id.miv_del:
-                showGoodsLayout(false);
-                break;
             case R.id.miv_close:
                 backSelect();
                 break;
@@ -272,11 +204,7 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                     Common.staticToast("请添加图片");
                     return;
                 }
-                if (isEmpty(currentGoods.goods_id)) {
-                    Common.staticToast("请添加商品");
-                    return;
-                }
-                mPresenter.createExperience(content, picstr.toString(), currentGoods.goods_id);
+                mPresenter.createCircle(content, picstr.toString(), circle_id);
                 break;
         }
         super.onClick(view);

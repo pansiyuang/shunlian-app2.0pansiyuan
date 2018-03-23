@@ -7,7 +7,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="90dp">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
@@ -41,10 +42,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="17dp"
                     android:layout_toRightOf="@id/miv_avar"
                     android:textColor="@color/new_text"
-                    android:textSize="13sp"
-                    android:layout_marginTop="17dp"/>
+                    android:textSize="13sp" />
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_time"
@@ -65,26 +66,29 @@
                     android:layout_centerVertical="true"
                     android:textColor="@color/value_88"
                     android:textSize="12sp" />
+
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_like"
-                    android:src="@mipmap/icon_found_quanzi_xin_n"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="3dp"
                     android:layout_toLeftOf="@id/mtv_like"
-                    android:layout_marginRight="3dp"/>
+                    android:src="@mipmap/icon_found_quanzi_xin_n" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_avar"
-                    android:layout_toLeftOf="@id/miv_like"
-                    android:layout_marginRight="8dp"
                     android:layout_width="82dp"
                     android:layout_height="24dp"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/miv_like" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/search_bg"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/search_bg" />
             </com.shunlian.app.widget.MyRelativeLayout>
 
             <com.shunlian.app.widget.MyTextView
@@ -96,11 +100,12 @@
                 android:layout_marginTop="23dp"
                 android:textColor="@color/new_text"
                 android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/white_ash"
-                android:layout_marginTop="22dp"/>
+                android:layout_marginTop="22dp"
+                android:background="@color/white_ash" />
 
             <com.shunlian.app.widget.MyTextView
                 android:layout_width="wrap_content"
@@ -111,13 +116,14 @@
                 android:text="@string/discover_jinxuanpinglun"
                 android:textColor="@color/value_B3B2B8"
                 android:textSize="15sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/background_gray2"
-                android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/background_gray2" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_remark"
@@ -128,4 +134,17 @@
 
         </com.shunlian.app.widget.MyLinearLayout>
     </ScrollView>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_attend"
+        android:layout_width="122dp"
+        android:layout_height="34dp"
+        android:background="@drawable/bg_store_sure"
+        android:text="@string/discover_canyuhuodong"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:layout_marginBottom="28dp" />
 </com.shunlian.app.widget.MyRelativeLayout>

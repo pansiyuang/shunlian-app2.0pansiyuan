@@ -102,4 +102,21 @@ public class ExperiencePublishPresenter extends BasePresenter<IExperiencePublish
             }
         });
     }
+
+    public void createCircle(String content, String image, String circle_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("content", content);
+        map.put("img", image);
+        map.put("circle_id", circle_id);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().createCircle(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.creatExperienctSuccess();
+            }
+
+        });
+    }
 }

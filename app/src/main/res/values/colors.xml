@@ -183,6 +183,8 @@
     <color name="value_BDBDBD">#BDBDBD</color>
     <color name="value_B3B2B8">#B3B2B8</color>
     <color name="value_878B8A">#878B8A</color>
+    <color name="dim50">#7F000000</color>
+    <color name="dim80">#33000000</color>
 </resources>
 
 

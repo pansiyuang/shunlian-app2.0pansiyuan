@@ -42,18 +42,26 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:text="@string/article" />
-
-    <View
+    <LinearLayout
+        android:id="@+id/ll_title"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/bg_gray_two" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@string/article" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/bg_gray_two" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_article"

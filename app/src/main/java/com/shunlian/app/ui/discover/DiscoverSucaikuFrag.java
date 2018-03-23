@@ -11,6 +11,9 @@ import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PDiscoverSucaiku;
 import com.shunlian.app.view.IDiscoverSucaiku;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.List;
 
@@ -21,6 +24,9 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
 
     @BindView(R.id.rv_sucaiku)
     RecyclerView rv_sucaiku;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     private PDiscoverSucaiku pDiscoverSucaiku;
     private LinearLayoutManager linearLayoutManager;
@@ -34,6 +40,8 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
     @Override
     protected void initData() {
         pDiscoverSucaiku=new PDiscoverSucaiku(getContext(),this);
+        NestedSlHeader header = new NestedSlHeader(getContext());
+        lay_refresh.setRefreshHeaderView(header);
     }
 
     @Override
@@ -52,6 +60,12 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
                 }
             }
         });
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pDiscoverSucaiku.resetBaby();
+            }
+        });
     }
 
     /**
@@ -66,6 +80,7 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
 
     @Override
     public void setApiData(DiscoveryMaterialEntity data, List<DiscoveryMaterialEntity.Content> datas) {
+        lay_refresh.setRefreshing(false);
         if (discoverSucaikuAdapter == null) {
             discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, datas);
             linearLayoutManager = new LinearLayoutManager(getContext());
@@ -79,7 +94,7 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
 
     @Override
     public void showFailureView(int request_code) {
-
+        lay_refresh.setRefreshing(false);
     }
 
     @Override

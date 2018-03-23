@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_common_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/edt_content"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_corner_solid_gray_3px"
+                android:gravity="left"
+                android:hint="@string/discover_miaoshuyixiazhao"
+                android:maxLength="300"
+                android:padding="10dp"
+                android:textColor="@color/new_text"
+                android:textColorHint="@color/my_gray_one"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_content_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/edt_content"
+                android:layout_marginTop="10dp"
+                android:text="0/300"
+                android:textColor="@color/new_gray" />
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_content_count"
+                android:layout_marginTop="15dp"
+                android:text="@string/upload_pic"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_imgs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv1"
+                android:layout_marginTop="13dp"
+                android:background="@color/white"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+            </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

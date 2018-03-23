@@ -70,15 +70,14 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         if (getItemViewType(position) == LAYOUT_TOP) {
             handleTop(holder);
         } else {
-            handleItem(holder, position);
+            if (!isEmpty(lists)) {
+                handleItem(holder, position);
+            }
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isEmpty(lists)) {
-            return super.getItemViewType(position);
-        }
         if (position == 0) {
             return LAYOUT_TOP;
         }
@@ -96,7 +95,6 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
         baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
-        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_footmark));
         baseFooterHolder.layout_no_more.setTextSize(12);
         baseFooterHolder.layout_load_error.setTextSize(12);
         baseFooterHolder.mtv_loading.setTextSize(12);

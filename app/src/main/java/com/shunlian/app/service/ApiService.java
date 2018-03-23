@@ -1251,4 +1251,15 @@ public interface ApiService {
      */
     @POST("discovery/experience/create")
     Call<BaseEntity<EmptyEntity>> createExperience(@Body RequestBody body);
+
+    /**
+     * 发表帖子
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/addInv")
+    Call<BaseEntity<EmptyEntity>> createCircle(@Body RequestBody body);
+
+
 }
