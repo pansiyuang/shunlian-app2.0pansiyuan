@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -15,6 +16,7 @@ import com.shunlian.app.adapter.SearchArticleAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.SearchArticlePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ISearchArticleView;
 
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class SearchArticleActivity extends BaseActivity implements ISearchArticl
 
     @BindView(R.id.tv_search_cancel)
     TextView tv_search_cancel;
+
+    @BindView(R.id.ll_title)
+    LinearLayout ll_title;
 
     @BindView(R.id.recycler_article)
     RecyclerView recycler_article;
@@ -77,6 +82,11 @@ public class SearchArticleActivity extends BaseActivity implements ISearchArticl
     public void getSearchArticleList(List<ArticleEntity.Article> list, int page, int totalPage) {
         if (page == 1) {
             articleList.clear();
+            if (isEmpty(list)) {
+                ll_title.setVisibility(View.GONE);
+            } else {
+                ll_title.setVisibility(View.VISIBLE);
+            }
         }
         if (!isEmpty(list)) {
             articleList.addAll(list);
@@ -110,9 +120,9 @@ public class SearchArticleActivity extends BaseActivity implements ISearchArticl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search_cancel:
+                Common.hideKeyboard(edt_goods_search);
                 finish();
                 break;
-
         }
         super.onClick(view);
     }

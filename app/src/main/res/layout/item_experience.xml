@@ -31,7 +31,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="顺*********毛"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -42,7 +41,6 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="6小时以前"
                 android:textColor="@color/new_gray"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -53,7 +51,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="这个苹果真的很好吃，这次就买了一箱，下次要多买点，推荐给大家赶紧抢购吧~"
         android:textColor="@color/new_text"
         android:textSize="16sp" />
 
@@ -66,6 +63,7 @@
         android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
+        android:id="@+id/ll_goods"
         android:layout_width="match_parent"
         android:layout_height="96dp"
         android:layout_marginTop="19dp"
@@ -89,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="安居乐业超强手电筒安全锤车球棍应急工具 超亮强光战术"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
@@ -100,7 +97,6 @@
                 android:layout_alignParentBottom="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="￥99"
                 android:textColor="@color/pink_color"
                 android:textSize="17sp" />
 
@@ -134,7 +130,6 @@
             android:drawableLeft="@mipmap/icon_found_quanzi_pinglun"
             android:drawablePadding="7dp"
             android:gravity="center"
-            android:text="6680"
             android:textColor="@color/value_878B8A"
             android:textSize="13sp" />
 
@@ -146,7 +141,6 @@
             android:drawableLeft="@mipmap/icon_found_pinglun_zan_n"
             android:drawablePadding="7dp"
             android:gravity="center"
-            android:text="6680"
             android:textColor="@color/value_878B8A"
             android:textSize="13sp" />
     </LinearLayout>

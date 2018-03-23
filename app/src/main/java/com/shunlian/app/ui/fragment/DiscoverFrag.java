@@ -3,7 +3,6 @@ package com.shunlian.app.ui.fragment;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,8 +28,6 @@ import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
-import com.shunlian.app.widget.refresh.ring.RingRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -136,7 +133,17 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         fragments = new HashMap<>();
-        pDiscover=new PDiscover(getContext(),this);
+        pDiscover = new PDiscover(getContext(), this);
+
+//        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//
+////                rv_content.setNestedScrollingEnabled(verticalOffset!=0);
+//                LogUtil.augusLogW("yxf---"+verticalOffset);
+//            }
+//        });
+        jingXuanFrag();
 
     }
 
