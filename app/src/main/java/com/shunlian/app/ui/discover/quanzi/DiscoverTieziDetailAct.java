@@ -3,7 +3,6 @@ package com.shunlian.app.ui.discover.quanzi;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
@@ -43,6 +42,9 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
 
+    @BindView(R.id.mtv_attend)
+    MyTextView mtv_attend;
+
 //    @BindView(R.id.rv_hot)
 //    RecyclerView rv_hot;
 //
@@ -52,6 +54,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     private PDiscoverTieziDetail pDiscoverTieziDetail;
     private LinearLayoutManager linearLayoutManager;
     private boolean isLike;
+    private String circle_id;
 
     //    private DiscoverHotAdapter newAdapter;
     public static void startAct(Context context, String circle_id, String inv_id) {
@@ -69,15 +72,16 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.mtv_attention:
-//
-//                break;
+            case R.id.mtv_attend:
+                DiscoverPublishPhotoAct.startAct(DiscoverTieziDetailAct.this, circle_id);
+                break;
         }
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        mtv_attend.setOnClickListener(this);
 //        rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -95,7 +99,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     protected void initData() {
-        String circle_id = getIntent().getStringExtra("circle_id");
+        circle_id = getIntent().getStringExtra("circle_id");
         String inv_id = getIntent().getStringExtra("inv_id");
         pDiscoverTieziDetail = new PDiscoverTieziDetail(this, this, circle_id, inv_id);
     }
@@ -128,12 +132,12 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         mtv_name.setText(data.inv_info.author_info.nickname);
         mtv_time.setText(data.inv_info.create_time);
         mtv_like.setText(data.inv_info.likes);
-        if ("1".equals(data.inv_info.is_likes)){
-            isLike=true;
+        if ("1".equals(data.inv_info.is_likes)) {
+            isLike = true;
             miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_h);
             mtv_like.setTextColor(getColorResouce(R.color.pink_color));
-        }else {
-            isLike=false;
+        } else {
+            isLike = false;
             miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_n);
             mtv_like.setTextColor(getColorResouce(R.color.value_88));
         }

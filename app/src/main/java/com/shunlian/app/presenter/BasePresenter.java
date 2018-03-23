@@ -23,6 +23,8 @@ package com.shunlian.app.presenter;
 //                佛祖保佑                 永无BUG
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -77,12 +79,14 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected boolean isLoading = false;//是否正在加载
     protected int currentPage = 1;//当前页
     protected int allPage;//总页数
+    private final Resources resources;
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;
         this.iView = iView;
         objectMapper = new ObjectMapper();
         requestCount = 0;
+        resources = context.getResources();
     }
 
     /**
@@ -416,5 +420,32 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     protected boolean isEmpty(CharSequence sequence){
         return TextUtils.isEmpty(sequence);
+    }
+
+    /**
+     * 获取文字资源
+     *
+     * @param stringResouce
+     */
+    protected String getStringResouce(int stringResouce) {
+        return resources.getString(stringResouce);
+    }
+
+    /**
+     * 获取颜色资源
+     *
+     *  @param colorResouce
+     */
+    protected int getColorResouce(int colorResouce) {
+        return resources.getColor(colorResouce);
+    }
+
+    /**
+     * 获取图片资源
+     *
+     *  @param drawableResouce
+     */
+    protected Drawable getDrawableResouce(int drawableResouce) {
+        return resources.getDrawable(drawableResouce);
     }
 }

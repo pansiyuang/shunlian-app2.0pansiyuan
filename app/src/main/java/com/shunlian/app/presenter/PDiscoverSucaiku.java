@@ -45,6 +45,13 @@ public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
     protected void initApi() {
 
     }
+    public void resetBaby() {
+        babyPage = 1;
+        babyIsLoading = true;
+        mDatas.clear();
+        getApiData(babyPage);
+    }
+
     public void refreshBaby() {
         if (!babyIsLoading && babyPage <= babyAllPage) {
             babyIsLoading = true;
