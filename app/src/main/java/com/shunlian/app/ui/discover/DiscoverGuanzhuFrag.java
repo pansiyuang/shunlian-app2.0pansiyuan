@@ -90,7 +90,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
             @Override
             public void onRefresh() {
                 if (presenter != null){
-                    presenter.refreshData();
+                    presenter.initApi();
                 }
             }
         });
@@ -142,7 +142,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
     public void refreshData(DefMessageEvent event){
         if (event.isRefGuanzhu || event.loginSuccess){
             if (presenter != null){
-                presenter.refreshData();
+                presenter.initApi();
             }
         }
     }
@@ -172,5 +172,8 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        if (presenter != null){
+            presenter.detachView();
+        }
     }
 }

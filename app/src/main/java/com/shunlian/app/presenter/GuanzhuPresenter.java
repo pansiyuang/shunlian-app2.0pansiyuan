@@ -45,15 +45,17 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
 
     @Override
     public void detachView() {
-
+        currentPage = 1;
+        allPage = 1;
+        isLoading = false;
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
     }
 
     @Override
-    protected void initApi() {
-        request(true,0);
-    }
-
-    public void refreshData(){
+    public void initApi() {
         currentPage = 1;
         allPage = 1;
         request(true,0);

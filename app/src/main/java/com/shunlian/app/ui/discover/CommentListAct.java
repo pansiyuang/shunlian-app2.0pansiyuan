@@ -210,4 +210,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         setEdittextFocusable(false,met_text);
         Common.hideKeyboard(met_text);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+        }
+    }
 }

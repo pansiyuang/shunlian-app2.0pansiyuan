@@ -211,4 +211,12 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         setEdittextFocusable(false,met_text);
         Common.hideKeyboard(met_text);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+        }
+    }
 }

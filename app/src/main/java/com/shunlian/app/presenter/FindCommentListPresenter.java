@@ -48,7 +48,13 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
     @Override
     public void detachView() {
-
+        currentPage = 1;
+        allPage = 1;
+        isLoading = false;
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
     }
 
     @Override
