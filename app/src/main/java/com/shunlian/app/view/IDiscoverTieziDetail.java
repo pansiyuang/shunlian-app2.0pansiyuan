@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
 
@@ -11,4 +12,5 @@ import java.util.List;
 
 public interface IDiscoverTieziDetail extends IView {
     void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas);
+    void dianZan(CommonEntity data);
 }

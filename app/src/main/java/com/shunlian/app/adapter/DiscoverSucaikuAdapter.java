@@ -17,8 +17,6 @@ import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.GrideItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IADiscoverSucaiku;
@@ -35,6 +33,8 @@ import butterknife.BindView;
  */
 
 public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMaterialEntity.Content> implements IADiscoverSucaiku {
+    private PADiscoverSucaiku paDiscoverSucaiku;
+
     public DiscoverSucaikuAdapter(Context context, boolean isShowFooter, List<DiscoveryMaterialEntity.Content> list) {
         super(context, isShowFooter, list);
     }
@@ -65,7 +65,8 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         viewHolder.miv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PADiscoverSucaiku paDiscoverSucaiku = new PADiscoverSucaiku(context, DiscoverSucaikuAdapter.this);
+                if (paDiscoverSucaiku==null)
+                    paDiscoverSucaiku = new PADiscoverSucaiku(context, DiscoverSucaikuAdapter.this);
                 if (viewHolder.isZan) {
                     paDiscoverSucaiku.dianZan(content.id, "2", viewHolder);
                 } else {
@@ -157,6 +158,16 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
     }
 
     @Override
+    public void dianZans(DiscoverNewAdapter.NewHolder holder) {
+
+    }
+
+    @Override
+    public void dianZanss(TieziCommentAdapter.CommentHolder holder) {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
@@ -187,8 +198,8 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         @BindView(R.id.rv_pics)
         RecyclerView rv_pics;
 
-        private boolean isZan=false;
         private SinglePicAdapter picAdapter;
+        private boolean isZan=false;
         private int zan=0;
         private PromptDialog promptDialog;
         public SucaikuHolder(View itemView) {
