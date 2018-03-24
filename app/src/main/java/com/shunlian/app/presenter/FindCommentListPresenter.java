@@ -51,14 +51,20 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         currentPage = 1;
         allPage = 1;
         isLoading = false;
+        mItemComments.clear();
         if (adapter != null){
             adapter.unbind();
             adapter = null;
+            mItemComments = null;
         }
     }
 
     @Override
     protected void initApi() {
+        currentPage = 1;
+        allPage = 1;
+        isLoading = false;
+        mItemComments.clear();
         requestData(true, 0);
     }
 
