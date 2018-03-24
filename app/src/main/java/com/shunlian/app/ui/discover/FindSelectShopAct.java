@@ -119,10 +119,12 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
 
     private String selectCount(){
         int count = 0;
-        for (int i = 0; i < mStoreLists.size(); i++) {
-            FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
-            if (storeList.isSelect){
-                count++;
+        if (!isEmpty(mStoreLists)) {
+            for (int i = 0; i < mStoreLists.size(); i++) {
+                FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
+                if (storeList.isSelect) {
+                    count++;
+                }
             }
         }
         return String.valueOf(count);

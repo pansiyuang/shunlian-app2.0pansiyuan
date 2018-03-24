@@ -313,12 +313,15 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                     hasSlect = 1;
                 }
                 if (hasSlect == 1 && notSlect == 1) {
+                    isAllSelect = false;
                     return 1;//部分选择
                 }
             }
             if (hasSlect == 0 && notSlect == 1) {
+                isAllSelect = false;
                 return 2;//全不选
             }
+            isAllSelect = true;
             return 0;//全选
         }
         return -1;

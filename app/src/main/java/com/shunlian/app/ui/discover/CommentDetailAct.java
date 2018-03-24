@@ -100,7 +100,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 .keyboardEnable(true)
                 .init();
 
-        mtv_title.setText("评论详情");
+        mtv_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
         gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
 
@@ -144,7 +144,8 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @Override
     public void delPrompt() {
         final PromptDialog dialog = new PromptDialog(this);
-        dialog.setSureAndCancleListener("确认删除评论吗？", "确认", new View.OnClickListener() {
+        dialog.setSureAndCancleListener(getStringResouce(R.string.are_you_sure_del_comment),
+                getStringResouce(R.string.confirm), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (presenter != null){
@@ -152,7 +153,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 }
                 dialog.dismiss();
             }
-        }, "取消", new View.OnClickListener() {
+        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -207,8 +208,16 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         String s = met_text.getText().toString();
         presenter.sendComment(s);
         met_text.setText("");
-        met_text.setHint("添加评论");
+        met_text.setHint(getStringResouce(R.string.add_comments));
         setEdittextFocusable(false,met_text);
         Common.hideKeyboard(met_text);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+        }
     }
 }

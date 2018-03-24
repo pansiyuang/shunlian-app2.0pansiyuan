@@ -18,7 +18,6 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -87,22 +86,21 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
             }
 
             GradientDrawable gradientDrawable = (GradientDrawable) mHolder.mtv_follow.getBackground();
-            LogUtil.zhLogW("handleList=====has_follow=="+dy.has_follow);
             if ("1".equals(dy.has_follow)){
                 gradientDrawable.setColor(getColor(R.color.white));
                 mHolder.mtv_follow.setTextColor(getColor(R.color.pink_color));
-                mHolder.mtv_follow.setText("已关注");
+                mHolder.mtv_follow.setText(getString(R.string.discover_alear_follow));
             }else {
                 gradientDrawable.setColor(getColor(R.color.pink_color));
                 mHolder.mtv_follow.setTextColor(getColor(R.color.white));
-                mHolder.mtv_follow.setText("关注");
+                mHolder.mtv_follow.setText(getString(R.string.discover_follow));
             }
         }
     }
 
     private void setPicMatrix(GuanzhuHolder mHolder, final List<GuanzhuEntity.TagsBean> goods_list) {
         if (!isEmpty(goods_list)) {
-            String formatNum = "%s件宝贝";
+            String formatNum = getString(R.string.discover_baby);
             SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter<GuanzhuEntity.TagsBean>
                     (context, R.layout.item_detail, goods_list) {
 

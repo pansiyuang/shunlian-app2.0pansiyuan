@@ -9,6 +9,7 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -100,6 +101,8 @@ public class MyCollectionAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        int i = TransformUtil.dip2px(this, 20);
+        TransformUtil.expandViewTouchDelegate(miv_all_select,i,i,i,i);
         pink_color = getColorResouce(R.color.pink_color);
         new_text = getColorResouce(R.color.new_text);
         color_value_6c = getColorResouce(R.color.color_value_6c);
@@ -257,13 +260,16 @@ public class MyCollectionAct extends BaseActivity {
         if (state == 0){
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            isSelectAll = true;
         }else if (1 == state){
             mtv_delete.setBackgroundColor(pink_color);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            isSelectAll = false;
         }else {
             mtv_delete.setClickable(false);
             mtv_delete.setBackgroundColor(color_value_6c);
             miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            isSelectAll = false;
         }
     }
 

@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.view.View;
 
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.GuanzhuAdapter;
 import com.shunlian.app.bean.BaseEntity;
@@ -45,17 +46,22 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
 
     @Override
     public void detachView() {
-
+        currentPage = 1;
+        allPage = 1;
+        isLoading = false;
+        mListBeans.clear();
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+            mListBeans = null;
+        }
     }
 
     @Override
-    protected void initApi() {
-        request(true,0);
-    }
-
-    public void refreshData(){
+    public void initApi() {
         currentPage = 1;
         allPage = 1;
+        mListBeans.clear();
         request(true,0);
     }
 
@@ -65,7 +71,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         map.put("page_size",page_size);
         sortAndMD5(map);
         Call<BaseEntity<GuanzhuEntity>> baseEntityCall = getApiService().foucsHome(map);
-        getNetData(0,0,isShow,baseEntityCall,new SimpleNetDataCallback<BaseEntity<GuanzhuEntity>>(){
+        getNetData(0,0,isShow,baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<GuanzhuEntity>>(){
             @Override
             public void onSuccess(BaseEntity<GuanzhuEntity> entity) {
                 super.onSuccess(entity);
@@ -248,7 +255,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToast("点赞失败");
+                Common.staticToast(getStringResouce(R.string.discover_failure_zan));
             }
         });
     }
@@ -275,7 +282,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                Common.staticToast("取消点赞失败");
+                Common.staticToast(getStringResouce(R.string.discover_cacle_failure_zan));
             }
         });
     }

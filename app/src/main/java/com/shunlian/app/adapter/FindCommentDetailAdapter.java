@@ -180,7 +180,8 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             TransformUtil.expandViewTouchDelegate(mtv_zan_count,i,i,i,i);
             TransformUtil.expandViewTouchDelegate(mtv_zan_count1,i,i,i,i);
 
-            LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            LinearLayoutManager manager = new LinearLayoutManager(context,
+                    LinearLayoutManager.HORIZONTAL,false);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
 
