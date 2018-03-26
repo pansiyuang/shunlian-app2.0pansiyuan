@@ -3,7 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -65,10 +65,10 @@ public class ExperiencePresenter extends BasePresenter<IExperienceView> {
         map.put("experience_id", experienceId);
         map.put("status", status);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().praiseExperience(getRequestBody(map));
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().praiseExperience(getRequestBody(map));
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 iView.praiseExperience();
             }

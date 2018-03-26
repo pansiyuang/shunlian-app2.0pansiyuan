@@ -10,4 +10,5 @@ public class DefMessageEvent {
     public boolean isRefGuanzhu;//是否刷新关注页面
     public boolean loginSuccess;//登录成功
 
+    public int praisePosition = -1;//点赞的条目位置
 }

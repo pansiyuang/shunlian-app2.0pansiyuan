@@ -2,12 +2,13 @@ package com.shunlian.app.ui.discover;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.ExperienceDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.view.IExperienceDetailView;
 
 import butterknife.BindView;
@@ -21,10 +22,11 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
     private ExperienceDetailPresenter presenter;
+    private LinearLayoutManager manager;
 
 
     public static void startAct(Context context,String experience_id){
-        Intent intent = new Intent(context, ExchangeDetailAct.class);
+        Intent intent = new Intent(context, ExperienceDetailAct.class);
         intent.putExtra("experience_id",experience_id);
         context.startActivity(intent);
     }
@@ -52,6 +54,9 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         String experience_id = getIntent().getStringExtra("experience_id");
         presenter = new ExperienceDetailPresenter(this,this,experience_id);
 
+        manager = new LinearLayoutManager(this);
+        recy_view.setLayoutManager(manager);
+
     }
 
     /**
@@ -72,5 +77,18 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+        }
     }
 }
