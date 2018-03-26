@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lay_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_ash">
+    android:background="@color/white_ash"
+    app:mode="follow">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"
@@ -10,4 +13,4 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+</com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>

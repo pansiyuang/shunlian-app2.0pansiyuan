@@ -13,4 +13,6 @@ public interface IExperienceView extends IView {
     void getExperienceList(List<ExperienceEntity.Experience> experienceList, int page, int totalPage);
 
     void praiseExperience();
+
+    void refreshFinish();
 }
