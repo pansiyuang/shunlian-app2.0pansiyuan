@@ -16,6 +16,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IDiscoverTieziDetail;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
@@ -201,10 +202,11 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 mtv_like.setTextColor(getColorResouce(R.color.value_88));
             }
             mtv_desc.setText(data.inv_info.content);
-            commentAdapter = new TieziCommentAdapter(getBaseContext(),circle_id,inv_id, true, mdatas);
+            commentAdapter = new TieziCommentAdapter(this,circle_id,inv_id, true, mdatas);
             linearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_remark.setLayoutManager(linearLayoutManager);
             rv_remark.setNestedScrollingEnabled(false);
+            rv_remark.addItemDecoration(new VerticalItemDecoration(28,0,0));
             rv_remark.setAdapter(commentAdapter);
         } else {
             commentAdapter.notifyDataSetChanged();
