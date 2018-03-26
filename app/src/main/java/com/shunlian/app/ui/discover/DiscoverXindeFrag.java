@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ExperienceAdapter;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.presenter.ExperiencePresenter;
@@ -21,7 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView {
+public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -49,6 +50,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
         experienceList = new ArrayList<>();
         mAdapter = new ExperienceAdapter(getActivity(), experienceList, this);
         recycler_list.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
     }
 
     /**
@@ -69,7 +71,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
 
         if (!isEmpty(list)) {
             experienceList.addAll(list);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(0,experienceList.size());
         }
     }
 
@@ -86,7 +88,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
                 }
                 experience.praise = currentStatus;
                 experience.praise_num = String.valueOf(count);
-                mAdapter.notifyItemChanged(i);
+                mAdapter.notifyItemRangeChanged(0,experienceList.size());
             }
         }
     }
@@ -105,5 +107,10 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView 
         currentId = id;
         currentStatus = status;
         mPresenter.praiseExperience(id, status);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //心得详情
     }
 }

@@ -231,6 +231,11 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
     }
 
     @Override
+    public void refreshFinish() {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }

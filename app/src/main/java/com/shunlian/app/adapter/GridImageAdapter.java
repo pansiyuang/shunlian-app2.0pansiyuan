@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.GlideUtils;
@@ -45,6 +47,7 @@ public class GridImageAdapter extends BaseRecyclerAdapter<String> {
         public ImageHolderView(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            miv_pic.setWHProportion(205, 205);
         }
 
         @Override

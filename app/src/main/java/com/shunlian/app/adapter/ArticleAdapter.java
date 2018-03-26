@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.ui.discover.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.TagDetailActivity;
 import com.shunlian.app.utils.GlideUtils;
@@ -34,24 +35,72 @@ import static com.shunlian.app.utils.FastClickListener.isFastClick;
  */
 
 public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
+    private final int LAYOUT_TOP = 1004;
     private DiscoverJingxuanFrag mFragment;
     private ChangeTopicAdapter mAdapter;
+    private List<ArticleEntity.Tag> mTags;
+    private ChosenTagAdapter chosenTagAdapter;
 
-    public ArticleAdapter(Context context, List<ArticleEntity.Article> lists, DiscoverJingxuanFrag frag) {
+    public ArticleAdapter(Context context, List<ArticleEntity.Article> lists, DiscoverJingxuanFrag frag, List<ArticleEntity.Tag> tags) {
         super(context, true, lists);
         this.mFragment = frag;
+        this.mTags = tags;
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == LAYOUT_TOP) {
+            return new TagViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_tag, parent, false));
+        }
         return new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chosen, parent, false));
     }
 
     @Override
+    public int getItemCount() {
+        return super.getItemCount() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return LAYOUT_TOP;
+        }
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == LAYOUT_TOP) {
+            handlerTag(holder);
+        } else {
+            handlerItem(holder, position);
+        }
+    }
+
+    public void handlerTag(RecyclerView.ViewHolder holder) {
+        if (holder instanceof TagViewHolder) {
+            TagViewHolder tagViewHolder = (TagViewHolder) holder;
+            chosenTagAdapter = new ChosenTagAdapter(context, mTags);
+            tagViewHolder.recycler_tags.setAdapter(chosenTagAdapter);
+
+            chosenTagAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    TagDetailActivity.startAct(context, mTags.get(position).id);
+                }
+            });
+        }
+    }
+
+    public void handlerItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ArticleViewHolder) {
             ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-            final ArticleEntity.Article article = lists.get(position);
+            final ArticleEntity.Article article = lists.get(position - 1);
 
             if ("0".equals(article.thumb_type)) {
                 articleViewHolder.rl_small.setVisibility(View.VISIBLE);
@@ -92,6 +141,13 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                     } else {
                         mFragment.toUnLikeArticle(article.id);
                     }
+                }
+            });
+
+            articleViewHolder.ll_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentListAct.startAct(mFragment.getActivity(), article.id);
                 }
             });
 
@@ -147,9 +203,6 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         } else {
             linearLayout.setVisibility(View.VISIBLE);
 
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(manager);
-            recyclerView.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
             mAdapter = new ChangeTopicAdapter(context, topicData);
             recyclerView.setAdapter(mAdapter);
         }
@@ -187,6 +240,21 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             }, start, start + name.length(), 0);
         }
         return ssb.append(content);
+    }
+
+    public class TagViewHolder extends BaseRecyclerViewHolder {
+
+        @BindView(R.id.recycler_tags)
+        RecyclerView recycler_tags;
+
+        public TagViewHolder(View itemView) {
+            super(itemView);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recycler_tags.setLayoutManager(manager);
+            recycler_tags.setNestedScrollingEnabled(false);
+        }
+
     }
 
     public class ArticleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -254,6 +322,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         public ArticleViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recycler_change.setLayoutManager(manager);
+            recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
         }
 
         @Override

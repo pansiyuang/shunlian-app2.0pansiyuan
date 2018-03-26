@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.ui.discover.CommentListAct;
 import com.shunlian.app.ui.discover.TagDetailActivity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -193,6 +194,14 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
                 }
             });
 
+            articleViewHolder.ll_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentListAct.startAct((TagDetailActivity) context, article.id);
+                }
+            });
+
+
             articleViewHolder.miv_change.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -221,7 +230,7 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         }
     }
 
-    private SpannableStringBuilder addClickablePart(List<ArticleEntity.Tag> mTags, String content) {
+    private SpannableStringBuilder addClickablePart(final List<ArticleEntity.Tag> mTags, final String content) {
         StringBuffer sb = new StringBuffer();
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         for (int i = 0; i < mTags.size(); i++) {
@@ -234,12 +243,15 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         String[] str = sb.toString().split(" ");
 
         for (int i = 0; i < str.length; i++) {
+            final int index = i;
             final String name = str[i];
             final int start = sb.toString().indexOf(name);
             ssb.setSpan(new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
                     //点击事件
+                    TagDetailActivity.startAct(context, mTags.get(index).id);
+                    ((TagDetailActivity) context).finish();
                 }
 
                 @Override
