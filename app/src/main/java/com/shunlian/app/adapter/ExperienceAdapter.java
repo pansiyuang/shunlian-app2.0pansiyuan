@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,25 +78,17 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_content.setText(experience.content);
 
             if (!isEmpty(experience.image)) {
-                GridLayoutManager manager = new GridLayoutManager(context, 3);
-                holderView.recycler_img.setLayoutManager(manager);
-
-                if (holderView.recycler_img.getAdapter() == null) {
-                    GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
-                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(context, 6f), false);
-                    holderView.recycler_img.addItemDecoration(gridSpacingItemDecoration);
-                    holderView.recycler_img.setAdapter(gridImageAdapter);
-
-                    gridImageAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            BigImgEntity bigImgEntity = new BigImgEntity();
-                            bigImgEntity.itemList = (ArrayList<String>) experience.image;
-                            bigImgEntity.index = position;
-                            LookBigImgAct.startAct(context, bigImgEntity);
-                        }
-                    });
-                }
+                GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
+                holderView.recycler_img.setAdapter(gridImageAdapter);
+                gridImageAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>) experience.image;
+                        bigImgEntity.index = position;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
 
             if (isEmpty(goods.id)) {
@@ -184,6 +177,12 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
         public ExperienceHolderView(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            GridLayoutManager manager = new GridLayoutManager(context, 3);
+            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(context, 6f), false);
+            ((DefaultItemAnimator) recycler_img.getItemAnimator()).setSupportsChangeAnimations(false);
+            recycler_img.setLayoutManager(manager);
+            recycler_img.setNestedScrollingEnabled(false);
+            recycler_img.addItemDecoration(gridSpacingItemDecoration);
         }
 
         @Override

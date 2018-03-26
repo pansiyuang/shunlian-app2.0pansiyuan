@@ -1217,7 +1217,7 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/material/praise")
-    Call<BaseEntity<CommonEntity>> discoveryPraise(@Body RequestBody body);
+    Call<BaseEntity<EmptyEntity>> discoveryPraise(@Body RequestBody body);
 
     /**
      * 前台话题列表
@@ -1260,6 +1260,33 @@ public interface ApiService {
      */
     @POST("discovery/circle/addInv")
     Call<BaseEntity<EmptyEntity>> createCircle(@Body RequestBody body);
+
+    /**
+     * 话题点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/topicLike")
+    Call<BaseEntity<EmptyEntity>> circleTopicLike(@Body RequestBody body);
+
+    /**
+     * 帖子点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/InvLike")
+    Call<BaseEntity<CommonEntity>> circleInvLike(@Body RequestBody body);
+
+    /**
+     * 帖子评论点赞
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/CommentLike")
+    Call<BaseEntity<EmptyEntity>> circleCommentLike(@Body RequestBody body);
 
     /**
      * 心得详情

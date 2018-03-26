@@ -16,6 +16,9 @@ public class CommonEntity {
     public List<CalendarEntity> calendar; //获取足迹日历形式信息接口
     public String num;  //可添加的商品数量接口
 
+    public String likes;  //已点赞的人数
+    public List<String> five_member_likes;  //最新点赞头像列表
+
     public String new_likes;//点赞数量
     public List<FindCommentListEntity.LastLikesBean> last_likes;//点赞人的头像
 

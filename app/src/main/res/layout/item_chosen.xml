@@ -15,10 +15,7 @@
             android:id="@+id/rl_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:padding="10dp"
             android:visibility="gone">
 
             <TextView
@@ -35,7 +32,7 @@
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_small_icon"
-                android:layout_width="108dp"
+                android:layout_width="107.5dp"
                 android:layout_height="95dp"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerCrop" />
@@ -84,7 +81,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/new_gray"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_big_icon"
@@ -127,7 +124,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="210"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -151,7 +147,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="6680"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -175,7 +170,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="260"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>

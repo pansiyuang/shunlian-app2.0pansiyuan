@@ -72,7 +72,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private List<FootprintEntity.MarkData> delList;
     private List<FootprintEntity.DateInfo> dateInfoList;
     private GridLayoutManager manager;
-    private boolean isSelectAll;
+    private boolean isSelectAll = false;
     private int selectStatus = 0; // 0 全选  1 部分选择 2 全不选
     private FootprintAdapter footprintAdapter;
     private LinearLayout.LayoutParams calendarParams;
@@ -219,6 +219,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             isSelectAll = true;
         }
         toSelectAll(isSelectAll);
+        footprintAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -227,6 +228,10 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @Override
     public void operationMange() {
         LogUtil.httpLogW("operationMange()");
+        isSelectAll = false;
+        selectStatus = 0;
+        toSelectAll(false);
+        footprintAdapter.setEditMode(false);
     }
 
     /**
@@ -521,14 +526,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             markData.isSelect = isSelectAll;
             if (isSelectAll) {
                 delList.add(markData);
-            } else {
-                delList.remove(markData);
             }
         }
         for (FootprintEntity.DateInfo dateInfo : dateInfoList) {
             dateInfo.isSelect = isSelectAll;
         }
-        checkSelctStatus();
     }
 
     /**

@@ -5,10 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView
+    <com.shunlian.app.widget.MyScrollView
+        android:id="@+id/msv_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="90dp">
+        android:layout_marginBottom="90dp"
+        android:scrollbars="none"
+        android:overScrollMode="never">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
@@ -16,8 +19,8 @@
             android:orientation="vertical">
 
             <!--轮播-->
-            <com.shunlian.app.widget.banner.Kanner
-                android:id="@+id/kanner"
+            <com.shunlian.app.widget.banner.TieziKanner
+                android:id="@+id/kanner_tiezi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bb_delay="5"
@@ -42,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="17dp"
+                    android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/miv_avar"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
@@ -72,16 +75,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
                     android:layout_toLeftOf="@id/mtv_like"
                     android:src="@mipmap/icon_found_quanzi_xin_n" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_avar"
-                    android:layout_width="82dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@id/miv_like" />
 
                 <View
@@ -133,8 +138,53 @@
                 android:paddingRight="20dp" />
 
         </com.shunlian.app.widget.MyLinearLayout>
-    </ScrollView>
+    </com.shunlian.app.widget.MyScrollView>>
+    <View
+        android:id="@+id/view_bg"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="@color/white" />
 
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/rLayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/icon_more_fanhui" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/icon_more_gengduo" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_titles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/miv_close"
+            android:layout_toLeftOf="@id/miv_more"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="18sp" />
+
+
+    </com.shunlian.app.widget.MyRelativeLayout>
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_attend"
         android:layout_width="122dp"

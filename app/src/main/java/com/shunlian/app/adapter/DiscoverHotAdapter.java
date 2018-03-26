@@ -13,6 +13,7 @@ import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -35,7 +36,6 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new TieziHolder(LayoutInflater.from(context).inflate(R.layout.item_discover_tiezi, parent, false));
     }
-
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {

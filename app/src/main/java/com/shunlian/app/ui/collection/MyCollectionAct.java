@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -256,6 +257,7 @@ public class MyCollectionAct extends BaseActivity {
      * @param state 0 全选  1 部分选择 2 全不选
      */
     public void setManageState(int state){
+        LogUtil.httpLogW("setManageState:" + state);
         mtv_delete.setClickable(true);
         if (state == 0){
             mtv_delete.setBackgroundColor(pink_color);
