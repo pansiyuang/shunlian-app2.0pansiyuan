@@ -81,7 +81,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/new_gray"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_big_icon"
@@ -124,7 +124,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="210"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -148,7 +147,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="6680"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -172,7 +170,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="260"
                     android:textColor="@color/new_text"
                     android:textSize="13sp" />
             </LinearLayout>

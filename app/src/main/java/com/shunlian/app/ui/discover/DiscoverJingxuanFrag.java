@@ -32,7 +32,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @BindView(R.id.recycler_article)
     RecyclerView recycler_article;
 
-    private ChosenTagAdapter mAdapter;
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
     private List<ArticleEntity.Tag> mTags;
@@ -59,17 +58,9 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         mPresenter = new ChosenPresenter(getActivity(), this);
         mPresenter.getArticleList(true);
         mTags = new ArrayList<>();
-        mAdapter = new ChosenTagAdapter(getActivity(), mTags);
-        recycler_tags.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                TagDetailActivity.startAct(getActivity(), mTags.get(position).id);
-            }
-        });
+
 
         mArticleList = new ArrayList<>();
-        mArticleAdapter = new ArticleAdapter(getActivity(), mArticleList, this);
         recycler_article.setAdapter(mArticleAdapter);
         mArticleAdapter.setOnItemClickListener(this);
     }
@@ -102,7 +93,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             mArticleList.clear();
             if (!isEmpty(articleEntity.tag_list)) {
                 mTags.addAll(articleEntity.tag_list);
-                mAdapter.notifyDataSetChanged();
             }
 
             if (!isEmpty(articleEntity.article_list)) {
@@ -115,6 +105,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
                 }
                 articleEntity.article_list.get(index).topic_list = topicList;
             }
+
+            mArticleAdapter = new ArticleAdapter(getActivity(), mArticleList, this, mTags);
         }
         if (!isEmpty(articleEntity.article_list)) {
             mArticleList.addAll(articleEntity.article_list);

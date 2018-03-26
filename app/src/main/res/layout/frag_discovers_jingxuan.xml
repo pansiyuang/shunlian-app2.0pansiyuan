@@ -13,13 +13,6 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_tags"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:overScrollMode="never"
-            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-
-        <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_article"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
