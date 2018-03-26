@@ -44,6 +44,10 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
 
     }
 
+    public void initPage() {
+        currentPage = 1;
+    }
+
     public void getArticleList(boolean isShowLoading) {
         currentMode = MODE_ARTICLE;
         Map<String, String> map = new HashMap<>();
@@ -60,6 +64,9 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 iView.getNiceList(articleEntity, Integer.valueOf(articleEntity.page), Integer.valueOf(articleEntity.total_page));
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
+                if (currentPage == 1){
+                    iView.refreshFinish();
+                }
                 currentPage++;
             }
         });

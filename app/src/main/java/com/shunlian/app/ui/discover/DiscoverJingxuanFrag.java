@@ -18,6 +18,9 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IChosenView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,12 @@ import butterknife.BindView;
 
 
 public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, BaseRecyclerAdapter.OnItemClickListener {
-    @BindView(R.id.recycler_tags)
-    RecyclerView recycler_tags;
-
     @BindView(R.id.recycler_article)
     RecyclerView recycler_article;
+
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
 
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
@@ -45,10 +49,9 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     protected void initData() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recycler_tags.setLayoutManager(manager);
-        recycler_tags.setNestedScrollingEnabled(false);
+
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
 
         LinearLayoutManager articleManager = new LinearLayoutManager(getActivity());
         recycler_article.setLayoutManager(articleManager);
@@ -58,11 +61,21 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         mPresenter = new ChosenPresenter(getActivity(), this);
         mPresenter.getArticleList(true);
         mTags = new ArrayList<>();
-
-
         mArticleList = new ArrayList<>();
-        recycler_article.setAdapter(mArticleAdapter);
-        mArticleAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void initListener() {
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mPresenter != null) {
+                    mPresenter.initPage();
+                    mPresenter.getArticleList(false);
+                }
+            }
+        });
+        super.initListener();
     }
 
     /**
@@ -78,7 +91,9 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null){
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -107,6 +122,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             }
 
             mArticleAdapter = new ArticleAdapter(getActivity(), mArticleList, this, mTags);
+            mArticleAdapter.setOnItemClickListener(this);
+            recycler_article.setAdapter(mArticleAdapter);
         }
         if (!isEmpty(articleEntity.article_list)) {
             mArticleList.addAll(articleEntity.article_list);
@@ -162,5 +179,23 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position);
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
+    }
+
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null){
+            lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null){
+            mPresenter.detachView();
+        }
     }
 }

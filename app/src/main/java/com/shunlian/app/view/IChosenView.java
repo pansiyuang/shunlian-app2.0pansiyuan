@@ -16,4 +16,9 @@ public interface IChosenView extends IView {
     void unLikeArticle(String articleId);
 
     void getOtherTopics(List<ArticleEntity.Topic> topic_list);
+
+    /**
+     * 刷新完成
+     */
+    void refreshFinish();
 }

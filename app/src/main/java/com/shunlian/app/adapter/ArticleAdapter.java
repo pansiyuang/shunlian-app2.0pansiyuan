@@ -85,10 +85,6 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
     public void handlerTag(RecyclerView.ViewHolder holder) {
         if (holder instanceof TagViewHolder) {
             TagViewHolder tagViewHolder = (TagViewHolder) holder;
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            tagViewHolder.recycler_tags.setLayoutManager(manager);
-            tagViewHolder.recycler_tags.setNestedScrollingEnabled(false);
             chosenTagAdapter = new ChosenTagAdapter(context, mTags);
             tagViewHolder.recycler_tags.setAdapter(chosenTagAdapter);
 
@@ -104,7 +100,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
     public void handlerItem(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ArticleViewHolder) {
             ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-            final ArticleEntity.Article article = lists.get(position);
+            final ArticleEntity.Article article = lists.get(position - 1);
 
             if ("0".equals(article.thumb_type)) {
                 articleViewHolder.rl_small.setVisibility(View.VISIBLE);
@@ -207,9 +203,6 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         } else {
             linearLayout.setVisibility(View.VISIBLE);
 
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(manager);
-            recyclerView.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
             mAdapter = new ChangeTopicAdapter(context, topicData);
             recyclerView.setAdapter(mAdapter);
         }
@@ -256,6 +249,10 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
         public TagViewHolder(View itemView) {
             super(itemView);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recycler_tags.setLayoutManager(manager);
+            recycler_tags.setNestedScrollingEnabled(false);
         }
 
     }
@@ -325,6 +322,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         public ArticleViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recycler_change.setLayoutManager(manager);
+            recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
         }
 
         @Override
