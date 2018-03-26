@@ -49,9 +49,11 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         currentPage = 1;
         allPage = 1;
         isLoading = false;
+        mReplyListBeans.clear();
         if (adapter != null){
             adapter.unbind();
             adapter = null;
+            mReplyListBeans = null;
         }
     }
 

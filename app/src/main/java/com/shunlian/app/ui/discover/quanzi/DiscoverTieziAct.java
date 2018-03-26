@@ -5,23 +5,17 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverHotAdapter;
-import com.shunlian.app.adapter.StoreEvaluateAdapter;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
-import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.presenter.PDiscoverTiezi;
-import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.store.StoreLicenseAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IDiscoverTiezi;
-import com.shunlian.app.view.StoreIntroduceView;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyRelativeLayout;
+import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -29,18 +23,31 @@ import java.util.List;
 import butterknife.BindView;
 
 public class DiscoverTieziAct extends BaseActivity implements View.OnClickListener, IDiscoverTiezi {
+    @BindView(R.id.miv_more)
+    MyImageView miv_more;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+    @BindView(R.id.mtv_titles)
+    MyTextView mtv_titles;
+
+    @BindView(R.id.view_bg)
+    View view_bg;
+
+    @BindView(R.id.msv_out)
+    MyScrollView msv_out;
+
+
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
-
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
-
     @BindView(R.id.rv_hot)
     RecyclerView rv_hot;
-
     @BindView(R.id.rv_new)
     RecyclerView rv_new;
 
@@ -48,6 +55,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     private LinearLayoutManager linearLayoutManager;
     private DiscoverHotAdapter newAdapter;
     private String circle_id;
+
     public static void startAct(Context context, String circle_id) {
         Intent intent = new Intent(context, DiscoverTieziAct.class);
         intent.putExtra("circle_id", circle_id);
@@ -56,16 +64,17 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     protected int getLayoutId() {
+        setHideStatus();
         return R.layout.act_discover_tiezi;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.mtv_attention:
-
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.mtv_attention:
+//
+//                break;
+//        }
     }
 
     @Override
@@ -77,10 +86,35 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
                 if (linearLayoutManager != null) {
                     int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
-                        if (pDiscoverTiezi != null) {
-                            pDiscoverTiezi.refreshBaby();
-                        }
+
                     }
+                }
+            }
+        });
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (isScrollBottom && pDiscoverTiezi != null) {
+                    pDiscoverTiezi.refreshBaby();
+                }
+                float alpha = ((float) y) / 250;
+                if (y > 250) {
+                    mtv_titles.setAlpha(1);
+                    view_bg.setAlpha(1);
+                } else if (y > 150) {
+                    view_bg.setAlpha(alpha);
+                    mtv_titles.setAlpha(alpha);
+                    miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
+                    miv_more.setImageResource(R.mipmap.icon_more_n);
+                    miv_close.setAlpha(alpha);
+                    miv_more.setAlpha(alpha);
+                } else if (y > 0) {
+                    view_bg.setAlpha(0);
+                    mtv_titles.setAlpha(0);
+                    miv_close.setAlpha(1 - alpha);
+                    miv_more.setAlpha(1 - alpha);
+                    miv_close.setImageResource(R.mipmap.icon_more_fanhui);
+                    miv_more.setImageResource(R.mipmap.icon_more_gengduo);
                 }
             }
         });
@@ -88,9 +122,12 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initData() {
-        circle_id=getIntent().getStringExtra("circle_id");
+        circle_id = getIntent().getStringExtra("circle_id");
         pDiscoverTiezi = new PDiscoverTiezi(this, this, circle_id);
+        view_bg.setAlpha(0);
+        mtv_titles.setAlpha(0);
     }
+
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -103,13 +140,13 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     }
 
 
-
     @Override
     public void setApiData(final DiscoveryTieziEntity.Mdata data, final List<DiscoveryTieziEntity.Mdata.Hot> mdatas) {
         if (newAdapter == null) {
             mtv_title.setText(data.topicDetail.title);
+            mtv_titles.setText(data.topicDetail.title);
             mtv_desc.setText(data.topicDetail.content);
-            GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,data.topicDetail.img);
+            GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.topicDetail.img);
             newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas);
             linearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_new.setLayoutManager(linearLayoutManager);
@@ -123,13 +160,13 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this,circle_id,data.new_inv.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.new_inv.get(position).id);
                 }
             });
             hotAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this,circle_id,mdatas.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id);
                 }
             });
 
@@ -139,4 +176,5 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
         newAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
 
     }
+
 }

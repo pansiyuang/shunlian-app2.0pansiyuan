@@ -55,6 +55,7 @@ public class LookBigImgAct extends BaseActivity {
     public static void startAct(Context context, BigImgEntity entity) {
         Intent intent = new Intent(context, LookBigImgAct.class);
         intent.putExtra("data", entity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intent);
     }
 

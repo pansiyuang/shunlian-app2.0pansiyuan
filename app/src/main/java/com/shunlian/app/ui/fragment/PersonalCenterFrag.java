@@ -271,28 +271,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
-        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
-            @Override
-            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
-                if (y>30){
-                    view_bg.setAlpha(1);
-                }else if (y>0){
-                    float alpha = ((float) y) / 30;
-                    view_bg.setAlpha(alpha);
-                }else {
-                    view_bg.setAlpha(0);
-                }
-            }
-        });
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                personalcenterPresenter.getApiData();
-            }
-            @Override
-            public void onLoadMore() {
-            }
-        });
     }
 
     @Override
@@ -321,6 +299,28 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         rl_more.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
         view_bg.setOnClickListener(this);
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (y>30){
+                    view_bg.setAlpha(1);
+                }else if (y>0){
+                    float alpha = ((float) y) / 30;
+                    view_bg.setAlpha(alpha);
+                }else {
+                    view_bg.setAlpha(0);
+                }
+            }
+        });
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                personalcenterPresenter.getApiData();
+            }
+            @Override
+            public void onLoadMore() {
+            }
+        });
     }
 
     @Override

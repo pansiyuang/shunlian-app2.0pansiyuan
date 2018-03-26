@@ -51,14 +51,20 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         currentPage = 1;
         allPage = 1;
         isLoading = false;
+        mItemComments.clear();
         if (adapter != null){
             adapter.unbind();
             adapter = null;
+            mItemComments = null;
         }
     }
 
     @Override
     protected void initApi() {
+        currentPage = 1;
+        allPage = 1;
+        isLoading = false;
+        mItemComments.clear();
         requestData(true, 0);
     }
 
@@ -69,7 +75,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         map.put("article_id", mArticle_id);
         sortAndMD5(map);
         Call<BaseEntity<FindCommentListEntity>> baseEntityCall = getApiService().findcommentList(map);
-        getNetData(0, failureCode, isShow, baseEntityCall, new SimpleNetDataCallback<BaseEntity<FindCommentListEntity>>() {
+        getNetData(0, failureCode, isShow, baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<FindCommentListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<FindCommentListEntity> entity) {
                 super.onSuccess(entity);
@@ -106,7 +113,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
 
     private void setCommentList(int currentPage, int allPage) {
         if (adapter == null) {
-            adapter = new FindCommentListAdapter(context, mItemComments, hotCommentCount,comment_type);
+            adapter = new FindCommentListAdapter(context, mItemComments,
+                    hotCommentCount,comment_type);
             iView.setAdapter(adapter);
             adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
                 @Override
@@ -199,7 +207,8 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             Common.staticToasts(context, message, R.mipmap.icon_common_duihao);
             return;
         }
-        Common.staticToasts(context, "发布成功", R.mipmap.icon_common_duihao);
+        Common.staticToasts(context, getStringResouce(R.string.send_success),
+                R.mipmap.icon_common_duihao);
         if (currentTouchItem != -1) {
             mItemComments.remove(currentTouchItem);
             mItemComments.add(currentTouchItem, insert_item);

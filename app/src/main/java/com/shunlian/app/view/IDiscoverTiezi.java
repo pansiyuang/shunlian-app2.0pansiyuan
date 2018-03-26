@@ -1,6 +1,5 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
 
 import java.util.List;

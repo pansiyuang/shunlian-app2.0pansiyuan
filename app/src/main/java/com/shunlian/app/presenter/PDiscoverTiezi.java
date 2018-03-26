@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverQuanzi;
 import com.shunlian.app.view.IDiscoverTiezi;
 
@@ -50,7 +51,11 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
 
     }
     public void refreshBaby() {
+        LogUtil.augusLogW("yxf--"+babyAllPage);
+        LogUtil.augusLogW("yxf--"+babyPage);
+        LogUtil.augusLogW("yxf--"+babyIsLoading);
         if (!babyIsLoading && babyPage <= babyAllPage) {
+            LogUtil.augusLogW("yxf--8958");
             babyIsLoading = true;
             getApiData(babyPage,circle_id);
         }
@@ -71,6 +76,7 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
                 DiscoveryTieziEntity data =entity.data;
                 babyIsLoading = false;
                 babyPage++;
+                LogUtil.augusLogW("yxf---sdfsdfs");
                 babyAllPage = Integer.parseInt(data.list.total_page);
                 mDatas.addAll(data.list.new_inv);
                 iView.setApiData(data.list,mDatas);

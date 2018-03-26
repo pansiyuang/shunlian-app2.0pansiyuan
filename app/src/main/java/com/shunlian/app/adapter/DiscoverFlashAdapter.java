@@ -51,7 +51,6 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
                 twoHolder.view_left.setVisibility(View.GONE);
                 twoHolder.view_right.setVisibility(View.GONE);
             }
-            data.thumb="https://img01.sldlcdn.com/attachment/channelimg/2018/03/P599bAK9k5Ql5iAbiotqqIx7B99Hyy.jpg";
             GlideUtils.getInstance().loadCornerImage(context,twoHolder.miv_photo,data.thumb,4);
         }
     }

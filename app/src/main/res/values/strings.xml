@@ -489,6 +489,8 @@
     <string name="discover_miaoshuyixiazhao">描述一下照片...</string>
     <string name="discover_fabiaozhaopian">发表照片</string>
     <string name="discover_canyuhuodong">参与活动</string>
+    <string name="discover_yiyourencanyu">已有%s人参与讨论</string>
+    <string name="discover_renxihuan">%s人喜欢</string>
 
     <!--关注-->
     <string name="discover_notfollow">咦？还没有关注哦</string>
@@ -499,4 +501,13 @@
     <string name="discover_follow">关注</string>
     <string name="discover_baby">%s件宝贝</string>
     <!--评论列表-->
+    <string name="comments">评论</string>
+    <string name="add_comments">添加评论</string>
+    <string name="send_success">发布成功</string>
+    <string name="hot_comment">热门评论</string>
+    <string name="new_comment">最新评论</string>
+    <string name="select_comment">精选评论</string>
+    <string name="comment_details">评论详情</string>
+    <string name="are_you_sure_del_comment">确认删除评论吗？</string>
+
 </resources>

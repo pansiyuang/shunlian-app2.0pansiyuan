@@ -49,9 +49,11 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         currentPage = 1;
         allPage = 1;
         isLoading = false;
+        mListBeans.clear();
         if (adapter != null){
             adapter.unbind();
             adapter = null;
+            mListBeans = null;
         }
     }
 
@@ -59,6 +61,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     public void initApi() {
         currentPage = 1;
         allPage = 1;
+        mListBeans.clear();
         request(true,0);
     }
 

@@ -11,15 +11,13 @@
         android:id="@+id/miv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/icon_pinglun" />
+        android:layout_marginLeft="10dp"/>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="热门评论"
         android:textColor="#B3B2B8"
         android:textSize="15sp" />
 </LinearLayout>

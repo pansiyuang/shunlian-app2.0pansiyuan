@@ -36,7 +36,8 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
     private String mCommentType;
     private OnPointFabulousListener mFabulousListener;
 
-    public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists, int hotCommentCount, String comment_type) {
+    public FindCommentListAdapter(Context context, List<FindCommentListEntity.ItemComment> lists,
+                                  int hotCommentCount, String comment_type) {
         super(context, true, lists);
         mHotCommentCount = hotCommentCount;
         mCommentType = comment_type;
@@ -92,20 +93,20 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     String title = "";
                     if (position == 0){
                         icon = R.mipmap.icon_pinglun;
-                        title = "热门评论";
+                        title = getString(R.string.hot_comment);
                     }else {
                         icon = R.mipmap.icon_zuixin;
-                        title = "最新评论";
+                        title = getString(R.string.new_comment);
                     }
                     mHolder.miv_icon.setImageResource(icon);
                     mHolder.mtv_title.setText(title);
                 }else {
                     mHolder.miv_icon.setImageResource(R.mipmap.icon_zuixin);
-                    mHolder.mtv_title.setText("最新评论");
+                    mHolder.mtv_title.setText(getString(R.string.new_comment));
                 }
             }else {
                 mHolder.miv_icon.setImageResource(R.mipmap.icon_found_jingxuan);
-                mHolder.mtv_title.setText("精选评论");
+                mHolder.mtv_title.setText(getString(R.string.select_comment));
             }
         }
     }
@@ -169,7 +170,8 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
         }
     }
 
-    private void reply(FindCommentListHolder mHolder, FindCommentListEntity.ItemComment itemComment, List<FindCommentListEntity.ReplyList> reply_list) {
+    private void reply(FindCommentListHolder mHolder, FindCommentListEntity.ItemComment itemComment,
+                       List<FindCommentListEntity.ReplyList> reply_list) {
         mHolder.ll_sub_bg.removeAllViews();
         for (int j = 0; j < reply_list.size(); j++) {
             SubCommentItemView view = new SubCommentItemView(context);

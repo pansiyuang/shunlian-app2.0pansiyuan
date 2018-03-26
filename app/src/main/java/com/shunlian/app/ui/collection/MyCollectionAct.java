@@ -9,6 +9,7 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -101,6 +102,8 @@ public class MyCollectionAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        int i = TransformUtil.dip2px(this, 20);
+        TransformUtil.expandViewTouchDelegate(miv_all_select,i,i,i,i);
         pink_color = getColorResouce(R.color.pink_color);
         new_text = getColorResouce(R.color.new_text);
         color_value_6c = getColorResouce(R.color.color_value_6c);

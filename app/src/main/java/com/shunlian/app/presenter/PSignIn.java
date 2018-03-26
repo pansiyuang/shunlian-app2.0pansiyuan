@@ -58,7 +58,11 @@ public class PSignIn extends BasePresenter<ISignInView> {
 
     }
     public void refreshBaby() {
+        LogUtil.augusLogW("yxf--"+babyAllPage);
+        LogUtil.augusLogW("yxf--"+babyPage);
+        LogUtil.augusLogW("yxf--"+babyIsLoading);
         if (!babyIsLoading && babyPage <= babyAllPage) {
+            LogUtil.augusLogW("yxf--8958");
             babyIsLoading = true;
             getApiData(babyPage);
         }
@@ -78,6 +82,7 @@ public class PSignIn extends BasePresenter<ISignInView> {
                 CheckInStateEntity checkInStateEntity =entity.data;
                 babyIsLoading = false;
                 babyPage++;
+                LogUtil.augusLogW("yxf---sdfsdfs");
                 babyAllPage = checkInStateEntity.goodslist.total_page;
                 mDatas.addAll(checkInStateEntity.goodslist.list);
                 iView.setApiData(checkInStateEntity,mDatas);

@@ -5,9 +5,12 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.adapter.DiscoverNewAdapter;
 import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
+import com.shunlian.app.adapter.TieziCommentAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -49,13 +52,47 @@ public class PADiscoverSucaiku extends BasePresenter<IADiscoverSucaiku> {
         map.put("material_id", material_id);
         map.put("status", status);
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().discoveryPraise(getRequestBody(map));
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().discoveryPraise(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<CommonEntity> entity) {
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 iView.dianZan(viewHolder);
             }
         });
     }
+
+    public void dianZans(String circle_id, String status, final DiscoverNewAdapter.NewHolder viewHolder){
+        Map<String, String> map = new HashMap<>();
+        map.put("circle_id", circle_id);
+        map.put("status", status);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().circleTopicLike(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.dianZans(viewHolder);
+            }
+        });
+    }
+
+    public void dianZanss(String circle_id, String comment_id,String inv_id,String status, final TieziCommentAdapter.CommentHolder viewHolder){
+        Map<String, String> map = new HashMap<>();
+        map.put("circle_id", circle_id);
+        map.put("comment_id", comment_id);
+        map.put("inv_id", inv_id);
+        map.put("status", status);
+        sortAndMD5(map);
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().circleCommentLike(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                iView.dianZanss(viewHolder);
+            }
+        });
+    }
+
+
 }
