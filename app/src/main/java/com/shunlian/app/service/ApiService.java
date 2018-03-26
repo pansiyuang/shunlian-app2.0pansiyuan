@@ -1261,5 +1261,12 @@ public interface ApiService {
     @POST("discovery/circle/addInv")
     Call<BaseEntity<EmptyEntity>> createCircle(@Body RequestBody body);
 
+    /**
+     * 心得详情
+     * @param map
+     * @return
+     */
+    @GET("discovery/experience/commentList")
+    Call<BaseEntity<EmptyEntity>> experienceDetail(@QueryMap Map<String,String> map);
 
 }

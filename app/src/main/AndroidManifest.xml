@@ -345,6 +345,10 @@
         <activity android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.discover.ExperienceDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
