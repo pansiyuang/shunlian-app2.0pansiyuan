@@ -160,13 +160,13 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.new_inv.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id);
                 }
             });
             hotAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, mdatas.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.new_inv.get(position).id);
                 }
             });
 
