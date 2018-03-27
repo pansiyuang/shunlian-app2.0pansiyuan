@@ -16,6 +16,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IADiscoverSucaiku;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -49,9 +50,11 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
         if ("1".equals(content.is_likes)){
             viewHolder.isZan=true;
             viewHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
+            viewHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
         }else {
             viewHolder.isZan=false;
             viewHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
+            viewHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
         }
         viewHolder.miv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +129,7 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
         MyTextView mtv_content;
 
         @BindView(R.id.civ_head)
-        MyImageView civ_head;
+        CircleImageView civ_head;
 
         @BindView(R.id.miv_vip)
         MyImageView miv_vip;

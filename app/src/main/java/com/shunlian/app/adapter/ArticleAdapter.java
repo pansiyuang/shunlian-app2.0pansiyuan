@@ -20,6 +20,7 @@ import com.shunlian.app.ui.discover.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.TagDetailActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
@@ -35,7 +36,7 @@ import static com.shunlian.app.utils.FastClickListener.isFastClick;
  */
 
 public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
-    private final int LAYOUT_TOP = 1004;
+    private final int LAYOUT_TOP = 100004;
     private DiscoverJingxuanFrag mFragment;
     private ChangeTopicAdapter mAdapter;
     private List<ArticleEntity.Tag> mTags;
@@ -49,7 +50,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return null;
+        return new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chosen, parent, false));
     }
 
     @Override
@@ -57,12 +58,12 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         if (viewType == LAYOUT_TOP) {
             return new TagViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_tag, parent, false));
         }
-        return new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chosen, parent, false));
+        return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + 1;
+        return lists.size() + 1;
     }
 
     @Override
@@ -97,17 +98,17 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         }
     }
 
-    public void handlerItem(RecyclerView.ViewHolder holder, int position) {
+    public void handlerItem(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ArticleViewHolder) {
             ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
             final ArticleEntity.Article article = lists.get(position - 1);
 
             if ("0".equals(article.thumb_type)) {
-                articleViewHolder.rl_small.setVisibility(View.VISIBLE);
-                articleViewHolder.ll_big.setVisibility(View.GONE);
+                visible(articleViewHolder.rl_small);
+                gone(articleViewHolder.ll_big);
             } else {
-                articleViewHolder.ll_big.setVisibility(View.VISIBLE);
-                articleViewHolder.rl_small.setVisibility(View.GONE);
+                visible(articleViewHolder.ll_big);
+                gone(articleViewHolder.rl_small);
             }
 
             articleViewHolder.tv_small_title.setText(article.title);
@@ -191,10 +192,10 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         for (int i = 0; i < lists.size(); i++) {
             if (articleId.equals(lists.get(i).id)) {
                 lists.get(i).had_like = hadLike;
-                notifyItemChanged(i);
                 break;
             }
         }
+        notifyItemRangeChanged(0, lists.size());
     }
 
     public void setTopicData(List<ArticleEntity.Topic> topicData, LinearLayout linearLayout, RecyclerView recyclerView) {
@@ -325,6 +326,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recycler_change.setLayoutManager(manager);
             recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
+            miv_small_icon.setWHProportion(215, 190);
         }
 
         @Override

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -69,7 +70,6 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             ExperienceHolderView holderView = (ExperienceHolderView) holder;
             final ExperienceEntity.Experience experience = lists.get(position);
             ExperienceEntity.MemberInfo memberInfo = experience.member_info;
-            final GoodsDeatilEntity.Goods goods = experience.goods;
 
             GlideUtils.getInstance().loadImage(context, holderView.miv_avatar, memberInfo.avatar);
             holderView.tv_name.setText(memberInfo.nickname);
@@ -89,8 +89,8 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                     }
                 });
             }
-
-            if (goods == null) {
+            final GoodsDeatilEntity.Goods goods = experience.goods;
+            if (experience.goods == null) {
                 holderView.ll_goods.setVisibility(View.GONE);
             } else {
                 GlideUtils.getInstance().loadImage(context, holderView.miv_icon, goods.thumb);
@@ -105,7 +105,9 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_add_car.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    GoodsDetailAct.startAct(context, goods.id);
+                    if (!isEmpty(goods.id)) {
+                        GoodsDetailAct.startAct(context, goods.id);
+                    }
                 }
             });
             holderView.tv_evaluate_count.setOnClickListener(new View.OnClickListener() {

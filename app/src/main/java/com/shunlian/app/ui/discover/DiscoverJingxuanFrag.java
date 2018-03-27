@@ -33,12 +33,12 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
 
-
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
     private List<ArticleEntity.Tag> mTags;
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
+    private LinearLayoutManager articleManager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -51,7 +51,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         NestedSlHeader header = new NestedSlHeader(baseContext);
         lay_refresh.setRefreshHeaderView(header);
 
-        LinearLayoutManager articleManager = new LinearLayoutManager(getActivity());
+        articleManager = new LinearLayoutManager(getActivity());
         recycler_article.setLayoutManager(articleManager);
         recycler_article.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(getActivity(), 10), 0, 0));
         ((SimpleItemAnimator) recycler_article.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -69,10 +69,26 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             public void onRefresh() {
                 if (mPresenter != null) {
                     mPresenter.initPage();
-                    mPresenter.getArticleList(false);
+                    mPresenter.getArticleList(true);
                 }
             }
         });
+
+        recycler_article.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (articleManager != null){
+                    int lastPosition = articleManager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == articleManager.getItemCount()){
+                        if (mPresenter != null){
+                            mPresenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
+
         super.initListener();
     }
 
@@ -89,7 +105,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     public void showFailureView(int request_code) {
-        if (lay_refresh != null){
+        if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
         }
     }
@@ -175,7 +191,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     public void onItemClick(View view, int position) {
-        ArticleEntity.Article article = mArticleList.get(position);
+        ArticleEntity.Article article = mArticleList.get(position - 1);
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
 
@@ -184,7 +200,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
      */
     @Override
     public void refreshFinish() {
-        if (lay_refresh != null){
+        if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
         }
     }
@@ -192,7 +208,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.detachView();
         }
     }

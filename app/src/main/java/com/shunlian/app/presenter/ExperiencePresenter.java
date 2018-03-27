@@ -40,6 +40,10 @@ public class ExperiencePresenter extends BasePresenter<IExperienceView> {
 
     }
 
+    public void initPage() {
+        currentPage = 1;
+    }
+
     public void getExperienceList(boolean isShowLoading) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(currentPage));
@@ -55,7 +59,26 @@ public class ExperiencePresenter extends BasePresenter<IExperienceView> {
                 iView.getExperienceList(experienceEntity.list, Integer.valueOf(experienceEntity.page), Integer.valueOf(experienceEntity.total_page));
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
+                currentPage++;
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
             }
         });
     }
