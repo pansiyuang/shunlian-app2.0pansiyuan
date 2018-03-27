@@ -31,6 +31,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
 import com.shunlian.app.bean.CheckInStateEntity;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
@@ -1296,7 +1297,7 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/circle/addComment")
-    Call<BaseEntity<EmptyEntity>> circleAddComment(@Body RequestBody body);
+    Call<BaseEntity<CircleAddCommentEntity>> circleAddComment(@Body RequestBody body);
 
 
 }

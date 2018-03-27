@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
@@ -34,7 +35,7 @@ public class PDiscoverTieziDetail extends BasePresenter<IDiscoverTieziDetail> {
     private boolean babyIsLoading;
     private String circle_id;
     private String inv_id;
-    private List<DiscoveryCommentListEntity.Mdata.Commentlist> mDatas = new ArrayList<>();
+    public List<DiscoveryCommentListEntity.Mdata.Commentlist> mDatas = new ArrayList<>();
 
     public PDiscoverTieziDetail(Context context, IDiscoverTieziDetail iView, String circle_id,String inv_id) {
         super(context, iView);
@@ -113,12 +114,13 @@ public class PDiscoverTieziDetail extends BasePresenter<IDiscoverTieziDetail> {
         map.put("inv_id", inv_id);
         map.put("content", content);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().circleAddComment(getRequestBody(map));
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CircleAddCommentEntity>> baseEntityCall = getAddCookieApiService().circleAddComment(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CircleAddCommentEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CircleAddCommentEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(getStringResouce(R.string.discover_pinglunchenggong));
+                iView.faBu(entity.data.list);
+//                Common.staticToast(getStringResouce(R.string.discover_pinglunchenggong));
             }
         });
     }

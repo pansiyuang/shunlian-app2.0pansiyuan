@@ -12,6 +12,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.adapter.TieziCommentAdapter;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.presenter.PDiscoverTieziDetail;
@@ -99,6 +100,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     private String circle_id, inv_id;
     private TieziAvarAdapter avarAdapter;
     private List<String> avars;
+    private int num=0;
     private TieziCommentAdapter commentAdapter;
 
     //    private DiscoverHotAdapter newAdapter;
@@ -128,6 +130,9 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @OnClick(R.id.met_text)
     public void onClick(){
         setEdittextFocusable(true,met_text);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
+        }
     }
 
     @Override
@@ -256,6 +261,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     public void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas) {
         if (commentAdapter == null) {
             avars = new ArrayList<>();
+            num=Integer.parseInt(data.commentcounts);
             avars.addAll(data.inv_info.five_member_likes);
             avarAdapter = new TieziAvarAdapter(getBaseContext(), false, avars);
             rv_avar.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -313,6 +319,14 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         avars.clear();
         avars.addAll(data.five_member_likes);
         avarAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void faBu(DiscoveryCommentListEntity.Mdata.Commentlist data) {
+        pDiscoverTieziDetail.mDatas.add(0,data);
+        commentAdapter.notifyDataSetChanged();
+        num++;
+        mtv_msg_count.setText(String.valueOf(num));
     }
 
 }
