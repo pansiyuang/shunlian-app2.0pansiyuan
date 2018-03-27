@@ -51,9 +51,10 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
 
-    public static void startAct(Context context,String comment_id){
+    public static void startAct(Context context,String experience_id,String comment_id){
         Intent intent = new Intent(context, CommentDetailAct.class);
         intent.putExtra("comment_id",comment_id);
+        intent.putExtra("experience_id",experience_id);
         context.startActivity(intent);
     }
 
@@ -108,7 +109,8 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         recy_view.setLayoutManager(manager);
 
         String comment_id = getIntent().getStringExtra("comment_id");
-        presenter = new FindCommentDetailPresenter(this,this,comment_id);
+        String experience_id = getIntent().getStringExtra("experience_id");
+        presenter = new FindCommentDetailPresenter(this,this,experience_id,comment_id);
 
     }
 
@@ -206,6 +208,10 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @OnClick(R.id.mtv_send)
     public void send(){
         String s = met_text.getText().toString();
+        if (isEmpty(s)){
+            Common.staticToast("评论内容不能为空");
+            return;
+        }
         presenter.sendComment(s);
         met_text.setText("");
         met_text.setHint(getStringResouce(R.string.add_comments));
@@ -218,6 +224,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();
+            presenter = null;
         }
     }
 }

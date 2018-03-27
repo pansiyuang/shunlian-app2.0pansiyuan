@@ -205,6 +205,10 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @OnClick(R.id.mtv_send)
     public void send(){
         String s = met_text.getText().toString();
+        if (isEmpty(s)){
+            Common.staticToast("评论内容不能为空");
+            return;
+        }
         presenter.sendComment(s);
         met_text.setText("");
         met_text.setHint(getStringResouce(R.string.add_comments));
@@ -217,6 +221,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();
+            presenter = null;
         }
     }
 }
