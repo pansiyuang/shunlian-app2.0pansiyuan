@@ -1311,5 +1311,20 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/experience/createComment")
-    Call<BaseEntity<CommonEntity>> createComment(@Body RequestBody body);
+    Call<BaseEntity<UseCommentEntity>> createComment(@Body RequestBody body);
+
+    /**
+     * 心得评论删除
+     * @return
+     */
+    @POST("discovery/experience/deleteComment")
+    Call<BaseEntity<EmptyEntity>> deleteComment(@Body RequestBody body);
+
+    /**
+     * 心得评论详情
+     * @param map
+     * @return
+     */
+    @GET("discovery/experience/commentInfo")
+    Call<BaseEntity<CommentDetailEntity>> experienceCommentDetail(@QueryMap Map<String,String> map);
 }

@@ -1,12 +1,17 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.view.View;
 
+import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ExperienceDetailAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ExchangDetailEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -57,6 +62,15 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
      */
     @Override
     public void detachView() {
+        currentPage=1;
+        allPage = 1;
+        isLoading = true;
+        if (adapter != null){
+            mCommentLists.clear();
+            adapter.unbind();
+            adapter=null;
+            mCommentLists=null;
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -106,13 +120,44 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
         if (adapter == null) {
             adapter = new ExperienceDetailAdapter(context, mExperienceInfo, mCommentLists);
             iView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                String delete_enable = "0";
+                @Override
+                public void onItemClick(View view, int position) {
+                    currentPosition = position;
+                    if (position > 0){
+                        FindCommentListEntity.ItemComment itemComment = mCommentLists.get(position - 2);
+                        delete_enable = itemComment.delete_enable;
+                        if ("1".equals(delete_enable)) {//删除
+                            iView.delPrompt();
+                        } else {
+                            if (getIsAllType())
+                                iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                        }
+                    }else if (position == 0){
+                        iView.showorhideKeyboard("@".concat(mExperienceInfo.nickname));
+                    }
+
+                }
+            });
+
+            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    onRefresh();
+                }
+            });
         }else {
             adapter.notifyDataSetChanged();
         }
         adapter.setPageLoading(currentPage,allPage);
     }
 
-
+    /**
+     * 点赞
+     * @param experienceId
+     * @param had_like
+     */
     public void praiseExperience(String experienceId, String had_like) {
         Map<String, String> map = new HashMap<>();
         map.put("experience_id", experienceId);
@@ -142,6 +187,11 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
         });
     }
 
+    /**
+     * 对评论点赞
+     * @param comment_id
+     * @param had_like
+     */
     public void comment_Praise(String comment_id,String had_like){
         Map<String, String> map = new HashMap<>();
         map.put("experience_id", mExperience_id);
@@ -182,5 +232,74 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                 comment_Praise(itemComment.item_id,itemComment.had_like);
             }
         }
+    }
+
+    /**
+     * 发布评价
+     * @param content
+     */
+    public void sendExperience(String content){
+        Map<String,String> map = new HashMap<>();
+        map.put("experience_id",mExperience_id);
+        if (currentPosition > 0){
+            FindCommentListEntity.ItemComment itemComment = mCommentLists.get(currentPosition - 2);
+            map.put("pid",itemComment.item_id);
+        }
+        map.put("content",content);
+        map.put("from_page","list");
+        sortAndMD5(map);
+
+        Call<BaseEntity<UseCommentEntity>> comment = getAddCookieApiService()
+                .createComment(getRequestBody(map));
+        getNetData(true,comment,new SimpleNetDataCallback<BaseEntity<UseCommentEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<UseCommentEntity> entity) {
+                super.onSuccess(entity);
+                FindCommentListEntity.ItemComment insert_item = entity.data.insert_item;
+                if (isEmpty(insert_item.avatar)){
+                    Common.staticToasts(context, entity.message, R.mipmap.icon_common_duihao);
+                }else {
+                    Common.staticToasts(context, getStringResouce(R.string.send_success),
+                            R.mipmap.icon_common_duihao);
+                    mCommentLists.add(0, insert_item);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    /**
+     * 评论类型，true是all，否则精选
+     * @return
+     */
+    private boolean getIsAllType(){
+        if ("0".equals(mExperienceInfo.check_comment))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * 删除评论
+     */
+    public void delComment() {
+        Map<String,String> map = new HashMap<>();
+        map.put("experience_id",mExperience_id);
+        FindCommentListEntity.ItemComment itemComment = mCommentLists.get(currentPosition - 2);
+        map.put("comment_id",itemComment.item_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .deleteComment(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                mCommentLists.remove(currentPosition - 2);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 }

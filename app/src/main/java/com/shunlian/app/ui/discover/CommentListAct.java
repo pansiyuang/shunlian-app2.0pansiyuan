@@ -217,6 +217,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();
+            presenter = null;
         }
     }
 }
