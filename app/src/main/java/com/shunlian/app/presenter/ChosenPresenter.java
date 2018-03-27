@@ -64,10 +64,21 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 iView.getNiceList(articleEntity, Integer.valueOf(articleEntity.page), Integer.valueOf(articleEntity.total_page));
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
-                if (currentPage == 1){
+                if (currentPage == 1) {
                     iView.refreshFinish();
                 }
                 currentPage++;
+            }
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
             }
         });
     }
@@ -90,7 +101,22 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 iView.getNiceList(articleEntity, Integer.valueOf(articleEntity.page), Integer.valueOf(articleEntity.total_page));
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
+                if (currentPage == 1) {
+                    iView.refreshFinish();
+                }
                 currentPage++;
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                isLoading = false;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                isLoading = false;
             }
         });
     }

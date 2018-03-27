@@ -15,6 +15,9 @@ import com.shunlian.app.presenter.ExperiencePresenter;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +30,15 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
     private ExperiencePresenter mPresenter;
     private ExperienceAdapter mAdapter;
     private List<ExperienceEntity.Experience> experienceList;
     private String currentId;
     private String currentStatus;
+    private LinearLayoutManager manager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -40,7 +47,11 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
 
     @Override
     protected void initData() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+
+        NestedSlHeader header = new NestedSlHeader(baseContext);
+        lay_refresh.setRefreshHeaderView(header);
+
+        manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
         mPresenter = new ExperiencePresenter(getActivity(), this);
         mPresenter.getExperienceList(true);
@@ -51,6 +62,35 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
         mAdapter = new ExperienceAdapter(getActivity(), experienceList, this);
         recycler_list.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void initListener() {
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mPresenter != null) {
+                    mPresenter.initPage();
+                    mPresenter.getExperienceList(true);
+                }
+            }
+        });
+
+        recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null) {
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()) {
+                        if (mPresenter != null) {
+                            mPresenter.onRefresh();
+                        }
+                    }
+                }
+            }
+        });
+        super.initListener();
     }
 
     /**
@@ -71,7 +111,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
 
         if (!isEmpty(list)) {
             experienceList.addAll(list);
-            mAdapter.notifyItemRangeChanged(0,experienceList.size());
+            mAdapter.notifyItemRangeChanged(0, experienceList.size());
         }
     }
 
@@ -88,14 +128,16 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
                 }
                 experience.praise = currentStatus;
                 experience.praise_num = String.valueOf(count);
-                mAdapter.notifyItemRangeChanged(0,experienceList.size());
+                mAdapter.notifyItemRangeChanged(0, experienceList.size());
             }
         }
     }
 
     @Override
     public void showFailureView(int request_code) {
-
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -112,5 +154,22 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
     @Override
     public void onItemClick(View view, int position) {
         //心得详情
+    }
+    /**
+     * 刷新完成
+     */
+    @Override
+    public void refreshFinish() {
+        if (lay_refresh != null) {
+            lay_refresh.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
     }
 }
