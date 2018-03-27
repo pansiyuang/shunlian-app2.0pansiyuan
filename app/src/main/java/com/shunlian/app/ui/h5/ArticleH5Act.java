@@ -4,14 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.http.SslError;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
@@ -52,6 +57,9 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
     @BindView(R.id.tv_storeName)
     MyTextView tv_storeName;
 
+//    @BindView(R.id.rl_bottom)
+//    RelativeLayout rl_bottom;
+
     @BindView(R.id.h5_mwb)
     WebView h5_mwb;
     private String articleId;
@@ -84,7 +92,7 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
         Intent intent = getIntent();
         articleId = intent.getStringExtra("articleId");
         mode = intent.getIntExtra("mode", 0);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         if (!SonicEngine.isGetInstanceAllowed()) {
             SonicEngine.createInstance(new SonicRuntimeImpl(getApplication()), new SonicConfig.Builder().build());
         }
@@ -138,6 +146,7 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
         mPresent.getArticleDetail(articleId);
         httpDialog = new HttpDialog(this);
         initWebView();
+//        setListenerToRootView();
     }
 
     @SuppressLint({"SetJavaScriptEnabled"})
@@ -227,6 +236,40 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
 //        addCookie();
 
         // webview is ready now, just tell session client to bind
+    }
+
+
+    private void setListenerToRootView() {
+        final View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                boolean mKeyboardUp = isKeyboardShown(rootView);
+                if (mKeyboardUp) {
+//                    rl_bottom.setVisibility(View.VISIBLE);
+                } else {
+//                    rl_bottom.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private boolean isKeyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
+    }
+
+    private boolean isSoftShowing() {
+        //获取当前屏幕内容的高度
+        int screenHeight = getWindow().getDecorView().getHeight();
+        //获取View可见区域的bottom
+        Rect rect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        return screenHeight - rect.bottom != 0;
     }
 
     @Override

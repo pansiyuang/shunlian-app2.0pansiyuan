@@ -111,8 +111,10 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 gone(articleViewHolder.rl_small);
             }
 
-            articleViewHolder.tv_small_title.setText(article.title);
-            articleViewHolder.tv_big_title.setText(article.title);
+            if (!isEmpty(article.title)) {
+                articleViewHolder.tv_small_title.setText(article.title);
+                articleViewHolder.tv_big_title.setText(article.title);
+            }
             GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb);
             GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb);
             articleViewHolder.tv_share_count.setText(article.forwards);

@@ -120,7 +120,7 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
             immersionBar = ImmersionBar.with(this);
         }
         immersionBar.titleBar(toolbar, false)
-                .statusBarDarkFont(true, 0.2f)
+                .statusBarDarkFont(true, 0f)
                 .addTag(GoodsDetailAct.class.getName()).init();
     }
 

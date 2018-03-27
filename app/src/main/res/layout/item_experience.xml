@@ -102,7 +102,7 @@
 
             <TextView
                 android:id="@+id/tv_add_car"
-                android:layout_width="76dp"
+                android:layout_width="wrap_content"
                 android:layout_height="23dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
@@ -111,7 +111,9 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/add_shopping_cart"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:text="@string/discover_to_buy"
                 android:textColor="@color/pink_color"
                 android:textSize="12sp" />
         </RelativeLayout>

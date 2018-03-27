@@ -11,8 +11,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-feature android:name="android.hardware.autofocus"/>
+
+    <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -37,8 +39,8 @@
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:resizeableActivity="true"
+            android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
@@ -98,8 +100,8 @@
             android:name=".ui.goods_detail.GoodsDetailAct"
             android:exported="false"
             android:resizeableActivity="true"
-            android:supportsPictureInPicture="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".ui.store.StoreIntroduceAct"
             android:exported="false"
@@ -129,7 +131,8 @@
             android:name=".ui.confirm_order.MegerOrderActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.receive_adress.AddAdressAct"
+        <activity
+            android:name=".ui.receive_adress.AddAdressAct"
             android:exported="false"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -146,8 +149,7 @@
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" >
-        </activity>
+            android:screenOrientation="behind"></activity>
         <activity
             android:name=".ui.my_comment.MyCommentAct"
             android:exported="false"
@@ -209,12 +211,12 @@
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.h5.H5Act"
+        <activity
+            android:name=".ui.h5.H5Act"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".photopick.PhotoPickerActivity"
             android:exported="false"
@@ -231,83 +233,88 @@
             android:name=".ui.category.CategoryLetterAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.returns_order.ConsultHistoryAct"
+        <activity
+            android:name=".ui.returns_order.ConsultHistoryAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.returns_order.RefundAfterSaleAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.zxing_code.ZXingDemoAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.returns_order.SubmitLogisticsInfoAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.category.CategoryAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.RefundAfterSaleAct"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.returns_order.SelectLogisticsAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.category.CategoryFiltrateAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.zxing_code.ZXingDemoAct"
+            android:theme="@style/pay" />
+        <activity
+            android:name=".ui.category.RankingListAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.SubmitLogisticsInfoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order.PlatformInterventionRequestActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.CategoryAct"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.SelectLogisticsAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.CategoryFiltrateAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/pay"/>
-        <activity android:name=".ui.category.RankingListAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.order.PlatformInterventionRequestActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.goods_detail.SearchGoodsActivity"
+        <activity
+            android:name=".ui.goods_detail.SearchGoodsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.activity.DayDayAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DayDayAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.collection.MyCollectionAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.collection.MyCollectionAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.collection.SearchResultAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.collection.SearchResultAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.sign.SignInAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.sign.SignInAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.qr_code.QrCodeAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.qr_code.QrCodeAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.myself_store.MyLittleStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.MyLittleStoreActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            />
-        <activity android:name=".ui.myself_store.AddStoreGoodsAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.BrandListAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.AddStoreGoodsAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.myself_store.GoodsSearchAct"
+        <activity
+            android:name=".ui.category.BrandListAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.myself_store.QrcodeStoreAct"
+        <activity
+            android:name=".ui.myself_store.GoodsSearchAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.QrcodeStoreAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -316,8 +323,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.h5.ArticleH5Act"
+            android:configChanges="screenSize|keyboardHidden|orientation"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.discover.TagDetailActivity"
             android:exported="false"
@@ -326,25 +335,31 @@
             android:name=".ui.discover.ExperiencePublishActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.discover.CommentListAct"
+        <activity
+            android:name=".ui.discover.CommentListAct"
             android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.discover.CommentDetailAct"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.discover.CommentDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.discover.FindSelectShopAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.FindSelectShopAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.discover.quanzi.DiscoverTieziAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverTieziAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

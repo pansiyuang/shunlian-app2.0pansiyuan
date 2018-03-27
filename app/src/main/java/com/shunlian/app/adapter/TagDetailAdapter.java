@@ -111,17 +111,17 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         for (int i = 0; i < lists.size(); i++) {
             if (articleId.equals(lists.get(i).id)) {
                 lists.get(i).had_like = hadLike;
-                notifyDataSetChanged();
                 break;
             }
         }
+        notifyDataSetChanged();
     }
 
     public void handleTop(RecyclerView.ViewHolder holder) {
         if (holder instanceof DetailTopHolderView) {
             final DetailTopHolderView topHolderView = (DetailTopHolderView) holder;
-            GlideUtils.getInstance().loadImage(context, topHolderView.miv_icon, mTag.bg_img);
-            GlideUtils.getInstance().loadCircleImage(context, topHolderView.miv_icon, mTag.head_img);
+            GlideUtils.getInstance().loadCircleImage(context, topHolderView.miv_icon, mTag.bg_img);
+            GlideUtils.getInstance().loadImage(context, topHolderView.miv_bg, mTag.head_img);
             topHolderView.tv_title.setText(mTag.name);
             topHolderView.tv_content.setText(mTag.description);
 
