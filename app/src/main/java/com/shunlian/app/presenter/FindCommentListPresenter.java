@@ -53,7 +53,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         isLoading = false;
         mItemComments.clear();
         if (adapter != null){
-            adapter.unbind();
+//            adapter.unbind();
             adapter = null;
             mItemComments = null;
         }

@@ -51,7 +51,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         isLoading = false;
         mListBeans.clear();
         if (adapter != null){
-            adapter.unbind();
+//            adapter.unbind();
             adapter = null;
             mListBeans = null;
         }
