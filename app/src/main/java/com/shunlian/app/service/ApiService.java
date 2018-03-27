@@ -1289,4 +1289,14 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> circleCommentLike(@Body RequestBody body);
 
 
+    /**
+     * 发表帖子评论
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/addComment")
+    Call<BaseEntity<EmptyEntity>> circleAddComment(@Body RequestBody body);
+
+
 }

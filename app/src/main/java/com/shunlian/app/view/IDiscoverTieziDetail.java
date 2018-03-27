@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Administrator on 2018/1/5.
  */
 
-public interface IDiscoverTieziDetail extends IView {
+public interface IDiscoverTieziDetail extends IFindCommentListView {
     void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas);
     void dianZan(CommonEntity data);
 }

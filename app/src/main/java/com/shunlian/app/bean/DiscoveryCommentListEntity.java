@@ -18,6 +18,7 @@ public class DiscoveryCommentListEntity {
         public String total_page;
         public String page_size;
         public String page;
+        public String commentcounts;
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class InvInfo {

@@ -8,8 +8,9 @@
         android:id="@+id/msv_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:layout_marginBottom="62dp"
+        android:scrollbars="none">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
@@ -96,6 +97,19 @@
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyScrollView>
 
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_attend"
+        android:layout_width="122dp"
+        android:layout_height="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/bg_store_sure"
+        android:gravity="center"
+        android:text="@string/discover_canyuhuodong"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
@@ -131,9 +145,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/miv_close"
-            android:layout_toLeftOf="@id/miv_more"
             android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@id/miv_more"
+            android:layout_toRightOf="@id/miv_close"
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
