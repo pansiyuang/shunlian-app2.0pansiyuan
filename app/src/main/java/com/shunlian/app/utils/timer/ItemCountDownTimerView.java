@@ -359,6 +359,34 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
     }
 
     /**
+     * 设置时间颜色
+     * @param color
+     */
+    public void setTimeTextColor(int color) {
+        if (getIsShowDay()) {
+            mDayTextView.setTextColor(color);
+        }
+        mHourTextView.setTextColor(color);
+        mMinTextView.setTextColor(color);
+        mSecondTextView.setTextColor(color);
+        requestLayout();
+    }
+
+    /**
+     * 设置时间字体大小
+     * @param size
+     */
+    public void setTimeTextSize(int size){
+        if (getIsShowDay()) {
+            mDayTextView.setTextSize(size);
+        }
+        mHourTextView.setTextSize(size);
+        mMinTextView.setTextSize(size);
+        mSecondTextView.setTextSize(size);
+        requestLayout();
+    }
+
+    /**
      * 设置时间单位的字体颜色
      * @param color
      */
@@ -369,6 +397,35 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
         mTtimeUnitHour.setTextColor(color);
         mTimeUnitMin.setTextColor(color);
         mTimeUnitSec.setTextColor(color);
+        requestLayout();
+    }
+
+    /**
+     * 设置时间字体大小
+     * @param size
+     */
+    public void setTimeUnitTextSize(int size){
+        if (getIsShowDay()) {
+            mTimeUnitDay.setTextSize(size);
+        }
+        mTtimeUnitHour.setTextSize(size);
+        mTimeUnitMin.setTextSize(size);
+        mTimeUnitSec.setTextSize(size);
+        requestLayout();
+    }
+
+    /**
+     * 设置时间字体大小
+     * @param padding
+     */
+    public void setTimeUnitPadding(int padding){
+        int i = dip2px(padding);
+        if (getIsShowDay()) {
+            mTimeUnitDay.setPadding(i,i,i,i);
+        }
+        mTtimeUnitHour.setPadding(i,i,i,i);
+        mTimeUnitMin.setPadding(i,i,i,i);
+        mTimeUnitSec.setPadding(i,i,i,i);
         requestLayout();
     }
 
