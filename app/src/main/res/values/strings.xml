@@ -491,6 +491,7 @@
     <string name="discover_canyuhuodong">参与活动</string>
     <string name="discover_yiyourencanyu">已有%s人参与讨论</string>
     <string name="discover_renxihuan">%s人喜欢</string>
+    <string name="discover_pinglunchenggong">评论成功，请等待审核~</string>
     <string name="discover_to_buy">去购买</string>
 
     <!--关注-->

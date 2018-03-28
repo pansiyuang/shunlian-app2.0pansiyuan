@@ -2,15 +2,19 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IDiscoverTiezi;
 import com.shunlian.app.view.IDiscoverTieziDetail;
+import com.shunlian.app.view.IFindCommentListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +35,7 @@ public class PDiscoverTieziDetail extends BasePresenter<IDiscoverTieziDetail> {
     private boolean babyIsLoading;
     private String circle_id;
     private String inv_id;
-    private List<DiscoveryCommentListEntity.Mdata.Commentlist> mDatas = new ArrayList<>();
+    public List<DiscoveryCommentListEntity.Mdata.Commentlist> mDatas = new ArrayList<>();
 
     public PDiscoverTieziDetail(Context context, IDiscoverTieziDetail iView, String circle_id,String inv_id) {
         super(context, iView);
@@ -81,6 +85,7 @@ public class PDiscoverTieziDetail extends BasePresenter<IDiscoverTieziDetail> {
                 mDatas.addAll(data.list.commentlist);
                 iView.setApiData(data.list,mDatas);
                 isFirst=false;
+                iView.setCommentAllCount(data.list.commentcounts);
             }
         });
     }
@@ -102,4 +107,21 @@ public class PDiscoverTieziDetail extends BasePresenter<IDiscoverTieziDetail> {
         });
     }
 
+
+    public void faBu(String circle_id,String inv_id, String content){
+        Map<String, String> map = new HashMap<>();
+        map.put("circle_id", circle_id);
+        map.put("inv_id", inv_id);
+        map.put("content", content);
+        sortAndMD5(map);
+        Call<BaseEntity<CircleAddCommentEntity>> baseEntityCall = getAddCookieApiService().circleAddComment(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CircleAddCommentEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CircleAddCommentEntity> entity) {
+                super.onSuccess(entity);
+                iView.faBu(entity.data.list);
+//                Common.staticToast(getStringResouce(R.string.discover_pinglunchenggong));
+            }
+        });
+    }
 }

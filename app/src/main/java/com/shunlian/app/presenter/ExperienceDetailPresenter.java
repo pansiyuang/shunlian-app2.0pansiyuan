@@ -67,7 +67,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
         isLoading = true;
         if (adapter != null){
             mCommentLists.clear();
-            adapter.unbind();
+//            adapter.unbind();
             adapter=null;
             mCommentLists=null;
         }

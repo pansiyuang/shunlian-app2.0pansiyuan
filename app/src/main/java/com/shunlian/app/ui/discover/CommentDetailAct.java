@@ -208,6 +208,10 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @OnClick(R.id.mtv_send)
     public void send(){
         String s = met_text.getText().toString();
+        if (isEmpty(s)){
+            Common.staticToast("评论内容不能为空");
+            return;
+        }
         presenter.sendComment(s);
         met_text.setText("");
         met_text.setHint(getStringResouce(R.string.add_comments));

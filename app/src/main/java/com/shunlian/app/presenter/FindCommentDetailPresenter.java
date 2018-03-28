@@ -56,7 +56,7 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         isLoading = false;
         mReplyListBeans.clear();
         if (adapter != null){
-            adapter.unbind();
+//            adapter.unbind();
             adapter = null;
             mReplyListBeans = null;
         }

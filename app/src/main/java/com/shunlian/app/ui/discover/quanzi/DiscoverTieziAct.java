@@ -50,6 +50,8 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     RecyclerView rv_hot;
     @BindView(R.id.rv_new)
     RecyclerView rv_new;
+    @BindView(R.id.mtv_attend)
+    MyTextView mtv_attend;
 
     private PDiscoverTiezi pDiscoverTiezi;
     private LinearLayoutManager linearLayoutManager;
@@ -70,16 +72,17 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.mtv_attention:
-//
-//                break;
-//        }
+        switch (v.getId()) {
+            case R.id.mtv_attend:
+                DiscoverPublishPhotoAct.startAct(DiscoverTieziAct.this, circle_id);
+                break;
+        }
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        mtv_attend.setOnClickListener(this);
         rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
