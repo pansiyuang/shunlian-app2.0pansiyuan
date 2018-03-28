@@ -270,7 +270,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     if ("all".equals(mCommentType)) {
                         FindCommentListEntity.ItemComment itemComment = lists
                                 .get(FindCommentListAdapter.this.getPosition(getAdapterPosition()));
-                        CommentDetailAct.startAct(context, itemComment.item_id);
+                        CommentDetailAct.startAct(context,null, itemComment.item_id);
                     }
                     break;
                 default:

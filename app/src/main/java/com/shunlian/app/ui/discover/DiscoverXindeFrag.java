@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ExperienceAdapter;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.presenter.ExperiencePresenter;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;
@@ -154,6 +155,9 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
     @Override
     public void onItemClick(View view, int position) {
         //心得详情
+        ExperienceEntity.Experience experience = experienceList.get(position);
+        String id = experience.id;
+        ExperienceDetailAct.startAct(baseActivity,id);
     }
     /**
      * 刷新完成

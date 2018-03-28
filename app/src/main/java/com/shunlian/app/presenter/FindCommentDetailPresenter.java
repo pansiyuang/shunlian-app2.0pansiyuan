@@ -8,7 +8,9 @@ import com.shunlian.app.adapter.FindCommentDetailAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommentDetailEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
+import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IFindCommentDetailView;
 
@@ -25,6 +27,7 @@ import retrofit2.Call;
 
 public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommentDetailView> {
 
+    private String mExperience_id;
     private String mComment_id;
     private final String page_size = "10";
     private String article_id;
@@ -33,8 +36,10 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     private List<FindCommentListEntity.ItemComment> mReplyListBeans = new ArrayList<>();
     private int currentTouchItem = -1;
 
-    public FindCommentDetailPresenter(Context context, IFindCommentDetailView iView, String comment_id) {
+    public FindCommentDetailPresenter(Context context, IFindCommentDetailView iView,
+                                      String experience_id, String comment_id) {
         super(context, iView);
+        mExperience_id = experience_id;
         mComment_id = comment_id;
         initApi();
     }
@@ -64,12 +69,20 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
 
     private void request(boolean isShow, int failure) {
         Map<String, String> map = new HashMap<>();
+        if (!isEmpty(mExperience_id)){
+            map.put("experience_id", mExperience_id);
+        }
         map.put("comment_id", mComment_id);
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", page_size);
         sortAndMD5(map);
 
-        Call<BaseEntity<CommentDetailEntity>> baseEntityCall = getApiService().commentDetail(map);
+        Call<BaseEntity<CommentDetailEntity>> baseEntityCall = null;
+        if (!isEmpty(mExperience_id)){
+            baseEntityCall = getApiService().experienceCommentDetail(map);
+        }else {
+            baseEntityCall = getApiService().commentDetail(map);
+        }
         getNetData(0, failure, isShow, baseEntityCall,
                 new SimpleNetDataCallback<BaseEntity<CommentDetailEntity>>() {
 
@@ -127,7 +140,11 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
                 public void onPointFabulous(int position) {
                     currentTouchItem = position;
                     FindCommentListEntity.ItemComment itemComment = mReplyListBeans.get(position);
-                    pointFabulous(itemComment.item_id, itemComment.had_like);
+                    if (!isEmpty(mExperience_id)){
+                        comment_Praise(itemComment.item_id, itemComment.had_like);
+                    }else {
+                        pointFabulous(itemComment.item_id, itemComment.had_like);
+                    }
                 }
             });
         } else {
@@ -186,12 +203,20 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
         } else {
             pid = mReplyListBeans.get(0).item_id;
         }
-        sendComment(content, pid, article_id, "detail");
+        if (!isEmpty(mExperience_id)){
+            sendExperience(content);
+        }else {
+            sendComment(content, pid, article_id, "detail");
+        }
     }
 
 
     public void delComment() {
-        delComment(itemComment.item_id);
+        if (!isEmpty(mExperience_id)){
+            delExperienceComment();
+        }else {
+            delComment(itemComment.item_id);
+        }
     }
 
     @Override
@@ -204,5 +229,90 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     protected void delSuccess() {
         mReplyListBeans.remove(currentTouchItem);
         adapter.notifyDataSetChanged();
+    }
+
+    /***************************************心*********************************************/
+    /***************************************得*********************************************/
+    /***************************************详*********************************************/
+    /***************************************情*********************************************/
+    /***************************************处*********************************************/
+    /***************************************理*********************************************/
+
+    /**
+     * 对心得评论点赞
+     * @param comment_id
+     * @param had_like
+     */
+    public void comment_Praise(String comment_id,String had_like){
+        Map<String, String> map = new HashMap<>();
+        map.put("experience_id", mExperience_id);
+        if ("1".equals(had_like)){
+            map.put("status", "2");
+        }else {
+            map.put("status", "1");
+        }
+        map.put("comment_id",comment_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService()
+                .comment_Praise(getRequestBody(map));
+        getNetData(true,baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<CommonEntity> entity) {
+                        super.onSuccess(entity);
+                        CommonEntity data = entity.data;
+                        setPointFabulous(data.new_likes, data.last_likes);
+                    }
+                });
+    }
+
+
+    /**
+     * 删除心得评论
+     */
+    public void delExperienceComment() {
+        Map<String,String> map = new HashMap<>();
+        map.put("experience_id",mExperience_id);
+        FindCommentListEntity.ItemComment itemComment = mReplyListBeans.get(currentTouchItem);
+        map.put("comment_id",itemComment.item_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .deleteComment(getRequestBody(map));
+
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+                super.onSuccess(entity);
+                delSuccess();
+            }
+        });
+    }
+
+
+    /**
+     * 发布心得评价
+     * @param content
+     */
+    public void sendExperience(String content){
+        Map<String,String> map = new HashMap<>();
+        map.put("experience_id",mExperience_id);
+        FindCommentListEntity.ItemComment itemComment = mReplyListBeans.get(currentTouchItem);
+        map.put("pid",itemComment.item_id);
+        map.put("content",content);
+        map.put("from_page","detail");
+        sortAndMD5(map);
+
+        Call<BaseEntity<UseCommentEntity>> comment = getAddCookieApiService()
+                .createComment(getRequestBody(map));
+        getNetData(true,comment,new SimpleNetDataCallback<BaseEntity<UseCommentEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<UseCommentEntity> entity) {
+                super.onSuccess(entity);
+                UseCommentEntity data = entity.data;
+                refreshItem(data.insert_item,entity.message);
+            }
+        });
     }
 }

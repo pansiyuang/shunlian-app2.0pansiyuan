@@ -48,6 +48,7 @@ import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.DistrictGetlocationEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.ExchangDetailEntity;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.FindSelectShopEntity;
@@ -1173,7 +1174,7 @@ public interface ApiService {
      * @return
      */
     @POST("discovery/experience/praise")
-    Call<BaseEntity<EmptyEntity>> praiseExperience(@Body RequestBody body);
+    Call<BaseEntity<CommonEntity>> praiseExperience(@Body RequestBody body);
 
     /**
      * 文章搜索接口
@@ -1288,5 +1289,42 @@ public interface ApiService {
     @POST("discovery/circle/CommentLike")
     Call<BaseEntity<EmptyEntity>> circleCommentLike(@Body RequestBody body);
 
+    /**
+     * 心得详情
+     * @param map
+     * @return
+     */
+    @GET("discovery/experience/commentList")
+    Call<BaseEntity<ExchangDetailEntity>> experienceDetail(@QueryMap Map<String,String> map);
 
+    /**
+     * 心得评论点赞
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/commentPraise")
+    Call<BaseEntity<CommonEntity>> comment_Praise(@Body RequestBody body);
+
+    /**
+     * 发布心得评论
+     * @param body
+     * @return
+     */
+    @POST("discovery/experience/createComment")
+    Call<BaseEntity<UseCommentEntity>> createComment(@Body RequestBody body);
+
+    /**
+     * 心得评论删除
+     * @return
+     */
+    @POST("discovery/experience/deleteComment")
+    Call<BaseEntity<EmptyEntity>> deleteComment(@Body RequestBody body);
+
+    /**
+     * 心得评论详情
+     * @param map
+     * @return
+     */
+    @GET("discovery/experience/commentInfo")
+    Call<BaseEntity<CommentDetailEntity>> experienceCommentDetail(@QueryMap Map<String,String> map);
 }

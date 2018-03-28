@@ -1,5 +1,6 @@
 package com.shunlian.app.ui;
 
+import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.shunlian.app.App;
@@ -233,6 +235,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             byId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    InputMethodManager imm = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isActive()) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
                     finish();
                 }
             });

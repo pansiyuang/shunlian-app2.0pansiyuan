@@ -175,6 +175,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView{
         EventBus.getDefault().unregister(this);
         if (presenter != null){
             presenter.detachView();
+            presenter = null;
         }
     }
 }
