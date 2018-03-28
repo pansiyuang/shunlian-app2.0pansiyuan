@@ -2,22 +2,30 @@ package com.shunlian.app.ui.discover.quanzi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.TieziAvarAdapter;
 import com.shunlian.app.adapter.TieziCommentAdapter;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.presenter.PDiscoverTieziDetail;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorizonItemDecoration;
+import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IDiscoverTieziDetail;
+import com.shunlian.app.view.IFindCommentListView;
+import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
@@ -28,8 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClickListener, IDiscoverTieziDetail {
+public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClickListener, IDiscoverTieziDetail , IFindCommentListView {
     @BindView(R.id.kanner_tiezi)
     TieziKanner kanner_tiezi;
 
@@ -50,9 +59,6 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
-
-    @BindView(R.id.mtv_attend)
-    MyTextView mtv_attend;
 
     @BindView(R.id.miv_more)
     MyImageView miv_more;
@@ -75,12 +81,26 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.rv_remark)
     RecyclerView rv_remark;
 
+    @BindView(R.id.met_text)
+    MyEditText met_text;
+
+    @BindView(R.id.mtv_msg_count)
+    MyTextView mtv_msg_count;
+
+    @BindView(R.id.mtv_send)
+    MyTextView mtv_send;
+
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
+
+
     private PDiscoverTieziDetail pDiscoverTieziDetail;
     private LinearLayoutManager linearLayoutManager;
     private boolean isLike;
     private String circle_id, inv_id;
     private TieziAvarAdapter avarAdapter;
     private List<String> avars;
+    private int num=0;
     private TieziCommentAdapter commentAdapter;
 
     //    private DiscoverHotAdapter newAdapter;
@@ -97,12 +117,27 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         return R.layout.act_discover_tiezi_detail;
     }
 
+    @OnClick(R.id.mtv_send)
+    public void send(){
+        String s = met_text.getText().toString();
+        pDiscoverTieziDetail.faBu(circle_id,inv_id,s);
+        met_text.setText("");
+        met_text.setHint(getStringResouce(R.string.add_comments));
+        setEdittextFocusable(false,met_text);
+        Common.hideKeyboard(met_text);
+    }
+
+    @OnClick(R.id.met_text)
+    public void onClick(){
+        setEdittextFocusable(true,met_text);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.mtv_attend:
-                DiscoverPublishPhotoAct.startAct(DiscoverTieziDetailAct.this, circle_id);
-                break;
             case R.id.miv_like:
             case R.id.mtv_like:
                 if (isLike) {
@@ -113,13 +148,65 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 break;
         }
     }
+    private boolean isSoftShowing() {
+        //获取当前屏幕内容的高度
+        int screenHeight = getWindow().getDecorView().getHeight();
+        //获取View可见区域的bottom
+        Rect rect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        return screenHeight - rect.bottom != 0;
+    }
+
+    @Override
+    public void setCommentAllCount(String count) {
+        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
+        int w = TransformUtil.dip2px(this, 0.5f);
+        background.setStroke(w,getColorResouce(R.color.white));
+        mtv_msg_count.setText(count);
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+
+    }
+
+    @Override
+    public void delPrompt() {
+
+    }
+
+    /**
+     * 软键盘处理
+     */
+    @Override
+    public void showorhideKeyboard(String hint) {
+        setEdittextFocusable(true, met_text);
+        met_text.setHint(hint);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
+        } else {
+            Common.hideKeyboard(met_text);
+        }
+    }
 
     @Override
     protected void initListener() {
         super.initListener();
-        mtv_attend.setOnClickListener(this);
         mtv_like.setOnClickListener(this);
         miv_like.setOnClickListener(this);
+        met_text.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                if (!isEmpty(s)) {
+                    visible(mtv_send);
+                    gone(miv_icon, mtv_msg_count);
+                } else {
+                    gone(mtv_send);
+                    visible(miv_icon, mtv_msg_count);
+                }
+            }
+        });
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -156,6 +243,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         pDiscoverTieziDetail = new PDiscoverTieziDetail(this, this, circle_id, inv_id);
         view_bg.setAlpha(0);
         mtv_titles.setAlpha(0);
+        mtv_titles.setText(getStringResouce(R.string.detail));
     }
 
     @Override
@@ -173,6 +261,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     public void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas) {
         if (commentAdapter == null) {
             avars = new ArrayList<>();
+            num=Integer.parseInt(data.commentcounts);
             avars.addAll(data.inv_info.five_member_likes);
             avarAdapter = new TieziAvarAdapter(getBaseContext(), false, avars);
             rv_avar.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -202,11 +291,11 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 mtv_like.setTextColor(getColorResouce(R.color.value_88));
             }
             mtv_desc.setText(data.inv_info.content);
-            commentAdapter = new TieziCommentAdapter(this,circle_id,inv_id, true, mdatas);
+            commentAdapter = new TieziCommentAdapter(this, circle_id, inv_id, true, mdatas);
             linearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_remark.setLayoutManager(linearLayoutManager);
             rv_remark.setNestedScrollingEnabled(false);
-            rv_remark.addItemDecoration(new VerticalItemDecoration(28,0,0));
+            rv_remark.addItemDecoration(new VerticalItemDecoration(28, 0, 0));
             rv_remark.setAdapter(commentAdapter);
         } else {
             commentAdapter.notifyDataSetChanged();
@@ -230,6 +319,14 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
         avars.clear();
         avars.addAll(data.five_member_likes);
         avarAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void faBu(DiscoveryCommentListEntity.Mdata.Commentlist data) {
+        pDiscoverTieziDetail.mDatas.add(0,data);
+        commentAdapter.notifyDataSetChanged();
+        num++;
+        mtv_msg_count.setText(String.valueOf(num));
     }
 
 }

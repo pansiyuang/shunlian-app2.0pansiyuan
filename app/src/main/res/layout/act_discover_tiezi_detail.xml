@@ -9,7 +9,7 @@
         android:id="@+id/msv_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="51dp"
         android:scrollbars="none"
         android:overScrollMode="never">
 
@@ -186,16 +186,85 @@
 
 
     </com.shunlian.app.widget.MyRelativeLayout>
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_attend"
-        android:layout_width="122dp"
-        android:layout_height="34dp"
-        android:background="@drawable/bg_store_sure"
-        android:text="@string/discover_canyuhuodong"
+
+    <RelativeLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:layout_marginBottom="14dp" />
+        android:background="@color/white"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="7.5dp">
+
+        <com.shunlian.app.widget.MyEditText
+            android:id="@+id/met_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="65dp"
+            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:gravity="center_vertical"
+            android:hint="添加评论"
+            android:maxHeight="60dp"
+            android:minHeight="35dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/new_text"
+            android:textColorHint="@color/share_text"
+            android:textSize="13sp" />
+
+        <RelativeLayout
+            android:layout_width="65dp"
+            android:maxHeight="60dp"
+            android:minHeight="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/icon_pinglun"
+                app:iv_control_adapter="true"
+                app:iv_control_height="31"
+                app:iv_control_width="34"
+                app:iv_margin_right="52" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_msg_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="31dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/rounded_rectangle_12px"
+                android:gravity="center"
+                android:paddingBottom="0.5dp"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                android:paddingTop="0.5dp"
+                android:minWidth="12dp"
+                android:minHeight="12dp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="8sp" />
+        </RelativeLayout>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_send"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:maxHeight="60dp"
+            android:minHeight="35dp"
+            android:text="发布"
+            android:textColor="#BDBDBD"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
 </com.shunlian.app.widget.MyRelativeLayout>

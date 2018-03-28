@@ -31,6 +31,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
 import com.shunlian.app.bean.CheckInStateEntity;
+import com.shunlian.app.bean.CircleAddCommentEntity;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.ComboDetailEntity;
@@ -1296,6 +1297,16 @@ public interface ApiService {
      */
     @GET("discovery/experience/commentList")
     Call<BaseEntity<ExchangDetailEntity>> experienceDetail(@QueryMap Map<String,String> map);
+
+    /**
+     * 发表帖子评论
+     *
+     * @param body
+     * @return
+     */
+    @POST("discovery/circle/addComment")
+    Call<BaseEntity<CircleAddCommentEntity>> circleAddComment(@Body RequestBody body);
+
 
     /**
      * 心得评论点赞
