@@ -214,4 +214,8 @@
             android:overScrollMode="never"
             android:scrollbars="none"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 </LinearLayout>
