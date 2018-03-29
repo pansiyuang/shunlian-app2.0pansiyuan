@@ -85,4 +85,9 @@ public class DefaultWeekView extends WeekView {
                             calendar.isCurrentMonth() ? mCurMonthLunarTextPaint : mOtherMonthLunarTextPaint);
         }
     }
+
+    @Override
+    protected void onDrawCurrentDay(Canvas canvas, Calendar calendar, int x, boolean isCurrentDay) {
+
+    }
 }

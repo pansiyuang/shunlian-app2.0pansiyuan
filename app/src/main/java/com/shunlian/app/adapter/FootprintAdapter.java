@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -32,9 +33,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
     public final int Head_Layout = 13;
 
     private LayoutInflater inflater;
-    private List<FootprintEntity.DateInfo> mDateList;
     private boolean isEdit;
     private OnChildClickListener mListener;
+    private List<FootprintEntity.MarkData> mList;
 
     private List<Integer> timeShowPosition = new ArrayList<>();
     public Map<Integer, FootprintEntity.DateInfo> timeDatas = new HashMap<>();
@@ -44,21 +45,22 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
     public FootprintAdapter(Context context, List<FootprintEntity.MarkData> lists, List<FootprintEntity.DateInfo> dateList) {
         super(context, true, lists);
         inflater = LayoutInflater.from(context);
-        mDateList = dateList;
-        initData();
+        initData(lists, dateList);
     }
 
-    public void initData() {
+    public void initData(List<FootprintEntity.MarkData> markDataList, List<FootprintEntity.DateInfo> dList) {
+        this.mList = markDataList;
+        titleCount = 0;
         timeShowPosition.clear();
         timeDatas.clear();
         timeShowPosition.add(1);
-        timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), mDateList.get(0));
-        for (int i = 0; i < mDateList.size(); i++) {//计算日期显示的位置
-            FootprintEntity.DateInfo dateInfo = mDateList.get(i);
-            if (i + 1 != mDateList.size()) {
+        timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(0));
+        for (int i = 0; i < dList.size(); i++) {//计算日期显示的位置
+            FootprintEntity.DateInfo dateInfo = dList.get(i);
+            if (i + 1 != dList.size()) {
                 int size = timeShowPosition.size() - 1;
                 timeShowPosition.add(timeShowPosition.get(size) + Integer.parseInt(dateInfo.counts) + 1);
-                timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), mDateList.get(i + 1));
+                timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(i + 1));
             }
         }
     }
@@ -215,10 +217,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
         if (holder instanceof FootprintHolder) {
             FootprintHolder mHolder = (FootprintHolder) holder;
             titleCount = computeCount(position);
-            int index = position - titleCount;
-            if (index < lists.size()) {
-                final FootprintEntity.MarkData markData = lists.get(index);
-
+            int index = position - titleCount - 1;
+            if (index < mList.size()) {
+                final FootprintEntity.MarkData markData = mList.get(index);
                 GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, markData.thumb);
                 mHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
 

@@ -239,7 +239,10 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
      */
     @Override
     public void finishManage() {
+        selectStatus = 2;
+        isSelectAll = false;
         toSelectAll(false);
+        ((MyCollectionAct) baseActivity).setManageState(selectStatus);
     }
 
     /**
@@ -303,6 +306,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     public void getMarkList(List<FootprintEntity.MarkData> list, List<FootprintEntity.DateInfo> dateList, int page, int allPage) {
         if (page == 1) {
             markDataList.clear();
+            dateInfoList.clear();
             dateInfoList.addAll(dateList);
         }
         if (isSelectAll) {
@@ -330,6 +334,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             footprintAdapter.setOnChildClickListener(this);
             recycler_list.setAdapter(footprintAdapter);
         } else {
+            footprintAdapter.initData(markDataList, dateInfoList);
             footprintAdapter.notifyDataSetChanged();
         }
     }
@@ -351,7 +356,8 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                 markIt.remove();
             }
         }
-        footprintAdapter.initData();
+
+        footprintAdapter.initData(markDataList, dateInfoList);
         footprintAdapter.notifyDataSetChanged();
         Common.staticToast(msg);
     }
@@ -380,12 +386,13 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
         tv_date.setText(calendar.getYear() + "年" + calendar.getMonth() + "月");
-//        printPresenter.getMarklist(String.valueOf(calendar.getYear()), String.valueOf(calendar.getMonth()), String.valueOf(calendar.getDay()), false);
         if (isClick) {
             if (isEmpty(calendar.getScheme())) {
                 Common.staticToast("当前日期没有足迹");
             } else {
                 mCurrentCalendar = calendar;
+                printPresenter.initPage();
+                printPresenter.getMarklist(String.valueOf(calendar.getYear()), String.valueOf(calendar.getMonth()), String.valueOf(calendar.getDay()), false);
             }
         }
     }
@@ -585,5 +592,11 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             }
         }
         return stringBuffer.toString();
+    }
+
+    @Override
+    public void onDestroy() {
+        mCurrentCalendar = null;
+        super.onDestroy();
     }
 }

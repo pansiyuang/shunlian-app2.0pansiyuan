@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * 周视图，因为日历UI采用热插拔实现，所以这里必须继承实现，达到UI一致即可
  */
 
-public abstract class WeekView extends BaseView  {
+public abstract class WeekView extends BaseView {
 
     public WeekView(Context context) {
         super(context);
@@ -46,10 +46,12 @@ public abstract class WeekView extends BaseView  {
 
         for (int i = 0; i < 7; i++) {
             int x = i * mItemWidth;
+            int y = mItemHeight;
             onLoopStart(x);
             Calendar calendar = mItems.get(i);
             boolean isSelected = i == mCurrentItem;
             boolean hasScheme = mDelegate.mSchemeDate != null && mDelegate.mSchemeDate.contains(calendar);
+            onDrawCurrentDay(canvas, calendar, x, calendar.isCurrentDay());
             if (hasScheme) {
                 Calendar scheme = mDelegate.mSchemeDate.get(mDelegate.mSchemeDate.indexOf(calendar));
                 calendar.setScheme(TextUtils.isEmpty(scheme.getScheme()) ? mDelegate.getSchemeText() : scheme.getScheme());
@@ -336,4 +338,14 @@ public abstract class WeekView extends BaseView  {
      * @param isSelected 是否选中
      */
     protected abstract void onDrawText(Canvas canvas, Calendar calendar, int x, boolean hasScheme, boolean isSelected);
+
+    /**
+     * 绘制当前天是否被选中状态
+     *
+     * @param canvas   canvas
+     * @param calendar 日历calendar
+     * @param x        日历Card x起点坐标
+     */
+
+    protected abstract void onDrawCurrentDay(Canvas canvas, Calendar calendar, int x, boolean isCurrentDay);
 }

@@ -5,6 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
+
 import static com.shunlian.app.ui.collection.FootprintFrag.mCurrentCalendar;
 
 /**
@@ -38,6 +41,7 @@ public class CustomWeekView extends WeekView {
         int cx = x + mItemWidth / 2;
         int cy = mItemHeight / 2;
         if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
+            mSelectedPaint.setColor(getContext().getResources().getColor(R.color.pink_color));
             canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
         }
         if (hasScheme) {
@@ -59,26 +63,35 @@ public class CustomWeekView extends WeekView {
         float baselineY = mTextBaseLine;
         int cx = x + mItemWidth / 2;
         if (isSelected) {
-            if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
-                mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
-            }else{
-                mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+            if (mCurrentCalendar == null) {
+                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
+                        calendar.isCurrentDay() ? mCurDayTextPaint :
+                                calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
+            } else {
+                if (calendar.equals(mCurrentCalendar)) {
+                    mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
+                } else {
+                    if (calendar.isCurrentDay()) {
+                        mSelectTextPaint.setColor(getContext().getResources().getColor(R.color.pink_color));
+                    } else {
+                        mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+                    }
+                }
+                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mSelectTextPaint);
             }
-            canvas.drawText(String.valueOf(calendar.getDay()),
-                    cx,
-                    baselineY,
-                    mSelectTextPaint);
-        } else if (hasScheme) {
-            canvas.drawText(String.valueOf(calendar.getDay()),
-                    cx,
-                    baselineY,
-                    calendar.isCurrentDay() ? mCurDayTextPaint :
-                            calendar.isCurrentMonth() ? mSchemeTextPaint : mSchemeTextPaint);
-
         } else {
             canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
                     calendar.isCurrentDay() ? mCurDayTextPaint :
-                            calendar.isCurrentMonth() ? mCurMonthTextPaint : mCurMonthTextPaint);
+                            calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
+        }
+    }
+
+    @Override
+    protected void onDrawCurrentDay(Canvas canvas, Calendar calendar, int x, boolean isCurrentDay) {
+        int cx = x + mItemWidth / 2;
+        if (isCurrentDay) {
+            mSelectedPaint.setColor(Color.parseColor("#FCEAEE"));
+            canvas.drawCircle(cx, mItemHeight / 2, mRadius, mSelectedPaint);
         }
     }
 

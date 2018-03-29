@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 
 import static com.shunlian.app.ui.collection.FootprintFrag.mCurrentCalendar;
 
@@ -72,22 +73,22 @@ public class CustomMonthView extends MonthView {
         int cx = x + mItemWidth / 2;
 
         if (isSelected) {
-            if (mCurrentCalendar != null && calendar.equals(mCurrentCalendar)) {
-                mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
+            if (mCurrentCalendar == null) {
+                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
+                        calendar.isCurrentDay() ? mCurDayTextPaint :
+                                calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
             } else {
-                mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+                if (calendar.equals(mCurrentCalendar)) {
+                    mSelectTextPaint.setColor(Color.parseColor("#FFFFFF"));
+                } else {
+                    if (calendar.isCurrentDay()) {
+                        mSelectTextPaint.setColor(getContext().getResources().getColor(R.color.pink_color));
+                    } else {
+                        mSelectTextPaint.setColor(Color.parseColor("#1C1B20"));
+                    }
+                }
+                canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY, mSelectTextPaint);
             }
-            canvas.drawText(String.valueOf(calendar.getDay()),
-                    cx,
-                    baselineY,
-                    mSelectTextPaint);
-        } else if (hasScheme) {
-            canvas.drawText(String.valueOf(calendar.getDay()),
-                    cx,
-                    baselineY,
-                    calendar.isCurrentDay() ? mCurDayTextPaint :
-                            calendar.isCurrentMonth() ? mSchemeTextPaint : mOtherMonthTextPaint);
-
         } else {
             canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
                     calendar.isCurrentDay() ? mCurDayTextPaint :

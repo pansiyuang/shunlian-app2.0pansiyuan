@@ -73,6 +73,10 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         getMarklist(year, month, "", isShowLoading);
     }
 
+    public void initPage() {
+        currentPage = 1;
+    }
+
     public void getMarklist(String year, String month, String day, boolean isShowLoading) {
         currentYear = year;
         currentMonth = month;
@@ -80,7 +84,7 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         map.put("year", year);
         map.put("month", month);
         if (!TextUtils.isEmpty(day)) {
-            map.put("day", day);
+            map.put("date", day);
         }
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(PAGE_SIZE));
