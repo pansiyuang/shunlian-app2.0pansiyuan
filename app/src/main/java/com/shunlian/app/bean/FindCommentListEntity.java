@@ -62,10 +62,29 @@ public class FindCommentListEntity {
         public String reply;
         public String reply_time;
         public String at;
+
+        @Override
+        public String toString() {
+            return "ReplyList{" +
+                    "reply_id='" + reply_id + '\'' +
+                    ", reply_avatar='" + reply_avatar + '\'' +
+                    ", reply_by='" + reply_by + '\'' +
+                    ", reply='" + reply + '\'' +
+                    ", reply_time='" + reply_time + '\'' +
+                    ", at='" + at + '\'' +
+                    '}';
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class LastLikesBean {
         public String avatar;
+
+        @Override
+        public String toString() {
+            return "LastLikesBean{" +
+                    "avatar='" + avatar + '\'' +
+                    '}';
+        }
     }
 }

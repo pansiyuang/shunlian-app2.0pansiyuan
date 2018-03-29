@@ -190,6 +190,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         itemComment.likes = new_likes;
         itemComment.had_like = "0".equals(itemComment.had_like) ? "1" : "0";
         adapter.notifyDataSetChanged();
+        currentTouchItem = -1;
     }
 
 
@@ -216,12 +217,16 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             mItemComments.add(hotCommentCount, insert_item);
         }
         adapter.notifyDataSetChanged();
+        currentTouchItem = -1;
+        itemComment = null;
     }
 
     @Override
     protected void delSuccess() {
         mItemComments.remove(currentTouchItem);
         adapter.notifyDataSetChanged();
+        currentTouchItem = -1;
+        itemComment = null;
     }
 
 

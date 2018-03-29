@@ -19,6 +19,7 @@ import com.shunlian.app.bean.ExchangDetailEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.discover.CommentDetailAct;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -84,7 +85,9 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + (mExperience_info == null ? 0 : 1) + (isEmpty(lists) ? 0 : 1);
+        return super.getItemCount()
+                + (mExperience_info == null ? 0 : 1)
+                + (isEmpty(lists) ? 0 : 1);//评论条目
     }
 
     /**
@@ -206,11 +209,9 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
         List<FindCommentListEntity.ReplyList> reply_list = itemComment.reply_list;
 
         if (isEmpty(reply_list)) {
-            mHolder.ll_sub_bg.setVisibility(View.GONE);
-            mHolder.miv_sanjiao.setVisibility(View.GONE);
+            gone(mHolder.ll_sub_bg,mHolder.miv_sanjiao);
         } else {
-            mHolder.ll_sub_bg.setVisibility(View.VISIBLE);
-            mHolder.miv_sanjiao.setVisibility(View.VISIBLE);
+            visible(mHolder.ll_sub_bg,mHolder.miv_sanjiao);
             //回复
             reply(mHolder, itemComment, reply_list);
         }
@@ -368,6 +369,8 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             recycler_img.setNestedScrollingEnabled(false);
             recycler_img.addItemDecoration(gridSpacingItemDecoration);
             itemView.setOnClickListener(this);
+            ll_goods.setOnClickListener(this);
+            tv_add_car.setOnClickListener(this);
         }
 
         /**
@@ -382,6 +385,12 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     DefMessageEvent event = new DefMessageEvent();
                     event.praisePosition = getAdapterPosition();
                     EventBus.getDefault().post(event);
+                    break;
+                case R.id.ll_goods:
+                        break;
+                case R.id.tv_add_car:
+                    String id = mExperience_info.goods.id;
+                    GoodsDetailAct.startAct(context,id);
                     break;
                 default:
                     if (listener != null){
