@@ -50,6 +50,14 @@
         android:overScrollMode="never" />
 
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_below="@+id/rl_title"
+        android:layout_weight="1" />
     <RelativeLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"

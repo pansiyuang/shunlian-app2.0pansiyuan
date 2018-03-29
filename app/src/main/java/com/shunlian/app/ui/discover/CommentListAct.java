@@ -22,6 +22,7 @@ import com.shunlian.app.view.IFindCommentListView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,6 +50,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
 
@@ -131,6 +135,15 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Override
     public void showDataEmptyView(int request_code) {
 
+        if (request_code == 100){
+            visible(nei_empty);
+            gone(recy_view);
+            nei_empty.setImageResource(R.mipmap.img_empty_common)
+                    .setText("暂无评论").setButtonText(null);
+        }else {
+            gone(nei_empty);
+            visible(recy_view);
+        }
     }
 
     /**
