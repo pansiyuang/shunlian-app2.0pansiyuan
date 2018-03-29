@@ -53,6 +53,23 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         return R.layout.act_experiencedetail;
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null && presenter != null){
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition + 1 == manager.getItemCount()){
+                        presenter.onRefresh();
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * 初始化数据
      */
