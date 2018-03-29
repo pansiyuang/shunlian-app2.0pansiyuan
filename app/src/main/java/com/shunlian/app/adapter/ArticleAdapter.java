@@ -256,7 +256,6 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             recycler_tags.setLayoutManager(manager);
             recycler_tags.setNestedScrollingEnabled(false);
         }
-
     }
 
     public class ArticleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
