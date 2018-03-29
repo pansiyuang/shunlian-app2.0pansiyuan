@@ -65,6 +65,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
         currentPage=1;
         allPage = 1;
         isLoading = true;
+        currentPosition = -1;
         if (adapter != null){
             mCommentLists.clear();
 //            adapter.unbind();
@@ -177,6 +178,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                 mExperienceInfo.had_like = "1".equals(mExperienceInfo.had_like)?"0":"1";
                 mExperienceInfo.praise_num = entity.data.new_likes;
                 adapter.notifyDataSetChanged();
+                currentPosition = -1;
             }
 
             @Override
@@ -215,6 +217,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                         itemComment.had_like = "1".equals(itemComment.had_like)?"0":"1";
                         itemComment.likes = entity.data.new_likes;
                         adapter.notifyDataSetChanged();
+                        currentPosition = -1;
                     }
                 });
     }
@@ -256,14 +259,22 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
             public void onSuccess(BaseEntity<UseCommentEntity> entity) {
                 super.onSuccess(entity);
                 FindCommentListEntity.ItemComment insert_item = entity.data.insert_item;
-                if (isEmpty(insert_item.avatar)){
+                if (insert_item != null && isEmpty(insert_item.content)){//开通审核
                     Common.staticToasts(context, entity.message, R.mipmap.icon_common_duihao);
+                    return;
+                }
+                //直接发布
+                Common.staticToasts(context, getStringResouce(R.string.send_success),
+                        R.mipmap.icon_common_duihao);
+                if (currentPosition > 1){
+                    mCommentLists.remove(currentPosition - 2);
+                    mCommentLists.add(currentPosition - 2,insert_item);
+                    adapter.notifyDataSetChanged();
                 }else {
-                    Common.staticToasts(context, getStringResouce(R.string.send_success),
-                            R.mipmap.icon_common_duihao);
                     mCommentLists.add(0, insert_item);
                     adapter.notifyDataSetChanged();
                 }
+                currentPosition = -1;
             }
         });
     }
@@ -298,6 +309,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                 super.onSuccess(entity);
                 mCommentLists.remove(currentPosition - 2);
                 adapter.notifyDataSetChanged();
+                currentPosition = -1;
             }
         });
 
