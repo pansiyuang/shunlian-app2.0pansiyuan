@@ -56,8 +56,23 @@ public class GoodsDeatilEntity {
     public ArrayList<Comments> comments;
 
     public TTAct tt_act;//天天特惠
+    public SpecailAct common_activity;//专题活动
 
     public Act activity;
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SpecailAct{
+        public String act_id;
+        public String detail_pic;
+        public String if_act_price;
+        public String if_time;
+        public String actprice;
+        public String activity_status;
+        public String start_remain_seconds;
+        public String end_remain_seconds;
+
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Act{

@@ -576,17 +576,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             final String is_preferential = mGoodsEntity.is_preferential;
             if (mGoodsEntity.tt_act != null){
                 pref_length = 5;//显示天天特惠标题
-                mHolder.miv_pref.setVisibility(View.VISIBLE);
+                visible(mHolder.miv_pref);
             }else {
-                mHolder.miv_pref.setVisibility(View.GONE);
+                gone(mHolder.miv_pref);
                 if (!isEmpty(is_preferential)){//显示正常标题
                     GradientDrawable infoDrawable = (GradientDrawable) mHolder.mtv_discount_info.getBackground();
                     infoDrawable.setColor(Color.parseColor("#FB0036"));
                     mHolder.mtv_discount_info.setText(is_preferential);
-                    mHolder.mtv_discount_info.setVisibility(View.VISIBLE);
+                    visible(mHolder.mtv_discount_info);
                     pref_length = is_preferential.length();
                 }else {
-                    mHolder.mtv_discount_info.setVisibility(View.GONE);
+                    gone(mHolder.mtv_discount_info);
                     pref_length = 0;
                 }
             }
@@ -611,114 +611,241 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.mtv_address.setText(mGoodsEntity.area);
 
             if ("1".equals(mGoodsEntity.is_new)){
-                mHolder.mtv_new_goods.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_new_goods);
                 GradientDrawable newDrawable = (GradientDrawable) mHolder.mtv_new_goods.getBackground();
                 newDrawable.setColor(Color.parseColor("#FBB700"));
             }else {
-                mHolder.mtv_new_goods.setVisibility(View.GONE);
+                gone(mHolder.mtv_new_goods);
             }
 
             if ("1".equals(mGoodsEntity.is_explosion)) {
-                mHolder.mtv_explosion_goods.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_explosion_goods);
                 GradientDrawable explosionDrawable = (GradientDrawable) mHolder.mtv_explosion_goods.getBackground();
                 explosionDrawable.setColor(Color.parseColor("#FB6400"));
             }else {
-                mHolder.mtv_explosion_goods.setVisibility(View.GONE);
+                gone(mHolder.mtv_explosion_goods);
             }
 
             if ("1".equals(mGoodsEntity.is_hot)) {
-                mHolder.mtv_hot_goods.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_hot_goods);
                 GradientDrawable hotDrawable = (GradientDrawable) mHolder.mtv_hot_goods.getBackground();
                 hotDrawable.setColor(Color.parseColor("#FB3500"));
             }else {
-                mHolder.mtv_hot_goods.setVisibility(View.GONE);
+                gone(mHolder.mtv_hot_goods);
             }
 
             if ("1".equals(mGoodsEntity.is_recommend)){
-                mHolder.mtv_recommend_goods.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_recommend_goods);
                 GradientDrawable recommedDrawable = (GradientDrawable) mHolder.mtv_recommend_goods.getBackground();
                 recommedDrawable.setColor(Color.parseColor("#FB0000"));
             }else {
-                mHolder.mtv_recommend_goods.setVisibility(View.GONE);
+                gone(mHolder.mtv_recommend_goods);
             }
 
 
             /**********天天特惠******************/
-            GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
-            if (tt_act != null) {
-                mHolder.mllayout_preferential.setVisibility(View.VISIBLE);
-                mHolder.mllayout_common_price.setVisibility(View.GONE);
-                mHolder.mtv_sales.setVisibility(View.GONE);
+            daydayPreferential(mHolder);
+            /**********天天特惠******************/
 
-                if ("1".equals(tt_act.sale)){//1：活动进行中   0：活动未开始
-                    mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
-                    mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_FEEBE7));
-                    mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
-                    mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
-                    mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
-                    mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
-                    mHolder.mtv_follow_count.setVisibility(View.GONE);
-                    mHolder.mtv_desc.setVisibility(View.VISIBLE);
-                    mHolder.seekbar_grow.setVisibility(View.VISIBLE);
-                    mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
-                    mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
-                }else {
-                    mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
-                    mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
-                    mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
-                    mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
-                    mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
-                    mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_1B78C1));
-                    String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
-                    mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
-                    mHolder.mtv_follow_count.setVisibility(View.VISIBLE);
-                    mHolder.seekbar_grow.setVisibility(View.GONE);
-                    mHolder.mtv_desc.setVisibility(View.GONE);
-                }
+            /************专题活动****************/
+            specialActivity(mHolder);
+            /************专题活动****************/
 
-                mHolder.mtv_pPrice.setText(mGoodsEntity.price);
-                mHolder.mtv_pmarketPrice.setStrikethrough()
-                        .setText(getString(R.string.rmb)
-                                .concat(mGoodsEntity.market_price));
-                mHolder.mtv_act_title.setText(tt_act.content);
+
+            /************活动连接****************/
+            if (mGoodsEntity.activity != null && !isEmpty(mGoodsEntity.activity.desc)){
+                visible(mHolder.mtv_act);
+                mHolder.mtv_act.setText(mGoodsEntity.activity.desc);
+            }else {
+                gone(mHolder.mtv_act);
+            }
+        }
+    }
+    /*
+    专题活动
+     */
+    private void specialActivity(final TitleHolder mHolder) {
+        GoodsDeatilEntity.SpecailAct common_activity = mGoodsEntity.common_activity;
+        if (common_activity == null){
+            gone(mHolder.mllayout_specail_act,mHolder.mllayout_specail_before_act);
+        }else {
+            visible(mHolder.mllayout_specail_act);
+            String activity_status = common_activity.activity_status;
+            if ("1".equals(activity_status)){//活动未开始
+                visible(
+                        mHolder.miv_special_pic,
+                        mHolder.mllayout_specail_before_act,
+                        mHolder.mllayout_specail_before_downtime);
+
+                gone(
+                        mHolder.mtv_marketPrice,
+                        mHolder.mrlayout_special_preBgL,
+                        mHolder.mrlayout_special_preBgR);
+
+                GlideUtils.getInstance().loadImage(context,
+                        mHolder.miv_special_pic,common_activity.detail_pic);
+
+                mHolder.mtv_special_before_original_price.setStrikethrough()
+                        .setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
+                mHolder.mtv_special_before_price.setText(
+                        "活动价:" + getString(R.string.rmb).concat(common_activity.actprice));
+
+                GradientDrawable background = (GradientDrawable) mHolder
+                        .mllayout_before_downTime.getBackground();
+                background.setColor(getColor(R.color.transparent));
+                int i = TransformUtil.dip2px(context, 1);
+                background.setStroke(i,getColor(R.color.my_gray_one));
+
+                GlideUtils.getInstance().loadImage(context,
+                        mHolder.miv_special_before_pic,mGoodsEntity.pics.get(0));
+
+                mHolder.ddp_special_before_downTime.setLabelBackgroundColor(getColor(R.color.transparent));
+                mHolder.ddp_special_before_downTime.setTimeUnitTextColor(getColor(R.color.my_gray_one));
+                mHolder.ddp_special_before_downTime.setTimeTextColor(getColor(R.color.my_gray_one));
+                mHolder.ddp_special_before_downTime.setTimeTextSize(11);
+                mHolder.ddp_special_before_downTime.setTimeUnitTextSize(11);
+                mHolder.ddp_special_before_downTime.setTimeUnitPadding(0);
 
                 if (!isStartDownTime) {
-                    String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
-                    //time = "10";
-                    mHolder.ddp_downTime.setDownTime(Integer.parseInt(time));
-                    mHolder.ddp_downTime.startDownTimer();
+                    String time = isEmpty(common_activity.start_remain_seconds) ? "0" :
+                            common_activity.start_remain_seconds;
+
+//                    time = "10";
+                    mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time));
+                    mHolder.ddp_special_before_downTime.startDownTimer();
                     isStartDownTime = true;
                 }
-                mHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
+                mHolder.ddp_special_before_downTime.setDownTimerListener(new OnCountDownTimerListener() {
                     @Override
                     public void onFinish() {
                         isStartDownTime = false;
                         if (context instanceof GoodsDetailAct){
                             GoodsDetailAct act = (GoodsDetailAct) context;
                             if (act.isFinishing()){
-                                mHolder.ddp_downTime.cancelDownTimer();
+                                mHolder.ddp_special_before_downTime.cancelDownTimer();
                                 return;
                             }
                             act.refreshDetail();
                         }
                     }
                 });
-            }else {
-                mHolder.mtv_sales.setVisibility(View.VISIBLE);
-                mHolder.mllayout_common_price.setVisibility(View.VISIBLE);
-                mHolder.mllayout_preferential.setVisibility(View.GONE);
-            }
-            /**********天天特惠******************/
 
-            /************活动****************/
-            if (mGoodsEntity.activity != null && !isEmpty(mGoodsEntity.activity.desc)){
-                mHolder.mtv_act.setVisibility(View.VISIBLE);
-                mHolder.mtv_act.setText(mGoodsEntity.activity.desc);
-            }else {
-                mHolder.mtv_act.setVisibility(View.GONE);
+            }else {//活动开始
+                visible(
+                        mHolder.mrlayout_special_preBgL,
+                        mHolder.mrlayout_special_preBgR);
+
+                gone(
+                        mHolder.miv_special_pic,
+                        mHolder.mtv_marketPrice,
+                        mHolder.mtv_price_rmb,
+                        mHolder.mtv_price,
+                        mHolder.mllayout_specail_before_act,
+                        mHolder.mllayout_specail_before_downtime);
+
+                mHolder.mtv_special_price.setText(
+                        getString(R.string.rmb).concat(common_activity.actprice));
+
+                mHolder.mtv_special_original_price.setStrikethrough().setText(
+                        "原价:"+getString(R.string.rmb).concat(mGoodsEntity.price)
+                );
+                mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
+                mHolder.ddp_special_downTime.setTimeUnitTextColor(getColor(R.color.pink_color));
+                mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
+
+                if (!isStartDownTime) {
+                    String time = isEmpty(common_activity.end_remain_seconds) ? "0" :
+                            common_activity.end_remain_seconds;
+
+//                    time = "10";
+                    mHolder.ddp_special_downTime.setDownTime(Integer.parseInt(time));
+                    mHolder.ddp_special_downTime.startDownTimer();
+                    isStartDownTime = true;
+                }
+                mHolder.ddp_special_downTime.setDownTimerListener(new OnCountDownTimerListener() {
+                    @Override
+                    public void onFinish() {
+                        isStartDownTime = false;
+                        if (context instanceof GoodsDetailAct){
+                            GoodsDetailAct act = (GoodsDetailAct) context;
+                            if (act.isFinishing()){
+                                mHolder.ddp_special_downTime.cancelDownTimer();
+                                return;
+                            }
+                            act.refreshDetail();
+                        }
+                    }
+                });
             }
         }
     }
+
+    /*
+    天天特惠
+     */
+    private void daydayPreferential(final TitleHolder mHolder) {
+        GoodsDeatilEntity.TTAct tt_act = mGoodsEntity.tt_act;
+        if (tt_act != null) {
+            visible(mHolder.mllayout_preferential);
+            gone(mHolder.mllayout_common_price,mHolder.mtv_sales);
+
+            if ("1".equals(tt_act.sale)){//1：活动进行中   0：活动未开始
+                mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.pink_color));
+                mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_FEEBE7));
+                mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
+                mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
+                mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
+                mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
+                gone(mHolder.mtv_follow_count);
+                visible(mHolder.mtv_desc,mHolder.seekbar_grow);
+                mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
+                mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
+            }else {
+                mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
+                mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
+                mHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
+                mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
+                mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
+                mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_1B78C1));
+                String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
+                mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
+                visible(mHolder.mtv_follow_count);
+                gone(mHolder.seekbar_grow,mHolder.mtv_desc);
+            }
+
+            mHolder.mtv_pPrice.setText(mGoodsEntity.price);
+            mHolder.mtv_pmarketPrice.setStrikethrough()
+                    .setText(getString(R.string.rmb)
+                            .concat(mGoodsEntity.market_price));
+            mHolder.mtv_act_title.setText(tt_act.content);
+
+            if (!isStartDownTime) {
+                String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
+                //time = "10";
+                mHolder.ddp_downTime.setDownTime(Integer.parseInt(time));
+                mHolder.ddp_downTime.startDownTimer();
+                isStartDownTime = true;
+            }
+            mHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    isStartDownTime = false;
+                    if (context instanceof GoodsDetailAct){
+                        GoodsDetailAct act = (GoodsDetailAct) context;
+                        if (act.isFinishing()){
+                            mHolder.ddp_downTime.cancelDownTimer();
+                            return;
+                        }
+                        act.refreshDetail();
+                    }
+                }
+            });
+        }else {
+            visible(mHolder.mtv_sales,mHolder.mllayout_common_price);
+            gone(mHolder.mllayout_preferential);
+        }
+    }
+
     /**
      * 轮播和顶部商品信息
      * @param holder
@@ -912,6 +1039,52 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         @BindView(R.id.mtv_act)
         MyTextView mtv_act;
+
+        @BindView(R.id.mtv_price_rmb)
+        MyTextView mtv_price_rmb;
+
+        /*专题活动*/
+        @BindView(R.id.mllayout_specail_act)
+        MyLinearLayout mllayout_specail_act;
+
+        @BindView(R.id.miv_special_pic)
+        MyImageView miv_special_pic;
+
+        @BindView(R.id.mrlayout_special_preBgL)
+        MyRelativeLayout mrlayout_special_preBgL;
+
+        @BindView(R.id.mtv_special_price)
+        MyTextView mtv_special_price;
+
+        @BindView(R.id.mtv_special_original_price)
+        MyTextView mtv_special_original_price;
+
+        @BindView(R.id.mrlayout_special_preBgR)
+        MyRelativeLayout mrlayout_special_preBgR;
+
+        @BindView(R.id.ddp_special_downTime)
+        DDPDownTimerView ddp_special_downTime;
+
+        @BindView(R.id.mllayout_specail_before_act)
+        MyLinearLayout mllayout_specail_before_act;
+
+        @BindView(R.id.mtv_special_before_original_price)
+        MyTextView mtv_special_before_original_price;
+
+        @BindView(R.id.mtv_special_before_price)
+        MyTextView mtv_special_before_price;
+
+        @BindView(R.id.mllayout_before_downTime)
+        MyLinearLayout mllayout_before_downTime;
+
+        @BindView(R.id.mllayout_specail_before_downtime)
+        MyLinearLayout mllayout_specail_before_downtime;
+
+        @BindView(R.id.ddp_special_before_downTime)
+        DDPDownTimerView ddp_special_before_downTime;
+
+        @BindView(R.id.miv_special_before_pic)
+        MyImageView miv_special_before_pic;
 
         public TitleHolder(View itemView) {
             super(itemView);

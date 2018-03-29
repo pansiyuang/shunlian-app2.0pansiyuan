@@ -298,7 +298,12 @@ public class FindCommentDetailPresenter extends FindCommentPresenter<IFindCommen
     public void sendExperience(String content){
         Map<String,String> map = new HashMap<>();
         map.put("experience_id",mExperience_id);
-        FindCommentListEntity.ItemComment itemComment = mReplyListBeans.get(currentTouchItem);
+        FindCommentListEntity.ItemComment itemComment = null;
+        if (currentTouchItem > 0){
+            itemComment = mReplyListBeans.get(currentTouchItem);
+        }else {
+            itemComment = mReplyListBeans.get(0);
+        }
         map.put("pid",itemComment.item_id);
         map.put("content",content);
         map.put("from_page","detail");
