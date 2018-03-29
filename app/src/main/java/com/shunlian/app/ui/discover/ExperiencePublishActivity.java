@@ -225,7 +225,9 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
         for (int i = 0; i < pics.size(); i++) {
             String path = pics.get(i);
             picstr.append(path);
-            picstr.append(",");
+            if (i != pics.size() - 1) {
+                picstr.append(",");
+            }
         }
     }
 

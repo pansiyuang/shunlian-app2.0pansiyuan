@@ -28,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -120,6 +121,11 @@ public class DeviceInfoUtil {
     public static int getDeviceHeight(Context context) {
         int heightPixels = context.getResources().getDisplayMetrics().heightPixels;
         return heightPixels;
+    }
+
+    public static String getDeviceId(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getDeviceId();
     }
 
     public static String getUserAgent(Context context) {

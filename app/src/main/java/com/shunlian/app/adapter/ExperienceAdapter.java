@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,10 +18,12 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
+import com.shunlian.app.ui.discover.ExperienceDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -89,6 +92,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                     }
                 });
             }
+
             final GoodsDeatilEntity.Goods goods = experience.goods;
             if (experience.goods == null) {
                 holderView.ll_goods.setVisibility(View.GONE);
@@ -177,13 +181,12 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
 
         public ExperienceHolderView(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
             GridLayoutManager manager = new GridLayoutManager(context, 3);
             GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(context, 6f), false);
             ((DefaultItemAnimator) recycler_img.getItemAnimator()).setSupportsChangeAnimations(false);
             recycler_img.setLayoutManager(manager);
-            recycler_img.setNestedScrollingEnabled(false);
             recycler_img.addItemDecoration(gridSpacingItemDecoration);
+            itemView.setOnClickListener(this);
         }
 
         @Override

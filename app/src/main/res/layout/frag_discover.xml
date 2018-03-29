@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:src="@mipmap/icon_more_search" />
+            android:src="@mipmap/icon_found_sousuo" />
     </com.shunlian.app.widget.MyRelativeLayout>
 
 

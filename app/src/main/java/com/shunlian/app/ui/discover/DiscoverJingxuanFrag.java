@@ -53,7 +53,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
         articleManager = new LinearLayoutManager(getActivity());
         recycler_article.setLayoutManager(articleManager);
-        recycler_article.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(getActivity(), 10), 0, 0));
         ((SimpleItemAnimator) recycler_article.getItemAnimator()).setSupportsChangeAnimations(false);
 
         mPresenter = new ChosenPresenter(getActivity(), this);
@@ -78,10 +77,10 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (articleManager != null){
+                if (articleManager != null) {
                     int lastPosition = articleManager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == articleManager.getItemCount()){
-                        if (mPresenter != null){
+                    if (lastPosition + 1 == articleManager.getItemCount()) {
+                        if (mPresenter != null) {
                             mPresenter.onRefresh();
                         }
                     }
