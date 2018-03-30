@@ -6,6 +6,11 @@
     android:background="@color/my_line_gray"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_height"
+        android:background="@color/white" />
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"

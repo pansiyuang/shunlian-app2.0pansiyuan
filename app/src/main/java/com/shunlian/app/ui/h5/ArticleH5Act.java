@@ -9,19 +9,14 @@ import android.net.http.SslError;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
-import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -139,8 +134,10 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
      */
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        immersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .keyboardEnable(true)
+                .init();
 
         mPresent = new ArticleDetailPresenter(this, this);
         mPresent.getArticleDetail(articleId);
