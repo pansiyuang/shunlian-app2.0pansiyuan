@@ -34,6 +34,16 @@
             android:textColor="#1c1b20"
             android:textSize="18sp" />
 
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_favorite"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_found_souchang_n"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <WebView

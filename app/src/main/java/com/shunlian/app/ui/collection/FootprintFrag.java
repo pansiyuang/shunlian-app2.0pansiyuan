@@ -120,7 +120,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         calendarView.setOnDateSelectedListener(this);
         calendarView.setOnStatusChangeListener(this);
 
-        expandViewTouchDelegate(miv_more, TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 15f), TransformUtil.dip2px(baseActivity, 1f));
+        expandViewTouchDelegate(miv_more, TransformUtil.dip2px(baseActivity, 10f), TransformUtil.dip2px(baseActivity, 10f), TransformUtil.dip2px(baseActivity, 10f), TransformUtil.dip2px(baseActivity, 10f));
 
         recycler_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -229,7 +229,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     public void operationMange() {
         LogUtil.httpLogW("operationMange()");
         isSelectAll = false;
-        selectStatus = 0;
+        selectStatus = 2;
         toSelectAll(false);
         footprintAdapter.setEditMode(false);
     }

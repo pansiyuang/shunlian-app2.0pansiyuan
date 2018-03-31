@@ -29,6 +29,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.HttpDialog;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
@@ -57,6 +58,9 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
     @BindView(R.id.tv_storeName)
     MyTextView tv_storeName;
 
+    @BindView(R.id.miv_favorite)
+    MyImageView miv_favorite;
+
 //    @BindView(R.id.rl_bottom)
 //    RelativeLayout rl_bottom;
 
@@ -74,6 +78,7 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
     SonicSessionClientImpl sonicSessionClient = null;
     private HttpDialog httpDialog;
     private ArticleDetailPresenter mPresent;
+    private int currentFavoriteStatus;
 
     public static void startAct(Context context, String articleId, int mode) {
         Intent intentH5 = new Intent(context, ArticleH5Act.class);
@@ -89,6 +94,7 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
      */
     @Override
     protected int getLayoutId() {
+
         Intent intent = getIntent();
         articleId = intent.getStringExtra("articleId");
         mode = intent.getIntExtra("mode", 0);
@@ -147,6 +153,21 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
         httpDialog = new HttpDialog(this);
         initWebView();
 //        setListenerToRootView();
+    }
+
+    @Override
+    protected void initListener() {
+        miv_favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentFavoriteStatus == 1) {
+                    mPresent.unFavoriteArticle(articleId);
+                } else {
+                    mPresent.favoriteArticle(articleId);
+                }
+            }
+        });
+        super.initListener();
     }
 
     @SuppressLint({"SetJavaScriptEnabled"})
@@ -304,6 +325,25 @@ public class ArticleH5Act extends BaseActivity implements IArticleDetailView {
             if (!isEmpty(detailEntity.h5_detail_url))
                 h5_mwb.loadUrl(detailEntity.h5_detail_url, setWebviewHeader());
         }
+        if ("1".equals(detailEntity.had_favorites)) {
+            miv_favorite.setImageResource(R.mipmap.icon_found_souchang_h);
+        } else {
+            miv_favorite.setImageResource(R.mipmap.icon_found_souchang_n);
+        }
+        currentFavoriteStatus = Integer.valueOf(detailEntity.had_favorites);
+        miv_favorite.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void favoriteSuccess() {
+        currentFavoriteStatus = 1;
+        miv_favorite.setImageResource(R.mipmap.icon_found_souchang_h);
+    }
+
+    @Override
+    public void unFavoriteSuccess() {
+        currentFavoriteStatus = 0;
+        miv_favorite.setImageResource(R.mipmap.icon_found_souchang_n);
     }
 
 

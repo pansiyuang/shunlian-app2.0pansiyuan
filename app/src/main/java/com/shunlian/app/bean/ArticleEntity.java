@@ -16,6 +16,7 @@ public class ArticleEntity {
     public String page;
     public String page_size;
     public List<Article> article_list;
+    public List<Article> list;
     public List<Topic> topic_list;
     public Tag tag_obj;
 
@@ -29,6 +30,8 @@ public class ArticleEntity {
         public List<Tag> tags;
         public String share_url;
         public String likes;
+        public String favorites;
+        public String status;
         public String comments;
         public String forwards;
         public String had_like;
@@ -37,6 +40,7 @@ public class ArticleEntity {
         public String[] full_title_keywords;
         public String pub_time;
         public String pub_by;
+        public boolean isSelect;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

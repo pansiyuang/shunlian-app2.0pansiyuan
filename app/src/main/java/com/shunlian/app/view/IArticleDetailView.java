@@ -8,4 +8,8 @@ import com.shunlian.app.bean.ArticleDetailEntity;
 
 public interface IArticleDetailView extends IView {
     void getArticleDetail(ArticleDetailEntity detailEntity);
+
+    void favoriteSuccess();
+
+    void unFavoriteSuccess();
 }
