@@ -130,8 +130,10 @@ public class H5Act extends BaseActivity {
      */
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        immersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .keyboardEnable(true)
+                .init();
         httpDialog = new HttpDialog(this);
         initWebView();
     }
