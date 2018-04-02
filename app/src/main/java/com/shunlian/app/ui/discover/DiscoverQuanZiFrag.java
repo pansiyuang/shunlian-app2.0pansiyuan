@@ -110,7 +110,7 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                 kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                     @Override
                     public void onItemClick(int position) {
-                        GoodsDetailAct.startAct(getContext(),data.banner.get(position).id);
+                        DiscoverTieziAct.startAct(getContext(), data.banner.get(position).id);
                     }
                 });
             }

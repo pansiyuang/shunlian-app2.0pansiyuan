@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PDiscoverSucaiku;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverSucaiku;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -87,6 +88,13 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
             rv_sucaiku.setLayoutManager(linearLayoutManager);
             rv_sucaiku.setAdapter(discoverSucaikuAdapter);
         } else {
+            LogUtil.augusLogW("yxf-0--"+datas.get(0).image.size());
+            LogUtil.augusLogW("yxf-1--"+datas.get(1).image.size());
+            LogUtil.augusLogW("yxf-2--"+datas.get(2).image.size());
+            LogUtil.augusLogW("yxf-3--"+datas.get(3).image.size());
+            LogUtil.augusLogW("yxf-4--"+datas.get(4).image.size());
+            LogUtil.augusLogW("yxf-5--"+datas.get(5).image.size());
+            LogUtil.augusLogW("yxf-6--"+datas.get(6).image.size());
             discoverSucaikuAdapter.notifyDataSetChanged();
         }
         discoverSucaikuAdapter.setPageLoading(Integer.parseInt(data.page),Integer.parseInt( data.total_page));
