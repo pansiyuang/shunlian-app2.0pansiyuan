@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.widget.MyImageView;
 
@@ -149,9 +151,12 @@ public class ContentAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         @BindView(R.id.swipe_layout)
         SwipeMenuLayout swipe_layout;
 
+        @BindView(R.id.rl_item)
+        RelativeLayout rl_item;
+
         public ArticleViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            rl_item.setOnClickListener(this);
         }
 
         @Override

@@ -1028,7 +1028,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/footermark/deleteBatch")
-    Call<BaseEntity<EmptyEntity>> deleteBatch(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> deleteBatch(@QueryMap Map<String, String> map);
 
     /**
      * 可添加商品列表

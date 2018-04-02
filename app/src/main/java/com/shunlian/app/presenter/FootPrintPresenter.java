@@ -112,20 +112,20 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         });
     }
 
-    public void deleteBatch(String ids) {
+    public void deleteBatch(String ids, String date) {
         if (Common.loginPrompt()) {
             return;
         }
         Map<String, String> map = new HashMap<>();
         map.put("ids", ids);
-        LogUtil.augusLogW("id--" + ids);
+        map.put("date", date);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().deleteBatch(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().deleteBatch(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<EmptyEntity> entity) {
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.delSuccess(entity.message);
+                iView.delSuccess(entity.message, entity.data.date_info);
             }
         });
     }
