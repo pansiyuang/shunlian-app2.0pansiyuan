@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.ui.discover.quanzi.DiscoverTieziAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 
@@ -36,10 +38,16 @@ public class ChangeTopicAdapter extends BaseRecyclerAdapter<ArticleEntity.Topic>
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         TopicHolderView topicHolderView = (TopicHolderView) holder;
-        ArticleEntity.Topic topic = mTopics.get(position);
+        final ArticleEntity.Topic topic = mTopics.get(position);
         GlideUtils.getInstance().loadImage(context, topicHolderView.miv_icon, topic.thumb);
         topicHolderView.tv_title.setText(topic.subject);
         topicHolderView.tv_attention.setText(topic.join_in_num + "人关注");
+        topicHolderView.rl_rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DiscoverTieziAct.startAct(context, topic.id);
+            }
+        });
     }
 
     public void setData(List<ArticleEntity.Topic> mData) {
@@ -59,6 +67,9 @@ public class ChangeTopicAdapter extends BaseRecyclerAdapter<ArticleEntity.Topic>
 
         @BindView(R.id.tv_attention)
         TextView tv_attention;
+
+        @BindView(R.id.rl_rootView)
+        RelativeLayout rl_rootView;
 
         public TopicHolderView(View itemView) {
             super(itemView);

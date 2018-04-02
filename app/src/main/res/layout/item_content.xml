@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.utils.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:ios="false"
+    app:leftSwipe="true"
+    app:swipeEnable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:id="@+id/ll_select"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_select"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:src="@mipmap/img_shoppingcar_selected_n" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_item"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@+id/ll_select">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_favorite_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@mipmap/icon_shoucang_shoucang_n"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_praise_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:layout_toRightOf="@+id/tv_favorite_count"
+                android:drawableLeft="@mipmap/icon_shoucang_zan_n"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_fail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_shoucang_contentfail"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_gray_three"></View>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel_collection"
+        android:layout_width="76.5dp"
+        android:layout_height="100dp"
+        android:background="@color/pink_color"
+        android:gravity="center"
+        android:text="@string/cancel_collection"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</com.shunlian.app.utils.SwipeMenuLayout>

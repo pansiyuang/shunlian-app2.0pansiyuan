@@ -176,6 +176,14 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
         }
         if (!isEmpty(articleEntity.article_list)) {
             articleList.addAll(articleEntity.article_list);
+            List<ArticleEntity.Topic> topicList = articleEntity.topic_list;
+            int index = 0;
+            if (articleEntity.article_list.size() >= 5) {
+                index = 4;
+            } else if (articleEntity.article_list.size() < 5) {
+                index = articleEntity.article_list.size() - 1;
+            }
+            articleEntity.article_list.get(index).topic_list = topicList;
         }
         if (mAdapter == null) {
             mAdapter = new TagDetailAdapter(this, articleList, mTag);

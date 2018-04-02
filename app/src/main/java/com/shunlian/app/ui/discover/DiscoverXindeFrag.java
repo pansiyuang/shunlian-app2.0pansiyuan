@@ -60,9 +60,6 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
 
         experienceList = new ArrayList<>();
-        mAdapter = new ExperienceAdapter(getActivity(), experienceList, this);
-        recycler_list.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -112,6 +109,13 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
 
         if (!isEmpty(list)) {
             experienceList.addAll(list);
+        }
+
+        if (mAdapter == null) {
+            mAdapter = new ExperienceAdapter(getActivity(), experienceList, this);
+            recycler_list.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(this);
+        } else {
             mAdapter.notifyItemRangeChanged(0, experienceList.size());
         }
     }
@@ -157,8 +161,9 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
         //心得详情
         ExperienceEntity.Experience experience = experienceList.get(position);
         String id = experience.id;
-        ExperienceDetailAct.startAct(baseActivity,id);
+        ExperienceDetailAct.startAct(baseActivity, id);
     }
+
     /**
      * 刷新完成
      */
