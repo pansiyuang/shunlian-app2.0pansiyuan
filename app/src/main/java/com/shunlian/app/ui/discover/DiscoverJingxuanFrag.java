@@ -41,8 +41,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
-    public static  String ISLIKE="";
-    private String mArticleId="";
+    public static String ISLIKE = "";
+    private String mArticleId = "";
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -109,11 +109,11 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onResume() {
         super.onResume();
-        if (!TextUtils.isEmpty(ISLIKE)&&mArticleList!=null&&mArticleAdapter!=null){
-            if ("1".equals(ISLIKE)){
-                mArticleAdapter.updateEvaluate(mArticleId, "1");
-            }else {
-                mArticleAdapter.updateEvaluate(mArticleId, "0");
+        if (!TextUtils.isEmpty(ISLIKE) && mArticleList != null && mArticleAdapter != null) {
+            if ("1".equals(ISLIKE)) {
+                upDateLikeArticle(mArticleId);
+            } else {
+                upDateUnLikeArticle(mArticleId);
             }
         }
     }
@@ -174,6 +174,15 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     public void likeArticle(String articleId) {
+        upDateLikeArticle(articleId);
+    }
+
+    @Override
+    public void unLikeArticle(String articleId) {
+        upDateUnLikeArticle(articleId);
+    }
+
+    public void upDateLikeArticle(String articleId) {
         for (int i = 0; i < mArticleList.size(); i++) {
             ArticleEntity.Article article = mArticleList.get(i);
             if (articleId.equals(mArticleList.get(i).id)) {
@@ -185,8 +194,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         mArticleAdapter.updateEvaluate(articleId, "1");
     }
 
-    @Override
-    public void unLikeArticle(String articleId) {
+    public void upDateUnLikeArticle(String articleId) {
         for (int i = 0; i < mArticleList.size(); i++) {
             ArticleEntity.Article article = mArticleList.get(i);
             if (articleId.equals(mArticleList.get(i).id)) {
@@ -207,8 +215,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position - 1);
-        ISLIKE=article.had_like;
-        mArticleId=article.id;
+        ISLIKE = article.had_like;
+        mArticleId = article.id;
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
 

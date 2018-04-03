@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/my_line_gray"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rLayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingTop="12dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="在线客服"
+            android:textColor="@color/my_gray_two"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ListView
+            android:id="@+id/lv_chatlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"></ListView>
+    </LinearLayout>
+</LinearLayout>

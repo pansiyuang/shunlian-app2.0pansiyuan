@@ -18,6 +18,7 @@ import com.shunlian.app.adapter.first_page.GoodsTitleAdapter;
 import com.shunlian.app.adapter.first_page.OnePlusTwoLayoutAdapter;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.MainPageEntity;
+import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.presenter.MainPagePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
@@ -304,6 +305,10 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.mll_message:
+                MessageActivity.startAct(getActivity());
+                break;
+        }
     }
 }

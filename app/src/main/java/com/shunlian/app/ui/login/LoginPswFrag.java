@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
@@ -170,6 +171,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
+        EasyWebsocketClient.initWebsocketClient(getActivity()); //初始化聊天
         baseActivity.finish();
     }
 
