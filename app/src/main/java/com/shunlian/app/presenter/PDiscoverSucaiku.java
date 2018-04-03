@@ -23,7 +23,7 @@ public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
     private boolean isFirst=true;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
-    private boolean babyIsLoading;
+    private boolean babyIsLoading,isRest=false;
     private List<DiscoveryMaterialEntity.Content> mDatas = new ArrayList<>();
 
     public PDiscoverSucaiku(Context context, IDiscoverSucaiku iView) {
@@ -48,7 +48,7 @@ public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
     public void resetBaby() {
         babyPage = 1;
         babyIsLoading = true;
-        mDatas.clear();
+        isRest=true;
         getApiData(babyPage);
     }
 
@@ -74,6 +74,10 @@ public class PDiscoverSucaiku extends BasePresenter<IDiscoverSucaiku> {
                 babyIsLoading = false;
                 babyPage++;
                 babyAllPage = Integer.parseInt(data.total_page);
+                if (isRest){//此处写解决闪屏
+                    mDatas.clear();
+                    isRest=false;
+                }
                 mDatas.addAll(data.list);
                 iView.setApiData(data,mDatas);
                 isFirst=false;

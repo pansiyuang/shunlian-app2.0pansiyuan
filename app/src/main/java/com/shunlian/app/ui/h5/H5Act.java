@@ -1,26 +1,44 @@
 package com.shunlian.app.ui.h5;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.HttpDialog;
+import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.MyWebView;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicConstants;
@@ -40,37 +58,89 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+import static com.shunlian.app.service.InterentTools.DOMAIN;
+
 /**
  * Created by Administrator on 2017/12/26.
  */
 
-public class H5Act extends BaseActivity {
-
-    @BindView(R.id.tv_storeName)
-    MyTextView tv_storeName;
-
-    @BindView(R.id.h5_mwb)
-    WebView h5_mwb;
-    private String h5Url;
-    private String h5Title;
-
+public abstract class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
-
     public static final int MODE_SONIC = 1;//有缓存
-
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
-    private int mode;
-    private SonicSession sonicSession;
+    private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+    protected String h5Url;
+    protected String title;
+    protected int mode;
+    protected SonicSession sonicSession;
+    protected HttpDialog httpDialog;
+    protected ValueCallback<Uri> uploadMessage;
+    protected ValueCallback<Uri[]> uploadMessageAboveL;
+    protected Intent mIntent;
+    @BindView(R.id.mtv_close)
+    MyTextView mtv_close;
+    @BindView(R.id.mar_title)
+    MarqueeTextView mar_title;
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+    @BindView(R.id.mwv_h5)
+    MyWebView mwv_h5;
     SonicSessionClientImpl sonicSessionClient = null;
-    private HttpDialog httpDialog;
+    protected String methodName="android";
 
-    public static void startAct(Context context, String title, String url,int mode) {
+    public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
         intentH5.putExtra("url", url);
-        intentH5.putExtra("title", title);
         intentH5.putExtra("mode", mode);
         context.startActivity(intentH5);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mwv_h5.canGoBack()) {
+            mwv_h5.goBack();// 返回前一个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 布局id
+     *
+     * @return
+     */
+    protected abstract void jsCallback(H5CallEntity h5CallEntity);
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()) {
+            case R.id.mtv_close:
+//                if (h5_mwb.canGoBack()) {
+//                    h5_mwb.goBack();// 返回前一个页面
+//                } else {
+                finish();
+//                }
+                break;
+//            case R.id.layout_backtToUp:
+//                h5_mwb.scrollTo(0, 0);
+//                break;
+
+        }
+    }
+
+    private void setTitle() {
+        if (!TextUtils.isEmpty(title) && title.length() > 8) {
+            mar_title.setVisibility(View.VISIBLE);
+            mtv_title.setVisibility(View.GONE);
+            mar_title.setText(title);
+        } else {
+            mar_title.setVisibility(View.GONE);
+            mtv_title.setVisibility(View.VISIBLE);
+            mtv_title.setText(title);
+        }
+    }
+
     /**
      * 布局id
      *
@@ -78,12 +148,33 @@ public class H5Act extends BaseActivity {
      */
     @Override
     protected int getLayoutId() {
-        Intent intent = getIntent();
-        h5Url = intent.getStringExtra("url");
-        h5Title = intent.getStringExtra("title");
-        mode = intent.getIntExtra("mode",0);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        mIntent = getIntent();
+        if (!TextUtils.isEmpty(mIntent.getStringExtra("url"))) {
+            h5Url = mIntent.getStringExtra("url");
+            initSonic();
+        }
+        mode = mIntent.getIntExtra("mode", 0);
+        return R.layout.act_h5;
+    }
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    /**
+     * 初始化数据
+     */
+    @Override
+    protected void initData() {
+        immersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .keyboardEnable(true)
+                .init();
+        httpDialog = new HttpDialog(this);
+        initWebView(methodName);
+        if (!TextUtils.isEmpty(h5Url)) {
+            loadUrl();
+        }
+    }
+
+    public void initSonic() {
         if (!SonicEngine.isGetInstanceAllowed()) {
             SonicEngine.createInstance(new SonicRuntimeImpl(getApplication()), new SonicConfig.Builder().build());
         }
@@ -118,29 +209,27 @@ public class H5Act extends BaseActivity {
                 // this only happen when a same sonic session is already running,
                 // u can comment following codes to feedback as a default mode.
                 // throw new UnknownError("create session fail!");
-                Toast.makeText(this, "create sonic session fail!", Toast.LENGTH_LONG).show();
+                Common.staticToast("create sonic session fail!");
             }
         }
-
-        return R.layout.act_h5;
     }
 
-    /**
-     * 初始化数据
-     */
-    @Override
-    protected void initData() {
-        immersionBar.statusBarColor(R.color.white)
-                .statusBarDarkFont(true, 0.2f)
-                .keyboardEnable(true)
-                .init();
-        httpDialog = new HttpDialog(this);
-        initWebView();
+    protected void loadUrl() {
+        // webview is ready now, just tell session client to bind
+        if (sonicSessionClient != null) {
+            sonicSessionClient.bindWebView(mwv_h5);
+            sonicSessionClient.clientReady();
+        } else { // default mode
+            if (!isEmpty(h5Url))
+                mwv_h5.loadUrl(h5Url, setWebviewHeader());
+        }
+//        String targetUrl = "file:///android_asset/up.html";
+//        mwv_h5.loadUrl(targetUrl);
     }
 
-    @SuppressLint({"SetJavaScriptEnabled"})
-    private void initWebView() {
-        WebSettings webSetting = h5_mwb.getSettings();
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
+    protected void initWebView(String methodName) {
+        WebSettings webSetting = mwv_h5.getSettings();
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -154,22 +243,36 @@ public class H5Act extends BaseActivity {
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-
-        h5_mwb.setWebViewClient(new WebViewClient() {
+        mwv_h5.setWebChromeClient(new WebChromeClient());
+        //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
+        mwv_h5.addJavascriptInterface(new Object() {
+            @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
+            public void androidCallback(String param) {
+                try {
+                    H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
+                    jsCallback(h5CallEntity);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, methodName);
+        mwv_h5.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 if (!isFinishing() && httpDialog != null) {
                     httpDialog.show();
                 }
-                if (h5_mwb != null) {
-                    h5_mwb.setVisibility(View.VISIBLE);
+                if (mwv_h5 != null) {
+                    mwv_h5.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                title = view.getTitle();
+                setTitle();
                 if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
                     httpDialog.dismiss();
                 }
@@ -190,8 +293,8 @@ public class H5Act extends BaseActivity {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 //                view.loadUrl(h5Url,setWebviewHeader());
-                if (h5_mwb != null) {
-                    h5_mwb.setVisibility(View.INVISIBLE);
+                if (mwv_h5 != null) {
+                    mwv_h5.setVisibility(View.INVISIBLE);
                     Common.staticToast("网络连接错误，请稍后再试");
                 }
                 if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
@@ -201,14 +304,12 @@ public class H5Act extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("==========url==========" + url);
-//                if (url.contains("slmall://")) {
-//                    analysisUrl(url);
-//                    return true;
-//                } else {
-//                    return super.shouldOverrideUrlLoading(view, url);
-//                }
+                if (url.contains("slmall://")) {
+                    analysisUrl(url);
+                    return true;
+                } else {
                     return super.shouldOverrideUrlLoading(view, url);
+                }
             }
 
             @Override
@@ -222,18 +323,105 @@ public class H5Act extends BaseActivity {
 
         });
 
-//        addCookie();
+        addCookie();
+        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
 
-        // webview is ready now, just tell session client to bind
-        if (sonicSessionClient != null) {
-            sonicSessionClient.bindWebView(h5_mwb);
-            sonicSessionClient.clientReady();
-        } else { // default mode
-            if (!isEmpty(h5Url))
-                h5_mwb.loadUrl(h5Url,setWebviewHeader());
+    }
+
+    public void addCookie() {
+        //add
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
+
+        mwv_h5.setWebChromeClient(new WebChromeClient() {
+
+            // For Android < 3.0
+            public void openFileChooser(ValueCallback<Uri> valueCallback) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            // For Android  >= 3.0
+            public void openFileChooser(ValueCallback valueCallback, String acceptType) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            //For Android  >= 4.1
+            public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
+                uploadMessage = valueCallback;
+                openImageChooserActivity();
+            }
+
+            // For Android >= 5.0
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                uploadMessageAboveL = filePathCallback;
+                openImageChooserActivity();
+                return true;
+            }
+        });
+//        h5_mwb.setWebChromeClient(new WebChromeClient());
+        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeAllCookie();
+
+//        if (BuildConfig.DEBUG) {
+//            domain ="api-test.shunliandongli.com";
+//        }
+
+        cookieManager.setCookie(DOMAIN, "Client-Type=Android");
+        cookieManager.setCookie(DOMAIN, "token=" + token);
+        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian"+ua);
+        cookieSyncManager.sync();
+        //end
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILE_CHOOSER_RESULT_CODE) {
+            if (null == uploadMessage && null == uploadMessageAboveL) return;
+            Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
+            if (uploadMessageAboveL != null) {
+                onActivityResultAboveL(requestCode, resultCode, data);
+            } else if (uploadMessage != null) {
+                uploadMessage.onReceiveValue(result);
+                uploadMessage = null;
+            }
         }
-//        String targetUrl = "file:///android_asset/up.html";
-//        h5_mwb.loadUrl(targetUrl);
+    }
+
+    private void openImageChooserActivity() {
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("image/*");
+        startActivityForResult(Intent.createChooser(i, "Image Chooser"), FILE_CHOOSER_RESULT_CODE);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void onActivityResultAboveL(int requestCode, int resultCode, Intent intent) {
+        if (requestCode != FILE_CHOOSER_RESULT_CODE || uploadMessageAboveL == null)
+            return;
+        Uri[] results = null;
+        if (resultCode == Activity.RESULT_OK) {
+            if (intent != null) {
+                String dataString = intent.getDataString();
+                ClipData clipData = intent.getClipData();
+                if (clipData != null) {
+                    results = new Uri[clipData.getItemCount()];
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        results[i] = item.getUri();
+                    }
+                }
+                if (dataString != null)
+                    results = new Uri[]{Uri.parse(dataString)};
+            }
+        }
+        uploadMessageAboveL.onReceiveValue(results);
+        uploadMessageAboveL = null;
     }
 
     @Override
@@ -242,13 +430,84 @@ public class H5Act extends BaseActivity {
             sonicSession.destroy();
             sonicSession = null;
         }
-        if (null != sonicSessionClient){
+        if (null != sonicSessionClient) {
             sonicSessionClient.destroy();
             sonicSessionClient = null;
         }
+//        if (mwv_h5 != null) {
+//            mwv_h5.clearHistory();
+//            mwv_h5.clearCache(true);
+//        }
         super.onDestroy();
     }
 
+    private void analysisUrl(String url) {
+        if (url.equals(h5Url)) {
+            LogUtil.httpLogW("=====analysisUrl=====h5Url==========" + h5Url);
+            return;
+        }
+        if (url.startsWith("slmall://")) {
+            String s = interceptBody(url);
+            if (!TextUtils.isEmpty(s)) {
+                String id = "";
+                if (!TextUtils.isEmpty(interceptId(url)))
+                    id = interceptId(url);
+                switch (s) {
+                    case "goods":
+                        GoodsDetailAct.startAct(H5Act.this, id);
+                        break;
+                    case "login":
+                        LoginAct.startAct(H5Act.this);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 完整url slmall://goods/item.json?goodsId=138471
+     * 截取之后goods/item.json
+     *
+     * @param url
+     * @return
+     */
+    private String interceptBody(String url) {
+        String[] split = url.split("\\?");
+        String s = split[0];
+        if (!TextUtils.isEmpty(s)) {
+            String[] split1 = s.split("//");
+            if (!TextUtils.isEmpty(split1[1])) {
+                return split1[1];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 截取商品id
+     *
+     * @param url
+     * @return
+     */
+    private String interceptId(String url) {
+        String[] split = url.split("\\?");
+        String s = split[1];
+        String[] split1 = s.split("=");
+        String s1 = split1[1];
+        /*if (s1.matches("[0-9]+")){
+            return s1;
+        }*/
+        return s1;
+    }
+
+    @Override
+    public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+//        if (y > 2000) {
+//            layout_backtToUp.setVisibility(View.VISIBLE);
+//        } else {
+//            layout_backtToUp.setVisibility(View.GONE);
+//        }
+    }
 
     private static class OfflinePkgSessionConnection extends SonicSessionConnection {
 

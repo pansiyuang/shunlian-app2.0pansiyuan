@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.DiscoverSucaikuAdapter;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PDiscoverSucaiku;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverSucaiku;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;

@@ -3,6 +3,7 @@ package com.shunlian.app.ui.discover;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.h5.ArticleH5Act;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IChosenView;
@@ -39,6 +41,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
+    public static  String ISLIKE="";
+    private String mArticleId="";
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -101,6 +105,18 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         return false;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!TextUtils.isEmpty(ISLIKE)&&mArticleList!=null&&mArticleAdapter!=null){
+            if ("1".equals(ISLIKE)){
+                mArticleAdapter.updateEvaluate(mArticleId, "1");
+            }else {
+                mArticleAdapter.updateEvaluate(mArticleId, "0");
+            }
+        }
+    }
 
     @Override
     public void showFailureView(int request_code) {
@@ -191,6 +207,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position - 1);
+        ISLIKE=article.had_like;
+        mArticleId=article.id;
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
 

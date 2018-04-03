@@ -13,6 +13,7 @@ import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.presenter.PDiscoverTiezi;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverTiezi;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
@@ -169,7 +170,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             hotAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.new_inv.get(position).id);
+                    DiscoverTieziDetailAct.startAct(DiscoverTieziAct.this, circle_id, data.hot_inv.get(position).id);
                 }
             });
 
