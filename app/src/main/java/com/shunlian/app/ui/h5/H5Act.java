@@ -29,8 +29,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -77,6 +75,7 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     protected Intent mIntent;
+    protected String methodName = "android";
     @BindView(R.id.mtv_close)
     MyTextView mtv_close;
     @BindView(R.id.mar_title)
@@ -86,7 +85,6 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     @BindView(R.id.mwv_h5)
     MyWebView mwv_h5;
     SonicSessionClientImpl sonicSessionClient = null;
-    protected String methodName="android";
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
@@ -322,17 +320,6 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
 
 
         });
-
-        addCookie();
-        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
-
-    }
-
-    public void addCookie() {
-        //add
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
-
         mwv_h5.setWebChromeClient(new WebChromeClient() {
 
             // For Android < 3.0
@@ -361,6 +348,23 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
                 return true;
             }
         });
+        addCookie();
+        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        addCookie();
+        mwv_h5.reload();
+    }
+
+
+    public void addCookie() {
+        //add
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
+
 //        h5_mwb.setWebChromeClient(new WebChromeClient());
         CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
@@ -373,7 +377,7 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian"+ua);
+        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian" + ua);
         cookieSyncManager.sync();
         //end
     }
@@ -450,16 +454,12 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
             String s = interceptBody(url);
             if (!TextUtils.isEmpty(s)) {
                 String id = "";
-                if (!TextUtils.isEmpty(interceptId(url)))
+                String id1 = "";
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
                     id = interceptId(url);
-                switch (s) {
-                    case "goods":
-                        GoodsDetailAct.startAct(H5Act.this, id);
-                        break;
-                    case "login":
-                        LoginAct.startAct(H5Act.this);
-                        break;
-                }
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                    id1 = interceptId(url);
+                Common.goGoGo(H5Act.this, s, id, id1);
             }
         }
     }
