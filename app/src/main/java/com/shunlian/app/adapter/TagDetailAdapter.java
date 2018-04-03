@@ -222,9 +222,6 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         } else {
             linearLayout.setVisibility(View.VISIBLE);
 
-            LinearLayoutManager manager = new LinearLayoutManager(context);
-            recyclerView.setLayoutManager(manager);
-            recyclerView.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
             mAdapter = new ChangeTopicAdapter(context, topicData);
             recyclerView.setAdapter(mAdapter);
         }
@@ -355,6 +352,9 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
         public ArticleViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recycler_change.setLayoutManager(manager);
+            recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
         }
 
         @Override

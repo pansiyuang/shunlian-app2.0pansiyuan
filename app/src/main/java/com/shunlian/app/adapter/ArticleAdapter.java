@@ -19,6 +19,8 @@ import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.ui.discover.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.TagDetailActivity;
+import com.shunlian.app.ui.discover.quanzi.DiscoverTieziAct;
+import com.shunlian.app.ui.discover.quanzi.DiscoverTieziDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -199,7 +201,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         notifyItemRangeChanged(0, lists.size());
     }
 
-    public void setTopicData(List<ArticleEntity.Topic> topicData, LinearLayout linearLayout, RecyclerView recyclerView) {
+    public void setTopicData(final List<ArticleEntity.Topic> topicData, LinearLayout linearLayout, RecyclerView recyclerView) {
         if (isEmpty(topicData)) {
             linearLayout.setVisibility(View.GONE);
         } else {

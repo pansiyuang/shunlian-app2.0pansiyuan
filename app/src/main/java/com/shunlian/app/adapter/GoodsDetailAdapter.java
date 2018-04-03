@@ -1092,7 +1092,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @OnClick(R.id.mtv_act)
         public void actTitle(){
             GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
-            H5Act.startAct(context,activity.title,activity.link,H5Act.MODE_SONIC);
+            H5Act.startAct(context,activity.link,H5Act.MODE_SONIC);
         }
     }
 

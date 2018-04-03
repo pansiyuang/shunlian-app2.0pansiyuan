@@ -47,7 +47,6 @@ public class ReceivedCookiesInterceptor implements Interceptor {
                 if (!TextUtils.isEmpty(split[0])){
                     cookieBuffer.append(split[0]).append(";");
                 }
-
             }
             cookieBuffer.append("path=/;");
             cookieBuffer.append("domain=.api.shunliandongli.com");
