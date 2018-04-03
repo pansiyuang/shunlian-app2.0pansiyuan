@@ -27,7 +27,29 @@
             android:src="@mipmap/icon_common_back_black" />
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/tv_storeName"
+            android:id="@+id/mtv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/miv_close"
+            android:text="关闭"
+            android:textColor="@color/new_text"
+            android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MarqueeTextView
+            android:id="@+id/mar_title"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="#1c1b20"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -35,7 +57,6 @@
             android:ems="8"
             android:gravity="center"
             android:lines="1"
-            android:text="详情"
             android:textColor="#1c1b20"
             android:textSize="18sp" />
 
@@ -51,11 +72,11 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/h5_mwb"
+    <com.shunlian.app.widget.MyWebView
+        android:id="@+id/mwv_h5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none" />
+        android:scrollbars="none"/>
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/rl_bottom"-->

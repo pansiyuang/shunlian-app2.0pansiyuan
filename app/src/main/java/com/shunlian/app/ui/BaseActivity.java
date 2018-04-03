@@ -298,6 +298,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         extraHeaders.put("Content-Type", "application/json");
         extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
         extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
+        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
+        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
         return extraHeaders;
     }
     /**
