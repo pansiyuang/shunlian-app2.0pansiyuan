@@ -4,6 +4,15 @@
     <string name="common_yuan">￥</string>
     <string name="common_go_shop">去逛逛</string>
 
+    <!-- IM -->
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="time_yesterday">昨天</string>
+    <string name="sys_message">系统消息</string>
+    <string name="store_message">小店消息</string>
+
+
     <!--主页tab-->
     <string name="main_page">首页</string>
     <string name="sort">分类</string>
