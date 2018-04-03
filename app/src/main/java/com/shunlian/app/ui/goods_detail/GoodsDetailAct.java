@@ -190,6 +190,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
+
     protected void initData() {
         defToolbar();
         goodsId = getIntent().getStringExtra("goodsId");
@@ -536,6 +537,15 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.pink_color));
         }
         mtv_buy_immediately.setTextColor(getColorResouce(R.color.white));
+    }
+
+    /**
+     * 专题活动
+     */
+    @Override
+    public void specailAct() {
+        mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FFE324));
+        mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_FB0236));
     }
 
     /*
