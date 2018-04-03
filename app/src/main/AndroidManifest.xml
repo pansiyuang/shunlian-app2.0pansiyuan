@@ -352,6 +352,11 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".newchat.ui.MessageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.discover.ExperienceDetailAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"
