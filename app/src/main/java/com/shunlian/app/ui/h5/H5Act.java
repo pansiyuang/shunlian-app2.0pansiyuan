@@ -62,7 +62,7 @@ import static com.shunlian.app.service.InterentTools.DOMAIN;
  * Created by Administrator on 2017/12/26.
  */
 
-public abstract class H5Act extends BaseActivity implements MyWebView.ScrollListener {
+public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
@@ -75,7 +75,6 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     protected Intent mIntent;
-    protected String methodName = "android";
     @BindView(R.id.mtv_close)
     MyTextView mtv_close;
     @BindView(R.id.mar_title)
@@ -107,7 +106,9 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
      *
      * @return
      */
-    protected abstract void jsCallback(H5CallEntity h5CallEntity);
+    protected void jsCallback(H5CallEntity h5CallEntity){
+
+    }
 
     @Override
     public void onClick(View view) {
@@ -166,7 +167,8 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
                 .keyboardEnable(true)
                 .init();
         httpDialog = new HttpDialog(this);
-        initWebView(methodName);
+        initWebView();
+//        addJs();
         if (!TextUtils.isEmpty(h5Url)) {
             loadUrl();
         }
@@ -226,7 +228,24 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
-    protected void initWebView(String methodName) {
+    protected void addJs(final String methodName){
+        //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
+        mwv_h5.addJavascriptInterface(new Object() {
+            @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
+            public void androidCallback(String param) {
+                try {
+                    H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
+                    h5CallEntity.type=methodName;
+                    jsCallback(h5CallEntity);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, methodName);
+    }
+
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
+    protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
@@ -241,19 +260,8 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-        mwv_h5.setWebChromeClient(new WebChromeClient());
-        //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
-        mwv_h5.addJavascriptInterface(new Object() {
-            @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
-            public void androidCallback(String param) {
-                try {
-                    H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
-                    jsCallback(h5CallEntity);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, methodName);
+//        mwv_h5.setWebChromeClient(new WebChromeClient());
+
         mwv_h5.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
-import com.shunlian.app.ui.discover.CommentListAct;
+import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;

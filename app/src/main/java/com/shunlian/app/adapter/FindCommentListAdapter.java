@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FindCommentListEntity;
-import com.shunlian.app.ui.discover.CommentDetailAct;
+import com.shunlian.app.ui.discover.other.CommentDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;

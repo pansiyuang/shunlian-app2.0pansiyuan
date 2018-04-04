@@ -12,7 +12,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ExperienceAdapter;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.presenter.ExperiencePresenter;
-import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;

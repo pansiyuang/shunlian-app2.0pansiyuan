@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
-import com.shunlian.app.ui.discover.ExperiencePublishActivity;
-import com.shunlian.app.ui.discover.SearchArticleActivity;
+import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
+import com.shunlian.app.ui.discover.other.SearchArticleActivity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
 import com.shunlian.app.ui.BaseFragment;
@@ -28,13 +28,10 @@ import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;

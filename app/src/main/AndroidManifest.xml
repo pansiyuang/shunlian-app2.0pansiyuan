@@ -310,33 +310,33 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover.SearchArticleActivity"
+            android:name=".ui.discover.other.SearchArticleActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.h5.ArticleH5Act"
+            android:name=".ui.discover.jingxuan.ArticleH5Act"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".ui.discover.TagDetailActivity"
+            android:name=".ui.discover.jingxuan.TagDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover.ExperiencePublishActivity"
+            android:name=".ui.discover.other.ExperiencePublishActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.discover.CommentListAct"
+        <activity android:name=".ui.discover.other.CommentListAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.discover.CommentDetailAct"
+        <activity android:name=".ui.discover.other.CommentDetailAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.discover.FindSelectShopAct"
+        <activity android:name=".ui.discover.guanzhu.FindSelectShopAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
@@ -357,7 +357,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.discover.ExperienceDetailAct"
+        <activity android:name=".ui.discover.other.ExperienceDetailAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />

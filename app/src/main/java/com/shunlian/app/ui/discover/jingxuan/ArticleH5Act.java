@@ -1,23 +1,17 @@
-package com.shunlian.app.ui.h5;
+package com.shunlian.app.ui.discover.jingxuan;
 
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.webkit.JavascriptInterface;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
-import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 
@@ -50,6 +44,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
 
     @Override
     protected void jsCallback(H5CallEntity h5CallEntity) {
+        Common.staticToast("call");
         ISLIKE=h5CallEntity.istates;
     }
 
@@ -59,8 +54,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
      */
     @Override
     protected void initData() {
-        initWebView("praiseBack");
         super.initData();
+        addJs("praiseBack");
         articleId = mIntent.getStringExtra("articleId");
         mPresent = new ArticleDetailPresenter(this, this);
         mPresent.getArticleDetail(articleId);
