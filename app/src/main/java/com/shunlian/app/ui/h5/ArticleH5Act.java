@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
@@ -17,11 +18,11 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import butterknife.BindView;
-
-import static com.shunlian.app.ui.discover.DiscoverJingxuanFrag.ISLIKE;
 
 /**
  * Created by Administrator on 2018/3/19.
@@ -50,7 +51,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
 
     @Override
     protected void jsCallback(H5CallEntity h5CallEntity) {
-        ISLIKE=h5CallEntity.istates;
+        EventBus.getDefault().post(new ArticleEvent(articleId, h5CallEntity.istates));
     }
 
 

@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ContentAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ContentPresenter;
 import com.shunlian.app.ui.h5.ArticleH5Act;
 import com.shunlian.app.utils.Common;
@@ -20,6 +21,10 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IContentView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,6 +60,7 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         mPresenter = new ContentPresenter(getActivity(), this);
         mPresenter.getFavoriteArticles(true);
 
@@ -337,5 +343,47 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
         String result = stringBuffer.toString();
         result = result.substring(0, result.length() - 1);
         return result;
+    }
+
+    public void upDateLikeArticle(String articleId) {
+        for (int i = 0; i < mArticleList.size(); i++) {
+            ArticleEntity.Article article = mArticleList.get(i);
+            if (articleId.equals(mArticleList.get(i).id)) {
+                int likeCount = Integer.valueOf(article.likes) + 1;
+                article.likes = likeCount + "";
+                break;
+            }
+        }
+        mAdapter.updateEvaluate(articleId, "1");
+    }
+
+    public void upDateUnLikeArticle(String articleId) {
+        for (int i = 0; i < mArticleList.size(); i++) {
+            ArticleEntity.Article article = mArticleList.get(i);
+            if (articleId.equals(mArticleList.get(i).id)) {
+                int likeCount = Integer.valueOf(article.likes) - 1;
+                article.likes = likeCount + "";
+                break;
+            }
+        }
+        mAdapter.updateEvaluate(articleId, "0");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(ArticleEvent event) {
+        if (!isEmpty(event.articleId) && !isEmpty(event.isLike)) {
+            if ("1".equals(event.isLike)) {
+                upDateLikeArticle(event.articleId);
+            } else {
+                upDateUnLikeArticle(event.articleId);
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

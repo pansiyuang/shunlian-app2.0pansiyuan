@@ -1,10 +1,10 @@
 package com.shunlian.app.ui.myself_store;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +18,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.BrandListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IAddGoodsView;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.ui.discover.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 
 /**
  * Created by Administrator on 2018/2/27.
@@ -89,9 +92,14 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
         setStatusBarFontDark();
 
         tv_title.setText(getStringResouce(R.string.add_goods));
+        tv_title_right.setText(getStringResouce(R.string.SelectRecommendAct_sure));
 
         currentFrom = getIntent().getStringExtra("currentFrom");
 
+        if (FROM_EXPERIENCE_PUBLISH.equals(currentFrom)) { //用于判别是否是发布心得
+            showBottomLayout(false);
+            tv_title_right.setVisibility(View.VISIBLE);
+        }
         //设置tablayout标签的显示方式
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
         //循环注入标签
@@ -121,6 +129,7 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
         tv_store_add.setOnClickListener(this);
         tv_goods_search.setOnClickListener(this);
         vp_goods.addOnPageChangeListener(this);
+        tv_title_right.setOnClickListener(this);
         super.initListener();
     }
 
@@ -170,6 +179,16 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
                     }
                 }
                 mPresenter.addStoreGoods(currentGoodsIds.toString(), true);
+                break;
+            case R.id.tv_title_right:
+                if (isEmpty(currentGoodsList)) {
+                    Common.staticToast("请选择要选择的商品");
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.putExtra("goods", currentGoodsList.get(0));
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
         }
         super.onClick(view);
@@ -257,6 +276,10 @@ public class AddStoreGoodsAct extends BaseActivity implements IAddGoodsView, Vie
 
     @Override
     public void onPageSelected(int position) {
+        if (FROM_EXPERIENCE_PUBLISH.equals(currentFrom)) {//用于判别是否是发布心得
+            showBottomLayout(false);
+            return;
+        }
         AllGoodsFrag frag = (AllGoodsFrag) goodsFrags.get(position);
         showBottomLayout(frag.isShowEmpty());
     }
