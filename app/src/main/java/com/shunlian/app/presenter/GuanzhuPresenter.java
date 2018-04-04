@@ -1,10 +1,8 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
-import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.GuanzhuAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -106,45 +104,36 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         if (adapter == null) {
             adapter = new GuanzhuAdapter(context, mListBeans);
             iView.setAdapter(adapter);
-            adapter.setOnFollowShopListener(new GuanzhuAdapter.OnFollowShopListener() {
-                @Override
-                public void onFollow(int position) {
-                    operationId = position;
-                    //是否关注，1是，0否
+            adapter.setOnFollowShopListener((position)-> {
+                operationId = position;
+                //是否关注，1是，0否
+                GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
+                String store_id = dynamicListBean.store_id;
+                if ("1".equals(dynamicListBean.has_follow)){
+                    delFollowStore(store_id);
+                }else {
+                    followStore(store_id);
+                }
+            });
+
+            adapter.setOnItemClickListener((view,position)-> {
+                operationId = position;
+                GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
+                if (!"new_sales".equals(dynamicListBean.type)){//文章
+//                    ArticleH5Act.startAct(context, dynamicListBean.id, ArticleH5Act.MODE_SONIC);
+                }
+            });
+
+            adapter.setOnShareLikeListener((position,isShare)-> {
+                currentPosition = position;
+                if (isShare){//分享
+
+                }else {//点赞
                     GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
-                    String store_id = dynamicListBean.store_id;
-                    if ("1".equals(dynamicListBean.has_follow)){
-                        delFollowStore(store_id);
+                    if ("1".equals(dynamicListBean.has_like)){
+                        articleUnLike(dynamicListBean.id);
                     }else {
-                        followStore(store_id);
-                    }
-                }
-            });
-
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    operationId = position;
-                    GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
-                    if (!"new_sales".equals(dynamicListBean.type)){//文章
-
-                    }
-                }
-            });
-
-            adapter.setOnShareLikeListener(new GuanzhuAdapter.OnShareLikeListener() {
-                @Override
-                public void onItemPosition(int position, boolean isShare) {
-                    currentPosition = position;
-                    if (isShare){//分享
-
-                    }else {//点赞
-                        GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
-                        if ("1".equals(dynamicListBean.has_like)){
-                            articleUnLike(dynamicListBean.id);
-                        }else {
-                            articleLike(dynamicListBean.id);
-                        }
+                        articleLike(dynamicListBean.id);
                     }
                 }
             });
