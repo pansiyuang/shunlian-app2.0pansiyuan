@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.guanzhu;
 
 import android.app.Activity;
 import android.content.Intent;

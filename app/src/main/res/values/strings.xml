@@ -522,4 +522,6 @@
     <string name="are_you_sure_del_comment">确认删除评论吗？</string>
     <string name="punish">处罚</string>
 
+    <!--聊天-->
+    <string name="chat_lingquyouhui">领取优惠券</string>
 </resources>

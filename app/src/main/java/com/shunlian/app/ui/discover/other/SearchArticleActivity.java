@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.other;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
-import static com.shunlian.app.utils.Common.hideKeyboard;
 
 /**
  * Created by Administrator on 2018/3/17.

@@ -51,6 +51,8 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -58,6 +60,7 @@ import com.shunlian.app.widget.MyTextView;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -71,6 +74,25 @@ public class Common {
     private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
 
+    public static void goGoGo(Context context, String type, String... params) {
+        switch (type) {
+            case "goods":
+                GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "login":
+                LoginAct.startAct(context);
+                break;
+        }
+    }
+
+    public static String getURLParameterValue(String url, String parameter) {
+        Matcher accessMatcher = Pattern.compile(parameter + "=(.+?)(?:&|$)").matcher(url);
+        String parameterValue = null;
+        if (accessMatcher.find()) {
+            parameterValue = accessMatcher.group(1);
+        }
+        return parameterValue;
+    }
 
     public static long getMemoryFreeSize(Context context) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -121,6 +143,7 @@ public class Common {
     public static int getScreenHeight(Activity ac) {
         return ac.getWindowManager().getDefaultDisplay().getHeight();
     }
+
     //获取经纬度
     public static Location getGPS(final Activity activity) {
         // 获取位置管理服务
@@ -448,6 +471,7 @@ public class Common {
 
     /**
      * 文字加粗
+     *
      * @param source    源字符串
      * @param changeStr 需要加粗的字符串
      * @return

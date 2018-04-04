@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.jingxuan;
 
 import android.content.Context;
 import android.content.Intent;

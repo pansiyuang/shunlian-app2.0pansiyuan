@@ -12,5 +12,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class H5CallEntity {
     public String istates;
+    public String type;
 
 }

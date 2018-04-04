@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.other;
 
 import android.content.Context;
 import android.content.Intent;

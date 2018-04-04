@@ -29,8 +29,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -64,7 +62,7 @@ import static com.shunlian.app.service.InterentTools.DOMAIN;
  * Created by Administrator on 2017/12/26.
  */
 
-public abstract class H5Act extends BaseActivity implements MyWebView.ScrollListener {
+public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
@@ -86,7 +84,6 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     @BindView(R.id.mwv_h5)
     MyWebView mwv_h5;
     SonicSessionClientImpl sonicSessionClient = null;
-    protected String methodName="android";
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
@@ -109,7 +106,9 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
      *
      * @return
      */
-    protected abstract void jsCallback(H5CallEntity h5CallEntity);
+    protected void jsCallback(H5CallEntity h5CallEntity){
+
+    }
 
     @Override
     public void onClick(View view) {
@@ -168,7 +167,8 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
                 .keyboardEnable(true)
                 .init();
         httpDialog = new HttpDialog(this);
-        initWebView(methodName);
+        initWebView();
+//        addJs();
         if (!TextUtils.isEmpty(h5Url)) {
             loadUrl();
         }
@@ -228,7 +228,24 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
-    protected void initWebView(String methodName) {
+    protected void addJs(final String methodName){
+        //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
+        mwv_h5.addJavascriptInterface(new Object() {
+            @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
+            public void androidCallback(String param) {
+                try {
+                    H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
+                    h5CallEntity.type=methodName;
+                    jsCallback(h5CallEntity);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, methodName);
+    }
+
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
+    protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
@@ -243,19 +260,8 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-        mwv_h5.setWebChromeClient(new WebChromeClient());
-        //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
-        mwv_h5.addJavascriptInterface(new Object() {
-            @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
-            public void androidCallback(String param) {
-                try {
-                    H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
-                    jsCallback(h5CallEntity);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, methodName);
+//        mwv_h5.setWebChromeClient(new WebChromeClient());
+
         mwv_h5.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -322,17 +328,6 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
 
 
         });
-
-        addCookie();
-        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
-
-    }
-
-    public void addCookie() {
-        //add
-        String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
-
         mwv_h5.setWebChromeClient(new WebChromeClient() {
 
             // For Android < 3.0
@@ -361,6 +356,23 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
                 return true;
             }
         });
+        addCookie();
+        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        addCookie();
+        mwv_h5.reload();
+    }
+
+
+    public void addCookie() {
+        //add
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
+
 //        h5_mwb.setWebChromeClient(new WebChromeClient());
         CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
@@ -373,7 +385,7 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian"+ua);
+        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian" + ua);
         cookieSyncManager.sync();
         //end
     }
@@ -450,16 +462,12 @@ public abstract class H5Act extends BaseActivity implements MyWebView.ScrollList
             String s = interceptBody(url);
             if (!TextUtils.isEmpty(s)) {
                 String id = "";
-                if (!TextUtils.isEmpty(interceptId(url)))
+                String id1 = "";
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
                     id = interceptId(url);
-                switch (s) {
-                    case "goods":
-                        GoodsDetailAct.startAct(H5Act.this, id);
-                        break;
-                    case "login":
-                        LoginAct.startAct(H5Act.this);
-                        break;
-                }
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                    id1 = interceptId(url);
+                Common.goGoGo(H5Act.this, s, id, id1);
             }
         }
     }

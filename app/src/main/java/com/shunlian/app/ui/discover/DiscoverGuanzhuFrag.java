@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.GuanzhuPresenter;
+import com.shunlian.app.ui.discover.guanzhu.FindSelectShopAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
