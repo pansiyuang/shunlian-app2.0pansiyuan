@@ -17,7 +17,6 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.GoodsListPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.ui.discover.ExperiencePublishActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -27,7 +26,7 @@ import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shunlian.app.ui.discover.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
+import static com.shunlian.app.ui.discover.other.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 import static com.shunlian.app.ui.myself_store.AddStoreGoodsAct.currentGoodsList;
 
 
@@ -161,7 +160,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
 
             mActivty.updateAddGoodsCount();
         } else {
-            if (ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH.equals(fromType)) {
+            if (FROM_EXPERIENCE_PUBLISH.equals(fromType)) {
                 mActivty.clearSelectData();
                 goods.isSelect = true;
                 currentGoodsList.add(goods);

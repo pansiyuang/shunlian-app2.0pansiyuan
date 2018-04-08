@@ -28,7 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.ui.discover.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
+import static com.shunlian.app.ui.discover.other.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 
 /**
  * Created by Administrator on 2018/2/27.

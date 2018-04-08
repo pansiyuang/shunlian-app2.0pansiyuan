@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.ui.discover.ExperiencePublishActivity;
-import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
-import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;

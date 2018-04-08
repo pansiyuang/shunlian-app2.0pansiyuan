@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.widget.BoldTextSpan;
@@ -81,6 +82,9 @@ public class Common {
                 break;
             case "login":
                 LoginAct.startAct(context);
+                break;
+            case "article":
+                ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
                 break;
         }
     }
