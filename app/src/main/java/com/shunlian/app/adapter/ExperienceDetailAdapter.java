@@ -18,7 +18,7 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ExchangDetailEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
-import com.shunlian.app.ui.discover.CommentDetailAct;
+import com.shunlian.app.ui.discover.other.CommentDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;

@@ -1,4 +1,4 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.other;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,18 +8,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.MovementMethod;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonImgAdapter;
-import com.shunlian.app.adapter.SingleImgAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;

@@ -1,6 +1,6 @@
-package com.shunlian.app.ui.discover;
+package com.shunlian.app.ui.discover.other;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -11,27 +11,25 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.presenter.FindCommentListPresenter;
+import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
-import com.shunlian.app.view.IFindCommentListView;
+import com.shunlian.app.view.IFindCommentDetailView;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2018/3/14.
+ * Created by Administrator on 2018/3/15.
  */
 
-public class CommentListAct extends BaseActivity implements IFindCommentListView{
+public class CommentDetailAct extends BaseActivity implements IFindCommentDetailView{
 
     @BindView(R.id.met_text)
     MyEditText met_text;
@@ -50,16 +48,14 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
-
-    @BindView(R.id.nei_empty)
-    NetAndEmptyInterface nei_empty;
+    private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
-    private FindCommentListPresenter presenter;
 
-    public static void startAct(Activity activity,String article_id){
-        Intent intent = new Intent(activity, CommentListAct.class);
-        intent.putExtra("article_id",article_id);
-        activity.startActivity(intent);
+    public static void startAct(Context context,String experience_id,String comment_id){
+        Intent intent = new Intent(context, CommentDetailAct.class);
+        intent.putExtra("comment_id",comment_id);
+        intent.putExtra("experience_id",experience_id);
+        context.startActivity(intent);
     }
 
     @Override
@@ -105,26 +101,17 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .keyboardEnable(true)
                 .init();
 
-        mtv_title.setText(getStringResouce(R.string.comments));
-
+        mtv_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
         gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
 
-        String article_id = getIntent().getStringExtra("article_id");
-        presenter = new FindCommentListPresenter(this,this, article_id);
-
-
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
-        int space = TransformUtil.dip2px(this, 15);
-        recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getColorResouce(R.color.white)));
 
-    }
+        String comment_id = getIntent().getStringExtra("comment_id");
+        String experience_id = getIntent().getStringExtra("experience_id");
+        presenter = new FindCommentDetailPresenter(this,this,experience_id,comment_id);
 
-    @OnClick(R.id.met_text)
-    public void onClick(){
-        setEdittextFocusable(true,met_text);
     }
 
     @Override
@@ -135,38 +122,22 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @Override
     public void showDataEmptyView(int request_code) {
 
-        if (request_code == 100){
-            visible(nei_empty);
-            gone(recy_view);
-            nei_empty.setImageResource(R.mipmap.img_empty_common)
-                    .setText("暂无评论").setButtonText(null);
+    }
+
+    @OnClick(R.id.met_text)
+    public void onClick(){
+        setEdittextFocusable(true,met_text);
+    }
+
+    @Override
+    public void showorhideKeyboard(String hint){
+        setEdittextFocusable(true,met_text);
+        met_text.setHint(hint);
+        if (!isSoftShowing()) {
+            Common.showKeyboard(met_text);
         }else {
-            gone(nei_empty);
-            visible(recy_view);
+            Common.hideKeyboard(met_text);
         }
-    }
-
-    /**
-     * 设置评论总数
-     *
-     * @param count
-     */
-    @Override
-    public void setCommentAllCount(String count) {
-        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
-        int w = TransformUtil.dip2px(this, 0.5f);
-        background.setStroke(w,getColorResouce(R.color.white));
-        mtv_msg_count.setText(count);
-    }
-
-    /**
-     * 设置adapter
-     *
-     * @param adapter
-     */
-    @Override
-    public void setAdapter(BaseRecyclerAdapter adapter) {
-        recy_view.setAdapter(adapter);
     }
 
     /**
@@ -193,17 +164,36 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     }
 
     /**
-     * 软键盘处理
+     * 评论总数
+     *
+     * @param count
      */
     @Override
-    public void showorhideKeyboard(String hint) {
-        setEdittextFocusable(true, met_text);
+    public void setCommentAllCount(String count) {
+        GradientDrawable background = (GradientDrawable) mtv_msg_count.getBackground();
+        int w = TransformUtil.dip2px(this, 0.5f);
+        background.setStroke(w,getColorResouce(R.color.white));
+        mtv_msg_count.setText(count);
+    }
+
+    /**
+     * 设置adapter
+     *
+     * @param adapter
+     */
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
+    }
+
+    /**
+     * 设置hint
+     *
+     * @param hint
+     */
+    @Override
+    public void setHint(String hint) {
         met_text.setHint(hint);
-        if (!isSoftShowing()) {
-            Common.showKeyboard(met_text);
-        } else {
-            Common.hideKeyboard(met_text);
-        }
     }
 
     private boolean isSoftShowing() {

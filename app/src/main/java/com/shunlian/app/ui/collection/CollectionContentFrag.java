@@ -6,7 +6,6 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -15,9 +14,8 @@ import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ContentPresenter;
-import com.shunlian.app.ui.h5.ArticleH5Act;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IContentView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
