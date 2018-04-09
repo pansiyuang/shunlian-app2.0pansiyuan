@@ -10,17 +10,12 @@ import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
-
 import butterknife.BindView;
-
-import static com.shunlian.app.ui.discover.DiscoverJingxuanFrag.ISLIKE;
 
 /**
  * Created by Administrator on 2018/3/19.
