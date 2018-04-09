@@ -418,7 +418,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 if (isEmpty(searchParam.brand_ids)) {
                     searchParam.brand_ids = "";
                 }
-                if (isEmpty(searchParam.send_area)) {
+                if (isEmpty(searchParam.send_area)||getStringResouce(R.string.category_dingwei).equals(searchParam.send_area)) {
                     searchParam.send_area = "";
                 }
                 if (isEmpty(searchParam.is_free_ship)) {

@@ -24,6 +24,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
@@ -67,7 +68,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
-    protected String h5Url;
+    protected String h5Url="";
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
@@ -84,11 +85,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @BindView(R.id.mwv_h5)
     MyWebView mwv_h5;
     SonicSessionClientImpl sonicSessionClient = null;
+    private boolean isLogin = false;
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
         intentH5.putExtra("url", url);
         intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intentH5);
     }
 
@@ -106,7 +109,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      *
      * @return
      */
-    protected void jsCallback(H5CallEntity h5CallEntity){
+    protected void jsCallback(H5CallEntity h5CallEntity) {
 
     }
 
@@ -209,7 +212,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 // this only happen when a same sonic session is already running,
                 // u can comment following codes to feedback as a default mode.
                 // throw new UnknownError("create session fail!");
-                Common.staticToast("create sonic session fail!");
+                LogUtil.augusLogW("create sonic session fail!--"+h5Url);
             }
         }
     }
@@ -228,14 +231,14 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
-    protected void addJs(final String methodName){
+    protected void addJs(final String methodName) {
         //如果有多个交互方法，stringName必须取名不一样，否则后写的覆盖前面的
         mwv_h5.addJavascriptInterface(new Object() {
             @JavascriptInterface//Android4.4后每个js交互方法必须要有注解
             public void androidCallback(String param) {
                 try {
                     H5CallEntity h5CallEntity = new ObjectMapper().readValue(param, H5CallEntity.class);
-                    h5CallEntity.type=methodName;
+                    h5CallEntity.type = methodName;
                     jsCallback(h5CallEntity);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -364,8 +367,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @Override
     protected void onRestart() {
         super.onRestart();
-        addCookie();
-        mwv_h5.reload();
+        if (isLogin) {
+            addCookie();
+            mwv_h5.reload();
+        }
     }
 
 
@@ -460,15 +465,17 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             return;
         }
         if (url.startsWith("slmall://")) {
-            String s = interceptBody(url);
-            if (!TextUtils.isEmpty(s)) {
+            String type = interceptBody(url);
+            if (!TextUtils.isEmpty(type)) {
+                if ("login".equals(type))
+                    isLogin = true;
                 String id = "";
                 String id1 = "";
                 if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
                     id = interceptId(url);
                 if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
                     id1 = interceptId(url);
-                Common.goGoGo(H5Act.this, s, id, id1);
+                Common.goGoGo(H5Act.this, type, id, id1);
             }
         }
     }

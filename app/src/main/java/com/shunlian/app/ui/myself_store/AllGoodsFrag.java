@@ -26,7 +26,7 @@ import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
+import static com.shunlian.app.ui.discover.other.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 import static com.shunlian.app.ui.myself_store.AddStoreGoodsAct.currentGoodsList;
 
 
@@ -40,7 +40,7 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     NetAndEmptyInterface emptyInterface;
 
     private GridLayoutManager manager;
-    private String currentFrom;
+    private String currentFrom, fromType;
     private GoodsListPresenter mPresenter;
     private AddGoodsAdapter mAdapter;
     private List<GoodsDeatilEntity.Goods> goodsList;
@@ -96,12 +96,15 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
 
     @Override
     protected void onFragmentFirstVisible() {
+
+        fromType = ((AddStoreGoodsAct) getActivity()).getCurrentFrom();
+
         manager = new GridLayoutManager(baseActivity, 2);
         recy_view.setLayoutManager(manager);
         recy_view.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(baseContext, 12), true));
 
         goodsList = new ArrayList<>();
-        mAdapter = new AddGoodsAdapter(baseActivity, true, true, goodsList);
+        mAdapter = new AddGoodsAdapter(baseActivity, true, true, goodsList, fromType);
         recy_view.setAdapter(mAdapter);
         currentFrom = getArguments().getString("from");
         mPresenter = new GoodsListPresenter(baseActivity, this);
@@ -134,15 +137,6 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
         String currentGoodsId;
         GoodsDeatilEntity.Goods goods = goodsList.get(position);
         currentGoodsId = goods.goods_id;
-        String from = ((AddStoreGoodsAct) getActivity()).getCurrentFrom();
-
-        if (!isEmpty(from)) {
-            Intent intent = new Intent();
-            intent.putExtra("goods", goods);
-            getActivity().setResult(RESULT_OK, intent);
-            getActivity().finish();
-            return;
-        }
 
         if (goods.isSelect) {
             for (int i = 0; i < currentGoodsList.size(); i++) {
@@ -166,13 +160,20 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
 
             mActivty.updateAddGoodsCount();
         } else {
+            if (FROM_EXPERIENCE_PUBLISH.equals(fromType)) {
+                mActivty.clearSelectData();
+                goods.isSelect = true;
+                currentGoodsList.add(goods);
+                mAdapter.notifyDataSetChanged();
+                return;
+            }
+
             if (!isContain(currentGoodsId)) {
                 if (mActivty.canAddGoods()) {
                     goods.isSelect = true;
                     goods.index = currentGoodsList.size() + 1;
                     currentGoodsList.add(goods);
                     mAdapter.notifyItemChanged(position);
-
                     mActivty.updateDelGoodsCount();
                 }
             } else {
@@ -204,14 +205,15 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
     }
 
     public void clearSelectData() {
+        if (isEmpty(goodsList)) {
+            return;
+        }
         for (int i = 0; i < goodsList.size(); i++) {
-            if (goodsList.get(i).isSelect) {
-                goodsList.get(i).isSelect = false;
-                goodsList.get(i).index = -1;
+            goodsList.get(i).isSelect = false;
+            goodsList.get(i).index = -1;
 
-                if (mAdapter != null) {
-                    mAdapter.notifyItemChanged(i);
-                }
+            if (mAdapter != null) {
+                mAdapter.notifyItemChanged(i);
             }
         }
     }
@@ -233,6 +235,9 @@ public class AllGoodsFrag extends BaseLazyFragment implements IGoodsListView, Ba
             emptyInterface.setVisibility(View.GONE);
             recy_view.setVisibility(View.VISIBLE);
             showEmpty = true;
+        }
+        if (FROM_EXPERIENCE_PUBLISH.equals(fromType)) { //用于判别是否是发布心得
+            return;
         }
         mActivty.showBottomLayout(showEmpty);
     }

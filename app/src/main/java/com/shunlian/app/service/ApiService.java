@@ -1421,4 +1421,12 @@ public interface ApiService {
     @GET("message/sysmessage")
     Call<BaseEntity<EmptyEntity>> sysmessage(@QueryMap Map<String, String> map);
 
+    /**
+     * 获取系统消息
+     *
+     * @return
+     */
+    @GET("message/sys")
+    Call<BaseEntity<EmptyEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
 }

@@ -48,6 +48,17 @@ public class ContentAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         return new ArticleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_content, parent, false));
     }
 
+    public void updateEvaluate(String articleId, String hadLike) {
+        for (int i = 0; i < lists.size(); i++) {
+            if (articleId.equals(lists.get(i).id)) {
+                lists.get(i).had_like = hadLike;
+                break;
+            }
+        }
+        notifyItemRangeChanged(0, lists.size());
+    }
+
+
     /**
      * 设置baseFooterHolder  layoutparams
      *

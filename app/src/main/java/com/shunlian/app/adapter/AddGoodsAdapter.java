@@ -11,9 +11,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -26,10 +25,12 @@ import butterknife.BindView;
 
 public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
     private boolean isEditMode;
+    private String currentFrom;
 
-    public AddGoodsAdapter(Context context, boolean isShowFooter, boolean isEdit, List<GoodsDeatilEntity.Goods> lists) {
+    public AddGoodsAdapter(Context context, boolean isShowFooter, boolean isEdit, List<GoodsDeatilEntity.Goods> lists, String from) {
         super(context, isShowFooter, lists);
         this.isEditMode = isEdit;
+        this.currentFrom = from;
     }
 
     @Override
@@ -97,11 +98,15 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
             }
 
             if (goods.isSelect) {
-                goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_soild_pink));
+                if (ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH.equals(currentFrom)) {
+                    goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));
+                    goodsHolderView.tv_select.setText("");
+                } else {
+                    goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_soild_pink));
+                }
             } else {
                 goodsHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_stroke_pink));
             }
-
 
             if (goods.index > 0) {
                 goodsHolderView.tv_select.setText(String.valueOf(goods.index));

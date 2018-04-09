@@ -178,8 +178,13 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
     public void reBuildData() {
         if (!TextUtils.isEmpty(Constant.DINGWEI)) {
             locate = Constant.DINGWEI;
-            mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
-            mtv_address.setText("      " + locate);
+            if (getStringResouce(R.string.category_dingwei).equals(locate)){
+                mtv_address.setBackgroundResource(0);
+                mtv_address.setText(locate);
+            }else {
+                mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                mtv_address.setText("      " + locate);
+            }
         }
         initList(Constant.LISTFILTER);
         if (Constant.SEARCHPARAM != null) {
@@ -306,8 +311,13 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     mtv_zhusan.setBackgroundResource(R.mipmap.img_xcha);
                     isZhu = true;
                     mtv_jiangzhe.setBackgroundColor(getColorResouce(R.color.value_f5));
-                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
-                    mtv_address.setText("      " + locate);
+                    if (getStringResouce(R.string.category_dingwei).equals(locate)){
+                        mtv_address.setBackgroundResource(0);
+                        mtv_address.setText(locate);
+                    }else {
+                        mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                        mtv_address.setText("      " + locate);
+                    }
                     isDing = false;
                     isZhe = false;
                 }
@@ -320,16 +330,26 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                     mtv_jiangzhe.setBackgroundResource(R.mipmap.img_xcha);
                     isZhe = true;
                     mtv_zhusan.setBackgroundColor(getColorResouce(R.color.value_f5));
-                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
-                    mtv_address.setText("      " + locate);
+                    if (getStringResouce(R.string.category_dingwei).equals(locate)){
+                        mtv_address.setBackgroundResource(0);
+                        mtv_address.setText(locate);
+                    }else {
+                        mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                        mtv_address.setText("      " + locate);
+                    }
                     isDing = false;
                     isZhu = false;
                 }
                 break;
             case R.id.mtv_address:
                 if (isDing) {
-                    mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
-                    mtv_address.setText("      " + locate);
+                    if (getStringResouce(R.string.category_dingwei).equals(locate)){
+                        mtv_address.setBackgroundResource(0);
+                        mtv_address.setText(locate);
+                    }else {
+                        mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                        mtv_address.setText("      " + locate);
+                    }
                     isDing = false;
                 } else {
                     mtv_address.setBackgroundResource(R.mipmap.img_xcha);
@@ -441,8 +461,13 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
             mtv_address.setBackgroundResource(R.mipmap.img_xcha);
             isDing = true;
         } else {
-            mtv_address.setText("      " + locate);
-            mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+            if (getStringResouce(R.string.category_dingwei).equals(locate)){
+                mtv_address.setBackgroundResource(0);
+                mtv_address.setText(locate);
+            }else {
+                mtv_address.setBackgroundResource(R.mipmap.icon_dizhi);
+                mtv_address.setText("      " + locate);
+            }
             isDing = false;
         }
         isZhe = false;

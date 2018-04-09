@@ -7,15 +7,15 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
-import butterknife.BindView;
+import org.greenrobot.eventbus.EventBus;
 
-import static com.shunlian.app.ui.discover.DiscoverJingxuanFrag.ISLIKE;
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/3/19.
@@ -39,13 +39,13 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
         Intent intentH5 = new Intent(context, ArticleH5Act.class);
         intentH5.putExtra("articleId", articleId);
         intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intentH5);
     }
 
     @Override
     protected void jsCallback(H5CallEntity h5CallEntity) {
-        Common.staticToast("call");
-        ISLIKE=h5CallEntity.istates;
+        EventBus.getDefault().post(new ArticleEvent(articleId, h5CallEntity.istates));
     }
 
 
