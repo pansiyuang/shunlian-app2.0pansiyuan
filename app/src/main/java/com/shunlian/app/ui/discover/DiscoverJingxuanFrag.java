@@ -13,12 +13,18 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.ArticleAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.eventbus_bean.ArticleEvent;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +45,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
-    public static String ISLIKE = "";
     private String mArticleId = "";
 
     @Override
@@ -49,7 +54,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     protected void initData() {
-
+        EventBus.getDefault().register(this);
         NestedSlHeader header = new NestedSlHeader(baseContext);
         lay_refresh.setRefreshHeaderView(header);
 
@@ -93,6 +98,17 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         super.initListener();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(ArticleEvent event) {
+        if (!isEmpty(event.articleId) && !isEmpty(event.isLike)) {
+            if ("1".equals(event.isLike)) {
+                upDateLikeArticle(event.articleId);
+            } else {
+                upDateUnLikeArticle(event.articleId);
+            }
+        }
+    }
+
     /**
      * 管理是否可点击
      *
@@ -101,19 +117,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public boolean isClickManage() {
         return false;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!TextUtils.isEmpty(ISLIKE) && mArticleList != null && mArticleAdapter != null) {
-            if ("1".equals(ISLIKE)) {
-                upDateLikeArticle(mArticleId);
-            } else {
-                upDateUnLikeArticle(mArticleId);
-            }
-        }
     }
 
     @Override
@@ -213,7 +216,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position - 1);
-        ISLIKE = article.had_like;
         mArticleId = article.id;
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
@@ -234,5 +236,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         if (mPresenter != null) {
             mPresenter.detachView();
         }
+        EventBus.getDefault().unregister(this);
     }
 }

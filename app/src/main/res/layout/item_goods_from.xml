@@ -22,7 +22,7 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="9sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_goods_title"
