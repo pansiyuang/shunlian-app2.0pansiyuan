@@ -10,13 +10,10 @@ import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 
@@ -42,12 +39,12 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
         Intent intentH5 = new Intent(context, ArticleH5Act.class);
         intentH5.putExtra("articleId", articleId);
         intentH5.putExtra("mode", mode);
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intentH5);
     }
 
     @Override
     protected void jsCallback(H5CallEntity h5CallEntity) {
-        Common.staticToast("call");
         EventBus.getDefault().post(new ArticleEvent(articleId, h5CallEntity.istates));
     }
 
