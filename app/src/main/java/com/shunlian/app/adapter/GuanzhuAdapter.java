@@ -144,9 +144,9 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 ClickableColorSpan span = new ClickableColorSpan
                         (i,getColor(R.color.value_299FFA));
                 if (!isNew) {
-                    span.setOnClickItemListener((position) -> {
-                        TagDetailActivity.startAct(context, tagsBeans.get(position).id);
-                    });
+                    span.setOnClickItemListener((position) ->
+                        TagDetailActivity.startAct(context, tagsBeans.get(position).id)
+                    );
                 }
                 ssb.setSpan(span,sb.length()-
                                 String.format(format, tagsBean.name).length(),sb.length(),

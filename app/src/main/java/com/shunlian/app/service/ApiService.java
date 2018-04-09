@@ -1413,4 +1413,12 @@ public interface ApiService {
     @GET("discovery/user/unFavorite")
     Call<BaseEntity<EmptyEntity>> unFavoriteArticle(@QueryMap Map<String, String> map);
 
+    /**
+     * 系统消息
+     * @param map
+     * @return
+     */
+    @GET("message/sysmessage")
+    Call<BaseEntity<EmptyEntity>> sysmessage(@QueryMap Map<String, String> map);
+
 }

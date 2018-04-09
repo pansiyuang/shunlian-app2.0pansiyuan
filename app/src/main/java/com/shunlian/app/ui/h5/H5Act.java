@@ -310,6 +310,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                LogUtil.httpLogW("========h5Url==========" + h5Url);
                 if (url.contains("slmall://")) {
                     analysisUrl(url);
                     return true;
