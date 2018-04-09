@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
@@ -30,7 +32,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
 
@@ -93,6 +95,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -117,6 +120,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void initData() {
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
+
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            messageCountManager.initData();
+            messageCountManager.setOnGetMessageListener(this);
+        }
     }
 
     @Override
@@ -249,7 +258,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void personCenterClick() {
-        if (!Common.isAlreadyLogin()){
+        if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
             return;
         }
@@ -358,4 +367,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        //可以开始设置消息数量的数据了
+    }
+
+    @Override
+    public void OnLoadFail() {
+        //可以开始设置消息数量的数据了
+    }
 }

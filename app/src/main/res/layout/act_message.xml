@@ -1,25 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include layout="@layout/title_common_layout" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabBackground="@android:color/transparent"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/pink_color"
-        app:tabIndicatorHeight="1dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/pink_color"
-        app:tabTextColor="@color/new_text"></android.support.design.widget.TabLayout>
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <android.support.v4.view.ViewPager
+        <RelativeLayout
+            android:id="@+id/rl_sys"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_sys_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="@string/sys_message"
+                android:textColor="@color/tab_text_color_selector"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_sys_count"
+                android:layout_width="wrap_content"
+                android:layout_height="13dp"
+                android:layout_alignTop="@+id/tv_sys_title"
+                android:layout_gravity="right"
+                android:layout_marginLeft="-6.5dp"
+                android:layout_marginTop="-6.5dp"
+                android:layout_toRightOf="@+id/tv_sys_title"
+                android:background="@drawable/rounded_corner_pink_26px"
+                android:gravity="center"
+                android:minWidth="13dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/line_sys"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/pink_color" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_store"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_store_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="@string/store_message"
+                android:textColor="@color/tab_text_color_selector"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_store_count"
+                android:layout_width="wrap_content"
+                android:layout_height="13dp"
+                android:layout_alignTop="@+id/tv_store_title"
+                android:layout_gravity="right"
+                android:layout_marginLeft="-6.5dp"
+                android:layout_marginTop="-6.5dp"
+                android:layout_toRightOf="@+id/tv_store_title"
+                android:background="@drawable/rounded_corner_pink_26px"
+                android:gravity="center"
+                android:minWidth="13dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/line_store"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/light_gray_two" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.shunlian.app.widget.CustomViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
