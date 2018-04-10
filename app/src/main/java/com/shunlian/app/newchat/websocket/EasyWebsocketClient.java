@@ -18,7 +18,9 @@ import com.shunlian.app.newchat.event.MessageRespEvent;
 import com.shunlian.app.newchat.event.SimpleRespEvent;
 import com.shunlian.app.newchat.event.UnReadCountEvent;
 import com.shunlian.app.newchat.event.UpdateListEvent;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.HttpDialog;
 
@@ -243,26 +245,13 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
     }
 
-    public void initChat(String chatId) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("type", "dialog_init");
-            jsonObject.put("member_id", chatId);//商户id
-            LogUtil.httpLogW("chatId:" + chatId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (!isClosed() || getStatus() != Status.CONNECTING) {
-            send(jsonObject.toString());
-        }
-    }
-
     public void connetService() {
-//        if (!isNetworkOpen(mContext)) {
-//            Common.staticToast(mContext, "请检查你的网络状态");
-//            return;
-//        }
+        if (!NetworkUtils.isNetworkOpen(mContext)) {
+            Common.staticToast("请检查你的网络状态");
+            return;
+        }
         String token = SharedPrefUtil.getSharedPrfString("token", "");
+        String roleType = SharedPrefUtil.getSharedPrfString("role_type", "member");
         LogUtil.httpLogW("token:" + token);
         if (TextUtils.isEmpty(token)) {
             return;
@@ -271,11 +260,12 @@ public class EasyWebsocketClient extends WebSocketClient {
         try {
             jsonObject.put("type", "init");
             jsonObject.put("token", token);
-            jsonObject.put("role_type", "member");
+            jsonObject.put("role_type", roleType);
             jsonObject.put("client", "android");
         } catch (Exception e) {
             e.printStackTrace();
         }
+        LogUtil.httpLogW("connetService:" + jsonObject.toString());
         send(jsonObject.toString());
     }
 
@@ -413,6 +403,7 @@ public class EasyWebsocketClient extends WebSocketClient {
         try {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
             SharedPrefUtil.saveSharedPrfString("user_id", userInfoEntity.info.user.user_id);
+            SharedPrefUtil.saveSharedPrfString("role_type", userInfoEntity.info.role_type);
             setFriendList(userInfoEntity);
         } catch (Exception e) {
             e.printStackTrace();
@@ -438,7 +429,7 @@ public class EasyWebsocketClient extends WebSocketClient {
         if (mFriendList != null && mFriendList.size() != 0) {
             for (int i = 0; i < mFriendList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_id.equals(mFriendList.get(i).uid)) {
+                if (baseMessage.from_join_id.equals(mFriendList.get(i).uid)) {
                     LogUtil.httpLogW("好友给自己发消息");
                     if (!getIsChating()) { //不在聊天页面
                         unReadNum = mFriendList.get(i).unReadNum + 1;
@@ -531,9 +522,9 @@ public class EasyWebsocketClient extends WebSocketClient {
         String friendId;
         boolean isInclude = false;
         if (isSelf(baseMessage)) {
-            friendId = baseMessage.to_id;
+            friendId = baseMessage.to_join_id;
         } else {
-            friendId = baseMessage.from_id;
+            friendId = baseMessage.from_join_id;
         }
         if (!TextUtils.isEmpty(friendId) && mFriendList != null) {
             for (int i = 0; i < mFriendList.size(); i++) {
@@ -550,14 +541,14 @@ public class EasyWebsocketClient extends WebSocketClient {
         UserInfoEntity.Info.Friend friend = new UserInfoEntity.Info.Friend();
         if (!isSelf(baseMessage)) { //对方发送的消息
             friend.headurl = baseMessage.from_headurl;
-            friend.uid = baseMessage.from_id;
+            friend.uid = baseMessage.from_join_id;
             friend.line_status = "1";
             friend.user_id = baseMessage.from_user_id;
             friend.nickname = baseMessage.from_nickname;
             friend.update_time = String.valueOf(baseMessage.getSendTime());
         } else { //自己发送的消息
             friend.headurl = baseMessage.to_headurl;
-            friend.uid = baseMessage.to_id;
+            friend.uid = baseMessage.to_join_id;
             friend.line_status = "5";
             friend.user_id = baseMessage.to_user_id;
             friend.nickname = baseMessage.to_nickname;

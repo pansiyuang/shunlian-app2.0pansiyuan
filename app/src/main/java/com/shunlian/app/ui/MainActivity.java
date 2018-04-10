@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
@@ -122,6 +123,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mainPageClick();
 
         if (Common.isAlreadyLogin()) {
+            EasyWebsocketClient.initWebsocketClient(this); //初始化聊天
+
             messageCountManager = MessageCountManager.getInstance(this);
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);

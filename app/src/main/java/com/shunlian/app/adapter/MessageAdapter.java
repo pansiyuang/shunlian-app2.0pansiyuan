@@ -5,13 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.widget.MyImageView;
 
@@ -39,9 +42,14 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
     }
 
     @Override
-    public void handleList(RecyclerView.ViewHolder holder, int position) {
+    public void handleList(RecyclerView.ViewHolder holder, final int position) {
         MessageViewHolder viewHolder = (MessageViewHolder) holder;
         MessageListEntity.Msg msg = lists.get(position);
+        if ("0".equals(msg.is_del)) {
+            viewHolder.swipe_layout.setSwipeEnable(false);
+        } else {
+            viewHolder.swipe_layout.setSwipeEnable(true);
+        }
         switch (msg.type) {
             case "4": //系统消息
                 GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_xitong, viewHolder.miv_icon);
@@ -92,7 +100,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
         viewHolder.tv_date.setText(msg.date);
     }
 
-    public class MessageViewHolder extends BaseRecyclerViewHolder {
+    public class MessageViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.swipe_layout)
         SwipeMenuLayout swipe_layout;
 
@@ -117,8 +125,19 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
         @BindView(R.id.tv_official)
         TextView tv_official;
 
+        @BindView(R.id.ll_item)
+        LinearLayout ll_item;
+
         public MessageViewHolder(View itemView) {
             super(itemView);
+            ll_item.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 }

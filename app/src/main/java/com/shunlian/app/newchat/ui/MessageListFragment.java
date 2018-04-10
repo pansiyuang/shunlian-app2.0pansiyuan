@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MessageAdapter;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.presenter.MessagePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageView;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/4/3.
  */
 
-public class MessageListFragment extends BaseLazyFragment implements IMessageView {
+public class MessageListFragment extends BaseLazyFragment implements IMessageView, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
@@ -60,6 +62,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         }
         if (mAdapter == null) {
             mAdapter = new MessageAdapter(getActivity(), msgs);
+            mAdapter.setOnItemClickListener(this);
             recycler_list.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
@@ -74,5 +77,20 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        MessageListEntity.Msg msg = msgs.get(position);
+        LogUtil.httpLogW("onItemClick:" + msg.type);
+        switch (msg.type) {
+            case "4":
+                break;
+            case "5":
+                break;
+            case "10":
+                ChatActivity.startAct(getActivity());
+                break;
+        }
     }
 }

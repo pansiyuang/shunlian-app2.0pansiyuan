@@ -63,7 +63,7 @@ public class ChatMemberAdapter extends BaseAdapter {
             return;
         }
         for (int i = 0; i < members.size(); i++) {
-            if (item.from_id.equals(members.get(i).uid)) {
+            if (item.from_join_id.equals(members.get(i).uid)) {
                 members.get(i).unReadNum = item.getuReadNum();
                 members.get(i).headurl = item.from_headurl;
                 members.get(i).nickname = item.from_nickname;

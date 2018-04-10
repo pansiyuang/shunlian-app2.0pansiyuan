@@ -16,17 +16,20 @@ public class BaseMessage {
 
     public String type;
     public String from_user_id;
-    public String from_id;
+    public String from_join_id;
     public String from_type;
     public String from_nickname;
     public String from_headurl;
     public String to_user_id;
-    public String to_id;
+    public String to_join_id; //消息接受方关联id 普通用户关联member表 member_id ,平台客服关联admin表id，商家客服关联seller表
+    public String seller_id; //（如果是发送对象是商家客服，该字段可不传）
+    public String to_shop_id;//如果发送对象是商家客服，需要传店铺id（如果发送对象是商家客服，该字段必须传，其他情况请忽略此字段）
     public String tag_id;
-    public String to_type;
+    public String to_type;  //发送对象用户类型 1=平台客服，3=商家客服，0=普通用户
     public String to_nickname;
     public String to_headurl;
     public String msg_type;
+    public String extras;
     public long sendTime;
     private int sendType;
     private int uReadNum;
@@ -83,9 +86,9 @@ public class BaseMessage {
 
     @Override
     public String toString() {
-        return "type:" + type + " from_user_id:" + from_user_id + " from_id:" + from_id + " from_type:" + from_type +
+        return "type:" + type + " from_user_id:" + from_user_id + " from_join_id:" + from_join_id + " from_type:" + from_type +
                 " from_nickname:" + from_nickname + " from_headurl:" + from_headurl +
-                " to_user_id:" + to_user_id + " to_id:" + to_id + " tag_id:" + tag_id +
+                " to_user_id:" + to_user_id + " to_join_id:" + to_join_id + " tag_id:" + tag_id +
                 " to_type:" + to_type + " to_nickname:" + to_nickname + " to_headurl:" + to_headurl +
                 " msg_type:" + msg_type + " sendType:" + sendType + " status:" + status;
     }

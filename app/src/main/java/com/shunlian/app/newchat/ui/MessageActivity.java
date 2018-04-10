@@ -10,11 +10,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.newchat.util.MessageCountManager;
-import com.shunlian.app.presenter.AllMessageCountPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.CustomViewPager;
 import com.shunlian.app.widget.MyImageView;
 
@@ -64,6 +62,9 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     @BindView(R.id.line_store)
     View line_store;
 
+    @BindView(R.id.line_title)
+    View line_title;
+
     private static List<BaseFragment> mFrags = new ArrayList<>();
     private CommonLazyPagerAdapter mPagerAdapter;
     private int sysCount, storeCount;
@@ -89,6 +90,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         tv_title.setText(getStringResouce(R.string.message));
         miv_title_right.setVisibility(View.VISIBLE);
         miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
+        line_title.setVisibility(View.GONE);
 
         if (messageCountManager.isLoad()) {
             sysCount = messageCountManager.getSys_msg();

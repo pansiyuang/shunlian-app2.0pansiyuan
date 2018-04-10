@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/miv_icon">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_chat_me"
+            android:clickable="true"
+            android:longClickable="true">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_alignParentRight="true" />
+
+    <RelativeLayout
+        android:id="@+id/rl_msg_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rl_msg_right"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/rl_msg_right"
+        android:visibility="visible">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_status_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/audit_icon_d"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pb_right"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="5dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -280,10 +280,6 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
         }else {
             hour = (int) (totalHours) + "";// 时
         }
-        Log.i("TAG", "day:" + day);
-        Log.i("TAG", "hour:" + hour);
-        Log.i("TAG", "minute:" + minute);
-        Log.i("TAG", "second:" + second);
         if (!empty(day) && day.length() == 1) {
             day = "0" + day;
         }

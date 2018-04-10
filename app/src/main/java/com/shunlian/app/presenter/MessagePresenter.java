@@ -49,10 +49,15 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
             @Override
             public void onSuccess(BaseEntity<MessageListEntity> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(entity.message);
                 MessageListEntity messageListEntity = entity.data;
                 List<MessageListEntity.Msg> msgList = messageListEntity.list;
                 iView.getSysMessageList(msgList);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }

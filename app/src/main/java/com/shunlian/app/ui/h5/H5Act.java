@@ -68,7 +68,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
-    protected String h5Url="";
+    protected String h5Url = "";
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
@@ -91,7 +91,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         Intent intentH5 = new Intent(context, H5Act.class);
         intentH5.putExtra("url", url);
         intentH5.putExtra("mode", mode);
-        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intentH5);
     }
 
@@ -212,7 +212,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 // this only happen when a same sonic session is already running,
                 // u can comment following codes to feedback as a default mode.
                 // throw new UnknownError("create session fail!");
-                LogUtil.augusLogW("create sonic session fail!--"+h5Url);
+                LogUtil.augusLogW("create sonic session fail!--" + h5Url);
             }
         }
     }
@@ -463,6 +463,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             LogUtil.httpLogW("=====analysisUrl=====h5Url==========" + h5Url);
             return;
         }
+        LogUtil.httpLogW("链接:" + url);
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
             if (!TextUtils.isEmpty(type)) {
