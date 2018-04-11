@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
+        android:overScrollMode="never"
+        android:layout_below="@+id/mrlayout_toolbar"
+        android:background="@color/white_ash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</com.shunlian.app.widget.MyLinearLayout>
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

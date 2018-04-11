@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white_ash"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="10dp">
@@ -14,13 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_rectangle_10px"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/llayout_title"
+            android:id="@+id/llayout_coupon_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pink_color"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="7.5dp">
@@ -37,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="2016年5月24日 "
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -47,10 +44,9 @@
             android:id="@+id/mtv_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/llayout_title"
+            android:layout_below="@+id/llayout_coupon_title"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="19dp"
-            android:text="顺联动力官方旗舰店五一优惠券五一优惠券"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 
@@ -85,7 +81,6 @@
             android:layout_below="@+id/mtv_coupon_den"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="12dp"
-            android:text="有效期：2018/3/26-2018/5/6 "
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 
@@ -105,7 +100,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="9dp"
-            android:text="该优惠券指定商品可用"
             android:textColor="@color/share_text"
             android:textSize="10sp" />
 
@@ -114,51 +108,18 @@
     <!--商品模版-->
     <RelativeLayout
         android:id="@+id/rlayout_goods"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/TV_SystemMsg3"
         android:background="@drawable/rounded_rectangle_10px"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
         android:visibility="gone">
 
-        <RelativeLayout
-            android:id="@+id/llayout_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/mtv_source"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/ll_goods_title">
 
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_goods_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="18/03/26"
-                android:textColor="@color/share_text"
-                android:textSize="12sp" />
-
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/icon_login_logo"
-                app:iv_control_adapter="true"
-                app:iv_control_height="118"
-                app:iv_control_width="122" />
-
-        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_goods_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
             android:layout_marginTop="22dp"
-            android:layout_toLeftOf="@+id/llayout_icon"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -169,10 +130,10 @@
                 android:background="@drawable/red_dot" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_goods_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:text="看到您的商品已经下单了，喜欢的话可以尽快付款哦"
                 android:textColor="@color/new_text"
                 android:textSize="16sp" />
 
@@ -180,49 +141,55 @@
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_goods_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg1"
+            android:layout_width="match_parent"
             android:layout_below="@+id/ll_goods_title"
             android:layout_marginRight="25dp"
             android:layout_marginTop="17dp"
-            android:layout_toLeftOf="@+id/llayout_icon"
-            android:text="原宿2018老爹鞋超火人气爆款鞋子学生韩版百搭运动鞋女"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:layout_toLeftOf="@+id/miv_icon"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg2"
             android:layout_below="@+id/mtv_goods_desc"
             android:layout_marginBottom="18dp"
-            android:layout_marginTop="11dp"
-            android:text="来自分享"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            android:layout_marginTop="11dp"/>
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_goods_time"
+            style="@style/TV_SystemMsg2"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/ll_goods_title"/>
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/mtv_source"
+            app:iv_control_adapter="true"
+            app:iv_control_height="118"
+            app:iv_control_width="122" />
 
     </RelativeLayout>
 
     <!--促销活动-->
     <RelativeLayout
         android:id="@+id/rlayout_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
+        style="@style/TV_SystemMsg3"
+        android:background="@drawable/rounded_rectangle_10px"
         android:visibility="gone">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_act_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="24dp"
             android:layout_marginTop="22dp"
-            android:layout_toLeftOf="@+id/mtv_act_time"
-            android:text="亲爱的喵喵喵，端午节优惠活动将于开丰富的范德萨"
+            android:layout_toLeftOf="@+id/mtv_act_msg_time"
             android:textColor="@color/new_text"
-            android:textSize="15.5sp" />
+            android:textSize="16sp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_act_desc"
@@ -230,38 +197,28 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mtv_act_title"
             android:layout_marginTop="17dp"
-            android:text="“年货节”是一次大规模，高层次，综合性的年货展销盛会的高层次会..."
             android:textColor="@color/new_text"
-            android:textSize="13.5dp" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mtv_act_desc"
-            android:layout_marginBottom="18dp"
-            android:layout_marginTop="12dp"
-            android:text="活动时间：2018/01/22 -2018/02/22"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            android:textSize="14dp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_act_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg2"
+            android:layout_below="@+id/mtv_act_desc"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="12dp"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_act_msg_time"
+            style="@style/TV_SystemMsg2"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/mtv_act_title"
-            android:text="18/03/26"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            android:layout_alignTop="@+id/mtv_act_title"/>
     </RelativeLayout>
 
     <!--处罚通知-->
     <RelativeLayout
         android:id="@+id/rlayout_punish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
+        style="@style/TV_SystemMsg3"
+        android:background="@drawable/rounded_rectangle_10px"
         android:visibility="gone">
 
         <LinearLayout
@@ -283,107 +240,85 @@
                 android:textSize="16sp" />
 
             <com.shunlian.app.widget.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="18/03/26" />
+                android:id="@+id/mtv_punish_msg_time"
+                style="@style/TV_SystemMsg2"/>
 
         </LinearLayout>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_punish_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg1"
             android:layout_below="@+id/llayout_punish"
-            android:layout_marginBottom="10dp"
-            android:text="封禁时间：10年  从2018/06/12-2028/08/20"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:layout_marginBottom="10dp"/>
 
         <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/mtv_punish_due"
+            style="@style/TV_SystemMsg1"
             android:layout_below="@+id/mtv_punish_time"
-            android:layout_marginBottom="18dp"
-            android:text="原因：挥洒爱很简单回家的撒谎就撒啊是几份是"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:layout_marginBottom="18dp"/>
 
 
     </RelativeLayout>
 
     <!--文章审核通知-->
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/rlayout_article"
+        style="@style/TV_SystemMsg3"
+        android:background="@drawable/rounded_rectangle_10px"
+        android:paddingBottom="18dp"
+        android:paddingTop="22dp"
         android:visibility="gone">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_Article_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="24dp"
             android:layout_toLeftOf="@+id/mtv_article_time"
-            android:text="您发布的文章《是否是否的说法是范德萨的说法》已经通过审核"
             android:textColor="@color/new_text"
-            android:textSize="15.5dp" />
+            android:textSize="16dp" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_Article_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg1"
             android:layout_below="@+id/mtv_Article_title"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="17dp"
-            android:text="是否是否的说法是范德萨的说法"
-            android:textColor="@color/new_text"
-            android:textSize="13.5dp" />
+            android:layout_marginTop="17dp"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_article_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="18/03/26"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            style="@style/TV_SystemMsg2"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 
     <!--商品推送模板-->
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/rlayout_goods_notify"
+        style="@style/TV_SystemMsg3"
+        android:background="@drawable/rounded_rectangle_10px"
         android:paddingBottom="15dp"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
         android:visibility="gone">
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_goods_notif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/mtv_goods_notify"
+            style="@style/TV_SystemMsg1"
+            android:layout_width="match_parent"
             android:layout_marginRight="30dp"
             android:layout_marginTop="22dp"
-            android:layout_toLeftOf="@+id/miv_goods_notif"
-            android:text="原宿2018老爹鞋超火人气爆款鞋子学生韩版百搭运动鞋女"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:layout_toLeftOf="@+id/miv_goods_notif"/>
 
         <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mtv_goods_notif"
-            android:layout_marginTop="12dp"
-            android:text="18/03/26"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            android:id="@+id/mtv_goods_notify_time"
+            style="@style/TV_SystemMsg2"
+            android:layout_below="@+id/mtv_goods_notify"
+            android:layout_marginTop="12dp"/>
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_goods_notif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/mtv_goods_notif"
+            android:layout_alignTop="@+id/mtv_goods_notify"
             app:iv_control_adapter="true"
             app:iv_control_height="118"
             app:iv_control_width="122" />
@@ -391,31 +326,22 @@
 
     <!--专题活动-->
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/rlayout_special"
+        style="@style/TV_SystemMsg3"
+        android:background="@drawable/rounded_rectangle_10px"
         android:paddingBottom="23dp"
-        android:visibility="gone"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
-        android:paddingTop="23dp">
+        android:paddingTop="23dp"
+        android:visibility="gone">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_special_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="专题页名称专题页名称"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            style="@style/TV_SystemMsg1"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_special_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TV_SystemMsg2"
             android:layout_below="@+id/mtv_special_title"
-            android:layout_marginTop="13dp"
-            android:text="2018年6月1日 12:26:06 - 2018年8月17日 6:25:12"
-            android:textColor="@color/share_text"
-            android:textSize="12sp" />
+            android:layout_marginTop="13dp"/>
 
 
     </RelativeLayout>

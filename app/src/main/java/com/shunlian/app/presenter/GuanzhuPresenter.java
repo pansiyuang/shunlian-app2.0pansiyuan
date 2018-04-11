@@ -9,6 +9,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGuanzhuView;
 
@@ -120,7 +121,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                 operationId = position;
                 GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                 if (!"new_sales".equals(dynamicListBean.type)){//文章
-//                    ArticleH5Act.startAct(context, dynamicListBean.id, ArticleH5Act.MODE_SONIC);
+                    ArticleH5Act.startAct(context, dynamicListBean.id, ArticleH5Act.MODE_SONIC);
                 }
             });
 

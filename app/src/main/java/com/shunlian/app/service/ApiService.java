@@ -92,6 +92,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
+import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
@@ -1419,7 +1420,7 @@ public interface ApiService {
      * @return
      */
     @GET("message/sysmessage")
-    Call<BaseEntity<EmptyEntity>> sysmessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<SystemMsgEntity>> sysmessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取系统消息
