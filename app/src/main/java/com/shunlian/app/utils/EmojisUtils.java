@@ -9,16 +9,25 @@ import java.util.Map;
 
 public class EmojisUtils {
     private static Map<String, Integer> emojisMap;
+    private static Map<Integer, String> emojisMap1;
 
-    public static int emojisIndex(String key){
-        if (emojisMap == null){
+    public static int emojisIndex(String key) {
+        if (emojisMap == null) {
             emojisMap = emojisMap();
         }
         Integer index = emojisMap.get(key);
         return index;
     }
 
-    public static Map<String, Integer> emojisMap(){
+    public static String emojisName(Integer index) {
+        if (emojisMap1 == null) {
+            emojisMap1 = emojismap();
+        }
+        String name = emojisMap1.get(index);
+        return name;
+    }
+
+    public static Map<String, Integer> emojisMap() {
         Map<String, Integer> emojisMap = new HashMap<>();
         emojisMap.put("[微笑]", 0);
         emojisMap.put("[撇嘴]", 1);
@@ -134,5 +143,123 @@ public class EmojisUtils {
         emojisMap.put("[红包]", 111);
         emojisMap.put("[鸡]", 112);
         return emojisMap;
+    }
+
+    public static Map<Integer, String> emojismap() {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, "[微笑]");
+        map.put(1, "[撇嘴]");
+        map.put(2, "[色]");
+        map.put(3, "[发呆]");
+        map.put(4, "[得意]");
+        map.put(5, "[流泪]");
+        map.put(6, "[害羞]");
+        map.put(7, "[闭嘴]");
+        map.put(8, "[睡]");
+        map.put(9, "[大哭]");
+        map.put(10, "[尴尬]");
+        map.put(11, "[发怒]");
+        map.put(12, "[调皮]");
+        map.put(13, "[呲牙]");
+        map.put(14, "[惊讶]");
+        map.put(15, "[难过]");
+        map.put(16, "[酷]");
+        map.put(17, "[冷汗]");
+        map.put(18, "[抓狂]");
+        map.put(19, "[吐]");
+        map.put(20, "[偷笑]");
+        map.put(21, "[可爱]");
+        map.put(22, "[白眼]");
+        map.put(23, "[傲慢]");
+        map.put(24, "[饥饿]");
+        map.put(25, "[困]");
+        map.put(26, "[惊恐]");
+        map.put(27, "[流汗]");
+        map.put(28, "[憨笑]");
+        map.put(29, "[大兵]");
+        map.put(30, "[奋斗]");
+        map.put(31, "[咒骂]");
+        map.put(32, "[疑问]");
+        map.put(33, "[嘘]");
+        map.put(34, "[晕]");
+        map.put(35, "[折磨]");
+        map.put(36, "[衰]");
+        map.put(37, "[骷髅]");
+        map.put(38, "[敲打]");
+        map.put(39, "[再见]");
+        map.put(40, "[擦汗]");
+        map.put(41, "[抠鼻]");
+        map.put(42, "[鼓掌]");
+        map.put(43, "[糗大了]");
+        map.put(44, "[坏笑]");
+        map.put(45, "[左哼哼]");
+        map.put(46, "[右哼哼]");
+        map.put(47, "[哈欠]");
+        map.put(48, "[鄙视]");
+        map.put(49, "[委屈]");
+        map.put(50, "[快哭了]");
+        map.put(51, "[阴险]");
+        map.put(52, "[亲亲]");
+        map.put(53, "[吓]");
+        map.put(54, "[可怜]");
+        map.put(55, "[菜刀]");
+        map.put(56, "[西瓜]");
+        map.put(57, "[啤酒]");
+        map.put(58, "[篮球]");
+        map.put(59, "[乒乓]");
+        map.put(60, "[咖啡]");
+        map.put(61, "[饭]");
+        map.put(62, "[猪头]");
+        map.put(63, "[玫瑰]");
+        map.put(64, "[凋谢]");
+        map.put(65, "[示爱]");
+        map.put(66, "[爱心]");
+        map.put(67, "[心碎]");
+        map.put(68, "[蛋糕]");
+        map.put(69, "[闪电]");
+        map.put(70, "[炸弹]");
+        map.put(71, "[刀]");
+        map.put(72, "[足球]");
+        map.put(73, "[瓢虫]");
+        map.put(74, "[便便]");
+        map.put(75, "[月亮]");
+        map.put(76, "[太阳]");
+        map.put(77, "[礼物]");
+        map.put(78, "[拥抱]");
+        map.put(79, "[强]");
+        map.put(80, "[弱]");
+        map.put(81, "[握手]");
+        map.put(82, "[胜利]");
+        map.put(83, "[抱拳]");
+        map.put(84, "[勾引]");
+        map.put(85, "[拳头]");
+        map.put(86, "[差劲]");
+        map.put(87, "[爱你]");
+        map.put(88, "[NO]");
+        map.put(89, "[OK]");
+        map.put(90, "[爱情]");
+        map.put(91, "[飞吻]");
+        map.put(92, "[跳跳]");
+        map.put(93, "[发抖]");
+        map.put(94, "[怄火]");
+        map.put(95, "[转圈]");
+        map.put(96, "[磕头]");
+        map.put(97, "[回头]");
+        map.put(98, "[跳绳]");
+        map.put(99, "[挥手]");
+        map.put(100, "[激动]");
+        map.put(101, "[街舞]");
+        map.put(102, "[献吻]");
+        map.put(103, "[左太极]");
+        map.put(104, "[右太极]");
+        map.put(105, "[嘿哈]");
+        map.put(106, "[捂脸]");
+        map.put(107, "[奸笑]");
+        map.put(108, "[机智]");
+        map.put(109, "[皱眉]");
+        map.put(110, "[耶]");
+        map.put(111, "[红包]");
+        map.put(112, "[鸡]");
+        return map;
     }
 }

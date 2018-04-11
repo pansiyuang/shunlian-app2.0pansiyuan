@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +38,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,8 +68,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
     @BindView(R.id.recycler_chat)
     RecyclerView recycler_chat;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+//    @BindView(R.id.refreshview)
+//    SlRefreshView refreshview;
 
     public static final int OPEN_ALBUM = 1;
     public static final int OPEN_CAMERA = 2;
@@ -204,8 +199,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
 //                }
             }
         });
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+//        refreshview.setCanRefresh(true);
+//        refreshview.setCanLoad(false);
 
         manager = new LinearLayoutManager(this);
         recycler_chat.setLayoutManager(manager);

@@ -2,33 +2,27 @@ package com.shunlian.app.newchat.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.newchat.util.EmoticonUtil;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.shunlian.app.newchat.adapter.EmojisVPAdapter;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 
 
 /**
@@ -45,7 +39,13 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private InputMode inputMode = InputMode.TEXT;
     private ChatView chatView;
     private LinearLayout morePanel;
-    private LinearLayout emoticonPanel;
+    private ViewPager emoji_vp;
+    private RelativeLayout rlayout_emoji;
+    private LinearLayout llayout_dot;
+    private View scroll_dot;
+    private int spaceWidthDot;//点之间的间距
+    private int startLeftPosi;//最左侧点的距离
+    private int inputMethodHeight = -1;
     //    private final int REQUEST_CODE_ASK_PERMISSIONS = 100;
 
 
@@ -82,8 +82,62 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 }
             }
         });
+        editText.setOnTouchListener((v,ev)->{
+            if (inputMethodHeight == -1)
+                getInputMethodHeight();
+            return false;
+        });
         isSendVisible = editText.getText().length() != 0;
-        emoticonPanel = (LinearLayout) findViewById(R.id.emoticonPanel);
+        emoji_vp = (ViewPager) findViewById(R.id.emoji_vp);
+        rlayout_emoji = (RelativeLayout) findViewById(R.id.rlayout_emoji);
+        llayout_dot = (LinearLayout) findViewById(R.id.llayout_dot);
+        scroll_dot = findViewById(R.id.scroll_dot);
+        initVPListener();
+    }
+
+    private void getInputMethodHeight() {
+        postDelayed(()->{
+            int height = getRootView().getHeight();
+            Rect rect = new Rect();
+            getWindowVisibleDisplayFrame(rect);
+            inputMethodHeight = height - rect.bottom;
+            LinearLayout.LayoutParams rlayout_emoji_Params = new
+                    LinearLayout.LayoutParams(getRootView().getWidth(),inputMethodHeight);
+            rlayout_emoji.setLayoutParams(rlayout_emoji_Params);
+
+            RelativeLayout.LayoutParams emoji_vp_Params = new
+                    RelativeLayout.LayoutParams(getRootView().getWidth(),
+                    (int) (inputMethodHeight*0.8f));
+            emoji_vp.setLayoutParams(emoji_vp_Params);
+        },300);
+    }
+
+    /**
+     * 初始化vp监听
+     */
+    private void initVPListener() {
+        emoji_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
+
+                int v = (int) (spaceWidthDot * (positionOffset + position));
+                RelativeLayout.LayoutParams layoutParams = (LayoutParams)
+                        scroll_dot.getLayoutParams();
+                layoutParams.leftMargin = startLeftPosi+v;
+                scroll_dot.setLayoutParams(layoutParams);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void updateView(InputMode mode) {
@@ -95,7 +149,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 break;
             case TEXT:
                 if (editText.requestFocus()) {
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
                     btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
                 }
@@ -105,9 +160,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                     prepareEmoticon();
                 }
                 btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_n);
-                emoticonPanel.setVisibility(VISIBLE);
+                rlayout_emoji.setVisibility(VISIBLE);
                 break;
         }
+
     }
 
     private void leavingCurrentState() {
@@ -122,7 +178,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 morePanel.setVisibility(GONE);
                 break;
             case EMOTICON:
-                emoticonPanel.setVisibility(GONE);
+                rlayout_emoji.setVisibility(GONE);
         }
     }
 
@@ -203,61 +259,44 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     }
 
     private void prepareEmoticon() {
-        if (emoticonPanel == null) return;
-        for (int i = 0; i < 5; ++i) {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f));
-            linearLayout.setGravity(Gravity.CENTER);
-            linearLayout.setBackgroundColor(Color.WHITE);
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            for (int j = 0; j < 7; ++j) {
-                InputStream is = null;
-                try {
-                    AssetManager am = getContext().getAssets();
-                    final int index = 7 * i + j;
-//                    InputStream is = am.open(String.format("emoticon/%d.gif", index));
-                    is = am.open(String.format("emoticon/%d.png", index));
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    Matrix matrix = new Matrix();
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    // 缩放图片的尺寸
-                    int i1 = dip2px(getContext(), 28);
-                    float scaleWidth = (float) i1 / width;
-                    float scaleHeight = (float) i1 / height;
-                    matrix.postScale(scaleWidth, scaleHeight);
-                    final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            width, height, matrix, true);
-                    ImageView image = new ImageView(getContext());
-                    image.setImageBitmap(resizedBitmap);
-                    image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-                    linearLayout.addView(image);
-                    image.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String content = String.valueOf(EmoticonUtil.emoticonData[index]);
-                            SpannableString str = new SpannableString(content);
-                            ImageSpan span = new ImageSpan(getContext(), resizedBitmap, ImageSpan.ALIGN_BOTTOM);
-                            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            editText.setGravity(Gravity.CENTER_VERTICAL);
-                            editText.append(str);
-                        }
-                    });
-                } catch (Exception e) {
+        if (emoji_vp == null) return;
 
-                } finally {
-                    try {
-                        if (is != null) {
-                            is.close();
-                            is = null;
-                        }
-                    } catch (IOException e) {
-                    }
-                }
+        EmojisVPAdapter emojisVPAdapter = new EmojisVPAdapter(getContext());
+        emoji_vp.setAdapter(emojisVPAdapter);
 
-            }
-            emoticonPanel.addView(linearLayout);
+        llayout_dot.removeAllViews();
+        int width = TransformUtil.dip2px(getContext(), 2);
+        for (int i = 0; i < emojisVPAdapter.getCount(); i++) {
+            View view_dot = new View(getContext());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width*2,width*2);
+            lp.leftMargin = width * 5;
+            view_dot.setLayoutParams(lp);
+            view_dot.setBackgroundResource(R.drawable.red_dot);
+            llayout_dot.addView(view_dot);
+            GradientDrawable gd = (GradientDrawable) view_dot.getBackground();
+            gd.setColor(getResources().getColor(R.color.my_line_gray));
         }
+
+        llayout_dot.getViewTreeObserver()
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                llayout_dot.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                startLeftPosi = llayout_dot.getChildAt(0).getLeft();
+                spaceWidthDot = llayout_dot.getChildAt(1).getLeft() - startLeftPosi;
+
+                GradientDrawable gd = (GradientDrawable) scroll_dot.getBackground();
+                gd.setColor(getResources().getColor(R.color.share_text));
+                RelativeLayout.LayoutParams layoutParams = (LayoutParams)
+                        scroll_dot.getLayoutParams();
+
+                layoutParams.leftMargin = startLeftPosi;
+                scroll_dot.setLayoutParams(layoutParams);
+
+                LogUtil.zhLogW("表情vp高==="+emoji_vp.getHeight());
+            }
+        });
+
         isEmoticonReady = true;
     }
 
@@ -409,7 +448,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 
 
     public boolean isBottomPanelVisible() {
-        if (morePanel.getVisibility() == VISIBLE || emoticonPanel.getVisibility() == VISIBLE) {
+        if (morePanel.getVisibility() == VISIBLE || rlayout_emoji.getVisibility() == VISIBLE) {
             return true;
         }
 
@@ -420,8 +459,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         if (morePanel.getVisibility() == VISIBLE) {
             morePanel.setVisibility(GONE);
         }
-        if (emoticonPanel.getVisibility() == VISIBLE) {
-            emoticonPanel.setVisibility(GONE);
+        if (rlayout_emoji.getVisibility() == VISIBLE) {
+            rlayout_emoji.setVisibility(GONE);
         }
     }
 
