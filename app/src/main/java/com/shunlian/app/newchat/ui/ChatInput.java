@@ -78,7 +78,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    updateView(InputMode.TEXT);
+                    updateView(InputMode.TEXT, false);
                 }
             }
         });
@@ -86,9 +86,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         emoticonPanel = (LinearLayout) findViewById(R.id.emoticonPanel);
     }
 
-    private void updateView(InputMode mode) {
+    private void updateView(InputMode mode, boolean isAdd) {
         if (mode == inputMode) return;
-        leavingCurrentState();
+        leavingCurrentState(isAdd);
         switch (inputMode = mode) {
             case MORE:
                 morePanel.setVisibility(VISIBLE);
@@ -97,28 +97,32 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 if (editText.requestFocus()) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-                    btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
+                    btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_n);
                 }
                 break;
             case EMOTICON:
                 if (!isEmoticonReady) {
                     prepareEmoticon();
                 }
-                btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_n);
+                btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
                 emoticonPanel.setVisibility(VISIBLE);
                 break;
         }
     }
 
-    private void leavingCurrentState() {
+    private void leavingCurrentState(boolean isAdd) {
         switch (inputMode) {
             case TEXT:
                 View view = ((Activity) getContext()).getCurrentFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 editText.clearFocus();
+                if (isAdd) {
+                    btnAdd.setBackgroundResource(R.mipmap.icon_chat_sendmore_h);
+                }
                 break;
             case MORE:
+                btnAdd.setBackgroundResource(R.mipmap.icon_chat_sendmore_n);
                 morePanel.setVisibility(GONE);
                 break;
             case EMOTICON:
@@ -274,7 +278,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 chatView.sendText();
                 break;
             case R.id.btn_add:
-                updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
+                updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE, true);
                 break;
             case R.id.btn_photo:
                 if (activity != null && requestCamera(activity)) {
@@ -295,7 +299,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 //            }
                 break;
             case R.id.btnEmoticon:
-                updateView(inputMode == InputMode.EMOTICON ? InputMode.TEXT : InputMode.EMOTICON);
+                updateView(inputMode == InputMode.EMOTICON ? InputMode.TEXT : InputMode.EMOTICON, false);
                 break;
             case R.id.btn_comment:
 //                chatView.sendFile();
@@ -322,8 +326,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     /**
      * 设置输入模式
      */
-    public void setInputMode(InputMode mode) {
-        updateView(mode);
+    public void setInputMode(InputMode mode,boolean isAdd) {
+        updateView(mode,isAdd);
     }
 
 

@@ -63,8 +63,8 @@ public class ChatMemberAdapter extends BaseAdapter {
             return;
         }
         for (int i = 0; i < members.size(); i++) {
-            if (item.from_join_id.equals(members.get(i).uid)) {
-                members.get(i).unReadNum = item.getuReadNum();
+            if (item.from_join_id.equals(members.get(i).join_id)) {
+                members.get(i).unread_count = item.getuReadNum();
                 members.get(i).headurl = item.from_headurl;
                 members.get(i).nickname = item.from_nickname;
                 members.get(i).update_time = String.valueOf(item.getSendTime());
@@ -82,8 +82,8 @@ public class ChatMemberAdapter extends BaseAdapter {
             return;
         }
         for (int i = 0; i < members.size(); i++) {
-            if (userId.equals(members.get(i).uid)) {
-                members.get(i).unReadNum = 0;
+            if (userId.equals(members.get(i).join_id)) {
+                members.get(i).unread_count = 0;
                 notifyDataSetChanged(mListView, i);
                 break;
             }
@@ -93,7 +93,7 @@ public class ChatMemberAdapter extends BaseAdapter {
 
     public void updateItemStatus(StatusEntity statusEntity) {
         for (int i = 0; i < members.size(); i++) {
-            if (statusEntity.id.equals(members.get(i).uid)) {
+            if (statusEntity.id.equals(members.get(i).join_id)) {
                 if ("logout".equals(statusEntity.message_type)) {
                     members.get(i).line_status = "5";
                     LogUtil.httpLogW(members.get(i).nickname + "下线啦");
@@ -155,8 +155,8 @@ public class ChatMemberAdapter extends BaseAdapter {
             Long mDate = Long.valueOf(friend.update_time);
             holderView.mDate.setText(TimeUtil.getChatTimeStr(mDate));
         }
-        if (friend.unReadNum != 0) {
-            holderView.tv_numbers.setText(String.valueOf(friend.unReadNum));
+        if (friend.unread_count != 0) {
+            holderView.tv_numbers.setText(String.valueOf(friend.unread_count));
             holderView.tv_numbers.setVisibility(View.VISIBLE);
         } else {
             holderView.tv_numbers.setVisibility(View.GONE);

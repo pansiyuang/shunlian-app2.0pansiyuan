@@ -30,6 +30,7 @@ import com.shunlian.app.newchat.util.EmoticonUtil;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
@@ -125,7 +126,6 @@ public class ChatAdpater extends BaseAdapter {
             e.printStackTrace();
         }
         msgInfos.add(resizeImg(msgInfo));
-        notifyDataSetChanged();
     }
 
     public void addMsgInfo(int position, MsgInfo msgInfo) {
@@ -204,7 +204,7 @@ public class ChatAdpater extends BaseAdapter {
             chatHolder.rl_msg_right.setVisibility(View.VISIBLE);
             chatHolder.rl_msg_status.setVisibility(View.VISIBLE);
 
-            GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_icon_right,baseMessage.from_headurl);
+            GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_icon_right, baseMessage.from_headurl);
 
             if (baseMessage.getStatus() == MessageStatus.SendFail) {
                 chatHolder.iv_status_error.setVisibility(View.VISIBLE);
@@ -237,10 +237,10 @@ public class ChatAdpater extends BaseAdapter {
                         }
                         current_small_url = imagehost + msg_body.img_small;
                         current_bigl_url = imagehost + msg_body.img_original;
-                        GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_img_right,current_small_url);
+                        GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_img_right, current_small_url);
                     } else {
                         current_bigl_url = "file://" + msg_body.localUrl;
-                        GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_img_right,current_bigl_url);
+                        GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_img_right, current_bigl_url);
                     }
                     chatHolder.iv_msg_img_right.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -258,7 +258,7 @@ public class ChatAdpater extends BaseAdapter {
                 final LinkMessage.LinkBody linkBody = linkMessage.msg_body;
                 chatHolder.tv_msg_title_right.setText(linkBody.title);
                 chatHolder.tv_msg_price_right.setText(linkBody.price);
-                GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_link_right,linkBody.goodsImage);
+                GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_link_right, linkBody.goodsImage);
 
                 chatHolder.ll_msg_link_right.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -277,7 +277,7 @@ public class ChatAdpater extends BaseAdapter {
             chatHolder.ll_system.setVisibility(View.GONE);
             chatHolder.ll_system_link.setVisibility(View.GONE);
 
-            GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_icon_left,baseMessage.from_headurl);
+            GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_icon_left, baseMessage.from_headurl);
 
             if ("text".equals(msg_type)) {
                 msgText = (TextMessage) baseMessage;
@@ -301,7 +301,7 @@ public class ChatAdpater extends BaseAdapter {
                         current_small_url = msg_body.img_host + msg_body.img_small;
                         current_bigl_url = msg_body.img_host + msg_body.img_original;
                     }
-                    GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_img_left,current_small_url);
+                    GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_img_left, current_small_url);
                     chatHolder.iv_msg_img_left.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -317,7 +317,7 @@ public class ChatAdpater extends BaseAdapter {
                 final LinkMessage.LinkBody linkBody = linkMessage.msg_body;
                 chatHolder.tv_msg_title_left.setText(linkBody.title);
                 chatHolder.tv_msg_price_left.setText(linkBody.price);
-                GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_link_left,linkBody.goodsImage);
+                GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_link_left, linkBody.goodsImage);
 
                 chatHolder.ll_msg_link_left.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -351,7 +351,7 @@ public class ChatAdpater extends BaseAdapter {
                 LinkMessage.LinkBody linkBody = linkMessage.msg_body;
                 chatHolder.tv_msg_title.setText(linkBody.title);
                 chatHolder.tv_msg_price.setText(context.getResources().getString(R.string.common_yuan) + linkBody.price);
-                GlideUtils.getInstance().loadImage(context,chatHolder.iv_msg_link,linkBody.goodsImage);
+                GlideUtils.getInstance().loadImage(context, chatHolder.iv_msg_link, linkBody.goodsImage);
                 chatHolder.tv_send_goods.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

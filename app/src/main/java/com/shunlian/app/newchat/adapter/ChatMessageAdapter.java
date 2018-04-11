@@ -3,9 +3,11 @@ package com.shunlian.app.newchat.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,15 +15,18 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
 import com.shunlian.app.newchat.entity.ImageMessage;
 import com.shunlian.app.newchat.entity.LinkMessage;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.TextMessage;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,10 +51,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public static final int SYS_MSG = 6;
 
     private final ObjectMapper objectMapper;
+    private RecyclerView recycler;
 
-    public ChatMessageAdapter(Context context, List<MsgInfo> lists) {
+    public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
         objectMapper = new ObjectMapper();
+        this.recycler = recyclerView;
     }
 
     public void addMsgInfo(MsgInfo msgInfo) {
@@ -64,6 +71,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
         lists.add(resizeImg(msgInfo));
         notifyDataSetChanged();
+        recycler.scrollToPosition(getItemCount() - 1); //滚动到最底部
     }
 
     @Override
@@ -144,7 +152,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public void handLeftTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
-
+        TextMessage textMessage = (TextMessage) baseMessage;
+        LeftTxtViewHolder leftTxtViewHolder = (LeftTxtViewHolder) holder;
+        GlideUtils.getInstance().loadCornerImage(context, leftTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
+        leftTxtViewHolder.tv_content.setText(textMessage.msg_body);
     }
 
     public void handRightTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -159,7 +170,46 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public void handRightImg(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
+        ImageMessage imageMessag = (ImageMessage) baseMessage;
+        RightImgViewHolder rightImgViewHolder = (RightImgViewHolder) holder;
+        GlideUtils.getInstance().loadCornerImage(context, rightImgViewHolder.miv_icon, imageMessag.from_headurl, 3);
+        final String current_small_url, current_bigl_url;
+        if (imageMessag.msg_body != null) {
+            setImg(rightImgViewHolder.miv_img, imageMessag.msg_body);
+            if (TextUtils.isEmpty(imageMessag.msg_body.localUrl)) {
+                String imagehost = imageMessag.msg_body.img_host;
+                if (!imagehost.startsWith("https")) {
+                    imagehost = "https://" + imagehost;
+                }
+                current_small_url = imagehost + imageMessag.msg_body.img_small;
+                GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_small_url);
+            } else {
+                current_bigl_url = "file://" + imageMessag.msg_body.localUrl;
+                GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_bigl_url);
+            }
+            rightImgViewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<String> imgs = new ArrayList<>();
+                    imgs.clear();
 
+                    if (isEmpty(imageMessag.msg_body.localUrl)) {
+                        if (!imageMessag.msg_body.img_host.startsWith("https")) {
+                            imgs.add("https://" + imageMessag.msg_body.img_small);
+                        } else {
+                            imgs.add(imageMessag.msg_body.img_small);
+                        }
+                    } else {
+                        imgs.add("file://" + imageMessag.msg_body.localUrl);
+                    }
+                    //查看大图
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList<String>) imgs;
+                    bigImgEntity.index = 0;
+                    LookBigImgAct.startAct(context, bigImgEntity);
+                }
+            });
+        }
     }
 
     public void handLink(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -174,6 +224,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public class LeftTxtViewHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.miv_icon)
+        MyImageView miv_icon;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
 
         public LeftTxtViewHolder(View itemView) {
             super(itemView);
@@ -209,6 +264,21 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public class RightImgViewHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.miv_icon)
+        MyImageView miv_icon;
+
+        @BindView(R.id.miv_img)
+        MyImageView miv_img;
+
+        @BindView(R.id.rl_msg_status)
+        RelativeLayout rl_msg_status;
+
+        @BindView(R.id.miv_status_error)
+        MyImageView miv_status_error;
+
+        @BindView(R.id.pb_right)
+        ProgressBar pb_right;
+
 
         public RightImgViewHolder(View itemView) {
             super(itemView);
@@ -229,6 +299,16 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         public SysMsgViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    private void setImg(ImageView iv, ImageMessage.ImageBody imageBody) {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) iv.getLayoutParams();
+        lp.width = imageBody.img_width;
+        lp.height = imageBody.img_height;
+        if (imageBody.img_width == 0 || imageBody.img_height == 0) {
+            return;
+        }
+        iv.setLayoutParams(lp);
     }
 
     public BaseMessage str2Msg(String msg) {

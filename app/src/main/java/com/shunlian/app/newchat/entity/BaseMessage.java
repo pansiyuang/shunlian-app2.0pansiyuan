@@ -30,7 +30,7 @@ public class BaseMessage {
     public String to_nickname;
     public String to_headurl;
     public String msg_type;
-    public String extras;
+    public Extras extras;
     public long sendTime;
     private int sendType;
     private int uReadNum;
@@ -91,5 +91,9 @@ public class BaseMessage {
                 " to_user_id:" + to_user_id + " to_join_id:" + to_join_id + " tag_id:" + tag_id +
                 " to_type:" + to_type + " to_nickname:" + to_nickname + " to_headurl:" + to_headurl +
                 " msg_type:" + msg_type + " sendType:" + sendType + " status:" + status;
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Extras{
+
     }
 }

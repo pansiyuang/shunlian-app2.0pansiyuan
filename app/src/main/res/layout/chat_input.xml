@@ -52,12 +52,12 @@
 
         <Button
             android:id="@+id/btn_send"
-            android:layout_width="57dp"
+            android:layout_width="50dp"
             android:layout_height="28dp"
             android:layout_marginLeft="12dp"
-            android:background="@drawable/input_type"
+            android:background="@drawable/rounded_corner_solid_40a5ff_8px"
             android:text="发送"
-            android:textColor="#666666"
+            android:textColor="@color/white"
             android:textSize="14dp"
             android:visibility="gone" />
     </LinearLayout>

@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 
 import java.util.List;
@@ -11,4 +12,6 @@ import java.util.List;
 public interface IMessageView extends IView {
 
     void getSysMessageList(List<MessageListEntity.Msg> msgList);
+
+    void getMessageList(  List<ChatMemberEntity.ChatMember> members);
 }

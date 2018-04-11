@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MessageAdapter;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.presenter.MessagePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -31,6 +32,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     private MessagePresenter mPresenter;
     private List<MessageListEntity.Msg> msgs;
+    private List<ChatMemberEntity.ChatMember> memberList;
     private MessageAdapter mAdapter;
     private LinearLayoutManager manager;
 
@@ -49,10 +51,15 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     protected void initData() {
         mPresenter = new MessagePresenter(getActivity(), this);
         mPresenter.getSystemMessage();
+        mPresenter.getMessageList(1);
         msgs = new ArrayList<>();
+        memberList = new ArrayList<>();
 
         manager = new LinearLayoutManager(getActivity());
+        mAdapter = new MessageAdapter(getActivity(), msgs, memberList);
         recycler_list.setLayoutManager(manager);
+        recycler_list.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -60,13 +67,15 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         if (!isEmpty(msgList)) {
             msgs.addAll(msgList);
         }
-        if (mAdapter == null) {
-            mAdapter = new MessageAdapter(getActivity(), msgs);
-            mAdapter.setOnItemClickListener(this);
-            recycler_list.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getMessageList(List<ChatMemberEntity.ChatMember> members) {
+        if (!isEmpty(members)) {
+            memberList.addAll(members);
         }
+        mAdapter.notifyItemChanged(0, memberList.size());
     }
 
     @Override
@@ -81,16 +90,13 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void onItemClick(View view, int position) {
-        MessageListEntity.Msg msg = msgs.get(position);
-        LogUtil.httpLogW("onItemClick:" + msg.type);
-        switch (msg.type) {
-            case "4":
-                break;
-            case "5":
-                break;
-            case "10":
-                ChatActivity.startAct(getActivity());
-                break;
+        int index;
+        if (isEmpty(msgs)) {
+            index = position;
+        } else {
+            index = position - 1;
         }
+        ChatMemberEntity.ChatMember member = memberList.get(index);
+        ChatActivity.startAct(getActivity(),member);
     }
 }

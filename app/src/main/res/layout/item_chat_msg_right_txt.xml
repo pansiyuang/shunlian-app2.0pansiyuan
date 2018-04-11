@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_chat_me"
                 android:maxWidth="260dp"
+                android:textColor="@color/white"
                 android:textSize="15sp" />
         </RelativeLayout>
 

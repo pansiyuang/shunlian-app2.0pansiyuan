@@ -48,22 +48,23 @@ public class UserInfoEntity extends BaseEntity {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Friend implements Serializable {
-            public String uid;//商家ID 或者系统客服管理员ID
+            public String user_id;//商家ID 或者系统客服管理员ID
+            public String join_id;
+            public String shop_id;
             public String creat_time;//成为好友时间
             public String update_time; //最近沟通时间
             public String nickname;//昵称
             public String headurl;//头像
             //在线状态：1在线，2空闲，3离开，4隐身，5离线
             public String line_status;
-            public String user_id;//好友id
             //用户类型 0普通用户，1：客服管理员，2：普通系统客服，3，商家客服管理员，4，商家普通客服
             public String type;
-            public int unReadNum;
+            public int unread_count;
 
             @Override
             public String toString() {
                 return "Friend{" +
-                        "uid='" + uid + '\'' +
+                        "uid='" + user_id + '\'' +
                         ", creat_time='" + creat_time + '\'' +
                         ", update_time='" + update_time + '\'' +
                         ", nickname='" + nickname + '\'' +
@@ -71,7 +72,7 @@ public class UserInfoEntity extends BaseEntity {
                         ", line_status='" + line_status + '\'' +
                         ", user_id='" + user_id + '\'' +
                         ", type='" + type + '\'' +
-                        ", unReadNum='" + unReadNum +
+                        ", unread_count='" + unread_count +
                         '}';
             }
 

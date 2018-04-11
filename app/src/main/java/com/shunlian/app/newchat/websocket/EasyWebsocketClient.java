@@ -194,7 +194,7 @@ public class EasyWebsocketClient extends WebSocketClient {
 
                     if (!baseMessage.from_user_id.equals("-1")) { //-1为系统消息
 //                        //通知刷新好友列表
-                        updateFriendList(baseMessage);
+//                        updateFriendList(baseMessage);
                     }
                     break;
                 case "online":
@@ -429,12 +429,12 @@ public class EasyWebsocketClient extends WebSocketClient {
         if (mFriendList != null && mFriendList.size() != 0) {
             for (int i = 0; i < mFriendList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_join_id.equals(mFriendList.get(i).uid)) {
+                if (baseMessage.from_join_id.equals(mFriendList.get(i).join_id)) {
                     LogUtil.httpLogW("好友给自己发消息");
                     if (!getIsChating()) { //不在聊天页面
-                        unReadNum = mFriendList.get(i).unReadNum + 1;
+                        unReadNum = mFriendList.get(i).unread_count + 1;
                         baseMessage.setuReadNum(unReadNum);
-                        mFriendList.get(i).unReadNum = unReadNum;
+                        mFriendList.get(i).unread_count = unReadNum;
                         mFriendList.get(i).line_status = "1";
                         unReadCount++;
                         //通知页面刷新
@@ -456,9 +456,9 @@ public class EasyWebsocketClient extends WebSocketClient {
     public void updateFriendList(String uid) {
         if (mFriendList != null && mFriendList.size() != 0) {
             for (int i = 0; i < mFriendList.size(); i++) {
-                if (uid.equals(mFriendList.get(i).uid)) {
-                    int count = mFriendList.get(i).unReadNum;
-                    mFriendList.get(i).unReadNum = 0;
+                if (uid.equals(mFriendList.get(i).join_id)) {
+                    int count = mFriendList.get(i).unread_count;
+                    mFriendList.get(i).unread_count = 0;
 
                     unReadCount -= count;
                     //通知页面刷新
@@ -484,7 +484,7 @@ public class EasyWebsocketClient extends WebSocketClient {
             return;
         }
         for (int i = 0; i < mFriendList.size(); i++) {
-            if (statusEntity.id.equals(mFriendList.get(i).uid)) {
+            if (statusEntity.id.equals(mFriendList.get(i).join_id)) {
                 if ("logout".equals(statusEntity.message_type)) {
                     mFriendList.get(i).line_status = "5";
                 } else if ("online".equals(statusEntity.message_type)) {
@@ -504,11 +504,11 @@ public class EasyWebsocketClient extends WebSocketClient {
         List<UserInfoEntity.Info.Uread.UreadList> list = userInfoEntity.info.uread.uread_list;
         for (int i = 0; i < mFriendList.size(); i++) {
             for (int j = 0; j < list.size(); j++) {
-                if (list.get(j).uid.equals(mFriendList.get(i).uid)) {
-                    mFriendList.get(i).unReadNum = Integer.valueOf(list.get(j).num);
+                if (list.get(j).uid.equals(mFriendList.get(i).join_id)) {
+                    mFriendList.get(i).unread_count = Integer.valueOf(list.get(j).num);
                 }
             }
-            unReadCount += mFriendList.get(i).unReadNum;
+            unReadCount += mFriendList.get(i).unread_count;
         }
         LogUtil.httpLogW("消息初始化数量：" + unReadCount);
         EventBus.getDefault().postSticky(new UnReadCountEvent(EventType.UNREADCOUNT).setCount(unReadCount));
@@ -528,7 +528,7 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
         if (!TextUtils.isEmpty(friendId) && mFriendList != null) {
             for (int i = 0; i < mFriendList.size(); i++) {
-                if (mFriendList.get(i).uid.equals(friendId)) {
+                if (mFriendList.get(i).join_id.equals(friendId)) {
                     return true;
                 }
             }
@@ -541,14 +541,14 @@ public class EasyWebsocketClient extends WebSocketClient {
         UserInfoEntity.Info.Friend friend = new UserInfoEntity.Info.Friend();
         if (!isSelf(baseMessage)) { //对方发送的消息
             friend.headurl = baseMessage.from_headurl;
-            friend.uid = baseMessage.from_join_id;
+            friend.join_id = baseMessage.from_join_id;
             friend.line_status = "1";
             friend.user_id = baseMessage.from_user_id;
             friend.nickname = baseMessage.from_nickname;
             friend.update_time = String.valueOf(baseMessage.getSendTime());
         } else { //自己发送的消息
             friend.headurl = baseMessage.to_headurl;
-            friend.uid = baseMessage.to_join_id;
+            friend.join_id = baseMessage.to_join_id;
             friend.line_status = "5";
             friend.user_id = baseMessage.to_user_id;
             friend.nickname = baseMessage.to_nickname;

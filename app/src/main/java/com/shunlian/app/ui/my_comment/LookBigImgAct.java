@@ -180,7 +180,7 @@ public class LookBigImgAct extends BaseActivity {
     }
 
     public void loadImg(String url, final PhotoView imageView, final ProgressBar spinner, final View layout_error) {
-        if (url.startsWith("http")) {
+        if (url.startsWith("https")) {
             GlideUtils.getInstance().loadBitmapSync(this, url, new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -204,7 +204,7 @@ public class LookBigImgAct extends BaseActivity {
                 }
             });
         } else {
-            GlideUtils.getInstance().loadFileImageWithView(this, new File(url),imageView);
+            GlideUtils.getInstance().loadImage(this,imageView, url);
         }
     }
 }

@@ -20,11 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.adapter.ChatAdpater;
 import com.shunlian.app.newchat.adapter.ChatMessageAdapter;
 import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.ImageMessage;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
@@ -36,6 +38,9 @@ import com.shunlian.app.newchat.event.MessageRespEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.newchat.websocket.Status;
+import com.shunlian.app.photopick.PhotoPickerActivity;
+import com.shunlian.app.photopick.PhotoPickerIntent;
+import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -49,10 +54,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.utils.BitmapUtil.getFileFromMediaUri;
 
 /**
  * 示例界面
@@ -85,6 +93,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
     private String from_id, from_type, from_nickname, from_headurl;
     private List<MsgInfo> messages = new ArrayList<>();
     private UserInfoEntity.Info.Friend chatMember;
+    private PhotoPickerIntent picIntent;
     //    private MyHttpUtil.HttpCallback uploadCallBack, getHistoryCallBack;
     private String currentTagId;
     private ObjectMapper mObjectMapper;
@@ -101,9 +110,11 @@ public class ChatActivity extends BaseActivity implements ChatView {
     private String currentDeviceId;
     private boolean showStore;
     private LinearLayoutManager manager;
+    private ChatMemberEntity.ChatMember currentChatMember;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra("chatMember", chatMember);
         context.startActivity(intent);
     }
 
@@ -119,6 +130,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
+
+        currentChatMember = (ChatMemberEntity.ChatMember) getIntent().getSerializableExtra("chatMember");
 
         currentDeviceId = DeviceInfoUtil.getDeviceId(this);
         chatMember = (UserInfoEntity.Info.Friend) getIntent().getSerializableExtra("member");
@@ -136,6 +149,17 @@ public class ChatActivity extends BaseActivity implements ChatView {
     @Override
     protected void initListener() {
         tv_title_right.setOnClickListener(this);
+        recycler_chat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        et_input.setInputMode(ChatInput.InputMode.NONE, false);
+                        break;
+                }
+                return false;
+            }
+        });
         super.initListener();
     }
 
@@ -157,19 +181,6 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
     public void initPrf() {
 //        mHandler = new Handler();
-//
-//        lv_chat.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-//        lv_chat.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        et_input.setInputMode(ChatInput.InputMode.NONE);
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
 //
 //        refreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
 //            @Override
@@ -209,7 +220,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
         manager = new LinearLayoutManager(this);
         recycler_chat.setLayoutManager(manager);
-        mAdapter = new ChatMessageAdapter(this, messages);
+        mAdapter = new ChatMessageAdapter(this, messages, recycler_chat);
         recycler_chat.setAdapter(mAdapter);
     }
 
@@ -217,9 +228,9 @@ public class ChatActivity extends BaseActivity implements ChatView {
     private void initChat() {
         mObjectMapper = new ObjectMapper();
 
-        if (chatMember != null) {
-            chatUserId = chatMember.uid;
-            chatRoleType = chatMember.type;
+        if (currentChatMember != null) {
+            chatUserId = currentChatMember.join_id;
+            chatRoleType = currentChatMember.type;
         } else {
             chatUserId = getIntent().getStringExtra("user_id");
             chatRoleType = getIntent().getStringExtra("role_type");
@@ -283,22 +294,27 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
     @Override
     public void sendImage() {
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (picIntent == null) {
+            picIntent = new PhotoPickerIntent(this);
+            picIntent.setSelectModel(SelectModel.MULTI);
+            picIntent.setShowCarema(false);
+            picIntent.setMaxTotal(5); // 最多选择照片数量，默认为9
+        }
         try {
-//            startActivityForResult(i, OPEN_ALBUM);
+            startActivityForResult(picIntent, OPEN_ALBUM);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(ChatActivity.this, "启动相册异常~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "启动相册异常~", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void sendPhoto() {
-//        String photoPath = BaseApplication.CACHE_PATH + "/temp_take_image_" + System.currentTimeMillis() + "_" + Math.random() + ".png";
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        tempTakeUri = Uri.fromFile(new File(photoPath));
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, tempTakeUri);
-//        startActivityForResult(intent, OPEN_CAMERA);
+        String photoPath = App.CACHE_PATH + "/temp_take_image_" + System.currentTimeMillis() + "_" + Math.random() + ".png";
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        tempTakeUri = Uri.fromFile(new File(photoPath));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, tempTakeUri);
+        startActivityForResult(intent, OPEN_CAMERA);
     }
 
     @Override
@@ -370,8 +386,8 @@ public class ChatActivity extends BaseActivity implements ChatView {
         textMessage.from_type = from_type;
         textMessage.from_nickname = from_nickname;
         textMessage.from_headurl = from_headurl;
-        textMessage.to_join_id = "555";
-        textMessage.to_type = "1";
+        textMessage.to_join_id = currentChatMember.join_id;
+        textMessage.to_type = currentChatMember.type;
         textMessage.msg_type = "text";
         textMessage.setSendType(BaseMessage.VALUE_RIGHT);
         textMessage.tag_id = currentTagId;
@@ -402,6 +418,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
         imageMessage.from_nickname = from_nickname;
         imageMessage.from_headurl = from_headurl;
         imageMessage.to_join_id = chatUserId;
+        imageMessage.to_type = currentChatMember.type;
         imageMessage.msg_type = "image";
         imageMessage.setSendType(BaseMessage.VALUE_RIGHT);
         imageMessage.tag_id = currentTagId;
@@ -423,14 +440,13 @@ public class ChatActivity extends BaseActivity implements ChatView {
         }
         imageMessage.msg_body = imageBody;
         msgInfo.setSend_time(System.currentTimeMillis() / 1000);
-        msgInfo.setMessage(chatAdpater.msg2Str(imageMessage));
+        LogUtil.httpLogW("发送图片消息:" + mAdapter.msg2Str(imageMessage));
+        msgInfo.setMessage(mAdapter.msg2Str(imageMessage));
 
         if (mClient.getStatus() == Status.CONNECTED) {
-            chatAdpater.addMsgInfo(msgInfo);
-            chatAdpater.notifyDataSetChanged();
-//            lv_chat.setSelection(ListView.FOCUS_DOWN);//刷新到底部
-            chatAdpater.itemSendComplete(currentTagId, MessageStatus.Sending);
-            upLoadImg(imgPath, currentTagId, imageMessage);
+            mAdapter.addMsgInfo(msgInfo);
+//            chatAdpater.itemSendComplete(currentTagId, MessageStatus.Sending);
+//            upLoadImg(imgPath, currentTagId, imageMessage);
         }
     }
 
@@ -438,7 +454,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
      * 发送图片消息
      */
     private void sendImgMessage(ImageMessage imageMessage) {
-        mClient.send(chatAdpater.msg2Str(imageMessage));
+        mClient.send(mAdapter.msg2Str(imageMessage));
     }
 
     /**
@@ -591,18 +607,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
                             //接收到消息
                             MessageEntity messageEntity = mObjectMapper.readValue(msg, MessageEntity.class);
                             MsgInfo msgInfo = messageEntity.msg_info;
-                            // TODO: 2017/9/23
                             String message1 = msgInfo.getMessage();
-                            LogUtil.httpLogW("message1========" + message1);
                             BaseMessage baseMessage = mObjectMapper.readValue(message1, BaseMessage.class);
-                            // TODO: 2017/9/23
-                            int sendType = baseMessage.getSendType();
-                            if (sendType == BaseMessage.VALUE_LEFT) {
+                            LogUtil.httpLogW("sendType:" + baseMessage.getSendType());
+                            if (baseMessage.getSendType() == BaseMessage.VALUE_LEFT) {
                                 if (baseMessage.from_join_id.equals(chatUserId)) {
-                                    chatAdpater.addMsgInfo(msgInfo);
-//                                    LogUtil.httpLogW("插入一条消息:" + infoManager.insert(msgInfo));
+                                    mAdapter.addMsgInfo(msgInfo);
                                 }
-                            } else if (sendType == BaseMessage.VALUE_RIGHT) {
+                            } else if (baseMessage.getSendType() == BaseMessage.VALUE_RIGHT) {
                                 if (baseMessage.from_user_id.equals(currentUserId)) {
                                     //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
                                     if (!TextUtils.isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
@@ -614,7 +626,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
                                     }
 //                                    LogUtil.httpLogW("插入一条消息:" + infoManager.insert(msgInfo));
                                 }
-                            } else if (sendType == BaseMessage.VALUE_SYSTEM) {
+                            } else if (baseMessage.getSendType() == BaseMessage.VALUE_SYSTEM) {
                                 chatAdpater.addMsgInfo(msgInfo);
                             }
 //                            lv_chat.setSelection(ListView.FOCUS_DOWN);//刷新到底部
@@ -642,23 +654,25 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        String filePath;
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case OPEN_ALBUM:
-//                    filePath = getFileFromMediaUri(this, data.getData());
-//                    if (!TextUtils.isEmpty(filePath)) {
-//                        buildImageMessage(filePath);
-//                    }
-//                    break;
-//                case OPEN_CAMERA:
-//                    filePath = getFileFromMediaUri(this, tempTakeUri);
-//                    if (!TextUtils.isEmpty(filePath)) {
-//                        buildImageMessage(filePath);
-//                    }
-//                    break;
-//            }
-//        }
+        String filePath;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case OPEN_ALBUM:
+                    ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
+                    for (String path : picturePaths) {
+                        if (!TextUtils.isEmpty(path)) {
+                            buildImageMessage(path);
+                        }
+                    }
+                    break;
+                case OPEN_CAMERA:
+                    filePath = getFileFromMediaUri(this, tempTakeUri);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        buildImageMessage(filePath);
+                    }
+                    break;
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

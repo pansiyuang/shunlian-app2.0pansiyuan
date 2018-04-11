@@ -99,6 +99,7 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 
 import java.util.List;
@@ -1431,6 +1432,14 @@ public interface ApiService {
      */
     @GET("message/sys")
     Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取消息列表
+     *
+     * @return
+     */
+    @GET("chat/message/list")
+    Call<BaseEntity<ChatMemberEntity>> getMessageList(@QueryMap Map<String, String> map);
 
     /**
      * 消息统计
