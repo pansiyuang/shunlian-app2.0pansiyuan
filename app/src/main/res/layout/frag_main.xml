@@ -49,7 +49,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/rl_more"
             android:layout_weight="1"
-            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:ll_control_adapter="true"

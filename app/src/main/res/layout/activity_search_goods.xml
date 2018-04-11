@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:layout_toLeftOf="@+id/tv_search_cancel"
-            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
             android:drawableLeft="@mipmap/icon_common_search_gray"
             android:drawablePadding="6.5dp"
             android:gravity="center_vertical"

@@ -552,4 +552,16 @@ public class Common {
 //        Log.i("ActivityService isRun()", "com.ad 程序   ...isAppRunning......"+isAppRunning);
         return isAppRunning;
     }
+
+    public static String formatBadgeNumber(int value) {
+        if (value <= 0) {
+            return null;
+        }
+
+        if (value < 100) {
+            return Integer.toString(value);
+        }
+
+        return "99+";
+    }
 }

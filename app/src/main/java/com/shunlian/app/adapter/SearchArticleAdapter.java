@@ -59,7 +59,7 @@ public class SearchArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Arti
     }
 
 
-    public class ArticleViewHolder extends BaseRecyclerViewHolder {
+    public class ArticleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_title)
         TextView tv_title;
@@ -75,6 +75,14 @@ public class SearchArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Arti
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 }

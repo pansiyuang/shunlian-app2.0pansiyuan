@@ -12,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SearchArticleAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.SearchArticlePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
+import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ISearchArticleView;
 
@@ -63,10 +66,6 @@ public class SearchArticleActivity extends BaseActivity implements ISearchArticl
 
         articleList = new ArrayList<>();
         mPresenter = new SearchArticlePresenter(this, this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mAdapter = new SearchArticleAdapter(this, articleList);
-        recycler_article.setLayoutManager(manager);
-        recycler_article.setAdapter(mAdapter);
     }
 
     @Override
@@ -88,6 +87,20 @@ public class SearchArticleActivity extends BaseActivity implements ISearchArticl
         }
         if (!isEmpty(list)) {
             articleList.addAll(list);
+        }
+        if (mAdapter == null) {
+            LinearLayoutManager manager = new LinearLayoutManager(this);
+            mAdapter = new SearchArticleAdapter(this, articleList);
+            recycler_article.setLayoutManager(manager);
+            recycler_article.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    ArticleEntity.Article article = articleList.get(position);
+                    ArticleH5Act.startAct(SearchArticleActivity.this, article.id, ArticleH5Act.MODE_SONIC);
+                }
+            });
+        } else {
             mAdapter.notifyDataSetChanged();
         }
     }

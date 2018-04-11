@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
@@ -98,6 +99,7 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.newchat.entity.MessageListEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1428,6 +1430,14 @@ public interface ApiService {
      * @return
      */
     @GET("message/sys")
-    Call<BaseEntity<EmptyEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 消息统计
+     *
+     * @return
+     */
+    @GET("message/allcount")
+    Call<BaseEntity<AllMessageCountEntity>> messageAllCount(@QueryMap Map<String, String> map);
 
 }

@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="65dp"
-            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
             android:gravity="center_vertical"
             android:hint="添加评论"
             android:maxHeight="60dp"

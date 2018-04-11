@@ -23,7 +23,7 @@
             android:layout_height="25.5dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_brand"
-            android:background="@drawable/rounded_corned_solid_dc002f_51px"
+            android:background="@drawable/rounded_corner_solid_dc002f_51px"
             android:drawableLeft="@mipmap/icon_xiaodian_soushuo"
             android:drawablePadding="7.5dp"
             android:gravity="center_vertical"
