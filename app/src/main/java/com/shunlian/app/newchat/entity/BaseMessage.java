@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shunlian.app.newchat.websocket.MessageStatus;
+import com.shunlian.app.utils.SharedPrefUtil;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -75,11 +76,10 @@ public class BaseMessage {
     }
 
     public boolean isSelf() {//当前号的id为810
-//        BaseApplication myApp = (BaseApplication) BaseApplication.getContext();
-//        String userId = myApp.spUserInfo.getString("user_id", "");
-//        if (userId.equals(from_user_id)) {
-//            return true;
-//        }
+        String userId = SharedPrefUtil.getSharedPrfString("user_id", "");
+        if (userId.equals(from_user_id)) {
+            return true;
+        }
         return false;
     }
 

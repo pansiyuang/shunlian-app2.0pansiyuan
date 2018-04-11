@@ -185,6 +185,9 @@
     <color name="value_878B8A">#878B8A</color>
     <color name="dim50">#7F000000</color>
     <color name="dim80">#33000000</color>
+
+    <!-- IM -->
+    <color name="value_DA">#DADADA</color>
 </resources>
 
 

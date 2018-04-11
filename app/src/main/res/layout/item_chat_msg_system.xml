@@ -16,10 +16,13 @@
         <TextView
             android:id="@+id/tv_systemMessage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="center"
+            android:background="@drawable/rounded_corner_solid_da_50px"
             android:gravity="center"
-            android:textColor="#D3D3D3"
-            android:textSize="13sp" />
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

@@ -67,10 +67,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         BtnImage.setOnClickListener(this);
         LinearLayout BtnPhoto = (LinearLayout) findViewById(R.id.btn_image);
         BtnPhoto.setOnClickListener(this);
-//        LinearLayout btnVideo = (LinearLayout) findViewById(R.id.btn_video);
-//        btnVideo.setOnClickListener(this);
-//        LinearLayout btnFile = (LinearLayout) findViewById(R.id.btn_file);
-//        btnFile.setOnClickListener(this);
+        LinearLayout btnGoods = (LinearLayout) findViewById(R.id.btn_goods);
+        btnGoods.setOnClickListener(this);
+        LinearLayout btnComment = (LinearLayout) findViewById(R.id.btn_comment);
+        btnComment.setOnClickListener(this);
         setSendBtn();
         editText = (EditText) findViewById(R.id.input);
         editText.addTextChangedListener(this);
@@ -97,12 +97,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 if (editText.requestFocus()) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                    btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
                 }
                 break;
             case EMOTICON:
                 if (!isEmoticonReady) {
                     prepareEmoticon();
                 }
+                btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_n);
                 emoticonPanel.setVisibility(VISIBLE);
                 break;
         }
@@ -267,38 +269,38 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @Override
     public void onClick(View v) {
         Activity activity = (Activity) getContext();
-        int id = v.getId();
-        if (id == R.id.btn_send) {
-            chatView.sendText();
-        }
-        if (id == R.id.btn_add) {
-            updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
-        }
-        if (id == R.id.btn_photo) {
-            if (activity != null && requestCamera(activity)) {
-                chatView.sendPhoto();
-            }
-        }
-        if (id == R.id.btn_image) {
-            if (activity != null && requestStorage(activity)) {
-                chatView.sendImage();
-            }
-        }
-
-       /* if (id == R.id.btn_video){
-            if (getContext() instanceof FragmentActivity){
-                FragmentActivity fragmentActivity = (FragmentActivity) getContext();
-                if (requestVideo(fragmentActivity)){
-                    VideoInputDialog.show(fragmentActivity.getSupportFragmentManager());
+        switch (v.getId()) {
+            case R.id.btn_send:
+                chatView.sendText();
+                break;
+            case R.id.btn_add:
+                updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
+                break;
+            case R.id.btn_photo:
+                if (activity != null && requestCamera(activity)) {
+                    chatView.sendPhoto();
                 }
-            }
-        }*/
-        if (id == R.id.btnEmoticon) {
-            updateView(inputMode == InputMode.EMOTICON ? InputMode.TEXT : InputMode.EMOTICON);
+                break;
+            case R.id.btn_image:
+                if (activity != null && requestStorage(activity)) {
+                    chatView.sendImage();
+                }
+                break;
+            case R.id.btn_goods:
+//                if (getContext() instanceof FragmentActivity){
+//                FragmentActivity fragmentActivity = (FragmentActivity) getContext();
+//                if (requestVideo(fragmentActivity)){
+//                    VideoInputDialog.show(fragmentActivity.getSupportFragmentManager());
+//                }
+//            }
+                break;
+            case R.id.btnEmoticon:
+                updateView(inputMode == InputMode.EMOTICON ? InputMode.TEXT : InputMode.EMOTICON);
+                break;
+            case R.id.btn_comment:
+//                chatView.sendFile();
+                break;
         }
-      /*  if (id == R.id.btn_file){
-            chatView.sendFile();
-        }*/
     }
 
 

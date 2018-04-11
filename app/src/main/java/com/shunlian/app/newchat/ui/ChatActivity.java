@@ -109,15 +109,17 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
     @Override
     protected int getLayoutId() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return R.layout.activity_chat;
     }
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        immersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .keyboardEnable(true)
+                .init();
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//SOFT_INPUT_ADJUST_NOTHING
         currentDeviceId = DeviceInfoUtil.getDeviceId(this);
         chatMember = (UserInfoEntity.Info.Friend) getIntent().getSerializableExtra("member");
 //        goodsItem = getIntent().getParcelableExtra("goodsItem");
@@ -202,6 +204,9 @@ public class ChatActivity extends BaseActivity implements ChatView {
 //                }
             }
         });
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
+
         manager = new LinearLayoutManager(this);
         recycler_chat.setLayoutManager(manager);
         mAdapter = new ChatMessageAdapter(this, messages);

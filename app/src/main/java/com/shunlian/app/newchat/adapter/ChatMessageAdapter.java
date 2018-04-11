@@ -71,7 +71,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         String message = lists.get(position).getMessage();
         BaseMessage baseMessage = str2Msg(message);
         int sendType = baseMessage.getSendType();
-        LogUtil.httpLogW("position:" + position + "  lists:" + lists.size() + "    message:" + message);
         if (sendType == BaseMessage.VALUE_LEFT) { //左边消息
             switch (baseMessage.msg_type) {
                 case "text":
@@ -80,7 +79,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     return LEFT_IMG;
             }
         } else if (sendType == BaseMessage.VALUE_RIGHT) {//右边消息
-            LogUtil.httpLogW("baseMessage.msg_type:" + baseMessage.msg_type);
             switch (baseMessage.msg_type) {
                 case "text":
                     return RIGHT_TXT;
@@ -152,7 +150,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public void handRightTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
         TextMessage textMessage = (TextMessage) baseMessage;
         RightTxtViewHolder rightTxtViewHolder = (RightTxtViewHolder) holder;
-        GlideUtils.getInstance().loadCircleImage(context, rightTxtViewHolder.miv_icon, textMessage.from_headurl);
+        GlideUtils.getInstance().loadCornerImage(context, rightTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
         rightTxtViewHolder.tv_content.setText(textMessage.msg_body);
     }
 
