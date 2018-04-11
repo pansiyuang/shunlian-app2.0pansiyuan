@@ -45,6 +45,10 @@ android {
             minifyEnabled false
         }
     }
+    compileOptions {//lambda
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'

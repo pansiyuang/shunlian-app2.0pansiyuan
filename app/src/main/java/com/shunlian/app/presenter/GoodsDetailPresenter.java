@@ -51,7 +51,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
-        getNetData(0,0,true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
+        getNetData(0,0,true,baseEntityCall,
+                new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
                 super.onSuccess(entity);
@@ -66,6 +67,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                             act_id = tt_act.id;
                             iView.activityState(tt_act.sale,tt_act.remind_status);
                         }
+                    }
+                    GoodsDeatilEntity.SpecailAct common_activity = data.common_activity;
+                    if (common_activity != null){
+                        iView.specailAct();
                     }
                 }
             }

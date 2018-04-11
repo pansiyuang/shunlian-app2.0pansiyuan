@@ -62,4 +62,9 @@ public interface IGoodsDetailView extends IView {
      * @param remindStatus 提醒状态
      */
     void activityState(String status,String remindStatus);
+
+    /**
+     * 专题活动
+     */
+    void specailAct();
 }

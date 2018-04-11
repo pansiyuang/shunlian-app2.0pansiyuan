@@ -24,7 +24,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
@@ -313,6 +312,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                LogUtil.httpLogW("========h5Url==========" + h5Url);
                 if (url.contains("slmall://")) {
                     analysisUrl(url);
                     return true;

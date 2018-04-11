@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FindSelectShopAdapter;
 import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -69,6 +67,8 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 30);
         recy_view.addItemDecoration(new GrideItemDecoration(0,i,0,0,false));
+
+        TransformUtil.expandViewTouchDelegate(mtv_all_select,i,i,i,i);
     }
 
     @Override
@@ -89,20 +89,18 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
                 String.valueOf(isEmpty(mStoreLists)?0:mStoreLists.size())));
         adapter = new FindSelectShopAdapter(this,storeLists);
         recy_view.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                FindSelectShopEntity.StoreList storeList = storeLists.get(position);
-                storeList.isSelect = !storeList.isSelect;
-                mtv_count.setText(String.format(format,selectCount(),String.valueOf(mStoreLists.size())));
-                if (Integer.parseInt(selectCount()) < mStoreLists.size()){
-                    miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
-                }else {
-                    miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
-                }
-                adapter.notifyDataSetChanged();
+        adapter.setOnItemClickListener((view,position)-> {
+            FindSelectShopEntity.StoreList storeList = storeLists.get(position);
+            storeList.isSelect = !storeList.isSelect;
+            mtv_count.setText(String.format(format,selectCount(),String.valueOf(mStoreLists.size())));
+            if (Integer.parseInt(selectCount()) < mStoreLists.size()){
+                miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            }else {
+                miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
             }
+            adapter.notifyDataSetChanged();
         });
+        selectAll();
     }
 
     /**
@@ -133,15 +131,39 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
     @OnClick({R.id.miv_all_select,R.id.mtv_all_select,R.id.mtv_count})
     public void allSelect(){
         if (!isEmpty(mStoreLists)){
-            for (int i = 0; i < mStoreLists.size(); i++) {
-                FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
-                storeList.isSelect = true;
+            if (Integer.parseInt(selectCount()) == mStoreLists.size()){
+                cancelSelectAll();
+            }else {
+                selectAll();
             }
-            mtv_count.setText(String.format(format,String.valueOf(mStoreLists.size()),
-                    String.valueOf(mStoreLists.size())));
-            adapter.notifyDataSetChanged();
-            miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
         }
+    }
+/*
+取消全选
+ */
+    private void cancelSelectAll() {
+        for (int i = 0; i < mStoreLists.size(); i++) {
+            FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
+            storeList.isSelect = false;
+        }
+        mtv_count.setText(String.format(format, "0",
+                String.valueOf(mStoreLists.size())));
+        adapter.notifyDataSetChanged();
+        miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+    }
+
+    /**
+     * 选择所有
+     */
+    private void selectAll() {
+        for (int i = 0; i < mStoreLists.size(); i++) {
+            FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);
+            storeList.isSelect = true;
+        }
+        mtv_count.setText(String.format(format, String.valueOf(mStoreLists.size()),
+                String.valueOf(mStoreLists.size())));
+        adapter.notifyDataSetChanged();
+        miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
     }
 
     @OnClick(R.id.mbt_follow)

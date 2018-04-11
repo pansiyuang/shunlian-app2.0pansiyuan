@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="15dp"
+            android:src="@mipmap/icon_common_back_black" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/new_text"
+            android:textSize="18sp" />
+
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_toolbar_more"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="9.5dp"
+                android:src="@mipmap/icon_more_n" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_toolbar_msgCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_rectangle_12px"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="8.5sp"
+                android:visibility="gone" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+</merge>

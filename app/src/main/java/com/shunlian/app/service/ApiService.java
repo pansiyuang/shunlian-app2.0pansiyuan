@@ -93,6 +93,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
+import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
@@ -1414,6 +1415,14 @@ public interface ApiService {
      */
     @GET("discovery/user/unFavorite")
     Call<BaseEntity<EmptyEntity>> unFavoriteArticle(@QueryMap Map<String, String> map);
+
+    /**
+     * 系统消息
+     * @param map
+     * @return
+     */
+    @GET("message/sysmessage")
+    Call<BaseEntity<SystemMsgEntity>> sysmessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取系统消息

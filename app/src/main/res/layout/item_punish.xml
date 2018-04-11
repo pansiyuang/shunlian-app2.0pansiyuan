@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/rounded_rectangle_pink_4px"
+    android:orientation="vertical">
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="15dp"
+        android:text="尊敬的习大大（ID56455456466）"
+        android:textColor="@color/my_dark_grey"
+        android:textSize="14sp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/bg_gray_four" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="您的账号已被解封"
+        android:textColor="#02B782"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12sp"
+        android:layout_marginTop="10dp"
+        android:text="封禁时间：10年从2018/12/22-2018/12/28 "
+        android:textColor="@color/share_text"
+        android:textSize="11sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:text="原因：为了锁粉而进行夸大，诱导，虚假的宣传给平台造成了严重影响为了锁粉而进行夸大，诱导，虚假的宣传给平台造成了严重影响为了锁粉而进行夸大，诱导，虚假的宣传给平台造成了严重影响"
+        android:textColor="@color/new_text"
+        android:textSize="12sp" />
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="17dp"
+        android:text="如有异议，可以向顺联动力市场管理部门进行申诉。联系电话 0571-88888888"
+        android:textColor="@color/share_text"
+        android:textSize="12sp" />
+</LinearLayout>
