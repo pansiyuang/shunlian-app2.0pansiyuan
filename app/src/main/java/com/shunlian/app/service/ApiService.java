@@ -25,6 +25,7 @@ package com.shunlian.app.service;
 import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
@@ -97,11 +98,13 @@ import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
+import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.newchat.entity.MessageListEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1420,12 +1423,28 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> unFavoriteArticle(@QueryMap Map<String, String> map);
 
     /**
+     * 系统消息
+     * @param map
+     * @return
+     */
+    @GET("message/sysmessage")
+    Call<BaseEntity<SystemMsgEntity>> sysmessage(@QueryMap Map<String, String> map);
+
+    /**
      * 获取系统消息
      *
      * @return
      */
     @GET("message/sys")
-    Call<BaseEntity<EmptyEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 消息统计
+     *
+     * @return
+     */
+    @GET("message/allcount")
+    Call<BaseEntity<AllMessageCountEntity>> messageAllCount(@QueryMap Map<String, String> map);
 
     /**
      * 帮助首页

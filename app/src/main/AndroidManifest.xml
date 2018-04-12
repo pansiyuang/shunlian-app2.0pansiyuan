@@ -381,10 +381,24 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".newchat.ui.ChatActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.discover.other.ExperienceDetailAct"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.h5.SimpleH5Act"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.message.SystemMsgAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

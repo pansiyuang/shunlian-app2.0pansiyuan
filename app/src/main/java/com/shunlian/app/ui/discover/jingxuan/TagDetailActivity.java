@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.TagDetailAdapter;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.ChosenPresenter;
@@ -189,6 +190,13 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
             mAdapter = new TagDetailAdapter(this, articleList, mTag);
             mAdapter.setOnLayoutSizeListener(this);
             recycler_tags.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    ArticleEntity.Article article = articleList.get(position - 1);
+                    ArticleH5Act.startAct(TagDetailActivity.this, article.id, ArticleH5Act.MODE_SONIC);
+                }
+            });
         }
         mAdapter.notifyDataSetChanged();
     }

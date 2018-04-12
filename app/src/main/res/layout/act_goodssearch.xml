@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/mtv_cancel"
             android:layout_toRightOf="@+id/miv_close"
-            android:background="@drawable/rounded_corned_solid_gray_8px"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

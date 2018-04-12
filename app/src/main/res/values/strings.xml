@@ -11,6 +11,9 @@
     <string name="time_yesterday">昨天</string>
     <string name="sys_message">系统消息</string>
     <string name="store_message">小店消息</string>
+    <string name="sys_notice">系统通知</string>
+    <string name="topic">头条</string>
+    <string name="custom_message">客服消息</string>
 
 
     <!--主页tab-->
@@ -523,6 +526,7 @@
     <string name="select_comment">精选评论</string>
     <string name="comment_details">评论详情</string>
     <string name="are_you_sure_del_comment">确认删除评论吗？</string>
+    <string name="punish">处罚</string>
 
     <!--聊天-->
     <string name="chat_lingquyouhui">领取优惠券</string>

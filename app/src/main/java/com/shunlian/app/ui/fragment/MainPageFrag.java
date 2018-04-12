@@ -24,8 +24,8 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.myself_store.AddStoreGoodsAct;
-import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
+import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.message.SystemMsgAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
@@ -276,27 +276,33 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
             adapterList.add(new GoodsTitleAdapter(baseActivity, singleLayoutHelper));
 
             GridLayoutHelper helper = new GridLayoutHelper(2);
-            int i = TransformUtil.dip2px(baseActivity, 5);
-            helper.setHGap(i);
-            helper.setVGap(i);
+            int space = TransformUtil.dip2px(baseActivity, 5);
+            helper.setHGap(space);
+            helper.setVGap(space);
             helper.setBgColor(getColorResouce(R.color.white_ash));
             firstPageGoodsAdapter = new FirstPageGoodsAdapter(goodsLists, baseActivity, helper);
             adapterList.add(firstPageGoodsAdapter);
 
             adapter.setAdapters(adapterList);
 
-            firstPageGoodsAdapter.setOnItemClickListener(new FirstPageGoodsAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View v, int position) {
-                    int i = 0;
-                    if (!isEmptyBanner) {
-                        i = position - itemCount - 4;
-                    } else {
-                        i = position - itemCount - 3;
+            firstPageGoodsAdapter.setOnItemClickListener((v,position)-> {
+                int i;
+                if (!isEmptyBanner) {
+                    i = position - itemCount - 4;
+                    if (i == 0) {
+                        H5Act.startAct(baseActivity,
+                                "http://v20-wx.shunliandongli.com/special/14",
+                                H5Act.MODE_SONIC);
+                        return;
+                    } else if (i == 1) {
+                        SystemMsgAct.startAct(baseActivity);
+                        return;
                     }
-                    MainPageEntity.Data data = goodsLists.get(i);
-                    GoodsDetailAct.startAct(baseContext, data.item_id);
+                } else {
+                    i = position - itemCount - 3;
                 }
+                MainPageEntity.Data data = goodsLists.get(i);
+                GoodsDetailAct.startAct(baseContext, data.item_id);
             });
         } else {
             firstPageGoodsAdapter.notifyItemInserted(10);

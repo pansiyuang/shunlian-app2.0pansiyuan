@@ -159,4 +159,26 @@
         <!--<item name="android:minHeight">10dp</item>-->
         <item name="android:thumb">@color/transparent</item>
     </style>
+
+    <!--系统消息-->
+    <style name="TV_SystemMsg1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/new_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TV_SystemMsg2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/share_text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="TV_SystemMsg3">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">17dp</item>
+        <item name="android:paddingRight">17dp</item>
+    </style>
+
+
 </resources>

@@ -40,7 +40,7 @@ public class FindSelectShopAdapter extends BaseRecyclerAdapter<FindSelectShopEnt
         FindSelectShopEntity.StoreList storeList = lists.get(position);
         GlideUtils.getInstance().loadImage(context,mHolder.civ_head,storeList.logo);
         mHolder.mtv_shop_name.setText(storeList.name);
-        mHolder.mtv_shop_name.setText(storeList.desc);
+        mHolder.mtv_desc.setText(storeList.desc);
         if (storeList.isSelect){
             mHolder.miv_select.setImageResource(R.mipmap.img_found_choiceshop_h);
         }else {

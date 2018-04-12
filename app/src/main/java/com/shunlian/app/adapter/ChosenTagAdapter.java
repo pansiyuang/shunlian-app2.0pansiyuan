@@ -55,7 +55,9 @@ public class ChosenTagAdapter extends BaseRecyclerAdapter<ArticleEntity.Tag> {
 
         @Override
         public void onClick(View v) {
-            listener.onItemClick(v, getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 }

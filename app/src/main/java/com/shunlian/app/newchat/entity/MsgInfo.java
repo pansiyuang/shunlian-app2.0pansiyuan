@@ -2,16 +2,10 @@ package com.shunlian.app.newchat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Keep;
-import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Administrator on 2017/9/21.
  */
-@Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MsgInfo {
     public int uid;
@@ -19,17 +13,13 @@ public class MsgInfo {
     public int user_id;
     public int type;
     public int is_read;
-    @NotNull
     public String message;
     public long send_time;
-    @Id
     public Long id;
 
     public Long msg_id;
 
-    @Keep
-    public MsgInfo(int uid, int kid, int user_id, int type, int is_read,
-                   @NotNull String message, long send_time, Long id, Long msg_id) {
+    public MsgInfo(int uid, int kid, int user_id, int type, int is_read, String message, long send_time, Long id, Long msg_id) {
         this.uid = uid;
         this.kid = kid;
         this.user_id = user_id;

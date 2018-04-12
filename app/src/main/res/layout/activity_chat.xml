@@ -1,93 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/my_line_gray"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_height"
+        android:background="@color/white" />
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/title_common_layout" />
 
     <RelativeLayout
-        android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="44dp">
+        android:layout_height="wrap_content">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:paddingBottom="12dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="30dp"
-            android:paddingTop="12dp"
-            android:src="@mipmap/icon_common_back_black" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="在线客服"
-            android:textColor="@color/my_gray_two"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tv_store"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="进店"
-            android:textColor="@color/my_gray_two"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-        <View
+        <!--<com.shunlian.app.widget.refresh.turkey.SlRefreshView
+            android:id="@+id/refreshview"
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_alignParentBottom="true"
-            android:background="@color/line" />
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_above="@+id/input_panel">-->
 
-    <com.shunlian.app.newchat.ui.ChatInput
-        android:id="@+id/input_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_chat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:paddingBottom="10dp"
+                android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+        <!--</com.shunlian.app.widget.refresh.turkey.SlRefreshView>-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_chat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/input_panel"
-        android:layout_below="@+id/rLayout_title"
-        android:overScrollMode="never"
-        android:paddingBottom="10dp"
-        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/layout_chat_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <!--<ImageView-->
-
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:src="@drawable/chat_empty" />-->
-        <TextView
+        <LinearLayout
+            android:id="@+id/layout_chat_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="您还没有相关客服消息哦~"
-            android:textColor="@color/my_gray_two"
-            android:textSize="16dp" />
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="您还没有相关客服消息哦~"
+                android:textColor="@color/my_gray_two"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <com.shunlian.app.newchat.ui.ChatInput
+            android:id="@+id/input_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+</LinearLayout>

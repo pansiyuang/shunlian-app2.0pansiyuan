@@ -6,6 +6,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,13 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.ClickableColorSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
@@ -35,9 +38,13 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
 
     private OnFollowShopListener mShopListener;
     private OnShareLikeListener mShareLikeListener;
+    private final SpannableStringBuilder ssb;
+    private final StringBuilder sb;
 
     public GuanzhuAdapter(Context context, List<GuanzhuEntity.DynamicListBean> lists) {
         super(context, true, lists);
+        ssb = new SpannableStringBuilder();
+        sb = new StringBuilder();
     }
 
     @Override
@@ -76,11 +83,10 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                     mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
                 }
             }
-            String tags = getTags(dy.tags);
+            SpannableStringBuilder tags = getTags(dy.tags,full_title,"new_sales".equals(dy.type));
             if (!isEmpty(tags)) {
-                SpannableStringBuilder sb = Common
-                        .changeColor(tags.concat(full_title), tags, getColor(R.color.value_299FFA));
-                mHolder.mtv_desc.setText(sb);
+                mHolder.mtv_desc.setText(tags);
+                mHolder.mtv_desc.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 mHolder.mtv_desc.setText(full_title);
             }
@@ -114,27 +120,40 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
             };
             mHolder.recy_view.setAdapter(adapter);
             mHolder.mtv_babyNum.setText(String.format(formatNum, String.valueOf(goods_list.size())));
-            adapter.setOnItemClickListener(new com.shunlian.app.listener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    GuanzhuEntity.TagsBean tagsBean = goods_list.get(position);
-                    GoodsDetailAct.startAct(context, tagsBean.id);
-                }
+            adapter.setOnItemClickListener((view,position) ->{
+                GuanzhuEntity.TagsBean tagsBean = goods_list.get(position);
+                GoodsDetailAct.startAct(context, tagsBean.id);
             });
         } else {
             gone(mHolder.mtv_babyNum);
         }
     }
 
-    private String getTags(List<GuanzhuEntity.TagsBean> tagsBeans) {
+    private SpannableStringBuilder getTags(List<GuanzhuEntity.TagsBean> tagsBeans,
+                                           String full_title, boolean isNew) {
         if (!isEmpty(tagsBeans)) {
-            StringBuilder sb = new StringBuilder();
-            String format = "#%s#";
+            String format = "#%s# ";
+            sb.delete(0,sb.length());
+            ssb.clear();
             for (int i = 0; i < tagsBeans.size(); i++) {
                 GuanzhuEntity.TagsBean tagsBean = tagsBeans.get(i);
+
                 sb.append(String.format(format, tagsBean.name));
+                ssb.append(String.format(format, tagsBean.name));
+
+                ClickableColorSpan span = new ClickableColorSpan
+                        (i,getColor(R.color.value_299FFA));
+                if (!isNew) {
+                    span.setOnClickItemListener((position) ->
+                        TagDetailActivity.startAct(context, tagsBeans.get(position).id)
+                    );
+                }
+                ssb.setSpan(span,sb.length()-
+                                String.format(format, tagsBean.name).length(),sb.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            return sb.toString();
+            ssb.append(full_title);
+            return ssb;
         }
         return null;
     }

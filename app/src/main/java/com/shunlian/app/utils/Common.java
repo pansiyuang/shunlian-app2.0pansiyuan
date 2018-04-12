@@ -52,6 +52,7 @@ import android.widget.Toast;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
+import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.widget.BoldTextSpan;
@@ -85,6 +86,9 @@ public class Common {
                 break;
             case "article":
                 ArticleH5Act.startAct(context, params[0], ArticleH5Act.MODE_SONIC);
+                break;
+            case "artdetails":
+                CommentListAct.startAct((Activity) context, params[0]);
                 break;
         }
     }
@@ -551,5 +555,17 @@ public class Common {
 
 //        Log.i("ActivityService isRun()", "com.ad 程序   ...isAppRunning......"+isAppRunning);
         return isAppRunning;
+    }
+
+    public static String formatBadgeNumber(int value) {
+        if (value <= 0) {
+            return null;
+        }
+
+        if (value < 100) {
+            return Integer.toString(value);
+        }
+
+        return "99+";
     }
 }
