@@ -23,4 +23,5 @@ public class CommonEntity {
     public List<FindCommentListEntity.LastLikesBean> last_likes;//点赞人的头像
     public List<FootprintEntity.DateInfo> date_info;//足迹时间列表
 
+    public String tell;//帮助中心电话
 }

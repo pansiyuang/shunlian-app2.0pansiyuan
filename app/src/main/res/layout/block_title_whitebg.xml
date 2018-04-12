@@ -2,7 +2,8 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mrlayout_title"
     android:layout_width="match_parent"
-    android:layout_height="44dp">
+    android:layout_height="44dp"
+    android:background="@color/white">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_close"
@@ -22,6 +23,17 @@
         android:textColor="@color/my_dark_grey"
         android:textSize="18sp" />
 
+    <com.shunlian.app.widget.MarqueeTextView
+        android:id="@+id/mar_title"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="#1c1b20"
+        android:textSize="18sp"
+        android:visibility="gone" />
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_news"
         android:layout_width="60dp"
@@ -49,6 +61,17 @@
             android:textColor="@color/white"
             android:textSize="9sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_sousuo"
+        android:layout_centerVertical="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:visibility="gone"
+        android:layout_toLeftOf="@id/mrlayout_news"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

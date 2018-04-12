@@ -15,6 +15,7 @@ import com.shunlian.app.presenter.PSignIn;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
@@ -182,6 +183,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.mrlayout_zhuangxiu)
     MyRelativeLayout mrlayout_zhuangxiu;
 
+    @BindView(R.id.mrlayout_tiwen)
+    MyRelativeLayout mrlayout_tiwen;
+
     @BindView(R.id.mllayout_yue)
     MyLinearLayout mllayout_yue;
 
@@ -292,6 +296,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         miv_shezhi.setOnClickListener(this);
         mrlayout_yaoqing.setOnClickListener(this);
         mrlayout_zhuangxiu.setOnClickListener(this);
+        mrlayout_tiwen.setOnClickListener(this);
         mllayout_yue.setOnClickListener(this);
         mllayout_youhuiquan.setOnClickListener(this);
         mllayout_dongli.setOnClickListener(this);
@@ -548,10 +553,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             case R.id.mrlayout_yaoqing:
                 QrCodeAct.startAct(baseContext);
                 break;
-            case R.id.rl_more:
             case R.id.mrlayout_zhuangxiu:
                 MyLittleStoreActivity.startAct(getActivity());
                 break;
+            case R.id.mrlayout_tiwen:
+                HelpOneAct.startAct(baseContext);
+                break;
+            case R.id.rl_more:
             case R.id.mllayout_yue:
             case R.id.mllayout_youhuiquan:
             case R.id.mllayout_dongli:

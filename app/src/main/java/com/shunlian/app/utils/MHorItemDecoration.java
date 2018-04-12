@@ -22,11 +22,11 @@ package com.shunlian.app.utils;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -34,23 +34,23 @@ import android.view.View;
  * Created by zhang on 2017/3/17 09 : 09.
  */
 
-public class HorItemDecoration extends RecyclerView.ItemDecoration {
-    //item少，当前屏幕能全部显示的情况下，会失效
+public class MHorItemDecoration extends RecyclerView.ItemDecoration {
+
     private int space; //item中间间距
     private int leftMargin;//第一个item距左边的边距
     private int rightMargin;//最后一个item距右边的边距
     private Paint mPaint;
 
-    public HorItemDecoration(int space, int leftMargin, int rightMargin) {
-        this.space = space;
-        this.leftMargin = leftMargin;
-        this.rightMargin = rightMargin;
+    public MHorItemDecoration(Context context,float space, float leftMargin, float rightMargin) {
+        this.space = TransformUtil.dip2px(context,space);
+        this.leftMargin = TransformUtil.dip2px(context,leftMargin);
+        this.rightMargin = TransformUtil.dip2px(context,rightMargin);
     }
 
-    public HorItemDecoration(int space, int leftMargin, int rightMargin, @ColorInt int id) {
-        this.space = space;
-        this.leftMargin = leftMargin;
-        this.rightMargin = rightMargin;
+    public MHorItemDecoration(Context context,float space, float leftMargin, float rightMargin, @ColorInt int id) {
+        this.space = TransformUtil.dip2px(context,space);
+        this.leftMargin = TransformUtil.dip2px(context,leftMargin);
+        this.rightMargin = TransformUtil.dip2px(context,rightMargin);
         mPaint = new Paint();
         mPaint.setColor(id);
         mPaint.setAntiAlias(true);
@@ -61,25 +61,22 @@ public class HorItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.right = space;
         outRect.left = leftMargin;
-        RecyclerView.LayoutManager manager = parent.getLayoutManager();
-        if (manager instanceof LinearLayoutManager) {
-            LinearLayoutManager manager1 = (LinearLayoutManager) manager;
-            if (manager1.findLastVisibleItemPosition() + 1 == manager1.getItemCount()) {
-                if (rightMargin != 0) {
-                    outRect.right = rightMargin;
-                } else {
-                    outRect.right = 0;
-                }
+        if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
+            if (rightMargin != 0) {
+                outRect.right = rightMargin;
+            } else {
+                outRect.right = 0;
             }
-            if (leftMargin != 0) {
-                if (manager1.findFirstVisibleItemPosition() == 0) {
-                    outRect.left = leftMargin;
-                } else {
-                    outRect.left = 0;
-                }
+        }
+        if (leftMargin != 0) {
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.left = leftMargin;
+            } else {
+                outRect.left = 0;
             }
         }
     }
+
 
 
     //绘制分割线

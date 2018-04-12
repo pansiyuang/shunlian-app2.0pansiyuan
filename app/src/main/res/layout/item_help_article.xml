@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="115dp"
+    android:layout_height="67dp"
+    android:scaleType="fitXY"
+    android:id="@+id/miv_photo" />
+

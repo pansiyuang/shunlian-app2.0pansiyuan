@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    android:orientation="horizontal">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_photo"
+        android:layout_width="101dp"
+        android:layout_height="75dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"/>
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/new_text"
+            android:singleLine="true"
+            android:ellipsize="end"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/my_gray_one"/>
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/value_555555"/>
+    </com.shunlian.app.widget.MyLinearLayout>
+
+</com.shunlian.app.widget.MyLinearLayout>

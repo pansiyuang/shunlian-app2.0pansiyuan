@@ -455,6 +455,9 @@
     <string name="personal_wodedian">我的店</string>
     <string name="personal_zhuangxiuwode">装修我的店</string>
     <string name="personal_mashangzhuangxiu">马上装修</string>
+    <string name="personal_yonghufuwu">用户服务</string>
+    <string name="personal_bangzhuzhongxin">帮助中心</string>
+    <string name="personal_mashangtiwen">马上提问</string>
     <string name="personal_member">共%s人</string>
     <string name="personal_order">共%s单</string>
 
@@ -524,4 +527,25 @@
     <!--聊天-->
     <string name="chat_lingquyouhui">领取优惠券</string>
     <string name="chat_lijilingqu">立即领取</string>
+
+    <!--帮助-->
+    <string name="help_zaixiankefu">在线客服(00:00:24:00)</string>
+    <string name="help_bodadianhua">拨打电话(00:00:24:00)</string>
+    <string name="help_bangzhuzhongxin">帮助中心</string>
+    <string name="help_changjianwenti">常见问题：</string>
+    <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>
+    <string name="help_shi">是</string>
+    <string name="help_fou">否</string>
+    <string name="help_xiangguan">相关问题：</string>
+    <string name="help_jiejuefangan">解决方案</string>
+    <string name="help_yijianfankui">意见反馈</string>
+    <string name="help_ninjuedenali">您觉得哪里没有帮助到您呢？</string>
+    <string name="help_tijiao">提交</string>
+    <string name="help_qingzhishao">请至少输入5个字</string>
+    <string name="help_zishuchaoguo">字数超过140个字限制</string>
+    <string name="help_xiexiefankui">谢谢反馈</string>
+    <string name="help_xinshouketang">新手课堂</string>
+    <string name="help_shuruwenti">请输入问题关键词</string>
+    <string name="help_baoqian">抱歉，没有找到与“一样”相关的问题，您可以
+换个词试一试</string>
 </resources>

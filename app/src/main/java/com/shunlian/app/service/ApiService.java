@@ -59,6 +59,11 @@ import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.bean.HelpClassEntity;
+import com.shunlian.app.bean.HelpSearchEntity;
+import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.bean.HelpcenterQuestionEntity;
+import com.shunlian.app.bean.HelpcenterSolutionEntity;
 import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -1397,6 +1402,7 @@ public interface ApiService {
     @POST("member/Myfavorite/favoriteArticles")
     Call<BaseEntity<ArticleEntity>> favoriteArticles(@Body RequestBody body);
 
+
     /**
      * 精选文章收藏
      *
@@ -1420,5 +1426,78 @@ public interface ApiService {
      */
     @GET("message/sys")
     Call<BaseEntity<EmptyEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 帮助首页
+     *
+     * @return
+     */
+    @GET("helpcenter/index")
+    Call<BaseEntity<HelpcenterIndexEntity>> helpcenterIndex(@QueryMap Map<String, String> map);
+
+    /**
+     * 问题分类
+     *
+     * @return
+     */
+    @GET("helpcenter/questionCate")
+    Call<BaseEntity<HelpcenterQuestionEntity>> helpcenterQuestionCate(@QueryMap Map<String, String> map);
+
+    /**
+     * 根据二级分类获取问题列表
+     *
+     * @return
+     */
+    @GET("helpcenter/question")
+    Call<BaseEntity<HelpcenterQuestionEntity>> helpcenterQuestion(@QueryMap Map<String, String> map);
+
+    /**
+     * 解决方案
+     *
+     * @return
+     */
+    @GET("helpcenter/solution")
+    Call<BaseEntity<HelpcenterSolutionEntity>> helpcenterSolution(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 客服电话
+     *
+     * @return
+     */
+    @GET("helpcenter/serviceTell")
+    Call<BaseEntity<CommonEntity>> helpcenterServiceTell(@QueryMap Map<String, String> map);
+
+    /**
+     * 新手课堂
+     *
+     * @return
+     */
+    @GET("helpcenter/classes")
+    Call<BaseEntity<HelpClassEntity>> helpcenterClasses(@QueryMap Map<String, String> map);
+
+    /**
+     * 帮助中心关键词搜索
+     *
+     * @return
+     */
+    @GET("helpcenter/search")
+    Call<BaseEntity<HelpSearchEntity>> helpcenterSearch(@QueryMap Map<String, String> map);
+
+    /**
+     * 意见反馈
+     *
+     * @return
+     */
+    @POST("helpcenter/feedback")
+    Call<BaseEntity<EmptyEntity>> helpcenterFeedback(@Body RequestBody body);
+
+    /**
+     * 是否解决
+     *
+     * @return
+     */
+    @POST("helpcenter/solve")
+    Call<BaseEntity<EmptyEntity>> helpcenterSolve(@Body RequestBody body);
 
 }

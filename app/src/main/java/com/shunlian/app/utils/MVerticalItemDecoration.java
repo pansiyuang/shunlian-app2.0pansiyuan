@@ -1,5 +1,6 @@
 package com.shunlian.app.utils;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,24 +13,22 @@ import android.view.View;
  * Created by Administrator on 2017/11/24.
  */
 
-public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
-    //item少，当前屏幕能全部显示的情况下，会失效
+public class MVerticalItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
     private int topMargin;
     private int bottomMargin;
     private Paint mPaint;
 
-    public VerticalItemDecoration(int space, int topMargin, int bottomMargin){
-
-        this.space = space;
-        this.topMargin = topMargin;
-        this.bottomMargin = bottomMargin;
+    public MVerticalItemDecoration(Context context,float space, float topMargin, float bottomMargin){
+        this.space = TransformUtil.dip2px(context,space);
+        this.topMargin = TransformUtil.dip2px(context,topMargin);
+        this.bottomMargin = TransformUtil.dip2px(context,bottomMargin);
     }
 
-    public VerticalItemDecoration(int space, int topMargin, int bottomMargin, @ColorInt int colorId){
-        this.space = space;
-        this.topMargin = topMargin;
-        this.bottomMargin = bottomMargin;
+    public MVerticalItemDecoration(Context context,float space, float topMargin, float bottomMargin, @ColorInt int colorId){
+        this.space = TransformUtil.dip2px(context,space);
+        this.topMargin = TransformUtil.dip2px(context,topMargin);
+        this.bottomMargin = TransformUtil.dip2px(context,bottomMargin);
         mPaint = new Paint();
         mPaint.setColor(colorId);
         mPaint.setAntiAlias(true);
@@ -37,14 +36,20 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
     }
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        outRect.bottom = space;
+        outRect.bottom = bottomMargin;
         outRect.top = topMargin;
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if (layoutManager instanceof LinearLayoutManager){
-            LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
-            int lastPosition = manager.findLastVisibleItemPosition();
-            if (lastPosition + 1 == manager.getItemCount()){
-                outRect.bottom = bottomMargin;
+        if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
+            if (bottomMargin != 0) {
+                outRect.right = bottomMargin;
+            } else {
+                outRect.right = 0;
+            }
+        }
+        if (topMargin != 0) {
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.left = topMargin;
+            } else {
+                outRect.left = 0;
             }
         }
     }
