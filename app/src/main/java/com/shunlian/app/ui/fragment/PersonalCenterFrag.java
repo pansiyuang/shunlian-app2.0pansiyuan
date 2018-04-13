@@ -23,7 +23,9 @@ import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
@@ -540,6 +542,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     @Override
                     public void onClick(View view) {
                         Common.clearLoginInfo();
+                        JpushUtil.setJPushAlias();
+                        Constant.JPUSH=null;
                         LoginAct.startAct(baseContext);
                         promptDialog.dismiss();
                     }

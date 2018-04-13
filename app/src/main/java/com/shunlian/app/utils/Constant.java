@@ -74,6 +74,9 @@ public final class Constant {
     public static Map<String, List<String>> REBRAND_ATTRS;//筛选属性(重新赋值用)
     public static GetListFilterEntity LISTFILTER;//列表属性(重新赋值用)
     public static String DINGWEI;//定位
+
+    public static List<String> JPUSH;//推送
+
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId
 //    public static final int IM_ACCOUNT_TYPE = 3415;   //腾讯IM SDK  accountType

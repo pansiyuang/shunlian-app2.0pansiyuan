@@ -26,6 +26,7 @@ public class LoginAct extends BaseActivity {
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, LoginAct.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

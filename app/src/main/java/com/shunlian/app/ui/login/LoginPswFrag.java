@@ -18,7 +18,9 @@ import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyButton;
@@ -168,10 +170,15 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedPrfStringss("tags", null);
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
         EasyWebsocketClient.initWebsocketClient(getActivity()); //初始化聊天
+        if (Constant.JPUSH!=null&&!"login".equals(Constant.JPUSH.get(0))){
+            Common.goGoGo(baseActivity,Constant.JPUSH.get(0),Constant.JPUSH.get(1),Constant.JPUSH.get(2));
+        }
+        JpushUtil.setJPushAlias();
         baseActivity.finish();
     }
 

@@ -51,10 +51,12 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -76,7 +78,37 @@ public class Common {
     private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
 
+    /**
+     * 判断mainactivity是否处于栈底
+     *
+     * @return true在栈顶false不在栈底
+     */
+    public static boolean isBottomActivity(String className) {
+        ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        String name = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
+        String mName = name.substring(name.lastIndexOf(".") + 1);
+        return mName.equals(className);
+    }
+
+    public static String transClassName(String toPage) {
+        switch (toPage) {
+            case "goods":
+                return "GoodsDetailAct";
+            case "login":
+                return "LoginAct";
+            case "article":
+                return "ArticleH5Act";
+            case "artdetails":
+                return "CommentListAct";
+            case "myorder":
+                return "OrderDetailAct";
+            default:
+                return "";
+        }
+    }
+
     public static void goGoGo(Context context, String type, String... params) {
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
@@ -89,6 +121,16 @@ public class Common {
                 break;
             case "artdetails":
                 CommentListAct.startAct((Activity) context, params[0]);
+                break;
+            case "myorder":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    OrderDetailAct.startAct(context, params[0]);
+                }
+                break;
+            default:
+                MainActivity.startAct(context, "");
                 break;
         }
     }

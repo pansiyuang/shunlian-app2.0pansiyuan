@@ -132,6 +132,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     public static void startAct(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailAct.class);
         intent.putExtra("orderId", orderId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intent);
     }
 
