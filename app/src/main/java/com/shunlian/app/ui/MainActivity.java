@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.HashMap;
 import java.util.Iterator;

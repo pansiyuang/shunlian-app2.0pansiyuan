@@ -94,7 +94,9 @@ public class JpushUtil {
         String member_id;
         member_id = SharedPrefUtil.getSharedPrfString("member_id", "null");
         tagss = SharedPrefUtil.getSharedPrfStringss("tags", null);
-//        tagss=new HashSet<>();
+        if (tagss!=null)
+        LogUtil.augusLogW(tagss.toString());
+        //tagss=new HashSet<>();
 //        tagss.add("123");
 //        tagss.add("456");
         if (isValidTagAndAlias(member_id)) {

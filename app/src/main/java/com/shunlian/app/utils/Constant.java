@@ -77,6 +77,8 @@ public final class Constant {
 
     public static List<String> JPUSH;//推送
 
+    public static String MOBILE;//手机号
+
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId
 //    public static final int IM_ACCOUNT_TYPE = 3415;   //腾讯IM SDK  accountType

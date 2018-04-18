@@ -14,6 +14,7 @@ import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.presenter.PSignIn;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
@@ -565,6 +566,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.rl_more:
             case R.id.mllayout_yue:
+                BalanceMainAct.startAct(baseContext,false);
+                break;
             case R.id.mllayout_youhuiquan:
             case R.id.mllayout_dongli:
             case R.id.mllayout_xiaoshou:

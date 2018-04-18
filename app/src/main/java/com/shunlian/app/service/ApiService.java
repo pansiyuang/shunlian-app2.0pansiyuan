@@ -26,8 +26,11 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.AmountDetailEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.BalanceDetailEntity;
+import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
@@ -57,6 +60,7 @@ import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetQrCardEntity;
+import com.shunlian.app.bean.GetRealInfoEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
@@ -1424,6 +1428,7 @@ public interface ApiService {
 
     /**
      * 系统消息
+     *
      * @param map
      * @return
      */
@@ -1518,5 +1523,118 @@ public interface ApiService {
      */
     @POST("helpcenter/solve")
     Call<BaseEntity<EmptyEntity>> helpcenterSolve(@Body RequestBody body);
+
+    /**
+     * 余额明细
+     *
+     * @return
+     */
+    @POST("balance/transactionList")
+    Call<BaseEntity<BalanceDetailEntity>> balanceTransactionList(@Body RequestBody body);
+
+    /**
+     * 提现到支付宝
+     *
+     * @return
+     */
+    @POST("balance/withdraw")
+    Call<BaseEntity<CommonEntity>> balanceWithdraw(@Body RequestBody body);
+
+    /**
+     * 验证短信验证码
+     *
+     * @return
+     */
+    @POST("balance/checkCode")
+    Call<BaseEntity<CommonEntity>> balanceCheckCode(@Body RequestBody body);
+
+    /**
+     * 验证用户支付密码规则有效性
+     *
+     * @return
+     */
+    @POST("balance/checkPayPasswordRuleValid")
+    Call<BaseEntity<EmptyEntity>> checkPayPasswordRuleValid(@Body RequestBody body);
+
+    /**
+     * 第一次设置支付密码
+     *
+     * @return
+     */
+    @POST("balance/setPayPassword")
+    Call<BaseEntity<EmptyEntity>> balanceSetPayPassword(@Body RequestBody body);
+
+    /**
+     * 修改支付密码
+     *
+     * @return
+     */
+    @POST("balance/changePayPassword")
+    Call<BaseEntity<EmptyEntity>> balanceChangePayPassword(@Body RequestBody body);
+
+    /**
+     * 绑定支付宝账户
+     *
+     * @return
+     */
+    @POST("balance/bindAliPay")
+    Call<BaseEntity<CommonEntity>> balanceBindAliPay(@Body RequestBody body);
+
+    /**
+     * 验证支付密码正确
+     *
+     * @return
+     */
+    @POST("balance/checkPayPassword")
+    Call<BaseEntity<CommonEntity>> balanceCheckPayPassword(@Body RequestBody body);
+
+    /**
+     * 解除支付宝绑定
+     *
+     * @return
+     */
+    @POST("balance/unbindAliPay")
+    Call<BaseEntity<EmptyEntity>> balanceUnbindAliPay(@Body RequestBody body);
+
+
+    /**
+     * 余额详情
+     *
+     * @return
+     */
+    @GET("balance/info")
+    Call<BaseEntity<BalanceInfoEntity>> balanceInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 余额明细详情
+     *
+     * @return
+     */
+    @GET("balance/transactionDetail")
+    Call<BaseEntity<AmountDetailEntity>> amountDetails(@QueryMap Map<String, String> map);
+
+    /**
+     * 余额明细详情
+     *
+     * @return
+     */
+    @GET("balance/getWithdrawAccount")
+    Call<BaseEntity<CommonEntity>> getWithdrawAccount(@QueryMap Map<String, String> map);
+
+    /**
+     * 发送短信验证码
+     *
+     * @return
+     */
+    @GET("balance/sendSmsCode")
+    Call<BaseEntity<EmptyEntity>> balanceSendSmsCode(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取实名信息
+     *
+     * @return
+     */
+    @GET("balance/getRealInfo")
+    Call<BaseEntity<GetRealInfoEntity>> balanceGetRealInfo(@QueryMap Map<String, String> map);
 
 }

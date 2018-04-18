@@ -44,7 +44,6 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="6dp"
-                    android:text="您的积分1231"
                     android:textColor="@color/value_FE7894"
                     android:textSize="14sp" />
 

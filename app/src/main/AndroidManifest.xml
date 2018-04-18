@@ -12,8 +12,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-feature android:name="android.hardware.autofocus"/>
+
+    <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -57,7 +59,7 @@
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
@@ -68,36 +70,34 @@
 
         <!-- since 3.0.9 Required SDK 核心功能-->
         <provider
-            android:authorities="com.shunlian.app.DataProvider"
             android:name="cn.jpush.android.service.DataProvider"
-            android:exported="true"
-            />
+            android:authorities="com.shunlian.app.DataProvider"
+            android:exported="true" />
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
         <service
             android:name="cn.jpush.android.service.DaemonService"
             android:enabled="true"
             android:exported="true">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
-                <category android:name="com.shunlian.app"/>
+                <category android:name="com.shunlian.app" />
             </intent-filter>
         </service>
 
         <!-- since 3.1.0 Required SDK 核心功能-->
         <provider
-            android:authorities="com.shunlian.app.DownloadProvider"
             android:name="cn.jpush.android.service.DownloadProvider"
-            android:exported="true"
-            />
+            android:authorities="com.shunlian.app.DownloadProvider"
+            android:exported="true" />
 
         <!-- Required SDK核心功能-->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <category android:name="com.shunlian.app"/>
+                <category android:name="com.shunlian.app" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -107,6 +107,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -115,32 +116,32 @@
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.shunlian.app" />
             </intent-filter>
         </activity>
         <!-- SDK核心功能-->
         <!--<activity-->
-            <!--android:name="cn.jpush.android.ui.PopWinActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden"-->
-            <!--android:exported="false"-->
-            <!--android:theme="@style/MyDialogStyle">-->
-            <!--<intent-filter>-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="com.shunlian.app" />-->
-            <!--</intent-filter>-->
+        <!--android:name="cn.jpush.android.ui.PopWinActivity"-->
+        <!--android:configChanges="orientation|keyboardHidden"-->
+        <!--android:exported="false"-->
+        <!--android:theme="@style/MyDialogStyle">-->
+        <!--<intent-filter>-->
+        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--<category android:name="com.shunlian.app" />-->
+        <!--</intent-filter>-->
         <!--</activity>-->
 
         <!-- Required SDK核心功能-->
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <!-- Required SDK核心功能-->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
@@ -149,12 +150,12 @@
         <!-- 新的tag/alias接口结果返回需要开发者配置一个自定的广播 -->
         <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
         <!--<receiver-->
-            <!--android:name="自定义 Receiver"-->
-            <!--android:enabled="true" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
-                <!--<category android:name="com.shunlian.app" />-->
-            <!--</intent-filter>-->
+        <!--android:name="自定义 Receiver"-->
+        <!--android:enabled="true" >-->
+        <!--<intent-filter>-->
+        <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
+        <!--<category android:name="com.shunlian.app" />-->
+        <!--</intent-filter>-->
         <!--</receiver>-->
 
         <!-- User defined. 用户自定义的广播接收器-->
@@ -187,7 +188,9 @@
         <!-- 3cbe47ad444ddec83ea45d31 -->
         <!-- 测试 -->
         <!-- augus:4a85a233f140802d8ff97cff   ee43de8743a5ffe348cb1d88 -->
-        <meta-data android:name="JPUSH_APPKEY" android:value="4a85a233f140802d8ff97cff"/>
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="4a85a233f140802d8ff97cff" />
         <!--jpush-->
 
 
@@ -195,8 +198,8 @@
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:resizeableActivity="true"
+            android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
@@ -287,7 +290,8 @@
             android:name=".ui.confirm_order.MegerOrderActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.receive_adress.AddAdressAct"
+        <activity
+            android:name=".ui.receive_adress.AddAdressAct"
             android:exported="false"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -304,8 +308,7 @@
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" >
-        </activity>
+            android:screenOrientation="behind"></activity>
         <activity
             android:name=".ui.my_comment.MyCommentAct"
             android:exported="false"
@@ -367,11 +370,11 @@
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.h5.H5Act"
+        <activity
+            android:name=".ui.h5.H5Act"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".photopick.PhotoPickerActivity"
             android:exported="false"
@@ -388,91 +391,96 @@
             android:name=".ui.category.CategoryLetterAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.returns_order.ConsultHistoryAct"
+        <activity
+            android:name=".ui.returns_order.ConsultHistoryAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.returns_order.RefundAfterSaleAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.zxing_code.ZXingDemoAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.returns_order.SubmitLogisticsInfoAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.category.CategoryAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.RefundAfterSaleAct"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.returns_order.SelectLogisticsAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.category.CategoryFiltrateAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.zxing_code.ZXingDemoAct"
+            android:theme="@style/pay" />
+        <activity
+            android:name=".ui.category.RankingListAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.SubmitLogisticsInfoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.order.PlatformInterventionRequestActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.CategoryAct"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.returns_order.SelectLogisticsAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.CategoryFiltrateAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/pay"/>
-        <activity android:name=".ui.category.RankingListAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.order.PlatformInterventionRequestActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.goods_detail.SearchGoodsActivity"
+        <activity
+            android:name=".ui.goods_detail.SearchGoodsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.activity.DayDayAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DayDayAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.collection.MyCollectionAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.collection.MyCollectionAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.collection.SearchResultAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.collection.SearchResultAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.sign.SignInAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.sign.SignInAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.qr_code.QrCodeAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.qr_code.QrCodeAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.help.HelpOneAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.help.HelpOneAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.help.HelpTwoAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.help.HelpTwoAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.myself_store.MyLittleStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.MyLittleStoreActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            />
-        <activity android:name=".ui.myself_store.AddStoreGoodsAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.category.BrandListAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.AddStoreGoodsAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.myself_store.GoodsSearchAct"
+        <activity
+            android:name=".ui.category.BrandListAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.myself_store.QrcodeStoreAct"
+        <activity
+            android:name=".ui.myself_store.GoodsSearchAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myself_store.QrcodeStoreAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -492,31 +500,37 @@
             android:name=".ui.discover.other.ExperiencePublishActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.discover.other.CommentListAct"
+        <activity
+            android:name=".ui.discover.other.CommentListAct"
             android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <activity android:name=".ui.discover.other.CommentDetailAct"
+        <activity
+            android:name=".ui.discover.other.CommentDetailAct"
             android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <activity android:name=".ui.discover.guanzhu.FindSelectShopAct"
+        <activity
+            android:name=".ui.discover.guanzhu.FindSelectShopAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.discover.quanzi.DiscoverTieziAct"
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverTieziAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
+        <activity
+            android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".newchat.ui.MessageActivity"
@@ -543,19 +557,72 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.discover.other.ExperienceDetailAct"
+        <activity
+            android:name=".ui.discover.other.ExperienceDetailAct"
             android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.h5.SimpleH5Act"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.message.SystemMsgAct"
+            android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.h5.SimpleH5Act"
+        <activity
+            android:name=".ui.balance.BalanceMainAct"
             android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.message.SystemMsgAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalanceDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.AmountDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalanceXQAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalanceTXAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalanceResultAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalancePaySetAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalancePaySetOneAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalancePaySetTwoAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.BalanceVerifyPhoneAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.AlipayMyAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.AlipayAddAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.balance.AlipayDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
