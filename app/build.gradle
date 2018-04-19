@@ -83,6 +83,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.4.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.2.0'
     compile project(':immersive')
+    compile project(':chartlibrary')
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:design:25.4.0'
     implementation project(':mlibrary')

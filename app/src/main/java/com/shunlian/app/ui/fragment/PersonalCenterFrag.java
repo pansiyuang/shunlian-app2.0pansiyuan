@@ -11,15 +11,16 @@ import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PersonalcenterEntity;
-import com.shunlian.app.presenter.PSignIn;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
+import com.shunlian.app.ui.sale_data.SaleDataAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -554,8 +555,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mllayout_yue:
             case R.id.mllayout_youhuiquan:
+                break;
             case R.id.mllayout_dongli:
+                MyProfitAct.startAct(baseActivity);
+                break;
             case R.id.mllayout_xiaoshou:
+                SaleDataAct.startAct(baseActivity);
+                break;
             case R.id.mrlayout_xiaodianhuiyuan:
                 // TODO: 2018/2/2
 //                小店会员

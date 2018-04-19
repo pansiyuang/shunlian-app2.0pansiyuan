@@ -435,7 +435,7 @@
     <!--个人中心-->
     <string name="personal_yue">余额</string>
     <string name="personal_youhuiquan">优惠券</string>
-    <string name="personal_donglizhishu">动力指数</string>
+    <string name="personal_donglizhishu">收益</string>
     <string name="personal_xiaoshou">销售</string>
     <string name="personal_quanbu">全部</string>
     <string name="personal_daifukuan">待付款</string>

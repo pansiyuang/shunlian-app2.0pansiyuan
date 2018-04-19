@@ -191,6 +191,12 @@
 
     <!-- IM -->
     <color name="value_DA">#DADADA</color>
+    <!--销售数据-->
+    <color name="value_43D060">#43D060</color>
+    <color name="value_F9A31C">#F9A31C</color>
+    <color name="value_F1F0F0">#F1F0F0</color>
+    <color name="value_f9f9f9">#f9f9f9</color>
+
 
 </resources>
 

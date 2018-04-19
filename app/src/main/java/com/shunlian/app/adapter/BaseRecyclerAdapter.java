@@ -64,11 +64,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     private int allPage;//总页
     private OnReloadListener reloadListener;
     private boolean isLoadFailure;
+    public final LayoutInflater mInflater;
 
     public BaseRecyclerAdapter(Context context, boolean isShowFooter, List<T> lists) {
         this.context = context;
         this.lists = lists;
         this.isShowFooter = isShowFooter;
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override

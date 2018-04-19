@@ -568,4 +568,32 @@ public class Common {
 
         return "99+";
     }
+
+    /**
+     *
+     * @param plusRoleCode
+     * @return
+     */
+    public static int plusRoleCode(String plusRoleCode){
+        int resid = 0;
+        if (TextUtils.isEmpty(plusRoleCode)){
+            plusRoleCode = "0";
+        }
+        int code = Integer.parseInt(plusRoleCode);
+        switch (code){//1 普通 2黄金  3钻石 4皇冠;
+            case 1:
+                resid = R.mipmap.img_putong;
+                break;
+            case 2:
+                resid = R.mipmap.img_jinpai;
+                break;
+            case 3:
+                resid = R.mipmap.img_zuanshi;
+                break;
+            case 4:
+                resid = R.mipmap.img_huangguan;
+                break;
+        }
+        return resid;
+    }
 }

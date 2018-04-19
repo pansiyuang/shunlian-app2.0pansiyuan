@@ -19,7 +19,7 @@ public class HttpDialog extends Dialog {
     private static Context mContext;
     private ProgressView mProgressBar;
     private long startTime;
-    private static final long min_show_tile = 600;//最少显示时间(毫秒)
+    private static final long min_show_tile = 500;//最少显示时间(毫秒)
     public Handler mHandler = new Handler() {
 
         @Override

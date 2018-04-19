@@ -42,6 +42,7 @@ import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.DetailOrderRecordEntity;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
@@ -69,6 +70,7 @@ import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.MyHomeEntity;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.MyProfitEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
@@ -80,6 +82,9 @@ import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.bean.SaleDataEntity;
+import com.shunlian.app.bean.SaleDetailEntity;
+import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.bean.SortFragEntity;
@@ -1440,4 +1445,67 @@ public interface ApiService {
     @GET("message/allcount")
     Call<BaseEntity<AllMessageCountEntity>> messageAllCount(@QueryMap Map<String, String> map);
 
+    /**
+     *销售数据
+     */
+    @GET("member/salesdata/generalsales")
+    Call<BaseEntity<SaleDataEntity>> salesdata(@QueryMap Map<String, String> map);
+
+    /**
+     * 销售数据折线图
+     * @param body
+     * @return
+     */
+    @POST("member/salesdata/{name}")
+    Call<BaseEntity<SalesChartEntity>> salesChart(@Path("name")String path_name,@Body RequestBody body);
+
+    /**
+     * 销售详情 和奖励明细 myprofit/rewarddetail   salesdata/salesDetail
+     * @param body
+     * @return
+     */
+    @POST("member/{path1}/{path2}")
+    Call<BaseEntity<SaleDetailEntity>> salesDetail(@Path("path1")String path_name1,
+                                                   @Path("path2")String path_name2,
+                                                   @Body RequestBody body);
+
+    /**
+     * 我的收益
+     * @param body
+     * @return
+     */
+    @POST("member/myprofit/generalprofit")
+    Call<BaseEntity<MyProfitEntity>> generalprofit(@Body RequestBody body);
+
+    /**
+     * 收益折线走势图
+     * @param body
+     * @return
+     */
+    @POST("member/myprofit/profitChart")
+    Call<BaseEntity<SalesChartEntity>> profitChart(@Body RequestBody body);
+
+    /**
+     * 收益提现
+     * @param map
+     * @return
+     */
+    @GET("member/myprofit/withdrawProfit")
+    Call<BaseEntity<EmptyEntity>> withdrawProfit(@QueryMap Map<String,String> map);
+
+    /**
+     * 预估收益  详情订单记录
+     * @param body
+     * @return
+     */
+    @POST("member/myprofit/getEstimateDetail")
+    Call<BaseEntity<DetailOrderRecordEntity>> getEstimateDetail(@Body RequestBody body);
+
+    /**
+     * 领取月奖励和周奖励
+     * @param map
+     * @return
+     */
+    @GET("member/myprofit/receiveReward")
+    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String,String> map);
 }
