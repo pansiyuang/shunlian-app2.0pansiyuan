@@ -23,4 +23,16 @@ public class CommonEntity {
     public List<FindCommentListEntity.LastLikesBean> last_likes;//点赞人的头像
     public List<FootprintEntity.DateInfo> date_info;//足迹时间列表
 
+    public String tell;//帮助中心电话
+
+    //获取提现账户
+    public String account_name;
+    public String account_number;
+    public String account_type;
+    public String amount;
+    public String account;
+    public String rate;
+    public String free_amount;
+    public String free_amount_des;
+    public String key;
 }

@@ -198,6 +198,14 @@
     <color name="value_f9f9f9">#f9f9f9</color>
 
 
+
+    <!--帮助中心-->
+    <color name="value_555555">#555555</color>
+    <color name="value_F7F7F7">#F7F7F7</color>
+    <color name="value_E5E5E5">#E5E5E5</color>
+
+    <!--余额-->
+    <color name="value_FBFBFB">#FBFBFB</color>
 </resources>
 
 

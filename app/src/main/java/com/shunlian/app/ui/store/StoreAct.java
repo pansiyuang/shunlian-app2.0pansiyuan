@@ -205,6 +205,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     public static void startAct(Context context,String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
         intent.putExtra("storeId",storeId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

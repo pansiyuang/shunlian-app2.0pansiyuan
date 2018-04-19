@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/value_EFEEEE">
+
+    <include layout="@layout/block_title_whitebg" />
+    <include layout="@layout/block_help_bottom" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_qCate"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mrlayout_title"
+        android:layout_marginBottom="57.5dp"
+        android:overScrollMode="never"/>
+
+</com.shunlian.app.widget.MyRelativeLayout>

@@ -43,6 +43,7 @@ import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
@@ -276,6 +277,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     private void goLogin() {
         Common.clearLoginInfo();
+        JpushUtil.setJPushAlias();
+        Constant.JPUSH=null;
         LoginAct.startAct(context);
     }
 

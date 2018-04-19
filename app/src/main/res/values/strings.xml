@@ -458,6 +458,9 @@
     <string name="personal_wodedian">我的店</string>
     <string name="personal_zhuangxiuwode">装修我的店</string>
     <string name="personal_mashangzhuangxiu">马上装修</string>
+    <string name="personal_yonghufuwu">用户服务</string>
+    <string name="personal_bangzhuzhongxin">帮助中心</string>
+    <string name="personal_mashangtiwen">马上提问</string>
     <string name="personal_member">共%s人</string>
     <string name="personal_order">共%s单</string>
 
@@ -528,4 +531,97 @@
     <!--聊天-->
     <string name="chat_lingquyouhui">领取优惠券</string>
     <string name="chat_lijilingqu">立即领取</string>
+
+    <!--帮助-->
+    <string name="help_zaixiankefu">在线客服(00:00:24:00)</string>
+    <string name="help_bodadianhua">拨打电话(00:00:24:00)</string>
+    <string name="help_bangzhuzhongxin">帮助中心</string>
+    <string name="help_changjianwenti">常见问题：</string>
+    <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>
+    <string name="help_shi">是</string>
+    <string name="help_fou">否</string>
+    <string name="help_xiangguan">相关问题：</string>
+    <string name="help_jiejuefangan">解决方案</string>
+    <string name="help_yijianfankui">意见反馈</string>
+    <string name="help_ninjuedenali">您觉得哪里没有帮助到您呢？</string>
+    <string name="help_tijiao">提交</string>
+    <string name="help_qingzhishao">请至少输入5个字</string>
+    <string name="help_zishuchaoguo">字数超过140个字限制</string>
+    <string name="help_xiexiefankui">谢谢反馈</string>
+    <string name="help_xinshouketang">新手课堂</string>
+    <string name="help_shuruwenti">请输入问题关键词</string>
+    <string name="help_baoqian">抱歉，没有找到与“一样”相关的问题，您可以
+换个词试一试</string>
+
+    <!--余额-->
+    <string name="balance_yue">余额</string>
+    <string name="balance_zhifubaoxiang">支付宝详情</string>
+    <string name="balance_jiechubang">解除绑定</string>
+    <string name="balance_woyiyuedu">我已阅读并同意此</string>
+    <string name="balance_jiebangcheng">解绑成功</string>
+    <string name="balance_yonghuxieyi">《用户协议》</string>
+    <string name="balance_quedingyao">确定要解绑此支付宝吗？</string>
+    <string name="balance_wozaixiang">我再想想</string>
+    <string name="balance_yuemingxi">余额明细</string>
+    <string name="balance_keyong">可用余额(元)</string>
+    <string name="balance_zhifushezhi">支付设置</string>
+    <string name="balance_wodezhifu">我的支付宝</string>
+    <string name="balance_zhifubao">支付宝(%s)</string>
+    <string name="balance_ninhaimeiyou">您还没有添加过支付宝~</string>
+    <string name="balance_wodelicai">我的理财</string>
+    <string name="balance_tixiandao">提现到支付宝</string>
+    <string name="balance_shouzhiminxi">收支明细</string>
+    <string name="balance_yuexiangqing">余额详情</string>
+    <string name="balance_zhanghuyue">账户余额</string>
+    <string name="balance_tixian">提现</string>
+    <string name="balance_yuetixian">余额提现</string>
+    <string name="balance_tixianzhi">提现至</string>
+    <string name="balance_zhengshixinming">真实姓名</string>
+    <string name="balance_benrenshouji">本人手机号</string>
+    <string name="balance_tixianjine">提现金额</string>
+    <string name="balance_tixianzhanghu">提现账户</string>
+    <string name="balance_quanbutixian">全部提现</string>
+    <string name="balance_qingshurushengfengzheng">请输入身份证上的名字</string>
+    <string name="balance_qingshuruzhifubao">请输入支付宝账号</string>
+    <string name="balance_zhifubaozhanghao">支付宝账号</string>
+    <string name="balance_tixianshouxu">手续费￥%s（费率%s）</string>
+    <string name="balance_jinechao">金额已超过可提现金额</string>
+    <string name="balance_ketixian">可提现金额%s元</string>
+    <string name="balance_qingshuru">请输入要提现的金额</string>
+    <string name="balance_qingshuruzhifu">请输入支付密码</string>
+    <string name="balance_ewaikouchu">额外扣除￥%s手续费</string>
+    <string name="balance_tixianjieguo">提现结果</string>
+    <string name="balance_tixianshengqing">提现申请成功</string>
+    <string name="balance_zhaohuimima">找回密码</string>
+    <string name="balance_chongxinshuru">重新输入</string>
+    <string name="balance_zhifumima">支付密码</string>
+    <string name="balance_xiuigaizhifumima">修改支付密码</string>
+    <string name="balance_zhaohuizhifumima">找回支付密码</string>
+    <string name="balance_qutianjia">去添加</string>
+    <string name="balance_weishezhi">未设置</string>
+    <string name="balance_xiayibu">下一步</string>
+    <string name="balance_bunengshi">不能是连续数字</string>
+    <string name="balance_shezhimima">设置密码</string>
+    <string name="balance_shezhixinmima">设置新密码</string>
+    <string name="balance_shenfengyanzheng">身份验证</string>
+    <string name="balance_qingshezhimima">请设置密码，用于支付验证</string>
+    <string name="balance_qingshexinzhimima">请设置新密码，用于支付验证</string>
+    <string name="balance_qingzaicishuru">请再次输入，以确认密码</string>
+    <string name="balance_qingshurushoujihao">请验证手机号%s</string>
+    <string name="balance_yanzhengshouji">验证手机号</string>
+    <string name="balance_shoujihao">手机号</string>
+    <string name="balance_huoquyanzhengma">获取验证码</string>
+    <string name="balance_yanzhengma">验证码</string>
+    <string name="balance_shezhichenggong">设置成功</string>
+    <string name="balance_xiugaichenggong">修改成功</string>
+    <string name="balance_duanxingyanzheng">短信验证码</string>
+    <string name="balance_yanzhengmayifasong">验证码已发送</string>
+    <string name="balance_duanxinyanzheng">短信验证，以确保本人操作</string>
+    <string name="balance_qingshurunis">请输入您收到的短信验证码</string>
+    <string name="balance_tianjia">添加支付宝</string>
+    <string name="balance_tianjiazhifu">添加支付宝账号</string>
+    <string name="balance_ninhaimeiyoutianjia">您还没有添加支付宝账户，请添加完支付宝账户再进行提现！</string>
+    <string name="balance_meirenzhineng">每人只能添加一个支付宝账号，如需更换，请先解绑。</string>
+    <string name="balance_wenxintishi">温馨提示：每日余额提现有%s元额度免手续费，今日还剩%s元额度超过部分要缴纳一定手续费。
+    您还有%s元收益的免息部分，今日可免手续费的提现额度为%s元。</string>
 </resources>

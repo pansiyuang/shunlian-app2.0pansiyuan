@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/value_F7F7F7"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_close"
+            android:layout_width="9dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_common_back_black" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/balance_shezhimima"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_gray_two" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="35dp"
+        android:paddingTop="80dp"
+        android:textColor="@color/new_text"
+        android:textSize="20sp" />
+
+    <com.shunlian.app.widget.gridpasswordview.GridPasswordView
+        android:id="@+id/gpv_customUi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:gpvGridColor="@color/white"
+        app:gpvGridCorner="2dp"
+        app:gpvLineColor="@color/light_gray_three"
+        app:gpvLineWidth="1dp"
+        app:gpvPasswordLength="6"
+        app:gpvPasswordTransformation="●"
+        app:gpvPasswordType="numberPassword"
+        app:gpvTextColor="@color/new_text"
+        app:gpvTextSize="30sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:text="@string/balance_bunengshi"
+        android:textColor="@color/share_text"
+        android:textSize="14sp" />
+</com.shunlian.app.widget.MyLinearLayout>

@@ -26,8 +26,11 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.AmountDetailEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.BalanceDetailEntity;
+import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
@@ -58,9 +61,15 @@ import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GetQrCardEntity;
+import com.shunlian.app.bean.GetRealInfoEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.bean.HelpClassEntity;
+import com.shunlian.app.bean.HelpSearchEntity;
+import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.bean.HelpcenterQuestionEntity;
+import com.shunlian.app.bean.HelpcenterSolutionEntity;
 import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -1405,6 +1414,7 @@ public interface ApiService {
     @POST("member/Myfavorite/favoriteArticles")
     Call<BaseEntity<ArticleEntity>> favoriteArticles(@Body RequestBody body);
 
+
     /**
      * 精选文章收藏
      *
@@ -1423,6 +1433,7 @@ public interface ApiService {
 
     /**
      * 系统消息
+     *
      * @param map
      * @return
      */
@@ -1508,4 +1519,190 @@ public interface ApiService {
      */
     @GET("member/myprofit/receiveReward")
     Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String,String> map);
+    /**
+     * 帮助首页
+     *
+     * @return
+     */
+    @GET("helpcenter/index")
+    Call<BaseEntity<HelpcenterIndexEntity>> helpcenterIndex(@QueryMap Map<String, String> map);
+
+    /**
+     * 问题分类
+     *
+     * @return
+     */
+    @GET("helpcenter/questionCate")
+    Call<BaseEntity<HelpcenterQuestionEntity>> helpcenterQuestionCate(@QueryMap Map<String, String> map);
+
+    /**
+     * 根据二级分类获取问题列表
+     *
+     * @return
+     */
+    @GET("helpcenter/question")
+    Call<BaseEntity<HelpcenterQuestionEntity>> helpcenterQuestion(@QueryMap Map<String, String> map);
+
+    /**
+     * 解决方案
+     *
+     * @return
+     */
+    @GET("helpcenter/solution")
+    Call<BaseEntity<HelpcenterSolutionEntity>> helpcenterSolution(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 客服电话
+     *
+     * @return
+     */
+    @GET("helpcenter/serviceTell")
+    Call<BaseEntity<CommonEntity>> helpcenterServiceTell(@QueryMap Map<String, String> map);
+
+    /**
+     * 新手课堂
+     *
+     * @return
+     */
+    @GET("helpcenter/classes")
+    Call<BaseEntity<HelpClassEntity>> helpcenterClasses(@QueryMap Map<String, String> map);
+
+    /**
+     * 帮助中心关键词搜索
+     *
+     * @return
+     */
+    @GET("helpcenter/search")
+    Call<BaseEntity<HelpSearchEntity>> helpcenterSearch(@QueryMap Map<String, String> map);
+
+    /**
+     * 意见反馈
+     *
+     * @return
+     */
+    @POST("helpcenter/feedback")
+    Call<BaseEntity<EmptyEntity>> helpcenterFeedback(@Body RequestBody body);
+
+    /**
+     * 是否解决
+     *
+     * @return
+     */
+    @POST("helpcenter/solve")
+    Call<BaseEntity<EmptyEntity>> helpcenterSolve(@Body RequestBody body);
+
+    /**
+     * 余额明细
+     *
+     * @return
+     */
+    @POST("balance/transactionList")
+    Call<BaseEntity<BalanceDetailEntity>> balanceTransactionList(@Body RequestBody body);
+
+    /**
+     * 提现到支付宝
+     *
+     * @return
+     */
+    @POST("balance/withdraw")
+    Call<BaseEntity<CommonEntity>> balanceWithdraw(@Body RequestBody body);
+
+    /**
+     * 验证短信验证码
+     *
+     * @return
+     */
+    @POST("balance/checkCode")
+    Call<BaseEntity<CommonEntity>> balanceCheckCode(@Body RequestBody body);
+
+    /**
+     * 验证用户支付密码规则有效性
+     *
+     * @return
+     */
+    @POST("balance/checkPayPasswordRuleValid")
+    Call<BaseEntity<EmptyEntity>> checkPayPasswordRuleValid(@Body RequestBody body);
+
+    /**
+     * 第一次设置支付密码
+     *
+     * @return
+     */
+    @POST("balance/setPayPassword")
+    Call<BaseEntity<EmptyEntity>> balanceSetPayPassword(@Body RequestBody body);
+
+    /**
+     * 修改支付密码
+     *
+     * @return
+     */
+    @POST("balance/changePayPassword")
+    Call<BaseEntity<EmptyEntity>> balanceChangePayPassword(@Body RequestBody body);
+
+    /**
+     * 绑定支付宝账户
+     *
+     * @return
+     */
+    @POST("balance/bindAliPay")
+    Call<BaseEntity<CommonEntity>> balanceBindAliPay(@Body RequestBody body);
+
+    /**
+     * 验证支付密码正确
+     *
+     * @return
+     */
+    @POST("balance/checkPayPassword")
+    Call<BaseEntity<CommonEntity>> balanceCheckPayPassword(@Body RequestBody body);
+
+    /**
+     * 解除支付宝绑定
+     *
+     * @return
+     */
+    @POST("balance/unbindAliPay")
+    Call<BaseEntity<EmptyEntity>> balanceUnbindAliPay(@Body RequestBody body);
+
+
+    /**
+     * 余额详情
+     *
+     * @return
+     */
+    @GET("balance/info")
+    Call<BaseEntity<BalanceInfoEntity>> balanceInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 余额明细详情
+     *
+     * @return
+     */
+    @GET("balance/transactionDetail")
+    Call<BaseEntity<AmountDetailEntity>> amountDetails(@QueryMap Map<String, String> map);
+
+    /**
+     * 余额明细详情
+     *
+     * @return
+     */
+    @GET("balance/getWithdrawAccount")
+    Call<BaseEntity<CommonEntity>> getWithdrawAccount(@QueryMap Map<String, String> map);
+
+    /**
+     * 发送短信验证码
+     *
+     * @return
+     */
+    @GET("balance/sendSmsCode")
+    Call<BaseEntity<EmptyEntity>> balanceSendSmsCode(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取实名信息
+     *
+     * @return
+     */
+    @GET("balance/getRealInfo")
+    Call<BaseEntity<GetRealInfoEntity>> balanceGetRealInfo(@QueryMap Map<String, String> map);
+
 }

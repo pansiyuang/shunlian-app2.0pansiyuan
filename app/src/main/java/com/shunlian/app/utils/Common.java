@@ -51,10 +51,12 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -76,7 +78,37 @@ public class Common {
     private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
 
+    /**
+     * 判断mainactivity是否处于栈底
+     *
+     * @return true在栈顶false不在栈底
+     */
+    public static boolean isBottomActivity(String className) {
+        ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        String name = manager.getRunningTasks(1).get(0).baseActivity.getClassName();
+        String mName = name.substring(name.lastIndexOf(".") + 1);
+        return mName.equals(className);
+    }
+
+    public static String transClassName(String toPage) {
+        switch (toPage) {
+            case "goods":
+                return "GoodsDetailAct";
+            case "login":
+                return "LoginAct";
+            case "article":
+                return "ArticleH5Act";
+            case "artdetails":
+                return "CommentListAct";
+            case "myorder":
+                return "OrderDetailAct";
+            default:
+                return "";
+        }
+    }
+
     public static void goGoGo(Context context, String type, String... params) {
+        String token = SharedPrefUtil.getSharedPrfString("token", "");
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
@@ -89,6 +121,16 @@ public class Common {
                 break;
             case "artdetails":
                 CommentListAct.startAct((Activity) context, params[0]);
+                break;
+            case "myorder":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    OrderDetailAct.startAct(context, params[0]);
+                }
+                break;
+            default:
+                MainActivity.startAct(context, "");
                 break;
         }
     }
@@ -477,6 +519,33 @@ public class Common {
         return ssb;
     }
 
+    /**
+     * 更改源字符串的大小和颜色
+     *
+     * @param source    源字符串
+     * @param changeStr 需要改变大小的字符串
+     * @return
+     */
+    public static SpannableStringBuilder changeColors(String source,  @ColorInt int color,String... changeStr) {
+//        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+        if (ssb == null)
+            ssb = new SpannableStringBuilder();
+        ssb.clear();
+        ssb.append(source);
+        for (int i=0;i<changeStr.length;i++){
+            int m = source.indexOf(changeStr[i]);
+            if (m == -1) {
+                return ssb;
+            } else {
+                //        如果要改变字符串中多处字体颜色，setSpan方法中第一个参数必须要每次new一个对象出来才能显示效果
+                ssb.setSpan(new ForegroundColorSpan(color), m+2, m + changeStr[i].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            if (i>=changeStr.length-1){
+                return ssb;
+            }
+        }
+        return ssb;
+    }
     /**
      * 文字加粗
      *

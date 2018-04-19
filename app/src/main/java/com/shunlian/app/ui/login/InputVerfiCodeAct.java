@@ -16,11 +16,14 @@ import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 
@@ -151,9 +154,12 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        if (content.tag!=null)
+        SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
+        JpushUtil.setJPushAlias();
         finish();
     }
 

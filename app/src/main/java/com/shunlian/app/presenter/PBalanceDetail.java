@@ -1,0 +1,77 @@
+package com.shunlian.app.presenter;
+
+import android.content.Context;
+
+import com.shunlian.app.bean.BalanceDetailEntity;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.view.IBalanceDetail;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+
+/**
+ * Created by Administrator on 2017/10/20.
+ */
+
+public class PBalanceDetail extends BasePresenter<IBalanceDetail> {
+    private int pageSize=20;
+    private int babyPage = 1;//当前页数
+    private int babyAllPage = 0;
+    private boolean babyIsLoading=false;
+    private List<BalanceDetailEntity.Balance> mDatas = new ArrayList<>();
+
+    public PBalanceDetail(Context context, IBalanceDetail iView) {
+        super(context, iView);
+        getApiData(babyPage);
+    }
+
+    @Override
+    public void attachView() {
+
+    }
+
+    @Override
+    public void detachView() {
+
+    }
+
+    public void refreshBaby() {
+        if (!babyIsLoading && babyPage <= babyAllPage) {
+            babyIsLoading = true;
+            getApiData(babyPage);
+        }
+    }
+
+    private void getApiData(int page) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("pageSize", String.valueOf(pageSize));
+        sortAndMD5(map);
+
+        Call<BaseEntity<BalanceDetailEntity>> baseEntityCall = getAddCookieApiService().balanceTransactionList(getRequestBody(map));
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<BalanceDetailEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<BalanceDetailEntity> entity) {
+                super.onSuccess(entity);
+                BalanceDetailEntity data=entity.data;
+                babyIsLoading = false;
+                babyPage++;
+                babyAllPage = Integer.parseInt(data.total_page);
+                mDatas.addAll(data.list);
+                iView.setApiData(data,mDatas);
+            }
+        });
+    }
+
+    @Override
+    protected void initApi() {
+
+    }
+
+}
