@@ -533,8 +533,8 @@
     <string name="chat_lijilingqu">立即领取</string>
 
     <!--帮助-->
-    <string name="help_zaixiankefu">在线客服(00:00:24:00)</string>
-    <string name="help_bodadianhua">拨打电话(00:00:24:00)</string>
+    <string name="help_zaixiankefu">在线客服(00:00-24:00)</string>
+    <string name="help_bodadianhua">拨打电话(00:00-24:00)</string>
     <string name="help_bangzhuzhongxin">帮助中心</string>
     <string name="help_changjianwenti">常见问题：</string>
     <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>
@@ -624,4 +624,25 @@
     <string name="balance_meirenzhineng">每人只能添加一个支付宝账号，如需更换，请先解绑。</string>
     <string name="balance_wenxintishi">温馨提示：每日余额提现有%s元额度免手续费，今日还剩%s元额度超过部分要缴纳一定手续费。
     您还有%s元收益的免息部分，今日可免手续费的提现额度为%s元。</string>
+
+    <!--首页-->
+    <string name="first_pingzhi">品质热推</string>
+    <string name="first_jingri">今日特推</string>
+    <string name="first_meiri">每日上新</string>
+    <string name="first_rexiao">热销榜单</string>
+    <string name="first_rexiaoxin">热销新品</string>
+    <string name="first_aishangxin">爱上新品</string>
+    <string name="first_pingpaite">品牌特卖</string>
+    <string name="first_koubeire">口碑热销</string>
+    <string name="first_jisufahuo">极速发货</string>
+    <string name="first_zhengpingbaozhang">正品保障</string>
+    <string name="first_shouhouwuyou">售后无忧</string>
+    <string name="first_pingzhijingxuan">品质精选</string>
+    <string name="first_dapaiduyi">大牌独一份</string>
+    <string name="first_remeng">热门</string>
+    <string name="first_zuixinfabu">最新发布</string>
+    <string name="first_dianpumei">店铺美券</string>
+    <string name="first_dianpuyouhui">店铺暂无优惠券，敬请期待</string>
+    <string name="first_yifukuan">%s人已付款</string>
+    <string name="first_haopinglv">好评率%s</string>
 </resources>

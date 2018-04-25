@@ -262,6 +262,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                         sevenHolder.view_lineTwo.setVisibility(View.VISIBLE);
                     }
                    if (mdatas!=null&&mdatas.size()>0){
+                       sevenHolder.storeKanner.layoutRes=R.layout.layout_kanner_rectangle_indicator;
                        sevenHolder.storeKanner.setBanners(mdatas,sevenHolder.mtv_number,sevenHolder.mtv_seven);
                    }
                 }

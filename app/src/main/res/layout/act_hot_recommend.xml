@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/block_title_whitebg" />
+
+    <com.shunlian.app.widget.MyScrollView
+        android:id="@+id/msv_out"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/mrlayout_title">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="168dp">
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:id="@+id/miv_bg"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@color/dim50"
+                    android:layout_alignParentBottom="true"/>
+            </com.shunlian.app.widget.MyRelativeLayout>
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mtv_desc"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_list"
+                android:paddingLeft="7.5dp"
+                android:paddingRight="7.5dp"
+                android:background="@color/value_F7F7F7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyScrollView>
+
+</com.shunlian.app.widget.MyRelativeLayout>

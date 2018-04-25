@@ -21,6 +21,7 @@ import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
@@ -88,7 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
 
-    private MainPageFrag mainPageFrag;
+//    private MainPageFrag mainPageFrag;
+    private FirstPageFrag mainPageFrag;
     private SortFrag sortFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
@@ -205,9 +207,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public void mainPageClick() {
         if (mainPageFrag == null) {
-            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
+//            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
+            mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
             if (mainPageFrag == null) {
-                mainPageFrag = new MainPageFrag();
+//                mainPageFrag = new MainPageFrag();
+                mainPageFrag = new FirstPageFrag();
                 fragmentMap.put(flags[0], mainPageFrag);
             }
         }

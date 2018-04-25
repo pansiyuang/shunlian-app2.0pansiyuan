@@ -52,6 +52,7 @@ import android.widget.Toast;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -102,6 +103,8 @@ public class Common {
                 return "CommentListAct";
             case "myorder":
                 return "OrderDetailAct";
+            case "hotpush":
+                return "HotRecommendAct";
             default:
                 return "";
         }
@@ -128,6 +131,9 @@ public class Common {
                 } else {
                     OrderDetailAct.startAct(context, params[0]);
                 }
+                break;
+            case "hotpush":
+                HotRecommendAct.startAct(context,params[0]);
                 break;
             default:
                 MainActivity.startAct(context, "");

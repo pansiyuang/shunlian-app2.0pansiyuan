@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mllayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="140dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/value_E6E4E4" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_photo"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:scaleType="fitXY" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="@color/new_text"
+        android:textSize="14sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:ellipsize="end"
+        android:lines="3"
+        android:textColor="@color/share_text"
+        android:textSize="12sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_fu"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="130dp"
+        android:background="@drawable/rounded_corner_6e_18px"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/new_text"
+        android:textSize="10sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_hao"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/mtv_fu"
+        android:background="@drawable/rounded_corner_6e_18px"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/new_text"
+        android:textSize="10sp" />
+</com.shunlian.app.widget.MyRelativeLayout>
+
+
+

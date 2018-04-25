@@ -27,6 +27,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
@@ -337,7 +338,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
         int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
-        showLevel(percent, personalcenterEntity.next_level_info);
+        LogUtil.augusLogW(percent+"---"+personalcenterEntity.next_level_info);
+       //percent为10的倍数
+        showLevel(10, personalcenterEntity.next_level_info);
         mtv_all.setText(personalcenterEntity.next_level_score);
         mtv_refundNum.setVisibility(View.VISIBLE);
         mtv_persent.setPadding(percent * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);

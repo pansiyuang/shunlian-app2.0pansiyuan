@@ -7,31 +7,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
-import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.utils.GlideUtils;
 
 
-public class DiscoverKanner extends BaseBanner<DiscoveryCircleEntity.Mdata.Banner, DiscoverKanner> {
-    public DiscoverKanner(Context context) {
+public class MyKanner extends BaseBanner<String, MyKanner> {
+    public MyKanner(Context context) {
         this(context, null, 0);
     }
 
 
-    public DiscoverKanner(Context context, AttributeSet attrs) {
+    public MyKanner(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DiscoverKanner(Context context, AttributeSet attrs, int defStyle) {
+    public MyKanner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    public void onTitleSlect(TextView tv, int position) {
-    }
 
     @Override
     public View onCreateItemView(int position) {
@@ -41,7 +35,7 @@ public class DiscoverKanner extends BaseBanner<DiscoveryCircleEntity.Mdata.Banne
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 //        HomeAllEntity.Data.Banner banner = list.get(position);
-        GlideUtils.getInstance().loadImage(getContext(),iv,list.get(position).img);
+        GlideUtils.getInstance().loadImage(getContext(),iv,list.get(position));
 
 //        iv.setTag(R.id.tag_typeId, banner.getType());
 //        iv.setTag(R.id.tag_itemId, banner.getItemId());
@@ -54,10 +48,12 @@ public class DiscoverKanner extends BaseBanner<DiscoveryCircleEntity.Mdata.Banne
 //                }
 //            }
 //        });
-        View view = new View(context);
-        view.setBackgroundColor(context.getResources().getColor(R.color.dim50));
         container.addView(iv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        container.addView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        if (dimColor!=-1){
+            View view = new View(context);
+            view.setBackgroundColor(dimColor);
+            container.addView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        }
         return container;
     }
 
@@ -65,7 +61,7 @@ public class DiscoverKanner extends BaseBanner<DiscoveryCircleEntity.Mdata.Banne
 
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(R.layout.layout_kanner_rectangle_indicator, null);
+        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
         indicator.setViewPager(vp, list.size());
         return indicator;
     }

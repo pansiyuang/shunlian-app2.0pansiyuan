@@ -1,4 +1,4 @@
-package com.shunlian.app.widget;
+package com.shunlian.app.widget.slide_tab;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.ReboundHScrollView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * 专为ViewPager定制的滑动选项卡 HOME
  */
-public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnClickListener {
+public class PagerSlidingTabLine extends ReboundHScrollView implements View.OnClickListener {
     private int currentPosition; // 当前位置
     private int lastOffset;
     private int lastScrollX = 0;
@@ -48,25 +49,25 @@ public class PagerSlidingTabStrip extends ReboundHScrollView implements View.OnC
     private ArgbEvaluator mColorEvaluator;
     private Paint rectPaint;
     private float indicatorHeight=1.5f;
-    public PagerSlidingTabStrip(Context context) {
+    public PagerSlidingTabLine(Context context) {
         this(context, null);
     }
-    public PagerSlidingTabStrip(Context context, AttributeSet attrs) {
+    public PagerSlidingTabLine(Context context, AttributeSet attrs) {
         super(context, attrs);
         setHorizontalScrollBarEnabled(false); // 隐藏横向滑动提示条
         if (attrs != null) {
             TypedArray attrsTypedArray = context.obtainStyledAttributes(attrs,
-                    R.styleable.PagerSlidingTabStrip);
+                    R.styleable.PagerSlidingTabLine);
             if (attrsTypedArray != null) {
                 allowWidthFull = attrsTypedArray.getBoolean(
-                        R.styleable.PagerSlidingTabStrip_allowWidthFull, false);
+                        R.styleable.PagerSlidingTabLine_allowWidthFull, false);
                 slidingBlockDrawable = attrsTypedArray
-                        .getDrawable(R.styleable.PagerSlidingTabStrip_slidingBlock);
+                        .getDrawable(R.styleable.PagerSlidingTabLine_slidingBlock);
                 disableViewPager = attrsTypedArray.getBoolean(
-                        R.styleable.PagerSlidingTabStrip_disableViewPager,
+                        R.styleable.PagerSlidingTabLine_disableViewPager,
                         false);
                 allowAlignmentl = attrsTypedArray.getBoolean(
-                        R.styleable.PagerSlidingTabStrip_allowAlignment, false);
+                        R.styleable.PagerSlidingTabLine_allowAlignment, false);
 //				DisplayMetrics dm = getResources().getDisplayMetrics();
 //				tabTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, tabTextSize, dm);
 //				tabTextSize = attrsTypedArray.getDimensionPixelSize(0, tabTextSize);

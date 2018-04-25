@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:text="@string/discover_remenhuati"
-                android:textColor="@color/new_text"
+                android:textColor="@color/dim"
                 android:textSize="16sp" />
 
             <com.shunlian.app.widget.MyRelativeLayout
@@ -29,11 +29,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp">
                 <!--轮播-->
-                <com.shunlian.app.widget.banner.DiscoverKanner
+                <com.shunlian.app.widget.banner.MyKanner
                     android:id="@+id/kanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:bb_delay="5"
+                    app:bb_dimColor="@color/dim50"
                     app:bb_period="3"
                     app:bb_scale="0.4" />
                 <com.shunlian.app.widget.MyTextView

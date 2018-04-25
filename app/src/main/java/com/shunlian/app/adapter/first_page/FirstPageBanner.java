@@ -54,7 +54,7 @@ public class FirstPageBanner extends BaseBanner<MainPageEntity.Banner, FirstPage
 
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(R.layout.layout_kanner_round_indicator, null);
+        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
         indicator.setViewPager(vp, list.size());
         return indicator;
     }
