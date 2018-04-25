@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_login_back"
+        app:iv_control_adapter="true"
+        app:iv_control_height="31"
+        app:iv_control_width="31"
+        app:iv_margin_left="30" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_change_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="28dp"
+        android:text="验证码已发送到"
+        android:textColor="@color/new_text"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="25dp"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/new_text"
+            android:textSize="18sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/frame_line85"
+            android:text="59s"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+    <!--手机验证码-->
+    <com.shunlian.app.widget.VerificationCodeInput
+        android:id="@+id/input_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="30dp"
+        android:text="1234"
+        app:box="4"
+        app:padding="10dp" />
+
+    <!--密码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_pwd"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyEditText
+            android:id="@+id/et_pwd"
+            style="@style/editText_attribute"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            android:drawableBottom="@drawable/edittext_line"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:inputType="textPassword"
+            android:maxLength="16"
+            android:textSize="20sp"
+            app:hintText="@string/RegisterTwoAct_qsrxmm"/>
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/iv_hidden_psw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:src="@mipmap/icon_login_eyes_h"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <!--重新输入密码-->
+    <RelativeLayout
+        android:id="@+id/rlayout_reset_pwd"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.shunlian.app.widget.MyEditText
+            android:id="@+id/et_rpwd"
+            style="@style/editText_attribute"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            android:drawableBottom="@drawable/edittext_line"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:inputType="textPassword"
+            android:maxLength="16"
+            android:textSize="20sp"
+            app:hintText="@string/RegisterTwoAct_qcxsrxmm" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/iv_hidden_rpsw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:src="@mipmap/icon_login_eyes_h"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_save"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/rounded_rectangle_38px"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+</LinearLayout>

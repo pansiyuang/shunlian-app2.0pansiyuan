@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DetailOrderRecordEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -63,7 +64,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         mHolder.mtv_order.setText("订单号："+item.order_sn);
         mHolder.mtv_order_state.setText(item.status_desc);
         mHolder.mtv_order_time.setText("下单日期："+item.order_time);
-        mHolder.recy_view.setAdapter(new GoodsItemAdapter(context,item.order_goods));
+        mHolder.recy_view.setAdapter(new GoodsItemAdapter(context, item.order_goods));
     }
 
     public class DetailOrderRecordHolder extends BaseRecyclerViewHolder {
@@ -127,33 +128,49 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
             mHolder.mtv_goods_price.setText(getString(R.string.rmb)+item.price);
             mHolder.mtv_assertionProfit.setText(item.estimate_profit);
         }
-    }
 
-    public class GoodsItemHolder extends BaseRecyclerViewHolder{
 
-        @BindView(R.id.mtv_order_source)
-        MyTextView mtv_order_source;
+        public class GoodsItemHolder extends BaseRecyclerViewHolder
+                implements View.OnClickListener {
 
-        @BindView(R.id.mtv_goods_title)
-        MyTextView mtv_goods_title;
+            @BindView(R.id.mtv_order_source)
+            MyTextView mtv_order_source;
 
-        @BindView(R.id.mtv_goods_attr)
-        MyTextView mtv_goods_attr;
+            @BindView(R.id.mtv_goods_title)
+            MyTextView mtv_goods_title;
 
-        @BindView(R.id.mtv_goods_price)
-        MyTextView mtv_goods_price;
+            @BindView(R.id.mtv_goods_attr)
+            MyTextView mtv_goods_attr;
 
-        @BindView(R.id.mtv_goods_count)
-        MyTextView mtv_goods_count;
+            @BindView(R.id.mtv_goods_price)
+            MyTextView mtv_goods_price;
 
-        @BindView(R.id.mtv_assertionProfit)
-        MyTextView mtv_assertionProfit;
+            @BindView(R.id.mtv_goods_count)
+            MyTextView mtv_goods_count;
 
-        @BindView(R.id.miv_goods_pic)
-        MyImageView miv_goods_pic;
-        public GoodsItemHolder(View itemView) {
-            super(itemView);
+            @BindView(R.id.mtv_assertionProfit)
+            MyTextView mtv_assertionProfit;
+
+            @BindView(R.id.miv_goods_pic)
+            MyImageView miv_goods_pic;
+            public GoodsItemHolder(View itemView) {
+                super(itemView);
+                itemView.setOnClickListener(this);
+            }
+
+            /**
+             * Called when a view has been clicked.
+             *
+             * @param v The view that was clicked.
+             */
+            @Override
+            public void onClick(View v) {
+                DetailOrderRecordEntity.OrderGoods orderGoods = lists.get(getAdapterPosition());
+                GoodsDetailAct.startAct(context,orderGoods.goods_id);
+            }
         }
     }
+
+
 }
 

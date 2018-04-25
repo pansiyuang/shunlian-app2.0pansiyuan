@@ -35,4 +35,7 @@ public class CommonEntity {
     public String free_amount;
     public String free_amount_des;
     public String key;
+
+    public String mobile;//手机号
+    public String card_path;//推广二维码名片
 }

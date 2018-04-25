@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.ProfitExtractPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
+import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.view.IProfitExtractView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
@@ -87,7 +87,7 @@ public class ProfitExtractAct extends BaseActivity implements IProfitExtractView
 
     @OnClick(R.id.mtv_go_balance)
     public void goBalance(){
-        Common.staticToast("跳到余额");
+        BalanceMainAct.startAct(this,false);
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -29,6 +30,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -58,6 +60,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     private View rootView;
     private boolean isHidden = true;
     private LoginPresenter loginPresenter;
+    private String jumpType;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -67,6 +70,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         btn_login.setWHProportion(650, 90);
         setEdittextFocusable(true, edt_psw, edt_account);
         loginPresenter = new LoginPresenter(getActivity(), this, TYPE_USER);
@@ -159,6 +163,13 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump){
+        jumpType = jump.jumpType;
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().postSticky(jump);
+    }
+
     @Override
     public void login(LoginFinishEntity content) {
         //登陆成功啦
@@ -175,6 +186,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
         }
         JpushUtil.setJPushAlias();
+        if (!isEmpty(jumpType)){
+            Common.goGoGo(baseActivity,jumpType);
+        }
         baseActivity.finish();
     }
 
@@ -196,5 +210,11 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     @Override
     public void showDataEmptyView(int rquest_code) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }

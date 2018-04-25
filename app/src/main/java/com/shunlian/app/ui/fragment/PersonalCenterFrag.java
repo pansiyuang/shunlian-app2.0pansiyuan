@@ -15,20 +15,18 @@ import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.help.HelpOneAct;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
+import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
@@ -337,7 +335,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         refreshview.stopRefresh(true);
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
-        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
+//        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
+        int percent = 10;
         showLevel(percent, personalcenterEntity.next_level_info);
         mtv_all.setText(personalcenterEntity.next_level_score);
         mtv_refundNum.setVisibility(View.VISIBLE);
@@ -537,24 +536,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MyCollectionAct.startAct(baseContext);
                 break;
             case R.id.miv_shezhi:
-                final PromptDialog promptDialog = new PromptDialog(getActivity());
-                promptDialog.setTvSureColor(R.color.new_text);
-                promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
-                promptDialog.setSureAndCancleListener("确定要退出登录吗？", "确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Common.clearLoginInfo();
-                        JpushUtil.setJPushAlias();
-                        Constant.JPUSH=null;
-                        LoginAct.startAct(baseContext);
-                        promptDialog.dismiss();
-                    }
-                }, "取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        promptDialog.dismiss();
-                    }
-                }).show();
+                SettingAct.startAct(baseContext);
                 break;
             case R.id.mrlayout_yaoqing:
                 QrCodeAct.startAct(baseContext);
@@ -570,6 +552,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 BalanceMainAct.startAct(baseContext,false);
                 break;
             case R.id.mllayout_youhuiquan:
+                CouponListAct.startAct(baseActivity);
+//                SexSelectAct.startAct(baseActivity);
                 break;
             case R.id.mllayout_dongli:
                 MyProfitAct.startAct(baseActivity);

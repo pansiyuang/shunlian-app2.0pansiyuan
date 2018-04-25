@@ -129,7 +129,10 @@ public class Common {
                     OrderDetailAct.startAct(context, params[0]);
                 }
                 break;
-            default:
+            case "personCenter"://个人中心
+                MainActivity.startAct(context, "personCenter");
+                break;
+            default://首页
                 MainActivity.startAct(context, "");
                 break;
         }

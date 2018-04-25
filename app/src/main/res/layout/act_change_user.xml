@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_login_back"
+        app:iv_control_adapter="true"
+        app:iv_control_height="31"
+        app:iv_control_width="31"
+        app:iv_margin_left="30" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_change_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_close"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="28dp"
+        android:text="更换账号"
+        android:textStyle="bold"
+        android:textColor="@color/new_text"
+        android:textSize="30sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mtv_change_user"
+        android:layout_below="@+id/mtv_change_user"
+        android:layout_marginTop="18dp"
+        android:text="验证手机号以确保本人操作"
+        android:textColor="@color/new_text"
+        android:textSize="18sp" />
+
+
+    <com.shunlian.app.widget.MyEditText
+        android:id="@+id/met_phone"
+        style="@style/editText_attribute"
+        android:layout_below="@+id/mtv_change_user"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="94dp"
+        android:inputType="phone"
+        android:textColor="@color/new_text"
+        android:textSize="24sp" />
+
+    <View
+        android:id="@+id/view_line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignLeft="@+id/met_phone"
+        android:layout_alignRight="@+id/met_phone"
+        android:layout_below="@+id/met_phone"
+        android:layout_marginTop="10dp"
+        android:background="@color/light_gray_two" />
+
+
+    <com.shunlian.app.widget.MyEditText
+        android:id="@+id/met_code"
+        style="@style/editText_attribute"
+        android:layout_below="@+id/view_line1"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@+id/miv_code"
+        android:textColor="@color/new_text"
+        android:textSize="18sp"
+        android:inputType="number"
+        android:maxLength="4"
+        app:hintText="请输入图片验证码" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignLeft="@+id/met_code"
+        android:layout_alignRight="@+id/met_code"
+        android:layout_below="@+id/met_code"
+        android:layout_marginTop="10dp"
+        android:background="@color/light_gray_two" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/met_code"
+        app:iv_control_adapter="true"
+        app:iv_control_height="70"
+        app:iv_control_width="180"
+        app:iv_margin_right="50" />
+
+</RelativeLayout>

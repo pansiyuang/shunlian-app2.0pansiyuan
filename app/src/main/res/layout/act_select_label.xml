@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_login_back"
+        app:iv_control_adapter="true"
+        app:iv_control_height="31"
+        app:iv_control_width="31"
+        app:iv_margin_left="30" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_sex_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_close"
+        android:layout_centerHorizontal="true"
+        android:text="感兴趣的标签"
+        android:textColor="@color/new_text"
+        android:textSize="29sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_sex_select"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="选择越多推荐的商品越准确"
+        android:textColor="@color/value_555555"
+        android:textSize="14sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_desc"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/img_biaoqian_nan"
+        app:iv_control_adapter="true"
+        app:iv_control_height="198"
+        app:iv_control_width="568"
+        app:iv_margin_top="56" />
+
+    <LinearLayout
+        android:id="@+id/llayout_sex_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_pic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_balance_tixian"
+            app:iv_control_adapter="true"
+            app:iv_control_height="21"
+            app:iv_control_width="21" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_sex_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="4dp"
+            android:text="您选择的性别为帅哥"
+            android:textColor="@color/value_555555"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignLeft="@+id/miv_pic"
+        android:layout_alignRight="@+id/miv_pic"
+        android:layout_below="@+id/llayout_sex_set"
+        android:layout_marginTop="16dp"
+        android:background="#F3F1F2" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_alignLeft="@+id/view_line"
+        android:layout_alignRight="@+id/view_line"
+        android:layout_marginBottom="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mbtn_sure"
+        android:layout_below="@+id/view_line" />
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_sure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner_white_8px"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:bt_control_adapter="true"
+        app:bt_control_height="90"
+        app:bt_margin_bottom="40"
+        app:bt_margin_left="35"
+        app:bt_margin_right="35" />
+
+</RelativeLayout>

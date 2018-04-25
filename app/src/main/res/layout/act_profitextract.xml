@@ -41,7 +41,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginTop="10dp"
             android:maxLines="1"
-            android:text="13600009.68"
+            android:text="0.00"
             android:textColor="@color/pink_color"
             android:textSize="38dp" />
 

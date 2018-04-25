@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ash">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mrlayout_toolbar"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white_ash" />
+
+            <!--头像-->
+            <LinearLayout
+                android:id="@+id/llayout_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="头像"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:iv_control_adapter="true"
+                    app:iv_control_height="100"
+                    app:iv_control_width="100"
+                    app:iv_margin_right="20" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/img_common_rightarrow_huise" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--昵称-->
+            <LinearLayout
+                android:id="@+id/llayout_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="昵称"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="起个酷酷的名字吧"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--性别-->
+            <LinearLayout
+                android:id="@+id/llayout_sex"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="性别"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="未填写"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--所在地-->
+            <LinearLayout
+                android:id="@+id/llayout_region"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="所在地"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="未填写"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--兴趣-->
+            <LinearLayout
+                android:id="@+id/llayout_interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:maxLines="1"
+                    android:text="兴趣"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_interest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="25dp"
+                    android:gravity="right"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="未填写"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--生日-->
+            <LinearLayout
+                android:id="@+id/llayout_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="生日"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="未填写"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--个性签名-->
+            <LinearLayout
+                android:id="@+id/llayout_autograph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="个性签名"
+                    android:maxLines="1"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_autograph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:text="介绍一下自己"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

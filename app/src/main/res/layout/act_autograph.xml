@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/white_ash" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.shunlian.app.widget.MyEditText
+            android:id="@+id/met_signature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="left"
+            android:minHeight="100dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:textColorHint="@color/color_value_6c"
+            android:textSize="16sp"
+            app:hintText="个性签名可以让别人更了解你哦" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/met_signature"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:text="0/50"
+            android:textColor="@color/color_value_6c"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_save"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_rectangle_38px"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+
+</LinearLayout>

@@ -27,6 +27,7 @@ import com.shunlian.app.bean.AddGoodsEntity;
 import com.shunlian.app.bean.AddressDataEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.AmountDetailEntity;
+import com.shunlian.app.bean.ArtTagEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BalanceDetailEntity;
@@ -45,6 +46,7 @@ import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
+import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.bean.DetailOrderRecordEntity;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
@@ -85,6 +87,7 @@ import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.PersonShopEntity;
+import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
 import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
@@ -1704,5 +1707,110 @@ public interface ApiService {
      */
     @GET("balance/getRealInfo")
     Call<BaseEntity<GetRealInfoEntity>> balanceGetRealInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 个人中心优惠券列表
+     * @param body
+     * @return
+     */
+    @POST("voucher/all")
+    Call<BaseEntity<CouponListEntity>> voucherList(@Body RequestBody body);
+
+    /**
+     * 用户画像标签
+     * @param body
+     * @return
+     */
+    @POST("member/portrait/artTag")
+    Call<BaseEntity<ArtTagEntity>>  portraitArtTag(@Body RequestBody body);
+
+    /**
+     * 提交用户画像
+     * @param body
+     * @return
+     */
+    @POST("member/portrait/addPortrait")
+    Call<BaseEntity<EmptyEntity>>  addPortrait(@Body RequestBody body);
+
+    /**
+     * 设置数据
+     * @param map
+     * @return
+     */
+    @GET("member/accountSetting/myDatum")
+    Call<BaseEntity<PersonalDataEntity>> personalData(@QueryMap Map<String, String> map);
+
+    /**
+     * 设置个人信息
+     * @param body
+     * @return
+     */
+    @POST("member/accountSetting/setinfo")
+    Call<BaseEntity<EmptyEntity>> setinfo(@Body RequestBody body);
+
+    /**
+     * 设置数据
+     * @param map
+     * @return
+     */
+    @GET("member/accountSetting/gettaglist")
+    Call<BaseEntity<PersonalDataEntity>> gettaglist(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取手机号
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/getMobile")
+    Call<BaseEntity<CommonEntity>> getMobile(@QueryMap Map<String, String> map);
+
+    /**
+     * 更换账号和密码
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/{path}")
+    Call<BaseEntity<EmptyEntity>> userAndPwd(@Path("path") String path,@Body RequestBody body);
+
+    /**
+     * 验证短信验证码
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/checkCode")
+    Call<BaseEntity<CommonEntity>> checkSmsCode(@Body RequestBody body);
+
+    /**
+     * 检验新手机
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/bindMobile")
+    Call<BaseEntity<CommonEntity>> checkNewMobile(@Body RequestBody body);
+
+    /**
+     * 发送短信验证码
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/reSendSmsToNewMobile")
+    Call<BaseEntity<CommonEntity>> sendSmsCodeToMobile(@Body RequestBody body);
+
+    /**
+     * 推广二维码名片
+     * @param map
+     * @return
+     */
+    @GET("user/getQrCard")
+    Call<BaseEntity<CommonEntity>> getQrCard(@QueryMap Map<String, String> map);
+
+    /**
+     * 我要反馈
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/feedback")
+    Call<BaseEntity<CommonEntity>> feedback(@Body RequestBody body);
+
 
 }
