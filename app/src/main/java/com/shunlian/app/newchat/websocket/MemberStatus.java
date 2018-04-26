@@ -5,4 +5,16 @@ package com.shunlian.app.newchat.websocket;
  */
 
 public enum MemberStatus {
+    /**
+     * 成员
+     */
+    Member,
+    /**
+     * 商家客服
+     */
+    Seller,
+    /**
+     * 平台客服
+     */
+    Admin
 }

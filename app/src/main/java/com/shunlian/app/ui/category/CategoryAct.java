@@ -129,7 +129,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             searchParam = new GoodsSearchParam();
         }
         tv_keyword.setText(searchParam.keyword);
-        searchParam.keyword = "";
+//        searchParam.keyword = "";
         presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam, true);
         mGoods = new ArrayList<>();
@@ -148,22 +148,16 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
         setListMode(currentMode);
 
-        singleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                GoodsDeatilEntity.Goods goods = mGoods.get(position);
-                if (!isEmpty(goods.id)) {
-                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
-                }
+        singleAdapter.setOnItemClickListener((view, position) -> {
+            GoodsDeatilEntity.Goods goods = mGoods.get(position);
+            if (!isEmpty(goods.id)) {
+                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }
         });
-        doubleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                GoodsDeatilEntity.Goods goods = mGoods.get(position);
-                if (!isEmpty(goods.id)) {
-                    GoodsDetailAct.startAct(CategoryAct.this, goods.id);
-                }
+        doubleAdapter.setOnItemClickListener((view, position) -> {
+            GoodsDeatilEntity.Goods goods = mGoods.get(position);
+            if (!isEmpty(goods.id)) {
+                GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }
         });
     }

@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7.5dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_order_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginRight="14.5dp"
+            android:layout_toLeftOf="@id/tv_order_price"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:lineSpacingMultiplier="0.9"
+            android:maxLines="2"
+            android:text="YINE啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_order_param"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_order_title"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:text="160/40/L"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/miv_icon"
+            android:layout_marginLeft="12.5dp"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:text="商家已发货"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_order_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:includeFontPadding="false"
+            android:text="¥ 3099.99"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_order_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_order_price"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text="x1"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_order_send"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignBottom="@+id/miv_icon"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/rounded_rectangle_pink_4px"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"
+            android:text="@string/send_order"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
 </LinearLayout>

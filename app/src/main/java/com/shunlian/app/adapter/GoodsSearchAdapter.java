@@ -135,9 +135,6 @@ public class GoodsSearchAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         }
     }
 
-
-
-
     public TextView creatTextTag(String content, int colorRes, Drawable drawable, SingleViewHolder viewHolder) {
         TextView textView = new TextView(context);
         textView.setText(content);

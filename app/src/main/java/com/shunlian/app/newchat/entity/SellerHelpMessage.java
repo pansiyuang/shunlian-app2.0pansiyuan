@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SellerHelpEntity extends BaseMessage {
+public class SellerHelpMessage extends BaseMessage {
     public HelpBody msg_body;
 
     @JsonIgnoreProperties(ignoreUnknown = true)

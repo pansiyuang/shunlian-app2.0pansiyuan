@@ -32,6 +32,10 @@ public class BaseMessage {
     public String msg_type;
     public Extras extras;
     public long sendTime;
+    public long read_time;
+    public String id;
+    public String sid;
+    public boolean isFirst;
     private int sendType;
     private int uReadNum;
     private int status = MessageStatus.SendSucc;
@@ -92,8 +96,9 @@ public class BaseMessage {
                 " to_type:" + to_type + " to_nickname:" + to_nickname + " to_headurl:" + to_headurl +
                 " msg_type:" + msg_type + " sendType:" + sendType + " status:" + status;
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Extras{
+    public static class Extras {
 
     }
 }

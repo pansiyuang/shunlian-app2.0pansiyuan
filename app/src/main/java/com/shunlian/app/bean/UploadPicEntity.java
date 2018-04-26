@@ -37,4 +37,11 @@ public class UploadPicEntity {
     public List<String> newFileName;
     public List<String> fileType;
     public List<String> fileSize;
+    public List<SizeInfo> sizeInfo;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SizeInfo {
+        public int width;
+        public int height;
+    }
 }

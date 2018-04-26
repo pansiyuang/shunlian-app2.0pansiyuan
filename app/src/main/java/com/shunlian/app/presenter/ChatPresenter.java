@@ -4,15 +4,22 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.ImageMessage;
+import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.upload.ProgressListener;
 import com.shunlian.app.utils.upload.UploadFileRequestBody;
-import com.shunlian.app.view.IChatUpLoadImgView;
+import com.shunlian.app.view.IChatView;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -23,9 +30,9 @@ import retrofit2.Call;
  * Created by Administrator on 2018/4/12.
  */
 
-public class ChatUpLoadImgPresenter extends BasePresenter<IChatUpLoadImgView> {
+public class ChatPresenter extends BasePresenter<IChatView> {
 
-    public ChatUpLoadImgPresenter(Context context, IChatUpLoadImgView iView) {
+    public ChatPresenter(Context context, IChatView iView) {
         super(context, iView);
     }
 
@@ -69,6 +76,36 @@ public class ChatUpLoadImgPresenter extends BasePresenter<IChatUpLoadImgView> {
                 if (uploadPicEntity != null) {
                     iView.uploadImg(uploadPicEntity, tagId, imageMessage);
                 }
+            }
+        });
+    }
+
+    public void getChatHistoryMessage(boolean isLoad, String userId, String platform_type, String shopId, String sendTime) {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("platform_type", platform_type);
+        if (!isEmpty(shopId)) {
+            map.put("shop_id", shopId);
+        }
+        if (!isEmpty(sendTime)) {
+            map.put("send_time", String.valueOf(sendTime));
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<HistoryEntity>> baseEntityCall = getAddCookieApiService().chatUserHistoryData(map);
+        getNetData(isLoad, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HistoryEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<HistoryEntity> entity) {
+                super.onSuccess(entity);
+                HistoryEntity historyEntity = entity.data;
+                List<MsgInfo> msgInfoList = historyEntity.list;
+                iView.getHistoryMsg(msgInfoList, historyEntity.last_send_time, historyEntity.surplus);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }

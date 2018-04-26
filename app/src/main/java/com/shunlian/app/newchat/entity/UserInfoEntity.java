@@ -30,7 +30,6 @@ public class UserInfoEntity extends BaseEntity {
         public Uread uread; //未读消息情况
         public String role_type;
         public Bind bind;
-        public BindSeller bind_seller;
 
         @Override
         public String toString() {
@@ -44,6 +43,8 @@ public class UserInfoEntity extends BaseEntity {
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Bind {
             public boolean is_bind;
+            public BindAdmin bind_admin;
+            public BindSeller bind_seller;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)

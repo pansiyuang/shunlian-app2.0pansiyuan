@@ -14,6 +14,7 @@ import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.widget.MyImageView;
 
@@ -28,6 +29,7 @@ import butterknife.BindView;
 public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
     private boolean isLoad;
     private MessageCountManager manager;
+    private OnMessageClickListener messageClickListener;
 
     public TopMessageAdapter(Context context, List<MessageListEntity.Msg> lists) {
         super(context, false, lists);
@@ -46,6 +48,34 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
         MessageListEntity.Msg msg = lists.get(position);
         viewHolder.swipe_layout.setSwipeEnable(false);
         switch (msg.type) {
+            case "1": //平台消息
+                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_kefu, viewHolder.miv_icon);
+                viewHolder.tv_name.setText(getString(R.string.platform_message));
+                viewHolder.tv_official.setVisibility(View.GONE);
+                if (isLoad) {
+                    String custom_msg = Common.formatBadgeNumber(manager.getCustom_msg());
+                    if (isEmpty(custom_msg)) {
+                        viewHolder.tv_count.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tv_count.setText(custom_msg);
+                        viewHolder.tv_count.setVisibility(View.VISIBLE);
+                    }
+                }
+                break;
+            case "2": //客服消息
+                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_kefu, viewHolder.miv_icon);
+                viewHolder.tv_name.setText(getString(R.string.custom_message));
+                viewHolder.tv_official.setVisibility(View.GONE);
+                if (isLoad) {
+                    String custom_msg = Common.formatBadgeNumber(manager.getCustom_msg());
+                    if (isEmpty(custom_msg)) {
+                        viewHolder.tv_count.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tv_count.setText(custom_msg);
+                        viewHolder.tv_count.setVisibility(View.VISIBLE);
+                    }
+                }
+                break;
             case "4": //系统消息
                 GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_xitong, viewHolder.miv_icon);
                 viewHolder.tv_name.setText(getString(R.string.sys_notice));
@@ -74,28 +104,39 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
                     }
                 }
                 break;
-            case "10": //客服消息
-                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_kefu, viewHolder.miv_icon);
-                viewHolder.tv_name.setText(getString(R.string.custom_message));
-                viewHolder.tv_official.setVisibility(View.GONE);
-                if (isLoad) {
-                    String custom_msg = Common.formatBadgeNumber(manager.getCustom_msg());
-                    if (isEmpty(custom_msg)) {
-                        viewHolder.tv_count.setVisibility(View.GONE);
-                    } else {
-                        viewHolder.tv_count.setText(custom_msg);
-                        viewHolder.tv_count.setVisibility(View.VISIBLE);
-                    }
-                }
-                break;
             default:
                 break;
         }
         viewHolder.tv_content.setText(msg.title);
         viewHolder.tv_date.setText(msg.date);
+
+        viewHolder.ll_item.setOnClickListener(v -> {
+            switch (msg.type) {
+                case "1":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnAdminMsgClick();
+                    }
+                    break;
+                case "2":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnSellerMsgClick();
+                    }
+                    break;
+                case "4":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnSysMsgClick();
+                    }
+                    break;
+                case "5":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnTopMsgClick();
+                    }
+                    break;
+            }
+        });
     }
 
-    public class ItemViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class ItemViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.swipe_layout)
         SwipeMenuLayout swipe_layout;
 
@@ -125,14 +166,20 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            ll_item.setOnClickListener(this);
         }
+    }
 
-        @Override
-        public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClick(v, getAdapterPosition());
-            }
-        }
+    public void setOnMessageClickListener(OnMessageClickListener listener) {
+        this.messageClickListener = listener;
+    }
+
+    public interface OnMessageClickListener {
+        void OnSysMsgClick();
+
+        void OnTopMsgClick();
+
+        void OnAdminMsgClick();
+
+        void OnSellerMsgClick();
     }
 }

@@ -7,5 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TextMessage extends BaseMessage {
-    public String msg_body;
+    public TextMessageBody msg_body;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class TextMessageBody {
+        public String text;
+    }
 }

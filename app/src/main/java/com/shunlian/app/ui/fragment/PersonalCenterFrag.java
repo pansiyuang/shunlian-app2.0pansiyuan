@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
@@ -328,11 +329,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         refreshview.stopRefresh(true);
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
-        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
-        showLevel(percent, personalcenterEntity.next_level_info);
+//        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
+        showLevel(10, personalcenterEntity.next_level_info);
         mtv_all.setText(personalcenterEntity.next_level_score);
         mtv_refundNum.setVisibility(View.VISIBLE);
-        mtv_persent.setPadding(percent * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);
+        mtv_persent.setPadding(10 * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);
         if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
             mtv_refundNum.setVisibility(View.GONE);
         } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {
@@ -531,24 +532,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 final PromptDialog promptDialog = new PromptDialog(getActivity());
                 promptDialog.setTvSureColor(R.color.new_text);
                 promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
-                promptDialog.setSureAndCancleListener("确定要退出登录吗？", "确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Common.clearLoginInfo();
-                        LoginAct.startAct(baseContext);
-                        promptDialog.dismiss();
-                    }
-                }, "取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        promptDialog.dismiss();
-                    }
-                }).show();
+                promptDialog.setSureAndCancleListener("确定要退出登录吗？", "确定", view1 -> {
+                    Common.clearLoginInfo();
+                    LoginAct.startAct(baseContext);
+                    promptDialog.dismiss();
+                }, "取消", view12 -> promptDialog.dismiss()).show();
                 break;
             case R.id.mrlayout_yaoqing:
                 QrCodeAct.startAct(baseContext);
                 break;
             case R.id.rl_more:
+                MyCommentAct.startAct(getActivity());
+                break;
             case R.id.mrlayout_zhuangxiu:
                 MyLittleStoreActivity.startAct(getActivity());
                 break;

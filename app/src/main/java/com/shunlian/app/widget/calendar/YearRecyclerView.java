@@ -26,7 +26,7 @@ import android.util.AttributeSet;
  */
 public class YearRecyclerView extends RecyclerView {
     private CustomCalendarViewDelegate mDelegate;
-    private YearAdapter mAdapter;
+    private YearAdapterCalendar mAdapter;
     private OnMonthSelectedListener mListener;
 
     public YearRecyclerView(Context context) {
@@ -35,10 +35,10 @@ public class YearRecyclerView extends RecyclerView {
 
     public YearRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        mAdapter = new YearAdapter(context);
+        mAdapter = new YearAdapterCalendar(context);
         setLayoutManager(new GridLayoutManager(context, 3));
         setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseCalendarRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, long itemId) {
                 if (mListener != null && mDelegate != null) {

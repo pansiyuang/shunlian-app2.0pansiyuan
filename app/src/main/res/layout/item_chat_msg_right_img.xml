@@ -2,31 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:padding="10dp">
 
-    <RelativeLayout
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/miv_icon">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/bg_chat_me"
-            android:clickable="true"
-            android:longClickable="true">
-
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
-    </RelativeLayout>
+        android:layout_toLeftOf="@+id/miv_icon"
+        android:scaleType="centerCrop" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_icon"
@@ -38,9 +22,9 @@
         android:id="@+id/rl_msg_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_msg_right"
+        android:layout_alignBottom="@+id/miv_img"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/rl_msg_right"
+        android:layout_toLeftOf="@+id/miv_img"
         android:visibility="visible">
 
         <com.shunlian.app.widget.MyImageView
@@ -55,6 +39,6 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginRight="5dp"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
 </RelativeLayout>

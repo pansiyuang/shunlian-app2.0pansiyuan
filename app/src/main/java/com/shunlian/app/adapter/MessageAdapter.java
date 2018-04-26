@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -14,6 +15,8 @@ import com.shunlian.app.newchat.adapter.TopMessageAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.SwitchStatusDialog;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -28,9 +31,10 @@ import butterknife.BindView;
  * Created by Administrator on 2018/4/8.
  */
 
-public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMember> implements BaseRecyclerAdapter.OnItemClickListener {
+public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMember> implements TopMessageAdapter.OnMessageClickListener {
     public static final int ITEM_TOP = 100005;
     private List<MessageListEntity.Msg> msgList;
+    private OnStatusClickListener mListener;
 
     public MessageAdapter(Context context, List<MessageListEntity.Msg> msgs, List<ChatMemberEntity.ChatMember> memberList) {
         super(context, false, memberList);
@@ -54,8 +58,10 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return ITEM_TOP;
+        if (msgList != null) {
+            if (position == 0) {
+                return ITEM_TOP;
+            }
         }
         return super.getItemViewType(position);
     }
@@ -84,8 +90,8 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         if (!isEmpty(msgList)) {
             TopViewHolder topViewHolder = (TopViewHolder) holder;
             TopMessageAdapter messageAdapter = new TopMessageAdapter(context, msgList);
-            messageAdapter.setOnItemClickListener(this);
-            topViewHolder.recycler_list.setAdapter(new TopMessageAdapter(context, msgList));
+            messageAdapter.setOnMessageClickListener(this);
+            topViewHolder.recycler_list.setAdapter(messageAdapter);
         }
     }
 
@@ -110,15 +116,26 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        MessageListEntity.Msg msg = msgList.get(position);
-        switch (msg.type) {
-            case "4":
-                break;
-            case "5":
-                break;
-            case "10":
-                break;
+    public void OnSysMsgClick() {
+
+    }
+
+    @Override
+    public void OnTopMsgClick() {
+
+    }
+
+    @Override
+    public void OnAdminMsgClick() {
+        if (mListener != null) {
+            mListener.OnAdminClick();
+        }
+    }
+
+    @Override
+    public void OnSellerMsgClick() {
+        if (mListener != null) {
+            mListener.OnSellerClick();
         }
     }
 
@@ -172,5 +189,16 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
                 listener.onItemClick(v, getAdapterPosition());
             }
         }
+    }
+
+    public void setOnStatusClickListener(OnStatusClickListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnStatusClickListener {
+
+        void OnSellerClick();
+
+        void OnAdminClick();
     }
 }

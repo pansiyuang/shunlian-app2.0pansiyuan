@@ -8,8 +8,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -18,35 +19,42 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
-import com.shunlian.app.newchat.adapter.ChatAdpater;
+import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.StoreGoodsListEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.newchat.adapter.ChatMessageAdapter;
-import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
+import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.entity.EvaluateEntity;
+import com.shunlian.app.newchat.entity.EvaluateMessage;
+import com.shunlian.app.newchat.entity.GoodsMessage;
 import com.shunlian.app.newchat.entity.ImageMessage;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
-import com.shunlian.app.newchat.event.BaseEvent;
-import com.shunlian.app.newchat.event.FramedataEvent;
-import com.shunlian.app.newchat.event.MessageRespEvent;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
+import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.newchat.websocket.Status;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.photopick.SelectModel;
+import com.shunlian.app.presenter.ChatPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
+import com.shunlian.app.view.IChatView;
+import com.shunlian.app.widget.ChatOrderDialog;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -54,7 +62,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static com.shunlian.app.utils.BitmapUtil.getFileFromMediaUri;
 
 /**
@@ -62,7 +73,7 @@ import static com.shunlian.app.utils.BitmapUtil.getFileFromMediaUri;
  *
  * @author lucher
  */
-public class ChatActivity extends BaseActivity implements ChatView {
+public class ChatActivity extends BaseActivity implements ChatView, IChatView, ChatOrderDialog.OnOrderSendListener, EasyWebsocketClient.OnMessageReceiveListener {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
@@ -76,36 +87,38 @@ public class ChatActivity extends BaseActivity implements ChatView {
     @BindView(R.id.recycler_chat)
     RecyclerView recycler_chat;
 
-//    @BindView(R.id.refreshview)
-//    SlRefreshView refreshview;
+    @BindView(R.id.refreshview)
+    SlRefreshView refreshview;
 
     public static final int OPEN_ALBUM = 1;
     public static final int OPEN_CAMERA = 2;
+    public static final int SELECT_GOODS = 3;
+    public static final int SELECT_STORE_GOODS = 4;
     private Uri tempTakeUri;
 
     //websocket客户端
     private EasyWebsocketClient mClient;
+    private ObjectMapper objectMapper;
     private String from_id, from_type, from_nickname, from_headurl;
     private List<MsgInfo> messages = new ArrayList<>();
-    private UserInfoEntity.Info.Friend chatMember;
     private PhotoPickerIntent picIntent;
-    //    private MyHttpUtil.HttpCallback uploadCallBack, getHistoryCallBack;
     private String currentTagId;
     private ObjectMapper mObjectMapper;
-    private ChatAdpater chatAdpater;
     private ChatMessageAdapter mAdapter;
     private String currentUserId;  //用户ID
+    private String currentRoleType;  //用户ID
     private String chatUserId; //聊天对象ID
-    private String chatRoleType;
+    private String chatRoleType; //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
     private String chatName;
-    private UserInfoEntity userInfoEntity;
-    //    private GoodsItemEntity.Data.Item goodsItem;
-//    private ShopHomeEntity.Data.ShopInfo shopInfo;
-//    private OrderItemEntity.Data orderItem;
+    private String chatShopId;
+    private UserInfoEntity.Info.User mCurrentUser;
     private String currentDeviceId;
-    private boolean showStore;
     private LinearLayoutManager manager;
     private ChatMemberEntity.ChatMember currentChatMember;
+    private ChatPresenter mPresenter;
+    private ChatOrderDialog chatOrderDialog;
+    private String lastMessageSendTime;
+    private boolean isFirst = true;
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -123,36 +136,54 @@ public class ChatActivity extends BaseActivity implements ChatView {
     protected void initData() {
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
-                .keyboardEnable(true)
-                .init();
+                .keyboardEnable(true).init();
 
         currentChatMember = (ChatMemberEntity.ChatMember) getIntent().getSerializableExtra("chatMember");
 
         currentDeviceId = DeviceInfoUtil.getDeviceId(this);
-        chatMember = (UserInfoEntity.Info.Friend) getIntent().getSerializableExtra("member");
-//        goodsItem = getIntent().getParcelableExtra("goodsItem");
-//        orderItem = (OrderItemEntity.Data) getIntent().getSerializableExtra("orderItem");
-//        shopInfo = (ShopHomeEntity.Data.ShopInfo) getIntent().getSerializableExtra("shopItem");
         chatName = getIntent().getStringExtra("chatName");
-        showStore = getIntent().getBooleanExtra("showStore", true);
         init();
         initPrf();
         initChat();
-
+        initRightTxt();
     }
 
     @Override
     protected void initListener() {
         tv_title_right.setOnClickListener(this);
-        recycler_chat.setOnTouchListener(new View.OnTouchListener() {
+        recycler_chat.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    et_input.setInputMode(ChatInput.InputMode.NONE, false);
+                    break;
+            }
+            return false;
+        });
+
+        recycler_chat.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        et_input.setInputMode(ChatInput.InputMode.NONE, false);
-                        break;
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == SCROLL_STATE_IDLE) { // 滚动静止时才加载图片资源，极大提升流畅度
+                    mAdapter.setScrolling(false);
+                    mAdapter.notifyDataSetChanged(); // notify调用后onBindViewHolder会响应调用
+                } else
+                    mAdapter.setScrolling(true);
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        refreshview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) {//是平台用户
+                    mPresenter.getChatHistoryMessage(isFirst, currentUserId, "1", "", lastMessageSendTime);
+                } else if ("3".equals(chatRoleType) || "4".equals(chatRoleType)) {
+                    mPresenter.getChatHistoryMessage(isFirst, currentUserId, "2", chatShopId, lastMessageSendTime);
                 }
-                return false;
+            }
+
+            @Override
+            public void onLoadMore() {
+
             }
         });
         super.initListener();
@@ -162,80 +193,49 @@ public class ChatActivity extends BaseActivity implements ChatView {
      * 初始化
      */
     private void init() {
-        EventBus.getDefault().register(this);
+        objectMapper = new ObjectMapper();
 
-        if (chatMember != null) {
-            chatName = chatMember.nickname;
+        if (currentChatMember != null) {
+            chatName = currentChatMember.nickname;
         }
         if (!TextUtils.isEmpty(chatName)) {
             tv_title.setText(chatName);
         }
-
         et_input.setChatView(this);
     }
 
     public void initPrf() {
-//        mHandler = new Handler();
-//
-//        refreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-//            @Override
-//            public void onRefresh(final PullToRefreshBase<ListView> refreshView) {
-//                //判断网络是否连接  连接使用网络，否则获取数据库
-//                if (isNetworkOpen(ChatActivity.this)) {
-//                    getHistoryFromNetwork();
-//                } else {
-//                    final int beforeCount = messages.size();
-//                    List list = getDataFromSQL(false);
-//                    chatAdpater.addMsgInfos(0, list);
-//                    final int afterCount = messages.size();
-//                    chatAdpater.notifyDataSetChanged();
-//                    lv_chat.setSelection(afterCount - beforeCount);
-//                }
-//                mHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        refreshView.onRefreshComplete();
-//                    }
-//                }, 300);
-//            }
-//        });
+        refreshview.setCanRefresh(true);
+        refreshview.setCanLoad(false);
 
-        chatAdpater = new ChatAdpater(this, messages);
-        chatAdpater.setOnLinkClickListener(new ChatAdpater.OnLinkClickListener() {
-            @Override
-            public void OnClick() {
-                LogUtil.httpLogW("发送消息");
-//                if (goodsItem != null) {
-//                    sendLinkMessage(goodsItem);
-//                }
-            }
-        });
-//        refreshview.setCanRefresh(true);
-//        refreshview.setCanLoad(false);
-
+        ((SimpleItemAnimator) recycler_chat.getItemAnimator()).setSupportsChangeAnimations(false);//取消刷新动画
+        recycler_chat.setNestedScrollingEnabled(false);
         manager = new LinearLayoutManager(this);
         recycler_chat.setLayoutManager(manager);
         mAdapter = new ChatMessageAdapter(this, messages, recycler_chat);
         recycler_chat.setAdapter(mAdapter);
+        mPresenter = new ChatPresenter(this, this);
     }
-
 
     private void initChat() {
         mObjectMapper = new ObjectMapper();
 
         if (currentChatMember != null) {
-            chatUserId = currentChatMember.join_id;
+            if (!isEmpty(currentChatMember.m_user_id)) {
+                chatUserId = currentChatMember.m_user_id;
+            } else {
+                chatUserId = currentChatMember.user_id;
+            }
+            chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
+//
+//            chatUserId = "31";
+//            chatShopId = "26";
+//            chatRoleType = "3";
         } else {
             chatUserId = getIntent().getStringExtra("user_id");
             chatRoleType = getIntent().getStringExtra("role_type");
         }
-
-//        if (!chatUserId.isEmpty() && !chatUserId.equals("224")) { //224为官方客服
-//            if (showStore) {
-//                tv_title_right.setVisibility(View.VISIBLE);
-//            }
-//        }
 
         if (EasyWebsocketClient.getClient() == null) {
             mClient = EasyWebsocketClient.initWebsocketClient(this);
@@ -245,46 +245,88 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 Common.staticToast("初始化聊天失败");
                 return;
             } else {
-                userInfoEntity = mClient.getUserInfoEntity();
-                initUserInfo(userInfoEntity);
+                mCurrentUser = mClient.getUser();
+                initUser(mCurrentUser);
             }
         }
+
+        mClient.setOnMessageReceiveListener(this);
+
         //判断网络是否连接  连接使用网络，否则获取数据库
         if (NetworkUtils.isNetworkOpen(this)) {
             getHistoryFromNetwork();
         }
+        //获取历史消息
+
+        if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) {//是平台用户
+            mPresenter.getChatHistoryMessage(isFirst, currentUserId, "1", "", lastMessageSendTime);
+        } else if ("3".equals(chatRoleType) || "4".equals(chatRoleType)) {
+            mPresenter.getChatHistoryMessage(isFirst, currentUserId, "2", chatShopId, lastMessageSendTime);
+        }
+        readedMsg(chatUserId);
+    }
+
+    private void initRightTxt() {
+        switch (mClient.getMemberStatus()) {
+            case Admin: //
+                tv_title_right.setText(getStringResouce(R.string.switch_other));
+                et_input.showCommentBtn();
+                break;
+            case Seller:
+                tv_title_right.setText(getStringResouce(R.string.switch_other));
+                et_input.showGoodsBtn();
+                et_input.showCommentBtn();
+                break;
+            case Member:
+                if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { //对方是平台客服
+                    tv_title_right.setText(getStringResouce(R.string.help_center));
+                    et_input.showOrderBtn();
+                } else {
+                    tv_title_right.setText(getStringResouce(R.string.to_shop));
+                }
+                    et_input.showGoodsBtn();
+                break;
+        }
+        tv_title_right.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void onRestart() {
-        if (!TextUtils.isEmpty(chatUserId) && !TextUtils.isEmpty(chatRoleType)) {
-            readedMsg(chatUserId, chatRoleType);
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_title_right:
+                switch2Jump();
+                break;
         }
-        super.onRestart();
     }
 
-    private View.OnClickListener l = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.tv_title_right:
-                    if (chatUserId.isEmpty() || chatUserId.equals("224")) { //224为官方客服
-                        return;
-                    }
-                    Intent intentShop = new Intent(ChatActivity.this, StoreAct.class);
-                    intentShop.putExtra("shopId", chatUserId);
-                    startActivity(intentShop);
-                    break;
-            }
+    public void switch2Jump() {
+        switch (mClient.getMemberStatus()) {
+            case Admin: //
+                SwitchOtherActivity.startAct(this, currentUserId, chatUserId);
+                break;
+            case Seller:
+                SwitchOtherActivity.startAct(this, currentUserId, chatUserId);
+                break;
+            case Member:
+                if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
+                    //跳转帮助中心
+                } else {//对方是商家客服
+                    //跳转去店铺
+                    StoreAct.startAct(this, chatShopId);
+                }
+                break;
         }
-    };
+    }
 
-    private void initUserInfo(UserInfoEntity userInfoEntity) {
-        currentUserId = userInfoEntity.info.user.user_id;
-        from_headurl = userInfoEntity.info.user.headurl;
-        from_id = userInfoEntity.info.user.join_id;
-        from_nickname = userInfoEntity.info.user.nickname;
-        from_type = userInfoEntity.info.user.type;
+    private void initUser(UserInfoEntity.Info.User user) {
+        if (user != null) {
+            currentUserId = user.user_id;
+            currentRoleType = user.type;
+            from_headurl = user.headurl;
+            from_id = user.join_id;
+            from_nickname = user.nickname;
+            from_type = user.type;
+        }
     }
 
     @Override
@@ -322,6 +364,28 @@ public class ChatActivity extends BaseActivity implements ChatView {
         }
     }
 
+    @Override
+    public void sendGoods() {
+        if (mClient.getMemberStatus() == MemberStatus.Member) {
+            SelectGoodsActivity.startActForResult(this, chatShopId, SELECT_GOODS);
+        } else {
+            SelectStoreGoodsActivity.startActForResult(this, mCurrentUser.shop_id, SELECT_STORE_GOODS);
+        }
+    }
+
+    @Override
+    public void sendOrder() {
+        if (chatOrderDialog == null) {
+            chatOrderDialog = new ChatOrderDialog(this);
+            chatOrderDialog.setOnOrderListener(this);
+        }
+        chatOrderDialog.show();
+    }
+
+    @Override
+    public void sendComment() {
+        sendEvaluteMessage();
+    }
 
     /**
      * 网络获取历史消息
@@ -347,27 +411,6 @@ public class ChatActivity extends BaseActivity implements ChatView {
 //        MyHttpUtil.getHistoryMessage(this, getLastMessageId(), chatUserId, true, getHistoryCallBack);
     }
 
-    private String getLastMessageId() {
-        String currentMsgId;
-        MsgInfo info;
-        if (messages.size() == 0) {
-            currentMsgId = null;
-        } else {
-            info = messages.get(0);//从消息列表的第0项获取历史消息
-            String message = info.getMessage();
-            BaseMessage baseMessage = chatAdpater.str2Msg(message);
-            if ("sys_link".equals(baseMessage.msg_type)) {
-                return "sys_link";
-            }
-            if (info.getId() == null) { //
-                currentMsgId = String.valueOf(messages.get(1).getId());
-            } else {
-                currentMsgId = String.valueOf(messages.get(0).getId());
-            }
-        }
-        return currentMsgId;
-    }
-
     /**
      * 发送文字消息
      */
@@ -377,23 +420,27 @@ public class ChatActivity extends BaseActivity implements ChatView {
         currentTagId = creatMsgTagId(from_id);
         TextMessage textMessage = new TextMessage();
         textMessage.from_user_id = currentUserId;
-        textMessage.from_join_id = from_id;
         textMessage.from_type = from_type;
         textMessage.from_nickname = from_nickname;
         textMessage.from_headurl = from_headurl;
-        textMessage.to_join_id = currentChatMember.join_id;
-        textMessage.to_type = currentChatMember.type;
+        textMessage.to_user_id = chatUserId;
+        textMessage.to_type = chatRoleType;
+        textMessage.to_shop_id = chatShopId;
         textMessage.msg_type = "text";
         textMessage.setSendType(BaseMessage.VALUE_RIGHT);
         textMessage.tag_id = currentTagId;
         textMessage.type = "send_message";
-        textMessage.msg_body = msg;
+
+        TextMessage.TextMessageBody textMessageBody = new TextMessage.TextMessageBody();
+        textMessageBody.text = msg;
+        textMessage.msg_body = textMessageBody;
+
         if (mClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的文字消息:" + mAdapter.msg2Str(textMessage));
             mClient.send(mAdapter.msg2Str(textMessage));
-            msgInfo.setSend_time(System.currentTimeMillis() / 1000);
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
             textMessage.setStatus(MessageStatus.Sending);
-            msgInfo.setMessage(mAdapter.msg2Str(textMessage));
+            msgInfo.message = mAdapter.msg2Str(textMessage);
             mAdapter.addMsgInfo(msgInfo);
         }
     }
@@ -408,24 +455,25 @@ public class ChatActivity extends BaseActivity implements ChatView {
         currentTagId = creatMsgTagId(from_id);
         ImageMessage imageMessage = new ImageMessage();
         imageMessage.from_user_id = currentUserId;
-        imageMessage.from_join_id = from_id;
         imageMessage.from_type = from_type;
         imageMessage.from_nickname = from_nickname;
         imageMessage.from_headurl = from_headurl;
-        imageMessage.to_join_id = chatUserId;
-        imageMessage.to_type = currentChatMember.type;
+        imageMessage.to_user_id = chatUserId;
+        imageMessage.to_type = chatRoleType;
+        imageMessage.to_shop_id = chatShopId;
         imageMessage.msg_type = "image";
         imageMessage.setSendType(BaseMessage.VALUE_RIGHT);
         imageMessage.tag_id = currentTagId;
         imageMessage.type = "send_message";
 
+        ImageMessage.Image image = new ImageMessage.Image();
         ImageMessage.ImageBody imageBody = new ImageMessage.ImageBody();
         Bitmap bitmap = null;
         try {
-            imageBody.localUrl = imgPath;
+            image.localUrl = imgPath;
             bitmap = BitmapFactory.decodeFile(imgPath);
-            imageBody.img_height = bitmap.getHeight();
-            imageBody.img_width = bitmap.getWidth();
+            image.img_height = bitmap.getHeight();
+            image.img_width = bitmap.getWidth();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -433,15 +481,15 @@ public class ChatActivity extends BaseActivity implements ChatView {
                 bitmap.recycle();
             }
         }
+        imageBody.image = image;
         imageMessage.msg_body = imageBody;
-        msgInfo.setSend_time(System.currentTimeMillis() / 1000);
+        msgInfo.send_time = System.currentTimeMillis() / 1000;
         LogUtil.httpLogW("发送图片消息:" + mAdapter.msg2Str(imageMessage));
-        msgInfo.setMessage(mAdapter.msg2Str(imageMessage));
-
+        msgInfo.message = mAdapter.msg2Str(imageMessage);
         if (mClient.getStatus() == Status.CONNECTED) {
             mAdapter.addMsgInfo(msgInfo);
-//            chatAdpater.itemSendComplete(currentTagId, MessageStatus.Sending);
-//            upLoadImg(imgPath, currentTagId, imageMessage);
+            mAdapter.itemSendComplete(currentTagId, MessageStatus.Sending);
+            compressImgs(imgPath, imageMessage.tag_id, imageMessage);
         }
     }
 
@@ -450,6 +498,213 @@ public class ChatActivity extends BaseActivity implements ChatView {
      */
     private void sendImgMessage(ImageMessage imageMessage) {
         mClient.send(mAdapter.msg2Str(imageMessage));
+    }
+
+    /**
+     * 构建一条商品消息
+     */
+    public void sendGoodsMessage(ChatGoodsEntity.Goods goods) {
+        MsgInfo msgInfo = new MsgInfo();
+
+        currentTagId = creatMsgTagId(from_id);
+        GoodsMessage goodsMessage = new GoodsMessage();
+        goodsMessage.from_user_id = currentUserId;
+        goodsMessage.from_type = from_type;
+        goodsMessage.from_nickname = from_nickname;
+        goodsMessage.from_headurl = from_headurl;
+        goodsMessage.to_user_id = chatUserId;
+        goodsMessage.to_type = chatRoleType;
+        goodsMessage.to_shop_id = chatShopId;
+        goodsMessage.msg_type = "goods";
+        goodsMessage.setSendType(BaseMessage.VALUE_RIGHT);
+        goodsMessage.tag_id = currentTagId;
+        goodsMessage.type = "send_message";
+
+
+        GoodsMessage.Goods good = new GoodsMessage.Goods();
+        GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();
+        good.goodsImage = goods.thumb;
+        good.title = goods.title;
+        good.goodsId = goods.goods_id;
+        good.price = goods.price;
+        goodsBody.goods = good;
+        goodsMessage.msg_body = goodsBody;
+
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
+            mClient.send(mAdapter.msg2Str(goodsMessage));
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
+            goodsMessage.setStatus(MessageStatus.Sending);
+            msgInfo.message = mAdapter.msg2Str(goodsMessage);
+            mAdapter.addMsgInfo(msgInfo);
+        }
+    }
+
+    /**
+     * 构建一条商品消息
+     */
+    public void sendGoodsMessage(StoreGoodsListEntity.MData mData) {
+        MsgInfo msgInfo = new MsgInfo();
+
+        currentTagId = creatMsgTagId(from_id);
+        GoodsMessage goodsMessage = new GoodsMessage();
+        goodsMessage.from_user_id = currentUserId;
+        goodsMessage.from_type = from_type;
+        goodsMessage.from_nickname = from_nickname;
+        goodsMessage.from_headurl = from_headurl;
+        goodsMessage.to_user_id = chatUserId;
+        goodsMessage.to_type = chatRoleType;
+        goodsMessage.to_shop_id = chatShopId;
+        goodsMessage.msg_type = "goods";
+        goodsMessage.setSendType(BaseMessage.VALUE_RIGHT);
+        goodsMessage.tag_id = currentTagId;
+        goodsMessage.type = "send_message";
+
+        GoodsMessage.Goods good = new GoodsMessage.Goods();
+        GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();
+        good.goodsImage = mData.thumb;
+        good.title = mData.title;
+        good.goodsId = mData.id;
+        good.price = mData.price;
+        goodsBody.goods = good;
+        goodsMessage.msg_body = goodsBody;
+
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
+            mClient.send(mAdapter.msg2Str(goodsMessage));
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
+            goodsMessage.setStatus(MessageStatus.Sending);
+            msgInfo.message = mAdapter.msg2Str(goodsMessage);
+            mAdapter.addMsgInfo(msgInfo);
+        }
+    }
+
+    /**
+     * 发送一条评价消息
+     */
+
+    public void sendEvaluteMessage() {
+        MsgInfo msgInfo = new MsgInfo();
+
+        currentTagId = creatMsgTagId(from_id);
+        EvaluateMessage evaluateMessage = new EvaluateMessage();
+        evaluateMessage.from_user_id = currentUserId;
+        evaluateMessage.from_type = from_type;
+        evaluateMessage.from_nickname = from_nickname;
+        evaluateMessage.from_headurl = from_headurl;
+        evaluateMessage.to_user_id = chatUserId;
+        evaluateMessage.to_shop_id = chatShopId;
+        evaluateMessage.to_type = currentChatMember.type;
+        evaluateMessage.msg_type = "evaluate";
+        evaluateMessage.setSendType(BaseMessage.VALUE_SYSTEM);
+        evaluateMessage.tag_id = currentTagId;
+        evaluateMessage.type = "send_message";
+
+        // TODO: 2018/4/13
+        currentChatMember.sid = "12"; //这行代码到时候注释掉
+
+        if (isEmpty(currentChatMember.sid)) {
+            return;
+        }
+        EvaluateMessage.EvaluateMessageBody evaluateMessageBody = new EvaluateMessage.EvaluateMessageBody();
+        EvaluateMessage.Evaluate evaluate = new EvaluateMessage.Evaluate();
+        evaluate.sid = currentChatMember.sid;
+        evaluateMessageBody.evaluate = evaluate;
+        evaluateMessage.msg_body = evaluateMessageBody;
+
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的评价消息:" + mAdapter.msg2Str(evaluateMessage));
+            mClient.send(mAdapter.msg2Str(evaluateMessage));
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
+            evaluateMessage.setStatus(MessageStatus.Sending);
+            msgInfo.message = mAdapter.msg2Str(evaluateMessage);
+            mAdapter.addMsgInfo(msgInfo);
+        }
+    }
+
+    /**
+     * 发送评分消息
+     */
+    public void createEvalute(EvaluateMessage evaluateMessage) {
+        if (evaluateMessage.msg_body != null) {
+            EvaluateMessage.EvaluateMessageBody evaluateMessageBody = evaluateMessage.msg_body;
+            if (evaluateMessageBody.evaluate != null) {
+                EvaluateMessage.Evaluate evaluate = evaluateMessageBody.evaluate;
+                JSONObject jsonObject = new JSONObject();
+                LogUtil.httpLogW("msg_id:" + evaluateMessage.id);
+                try {
+                    jsonObject.put("type", "pingjia");
+                    jsonObject.put("msg_id", evaluateMessage.id);
+                    jsonObject.put("score", evaluate.score);
+                    jsonObject.put("evaluat_id", evaluate.id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (mClient.getStatus() == Status.CONNECTED) {
+                    LogUtil.httpLogW("发送的评价消息:" + jsonObject.toString());
+                    mClient.send(jsonObject.toString());
+                }
+            }
+        }
+    }
+
+    /**
+     * 发送一条订单消息
+     */
+
+    public void sendOrderMessage(MyOrderEntity.Orders orders) {
+        MsgInfo msgInfo = new MsgInfo();
+
+        currentTagId = creatMsgTagId(from_id);
+        OrderMessage orderMessage = new OrderMessage();
+        orderMessage.from_user_id = currentUserId;
+        orderMessage.from_type = from_type;
+        orderMessage.from_nickname = from_nickname;
+        orderMessage.from_headurl = from_headurl;
+        orderMessage.to_user_id = chatUserId;
+        orderMessage.to_type = chatRoleType;
+        orderMessage.to_shop_id = chatShopId;
+        orderMessage.msg_type = "order";
+        orderMessage.setSendType(BaseMessage.VALUE_SYSTEM);
+        orderMessage.tag_id = currentTagId;
+        orderMessage.type = "send_message";
+
+        OrderMessage.OrderMessageBody orderMessageBody = new OrderMessage.OrderMessageBody();
+        OrderMessage.Order order = new OrderMessage.Order();
+        order.ordersn = orders.order_sn;
+        order.orderGoods = orders.order_goods;
+        order.store_id = orders.store_id;
+        order.store_name = orders.store_name;
+        order.create_time = orders.create_time;
+        orderMessageBody.order = order;
+        orderMessage.msg_body = orderMessageBody;
+
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的订单消息:" + mAdapter.msg2Str(orderMessage));
+            mClient.send(mAdapter.msg2Str(orderMessage));
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
+            orderMessage.setStatus(MessageStatus.Sending);
+            msgInfo.message = mAdapter.msg2Str(orderMessage);
+            mAdapter.addMsgInfo(msgInfo);
+        }
+    }
+
+    /**
+     * 获取商家自动回复帮助内容
+     */
+    public void getHelpContent(String helpId, String sId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("type", "seller_help_content");
+            jsonObject.put("id", helpId);
+            jsonObject.put("sid", sId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的订单消息:" + jsonObject.toString());
+            mClient.send(jsonObject.toString());
+        }
     }
 
     /**
@@ -520,23 +775,20 @@ public class ChatActivity extends BaseActivity implements ChatView {
 
     /**
      * 消息已读上报
-     *
-     * @param userId
-     * @param memberType
      */
 
-    private void readedMsg(String userId, String memberType) {
+    private void readedMsg(String chatUserId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("type", "msg_read");
-            jsonObject.put("member_id", userId);
-            jsonObject.put("member_type", memberType);
+            jsonObject.put("to_user_id", chatUserId);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (mClient.getStatus() == Status.CONNECTED) {
             mClient.send(jsonObject.toString());
-            mClient.updateFriendList(chatUserId);
+            LogUtil.httpLogW("消息已读上报:" + jsonObject.toString());
+//            mClient.updateFriendList(chatUserId);
         }
     }
 
@@ -548,103 +800,6 @@ public class ChatActivity extends BaseActivity implements ChatView {
             return null;
         }
         return String.valueOf(currentDeviceId + "_" + System.currentTimeMillis()) + useId;
-    }
-
-    /**
-     * 处理websocket响应事件
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleEvent(BaseEvent event) {
-        Log.w("xiaojian", "state:" + event.getType());
-        switch (event.getType()) {
-            case CONNECTING:
-                break;
-            case OPEN:
-                break;
-            case CLOSE:
-                break;
-            case ERROR:
-                break;
-            case TIMEOUT:
-                break;
-            case MESSAGE:
-                String msg = ((MessageRespEvent) event).getMessage();
-                try {
-                    BaseEntity baseEntity = new ObjectMapper().readValue(msg, BaseEntity.class);
-                    switch (baseEntity.message_type) {
-                        case "init":
-                            userInfoEntity = mClient.getUserInfoEntity();
-                            initUserInfo(userInfoEntity);
-                            break;
-                        case "online":
-                            LogUtil.httpLogW("online：" + msg);
-                            break;
-                        case "logout":
-                            LogUtil.httpLogW("logout：" + msg);
-                            break;
-                        case "dialog_init":
-                            LogUtil.httpLogW("dialog_init：" + msg);
-                            MessageEntity msgEntity = new ObjectMapper().readValue(msg, MessageEntity.class);
-//                            Common.staticToast(ChatActivity.this, msgEntity.msg);
-
-                            mClient.setChating(true);
-//                            if (goodsItem != null) {
-//                                buildLinkMessage(goodsItem);
-//                            }
-                            readedMsg(chatUserId, chatRoleType);
-                            break;
-                        case "friend_add":
-                            break;
-                        case "receive_message":
-                            LogUtil.httpLogW("msg:" + msg);
-                            //接收到消息
-                            MessageEntity messageEntity = mObjectMapper.readValue(msg, MessageEntity.class);
-                            MsgInfo msgInfo = messageEntity.msg_info;
-                            String message1 = msgInfo.getMessage();
-                            BaseMessage baseMessage = mObjectMapper.readValue(message1, BaseMessage.class);
-                            LogUtil.httpLogW("sendType:" + baseMessage.getSendType());
-                            if (baseMessage.getSendType() == BaseMessage.VALUE_LEFT) {
-                                if (baseMessage.from_join_id.equals(chatUserId)) {
-                                    mAdapter.addMsgInfo(msgInfo);
-                                }
-                            } else if (baseMessage.getSendType() == BaseMessage.VALUE_RIGHT) {
-                                if (baseMessage.from_user_id.equals(currentUserId)) {
-                                    //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
-                                    if (!TextUtils.isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
-                                        chatAdpater.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
-                                        baseMessage.setStatus(MessageStatus.SendSucc);
-                                        msgInfo.setMessage(chatAdpater.msg2Str(baseMessage));
-                                    } else {
-                                        chatAdpater.addMsgInfo(msgInfo);
-                                    }
-//                                    LogUtil.httpLogW("插入一条消息:" + infoManager.insert(msgInfo));
-                                }
-                            } else if (baseMessage.getSendType() == BaseMessage.VALUE_SYSTEM) {
-                                chatAdpater.addMsgInfo(msgInfo);
-                            }
-//                            lv_chat.setSelection(ListView.FOCUS_DOWN);//刷新到底部
-                            break;
-                        case "user_ping":
-                            break;
-                        case "leaveline":
-                            break;
-                        case "freeline":
-                            break;
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-
-            case FRAGMENT:
-                String data = new String(((FramedataEvent) event).getFrameData().getPayloadData().array());
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -666,42 +821,21 @@ public class ChatActivity extends BaseActivity implements ChatView {
                         buildImageMessage(filePath);
                     }
                     break;
+                case SELECT_GOODS:
+                    List<ChatGoodsEntity.Goods> goodsList = (List<ChatGoodsEntity.Goods>) data.getSerializableExtra("select_goods");
+                    for (ChatGoodsEntity.Goods goods : goodsList) {
+                        sendGoodsMessage(goods);
+                    }
+                    break;
+                case SELECT_STORE_GOODS:
+                    StoreGoodsListEntity.MData mData = (StoreGoodsListEntity.MData) data.getSerializableExtra("select_goods");
+                    if (mData != null) {
+                        sendGoodsMessage(mData);
+                    }
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * @param filePath 上传图片
-     */
-    private void upLoadImg(String filePath, final String tagId, final ImageMessage imageMessage) {
-//        if (!TextUtils.isEmpty(filePath)) {
-//            uploadCallBack = new MyHttpUtil.HttpCallback() {
-//                @Override
-//                public void uploadImg(Context context, ImgEntity imgEntity) {
-//                    if (imgEntity != null && imgEntity.getData() != null) {
-//                        ImageMessage.ImageBody imageBody = new ImageMessage.ImageBody();
-//                        imageBody.img_height = imgEntity.getData().getImg_height();
-//                        imageBody.img_width = imgEntity.getData().getImg_width();
-//                        imageBody.img_host = imgEntity.getData().getImg_host();
-//                        imageBody.img_small = imgEntity.getData().getImg_small();
-//                        imageBody.img_original = imgEntity.getData().getImg_original();
-//                        imageMessage.msg_body = imageBody;
-//                        sendImgMessage(imageMessage);
-//                    } else {
-//                        chatAdpater.itemSendComplete(tagId, MessageStatus.SendFail);
-//                    }
-//                    super.uploadImg(context, imgEntity);
-//                }
-//
-//                @Override
-//                public void onFailure(Context context, int statusCode, Header[] headers, Throwable throwable, Object bj) {
-//                    chatAdpater.itemSendComplete(tagId, MessageStatus.SendFail);
-//                    super.onFailure(context, statusCode, headers, throwable, bj);
-//                }
-//            };
-//            MyHttpUtil.uploadImg(this, uploadCallBack, new File(filePath));
-//        }
     }
 
     private String splitDeviceId(String tagId) {
@@ -729,29 +863,159 @@ public class ChatActivity extends BaseActivity implements ChatView {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    public void showFailureView(int SELECT_STORE_GOODS) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int SELECT_STORE_GOODS) {
+
+    }
+
+    @Override
+    public void uploadImg(UploadPicEntity picEntity, String tagId, ImageMessage imageMessage) {
+        if (picEntity != null) {
+            ImageMessage.Image image = new ImageMessage.Image();
+            List<UploadPicEntity.SizeInfo> sizeInfos = picEntity.sizeInfo;
+            if (!isEmpty(sizeInfos)) {
+                image.img_height = sizeInfos.get(0).height;
+                image.img_width = sizeInfos.get(0).width;
+            }
+            image.img_host = picEntity.domain;
+            image.img_small = picEntity.relativePath.get(0);
+            image.img_original = picEntity.newFileName.get(0);
+            imageMessage.msg_body.image = image;
+            sendImgMessage(imageMessage);
+        } else {
+            mAdapter.itemSendComplete(tagId, MessageStatus.SendFail);
+        }
+    }
+
+    @Override
+    public void getHistoryMsg(List<MsgInfo> msgInfoList, String lasetSendTime, boolean noMore) {
+        refreshview.stopRefresh(true);
+
+        if (isFirst) {
+            messages.clear();
+        }
+
+        if (!isEmpty(msgInfoList)) {
+            mAdapter.addMsgInfos(0, msgInfoList);
+        }
+        if (noMore) {
+            refreshview.setCanRefresh(false);
+        } else {
+            refreshview.setCanRefresh(true);
+        }
+
+        lastMessageSendTime = lasetSendTime;
+
+        if (isFirst) {
+            recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+        }
+        isFirst = false;
+    }
+
+    //压缩图片
+    public void compressImgs(String imgPath, String tagId, ImageMessage imageMessage) {
+        Luban.with(this).load(imgPath).putGear(3).setCompressListener(new OnCompressListener() {
+
+            @Override
+            public void onStart() {
+                LogUtil.httpLogW("onStart()");
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                ImageEntity imageEntity = new ImageEntity(imgPath);
+                imageEntity.file = file;
+                mPresenter.uploadPic(imageEntity, "chat", tagId, imageMessage);//上传图片
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Common.staticToast("上传图片失败");
+            }
+        }).launch();
+    }
+
+    public void upDataChatMemberInfo(BaseMessage baseMessage) {
+        if (baseMessage.to_user_id.equals(currentUserId)) { //发给自己的消息
+            currentChatMember.m_user_id = baseMessage.from_user_id;
+            currentChatMember.nickname = baseMessage.from_nickname;
+            currentChatMember.headurl = baseMessage.from_headurl;
+            currentChatMember.sid = baseMessage.sid;
+        }
+    }
+
+    @Override
+    public void OnOrderSelect(MyOrderEntity.Orders orders) {
+        //发送订单消息
+        sendOrderMessage(orders);
     }
 
 
-//    public static Intent buildIntent(Context context, String chatId, String chatName, String roleType, GoodsItemEntity.Data.Item goodsItem, ShopHomeEntity.Data.ShopInfo shopInfo, OrderItemEntity.Data orderItem) {
-//        Intent intent = new Intent(context, ChatActivity.class);
-//        intent.putExtra("user_id", chatId);
-//        intent.putExtra("goodsItem", goodsItem);
-//        intent.putExtra("chatName", chatName);
-//        intent.putExtra("shopItem", shopInfo);
-//        intent.putExtra("orderItem", orderItem);
-//        intent.putExtra("role_type", roleType);
-//        return intent;
-//    }
-//
-//    public static Intent buildIntent(Context context, String chatId, String chatName, String roleType, boolean showStore) {
-//        Intent intent = new Intent(context, ChatActivity.class);
-//        intent.putExtra("user_id", chatId);
-//        intent.putExtra("chatName", chatName);
-//        intent.putExtra("role_type", roleType);
-//        intent.putExtra("showStore", showStore);
-//        return intent;
-//    }
+    @Override
+    public void initMessage() {
+        mCurrentUser = mClient.getUser();
+        initUser(mCurrentUser);
+    }
+
+    @Override
+    public void receiveMessage(String message) {
+        try {
+            MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
+            MsgInfo msgInfo = messageEntity.msg_info;
+            String message1 = msgInfo.message;
+            BaseMessage baseMessage = objectMapper.readValue(message1, BaseMessage.class);
+            upDataChatMemberInfo(baseMessage);//更新聊天对象的信息
+
+            if (baseMessage.getSendType() == BaseMessage.VALUE_LEFT) {
+                if (baseMessage.from_user_id.equals(chatUserId)) {
+                    mAdapter.addMsgInfo(msgInfo);
+                }
+            } else if (baseMessage.getSendType() == BaseMessage.VALUE_RIGHT) {
+                if (baseMessage.from_user_id.equals(currentUserId)) {
+                    //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
+                    if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
+                        mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
+                        baseMessage.setStatus(MessageStatus.SendSucc);
+                        msgInfo.message = mAdapter.msg2Str(baseMessage);
+                    } else {
+                        mAdapter.addMsgInfo(msgInfo);
+                    }
+                }
+            } else if (baseMessage.getSendType() == BaseMessage.VALUE_SYSTEM) {
+                mAdapter.addMsgInfo(msgInfo);
+            }
+            recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void evaluateMessage(String msg) {
+        try {
+            EvaluateEntity entity = mObjectMapper.readValue(msg, EvaluateEntity.class);
+            mAdapter.updateEvaluateStatus(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void roleSwitchMessage(String message) {
+
+    }
+
+    @Override
+    public void onLine() {
+
+    }
+
+    @Override
+    public void logout() {
+
+    }
 }

@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 
-class YearAdapter extends BaseRecyclerAdapter<Month> {
+class YearAdapterCalendar extends BaseCalendarRecyclerAdapter<Month> {
     private CustomCalendarViewDelegate mDelegate;
     private int mItemHeight;
     private int mTextHeight;
 
-    YearAdapter(Context context) {
+    YearAdapterCalendar(Context context) {
         super(context);
         mTextHeight = Util.dipToPx(context,56);
     }

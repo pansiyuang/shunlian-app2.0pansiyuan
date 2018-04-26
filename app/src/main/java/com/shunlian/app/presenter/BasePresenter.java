@@ -301,6 +301,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 super.onSuccess(entity);
                 RefreshTokenEntity data = entity.data;
                 if (data != null) {
+                    LogUtil.httpLogW("刷新token");
                     SharedPrefUtil.saveSharedPrfString("token", data.token);
                     SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
                     getNetData(emptyCode,failureCode,isLoading,clone,new SimpleNetDataCallback<BaseEntity<T>>());

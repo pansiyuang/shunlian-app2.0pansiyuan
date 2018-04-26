@@ -99,8 +99,12 @@ import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.ServiceEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1419,6 +1423,7 @@ public interface ApiService {
 
     /**
      * 系统消息
+     *
      * @param map
      * @return
      */
@@ -1448,5 +1453,53 @@ public interface ApiService {
      */
     @GET("message/allcount")
     Call<BaseEntity<AllMessageCountEntity>> messageAllCount(@QueryMap Map<String, String> map);
+
+    /**
+     * 客服商品列表
+     *
+     * @return
+     */
+    @GET("chat/goods/list")
+    Call<BaseEntity<ChatGoodsEntity>> chatGoodsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 客服商品列表
+     *
+     * @return
+     */
+    @GET("chat/chat/chatUserHistoryData")
+    Call<BaseEntity<HistoryEntity>> chatUserHistoryData(@QueryMap Map<String, String> map);
+
+    /**
+     * 客服获取工作状态
+     *
+     * @return
+     */
+    @GET("chat/chat/getReception")
+    Call<BaseEntity<CommonEntity>> getReception(@QueryMap Map<String, String> map);
+
+    /**
+     * 客服设置工作状态
+     *
+     * @return
+     */
+    @POST("chat/chat/setReception")
+    Call<BaseEntity<CommonEntity>> setReception(@Body RequestBody body);
+
+    /**
+     * 客服获取正在聊天用户列表
+     *
+     * @return
+     */
+    @GET("chat/chat/getUserList")
+    Call<BaseEntity<ChatMemberEntity>> getUserList(@QueryMap Map<String, String> map);
+
+    /**
+     * 转接客服列表
+     *
+     * @return
+     */
+    @GET("chat/chat/transferChatUserList")
+    Call<BaseEntity<ServiceEntity>> getTransferChatUserList(@QueryMap Map<String, String> map);
 
 }

@@ -7,10 +7,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageMessage extends BaseMessage {
-
     public ImageBody msg_body;
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ImageBody{
+    public static class ImageBody {
+        public Image image;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Image {
         public String img_small;
         public String img_original;
         public int img_height;

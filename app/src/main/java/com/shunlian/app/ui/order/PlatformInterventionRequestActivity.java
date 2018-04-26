@@ -186,6 +186,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     public void requestSuccess(String msg) {
         //申请成功
         Common.staticToast(msg);
+        finish();
     }
 
     @Override
@@ -252,6 +253,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
 
     @Override
     public void onSelect(int position) {
+        LogUtil.httpLogW("position:" + position);
         if (position < 0) {
             return;
         }

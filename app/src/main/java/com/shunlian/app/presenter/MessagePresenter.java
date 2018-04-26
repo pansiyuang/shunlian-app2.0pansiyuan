@@ -63,13 +63,15 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
         });
     }
 
-    public void getMessageList(int type) {
+    public void getMessageList(boolean isLoad, String type) {
         Map<String, String> map = new HashMap<>();
-        map.put("type", String.valueOf(type));
+        if (!isEmpty(type)) {
+            map.put("type", String.valueOf(type));
+        }
         sortAndMD5(map);
 
         Call<BaseEntity<ChatMemberEntity>> baseEntityCall = getAddCookieApiService().getMessageList(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ChatMemberEntity>>() {
+        getNetData(isLoad, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ChatMemberEntity>>() {
             @Override
             public void onSuccess(BaseEntity<ChatMemberEntity> entity) {
                 super.onSuccess(entity);

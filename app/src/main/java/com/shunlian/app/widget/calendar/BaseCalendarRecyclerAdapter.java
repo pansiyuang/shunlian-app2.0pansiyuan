@@ -27,14 +27,14 @@ import java.util.List;
 /**
  * 基本的适配器
  */
-abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
+abstract class BaseCalendarRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     LayoutInflater mInflater;
     private List<T> mItems;
     private OnItemClickListener onItemClickListener;
     private OnClickListener onClickListener;
 
-    BaseRecyclerAdapter(Context context) {
+    BaseCalendarRecyclerAdapter(Context context) {
         this.mItems = new ArrayList<>();
         mInflater = LayoutInflater.from(context);
         onClickListener = new OnClickListener() {

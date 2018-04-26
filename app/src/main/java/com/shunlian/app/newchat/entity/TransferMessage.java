@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Created by Administrator on 2018/4/24.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TransferEntity extends BaseMessage {
-    public TransferMessageBody 
+public class TransferMessage extends BaseMessage {
+    public TransferMessageBody msg_body;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TransferMessageBody {

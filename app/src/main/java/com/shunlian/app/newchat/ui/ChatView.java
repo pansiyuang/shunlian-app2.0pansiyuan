@@ -11,4 +11,10 @@ public interface ChatView {
     void sendPhoto();
 
     void sendText();
+
+    void sendGoods();
+
+    void sendOrder();
+
+    void sendComment();
 }

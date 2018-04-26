@@ -3,6 +3,7 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class StoreGoodsListEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MData {
+    public static class MData implements Serializable{
         public String id;
         public String title;
         public String thumb;
@@ -39,6 +40,7 @@ public class StoreGoodsListEntity {
         public String type;
         public String item_id;
         public String store_id;
+        public boolean isSelect;
 
         @Override
         public String toString() {
