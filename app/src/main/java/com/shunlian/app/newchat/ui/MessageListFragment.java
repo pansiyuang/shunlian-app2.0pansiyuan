@@ -113,7 +113,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void getMessageList(List<ChatMemberEntity.ChatMember> members) {
-        LogUtil.httpLogW("getMessageList()");
+        LogUtil.httpLogW("getMessageList():" + members.size());
         memberList.clear();
         if (!isEmpty(members)) {
             memberList.addAll(members);
