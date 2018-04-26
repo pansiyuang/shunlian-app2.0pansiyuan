@@ -56,6 +56,16 @@
                 android:visibility="gone" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_toolbar_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/img_shuoming"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"
+            android:padding="15dp"/>
 
     </com.shunlian.app.widget.MyRelativeLayout>
 </merge>

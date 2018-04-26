@@ -191,7 +191,22 @@
 
     <!-- IM -->
     <color name="value_DA">#DADADA</color>
+    <!--销售数据-->
+    <color name="value_43D060">#43D060</color>
+    <color name="value_F9A31C">#F9A31C</color>
+    <color name="value_F1F0F0">#F1F0F0</color>
+    <color name="value_f9f9f9">#f9f9f9</color>
 
+
+
+    <!--帮助中心-->
+    <color name="value_555555">#555555</color>
+    <color name="value_F7F7F7">#F7F7F7</color>
+    <color name="value_E5E5E5">#E5E5E5</color>
+
+    <!--余额-->
+    <color name="value_FBFBFB">#FBFBFB</color>
+    <color name="value_FEF2F4">#FEF2F4</color>
 </resources>
 
 

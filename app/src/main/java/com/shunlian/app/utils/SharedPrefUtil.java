@@ -25,6 +25,8 @@ package com.shunlian.app.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Set;
+
 /**
  * Created by zhang on 2017/4/14 11 : 43.
  */
@@ -65,6 +67,26 @@ public class SharedPrefUtil {
          return getsharedPreferences().edit().putString(key,value).commit();
     }
 
+    /**
+     * 将Set<String>保存到sp中
+     * @param key
+     * @param strings
+     * @return
+     */
+    public static boolean saveSharedPrfStringss(String key,Set<String> strings){
+         return getsharedPreferences().edit().putStringSet(key,strings).commit();
+    }
+
+
+    /**
+     * 从sp中获取Set<String>
+     * @param key
+     * @param strings
+     * @return
+     */
+    public static Set<String> getSharedPrfStringss(String key,Set<String> strings){
+        return getsharedPreferences().getStringSet(key,strings);
+    }
     /**
      * 清空sp文件内容
      */

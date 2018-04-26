@@ -35,19 +35,19 @@ import android.view.View;
  */
 
 public class HorItemDecoration extends RecyclerView.ItemDecoration {
-
+    //item少，当前屏幕能全部显示的情况下，会失效
     private int space; //item中间间距
     private int leftMargin;//第一个item距左边的边距
     private int rightMargin;//最后一个item距右边的边距
     private Paint mPaint;
 
-    public HorItemDecoration(int space,int leftMargin,int rightMargin){
+    public HorItemDecoration(int space, int leftMargin, int rightMargin) {
         this.space = space;
         this.leftMargin = leftMargin;
         this.rightMargin = rightMargin;
     }
 
-    public HorItemDecoration(int space,int leftMargin,int rightMargin,@ColorInt int id){
+    public HorItemDecoration(int space, int leftMargin, int rightMargin, @ColorInt int id) {
         this.space = space;
         this.leftMargin = leftMargin;
         this.rightMargin = rightMargin;
@@ -56,24 +56,25 @@ public class HorItemDecoration extends RecyclerView.ItemDecoration {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
     }
+
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.right = space;
         outRect.left = leftMargin;
         RecyclerView.LayoutManager manager = parent.getLayoutManager();
-        if (manager instanceof LinearLayoutManager){
+        if (manager instanceof LinearLayoutManager) {
             LinearLayoutManager manager1 = (LinearLayoutManager) manager;
-            if (manager1.findLastVisibleItemPosition()+1 == manager1.getItemCount()){
-                if (rightMargin != 0){
+            if (manager1.findLastVisibleItemPosition() + 1 == manager1.getItemCount()) {
+                if (rightMargin != 0) {
                     outRect.right = rightMargin;
-                }else {
+                } else {
                     outRect.right = 0;
                 }
             }
-            if (leftMargin != 0){
-                if (manager1.findFirstVisibleItemPosition() == 0){
+            if (leftMargin != 0) {
+                if (manager1.findFirstVisibleItemPosition() == 0) {
                     outRect.left = leftMargin;
-                }else {
+                } else {
                     outRect.left = 0;
                 }
             }
@@ -95,7 +96,7 @@ public class HorItemDecoration extends RecyclerView.ItemDecoration {
         final int bottom = parent.getMeasuredHeight() - parent.getPaddingBottom();
         final int childSize = parent.getChildCount();
         for (int i = 0; i < childSize; i++) {
-            if (i + 1 == childSize){
+            if (i + 1 == childSize) {
                 continue;
             }
             final View child = parent.getChildAt(i);

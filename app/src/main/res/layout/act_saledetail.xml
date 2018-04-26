@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/llayout_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/value_f9f9f9"
+        android:orientation="horizontal">
+        <!--分类1-->
+        <LinearLayout
+            android:id="@+id/llayout_classify1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_classify1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/pink_color"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_classify1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_sanjiao_red"
+                app:iv_control_height="14"
+                app:iv_control_width="27" />
+
+        </LinearLayout>
+        <!--分类2-->
+        <LinearLayout
+            android:id="@+id/llayout_classify2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_classify2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorAccent"
+                android:gravity="center"
+                android:textColor="@color/value_BDBDBD"
+                android:textSize="15sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_classify2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_sanjiao_red"
+                android:visibility="gone"
+                app:iv_control_height="14"
+                app:iv_control_width="27" />
+        </LinearLayout>
+        <!--分类3-->
+        <LinearLayout
+            android:id="@+id/llayout_classify3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_classify3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorAccent"
+                android:gravity="center"
+                android:textColor="@color/value_BDBDBD"
+                android:textSize="15sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_classify3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_sanjiao_red"
+                android:visibility="gone"
+                app:iv_control_height="14"
+                app:iv_control_width="27" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@color/value_f9f9f9"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_type1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_type2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_type3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_type4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:text="预估收益"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
+
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_control_height="100">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_total_sale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_total_profit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+
+
+    </com.shunlian.app.widget.MyLinearLayout>
+</LinearLayout>

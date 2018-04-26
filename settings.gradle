@@ -1,2 +1,2 @@
-include ':app', ':immersive', ':mlibrary'
+include ':app', ':immersive', ':mlibrary', ':chartlibrary'
 project(':mlibrary').projectDir = new File('library')

@@ -63,7 +63,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_prompt"
-                    android:text="130 0756 0706"
                     android:textColor="@color/new_text"
                     android:textSize="20sp" />
 

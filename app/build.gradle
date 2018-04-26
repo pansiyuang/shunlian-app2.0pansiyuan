@@ -31,7 +31,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        signingConfig signingConfigs.ShunLianPower
     }
-
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     buildTypes {
         release {
             debuggable true
@@ -83,6 +87,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.4.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.2.0'
     compile project(':immersive')
+    compile project(':chartlibrary')
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:design:25.4.0'
     implementation project(':mlibrary')
@@ -98,4 +103,5 @@ dependencies {
     compile 'com.facebook.rebound:rebound:0.3.8'
     compile 'org.greenrobot:eventbus:3.0.0'
     implementation files('libs/Java-WebSocket-1.3.1.jar')
+    implementation files('libs/jcore-android-1.2.0.jar')
 }

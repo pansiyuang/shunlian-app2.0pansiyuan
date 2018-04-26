@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal">
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_data1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/new_text"
+        android:textSize="13sp" />
+
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray_three" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_data2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/new_text"
+        android:textSize="13sp" />
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray_three" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_data3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/new_text"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray_three" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_data4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/new_text"
+        android:textSize="13sp" />
+
+</LinearLayout>

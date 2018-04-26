@@ -12,15 +12,20 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 
@@ -54,6 +59,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.btn_complete)
     Button btn_complete;
+    private String jumpType;
 
 
     public static void startAct(Context context, String phoneNum, String vCode) {
@@ -95,6 +101,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         currentPhone = getIntent().getStringExtra("phoneNum");
@@ -138,11 +145,17 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         super.onDestroy();
         countDownTimer.cancel();
         countDownTimer = null;
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onComplete(String content) {
         currentVerfiCode = content;
+    }
+
+    @Subscribe(sticky =true)
+    public void eventBus(DispachJump jump){
+        jumpType = jump.jumpType;
     }
 
     @Override
@@ -151,9 +164,15 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        if (content.tag!=null)
+        SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
+        JpushUtil.setJPushAlias();
+        if (!isEmpty(jumpType)){
+            Common.goGoGo(this,jumpType);
+        }
         finish();
     }
 

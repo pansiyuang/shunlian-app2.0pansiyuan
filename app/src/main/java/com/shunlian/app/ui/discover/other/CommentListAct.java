@@ -59,6 +59,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     public static void startAct(Activity activity,String article_id){
         Intent intent = new Intent(activity, CommentListAct.class);
         intent.putExtra("article_id",article_id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         activity.startActivity(intent);
     }
 

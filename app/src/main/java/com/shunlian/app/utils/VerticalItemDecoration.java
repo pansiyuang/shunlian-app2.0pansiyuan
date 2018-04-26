@@ -13,7 +13,7 @@ import android.view.View;
  */
 
 public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
-
+    //item少，当前屏幕能全部显示的情况下，会失效
     private int space;
     private int topMargin;
     private int bottomMargin;
@@ -26,12 +26,12 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
         this.bottomMargin = bottomMargin;
     }
 
-    public VerticalItemDecoration(int space, int topMargin, int bottomMargin, @ColorInt int id){
+    public VerticalItemDecoration(int space, int topMargin, int bottomMargin, @ColorInt int colorId){
         this.space = space;
         this.topMargin = topMargin;
         this.bottomMargin = bottomMargin;
         mPaint = new Paint();
-        mPaint.setColor(id);
+        mPaint.setColor(colorId);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
     }

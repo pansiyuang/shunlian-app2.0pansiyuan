@@ -13,12 +13,15 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.register.RegisterOneAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyButton;
@@ -27,6 +30,9 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 
@@ -37,30 +43,24 @@ import static com.shunlian.app.presenter.LoginPresenter.TYPE_USER;
  */
 
 public class LoginPswFrag extends BaseFragment implements View.OnClickListener, ILoginView {
+    @BindView(R.id.iv_hidden_psw)
+    MyImageView iv_hidden_psw;
+    @BindView(R.id.edt_account)
+    EditText edt_account;
+    @BindView(R.id.edt_psw)
+    MyEditText edt_psw;
+    @BindView(R.id.tv_new_regist)
+    TextView tv_new_regist;
+    @BindView(R.id.btn_login)
+    MyButton btn_login;
+    @BindView(R.id.tv_find_psw)
+    TextView tv_find_psw;
+    @BindView(R.id.tv_wx_login)
+    TextView tv_wx_login;
     private View rootView;
     private boolean isHidden = true;
     private LoginPresenter loginPresenter;
-
-    @BindView(R.id.iv_hidden_psw)
-    MyImageView iv_hidden_psw;
-
-    @BindView(R.id.edt_account)
-    EditText edt_account;
-
-    @BindView(R.id.edt_psw)
-    MyEditText edt_psw;
-
-    @BindView(R.id.tv_new_regist)
-    TextView tv_new_regist;
-
-    @BindView(R.id.btn_login)
-    MyButton btn_login;
-
-    @BindView(R.id.tv_find_psw)
-    TextView tv_find_psw;
-
-    @BindView(R.id.tv_wx_login)
-    TextView tv_wx_login;
+    private String jumpType;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -70,8 +70,9 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initData() {
-        btn_login.setWHProportion(650,90);
-        setEdittextFocusable(true,edt_psw,edt_account);
+        EventBus.getDefault().register(this);
+        btn_login.setWHProportion(650, 90);
+        setEdittextFocusable(true, edt_psw, edt_account);
         loginPresenter = new LoginPresenter(getActivity(), this, TYPE_USER);
     }
 
@@ -145,7 +146,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 loginPresenter.LoginUserName(currentAccount, currentPsw);
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity, "login",null);
+                WXEntryActivity.startAct(baseActivity, "login", null);
                 break;
         }
     }
@@ -162,16 +163,32 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump){
+        jumpType = jump.jumpType;
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().postSticky(jump);
+    }
+
     @Override
     public void login(LoginFinishEntity content) {
         //登陆成功啦
         SharedPrefUtil.saveSharedPrfString("token", content.token);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        if (content.tag != null)
+            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
         EasyWebsocketClient.initWebsocketClient(getActivity()); //初始化聊天
+        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+            Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
+        }
+        JpushUtil.setJPushAlias();
+        if (!isEmpty(jumpType)){
+            Common.goGoGo(baseActivity,jumpType);
+        }
         baseActivity.finish();
     }
 
@@ -193,5 +210,11 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     @Override
     public void showDataEmptyView(int rquest_code) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }

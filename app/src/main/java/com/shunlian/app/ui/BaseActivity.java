@@ -24,6 +24,8 @@ import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.NetworkUtils;
@@ -235,6 +237,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             byId.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+                        MainActivity.startAct(getBaseContext(),"");
+                    }
                     InputMethodManager imm = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm.isActive()) {
@@ -504,5 +509,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (FastClickListener.isFastClick()) {
             return;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+            MainActivity.startAct(getBaseContext(),"");
+        }
+        super.onBackPressed();
     }
 }

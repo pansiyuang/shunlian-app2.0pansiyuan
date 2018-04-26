@@ -6,9 +6,12 @@ import android.support.multidex.MultiDex;
 
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 
 import java.io.File;
+
+import cn.jpush.android.api.JPushInterface;
 
 
 //                            _ooOoo_
@@ -56,7 +59,15 @@ public class App extends Application {
     public static Context getContext() {
         return context;
     }
-
+    private void initJPush() {
+        try {
+            JPushInterface.setDebugMode(BuildConfig.DEBUG);    // 设置开启日志,发布时请关闭日志
+            JPushInterface.init(this);            // 初始化 JPush
+            JpushUtil.setJPushAlias();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -81,5 +92,6 @@ public class App extends Application {
         } else if (Common.getMemoryFreeSize(this) > 1024 * 1024) {
             CACHE_PATH = this.getCacheDir().getPath();
         }
+        initJPush();
     }
 }

@@ -289,14 +289,15 @@
                             android:orientation="vertical">
 
                             <com.shunlian.app.widget.MyImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:scaleType="fitXY"
                                 android:src="@mipmap/icon_personalcenter_quanbu" />
 
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_quanbu"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -318,7 +319,7 @@
                                 <com.shunlian.app.widget.MyImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@mipmap/icon_personalcenter_fukuan" />
 
                                 <com.shunlian.app.widget.MyTextView
@@ -336,7 +337,7 @@
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_daifukuan"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -358,7 +359,7 @@
                                 <com.shunlian.app.widget.MyImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@mipmap/icon_personalcenter_shouhuo" />
 
                                 <com.shunlian.app.widget.MyTextView
@@ -376,7 +377,7 @@
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_daishouhuo"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -409,7 +410,7 @@
                                 <com.shunlian.app.widget.MyImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@mipmap/icon_personalcenter_fahuo" />
 
                                 <com.shunlian.app.widget.MyTextView
@@ -427,7 +428,7 @@
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_daifahuo"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -449,7 +450,7 @@
                                 <com.shunlian.app.widget.MyImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@mipmap/icon_personalcenter_pingjia" />
 
                                 <com.shunlian.app.widget.MyTextView
@@ -467,7 +468,7 @@
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_daipingjia"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -489,7 +490,7 @@
                                 <com.shunlian.app.widget.MyImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@mipmap/icon_personalcenter_shouhou" />
 
                                 <com.shunlian.app.widget.MyTextView
@@ -507,7 +508,7 @@
                             <com.shunlian.app.widget.MyTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="10dp"
                                 android:text="@string/personal_shouhou"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
@@ -1012,7 +1013,6 @@
                         android:id="@+id/mrlayout_zhuangxiu"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:layout_marginBottom="20dp"
                         android:background="@color/white"
                         android:padding="10dp">
 
@@ -1032,6 +1032,68 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="10dp"
                             android:text="@string/personal_mashangzhuangxiu"
+                            android:textColor="@color/value_9F9F9F"
+                            android:textSize="13sp" />
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/icon_personalcenter_fanhui" />
+                    </com.shunlian.app.widget.MyRelativeLayout>
+                    <com.shunlian.app.widget.MyLinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:gravity="center_vertical">
+
+                        <com.shunlian.app.widget.MyImageView
+                            android:layout_width="3dp"
+                            android:layout_height="11dp"
+                            android:layout_marginLeft="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/img_lan" />
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="@string/personal_yonghufuwu"
+                            android:textColor="@color/new_text"
+                            android:textSize="13sp" />
+                    </com.shunlian.app.widget.MyLinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/light_gray_three" />
+
+                    <com.shunlian.app.widget.MyRelativeLayout
+                        android:id="@+id/mrlayout_tiwen"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:text="@string/personal_bangzhuzhongxin"
+                            android:textColor="@color/new_text"
+                            android:textSize="13sp" />
+
+                        <com.shunlian.app.widget.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/personal_mashangtiwen"
                             android:textColor="@color/value_9F9F9F"
                             android:textSize="13sp" />
 

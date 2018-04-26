@@ -2,6 +2,9 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by Administrator on 2017/11/14.
  */
@@ -21,4 +24,5 @@ public class LoginFinishEntity {
     public String refresh_expires_in;
     public String token;
     public String expires_in;
+    public List<String> tag;
 }

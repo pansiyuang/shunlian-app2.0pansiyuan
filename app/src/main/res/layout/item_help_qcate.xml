@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_arrow"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:src="@mipmap/img_bangzhu_jiantou"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_toLeftOf="@id/miv_arrow"
+        android:id="@+id/mtv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:orientation="vertical"
+        android:singleLine="true"
+        android:textColor="@color/new_text"
+        android:textSize="15sp"
+        android:layout_centerVertical="true"/>
+</com.shunlian.app.widget.MyRelativeLayout>
