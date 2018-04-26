@@ -17,11 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.shunlian.app.widget.refresh.turkey.SlRefreshView
+        <!--<com.shunlian.app.widget.refresh.turkey.SlRefreshView
             android:id="@+id/refreshview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/input_panel">
+            android:layout_above="@+id/input_panel">-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_chat"
@@ -30,7 +30,7 @@
                 android:overScrollMode="never"
                 android:paddingBottom="10dp"
                 android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-        </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+        <!--</com.shunlian.app.widget.refresh.turkey.SlRefreshView>-->
 
         <LinearLayout
             android:id="@+id/layout_chat_empty"

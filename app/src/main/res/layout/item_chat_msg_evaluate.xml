@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/please_service_comment"
+        android:textColor="@color/new_text"
+        android:textSize="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_very_unsatisfy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@mipmap/icon_chat_pingjia_h"
+            android:gravity="center"
+            android:text="@string/very_unsatisfy"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_unsatisfy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@mipmap/icon_chat_pingjia_h"
+            android:gravity="center"
+            android:text="@string/unsatisfy"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_commonly"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@mipmap/icon_chat_pingjia_h"
+            android:gravity="center"
+            android:text="@string/commonly"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_satisfy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@mipmap/icon_chat_pingjia_h"
+            android:gravity="center"
+            android:text="@string/satisfy"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_very_satisfy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@mipmap/icon_chat_pingjia_h"
+            android:gravity="center"
+            android:text="@string/very_satisfy"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/light_gray_three" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_corner_solid_f7_60px"
+        android:gravity="center"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:text="@string/already_comment"
+        android:textColor="@color/new_gray"
+        android:textSize="12sp" />
+</LinearLayout>

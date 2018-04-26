@@ -166,12 +166,37 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/emoticonPanel"
+    <RelativeLayout
+        android:id="@+id/rlayout_emoji"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:visibility="gone" />
+        android:layout_height="220dp"
+        android:visibility="gone"
+        android:background="@color/bg_gray_four">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/emoji_vp"
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/llayout_dot"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" />
+
+        <View
+            android:id="@+id/scroll_dot"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:layout_marginBottom="24dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/red_dot"/>
+    </RelativeLayout>
+
 
 </LinearLayout>
