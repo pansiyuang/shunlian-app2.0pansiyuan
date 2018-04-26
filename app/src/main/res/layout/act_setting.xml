@@ -119,7 +119,6 @@
                     android:layout_marginRight="10dp"
                     android:drawablePadding="10dp"
                     android:drawableRight="@mipmap/img_common_rightarrow_huise"
-                    android:text="10M"
                     android:textColor="@color/share_text"
                     android:textSize="14sp" />
 

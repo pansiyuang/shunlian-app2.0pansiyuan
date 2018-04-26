@@ -1,18 +1,24 @@
 package com.shunlian.app.utils;
+
 import android.content.Context;
 import android.os.Looper;
 import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.cache.ExternalCacheDiskCacheFactory;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
+import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.module.GlideModule;
 
 import java.io.File;
+import java.io.InputStream;
 
-import static com.shunlian.app.utils.TransformUtil.getFormatSize;
-
-public class GlideCacheUtil {
+public class GlideCacheUtil implements GlideModule{
     private static GlideCacheUtil inst;
+    private final String cachePath = Constant.CACHE_PATH_EXTERNAL
+            + File.separator+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
 
     public static GlideCacheUtil getInstance() {
         if (inst == null) {
@@ -58,10 +64,10 @@ public class GlideCacheUtil {
      * 清除图片所有缓存
      */
     public void clearImageAllCache(Context context) {
+//        String ImageExternalCatchDir=context.getExternalCacheDir()+ ExternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
         clearImageDiskCache(context);
         clearImageMemoryCache(context);
-        String ImageExternalCatchDir=context.getExternalCacheDir()+ ExternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
-        deleteFolderFile(ImageExternalCatchDir, true);
+        deleteFolderFile(cachePath, true);
     }
 
     /**
@@ -69,13 +75,13 @@ public class GlideCacheUtil {
      *
      * @return CacheSize
      */
-    public String getCacheSize(Context context) {
+    public long getCacheSize() {
         try {
-            return getFormatSize(getFolderSize(new File(context.getCacheDir() + "/"+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR)));
+            return getFolderSize(new File(cachePath));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return 0;
     }
 
     /**
@@ -131,5 +137,22 @@ public class GlideCacheUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    @Override
+    public void applyOptions(Context context, GlideBuilder builder) {
+        File file = new File(cachePath);
+        if (!file.exists()){
+            file.mkdirs();
+        }
+        int cacheSize = 50*1000*1000;
+        DiskLruCacheFactory dcf = new DiskLruCacheFactory(cachePath,cacheSize);
+        builder.setDiskCache(dcf);
+    }
+
+    @Override
+    public void registerComponents(Context context, Glide glide) {
+        glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
     }
 }

@@ -1,10 +1,12 @@
 package com.shunlian.app.ui.setting;
 
+import android.content.Context;
+import android.content.Intent;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.presenter.BusinessCardPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IBusinessCardView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -32,6 +34,12 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
 
     @BindView(R.id.llayout_save)
     LinearLayout llayout_save;
+
+    public static void startAct(Context context,String url){
+        Intent intent = new Intent(context,BusinessCardAct.class);
+        intent.putExtra("urlCode",url);
+        context.startActivity(intent);
+    }
     /**
      * 布局id
      *
@@ -51,8 +59,10 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
         setStatusBarFontDark();
         mtv_toolbar_title.setText("把APP推荐给好友");
         gone(mrlayout_toolbar_more);
+        String urlCode = getIntent().getStringExtra("urlCode");
+        GlideUtils.getInstance().loadImage(this,miv_code,urlCode);
 
-        BusinessCardPresenter presenter = new BusinessCardPresenter(this,this);
+//        BusinessCardPresenter presenter = new BusinessCardPresenter(this,this);
     }
 
 

@@ -41,9 +41,13 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!--jpush-->
 
-    <meta-data
+    <!--<meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-        android:value="GlideModule" />
+        android:value="GlideModule" />-->
+
+    <!--配置glide缓存-->
+    <meta-data android:name="com.shunlian.app.utils.GlideCacheUtil"
+        android:value="GlideModule"/>
 
     <application
         android:name=".App"

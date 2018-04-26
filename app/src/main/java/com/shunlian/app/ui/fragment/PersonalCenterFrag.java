@@ -453,6 +453,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         SpannableStringBuilder orderBuilder = Common.changeColor(order, personalcenterEntity.team_order_num, getColorResouce(R.color.pink_color));
         mtv_xiaodiandingdan.setText(orderBuilder);
 
+        if (isEmpty(personalcenterEntity.sl_user_ranks)){
+            return;
+        }
         if (personalcenterEntity.sl_user_ranks.get(0) != null) {
             mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
             mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).number);

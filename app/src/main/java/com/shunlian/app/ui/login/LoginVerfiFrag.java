@@ -129,6 +129,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         String currentPhoneNum = edt_account.getText().toString();
         String verifiCode = edt_verifi.getText().toString();
         InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum, verifiCode);
+        getActivity().finish();
     }
 
     @Override

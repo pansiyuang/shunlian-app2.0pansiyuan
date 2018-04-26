@@ -28,4 +28,15 @@ public interface IPersonalDataView extends IView {
      * @param tag
      */
     void setTag(String tag);
+
+    /**
+     * 设置凭证图片
+     * @param url
+     */
+    void setRefundPics(String url,String domain);
+
+
+//    void uploadImg(UploadPicEntity picEntity);
+
+//    void uploadProgress(int progress, String tag);
 }

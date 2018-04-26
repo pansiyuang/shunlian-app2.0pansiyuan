@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import com.shunlian.app.utils.LogUtil;
+
 import java.lang.reflect.Field;
 
 /**
@@ -63,8 +65,8 @@ public class MyNumberPicker extends NumberPicker {
 
     private void updateView(View view) {
         if (view instanceof EditText) {
-            ((EditText) view).setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-            ((EditText) view).setTextColor(Color.parseColor("#6495ED"));
+            ((EditText) view).setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            ((EditText) view).setTextColor(Color.parseColor("#1C1B20"));
         }
     }
 
@@ -178,39 +180,7 @@ public class MyNumberPicker extends NumberPicker {
                 break;
             }
         }
-//        for (Field field : pickerFields) {
-//            field.setAccessible(true);
-//            if (field.getName().equals("mDecrementVirtualButtonPressed")) {
-//                try {
-//                    mDecrementVirtualButtonPressed = (boolean) field.get(picker);
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            }
-//        }
-//        for (Field field : pickerFields) {
-//            field.setAccessible(true);
-//            if (field.getName().equals("mIncrementVirtualButtonPressed")) {
-//                try {
-//                    mIncrementVirtualButtonPressed = (boolean) field.get(picker);
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            }
-//        }
-//        for (Field field : pickerFields) {
-//            field.setAccessible(true);
-//            if (field.getName().equals("mVirtualButtonPressedDrawable")) {
-//                try {
-//                    mVirtualButtonPressedDrawable = (Drawable) field.get(picker);
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            }
-//        }
+
         for (Field field : pickerFields) {
             field.setAccessible(true);
             if (field.getName().equals("mScrollState")) {
@@ -262,7 +232,7 @@ public class MyNumberPicker extends NumberPicker {
     protected void onDraw(Canvas canvas) {
 //        super.onDraw(canvas);
         getMyValue();
-        mSelectorWheelPaint.setColor(Color.BLUE);
+        mSelectorWheelPaint.setColor(Color.parseColor("#1C1B20"));
 
         if (!mHasSelectorWheel) {
             super.onDraw(canvas);
@@ -272,31 +242,15 @@ public class MyNumberPicker extends NumberPicker {
         float x = (mRight - mLeft) / 2;
         float y = mCurrentScrollOffset;
 
-//        if (showSelectorWheel && mVirtualButtonPressedDrawable != null
-//                && mScrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-//            if (mDecrementVirtualButtonPressed) {
-//                mVirtualButtonPressedDrawable.setState(View.PRESSED_STATE_SET);
-//                mVirtualButtonPressedDrawable.setBounds(0, 0, mRight, mTopSelectionDividerTop);
-//                mVirtualButtonPressedDrawable.draw(canvas);
-//            }
-//            if (mIncrementVirtualButtonPressed) {
-//                mVirtualButtonPressedDrawable.setState(PRESSED_STATE_SET);
-//                mVirtualButtonPressedDrawable.setBounds(0, mBottomSelectionDividerBottom, mRight,
-//                        mBottom);
-//                mVirtualButtonPressedDrawable.draw(canvas);
-//            }
-//        }
-
         int[] selectorIndices = mSelectorIndices;
         for (int i = 0; i < selectorIndices.length; i++) {
             int selectorIndex = selectorIndices[i];
             String scrollSelectorValue = mSelectorIndexToStringCache.get(selectorIndex);
-            if (i != 1) {
-                mSelectorWheelPaint.setColor(Color.BLACK);
                 mSelectorWheelPaint.setTextSize(sp2px(16));
+            if (i != 1) {
+                mSelectorWheelPaint.setColor(Color.parseColor("#858585"));
             } else {
-                mSelectorWheelPaint.setColor(Color.parseColor("#6495ED"));
-                mSelectorWheelPaint.setTextSize(sp2px(20));
+                mSelectorWheelPaint.setColor(Color.parseColor("#1C1B20"));
             }
 
             if ((showSelectorWheel && i != 1) ||
@@ -310,7 +264,7 @@ public class MyNumberPicker extends NumberPicker {
 
         // draw the selection dividers
         if (showSelectorWheel && mSelectionDivider != null) {
-            mSelectionDivider = new ColorDrawable(Color.parseColor("#a0c4c4c4"));
+            mSelectionDivider = new ColorDrawable(Color.parseColor("#EEEEEE"));
             // draw the top divider
             int topOfTopDivider = mTopSelectionDividerTop;
             int bottomOfTopDivider = topOfTopDivider + 2;
