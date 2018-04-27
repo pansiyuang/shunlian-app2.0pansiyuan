@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.SettingPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.receive_adress.AddressManageActivity;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.utils.ClearCacheUtil;
@@ -145,6 +146,7 @@ public class SettingAct extends BaseActivity implements ISettingView{
                 AddressManageActivity.startAct(this);
                 break;
             case R.id.mtv_comment_manage:
+                MyCommentAct.startAct(this);
                 break;
             case R.id.mtv_user_security:
                 UserSecurityAct.startAct(this);

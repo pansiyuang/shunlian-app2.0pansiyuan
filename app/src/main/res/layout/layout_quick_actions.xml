@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentRight="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
     android:background="@mipmap/bg_more"
     android:orientation="vertical"
     app:ll_control_adapter="true"
@@ -27,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_more_message"
+            android:src="@mipmap/img_tanchuang_xiaoxi"
             app:iv_control_adapter="true"
             app:iv_control_height="37"
             app:iv_control_width="37" />
@@ -64,6 +67,48 @@
 
     </com.shunlian.app.widget.MyRelativeLayout>
 
+    <View
+        android:id="@+id/view_search"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/light_gray_three"
+        android:visibility="gone" />
+
+    <!--搜索-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:ll_control_adapter="true"
+        app:ll_control_height="95"
+        app:ll_margin_left="40">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_tanchuang_sousuo"
+            app:iv_control_adapter="true"
+            app:iv_control_height="36"
+            app:iv_control_width="40" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_message"
+            android:text="搜索"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="30" />
+
+    </com.shunlian.app.widget.MyLinearLayout>
 
     <View
         android:id="@+id/view_firstPage"
@@ -90,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_more_home"
+            android:src="@mipmap/img_tanchuang_shouye"
             app:iv_control_adapter="true"
             app:iv_control_height="36"
             app:iv_control_width="40" />
@@ -107,50 +152,6 @@
             app:tv_margin_left="30" />
 
     </com.shunlian.app.widget.MyLinearLayout>
-
-
-    <View
-        android:id="@+id/view_share"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/light_gray_three"
-        android:visibility="gone" />
-
-    <!--分享-->
-    <com.shunlian.app.widget.MyLinearLayout
-        android:id="@+id/mllayout_share"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:ll_control_adapter="true"
-        app:ll_control_height="95"
-        app:ll_margin_left="40">
-
-        <com.shunlian.app.widget.MyImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/img_more_fenxiang"
-            app:iv_control_adapter="true"
-            app:iv_control_height="33"
-            app:iv_control_width="33" />
-
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/miv_message"
-            android:text="分享"
-            android:textColor="@color/new_text"
-            android:textSize="14sp"
-            app:tv_control_adapter="true"
-            app:tv_margin_left="30" />
-    </com.shunlian.app.widget.MyLinearLayout>
-
 
     <View
         android:id="@+id/view_PersonalCenter"
@@ -177,7 +178,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_zx"
+            android:src="@mipmap/img_tanchuang_geren"
             app:iv_control_adapter="true"
             app:iv_control_height="35"
             app:iv_control_width="34" />
@@ -194,9 +195,8 @@
             app:tv_margin_left="30" />
     </com.shunlian.app.widget.MyLinearLayout>
 
-
     <View
-        android:id="@+id/view_printfoot"
+        android:id="@+id/view_car"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="20dp"
@@ -204,9 +204,9 @@
         android:background="@color/light_gray_three"
         android:visibility="gone" />
 
-    <!--足迹-->
+    <!--购物车-->
     <com.shunlian.app.widget.MyLinearLayout
-        android:id="@+id/mllayout_printfoot"
+        android:id="@+id/mllayout_car"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -216,28 +216,26 @@
         app:ll_control_height="95"
         app:ll_margin_left="40">
 
-
         <com.shunlian.app.widget.MyImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_zuji"
+            android:src="@mipmap/img_tanchuang_gouwuche"
             app:iv_control_adapter="true"
-            app:iv_control_height="35"
-            app:iv_control_width="36" />
+            app:iv_control_height="34"
+            app:iv_control_width="31" />
 
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/miv_message"
-            android:text="足迹"
+            android:text="购物车"
             android:textColor="@color/new_text"
             android:textSize="14sp"
             app:tv_control_adapter="true"
             app:tv_margin_left="30" />
     </com.shunlian.app.widget.MyLinearLayout>
-
 
     <View
         android:id="@+id/view_feedback"
@@ -264,7 +262,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_more_fankui"
+            android:src="@mipmap/img_tanchuang_fankui"
             app:iv_control_adapter="true"
             app:iv_control_height="34"
             app:iv_control_width="31" />
@@ -274,12 +272,97 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/miv_message"
-            android:text="我要反馈"
+            android:text="反馈"
             android:textColor="@color/new_text"
             android:textSize="14sp"
             app:tv_control_adapter="true"
             app:tv_margin_left="30" />
     </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:id="@+id/view_help"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/light_gray_three"
+        android:visibility="gone" />
+
+    <!--帮助中心-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:ll_control_adapter="true"
+        app:ll_control_height="95"
+        app:ll_margin_left="40">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_tanchuang_bangzhu"
+            app:iv_control_adapter="true"
+            app:iv_control_height="34"
+            app:iv_control_width="31" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_message"
+            android:text="帮助中心"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="30" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:id="@+id/view_share"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/light_gray_three"
+        android:visibility="gone" />
+
+    <!--分享-->
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:ll_control_adapter="true"
+        app:ll_control_height="95"
+        app:ll_margin_left="40">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/img_tanchuang_fengxiang"
+            app:iv_control_adapter="true"
+            app:iv_control_height="33"
+            app:iv_control_width="33" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/miv_message"
+            android:text="分享"
+            android:textColor="@color/new_text"
+            android:textSize="14sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="30" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
 
 
 </com.shunlian.app.widget.MyLinearLayout>
