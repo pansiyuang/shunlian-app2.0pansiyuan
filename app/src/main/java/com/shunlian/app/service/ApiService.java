@@ -1835,12 +1835,28 @@ public interface ApiService {
     Call<BaseEntity<ChatGoodsEntity>> chatGoodsList(@QueryMap Map<String, String> map);
 
     /**
-     * 客服商品列表
+     * 普通用户查看聊天记录
      *
      * @return
      */
     @GET("chat/chat/chatUserHistoryData")
     Call<BaseEntity<HistoryEntity>> chatUserHistoryData(@QueryMap Map<String, String> map);
+
+    /**
+     * 平台客服查看用户历史消息
+     *
+     * @return
+     */
+    @GET("chat/chat/platformChatUserHistoryData")
+    Call<BaseEntity<HistoryEntity>> platformChatUserHistoryData(@QueryMap Map<String, String> map);
+
+    /**
+     * 商家客服查看用户历史消息
+     *
+     * @return
+     */
+    @GET("chat/chat/shopChatUserHistoryData")
+    Call<BaseEntity<HistoryEntity>> shopChatUserHistoryData(@QueryMap Map<String, String> map);
 
     /**
      * 客服获取工作状态
@@ -1873,5 +1889,13 @@ public interface ApiService {
      */
     @GET("chat/chat/transferChatUserList")
     Call<BaseEntity<ServiceEntity>> getTransferChatUserList(@QueryMap Map<String, String> map);
+
+    /**
+     * 删除客服消息
+     *
+     * @return
+     */
+    @GET("chat/message/delete")
+    Call<BaseEntity<ServiceEntity>> deleteMessage(@QueryMap Map<String, String> map);
 
 }

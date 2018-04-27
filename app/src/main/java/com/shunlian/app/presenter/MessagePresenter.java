@@ -63,8 +63,11 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
         });
     }
 
-    public void getMessageList(boolean isLoad, String type) {
+    public void getMessageList(boolean isLoad, String keyWord, String type) {
         Map<String, String> map = new HashMap<>();
+        if (!isEmpty(keyWord)) {
+            map.put("keyword", String.valueOf(keyWord));
+        }
         if (!isEmpty(type)) {
             map.put("type", String.valueOf(type));
         }

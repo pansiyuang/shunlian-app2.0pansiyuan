@@ -174,11 +174,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) {//是平台用户
-                    mPresenter.getChatHistoryMessage(isFirst, currentUserId, "1", "", lastMessageSendTime);
-                } else if ("3".equals(chatRoleType) || "4".equals(chatRoleType)) {
-                    mPresenter.getChatHistoryMessage(isFirst, currentUserId, "2", chatShopId, lastMessageSendTime);
-                }
+                getChatHistory(isFirst);
             }
 
             @Override
@@ -250,19 +246,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
         }
 
-        mClient.setOnMessageReceiveListener(this);
+        mClient.addOnMessageReceiveListener(this);
 
         //判断网络是否连接  连接使用网络，否则获取数据库
         if (NetworkUtils.isNetworkOpen(this)) {
             getHistoryFromNetwork();
         }
         //获取历史消息
-
-        if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) {//是平台用户
-            mPresenter.getChatHistoryMessage(isFirst, currentUserId, "1", "", lastMessageSendTime);
-        } else if ("3".equals(chatRoleType) || "4".equals(chatRoleType)) {
-            mPresenter.getChatHistoryMessage(isFirst, currentUserId, "2", chatShopId, lastMessageSendTime);
-        }
+        getChatHistory(isFirst);
         readedMsg(chatUserId);
     }
 
@@ -284,10 +275,30 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 } else {
                     tv_title_right.setText(getStringResouce(R.string.to_shop));
                 }
-                    et_input.showGoodsBtn();
+                et_input.showGoodsBtn();
                 break;
         }
         tv_title_right.setVisibility(View.VISIBLE);
+    }
+
+    public void getChatHistory(boolean b) {
+        switch (chatRoleType) {
+            case "0":
+                if (mClient.getMemberStatus() == MemberStatus.Seller) {
+                    mPresenter.shopChatUserHistoryData(b, chatUserId, mCurrentUser.user_id, lastMessageSendTime);
+                } else if (mClient.getMemberStatus() == MemberStatus.Admin) {
+                    mPresenter.platformChatUserHistoryData(b, chatUserId, mCurrentUser.user_id, lastMessageSendTime);
+                }
+                break;
+            case "1":
+            case "2":
+                mPresenter.getChatHistoryMessage(b, currentUserId, "1", "", lastMessageSendTime);
+                break;
+            case "3":
+            case "4":
+                mPresenter.getChatHistoryMessage(b, currentUserId, "2", chatShopId, lastMessageSendTime);
+                break;
+        }
     }
 
     @Override
@@ -1017,5 +1028,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     public void logout() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        mClient.removeOnMessageReceiveListener(this);
+        super.onDestroy();
     }
 }

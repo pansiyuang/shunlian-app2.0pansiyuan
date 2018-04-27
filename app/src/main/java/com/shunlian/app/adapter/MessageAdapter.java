@@ -117,12 +117,16 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
 
     @Override
     public void OnSysMsgClick() {
-
+        if (mListener != null) {
+            mListener.OnSysClick();
+        }
     }
 
     @Override
     public void OnTopMsgClick() {
-
+        if (mListener != null) {
+            mListener.OnTopicClick();
+        }
     }
 
     @Override
@@ -196,6 +200,10 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
     }
 
     public interface OnStatusClickListener {
+
+        void OnSysClick();
+
+        void OnTopicClick();
 
         void OnSellerClick();
 

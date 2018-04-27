@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.App;
 import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.StatusEntity;
@@ -62,14 +63,12 @@ public class EasyWebsocketClient extends WebSocketClient {
     private UserInfoEntity.Info.User mUser;
     private static ObjectMapper objectMapper;
     private OnClientConnetListener mListener;
-    private OnMessageReceiveListener receiveListener;
     private String infoStr;
     private String currentPageType = "nomal";
+    private static List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
     //    private GoodsItemEntity.Data.Item goodsItem;
 //    private ShopHomeEntity.Data.ShopInfo shopInfo;
 //    private OrderItemEntity.Data orderItemEntity;
-    private static List<UserInfoEntity.Info.Friend> mFriendList;
-    private int unReadCount = 0;
 
 
     /**
@@ -85,11 +84,10 @@ public class EasyWebsocketClient extends WebSocketClient {
     public static EasyWebsocketClient initWebsocketClient(Context context) {
         mContext = context.getApplicationContext();
         objectMapper = new ObjectMapper();
+        messageReceiveListeners = new ArrayList<>();
         try {
             mSingleton = null;
-            mFriendList = null;
             mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
-            mFriendList = new ArrayList<>();
             mSingleton.setTimeOut(timeout);
             mSingleton.connect();
         } catch (java.net.URISyntaxException e) {
@@ -158,6 +156,24 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
     }
 
+    /**
+     * 判断集合内容是否为空
+     *
+     * @param list
+     * @return
+     */
+    protected boolean isEmpty(List list) {
+        if (list == null) {
+            return true;
+        }
+
+        if (list.size() == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void resetSocket() {
         if (mStatus == Status.DISCONNECTED) {
             LogUtil.httpLogW("尝试重连服务器....");
@@ -191,15 +207,20 @@ public class EasyWebsocketClient extends WebSocketClient {
             BaseEntity baseEntity = objectMapper.readValue(message, BaseEntity.class);
             switch (baseEntity.message_type) {
                 case "init":
-                    if (receiveListener != null) {
-                        receiveListener.initMessage();
+
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.initMessage();
+                        }
                     }
                     infoStr = message;
                     setUserInfoEntity(infoStr);
                     break;
                 case "receive_message":
-                    if (receiveListener != null) {
-                        receiveListener.receiveMessage(message);
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.receiveMessage(message);
+                        }
                     }
 
                     MessageEntity messageEntity = objectMapper.readValue(message, MessageEntity.class);
@@ -214,13 +235,17 @@ public class EasyWebsocketClient extends WebSocketClient {
                     }
                     break;
                 case "pingjia":
-                    if (receiveListener != null) {
-                        receiveListener.evaluateMessage(message);
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.evaluateMessage(message);
+                        }
                     }
                     break;
                 case "role_switch":
-                    if (receiveListener != null) {
-                        receiveListener.roleSwitchMessage(message);
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.roleSwitchMessage(message);
+                        }
                     }
                     SwitchStatusEntity switchStatusEntity = objectMapper.readValue(message, SwitchStatusEntity.class);
                     updateRoleType(switchStatusEntity.to_role);
@@ -233,23 +258,27 @@ public class EasyWebsocketClient extends WebSocketClient {
                     }.start();
                     break;
                 case "online":
-                    if (receiveListener != null) {
-                        receiveListener.onLine();
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.onLine();
+                        }
                     }
-
                     StatusEntity online = objectMapper.readValue(message, StatusEntity.class);
-                    updateFriendStatus(online);
                     break;
                 case "logout":
-                    if (receiveListener != null) {
-                        receiveListener.logout();
+                    if (!isEmpty(messageReceiveListeners)) {
+                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                            listener.logout();
+                        }
                     }
 
                     StatusEntity logout = objectMapper.readValue(message, StatusEntity.class);
-                    updateFriendStatus(logout);
                     break;
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             e.printStackTrace();
         }
     }
@@ -715,157 +744,6 @@ public class EasyWebsocketClient extends WebSocketClient {
         return bind_admin.is_bind;
     }
 
-
-    /**
-     * 通知刷新页面
-     *
-     * @param baseMessage
-     */
-
-    public void updateFriendList(BaseMessage baseMessage) {
-        int unReadNum;
-        //检查当前聊天列表是否存在
-        if (!checkFriendInList(baseMessage)) {
-            addFriend2List(baseMessage);
-        }
-        if (mFriendList != null && mFriendList.size() != 0) {
-            for (int i = 0; i < mFriendList.size(); i++) {
-                //好友发给自己的消息
-                if (baseMessage.from_join_id.equals(mFriendList.get(i).join_id)) {
-                    LogUtil.httpLogW("好友给自己发消息");
-                    if (!getIsChating()) { //不在聊天页面
-                        unReadNum = mFriendList.get(i).unread_count + 1;
-                        baseMessage.setuReadNum(unReadNum);
-                        mFriendList.get(i).unread_count = unReadNum;
-                        mFriendList.get(i).line_status = "1";
-                        unReadCount++;
-                        //通知页面刷新
-//                        EventBus.getDefault().post(new UpdateListEvent(EventType.FRIENDLIST).setBaseMessage(baseMessage));
-                    }
-                    //聊天列表是否存在当前item
-                    break;
-                }
-            }
-            LogUtil.httpLogW("消息有添加");
-//            EventBus.getDefault().postSticky(new UnReadCountEvent(EventType.UNREADCOUNT).setCount(unReadCount));
-        }
-    }
-
-    /**
-     * 刷新item为全部已读
-     */
-
-    public void updateFriendList(String uid) {
-        if (mFriendList != null && mFriendList.size() != 0) {
-            for (int i = 0; i < mFriendList.size(); i++) {
-                if (uid.equals(mFriendList.get(i).join_id)) {
-                    int count = mFriendList.get(i).unread_count;
-                    mFriendList.get(i).unread_count = 0;
-
-                    unReadCount -= count;
-                    //通知页面刷新
-
-//                    EventBus.getDefault().post(new UpdateListEvent(EventType.FRIENDLIST).setUserId(uid));
-                    break;
-                }
-            }
-            LogUtil.httpLogW("消息已读啦");
-            setChating(true);
-//            EventBus.getDefault().postSticky(new UnReadCountEvent(EventType.UNREADCOUNT).setCount(unReadCount));
-        }
-    }
-
-    /**
-     * 修改用户状态
-     * <p>
-     * 用户状态 1在线，2空闲，3离开，4隐身，5离线
-     */
-
-    public void updateFriendStatus(StatusEntity statusEntity) {
-        if (mFriendList == null || mFriendList.size() == 0) {
-            return;
-        }
-        for (int i = 0; i < mFriendList.size(); i++) {
-            if (statusEntity.id.equals(mFriendList.get(i).join_id)) {
-                if ("logout".equals(statusEntity.message_type)) {
-                    mFriendList.get(i).line_status = "5";
-                } else if ("online".equals(statusEntity.message_type)) {
-                    mFriendList.get(i).line_status = "1";
-                }
-//                EventBus.getDefault().post(new LineStatusEvent(LINESTATUS).setStatusEntity(statusEntity));
-                break;
-            }
-        }
-    }
-
-    /**
-     * 用户上线
-     */
-    public void setFriendList(UserInfoEntity userInfoEntity) {
-        mFriendList = userInfoEntity.info.friends;
-        List<UserInfoEntity.Info.Uread.UreadList> list = userInfoEntity.info.uread.uread_list;
-        for (int i = 0; i < mFriendList.size(); i++) {
-            for (int j = 0; j < list.size(); j++) {
-                if (list.get(j).uid.equals(mFriendList.get(i).join_id)) {
-                    mFriendList.get(i).unread_count = Integer.valueOf(list.get(j).num);
-                }
-            }
-            unReadCount += mFriendList.get(i).unread_count;
-        }
-        LogUtil.httpLogW("消息初始化数量：" + unReadCount);
-//        EventBus.getDefault().postSticky(new UnReadCountEvent(EventType.UNREADCOUNT).setCount(unReadCount));
-    }
-
-    /**
-     * 检查当前用户是否在聊天列表中
-     */
-
-    public boolean checkFriendInList(BaseMessage baseMessage) {
-        String friendId;
-        boolean isInclude = false;
-        if (isSelf(baseMessage)) {
-            friendId = baseMessage.to_join_id;
-        } else {
-            friendId = baseMessage.from_join_id;
-        }
-        if (!TextUtils.isEmpty(friendId) && mFriendList != null) {
-            for (int i = 0; i < mFriendList.size(); i++) {
-                if (mFriendList.get(i).join_id.equals(friendId)) {
-                    return true;
-                }
-            }
-        }
-        return isInclude;
-    }
-
-    public void addFriend2List(BaseMessage baseMessage) {
-        //当前用户不在聊天列表
-        UserInfoEntity.Info.Friend friend = new UserInfoEntity.Info.Friend();
-        if (!isSelf(baseMessage)) { //对方发送的消息
-            friend.headurl = baseMessage.from_headurl;
-            friend.join_id = baseMessage.from_join_id;
-            friend.line_status = "1";
-            friend.user_id = baseMessage.from_user_id;
-            friend.nickname = baseMessage.from_nickname;
-            friend.update_time = String.valueOf(baseMessage.getSendTime());
-        } else { //自己发送的消息
-            friend.headurl = baseMessage.to_headurl;
-            friend.join_id = baseMessage.to_join_id;
-            friend.line_status = "5";
-            friend.user_id = baseMessage.to_user_id;
-            friend.nickname = baseMessage.to_nickname;
-            friend.update_time = String.valueOf(baseMessage.getSendTime());
-        }
-        mFriendList.add(0, friend);
-        LogUtil.httpLogW("添加用户");
-//        EventBus.getDefault().post(new UpdateListEvent(EventType.FRIENDLIST).setmList(mFriendList));
-    }
-
-
-    public List<UserInfoEntity.Info.Friend> getFriendList() {
-        return mFriendList;
-    }
-
     public boolean getIsChating() {
         return isChating;
     }
@@ -898,8 +776,12 @@ public class EasyWebsocketClient extends WebSocketClient {
         this.mListener = listener;
     }
 
-    public void setOnMessageReceiveListener(OnMessageReceiveListener listener) {
-        this.receiveListener = listener;
+    public void addOnMessageReceiveListener(OnMessageReceiveListener listener) {
+        messageReceiveListeners.add(listener);
+    }
+
+    public void removeOnMessageReceiveListener(OnMessageReceiveListener listener) {
+        messageReceiveListeners.remove(listener);
     }
 
     public interface OnMessageReceiveListener {
