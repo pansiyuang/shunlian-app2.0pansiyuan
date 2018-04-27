@@ -14,6 +14,7 @@ import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMyCommentListView;
@@ -56,6 +57,9 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
     private int pink_color;
     private int new_text;
     private MyCommentListPresenter presenter;
@@ -135,6 +139,12 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
         currentPageStatus = MyCommentListPresenter.APPEND;
         classState(2);
         presenter.myCommentListAppend();
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.comment();
     }
 
     private void classState(int state) {
@@ -274,6 +284,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
         if (presenter != null) {
             presenter.detachView();

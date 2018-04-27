@@ -5,11 +5,17 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.DistrictAllEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.PersonalDataEntity;
+import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.upload.ProgressListener;
+import com.shunlian.app.utils.upload.UploadFileRequestBody;
 import com.shunlian.app.view.IPersonalDataView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +24,8 @@ import java.util.Map;
 import chihane.shunlian.BottomDialog;
 import chihane.shunlian.ISelectAble;
 import chihane.shunlian.Selector;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -227,6 +235,41 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
                 return this;
             }
         });
+    }
 
+    public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
+        Map<String, RequestBody> params = new HashMap<>();
+        for (int i = 0; i < filePath.size(); i++) {
+            LogUtil.httpLogW("I:"+i);
+            File file = filePath.get(i).file;
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
+                @Override
+                public void onProgress(int progress, String tag) {
+                    LogUtil.httpLogW("tag:" + tag + "    progress:" + progress);
+//                    iView.uploadProgress(progress, tag);
+                }
+
+                @Override
+                public void onDetailProgress(long written, long total, String tag) {
+
+                }
+            },file.getAbsolutePath());
+            params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(params, body);
+        getNetData(true,call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<UploadPicEntity> entity) {
+                super.onSuccess(entity);
+                UploadPicEntity uploadPicEntity = entity.data;
+                String domain = uploadPicEntity.domain;
+                if (!isEmpty(uploadPicEntity.relativePath)) {
+                    String s = uploadPicEntity.relativePath.get(0);
+                    iView.setRefundPics(s,domain);
+                }
+            }
+        });
     }
 }

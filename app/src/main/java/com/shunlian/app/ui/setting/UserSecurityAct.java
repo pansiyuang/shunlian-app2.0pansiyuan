@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.ChangeUserPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.setting.change_user.ChangeUserAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -18,9 +16,6 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IChangeUserView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.pick_time.PickTimeView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -45,9 +40,6 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
 
     @BindView(R.id.mtv_user)
     MyTextView mtv_user;
-
-    @BindView(R.id.ptv)
-    PickTimeView ptv;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, UserSecurityAct.class));
@@ -80,8 +72,6 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
         mtv_toolbar_title.setText("设置");
         gone(mrlayout_toolbar_more);
 
-        ptv.setViewType(PickTimeView.TYPE_PICK_DATE);
-
         ChangeUserPresenter presenter = new ChangeUserPresenter(this,this);
         presenter.getMobile();
     }
@@ -96,11 +86,7 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
                     Common.clearLoginInfo();
                     JpushUtil.setJPushAlias();
                     Constant.JPUSH = null;
-                    LoginAct.startAct(UserSecurityAct.this);
-                    /***登录成功后去个人中心***/
-                    DispachJump dispachJump = new DispachJump();
-                    dispachJump.jumpType = dispachJump.personal;
-                    EventBus.getDefault().postSticky(dispachJump);
+                    Common.goGoGo(this, "");
                     promptDialog.dismiss();
                 }, "取消", (v) -> promptDialog.dismiss()).show();
     }

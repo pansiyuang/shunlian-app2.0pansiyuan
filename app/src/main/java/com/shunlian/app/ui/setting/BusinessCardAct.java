@@ -1,10 +1,14 @@
 package com.shunlian.app.ui.setting;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.presenter.BusinessCardPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IBusinessCardView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -32,6 +36,13 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
 
     @BindView(R.id.llayout_save)
     LinearLayout llayout_save;
+    private String urlCode;
+
+    public static void startAct(Context context,String url){
+        Intent intent = new Intent(context,BusinessCardAct.class);
+        intent.putExtra("urlCode",url);
+        context.startActivity(intent);
+    }
     /**
      * 布局id
      *
@@ -40,6 +51,13 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
     @Override
     protected int getLayoutId() {
         return R.layout.act_business_card;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        llayout_save.setOnClickListener(this);
+        llayout_share.setOnClickListener(this);
     }
 
     /**
@@ -51,8 +69,10 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
         setStatusBarFontDark();
         mtv_toolbar_title.setText("把APP推荐给好友");
         gone(mrlayout_toolbar_more);
+        urlCode = getIntent().getStringExtra("urlCode");
+        GlideUtils.getInstance().loadImage(this,miv_code, urlCode);
 
-        BusinessCardPresenter presenter = new BusinessCardPresenter(this,this);
+//        BusinessCardPresenter presenter = new BusinessCardPresenter(this,this);
     }
 
 
@@ -84,5 +104,18 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
     @Override
     public void codePath(String card_path) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.llayout_save:
+                GlideUtils.getInstance().savePicture(getBaseContext(), urlCode);
+                break;
+            case R.id.llayout_share:
+                Common.staticToast("已分享");
+                break;
+        }
     }
 }

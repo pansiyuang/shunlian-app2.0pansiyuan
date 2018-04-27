@@ -84,12 +84,6 @@
         android:layout_weight="1"
         android:background="@color/white_ash" />
 
-    <com.shunlian.app.widget.pick_time.PickTimeView
-        android:id="@+id/ptv"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"/>
-
     <com.shunlian.app.widget.MyButton
         android:id="@+id/mbtn_logout"
         android:layout_width="match_parent"

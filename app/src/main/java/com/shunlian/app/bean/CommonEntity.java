@@ -38,5 +38,7 @@ public class CommonEntity {
     public String key;
 
     public String mobile;//手机号
-    public String card_path;//推广二维码名片
+    public String qr_img_for_app_down;//下载app
+    public String push_on;//接收推送，1是，0否
+    public String about_url;//关于的h5介绍页面（APP）
 }

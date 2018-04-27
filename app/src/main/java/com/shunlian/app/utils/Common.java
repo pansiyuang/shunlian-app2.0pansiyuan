@@ -132,6 +132,9 @@ public class Common {
             case "personCenter"://个人中心
                 MainActivity.startAct(context, "personCenter");
                 break;
+            case "shoppingcar"://购物车
+                MainActivity.startAct(context, "shoppingcar");
+                break;
             default://首页
                 MainActivity.startAct(context, "");
                 break;

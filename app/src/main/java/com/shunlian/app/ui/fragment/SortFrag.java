@@ -91,7 +91,7 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     @OnClick(R.id.rl_more)
     public void more(){
         quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.setShowItem(1,4,5);
+        quick_actions.category();
     }
 
     @OnClick(R.id.mtv_search)
@@ -199,8 +199,8 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

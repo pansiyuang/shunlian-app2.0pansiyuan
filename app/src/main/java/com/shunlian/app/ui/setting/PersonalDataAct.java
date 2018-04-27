@@ -1,22 +1,41 @@
 package com.shunlian.app.ui.setting;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ImageEntity;
+import com.shunlian.app.photopick.ImageCaptureManager;
+import com.shunlian.app.photopick.PhotoPickerActivity;
+import com.shunlian.app.photopick.PhotoPickerIntent;
+import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.presenter.PersonalDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalDataView;
+import com.shunlian.app.widget.AvatarDialog;
 import com.shunlian.app.widget.BottonDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SelectDateDialog;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
+
+import static com.shunlian.app.ui.zxing_code.ZXingDemoAct.REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY;
 
 /**
  * Created by Administrator on 2018/4/23.
@@ -74,6 +93,9 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
 
     private BottonDialog dialog;
     private PersonalDataPresenter presenter;
+    private SelectDateDialog dateDialog;
+    private ImageCaptureManager captureManager;
+    private AvatarDialog avatarDialog;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,PersonalDataAct.class));
@@ -97,6 +119,8 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
         llayout_autograph.setOnClickListener(this);
         llayout_region.setOnClickListener(this);
         llayout_interest.setOnClickListener(this);
+        llayout_birthday.setOnClickListener(this);
+        llayout_avatar.setOnClickListener(this);
     }
 
     /**
@@ -110,6 +134,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
         gone(mrlayout_toolbar_more);
 
         presenter = new PersonalDataPresenter(this,this);
+
     }
 
     @Override
@@ -142,8 +167,61 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
             case R.id.llayout_interest:
                 SelectLikeAct.startAct(this,mtv_interest.getText().toString());
                 break;
+            case R.id.llayout_avatar:
+                if (avatarDialog == null) {
+                    avatarDialog = new AvatarDialog(this);
+                    avatarDialog.setOnClickListener((id)->{
+                        if (id == 1){//拍照
+                            showCameraAction();
+                        }else {
+                            showAlbumAction();
+                        }
+                    });
+                }
+                avatarDialog.show();
+                break;
+            case R.id.llayout_birthday:
+                if (dateDialog == null) {
+
+                    dateDialog = new SelectDateDialog(this);
+                    dateDialog.setOnClickListener((date)->{
+                        if (presenter != null){
+                            String s = TransformUtil.date2TimeStamp(date, "yyyy-MM-dd");
+                            presenter.setInfo("birth",s);
+                        }
+                        mtv_birthday.setText(date);
+                    });
+                }
+                dateDialog.show();
+                break;
         }
     }
+
+    /**
+     * 选择相机
+     */
+    private void showCameraAction() {
+        try {
+            captureManager = new ImageCaptureManager(this);
+            Intent intent = captureManager.dispatchTakePictureIntent();
+            startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.msg_no_camera, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 选择相册
+     */
+    private void showAlbumAction() {
+        PhotoPickerIntent intent = new PhotoPickerIntent(this);
+        intent.setSelectModel(SelectModel.MULTI);
+        intent.setShowCarema(true); // 是否显示拍照
+        intent.setMaxTotal(1); // 最多选择照片数量，默认为9
+        startActivityForResult(intent, REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY);
+    }
+
 
     /**
      * 显示网络请求失败的界面
@@ -230,24 +308,37 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
         }
     }
 
+    /**
+     * 设置凭证图片
+     *
+     * @param pic
+     */
+    @Override
+    public void setRefundPics(String pic,String domain) {
+        if (presenter != null){
+            presenter.setInfo("avatar",pic);
+            GlideUtils.getInstance().loadCircleImage(this,miv_avatar,domain+pic);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Activity.RESULT_OK == resultCode//昵称
+        if (RESULT_OK == resultCode//昵称
                 && requestCode == NickNameAct.REQUEST_CODE){
             String nickname = data.getStringExtra("nickname");
             if (!isEmpty(nickname) && presenter != null){
                 mtv_nickname.setText(nickname);
                 presenter.setInfo("nickname",nickname);
             }
-        }else if (Activity.RESULT_OK == resultCode//个性签名
+        }else if (RESULT_OK == resultCode//个性签名
                 && requestCode == AutographAct.REQUEST_CODE){
             String signature = data.getStringExtra("signature");
             if (!isEmpty(signature) && presenter != null){
                 mtv_autograph.setText(signature);
                 presenter.setInfo("signature",signature);
             }
-        }else if (Activity.RESULT_OK == resultCode//兴趣选择
+        }else if (RESULT_OK == resultCode//兴趣选择
                 && requestCode == SelectLikeAct.REQUEST_CODE){
             String id = data.getStringExtra("id");
             String name = data.getStringExtra("name");
@@ -256,6 +347,62 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 mtv_interest.setText(name);
                 presenter.setInfo("tag",id);
             }
+        }else if (resultCode == RESULT_OK //相册
+                && requestCode == REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY) {
+            final String picturePath = data.getStringArrayListExtra
+                    (PhotoPickerActivity.EXTRA_RESULT).get(0);
+            compressImgs(picturePath);
+        }else if (resultCode == RESULT_OK //拍照
+                && requestCode == ImageCaptureManager.REQUEST_TAKE_PHOTO) {
+//            switch (requestCode) {
+//                // 相机拍照完成后，返回图片路径
+//                case ImageCaptureManager.REQUEST_TAKE_PHOTO:
+//
+//                    break;
+//            }
+            if (captureManager.getCurrentPhotoPath() != null) {
+                captureManager.galleryAddPic();
+                compressImgs(captureManager.getCurrentPhotoPath());
+            }
+        }
+    }
+
+    public void compressImgs(String url) {
+        Luban.with(this).load(url).putGear(3).setCompressListener(new OnCompressListener() {
+
+            @Override
+            public void onStart() {
+                LogUtil.httpLogW("onStart()");
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                LogUtil.httpLogW("onSuccess:" + file.length());
+                List<ImageEntity> imgList = new ArrayList<>();
+                ImageEntity imageEntity = new ImageEntity();
+                imageEntity.file = file;
+                imgList.add(imageEntity);
+                presenter.uploadPic(imgList,"customer_service");//上传图片
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Common.staticToast("上传图片失败");
+            }
+        }).launch();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog != null){
+            dialog.destory();
+        }
+        if (dateDialog != null){
+            dateDialog.destory();
+        }
+        if (avatarDialog != null){
+            avatarDialog.destory();
         }
     }
 }

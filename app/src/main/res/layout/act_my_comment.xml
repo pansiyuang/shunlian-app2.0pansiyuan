@@ -36,6 +36,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/rl_more"
             android:layout_width="50dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -183,4 +184,10 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:layout_below="@+id/line2" />
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </com.shunlian.app.widget.MyRelativeLayout>

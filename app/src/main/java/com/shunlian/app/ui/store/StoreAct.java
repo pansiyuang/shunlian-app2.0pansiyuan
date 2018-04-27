@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -33,15 +32,13 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.popmenu.PopMenu;
-import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 
 import java.util.List;
 
@@ -188,6 +185,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @BindView(R.id.mrLayout_operates)
     MyRelativeLayout mrLayout_operates;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
@@ -449,7 +449,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 }
                 break;
             case R.id.mrLayout_operates:
-
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.shop();
                 break;
         }
     }
@@ -640,6 +641,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
     }
 }

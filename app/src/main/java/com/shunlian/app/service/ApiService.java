@@ -1810,20 +1810,28 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> sendSmsCodeToMobile(@Body RequestBody body);
 
     /**
-     * 推广二维码名片
-     * @param map
-     * @return
-     */
-    @GET("user/getQrCard")
-    Call<BaseEntity<CommonEntity>> getQrCard(@QueryMap Map<String, String> map);
-
-    /**
      * 我要反馈
      * @param body
      * @return
      */
     @POST("personalcenter/feedback")
     Call<BaseEntity<CommonEntity>> feedback(@Body RequestBody body);
+
+    /**
+     * 设置
+     * @param map
+     * @return
+     */
+    @GET("personalcenter/setting")
+    Call<BaseEntity<CommonEntity>> setting(@QueryMap Map<String, String> map);
+
+    /**
+     * 更新推送设置
+     * @param body
+     * @return
+     */
+    @POST("personalcenter/updateSetting")
+    Call<BaseEntity<EmptyEntity>> updatePushSet(@Body RequestBody body);
 
 
     /**
