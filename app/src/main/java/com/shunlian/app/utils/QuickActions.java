@@ -18,6 +18,7 @@ import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.List;
 
@@ -73,6 +74,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     List<View> view_line;
 
     private Unbinder bind;
+    private int topMargin;
+    private int rightMargin;
+    private int px;
 
 
     public QuickActions(@NonNull Context context) {
@@ -99,6 +103,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mllayout_search.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
         mllayout_help.setOnClickListener(this);
+
+        px = TransformUtil.dip2px(mContext, 30);
+        topMargin = px;
+        rightMargin = px / 2;
     }
 
     /**
@@ -158,11 +166,18 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
 
         for (int i = 0; i < showItemPos.length; i++) {
-            showItem(showItemPos[i]);
+            showItem(showItemPos[i],showItemPos[0]);
         }
 
-        int i = showItemPos.length * 95 + TransformUtil.dip2px(mContext, 30);
+
+        int i = showItemPos.length * 90 + px;
         mllayout_content.setWHProportion(300,i);
+
+        RelativeLayout.LayoutParams layoutParams = (LayoutParams)
+                mllayout_content.getLayoutParams();
+        layoutParams.topMargin = topMargin;
+        layoutParams.rightMargin = rightMargin;
+
         requestLayout();
     }
 
@@ -179,38 +194,45 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             bind.unbind();
     }
 
-    private void showItem(int position) {
+    private void showItem(int position,int first) {
         switch (position) {
             case 1:
                 mrlayout_message.setVisibility(VISIBLE);
                 break;
             case 2:
                 mllayout_search.setVisibility(VISIBLE);
-                view_line.get(0).setVisibility(VISIBLE);
+                if (first != 2)
+                    view_line.get(0).setVisibility(VISIBLE);
                 break;
             case 3:
                 mllayout_firstPage.setVisibility(VISIBLE);
-                view_line.get(1).setVisibility(VISIBLE);
+                if (first != 3)
+                    view_line.get(1).setVisibility(VISIBLE);
                 break;
             case 4:
                 mllayout_PersonalCenter.setVisibility(VISIBLE);
-                view_line.get(2).setVisibility(VISIBLE);
+                if (first != 4)
+                    view_line.get(2).setVisibility(VISIBLE);
                 break;
             case 5:
                 mllayout_car.setVisibility(VISIBLE);
-                view_line.get(3).setVisibility(VISIBLE);
+                if (first != 5)
+                    view_line.get(3).setVisibility(VISIBLE);
                 break;
             case 6:
                 mllayout_feedback.setVisibility(VISIBLE);
-                view_line.get(4).setVisibility(VISIBLE);
+                if (first != 6)
+                    view_line.get(4).setVisibility(VISIBLE);
                 break;
             case 7:
                 mllayout_help.setVisibility(VISIBLE);
-                view_line.get(5).setVisibility(VISIBLE);
+                if (first != 7)
+                    view_line.get(5).setVisibility(VISIBLE);
                 break;
             case 8:
                 mllayout_share.setVisibility(VISIBLE);
-                view_line.get(6).setVisibility(VISIBLE);
+                if (first != 8)
+                    view_line.get(6).setVisibility(VISIBLE);
                 break;
         }
     }
@@ -251,6 +273,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 店铺
      */
     public void shop() {
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
+        rightMargin = px / 6;
         setShowItem(1, 3, 4, 6, 8);
     }
 
@@ -308,5 +332,20 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     public void order(){
         setShowItem(1,2,3,6,7);
+    }
+
+    /**
+     * 发现评论列表
+     */
+    public void findCommentList(){
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
+        setShowItem(1,2,3,6,7);
+    }
+
+    /**
+     * 帮助
+     */
+    public void help(){
+        setShowItem(1,2,3,4,6);
     }
 }

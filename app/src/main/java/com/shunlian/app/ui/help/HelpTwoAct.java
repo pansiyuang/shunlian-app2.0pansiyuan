@@ -16,10 +16,12 @@ import com.shunlian.app.bean.HelpcenterQuestionEntity;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -44,6 +46,12 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
 
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mrlayout_news)
+    MyRelativeLayout mrlayout_news;
 
     private PHelpTwo pHelpTwo;
     private LinearLayoutManager linearLayoutManager;
@@ -82,6 +90,10 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             case R.id.mllayout_kefu:
 
                 break;
+            case R.id.mrlayout_news:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.help();
+                break;
         }
     }
 
@@ -90,6 +102,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         super.initListener();
         mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
+        mrlayout_news.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -194,5 +207,12 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

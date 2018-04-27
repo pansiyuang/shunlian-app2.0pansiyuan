@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -15,14 +13,17 @@ import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.presenter.SelectServicePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ISelectServiceView;
 import com.shunlian.app.widget.CustomerGoodsView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/12/26.
@@ -30,17 +31,17 @@ import butterknife.BindView;
 
 public class SelectServiceActivity extends BaseActivity implements ISelectServiceView, BaseRecyclerAdapter.OnItemClickListener {
 
-    @BindView(R.id.tv_title)
-    TextView tv_title;
-
-    @BindView(R.id.rl_title_more)
-    RelativeLayout rl_title_more;
-
     @BindView(R.id.customer_goods)
     CustomerGoodsView customer_goods;
 
     @BindView(R.id.recycler_service)
     RecyclerView recycler_service;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
 
     private String currentOgId;
     private SelectServicePresenter presenter;
@@ -61,9 +62,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
-        tv_title.setText(getStringResouce(R.string.select_service_type));
-        rl_title_more.setVisibility(View.VISIBLE);
+        mtv_toolbar_title.setText(getStringResouce(R.string.select_service_type));
 
         presenter = new SelectServicePresenter(this, this);
         currentOgId = getIntent().getStringExtra("ogId");
@@ -98,6 +97,12 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
         }
     }
 
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        visible(quick_actions);
+        quick_actions.afterSale();
+    }
+
     @Override
     public void showFailureView(int request_code) {
 
@@ -117,5 +122,12 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
             mEntity.og_Id = currentOgId;
             ReturnRequestActivity.startAct(this, mEntity,false,null);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

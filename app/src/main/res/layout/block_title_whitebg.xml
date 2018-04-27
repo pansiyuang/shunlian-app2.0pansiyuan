@@ -36,10 +36,10 @@
         android:visibility="gone" />
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrlayout_news"
-        android:layout_width="60dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:paddingRight="8dp">
+        android:layout_marginRight="10dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_dot"
@@ -70,6 +70,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
+        android:layout_marginRight="10dp"
         android:visibility="gone"
         android:layout_toLeftOf="@id/mrlayout_news"/>
     <View

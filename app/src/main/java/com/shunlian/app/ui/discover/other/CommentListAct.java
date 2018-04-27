@@ -15,6 +15,7 @@ import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -33,6 +34,9 @@ import butterknife.OnClick;
 
 public class CommentListAct extends BaseActivity implements IFindCommentListView{
 
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
+
     @BindView(R.id.met_text)
     MyEditText met_text;
 
@@ -48,11 +52,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
-    @BindView(R.id.mtv_title)
-    MyTextView mtv_title;
-
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
 
@@ -106,7 +111,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .keyboardEnable(true)
                 .init();
 
-        mtv_title.setText(getStringResouce(R.string.comments));
+        mtv_toolbar_title.setText(getStringResouce(R.string.comments));
 
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
         gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
@@ -121,6 +126,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
                 0,0,getColorResouce(R.color.white)));
 
+    }
+
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.findCommentList();
     }
 
     @OnClick(R.id.met_text)
@@ -232,6 +243,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();
