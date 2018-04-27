@@ -14,7 +14,37 @@
     <string name="sys_notice">系统通知</string>
     <string name="topic">头条</string>
     <string name="custom_message">客服消息</string>
-
+    <string name="platform_message">平台消息</string>
+    <string name="chat_lingquyouhui">领取优惠券</string>
+    <string name="chat_lijilingqu">立即领取</string>
+    <string name="please_service_comment">请对本次服务进行评价</string>
+    <string name="very_unsatisfy">非常不满意</string>
+    <string name="unsatisfy">不满意</string>
+    <string name="commonly">一般</string>
+    <string name="satisfy">满意</string>
+    <string name="very_satisfy">非常满意</string>
+    <string name="already_comm">已评价</string>
+    <string name="seller">商家</string>
+    <string name="seller_id">商家ID</string>
+    <string name="express_number">快递单号</string>
+    <string name="select_goods">选择商品</string>
+    <string name="submit">提交</string>
+    <string name="submitted">已提交</string>
+    <string name="send_order">发送订单</string>
+    <string name="order_select">选择订单</string>
+    <string name="to_shop">进店</string>
+    <string name="help_center">帮助中心</string>
+    <string name="please_check_order">亲，请你核对订单信息</string>
+    <string name="receiver">收货人：%s</string>
+    <string name="phone_num">电话：%s</string>
+    <string name="address_detail">地址：%s</string>
+    <string name="no_switch">暂不切换</string>
+    <string name="ready_to_switch">确定切换</string>
+    <string name="switch_status">您当前的身份是%s，无法与%s聊天，请先切换为%s，是否要切换?</string>
+    <string name="customer_list">客户列表</string>
+    <string name="choose_customer_list">选择客户列表</string>
+    <string name="switch_other">转接</string>
+    <string name="next_step">下一步</string>
 
     <!--主页tab-->
     <string name="main_page">首页</string>
@@ -527,10 +557,6 @@
     <string name="comment_details">评论详情</string>
     <string name="are_you_sure_del_comment">确认删除评论吗？</string>
     <string name="punish">处罚</string>
-
-    <!--聊天-->
-    <string name="chat_lingquyouhui">领取优惠券</string>
-    <string name="chat_lijilingqu">立即领取</string>
 
     <!--帮助-->
     <string name="help_zaixiankefu">在线客服(00:00:24:00)</string>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
@@ -69,6 +70,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     private CommonLazyPagerAdapter mPagerAdapter;
     private int sysCount, storeCount;
     private MessageCountManager messageCountManager;
+    private MessageListFragment messageListFragment;
 
     @Override
     protected int getLayoutId() {
@@ -97,7 +99,8 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
             storeCount = messageCountManager.getStore_msg();
         }
 
-        mFrags.add(MessageListFragment.getInstance());
+        messageListFragment = MessageListFragment.getInstance();
+        mFrags.add(messageListFragment);
         mFrags.add(LittleStoreFragment.getInstance());
 
         mPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), mFrags, tabTitle);
@@ -112,7 +115,15 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         rl_sys.setOnClickListener(this);
         rl_store.setOnClickListener(this);
         view_pager.addOnPageChangeListener(this);
+        miv_title_right.setOnClickListener(this);
         super.initListener();
+    }
+
+    @Override
+    protected void onRestart() {
+        messageCountManager.upDateMessageCount();
+        messageListFragment.resetData();
+        super.onRestart();
     }
 
     private void SysClick() {
@@ -161,6 +172,9 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
             case R.id.rl_store:
                 StoreClick();
                 view_pager.setCurrentItem(1);
+                break;
+            case R.id.miv_title_right:
+                ChatActivity.startAct(this,new ChatMemberEntity.ChatMember());
                 break;
         }
         super.onClick(view);

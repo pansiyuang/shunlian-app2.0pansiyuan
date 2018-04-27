@@ -5,6 +5,8 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +31,19 @@ public class EmojiAdapter extends RecyclerView.Adapter {
     private int mEmojiStart;//每页开始位置
     private int mPageSize;//第几页表情
     private final AssetManager am;
+    private EmojisVPAdapter mVp;
 
-    public EmojiAdapter(Context context, int pageSize) {
+    public EmojiAdapter(Context context, int pageSize, EmojisVPAdapter emojiAdapter) {
         mContext = context;
         mEmojiStart = pageSize * 21;
         mPageSize = pageSize;
         am = mContext.getAssets();
+        this.mVp = emojiAdapter;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_emoji, parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_emoji, parent, false);
         int height = parent.getHeight();
         EmojiHolder emojiHolder = new EmojiHolder(view);
         ViewGroup.LayoutParams layoutParams = emojiHolder.itemView.getLayoutParams();
@@ -53,11 +56,11 @@ public class EmojiAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         EmojiHolder mHloder = (EmojiHolder) holder;
         position += mEmojiStart;
-        if (position != mEmojiStart && (position % 20 - mPageSize) == 0){
+        if (position != mEmojiStart && (position % 20 - mPageSize) == 0) {
             mHloder.imageView.setImageResource(R.mipmap.icon_chat_smiley_del);
-        }else {
+        } else {
             int emojisId = position - mPageSize;
-            if (emojisId>112){
+            if (emojisId > 112) {
                 return;
             }
             InputStream is = null;
@@ -73,8 +76,7 @@ public class EmojiAdapter extends RecyclerView.Adapter {
                 float scaleWidth = (float) i / width;
                 float scaleHeight = (float) i / height;
                 matrix.postScale(scaleWidth, scaleHeight);
-                final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                        width, height, matrix, true);
+                final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
                 mHloder.imageView.setImageBitmap(resizedBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -106,11 +108,11 @@ public class EmojiAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             int i = getAdapterPosition() + mEmojiStart;
-            if (i != mEmojiStart && (i % 20 - mPageSize) == 0){
-                Common.staticToast("删除");
-            }else {
-                String s = EmojisUtils.emojisName(i-mPageSize);
-                Common.staticToast(s);
+            if (i != mEmojiStart && (i % 20 - mPageSize) == 0) {
+                mVp.onDel();
+            } else {
+                String s = EmojisUtils.emojisName(i - mPageSize);
+                mVp.OnEmojiClick(i - mPageSize, s);
             }
         }
     }

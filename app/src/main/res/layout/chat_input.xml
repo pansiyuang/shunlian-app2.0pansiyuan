@@ -52,12 +52,12 @@
 
         <Button
             android:id="@+id/btn_send"
-            android:layout_width="57dp"
+            android:layout_width="50dp"
             android:layout_height="28dp"
             android:layout_marginLeft="12dp"
-            android:background="@drawable/input_type"
+            android:background="@drawable/rounded_corner_solid_40a5ff_8px"
             android:text="发送"
-            android:textColor="#666666"
+            android:textColor="@color/white"
             android:textSize="14dp"
             android:visibility="gone" />
     </LinearLayout>
@@ -126,7 +126,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="62.5dp"
@@ -148,7 +149,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="60dp"
@@ -163,6 +165,29 @@
                     android:textColor="@color/new_text"
                     android:textSize="13dp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_order"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/img_chat_sendorder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.5dp"
+                    android:text="订单"
+                    android:textColor="@color/new_text"
+                    android:textSize="13dp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -170,32 +195,32 @@
         android:id="@+id/rlayout_emoji"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:visibility="gone"
-        android:background="@color/bg_gray_four">
+        android:background="@color/bg_gray_four"
+        android:visibility="gone">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/emoji_vp"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp"
+            android:overScrollMode="never" />
 
 
         <LinearLayout
             android:id="@+id/llayout_dot"
-            android:layout_marginBottom="24dp"
-            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal" />
 
         <View
             android:id="@+id/scroll_dot"
             android:layout_width="4dp"
             android:layout_height="4dp"
-            android:layout_marginBottom="24dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/red_dot"/>
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/red_dot" />
     </RelativeLayout>
 
 

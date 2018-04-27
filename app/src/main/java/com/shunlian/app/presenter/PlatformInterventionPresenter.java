@@ -9,6 +9,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.upload.ProgressListener;
 import com.shunlian.app.utils.upload.UploadFileRequestBody;
@@ -106,17 +107,19 @@ public class PlatformInterventionPresenter extends BasePresenter<IPlatformInterv
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                    if (1000 == entity.code) {
-                        iView.requestSuccess(entity.message);
-                    } else {
-                        iView.requestFail(entity.message);
-                    }
+                    iView.requestSuccess(entity.message);
                     super.onSuccess(entity);
                 }
 
                 @Override
                 public void onFailure() {
                     super.onFailure();
+                }
+
+                @Override
+                public void onErrorCode(int code, String message) {
+                    Common.staticToast(message);
+                    super.onErrorCode(code, message);
                 }
             });
         } catch (Exception e) {

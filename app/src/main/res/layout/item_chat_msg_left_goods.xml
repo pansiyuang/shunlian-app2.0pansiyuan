@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/layout_goods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@+id/miv_icon">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_chat_other"
+            android:clickable="true"
+            android:longClickable="true"
+            android:padding="10dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_good_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_goods_title"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/miv_good_img"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:text="2016年夏季新款两侧大口袋收腰欧美风时尚中长款连衣裙低价处.."
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/miv_good_img"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/miv_good_img"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:maxWidth="180dp"
+                android:text="¥260-560"
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

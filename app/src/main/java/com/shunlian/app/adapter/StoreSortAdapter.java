@@ -13,6 +13,7 @@ import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyTextView;
 
@@ -27,6 +28,7 @@ public class StoreSortAdapter extends BaseRecyclerAdapter<StoreCategoriesEntity.
     private static final int TYPE3 = 3;//多品
     private Context context;
     private List<StoreCategoriesEntity.MData> datas;
+    private OnItemClickListener mListener;
 
     public StoreSortAdapter(Context context, boolean isShowFooter, List<StoreCategoriesEntity.MData> datas) {
         super(context, isShowFooter, datas);
@@ -79,8 +81,16 @@ public class StoreSortAdapter extends BaseRecyclerAdapter<StoreCategoriesEntity.
                     threeHolder.mtv_name.setText(data.name);
                     GridLayoutManager babyManager = new GridLayoutManager(context, 2);
                     threeHolder.rv_sort.setLayoutManager(babyManager);
-                    threeHolder.rv_sort.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(context, 5), TransformUtil.dip2px(context, 5),false));
-                    threeHolder.rv_sort.setAdapter(new StoreSortAdapters(context, false, data.children));
+                    threeHolder.rv_sort.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(context, 5), TransformUtil.dip2px(context, 5), false));
+                    StoreSortAdapters storeSortAdapters = new StoreSortAdapters(context, false, data.children);
+                    threeHolder.rv_sort.setAdapter(storeSortAdapters);
+                    storeSortAdapters.setOnItemClickListener((view, position1) -> {
+                        LogUtil.httpLogW("222222：" + position);
+                        if (mListener != null) {
+                            LogUtil.httpLogW("3333333：" + position);
+                            mListener.OnItemClick(view, position, position1);
+                        }
+                    });
                 }
                 break;
         }
@@ -112,5 +122,13 @@ public class StoreSortAdapter extends BaseRecyclerAdapter<StoreCategoriesEntity.
         DefaultHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void OnItemClick(View view, int parentPosition, int childPosition);
     }
 }

@@ -115,19 +115,16 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
                 0,0,getColorResouce(R.color.value_ECECEC)));
         recycle_category.setAdapter(singleAdapter);
 
-        singleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                GoodsDeatilEntity.Goods goods = mGoods.get(position);
-                if (goods_list.contains(goods.id)){
-                    goods_list.remove(goods.id);
-                }else {
-                    goods_list.add(goods.id);
-                }
-                singleAdapter.notifyDataSetChanged();
-                tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods)
-                        ,String.valueOf(count-goods_list.size())));
+        singleAdapter.setOnItemClickListener((view, position) -> {
+            GoodsDeatilEntity.Goods goods = mGoods.get(position);
+            if (goods_list.contains(goods.id)){
+                goods_list.remove(goods.id);
+            }else {
+                goods_list.add(goods.id);
             }
+            singleAdapter.notifyDataSetChanged();
+            tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods)
+                    ,String.valueOf(count-goods_list.size())));
         });
     }
 

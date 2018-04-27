@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -123,6 +122,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         currentFlag = intent.getStringExtra("flag");
         isShowHotSearch = intent.getBooleanExtra("isShowHotSearch", true);
         presenter = new SearchGoodsPresenter(this, this);
+
         if (isShowHotSearch) {
             presenter.getSearchTag();
         }
@@ -177,21 +177,17 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         historyAdapter = new TagAdapter<String>(histotyTags) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
-                View view = LayoutInflater.from(SearchGoodsActivity.this)
-                        .inflate(R.layout.item_tag_layout, taglayout_history, false);
+                View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(s);
                 return view;
             }
         };
-        taglayout_history.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
-                String s = histotyTags.get(position);
-                SearchResultAct.startAct(SearchGoodsActivity.this, s, currentFlag);
-                finish();
-                return true;
-            }
+        taglayout_history.setOnTagClickListener((view, position, parent) -> {
+            String s = histotyTags.get(position);
+            SearchResultAct.startAct(SearchGoodsActivity.this, s, currentFlag);
+            finish();
+            return true;
         });
         taglayout_history.setAdapter(historyAdapter);
     }
@@ -211,12 +207,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         };
         recycler_search.setLayoutManager(new LinearLayoutManager(this));
         recycler_search.setAdapter(simpleRecyclerAdapter);
-        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                switchToJump(mTips.get(position));
-            }
-        });
+        simpleRecyclerAdapter.setOnItemClickListener((view, position) -> switchToJump(mTips.get(position)));
     }
 
     @Override
@@ -225,66 +216,52 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
         tv_search_cancel.setOnClickListener(this);
         ll_clear.setOnClickListener(this);
         edt_goods_search.addTextChangedListener(this);
-        edt_goods_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String text = edt_goods_search.getText().toString();
-                if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
-                    text = edt_goods_search.getHint().toString();
-                }
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!isShowHotSearch) {
-                        if (!isEmpty(text)) {
-                            if ("goods".equals(currentFlag)) {
-                                String cacheSharedPrf = SharedPrefUtil
-                                        .getCacheSharedPrf(save_goods_history, "");
-                                String concat = cacheSharedPrf.concat(text.toString().concat(","));
-                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history, concat);
-                            } else {
-                                String cacheSharedPrf = SharedPrefUtil
-                                        .getCacheSharedPrf(save_shop_history, "");
-                                String concat = cacheSharedPrf.concat(text.toString().concat(","));
-                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
-                            }
-                            SearchResultAct.startAct(SearchGoodsActivity.this,
-                                    text.toString(), currentFlag);
-                            finish();
-                        }
-                        return true;
-                    } else {
-                        switchToJump(text.toString());
-                        return true;
-                    }
-                }
-                return false;
+        edt_goods_search.setOnEditorActionListener((v, actionId, event) -> {
+            String text = edt_goods_search.getText().toString();
+            if ("sortFrag".equals(currentFlag) && isEmpty(text)) {
+                text = edt_goods_search.getHint().toString();
             }
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (!isShowHotSearch) {
+                    if (!isEmpty(text)) {
+                        if ("goods".equals(currentFlag)) {
+                            String cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_goods_history, "");
+                            String concat = cacheSharedPrf.concat(text.toString().concat(","));
+                            SharedPrefUtil.saveCacheSharedPrf(save_goods_history, concat);
+                        } else {
+                            String cacheSharedPrf = SharedPrefUtil.getCacheSharedPrf(save_shop_history, "");
+                            String concat = cacheSharedPrf.concat(text.toString().concat(","));
+                            SharedPrefUtil.saveCacheSharedPrf(save_shop_history, concat);
+                        }
+                        SearchResultAct.startAct(SearchGoodsActivity.this, text.toString(), currentFlag);
+                        finish();
+                    }
+                    return true;
+                } else {
+                    switchToJump(text.toString());
+                    return true;
+                }
+            }
+            return false;
         });
 
         promptDialog = new PromptDialog(this);
         promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_delete_history),
                 getStringResouce(R.string.SelectRecommendAct_sure),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isShowHotSearch) {
-                            presenter.clearSearchHistory();
-                        } else {
-                            if ("goods".equals(currentFlag)) {
-                                SharedPrefUtil.saveCacheSharedPrf(save_goods_history, "");
-                            } else if ("shop".equals(currentFlag)) {
-                                SharedPrefUtil.saveCacheSharedPrf(save_shop_history, "");
-                            }
-                            clearSuccess("");
+                v -> {
+                    if (isShowHotSearch) {
+                        presenter.clearSearchHistory();
+                    } else {
+                        if ("goods".equals(currentFlag)) {
+                            SharedPrefUtil.saveCacheSharedPrf(save_goods_history, "");
+                        } else if ("shop".equals(currentFlag)) {
+                            SharedPrefUtil.saveCacheSharedPrf(save_shop_history, "");
                         }
-                        promptDialog.dismiss();
+                        clearSuccess("");
                     }
+                    promptDialog.dismiss();
                 }, getStringResouce(R.string.errcode_cancel),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        promptDialog.dismiss();
-                    }
-                });
+                v -> promptDialog.dismiss());
     }
 
     @Override
@@ -320,12 +297,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
 
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switchToJump(entity.hot_keywords.get(position));
-                    }
-                });
+                view.setOnClickListener(v -> switchToJump(entity.hot_keywords.get(position)));
                 return view;
             }
         };
@@ -338,12 +310,7 @@ public class SearchGoodsActivity extends BaseActivity implements ISearchGoodsVie
                 View view = LayoutInflater.from(SearchGoodsActivity.this).inflate(R.layout.item_tag_layout, taglayout_history, false);
                 TextView tv = (TextView) view.findViewById(R.id.tv_history_tag);
                 tv.setText(tagStr);
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switchToJump(entity.history_list.get(position));
-                    }
-                });
+                view.setOnClickListener(v -> switchToJump(entity.history_list.get(position)));
                 return view;
             }
         };

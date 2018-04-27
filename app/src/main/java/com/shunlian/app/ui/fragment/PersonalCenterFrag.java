@@ -18,6 +18,8 @@ import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
@@ -338,9 +340,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
         int percent = 10;
         showLevel(percent, personalcenterEntity.next_level_info);
+//        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
+        showLevel(10, personalcenterEntity.next_level_info);
         mtv_all.setText(personalcenterEntity.next_level_score);
         mtv_refundNum.setVisibility(View.VISIBLE);
-        mtv_persent.setPadding(percent * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);
+        mtv_persent.setPadding(10 * TransformUtil.dip2px(baseContext, 230) / 100, 0, 0, 0);
         if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
             mtv_refundNum.setVisibility(View.GONE);
         } else if (Integer.parseInt(personalcenterEntity.new_refund_num) > 9) {

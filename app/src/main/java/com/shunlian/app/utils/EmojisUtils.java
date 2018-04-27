@@ -1,5 +1,13 @@
 package com.shunlian.app.utils;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -261,5 +269,36 @@ public class EmojisUtils {
         map.put(111, "[红包]");
         map.put(112, "[鸡]");
         return map;
+    }
+
+    public static Bitmap getEmojiBitmap(Context context, int index) {
+        InputStream is = null;
+        Bitmap resizedBitmap = null;
+        try {
+            AssetManager am = context.getAssets();
+            is = am.open(String.format("emojis/%d.png", index));
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            Matrix matrix = new Matrix();
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            // 缩放图片的尺寸
+            int i1 = TransformUtil.dip2px(context, 28);
+            float scaleWidth = (float) i1 / width;
+            float scaleHeight = (float) i1 / height;
+            matrix.postScale(scaleWidth, scaleHeight);
+            resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                    is = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return resizedBitmap;
     }
 }

@@ -460,7 +460,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpOneAct"
-            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpTwoAct"
@@ -519,11 +518,14 @@
         <activity
             android:name=".ui.discover.guanzhu.FindSelectShopAct"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziAct"
             android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
             android:screenOrientation="portrait" />
 
         <activity
@@ -533,16 +535,6 @@
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverPublishPhotoAct"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".newchat.ui.MessageActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.help.HelpSolutionAct"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -560,6 +552,10 @@
             android:name=".newchat.ui.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".newchat.ui.MessageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.discover.other.ExperienceDetailAct"
@@ -570,6 +566,27 @@
             android:name=".ui.h5.SimpleH5Act"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui.message.SystemMsgAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".newchat.ui.SelectGoodsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".newchat.ui.CustomerListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".newchat.ui.SwitchOtherActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".newchat.ui.SelectStoreGoodsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
             />
         <activity android:name=".ui.sale_data.SaleDataAct"
             android:exported="false"
@@ -586,11 +603,6 @@
         <activity android:name=".ui.my_profit.DetailOrderRecordAct"
             android:exported="false"
             android:screenOrientation="portrait"/>
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".ui.message.SystemMsgAct"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.balance.BalanceMainAct"
             android:exported="false"
