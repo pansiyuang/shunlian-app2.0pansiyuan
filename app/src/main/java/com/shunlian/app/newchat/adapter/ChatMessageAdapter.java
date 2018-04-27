@@ -115,8 +115,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             e.printStackTrace();
         }
         lists.add(resizeImg(msgInfo));
-        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged()); //解决异常
-        recycler.scrollToPosition(getItemCount() - 1); //滚动到最底部
+        ((Activity) context).runOnUiThread(() -> {
+            notifyDataSetChanged();
+            recycler.scrollToPosition(getItemCount() - 1); //滚动到最底部
+        });
     }
 
     public void addMsgInfo(int position, MsgInfo msgInfo) {

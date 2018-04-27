@@ -109,4 +109,58 @@ public class ChatPresenter extends BasePresenter<IChatView> {
             }
         });
     }
+
+    public void platformChatUserHistoryData(boolean isLoad, String chatId, String mUserId, String sendTime) {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", chatId);
+        map.put("m_user_id", mUserId);
+        if (!isEmpty(sendTime)) {
+            map.put("send_time", String.valueOf(sendTime));
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<HistoryEntity>> baseEntityCall = getAddCookieApiService().platformChatUserHistoryData(map);
+        getNetData(isLoad, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HistoryEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<HistoryEntity> entity) {
+                super.onSuccess(entity);
+                HistoryEntity historyEntity = entity.data;
+                List<MsgInfo> msgInfoList = historyEntity.list;
+                iView.getHistoryMsg(msgInfoList, historyEntity.last_send_time, historyEntity.surplus);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
+    public void shopChatUserHistoryData(boolean isLoad, String chatId, String mUserId,  String sendTime) {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", chatId);
+        map.put("m_user_id", mUserId);
+        if (!isEmpty(sendTime)) {
+            map.put("send_time", String.valueOf(sendTime));
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<HistoryEntity>> baseEntityCall = getAddCookieApiService().shopChatUserHistoryData(map);
+        getNetData(isLoad, baseEntityCall, new SimpleNetDataCallback<BaseEntity<HistoryEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<HistoryEntity> entity) {
+                super.onSuccess(entity);
+                HistoryEntity historyEntity = entity.data;
+                List<MsgInfo> msgInfoList = historyEntity.list;
+                iView.getHistoryMsg(msgInfoList, historyEntity.last_send_time, historyEntity.surplus);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
 }

@@ -174,7 +174,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
                 view_pager.setCurrentItem(1);
                 break;
             case R.id.miv_title_right:
-                ChatActivity.startAct(this,new ChatMemberEntity.ChatMember());
+                SearchCustomerActivity.startAct(this);
                 break;
         }
         super.onClick(view);

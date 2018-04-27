@@ -26,6 +26,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.message.SystemMsgAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
@@ -166,7 +167,8 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-        ZXingDemoAct.startAct(baseActivity, false, 0);
+        StoreAct.startAct(baseActivity,"14046");
+//        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
     @OnClick(R.id.mllayout_search)
