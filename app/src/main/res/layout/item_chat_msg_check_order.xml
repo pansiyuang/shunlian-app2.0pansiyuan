@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@color/light_gray_three"
+        android:padding="10dp"
+        android:text="@string/please_check_order"
+        android:textColor="@color/new_text"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/miv_icon"
+                android:includeFontPadding="false"
+                android:text="2016年夏季新款两侧大口袋收腰欧美风时尚中长款连衣裙"
+                android:textColor="@color/new_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/miv_icon"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/miv_icon"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:text="¥260"
+                android:textColor="@color/new_text"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/light_gray_three" />
+
+        <TextView
+            android:id="@+id/tv_receiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:includeFontPadding="false"
+            android:text="@string/receiver"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_phone_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:includeFontPadding="false"
+            android:text="@string/phone_num"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_address_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:includeFontPadding="false"
+            android:text="@string/address_detail"
+            android:textColor="@color/new_gray"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

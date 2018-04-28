@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <LinearLayout
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp">
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/bg_chat_other"
+        android:clickable="true"
+        android:gravity="center"
+        android:longClickable="true">
 
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_icon"
-            android:layout_width="39dp"
-            android:layout_height="39dp" />
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_chat_other"
-            android:clickable="true"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:longClickable="true">
-
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:maxWidth="260dp"
-                android:textColor="@color/app_main_color"
-                android:textSize="14dp" />
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+            android:maxWidth="260dp"
+            android:textColor="@color/new_text"
+            android:textSize="14dp" />
+    </RelativeLayout>
+</LinearLayout>

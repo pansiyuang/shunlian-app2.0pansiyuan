@@ -35,6 +35,10 @@ public class MessageCountManager implements IMessageCountView {
         mPresenter.messageAllCount();
     }
 
+    public void upDateMessageCount(){
+        mPresenter.messageAllCount();
+    }
+
     @Override
     public void getMessageCount(AllMessageCountEntity messageCountEntity) {
         isLoad = true;

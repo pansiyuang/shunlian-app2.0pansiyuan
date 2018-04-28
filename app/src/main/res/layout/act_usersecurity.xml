@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/white_ash" />
+
+    <!--登录账号-->
+    <LinearLayout
+        android:id="@+id/llayout_login_user"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="登录账号"
+            android:textColor="@color/new_text"
+            android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/img_common_rightarrow_huise"
+            android:textColor="@color/share_text"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white_ash" />
+    <!--登录密码-->
+    <LinearLayout
+        android:id="@+id/llayout_login_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="登录密码"
+            android:textColor="@color/new_text"
+            android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_pwd_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/img_common_rightarrow_huise"
+            android:text="已设置"
+            android:textColor="@color/share_text"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white_ash" />
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="退出登录"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+
+
+</LinearLayout>

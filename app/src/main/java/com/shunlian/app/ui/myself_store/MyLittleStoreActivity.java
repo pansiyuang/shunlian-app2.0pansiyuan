@@ -85,7 +85,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     private boolean isEdit;
     private PromptDialog promptDialog;
     private PopMenu mPopMenu;
-    private String shareTitle,shareDesc,shareImg,shareQrImg,shareLink;
+    private String shareTitle, shareDesc, shareImg, shareQrImg, shareLink;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MyLittleStoreActivity.class);
@@ -119,25 +119,22 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
                 .addMenuItem(new PopMenuItem("保存二维码", getResources().getDrawable(R.mipmap.icon_erweima)))
-                .setOnItemClickListener(new PopMenuItemListener() {
-                    @Override
-                    public void onItemClick(PopMenu popMenu, int position) {
-                        switch (position){
-                            case 0:
-                                ShareInfoParam shareInfoParam=new ShareInfoParam();
-                                shareInfoParam.title=shareTitle;
-                                shareInfoParam.shareLink=shareLink;
-                                shareInfoParam.desc=shareDesc;
-                                shareInfoParam.img=shareImg;
-                                WXEntryActivity.startAct(MyLittleStoreActivity.this,"shareFriend",shareInfoParam);
-                                break;
-                            case 1:
-                                copyText();
-                                break;
-                            case 2:
-                                GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
-                                break;
-                        }
+                .setOnItemClickListener((popMenu, position) -> {
+                    switch (position) {
+                        case 0:
+                            ShareInfoParam shareInfoParam = new ShareInfoParam();
+                            shareInfoParam.title = shareTitle;
+                            shareInfoParam.shareLink = shareLink;
+                            shareInfoParam.desc = shareDesc;
+                            shareInfoParam.img = shareImg;
+                            WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
+                            break;
+                        case 1:
+                            copyText();
+                            break;
+                        case 2:
+                            GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
+                            break;
                     }
                 })
                 .build();
@@ -159,8 +156,9 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         }
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
-        Common.staticToasts(MyLittleStoreActivity.this,"复制链接成功",R.mipmap.icon_common_duihao);
+        Common.staticToasts(MyLittleStoreActivity.this, "复制链接成功", R.mipmap.icon_common_duihao);
     }
+
     @Override
     protected void onResume() {
         mPresenter = new PersonStorePresent(this, this);
@@ -245,12 +243,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     public void showEmptyView(boolean isShowEmpty) {
         if (isShowEmpty) {
             nei_empty.setImageResource(R.mipmap.img_xiaodian_kongyemian).setText(getStringResouce(R.string.store_empty));
-            nei_empty.setButtonText(getStringResouce(R.string.add_goods)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AddStoreGoodsAct.startAct(MyLittleStoreActivity.this);
-                }
-            });
+            nei_empty.setButtonText(getStringResouce(R.string.add_goods)).setOnClickListener(v -> AddStoreGoodsAct.startAct(MyLittleStoreActivity.this));
             nei_empty.setVisibility(View.VISIBLE);
             recycler_goods.setVisibility(View.GONE);
 
@@ -286,12 +279,12 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
     @Override
     public void getShopDetail(PersonShopEntity personShopEntity) {
         goodsList.clear();
-        if (personShopEntity.shareInfo!=null){
-          shareDesc=personShopEntity.shareInfo.desc;
-          shareImg=personShopEntity.shareInfo.img;
-          shareLink=personShopEntity.shareInfo.wx_link;
-          shareQrImg=personShopEntity.shareInfo.qrcode_img;
-          shareTitle=personShopEntity.shareInfo.title;
+        if (personShopEntity.shareInfo != null) {
+            shareDesc = personShopEntity.shareInfo.desc;
+            shareImg = personShopEntity.shareInfo.img;
+            shareLink = personShopEntity.shareInfo.wx_link;
+            shareQrImg = personShopEntity.shareInfo.qrcode_img;
+            shareTitle = personShopEntity.shareInfo.title;
         }
         if (!isEmpty(personShopEntity.goods_list)) {
             goodsList.addAll(personShopEntity.goods_list);
@@ -370,17 +363,9 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     public void checkSelectDialog() {
         promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener("", "确定要删除小店中的这些商品吗", getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                delGoods();
-            }
-        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-            }
-        });
+        promptDialog.setSureAndCancleListener("", "确定要删除小店中的这些商品吗",
+                getStringResouce(R.string.SelectRecommendAct_sure), v -> delGoods(),
+                getStringResouce(R.string.errcode_cancel), v -> promptDialog.dismiss());
     }
 
     public void resetSelectData() {

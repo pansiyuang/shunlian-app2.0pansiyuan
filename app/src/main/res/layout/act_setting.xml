@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mrlayout_toolbar"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white_ash" />
+            <!--个人资料-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_personal_data"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="个人资料"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+            <!--收货地址-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_address"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="收货地址"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+            <!--评价管理-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_comment_manage"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="评价管理"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+            <!--账号安全-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_user_security"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="账号安全"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white_ash" />
+            <!--清空缓存-->
+            <LinearLayout
+                android:id="@+id/llayout_clear"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="清空缓存"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+            <!--消息推送-->
+            <LinearLayout
+                android:id="@+id/llayout_message"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="消息推送"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/icon_chat_userlist_h"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white_ash" />
+
+            <!--意见反馈-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="意见反馈"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--给app评分-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_app_score"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="给顺联动力APP打分"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--推荐app-->
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_app_recommend"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="把APP推荐给好友"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white_ash" />
+
+            <!--关于app-->
+            <LinearLayout
+                android:id="@+id/llayout_about"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="关于顺联动力"
+                    android:textColor="@color/new_text"
+                    android:textSize="16sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="13dp"
+                    android:drawableRight="@mipmap/img_common_rightarrow_huise"
+                    android:textColor="@color/share_text"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:background="@color/white_ash" />
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

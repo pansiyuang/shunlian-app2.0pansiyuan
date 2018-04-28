@@ -1,50 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!--发送-->
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <!--文字-->
+    <RelativeLayout
+        android:id="@+id/rl_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:orientation="horizontal"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/miv_icon"
+        android:clickable="true"
+        android:gravity="right"
+        android:longClickable="true"
+        android:visibility="visible">
 
-        <!--文字-->
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:clickable="true"
-            android:gravity="right"
-            android:longClickable="true"
-            android:visibility="visible">
+            android:background="@drawable/bg_chat_me"
+            android:gravity="center"
+            android:maxWidth="260dp"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_chat_me"
-                android:maxWidth="260dp"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop" />
-    </LinearLayout>
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:id="@+id/rl_msg_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_msg_right"
+        android:layout_alignBottom="@+id/rl_message"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/rl_msg_right"
-        android:visibility="gone">
+        android:layout_toLeftOf="@+id/rl_message"
+        android:visibility="visible">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_status_error"
@@ -58,6 +54,6 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginRight="5dp"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
 </RelativeLayout>

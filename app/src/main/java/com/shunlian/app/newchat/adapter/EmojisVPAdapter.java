@@ -19,8 +19,9 @@ public class EmojisVPAdapter extends PagerAdapter {
 
     private Context mContext;
     private final LayoutInflater inflater;
+    private OnEmojiClickListenter mListener;
 
-    public EmojisVPAdapter(Context context){
+    public EmojisVPAdapter(Context context) {
         mContext = context;
         inflater = LayoutInflater.from(mContext);
     }
@@ -28,7 +29,7 @@ public class EmojisVPAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        if (EmojisUtils.emojisMap().size() % 21 != 0){
+        if (EmojisUtils.emojisMap().size() % 21 != 0) {
             return EmojisUtils.emojisMap().size() / 21 + 1;
         }
         return EmojisUtils.emojisMap().size() / 21;
@@ -43,17 +44,38 @@ public class EmojisVPAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        RecyclerView recycler_view = (RecyclerView) inflater.inflate(R.layout.recycler_view,
-                null, false);
+        RecyclerView recycler_view = (RecyclerView) inflater.inflate(R.layout.recycler_view, null, false);
         container.addView(recycler_view);
-        GridLayoutManager manager = new GridLayoutManager(mContext,7);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 7);
         recycler_view.setLayoutManager(manager);
-        recycler_view.setAdapter(new EmojiAdapter(mContext,position));
+        recycler_view.setAdapter(new EmojiAdapter(mContext, position, this));
         return recycler_view;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+    public void OnEmojiClick(int index, String emoStr) {
+        if (mListener != null) {
+            mListener.OnEmojiClick(index, emoStr);
+        }
+    }
+
+    public void onDel() {
+        if (mListener != null) {
+            mListener.OnEmojiDel();
+        }
+    }
+
+    public void setOnEmojiClickListener(OnEmojiClickListenter listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnEmojiClickListenter {
+        void OnEmojiClick(int emojiIndex, String emojiStr);
+
+        void OnEmojiDel();
     }
 }

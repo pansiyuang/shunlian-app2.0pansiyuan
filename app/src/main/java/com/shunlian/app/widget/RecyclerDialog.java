@@ -21,6 +21,8 @@ import com.shunlian.app.adapter.PromotionAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.newchat.adapter.ChatOrderAdapter;
 import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;

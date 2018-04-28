@@ -29,6 +29,7 @@ public class MyOrderEntity {
         public String status_text;
         public String is_append;
         public String status;
+        public String create_time;
         public String is_edit_praise;
         public String is_postpone; //是否申请过延长收货    1 申请过    0未申请
         public String qty;

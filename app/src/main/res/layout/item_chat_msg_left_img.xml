@@ -1,39 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:scaleType="centerCrop" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_img"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_icon"
-            android:layout_width="39dp"
-            android:layout_height="39dp"
-            android:scaleType="centerCrop" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:longClickable="true">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/bg_chat_other"
-                android:clickable="true"
-                android:longClickable="true">
-
-                <com.shunlian.app.widget.MyImageView
-                    android:id="@+id/miv_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+        android:layout_marginLeft="5dp"
+        android:scaleType="centerCrop" />
+</LinearLayout>

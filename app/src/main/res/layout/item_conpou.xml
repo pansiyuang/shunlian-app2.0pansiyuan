@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@mipmap/img_youhuiquan_di">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrLayout_TOP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rl_control_adapter="true"
+        app:rl_control_height="155">
+
+        <!--面额-->
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:rl_control_adapter="true"
+            app:rl_control_width="190">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_rmb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/rmb"
+                android:textColor="@color/pink_color"
+                android:textSize="13sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/mtv_rmb"
+                android:maxLines="1"
+                android:textColor="@color/pink_color"
+                android:textSize="26sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_full_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mtv_price"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/value_555555"
+                android:textSize="10sp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+        <!--详细信息-->
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/mrlayout_price">
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:ll_control_adapter="true"
+                app:ll_margin_top="30">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_coupon_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@color/new_text"
+                    android:textSize="15sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_overdue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/mtv_coupon_class"
+                    android:textColor="@color/pink_color"
+                    android:textSize="10sp" />
+
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_coupon_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mllayout_coupon"
+                android:layout_marginTop="15dp"
+                android:maxLines="1"
+                android:textColor="@color/share_text"
+                android:textSize="10sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_use_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/use_coupon"
+                android:gravity="center"
+                android:text="立即使用"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mrLayout_TOP"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/value_555555"
+            android:layout_marginRight="25dp"
+            android:textSize="10sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/value_555555"
+            android:textSize="10sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+</RelativeLayout>

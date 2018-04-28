@@ -22,6 +22,7 @@ public class CommonEntity {
     public String new_likes;//点赞数量
     public List<FindCommentListEntity.LastLikesBean> last_likes;//点赞人的头像
     public List<FootprintEntity.DateInfo> date_info;//足迹时间列表
+    public int reception; //客服获取工作状态 1表示工作中，0不在工作中
 
     public String tell;//帮助中心电话
 
@@ -35,4 +36,9 @@ public class CommonEntity {
     public String free_amount;
     public String free_amount_des;
     public String key;
+
+    public String mobile;//手机号
+    public String qr_img_for_app_down;//下载app
+    public String push_on;//接收推送，1是，0否
+    public String about_url;//关于的h5介绍页面（APP）
 }

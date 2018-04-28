@@ -44,6 +44,8 @@ public class App extends Application {
     public static App mApp;
     private ActivityHelper mActivityHelper;
     private static Context context;
+    public static String CACHE_PATH;
+
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
     }
@@ -54,7 +56,7 @@ public class App extends Application {
         super.attachBaseContext(base);
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return context;
     }
     private void initJPush() {
@@ -75,6 +77,21 @@ public class App extends Application {
         //注册侧滑返回生命周期回调
         mActivityHelper = new ActivityHelper();
         registerActivityLifecycleCallbacks(mActivityHelper);
+
+        if (Common.hasSD() && Common.getSDFreeSize() > 1024 * 1024) {
+            CACHE_PATH = Constant.CACHE_PATH_EXTERNAL;
+            try {
+                File dirs = new File(App.CACHE_PATH);
+                if (!dirs.exists()) {
+                    dirs.mkdirs();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (Common.getMemoryFreeSize(this) > 1024 * 1024) {
+            CACHE_PATH = this.getCacheDir().getPath();
+        }
         initJPush();
     }
 }

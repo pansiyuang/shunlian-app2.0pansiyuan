@@ -92,10 +92,10 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
                     int icon = 0;
                     String title = "";
                     if (position == 0){
-                        icon = R.mipmap.icon_pinglun;
+                        icon = R.mipmap.icon_zuixin;
                         title = getString(R.string.hot_comment);
                     }else {
-                        icon = R.mipmap.icon_zuixin;
+                        icon = R.mipmap.icon_pinglun;
                         title = getString(R.string.new_comment);
                     }
                     mHolder.miv_icon.setImageResource(icon);

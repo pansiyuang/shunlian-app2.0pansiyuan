@@ -17,6 +17,7 @@ import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.listener.OnItemClickListener;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
@@ -74,9 +75,9 @@ public class ReturnGoodsDialog extends Dialog {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recycler_list.setLayoutManager(linearLayoutManager);
 
-        tv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        tv_close.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSelect(currentPosition);
                 dismiss();
             }
         });
@@ -107,15 +108,10 @@ public class ReturnGoodsDialog extends Dialog {
             }
         };
         recycler_list.setAdapter(recyclerAdapter);
-        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (listener != null) {
-                    currentPosition = position;
-                    listener.onSelect(currentPosition);
-                    recyclerAdapter.notifyDataSetChanged();
-                    dismiss();
-                }
+        recyclerAdapter.setOnItemClickListener((view, position) -> {
+            if (listener != null) {
+                currentPosition = position;
+                recyclerAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -145,12 +141,10 @@ public class ReturnGoodsDialog extends Dialog {
             }
         };
         recycler_list.setAdapter(recyclerAdapter);
-        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                currentPosition = position;
-                recyclerAdapter.notifyDataSetChanged();
-            }
+        recyclerAdapter.setOnItemClickListener((view, position) -> {
+            LogUtil.httpLogW("点击item:" + position);
+            currentPosition = position;
+            recyclerAdapter.notifyDataSetChanged();
         });
     }
 

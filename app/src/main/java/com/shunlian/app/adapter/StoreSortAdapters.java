@@ -42,13 +42,20 @@ public class StoreSortAdapters extends BaseRecyclerAdapter<StoreCategoriesEntity
     }
 
 
-    class TwoHolder extends RecyclerView.ViewHolder {
+    class TwoHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         private MyTextView mtv_name;
 
         TwoHolder(View itemView) {
             super(itemView);
             mtv_name = (MyTextView) itemView.findViewById(R.id.mtv_name);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
-
 }

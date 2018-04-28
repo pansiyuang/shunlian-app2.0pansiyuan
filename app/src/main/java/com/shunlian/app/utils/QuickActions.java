@@ -1,5 +1,6 @@
 package com.shunlian.app.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,12 +8,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.help.HelpOneAct;
+import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -27,7 +29,7 @@ import butterknife.Unbinder;
 /**
  * Created by Administrator on 2018/1/8.
  * 快速操作
- *
+ * <p>
  * 默认全部隐藏，1 消息 2 首页 3 分享 4 个人中心 5足迹 6 我要反馈
  */
 
@@ -36,32 +38,38 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private Context mContext;
     private View view;
 
+    //消息
     @BindView(R.id.mrlayout_message)
     MyRelativeLayout mrlayout_message;
-
     @BindView(R.id.mtv_message_count)
     MyTextView mtv_message_count;
-
+    //首页
     @BindView(R.id.mllayout_firstPage)
     MyLinearLayout mllayout_firstPage;
-
+    //分享
     @BindView(R.id.mllayout_share)
     MyLinearLayout mllayout_share;
-
+    //个人中心
     @BindView(R.id.mllayout_PersonalCenter)
     MyLinearLayout mllayout_PersonalCenter;
-
-    @BindView(R.id.mllayout_printfoot)
-    MyLinearLayout mllayout_printfoot;
-
+    //反馈
     @BindView(R.id.mllayout_feedback)
     MyLinearLayout mllayout_feedback;
+    //搜索
+    @BindView(R.id.mllayout_search)
+    MyLinearLayout mllayout_search;
+    //购物车
+    @BindView(R.id.mllayout_car)
+    MyLinearLayout mllayout_car;
+    //帮助中心
+    @BindView(R.id.mllayout_help)
+    MyLinearLayout mllayout_help;
 
     @BindView(R.id.mllayout_content)
     MyLinearLayout mllayout_content;
 
-    @BindViews({R.id.view_firstPage,R.id.view_share,R.id.view_PersonalCenter
-            ,R.id.view_printfoot,R.id.view_feedback})
+    @BindViews({R.id.view_search, R.id.view_firstPage, R.id.view_PersonalCenter
+            , R.id.view_car, R.id.view_feedback, R.id.view_help, R.id.view_share})
     List<View> view_line;
 
     private Unbinder bind;
@@ -79,15 +87,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         super(context, attrs, defStyleAttr);
         mContext = context;
 
-        ScrollView scrollView = new ScrollView(mContext);
-        scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        TextView textView = new TextView(mContext);
-        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        scrollView.addView(textView);
-        addView(scrollView);
-
         view = LayoutInflater.from(mContext).inflate(R.layout.layout_quick_actions, this, false);
         addView(view);
         bind = ButterKnife.bind(this, view);
@@ -96,8 +95,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mllayout_firstPage.setOnClickListener(this);
         mllayout_share.setOnClickListener(this);
         mllayout_PersonalCenter.setOnClickListener(this);
-        mllayout_printfoot.setOnClickListener(this);
         mllayout_feedback.setOnClickListener(this);
+        mllayout_search.setOnClickListener(this);
+        mllayout_car.setOnClickListener(this);
+        mllayout_help.setOnClickListener(this);
     }
 
     /**
@@ -107,71 +108,88 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+
+        switch (v.getId()) {
             case R.id.mrlayout_message:
+                MessageActivity.startAct(getContext());
                 hide();
                 break;
             case R.id.mllayout_firstPage:
+                Common.goGoGo(getContext(),"");
+                hide();
                 break;
             case R.id.mllayout_share:
                 break;
             case R.id.mllayout_PersonalCenter:
+                Common.goGoGo(getContext(),"personCenter");
+                hide();
                 break;
-            case R.id.mllayout_printfoot:
+            case R.id.mllayout_car:
+                Common.goGoGo(getContext(),"shoppingcar");
+                hide();
                 break;
             case R.id.mllayout_feedback:
+                BeforeFeedBackAct.startAct(getContext(),null);
+                hide();
+                break;
+            case R.id.mllayout_help:
+                HelpOneAct.startAct(getContext());
+                hide();
+                break;
+            case R.id.mllayout_search:
+                SearchGoodsActivity.startActivityForResult((Activity) mContext);
+                hide();
                 break;
             default:
-
                 break;
         }
     }
 
 
-    public void setShowItem(int... showItem){
-        if (showItem == null){
+    public void setShowItem(int... showItemPos) {
+        if (showItemPos == null) {
             hide();
             return;
         }
 
-        if (showItem.length == 0){
+        if (showItemPos.length == 0) {
             hide();
             return;
         }
 
-        for (int i = 0; i < showItem.length; i++) {
-            hideItem(showItem[i]);
+        for (int i = 0; i < showItemPos.length; i++) {
+            showItem(showItemPos[i]);
         }
 
-        int i = showItem.length * 95 + TransformUtil.dip2px(mContext,30);
+        int i = showItemPos.length * 95 + TransformUtil.dip2px(mContext, 30);
         mllayout_content.setWHProportion(300,i);
         requestLayout();
     }
 
-    private void hide(){
+    private void hide() {
         setVisibility(GONE);
     }
 
     /**
      * 销毁快速操作
      */
-    public void destoryQuickActions(){
+    public void destoryQuickActions() {
         hide();
         if (bind != null)
             bind.unbind();
     }
 
-    private void hideItem(int position){
-        switch (position){
+    private void showItem(int position) {
+        switch (position) {
             case 1:
                 mrlayout_message.setVisibility(VISIBLE);
                 break;
             case 2:
-                mllayout_firstPage.setVisibility(VISIBLE);
+                mllayout_search.setVisibility(VISIBLE);
                 view_line.get(0).setVisibility(VISIBLE);
                 break;
             case 3:
-                mllayout_share.setVisibility(VISIBLE);
+                mllayout_firstPage.setVisibility(VISIBLE);
                 view_line.get(1).setVisibility(VISIBLE);
                 break;
             case 4:
@@ -179,12 +197,20 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 view_line.get(2).setVisibility(VISIBLE);
                 break;
             case 5:
-                mllayout_printfoot.setVisibility(VISIBLE);
+                mllayout_car.setVisibility(VISIBLE);
                 view_line.get(3).setVisibility(VISIBLE);
                 break;
             case 6:
                 mllayout_feedback.setVisibility(VISIBLE);
                 view_line.get(4).setVisibility(VISIBLE);
+                break;
+            case 7:
+                mllayout_help.setVisibility(VISIBLE);
+                view_line.get(5).setVisibility(VISIBLE);
+                break;
+            case 8:
+                mllayout_share.setVisibility(VISIBLE);
+                view_line.get(6).setVisibility(VISIBLE);
                 break;
         }
     }
@@ -192,16 +218,95 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                hide();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-            case MotionEvent.ACTION_UP:
 
-                break;
+        if (ev.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            boolean b = inRangeOfView(mllayout_content, ev);
+            if (!b)
+                hide();
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    private boolean inRangeOfView(View view, MotionEvent ev){
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
+        if(ev.getX() < x || ev.getX() > (x + view.getWidth())
+                || ev.getY() < y || ev.getY() > (y + view.getHeight())){
+            return false;
         }
         return true;
+    }
+
+    /**
+     * 商品详情
+     */
+    public void goodsDetail() {
+        setShowItem(1, 2, 3, 6, 7, 8);
+    }
+
+    /**
+     * 店铺
+     */
+    public void shop() {
+        setShowItem(1, 3, 4, 6, 8);
+    }
+
+    /**
+     * 凑单
+     */
+    public void pieceTogether() {
+        setShowItem(1, 2, 4, 6, 8);
+    }
+
+    /**
+     * 评价
+     */
+    public void comment() {
+        setShowItem(1, 2, 3, 6, 7);
+    }
+
+    /**
+     * 分类
+     */
+    public void category() {
+        setShowItem(1, 3, 6, 7);
+    }
+
+    /**
+     * 频道
+     */
+    public void channel() {
+        setShowItem(1, 2, 3, 5, 6);
+    }
+
+    /**
+     * 消息界面
+     */
+    public void message() {
+        setShowItem(3,4,6,7);
+    }
+
+    /**
+     * 售后
+     */
+    public void afterSale(){
+        setShowItem(1,2,3,6,7);
+    }
+
+    /**
+     * 活动
+     */
+    public void activity(){
+        setShowItem(1,2,3,4,5,6);
+    }
+
+    /**
+     * 订单页
+     */
+    public void order(){
+        setShowItem(1,2,3,6,7);
     }
 }

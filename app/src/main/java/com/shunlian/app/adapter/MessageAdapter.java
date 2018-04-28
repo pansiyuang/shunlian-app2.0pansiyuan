@@ -1,17 +1,22 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.adapter.TopMessageAdapter;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
-import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.newchat.util.SwitchStatusDialog;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -26,78 +31,127 @@ import butterknife.BindView;
  * Created by Administrator on 2018/4/8.
  */
 
-public class MessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
-    private MessageCountManager manager;
-    private boolean isLoad;
+public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMember> implements TopMessageAdapter.OnMessageClickListener {
+    public static final int ITEM_TOP = 100005;
+    private List<MessageListEntity.Msg> msgList;
+    private OnStatusClickListener mListener;
 
-    public MessageAdapter(Context context, List<MessageListEntity.Msg> lists) {
-        super(context, false, lists);
-        manager = MessageCountManager.getInstance(context);
-        isLoad = manager.isLoad();
+    public MessageAdapter(Context context, List<MessageListEntity.Msg> msgs, List<ChatMemberEntity.ChatMember> memberList) {
+        super(context, false, memberList);
+        this.msgList = msgs;
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new MessageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_message, parent, false));
+        return null;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case ITEM_TOP:
+                return new TopViewHolder(LayoutInflater.from(context).inflate(R.layout.frag_list, parent, false));
+            default:
+                return new MessageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_message, parent, false));
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (msgList != null) {
+            if (position == 0) {
+                return ITEM_TOP;
+            }
+        }
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (!isEmpty(msgList)) {
+            return super.getItemCount() + 1;
+        }
+        return super.getItemCount();
     }
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
-        MessageViewHolder viewHolder = (MessageViewHolder) holder;
-        MessageListEntity.Msg msg = lists.get(position);
-        if ("0".equals(msg.is_del)) {
-            viewHolder.swipe_layout.setSwipeEnable(false);
-        } else {
-            viewHolder.swipe_layout.setSwipeEnable(true);
-        }
-        switch (msg.type) {
-            case "4": //系统消息
-                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_xitong, viewHolder.miv_icon);
-                viewHolder.tv_name.setText(getString(R.string.sys_notice));
-                viewHolder.tv_official.setVisibility(View.VISIBLE);
-                if (isLoad) {
-                    String sys_notice_msg = Common.formatBadgeNumber(manager.getSys_notice_msg());
-                    if (isEmpty(sys_notice_msg)) {
-                        viewHolder.tv_count.setVisibility(View.GONE);
-                    } else {
-                        viewHolder.tv_count.setText(sys_notice_msg);
-                        viewHolder.tv_count.setVisibility(View.VISIBLE);
-                    }
-                }
-                break;
-            case "5": //头条消息
-                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_toutiao, viewHolder.miv_icon);
-                viewHolder.tv_name.setText(getString(R.string.topic));
-                viewHolder.tv_official.setVisibility(View.VISIBLE);
-                if (isLoad) {
-                    String discover_topic_msg = Common.formatBadgeNumber(manager.getDiscover_topic_msg());
-                    if (isEmpty(discover_topic_msg)) {
-                        viewHolder.tv_count.setVisibility(View.GONE);
-                    } else {
-                        viewHolder.tv_count.setText(discover_topic_msg);
-                        viewHolder.tv_count.setVisibility(View.VISIBLE);
-                    }
-                }
-                break;
-            case "10": //客服消息
-                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_kefu, viewHolder.miv_icon);
-                viewHolder.tv_name.setText(getString(R.string.custom_message));
-                viewHolder.tv_official.setVisibility(View.GONE);
-                if (isLoad) {
-                    String custom_msg = Common.formatBadgeNumber(manager.getCustom_msg());
-                    if (isEmpty(custom_msg)) {
-                        viewHolder.tv_count.setVisibility(View.GONE);
-                    } else {
-                        viewHolder.tv_count.setText(custom_msg);
-                        viewHolder.tv_count.setVisibility(View.VISIBLE);
-                    }
-                }
+        switch (getItemViewType(position)) {
+            case ITEM_TOP:
+                handlerTop(holder);
                 break;
             default:
+                handlerItem(holder, position);
                 break;
         }
-        viewHolder.tv_content.setText(msg.title);
-        viewHolder.tv_date.setText(msg.date);
+    }
+
+    public void handlerTop(RecyclerView.ViewHolder holder) {
+        if (!isEmpty(msgList)) {
+            TopViewHolder topViewHolder = (TopViewHolder) holder;
+            TopMessageAdapter messageAdapter = new TopMessageAdapter(context, msgList);
+            messageAdapter.setOnMessageClickListener(this);
+            topViewHolder.recycler_list.setAdapter(messageAdapter);
+        }
+    }
+
+    public void handlerItem(RecyclerView.ViewHolder holder, final int position) {
+        ChatMemberEntity.ChatMember chatMember;
+        if (isEmpty(msgList)) {
+            chatMember = lists.get(position);
+        } else {
+            chatMember = lists.get(position - 1);
+        }
+        MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
+        messageViewHolder.tv_name.setText(chatMember.nickname);
+//        messageViewHolder.tv_content.setText(chatMember.);
+        messageViewHolder.tv_date.setText(chatMember.update_time);
+        GlideUtils.getInstance().loadCornerImage(context, messageViewHolder.miv_icon, chatMember.headurl, 5);
+        if (chatMember.unread_count > 0) {
+            messageViewHolder.tv_count.setVisibility(View.VISIBLE);
+            messageViewHolder.tv_count.setText(Common.formatBadgeNumber(chatMember.unread_count));
+        } else {
+            messageViewHolder.tv_count.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void OnSysMsgClick() {
+        if (mListener != null) {
+            mListener.OnSysClick();
+        }
+    }
+
+    @Override
+    public void OnTopMsgClick() {
+        if (mListener != null) {
+            mListener.OnTopicClick();
+        }
+    }
+
+    @Override
+    public void OnAdminMsgClick() {
+        if (mListener != null) {
+            mListener.OnAdminClick();
+        }
+    }
+
+    @Override
+    public void OnSellerMsgClick() {
+        if (mListener != null) {
+            mListener.OnSellerClick();
+        }
+    }
+
+    public class TopViewHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.recycler_list)
+        RecyclerView recycler_list;
+
+        public TopViewHolder(View itemView) {
+            super(itemView);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recycler_list.setLayoutManager(manager);
+        }
     }
 
     public class MessageViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -139,5 +193,20 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg> {
                 listener.onItemClick(v, getAdapterPosition());
             }
         }
+    }
+
+    public void setOnStatusClickListener(OnStatusClickListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnStatusClickListener {
+
+        void OnSysClick();
+
+        void OnTopicClick();
+
+        void OnSellerClick();
+
+        void OnAdminClick();
     }
 }

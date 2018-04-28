@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/toolbar" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/mrlayout_toolbar"
+        android:background="@color/light_gray_two" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_line"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="邀请朋友体验品质购物"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="用微信扫一扫即可下载顺联动力APP"
+        android:textColor="@color/share_text"
+        android:textSize="12sp" />
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv2"
+        android:layout_centerHorizontal="true"
+        app:iv_control_adapter="true"
+        app:iv_control_height="300"
+        app:iv_control_width="300"
+        app:iv_margin_top="50" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_code"
+        android:layout_marginTop="25dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/llayout_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_productdetails_more_wechat"
+                app:iv_control_adapter="true"
+                app:iv_control_height="80"
+                app:iv_control_width="80" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="分享到微信"
+                android:textColor="@color/share_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llayout_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_chuangye_download"
+                app:iv_control_adapter="true"
+                app:iv_control_height="80"
+                app:iv_control_width="80" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="保存二维码到相册"
+                android:textColor="@color/share_text"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </com.shunlian.app.widget.MyLinearLayout>
+</RelativeLayout>

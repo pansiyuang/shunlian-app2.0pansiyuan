@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMessageView;
@@ -45,13 +46,41 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
         sortAndMD5(map);
 
         Call<BaseEntity<MessageListEntity>> baseEntityCall = getAddCookieApiService().getSystemMessage(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MessageListEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MessageListEntity>>() {
             @Override
             public void onSuccess(BaseEntity<MessageListEntity> entity) {
                 super.onSuccess(entity);
                 MessageListEntity messageListEntity = entity.data;
                 List<MessageListEntity.Msg> msgList = messageListEntity.list;
                 iView.getSysMessageList(msgList);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
+    public void getMessageList(boolean isLoad, String keyWord, String type) {
+        Map<String, String> map = new HashMap<>();
+        if (!isEmpty(keyWord)) {
+            map.put("keyword", String.valueOf(keyWord));
+        }
+        if (!isEmpty(type)) {
+            map.put("type", String.valueOf(type));
+        }
+        sortAndMD5(map);
+
+        Call<BaseEntity<ChatMemberEntity>> baseEntityCall = getAddCookieApiService().getMessageList(map);
+        getNetData(isLoad, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ChatMemberEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<ChatMemberEntity> entity) {
+                super.onSuccess(entity);
+                ChatMemberEntity chatMemberEntity = entity.data;
+                List<ChatMemberEntity.ChatMember> members = chatMemberEntity.list;
+                iView.getMessageList(members);
             }
 
             @Override

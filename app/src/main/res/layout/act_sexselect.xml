@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_login_back"
+        app:iv_control_adapter="true"
+        app:iv_control_height="31"
+        app:iv_control_width="31"
+        app:iv_margin_left="30" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_sex_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/miv_close"
+        android:layout_centerHorizontal="true"
+        android:text="选择性别"
+        android:textColor="@color/new_text"
+        android:textSize="29sp" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mbt_next"
+        android:layout_below="@+id/mtv_sex_select"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!--男-->
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_man"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/img_nan"
+                app:iv_control_adapter="true"
+                app:iv_control_height="198"
+                app:iv_control_width="568" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/mtv_man"
+                android:src="@mipmap/img_kong"
+                app:iv_control_adapter="true"
+                app:iv_control_height="41"
+                app:iv_control_width="41"
+                app:iv_margin_right="20" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="帅哥"
+                android:textColor="#3F3F3F"
+                android:textSize="15sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_right="185" />
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+        <!--女-->
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_woman"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/img_nv"
+                app:iv_control_adapter="true"
+                app:iv_control_height="198"
+                app:iv_control_width="568" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/mtv_woman"
+                android:src="@mipmap/img_kong"
+                app:iv_control_adapter="true"
+                app:iv_control_height="41"
+                app:iv_control_width="41"
+                app:iv_margin_right="20" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="美女"
+                android:textColor="#3F3F3F"
+                android:textSize="15sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_right="185" />
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+        <!--其他-->
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/img_mimi"
+                app:iv_control_adapter="true"
+                app:iv_control_height="198"
+                app:iv_control_width="568" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/mtv_private"
+                android:src="@mipmap/img_kong"
+                app:iv_control_adapter="true"
+                app:iv_control_height="41"
+                app:iv_control_width="41"
+                app:iv_margin_right="20" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="秘密"
+                android:textColor="#3F3F3F"
+                android:textSize="15sp"
+                app:tv_control_adapter="true"
+                app:tv_margin_right="185" />
+
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+    </com.shunlian.app.widget.MyLinearLayout>
+
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbt_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner_white_8px"
+        android:gravity="center"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:bt_control_adapter="true"
+        app:bt_control_height="90"
+        app:bt_margin_bottom="40"
+        app:bt_margin_left="35"
+        app:bt_margin_right="35" />
+</RelativeLayout>

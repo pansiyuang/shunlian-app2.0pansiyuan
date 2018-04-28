@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_man"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="男"
+        android:textColor="@color/new_text"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_woman"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="女"
+        android:textColor="@color/new_text"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_private"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="秘密"
+        android:textColor="@color/new_text"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="@color/share_text"
+        android:textSize="16sp" />
+
+</LinearLayout>
