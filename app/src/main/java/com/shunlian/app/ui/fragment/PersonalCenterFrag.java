@@ -470,11 +470,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).number);
             GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
         }
-        if (personalcenterEntity.sl_user_ranks.get(2) != null) {
-            mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
-            mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).number);
-            GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
-        }
+//        if (personalcenterEntity.sl_user_ranks.get(2) != null) {
+//            mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
+//            mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).number);
+//            GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
+//        }
     }
 
     @Override

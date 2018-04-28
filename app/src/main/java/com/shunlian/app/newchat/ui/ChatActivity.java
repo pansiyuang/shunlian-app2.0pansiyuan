@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,8 +108,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private ObjectMapper mObjectMapper;
     private ChatMessageAdapter mAdapter;
     private String currentUserId;  //用户ID
+    private String chat_m_user_Id; //管理员的id;
     private String currentRoleType;  //用户ID
-    private String chatUserId; //聊天对象ID
     private String chatRoleType; //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
     private String chatName;
     private String chatShopId;
@@ -217,19 +219,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         mObjectMapper = new ObjectMapper();
 
         if (currentChatMember != null) {
-            if (!isEmpty(currentChatMember.m_user_id)) {
-                chatUserId = currentChatMember.m_user_id;
-            } else {
-                chatUserId = currentChatMember.user_id;
-            }
+            chat_m_user_Id = currentChatMember.m_user_id;
             chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
 //
-//            chatUserId = "31";
+//            chatUserId = "40";
 //            chatShopId = "26";
-//            chatRoleType = "3";
+//            chatRoleType = "1";
         } else {
-            chatUserId = getIntent().getStringExtra("user_id");
             chatRoleType = getIntent().getStringExtra("role_type");
         }
 
@@ -254,7 +251,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         }
         //获取历史消息
         getChatHistory(isFirst);
-        readedMsg(chatUserId);
+        readedMsg(chat_m_user_Id);
     }
 
     private void initRightTxt() {
@@ -285,9 +282,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         switch (chatRoleType) {
             case "0":
                 if (mClient.getMemberStatus() == MemberStatus.Seller) {
-                    mPresenter.shopChatUserHistoryData(b, chatUserId, mCurrentUser.user_id, lastMessageSendTime);
+                    mPresenter.shopChatUserHistoryData(b, chat_m_user_Id, mCurrentUser.user_id, lastMessageSendTime);
                 } else if (mClient.getMemberStatus() == MemberStatus.Admin) {
-                    mPresenter.platformChatUserHistoryData(b, chatUserId, mCurrentUser.user_id, lastMessageSendTime);
+                    mPresenter.platformChatUserHistoryData(b, chat_m_user_Id, mCurrentUser.user_id, lastMessageSendTime);
                 }
                 break;
             case "1":
@@ -313,10 +310,10 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     public void switch2Jump() {
         switch (mClient.getMemberStatus()) {
             case Admin: //
-                SwitchOtherActivity.startAct(this, currentUserId, chatUserId);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id);
                 break;
             case Seller:
-                SwitchOtherActivity.startAct(this, currentUserId, chatUserId);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id);
                 break;
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
@@ -434,7 +431,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         textMessage.from_type = from_type;
         textMessage.from_nickname = from_nickname;
         textMessage.from_headurl = from_headurl;
-        textMessage.to_user_id = chatUserId;
+        textMessage.to_user_id = chat_m_user_Id;
         textMessage.to_type = chatRoleType;
         textMessage.to_shop_id = chatShopId;
         textMessage.msg_type = "text";
@@ -469,7 +466,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         imageMessage.from_type = from_type;
         imageMessage.from_nickname = from_nickname;
         imageMessage.from_headurl = from_headurl;
-        imageMessage.to_user_id = chatUserId;
+        imageMessage.to_user_id = chat_m_user_Id;
         imageMessage.to_type = chatRoleType;
         imageMessage.to_shop_id = chatShopId;
         imageMessage.msg_type = "image";
@@ -523,7 +520,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         goodsMessage.from_type = from_type;
         goodsMessage.from_nickname = from_nickname;
         goodsMessage.from_headurl = from_headurl;
-        goodsMessage.to_user_id = chatUserId;
+        goodsMessage.to_user_id = chat_m_user_Id;
         goodsMessage.to_type = chatRoleType;
         goodsMessage.to_shop_id = chatShopId;
         goodsMessage.msg_type = "goods";
@@ -563,7 +560,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         goodsMessage.from_type = from_type;
         goodsMessage.from_nickname = from_nickname;
         goodsMessage.from_headurl = from_headurl;
-        goodsMessage.to_user_id = chatUserId;
+        goodsMessage.to_user_id = chat_m_user_Id;
         goodsMessage.to_type = chatRoleType;
         goodsMessage.to_shop_id = chatShopId;
         goodsMessage.msg_type = "goods";
@@ -603,7 +600,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         evaluateMessage.from_type = from_type;
         evaluateMessage.from_nickname = from_nickname;
         evaluateMessage.from_headurl = from_headurl;
-        evaluateMessage.to_user_id = chatUserId;
+        evaluateMessage.to_user_id = chat_m_user_Id;
         evaluateMessage.to_shop_id = chatShopId;
         evaluateMessage.to_type = currentChatMember.type;
         evaluateMessage.msg_type = "evaluate";
@@ -672,7 +669,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         orderMessage.from_type = from_type;
         orderMessage.from_nickname = from_nickname;
         orderMessage.from_headurl = from_headurl;
-        orderMessage.to_user_id = chatUserId;
+        orderMessage.to_user_id = chat_m_user_Id;
         orderMessage.to_type = chatRoleType;
         orderMessage.to_shop_id = chatShopId;
         orderMessage.msg_type = "order";
@@ -982,7 +979,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             upDataChatMemberInfo(baseMessage);//更新聊天对象的信息
 
             if (baseMessage.getSendType() == BaseMessage.VALUE_LEFT) {
-                if (baseMessage.from_user_id.equals(chatUserId)) {
+                if (msgInfo.m_user_id.equals(chat_m_user_Id)) {
                     mAdapter.addMsgInfo(msgInfo);
                 }
             } else if (baseMessage.getSendType() == BaseMessage.VALUE_RIGHT) {
@@ -999,7 +996,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             } else if (baseMessage.getSendType() == BaseMessage.VALUE_SYSTEM) {
                 mAdapter.addMsgInfo(msgInfo);
             }
-            recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+            runOnUiThread(() -> {
+                recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

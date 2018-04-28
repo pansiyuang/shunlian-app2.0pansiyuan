@@ -36,6 +36,7 @@ public class BaseMessage {
     public String id;
     public String sid;
     public boolean isFirst;
+    public String m_user_id;
     private int sendType;
     private int uReadNum;
     private int status = MessageStatus.SendSucc;

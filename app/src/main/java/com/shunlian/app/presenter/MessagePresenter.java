@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
@@ -91,4 +92,23 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
         });
     }
 
+    public void deleteMessage(String chatUserId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("m_user_id", chatUserId);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().deleteMessage(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.delSuccess(entity.message);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
 }

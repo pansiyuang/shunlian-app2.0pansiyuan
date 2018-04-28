@@ -65,7 +65,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     protected void initData() {
         mPresenter = new MessagePresenter(getActivity(), this);
         mPresenter.getSystemMessage();
-        mPresenter.getMessageList(true, "","");
+        mPresenter.getMessageList(true, "", "");
         msgs = new ArrayList<>();
         memberList = new ArrayList<>();
 
@@ -134,6 +134,11 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
             memberList.addAll(members);
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void delSuccess(String msg) {
+
     }
 
     public void updateFriendList(String message) {
@@ -215,6 +220,11 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         } else {
             CustomerListActivity.startAct(getActivity());
         }
+    }
+
+    @Override
+    public void OnMessageDel(String userId) {
+        mPresenter.deleteMessage(userId);
     }
 
     @Override

@@ -1067,7 +1067,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             try {
                 is = am.open(String.format("emojis/%d.png", position));
                 // 压缩表情图片
-                int size = TransformUtil.dip2px(context, 28);
+                int size = TransformUtil.dip2px(context, 34);
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
                 Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
                 int end = start + value.length();

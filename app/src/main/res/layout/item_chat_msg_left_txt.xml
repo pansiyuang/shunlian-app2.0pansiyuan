@@ -28,6 +28,6 @@
             android:gravity="center"
             android:maxWidth="260dp"
             android:textColor="@color/new_text"
-            android:textSize="14dp" />
+            android:textSize="17dp" />
     </RelativeLayout>
 </LinearLayout>

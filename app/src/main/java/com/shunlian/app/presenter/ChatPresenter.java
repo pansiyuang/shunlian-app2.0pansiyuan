@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
@@ -137,7 +138,7 @@ public class ChatPresenter extends BasePresenter<IChatView> {
         });
     }
 
-    public void shopChatUserHistoryData(boolean isLoad, String chatId, String mUserId,  String sendTime) {
+    public void shopChatUserHistoryData(boolean isLoad, String chatId, String mUserId, String sendTime) {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", chatId);
         map.put("m_user_id", mUserId);

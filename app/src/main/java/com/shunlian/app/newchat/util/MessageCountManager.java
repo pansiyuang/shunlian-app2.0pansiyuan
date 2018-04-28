@@ -7,11 +7,13 @@ import com.shunlian.app.presenter.AllMessageCountPresenter;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageCountView;
 
+import java.util.Observable;
+
 /**
  * Created by Administrator on 2018/4/9.
  */
 
-public class MessageCountManager implements IMessageCountView {
+public class MessageCountManager extends Observable implements IMessageCountView {
     private static MessageCountManager manager;
     private AllMessageCountPresenter mPresenter;
     private static Context mContext;
@@ -22,7 +24,11 @@ public class MessageCountManager implements IMessageCountView {
     public static MessageCountManager getInstance(Context context) {
         mContext = context;
         if (manager == null) {
-            manager = new MessageCountManager();
+            synchronized (MessageCountManager.class) {
+                if (manager == null) {
+                    manager = new MessageCountManager();
+                }
+            }
         }
         return manager;
     }
@@ -35,7 +41,7 @@ public class MessageCountManager implements IMessageCountView {
         mPresenter.messageAllCount();
     }
 
-    public void upDateMessageCount(){
+    public void upDateMessageCount() {
         mPresenter.messageAllCount();
     }
 

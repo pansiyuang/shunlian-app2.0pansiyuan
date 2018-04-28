@@ -1903,7 +1903,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("chat/message/delete")
-    Call<BaseEntity<ServiceEntity>> deleteMessage(@QueryMap Map<String, String> map);
+    @POST("chat/message/delete")
+    Call<BaseEntity<CommonEntity>> deleteMessage(@Body RequestBody body);
 
 }
