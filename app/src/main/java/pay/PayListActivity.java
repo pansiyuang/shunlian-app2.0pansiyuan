@@ -72,6 +72,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String shop_goods;
     private String addressId;
     private String currentPayType;//当前支付方式
+    private String pay_sn;
 
     public static void startAct(Activity activity, String shop_goods, String addressId,String order_id,String price){
         PayListActivity.activity = activity;
@@ -137,7 +138,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             activity.finish();
         }
         Common.staticToast(getStringResouce(R.string.pay_success));
-        PaySuccessAct.startAct(this, order_id,price);
+        PaySuccessAct.startAct(this, order_id,price,pay_sn);
     }
 
     /**
@@ -268,6 +269,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void payOrder(PayOrderEntity entity) {
         this.order_id = entity.order_id;
+        pay_sn = entity.pay_sn;
         switch (currentPayType){
             case "alipay":
                 alipay(entity.alipay);

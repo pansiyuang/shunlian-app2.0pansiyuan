@@ -96,6 +96,7 @@ import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.bean.PersonalDataEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.bean.RankingListEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
@@ -129,7 +130,6 @@ import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
-import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.ServiceEntity;
 
 import java.util.List;
@@ -2013,5 +2013,21 @@ public interface ApiService {
      */
     @GET("top/weekSaleTop")
     Call<BaseEntity<WeekSaleTopEntity>> weekSaleTop(@QueryMap Map<String, String> map);
+
+    /**
+     * 猜你喜欢
+     * @return
+     */
+    @GET("order/payresult")
+    Call<BaseEntity<ProbablyLikeEntity>> probablyLike(@QueryMap Map<String, String> map);
+
+    /**
+     * 猜你喜欢
+     * @param body
+     * @return
+     */
+    @POST("goods/mayBeBuy")
+    Call<BaseEntity<ProbablyLikeEntity>> mayBeBuy(@Body RequestBody body);
+
 
 }

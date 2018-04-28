@@ -85,7 +85,7 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
     @OnClick(R.id.mrlayout_toolbar_more)
     public void more(){
         visible(quick_actions);
-        quick_actions.setShowItem(1,4,5);
+        quick_actions.message();
     }
 
     /**
@@ -115,9 +115,9 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (quick_actions != null){
             quick_actions.destoryQuickActions();
         }
+        super.onDestroy();
     }
 }

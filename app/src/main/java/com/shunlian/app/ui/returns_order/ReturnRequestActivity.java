@@ -25,8 +25,10 @@ import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
 
 import java.io.File;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -44,9 +47,6 @@ import static com.shunlian.app.adapter.SingleImgAdapter.REQUEST_CAMERA_CODE;
  */
 
 public class ReturnRequestActivity extends BaseActivity implements CustomerGoodsView.IChangeCountListener, ReturnGoodsDialog.ISelectListener, View.OnClickListener, IReturnRequestView {
-
-    @BindView(R.id.tv_title)
-    TextView tv_title;
 
     @BindView(R.id.customer_goods)
     CustomerGoodsView customer_goods;
@@ -83,6 +83,12 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @BindView(R.id.tv_return_type)
     TextView tv_return_type;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
 
     /**
      * 输入框小数的位数
@@ -146,13 +152,19 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         presenter = new ReturnRequestPresenter(this, this);
     }
 
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        visible(quick_actions);
+        quick_actions.afterSale();
+    }
+
     public void initViews(String type) {
         goodsDialog = new ReturnGoodsDialog(this);
         goodsDialog.setRefundReason(currentInfoEntity.reason, currentReasonId);
         goodsDialog.setSelectListener(this);
         switch (type) {
             case "1": //仅退款
-                tv_title.setText(getStringResouce(R.string.return_request));
+                mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
                 customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
@@ -161,7 +173,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 setMaxPrice(customer_goods.getCurrentCount());
                 break;
             case "3": //退货换货
-                tv_title.setText(getStringResouce(R.string.return_request));
+                mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
                 customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
@@ -170,7 +182,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 setMaxPrice(customer_goods.getCurrentCount());
                 break;
             case "4": //换货
-                tv_title.setText(getStringResouce(R.string.change_request));
+                mtv_toolbar_title.setText(getStringResouce(R.string.change_request));
                 customer_goods.setLabelName(getStringResouce(R.string.change_goods), false);
                 rl_return_money.setVisibility(View.GONE);
                 tv_request.setText(getStringResouce(R.string.return_instruction));
@@ -411,4 +423,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 }

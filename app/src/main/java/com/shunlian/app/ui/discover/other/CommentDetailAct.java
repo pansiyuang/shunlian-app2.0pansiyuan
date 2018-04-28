@@ -15,6 +15,7 @@ import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFindCommentDetailView;
@@ -31,6 +32,9 @@ import butterknife.OnClick;
 
 public class CommentDetailAct extends BaseActivity implements IFindCommentDetailView{
 
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
+
     @BindView(R.id.met_text)
     MyEditText met_text;
 
@@ -46,8 +50,9 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
-    @BindView(R.id.mtv_title)
-    MyTextView mtv_title;
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
 
@@ -101,7 +106,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 .keyboardEnable(true)
                 .init();
 
-        mtv_title.setText(getStringResouce(R.string.comment_details));
+        mtv_toolbar_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
         gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
 
@@ -112,6 +117,12 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         String experience_id = getIntent().getStringExtra("experience_id");
         presenter = new FindCommentDetailPresenter(this,this,experience_id,comment_id);
 
+    }
+
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.findCommentList();
     }
 
     @Override
@@ -221,6 +232,8 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();

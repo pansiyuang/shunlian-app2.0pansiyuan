@@ -963,6 +963,23 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_pic;
         public PicListHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener((v)->{
+                String text = null;
+                String s = null;
+                GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
+                if (detail != null){
+                    text = detail.text;
+                }
+
+                BigImgEntity entity = new BigImgEntity();
+                entity.itemList = (ArrayList<String>) lists;
+                if (TextUtils.isEmpty(text)){
+                    entity.index = getAdapterPosition() - ITEM_DIFFERENT + 1;
+                }else {
+                    entity.index= getAdapterPosition() - ITEM_DIFFERENT;
+                }
+                LookBigImgAct.startAct(context,entity);
+            });
         }
     }
 

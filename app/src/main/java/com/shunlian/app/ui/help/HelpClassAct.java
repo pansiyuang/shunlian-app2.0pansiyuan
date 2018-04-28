@@ -5,23 +5,21 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpClasAdapter;
-import com.shunlian.app.adapter.HelpQCateAdapter;
 import com.shunlian.app.bean.HelpClassEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
-import com.shunlian.app.widget.MarqueeTextView;
-import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -40,6 +38,12 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
 
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mrlayout_news)
+    MyRelativeLayout mrlayout_news;
 
     private PHelpTwo pHelpTwo;
     private HelpClasAdapter helpClasAdapter;
@@ -64,6 +68,10 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
             case R.id.mllayout_dianhua:
 
                 break;
+            case R.id.mrlayout_news:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.help();
+                break;
             case R.id.mllayout_kefu:
 
                 break;
@@ -74,6 +82,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     protected void initListener() {
         super.initListener();
         mllayout_kefu.setOnClickListener(this);
+        mrlayout_news.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -144,7 +153,10 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
 
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 }

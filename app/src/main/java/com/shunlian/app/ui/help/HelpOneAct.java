@@ -20,6 +20,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -53,6 +54,8 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.mrlayout_news)
     MyRelativeLayout mrlayout_news;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private PHelpOne pHelpOne;
     private PromptDialog promptDialog;
@@ -82,6 +85,8 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
                 }
                 break;
             case R.id.mrlayout_news:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.help();
                 break;
             case R.id.miv_search:
                 SearchQuestionAct.startAct(this);
@@ -178,4 +183,10 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         Constant.HELP_PHONE = phoneNum;
     }
 
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 }

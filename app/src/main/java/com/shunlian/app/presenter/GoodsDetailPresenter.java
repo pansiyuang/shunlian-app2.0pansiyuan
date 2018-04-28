@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.ProbablyLikeAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.CommentListEntity;
@@ -11,6 +12,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -42,6 +44,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         super(context, iView);
         this.goods_id = goods_id;
         initApi();
+        mayBeBuy();
     }
 
     @Override
@@ -376,5 +379,33 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         .getString(R.string.day_cancel_remind),R.mipmap.icon_common_tanhao);
             }
         });
+    }
+
+    public void mayBeBuy(){
+        Map<String,String> map = new HashMap<>();
+        map.put("from","goods");
+        map.put("ref_id",goods_id);
+        sortAndMD5(map);
+        Call<BaseEntity<ProbablyLikeEntity>> baseEntityCall = getApiService()
+                .mayBeBuy(getRequestBody(map));
+        getNetData(false,baseEntityCall,new
+                SimpleNetDataCallback<BaseEntity<ProbablyLikeEntity>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<ProbablyLikeEntity> entity) {
+                        super.onSuccess(entity);
+                        if (!isEmpty(entity.data.may_be_buy_list)){
+                            ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
+                                    (context,entity.data.may_be_buy_list);
+                            iView.setAdapter(adapter);
+                            adapter.setOnItemClickListener((v,p)->{
+                                ProbablyLikeEntity.MayBuyList mayBuyList = entity.
+                                        data.may_be_buy_list.get(p);
+                                Common.goGoGo(context,"goods",mayBuyList.id);
+                            });
+                        }else {
+                            iView.showDataEmptyView(100);
+                        }
+                    }
+                });
     }
 }

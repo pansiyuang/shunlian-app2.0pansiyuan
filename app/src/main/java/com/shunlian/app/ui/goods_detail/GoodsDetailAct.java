@@ -11,6 +11,8 @@ import android.graphics.PathMeasure;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -34,7 +37,9 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -141,6 +146,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mtv_off_shelf)
     MyTextView mtv_off_shelf;
 
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
+
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
 
@@ -162,6 +170,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private String favId;
     public int bottomListHeight;
     private int num;
+    private int currentQuickAction;//当前快速点击位置
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -215,6 +224,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             }
         });
 
+        //三个点下拉列表
+        GridLayoutManager manager = new GridLayoutManager(this,2);
+        recy_view.setLayoutManager(manager);
+        recy_view.addItemDecoration(new GridSpacingItemDecoration
+                (TransformUtil.dip2px(this, 5), false));
     }
     public void defToolbar(){
         if (immersionBar == null){
@@ -549,6 +563,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_FB0236));
     }
 
+    /**
+     * 三个点下拉列表
+     *
+     * @param adapter
+     */
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
+    }
+
     /*
    显示足迹列表
     */
@@ -728,6 +752,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             @Override
             public void onAnimationEnd(Animation animation) {
                 sv_mask.setVisibility(View.GONE);
+                quickAction();
             }
 
             @Override
@@ -955,6 +980,56 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void refreshDetail(){
         if (goodsDeatilFrag != null){
             goodsDetailPresenter.refreshDetail();
+        }
+    }
+
+    @OnClick(R.id.mtv_firstPage)
+    public void firstPage(){
+        currentQuickAction = 1;
+        moreHideAnim();
+    }
+
+    @OnClick(R.id.mtv_search)
+    public void search(){
+        currentQuickAction = 2;
+        moreHideAnim();
+    }
+
+    @OnClick(R.id.mtv_message)
+    public void message(){
+        currentQuickAction = 3;
+        moreHideAnim();
+    }
+
+    @OnClick(R.id.mtv_feedback)
+    public void feedback(){
+        currentQuickAction = 4;
+        moreHideAnim();
+    }
+
+    @OnClick(R.id.mtv_help)
+    public void help(){
+        currentQuickAction = 5;
+        moreHideAnim();
+    }
+
+    private void quickAction(){
+        switch (currentQuickAction){
+            case 1:
+                Common.goGoGo(this,"");
+                break;
+            case 2:
+                Common.goGoGo(this,"search");
+                break;
+            case 3:
+                Common.goGoGo(this,"message");
+                break;
+            case 4:
+                Common.goGoGo(this,"feedback",goodsId);
+                break;
+            case 5:
+                Common.goGoGo(this,"help");
+                break;
         }
     }
 }
