@@ -60,7 +60,7 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
         CouponListEntity.VoucherList voucherList = lists.get(position);
         //状态 0是未使用 1已经使用  -2已经过期
         String voucher_type_desc = voucherList.voucher_type_desc;
-        changeState(voucherList.stauts,mHolder,voucher_type_desc);
+        changeState(voucherList.stauts,mHolder,voucher_type_desc,voucherList.expired);
         mHolder.mtv_rule.setText(voucher_type_desc);
 
         mHolder.mtv_price.setText(voucherList.denomination);
@@ -84,8 +84,8 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
 
     }
 
-    private void changeState(String state, CouponListHolder mHolder, String text){
-        //状态 0是未使用 1已经使用  -2已经过期
+    private void changeState(String state, CouponListHolder mHolder, String text, String expired){
+        //状态 0是未使用 1已经使用    expired 是否过期  1为已经过期
         if (isEmpty(text)){
             text = "";
         }
@@ -118,14 +118,25 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
                     mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_di);
                 }
                 break;
-            case "-2":
+        }
+        if ("1".equals(expired)){
+            gone(mHolder.mtv_use_coupon);
+            if (length > 26){
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_gao);
+            }else {
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_di);
+            }
+        }else {
+            if ("0".equals(state))
+                visible(mHolder.mtv_use_coupon);
+            else
                 gone(mHolder.mtv_use_coupon);
-                if (length > 26){
-                    mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_gao);
-                }else {
-                    mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_di);
-                }
-                break;
+
+            if (length > 26){
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_gao);
+            }else {
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_di);
+            }
         }
         mHolder.mtv_rmb.setTextColor(pink_color);
         mHolder.mtv_price.setTextColor(pink_color);
