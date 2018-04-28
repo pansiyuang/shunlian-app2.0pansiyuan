@@ -6,16 +6,12 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -26,9 +22,8 @@ import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
@@ -39,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
@@ -74,6 +70,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @BindView(R.id.view_line)
     View view_line;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private CategoryPresenter presenter;
     private SingleCategoryAdapter singleAdapter;
@@ -160,6 +159,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }
         });
+    }
+
+    @OnClick(R.id.rl_title_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.search();
     }
 
     @Override
@@ -479,6 +484,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
         initFiltrate();
     }

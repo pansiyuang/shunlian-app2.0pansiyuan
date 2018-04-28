@@ -29,10 +29,11 @@
             android:src="@mipmap/img_active_tiantiantehui_title" />
 
         <RelativeLayout
-            android:layout_width="60dp"
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingRight="8dp">
+            android:layout_marginRight="10dp">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_dot"
@@ -68,4 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="55dp"
         android:layout_below="@id/rl_title"/>
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </com.shunlian.app.widget.MyRelativeLayout>
