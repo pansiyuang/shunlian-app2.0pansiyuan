@@ -3,11 +3,9 @@ package com.shunlian.app.ui.fragment.first_page;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import com.shunlian.app.bean.GetMenuEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +22,7 @@ public class MyFrPagerAdapter extends FragmentPagerAdapter {
     }
 
 
+
     @Override
     public CharSequence getPageTitle(int position) {
         return mDatas.get(position).channel_name;
@@ -31,13 +30,9 @@ public class MyFrPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return mDatas.size();
+        return fragments.size();
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        return super.instantiateItem(container, position);
-    }
 
     @Override
     public Fragment getItem(int position) {

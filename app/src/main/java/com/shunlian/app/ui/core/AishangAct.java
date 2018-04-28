@@ -140,6 +140,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             public void onItemClick(View view, int position) {
                 coreNewMenuAdapter.selectedPosition = position;
                 coreNewMenuAdapter.notifyDataSetChanged();
+                cate_id=coreNewEntity.cate_name.get(position).cate_id;
                 if (rv_category.getScrollState() == 0) {
                     pAishang.resetBaby("new",cate_id);
                 }

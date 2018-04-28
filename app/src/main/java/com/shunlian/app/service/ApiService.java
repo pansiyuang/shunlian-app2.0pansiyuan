@@ -116,6 +116,7 @@ import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
 import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.bean.WeekSaleTopEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 
 import java.util.List;
@@ -1716,7 +1717,7 @@ public interface ApiService {
      * @return
      */
     @GET("channel/branddetail")
-    Call<BaseEntity<VouchercenterplEntity>> branddetail(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CorePingEntity>> branddetail(@QueryMap Map<String, String> map);
 
     /**
      * 热销商品分类
@@ -1734,5 +1735,14 @@ public interface ApiService {
      */
     @GET("channel/newGoodsCate")
     Call<BaseEntity<CoreNewsEntity>> newGoodsCate(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 小店销售周排行榜
+     *
+     * @return
+     */
+    @GET("top/weekSaleTop")
+    Call<BaseEntity<WeekSaleTopEntity>> weekSaleTop(@QueryMap Map<String, String> map);
 
 }

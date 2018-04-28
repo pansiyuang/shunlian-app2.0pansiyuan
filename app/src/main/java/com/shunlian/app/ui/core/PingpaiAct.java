@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PinpaiAdapter;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
@@ -42,6 +43,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
 
 
     private PAishang pAishang;
+    private PinpaiAdapter pinpaiAdapter;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, PingpaiAct.class);
@@ -127,7 +129,14 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         }
         rv_list.setNestedScrollingEnabled(false);
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        rv_list.setAdapter(new PinpaiAdapter(getBaseContext(), false, corePingEntity.brand_list));
+        pinpaiAdapter = new PinpaiAdapter(getBaseContext(), false, corePingEntity.brand_list);
+        rv_list.setAdapter(pinpaiAdapter);
+        pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                PingpaiListAct.startAct(getBaseContext(), corePingEntity.brand_list.get(position).id);
+            }
+        });
     }
 
 }

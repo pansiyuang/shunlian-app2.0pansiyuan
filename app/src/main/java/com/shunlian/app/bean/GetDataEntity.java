@@ -17,6 +17,7 @@ public class GetDataEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {
         public String module;
+        public GoodsDeatilEntity.Goods moreGoods;
         public String bg_color;
         public String text_color;
         public String bg_pic;

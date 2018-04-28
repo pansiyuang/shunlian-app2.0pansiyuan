@@ -24,7 +24,7 @@ import java.util.List;
  */
 
 public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body> {
-    private static final int TYPE1 = 1;//商品组件双列
+    private static final int TYPE9 = 9;//商品组件双列
     private static final int TYPE2 = 2;//宝组单列
     private static final int TYPE3 = 3;//标题就传
     private static final int TYPE4 = 4;//图组文本就传
@@ -44,7 +44,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case TYPE1:
+            case TYPE9:
 //                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.block_store_first_one,parent,false);
 //                View itemView = View.inflate(parent.getContext(), R.layout.block_store_first_one, null);
                 return new OneHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_store_first_one, parent, false));
@@ -71,7 +71,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     public int getItemViewType(int position) {
         switch (datas.get(position).block_module_type) {
             case "1":
-                return TYPE1;
+                return TYPE9;
             case "2":
                 return TYPE2;
             case "3":
@@ -101,7 +101,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
-            case TYPE1:
+            case TYPE9:
                 if (holder instanceof OneHolder) {
                     OneHolder oneHolder = (OneHolder) holder;
                     final StoreIndexEntity.Body data=datas.get(position);

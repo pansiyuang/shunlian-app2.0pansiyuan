@@ -10,8 +10,14 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CorePingEntity {
+    public String count;
+    public String page;
+    public String page_size;
+    public String total_page;
     public List<MData> brand_list;
     public List<MData> banner;
+    public MData brand;
+    public List<MData> goods_list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {
@@ -22,6 +28,10 @@ public class CorePingEntity {
         public String img;
         public String id;
         public String bg_img;
+        public String thumb;
+        public String market_price;
+        public String price;
+        public String sales;
         public String title;
         public String slogan;
         public String content;

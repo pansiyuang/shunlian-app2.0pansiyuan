@@ -35,8 +35,8 @@
             android:textColor="@color/share_text"
             android:textSize="11sp" />
 
-        <com.shunlian.app.utils.timer.DDPDownTimerView
-            android:id="@+id/ddp_downTime"
+        <com.shunlian.app.utils.timer.FirstDownTimerView
+            android:id="@+id/downTime_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp" />

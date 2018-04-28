@@ -7,21 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.PinpaiAdapter;
-import com.shunlian.app.bean.CoreHotEntity;
-import com.shunlian.app.bean.CoreNewEntity;
-import com.shunlian.app.bean.CoreNewsEntity;
+import com.shunlian.app.adapter.PingListAdapter;
 import com.shunlian.app.bean.CorePingEntity;
-import com.shunlian.app.bean.HotRdEntity;
-import com.shunlian.app.presenter.PAishang;
+import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.view.IAishang;
+import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.view.IPingList;
+import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.MyKanner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,42 +27,112 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/7.
  */
 
-public class PingpaiListAct extends BaseActivity implements View.OnClickListener, IAishang {
+public class PingpaiListAct extends BaseActivity implements View.OnClickListener, IPingList {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
-    @BindView(R.id.kanner)
-    MyKanner kanner;
+    @BindView(R.id.mtv_desc)
+    MyTextView mtv_desc;
 
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
 
+    @BindView(R.id.view_bg)
+    View view_bg;
 
-    private PAishang pAishang;
+    @BindView(R.id.miv_arrow)
+    MyImageView miv_arrow;
 
-    public static void startAct(Context context) {
+    @BindView(R.id.miv_dot)
+    MyImageView miv_dot;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+    @BindView(R.id.miv_avar)
+    MyImageView miv_avar;
+
+    @BindView(R.id.miv_photo)
+    MyImageView miv_photo;
+
+    @BindView(R.id.msv_out)
+    MyScrollView msv_out;
+
+    private PPingList pPingList;
+    private PingListAdapter pingListAdapter;
+    private boolean isMore=false;
+
+    public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, PingpaiListAct.class);
+        intent.putExtra("id", id);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
     @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.miv_arrow:
+                if (isMore){
+                    miv_arrow.setImageResource(R.mipmap.icon_common_arrowdowns);
+                    mtv_desc.setLines(2);
+                    isMore=false;
+                }else {
+                    isMore=true;
+                    mtv_desc.setLines(3);
+                    miv_arrow.setImageResource(R.mipmap.icon_common_arrowups);
+                }
+                break;
+        }
+    }
+
+    @Override
     protected int getLayoutId() {
-        return R.layout.act_ping_pai;
+        setHideStatus();
+        return R.layout.act_ping_list;
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        miv_arrow.setOnClickListener(this);
+        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+                if (isScrollBottom && pPingList != null) {
+                    pPingList.refreshBaby();
+                }
+                float alpha = ((float) y) / 250;
+                if (y > 250) {
+                    mtv_title.setAlpha(1);
+                    view_bg.setAlpha(1);
+                } else if (y > 150) {
+                    mtv_title.setTextColor(getColorResouce(R.color.new_text));
+                    view_bg.setAlpha(alpha);
+                    mtv_title.setAlpha(alpha);
+                    miv_close.setImageResource(R.mipmap.icon_common_back_black);
+                    miv_dot.setImageResource(R.mipmap.icon_common_more_black);
+                    miv_close.setAlpha(alpha);
+                    miv_dot.setAlpha(alpha);
+                } else if (y > 0) {
+                    mtv_title.setTextColor(getColorResouce(R.color.white));
+                    view_bg.setAlpha(0);
+                    mtv_title.setAlpha(1);
+                    miv_close.setAlpha(1 - alpha);
+                    miv_dot.setAlpha(1 - alpha);
+                    miv_close.setImageResource(R.mipmap.icon_common_back_white);
+                    miv_dot.setImageResource(R.mipmap.icon_common_more_white);
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        mtv_title.setText(getStringResouce(R.string.first_pingpaite));
-        pAishang = new PAishang(this, this);
-        pAishang.getCorePing();
+//        pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
+        pPingList = new PPingList(this, this, "1");
+        pPingList.getApiData();
     }
 
 
@@ -80,53 +147,19 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void setNewData(CoreNewEntity coreNewEntity) {
-
-    }
-
-    @Override
-    public void setHotData(CoreHotEntity coreHotEntity) {
-
-    }
-
-    @Override
-    public void setHotsData(List<CoreHotEntity.Hot.Goods> mData, String page, String total) {
-
-    }
-
-    @Override
-    public void setNewsData(List<CoreNewsEntity.Goods> mData, String page, String total) {
-
-    }
-
-    @Override
-    public void setPushData(List<HotRdEntity.MData> mData, HotRdEntity data) {
-
-    }
-
-    @Override
-    public void setPingData(CorePingEntity corePingEntity) {
-        if (corePingEntity.banner != null && corePingEntity.banner.size() > 0) {
-            kanner.setVisibility(View.VISIBLE);
-            List<String> strings = new ArrayList<>();
-            for (int i = 0; i < corePingEntity.banner.size(); i++) {
-                strings.add(corePingEntity.banner.get(i).img);
-                if (i >= corePingEntity.banner.size() - 1) {
-                    kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-                    kanner.setBanner(strings);
-                    kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Common.goGoGo(getBaseContext(), corePingEntity.banner.get(position).type, corePingEntity.banner.get(position).item_id);
-                        }
-                    });
-                }
-            }
-        } else {
-            kanner.setVisibility(View.GONE);
+    public void setApiData(CorePingEntity corePingEntity, List<CorePingEntity.MData> mDatas) {
+        if (pingListAdapter==null){
+            mtv_title.setText(corePingEntity.brand.title);
+            mtv_desc.setText(corePingEntity.brand.content);
+            GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,corePingEntity.brand.img);
+            GlideUtils.getInstance().loadImage(getBaseContext(),miv_avar,corePingEntity.brand.logo);
+            pingListAdapter=new PingListAdapter(getBaseContext(),mDatas);
+            rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
+            rv_list.setNestedScrollingEnabled(false);
+            rv_list.setAdapter(pingListAdapter);
+        }else {
+            pingListAdapter.notifyDataSetChanged();
         }
-        rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        rv_list.setAdapter(new PinpaiAdapter(getBaseContext(), false, corePingEntity.brand_list));
+        pingListAdapter.setPageLoading(Integer.parseInt(corePingEntity.page),Integer.parseInt(corePingEntity.total_page));
     }
-
 }

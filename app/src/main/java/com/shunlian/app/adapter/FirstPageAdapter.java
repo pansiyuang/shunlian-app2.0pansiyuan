@@ -1,30 +1,33 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.presenter.PFirstAd;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.PingpaiAct;
+import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.view.IFirstAd;
+import com.shunlian.app.utils.timer.FirstDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -41,8 +44,8 @@ import butterknife.BindView;
  * Created by augus on 2017/11/13 0013.
  */
 
-public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> implements IFirstAd{
-    private static final int TYPE1 = 1;//轮播
+public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
+    private static final int TYPE9 = 9;//轮播
     private static final int TYPE2 = 2;//导航
     private static final int TYPE3 = 3;//会场
     private static final int TYPE4 = 4;//核心
@@ -50,21 +53,52 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
     private static final int TYPE6 = 6;//hot2多图
     private static final int TYPE7 = 7;//goods
     private static final int TYPE8 = 8;//cate
+    private static final int TYPE10 = 10;//moreGoods
     public boolean isFirst = false;
-    private EightHolder mEightHolder;
+    private CateGoryFrag cateGoryFrag;
+    private int mergePosition = 0;
 
-    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst) {
+    public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
         this.isFirst = isFirst;
+        this.cateGoryFrag = cateGoryFrag;
+        this.mergePosition = mergePosition;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager) {
+            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (position < mergePosition) {
+                        return manager.getSpanCount();
+                    } else {
+//                        return isBottom(position) ? manager.getSpanCount() : 1;
+                        return 1;
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean isBottom(int position) {
+        if (position + 1 == getItemCount()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case TYPE1:
+            case TYPE9:
 //                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.block_store_first_one,parent,false);
 //                View itemView = View.inflate(parent.getContext(), R.layout.block_store_first_one, null);
-                return new OneHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_page_banner, parent, false));
+                return new NineHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_page_banner, parent, false));
             case TYPE2:
                 return new TwoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_page_nav, parent, false));
             case TYPE3:
@@ -79,6 +113,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                 return new SevenHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_goods, parent, false));
             case TYPE8:
                 return new EightHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.block_first_category, parent, false));
+            case TYPE10:
+                return new TenHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_first_more, parent, false));
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -88,7 +124,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
     public int getItemViewType(int position) {
         switch (lists.get(position).module) {
             case "banner":
-                return TYPE1;
+                return TYPE9;
             case "nav":
                 return TYPE2;
             case "place":
@@ -103,6 +139,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                 return TYPE7;
             case "cate":
                 return TYPE8;
+            case "moreGoods":
+                return TYPE10;
             default:
                 return super.getItemViewType(position);
         }
@@ -118,18 +156,18 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
-            case TYPE1:
-                if (holder instanceof OneHolder) {
-                    OneHolder oneHolder = (OneHolder) holder;
+            case TYPE9:
+                if (holder instanceof NineHolder) {
+                    NineHolder nineHolder = (NineHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
                     if (data.datass != null && data.datass.size() > 0) {
                         List<String> strings = new ArrayList<>();
                         for (int i = 0; i < data.datass.size(); i++) {
                             strings.add(data.datass.get(i).thumb);
                             if (i >= data.datass.size() - 1) {
-                                oneHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-                                oneHolder.kanner.setBanner(strings);
-                                oneHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                                nineHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                                nineHolder.kanner.setBanner(strings);
+                                nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                     @Override
                                     public void onItemClick(int position) {
                                         Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id);
@@ -152,11 +190,14 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     twoHolder.mtv_nav2.setText(data.datass.get(1).title);
                     twoHolder.mtv_nav3.setText(data.datass.get(2).title);
                     twoHolder.mtv_nav4.setText(data.datass.get(3).title);
-//                    twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
-//                    twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
-//                    twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
-//                    twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
-//                    twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
+                    if (Common.isColor(data.text_color)) {
+                        twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
+                        twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
+                        twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
+                        twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
+                    }
+                    if (Common.isColor(data.bg_color))
+                        twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
                     twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -188,7 +229,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                 if (holder instanceof ThreeHolder) {
                     ThreeHolder threeHolder = (ThreeHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-//                    threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    if (Common.isColor(data.bg_color))
+                        threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
                     switch (data.number) {
                         case "1":
                             threeHolder.miv_one.setVisibility(View.VISIBLE);
@@ -323,24 +365,42 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                 if (holder instanceof FourHolder) {
                     FourHolder fourHolder = (FourHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-                    if (!TextUtils.isEmpty(data.bg_color))
-//                        fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
-                        GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_one,
-                                data.ttth.thumb);
+                    if (Common.isColor(data.bg_color))
+                        fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_one,
+                            data.ttth.thumb);
                     GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_two,
                             data.pptm.thumb);
                     GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_three,
                             data.asxp.thumb);
                     GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_four,
                             data.kbrx.thumb);
-//                    fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
-//                    fourHolder.mtv_one2.setTextColor(Color.parseColor(data.ttth.c_color));
-//                    fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.t_color));
-//                    fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.c_color));
-//                    fourHolder.mtv_three1.setTextColor(Color.parseColor(data.asxp.t_color));
-//                    fourHolder.mtv_three2.setTextColor(Color.parseColor(data.asxp.c_color));
-//                    fourHolder.mtv_four1.setTextColor(Color.parseColor(data.kbrx.t_color));
-//                    fourHolder.mtv_four2.setTextColor(Color.parseColor(data.kbrx.c_color));
+                    fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down));
+                    fourHolder.downTime_first.setDownTimerListener(new OnCountDownTimerListener() {
+                        @Override
+                        public void onFinish() {
+                            fourHolder.downTime_first.cancelDownTimer();
+                        }
+
+                    });
+                    fourHolder.downTime_first.startDownTimer();
+                    if (Common.isColor(data.ttth.t_color)) {
+                        fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
+                    }
+                    if (Common.isColor(data.ttth.c_color))
+                        fourHolder.mtv_one2.setTextColor(Color.parseColor(data.ttth.c_color));
+                    if (Common.isColor(data.pptm.t_color))
+                        fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.t_color));
+                    if (Common.isColor(data.pptm.c_color))
+                        fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.c_color));
+                    if (Common.isColor(data.asxp.t_color))
+                        fourHolder.mtv_three1.setTextColor(Color.parseColor(data.asxp.t_color));
+                    if (Common.isColor(data.asxp.c_color))
+                        fourHolder.mtv_three2.setTextColor(Color.parseColor(data.asxp.c_color));
+                    if (Common.isColor(data.kbrx.t_color))
+                        fourHolder.mtv_four1.setTextColor(Color.parseColor(data.kbrx.t_color));
+                    if (Common.isColor(data.kbrx.c_color))
+                        fourHolder.mtv_four2.setTextColor(Color.parseColor(data.kbrx.c_color));
                     fourHolder.mtv_one1.setText(data.ttth.title);
                     fourHolder.mtv_two1.setText(data.pptm.title);
                     fourHolder.mtv_three1.setText(data.asxp.title);
@@ -415,8 +475,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                             Common.goGoGo(context, data.url.type, data.url.item_id);
                         }
                     });
-                    if (sixHolder.firstHorizonAdapter==null){
-                        sixHolder.firstHorizonAdapter=new FirstHorizonAdapter(context, false, data.datass, false);
+                    if (sixHolder.firstHorizonAdapter == null) {
+                        sixHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, false);
                         sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                         sixHolder.rv_goods.setAdapter(new FirstHorizonAdapter(context, false, data.datass, false));
                         sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
@@ -428,49 +488,32 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                 if (holder instanceof SevenHolder) {
                     SevenHolder sevenHolder = (SevenHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-                    if (sevenHolder.firstHorizonAdapter==null){
-                        sevenHolder.firstHorizonAdapter=new FirstHorizonAdapter(context, false, data.datass, true);
+                    if (sevenHolder.firstHorizonAdapter == null) {
+                        sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
                         sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                         sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
                         sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                     }
                     sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
-                 }
+                }
                 break;
             case TYPE8:
                 if (holder instanceof EightHolder) {
                     EightHolder eightHolder = (EightHolder) holder;
-                    mEightHolder= (EightHolder) holder;
                     List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
                     if (eightHolder.firstCategoryMenuAdapter == null) {
+                        cateGoryFrag.cate_id = data.get(0).id;
+                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
                         eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
                         if (isFirst)
                             eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-//                        eightHolder.cate_id=data.get(0).id;
-//                        eightHolder.pFirstAd=new PFirstAd(context,this);
-//                        eightHolder.pFirstAd.resetBaby(eightHolder.cate_id);
-//                        eightHolder.rv_category.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                            @Override
-//                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                                if (eightHolder != null) {
-//                                    int lastPosition = eightHolder.gridLayoutManager.findLastVisibleItemPosition();
-//                                    if (lastPosition + 1 == eightHolder.gridLayoutManager.getItemCount()) {
-//                                        if (eightHolder.pFirstAd != null) {
-//                                            eightHolder.pFirstAd.refreshBaby(eightHolder.cate_id);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        });
                         eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
                                 eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
                                 eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                                eightHolder.cate_id=data.get(position).id;
-                                if (eightHolder.rv_category.getScrollState() == 0) {
-                                    eightHolder.pFirstAd.resetBaby(eightHolder.cate_id);
-                                }
+
+                                cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
                             }
                         });
                         eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
@@ -486,40 +529,94 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
                     }
                 }
                 break;
+            case TYPE10:
+                if (holder instanceof TenHolder) {
+                    TenHolder tenHolder = (TenHolder) holder;
+                    GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
+                    GlideUtils.getInstance().loadImage(context, tenHolder.miv_photo, goods.thumb);
+                    tenHolder.mtv_title.setText(goods.title);
+                    SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
+                    tenHolder.mtv_price.setText(spannableStringBuilder);
+
+                    tenHolder.mllayout_tag.removeAllViews();
+
+                    if ("1".equals(goods.is_new)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.is_hot)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.is_explosion)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.is_recommend)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.has_coupon)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.has_discount)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                    }
+
+                    if ("1".equals(goods.has_gift)) {
+                        tenHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                    }
+
+                }
+                break;
         }
     }
 
-    @Override
-    public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        if (mEightHolder.firstMoreAdapter==null){
-//            mEightHolder.firstMoreAdapter=new FirstMoreAdapter(context,mData);
-            mEightHolder.gridLayoutManager=new GridLayoutManager(context,2);
-            mEightHolder.rv_category.setLayoutManager(mEightHolder.gridLayoutManager);
-            mEightHolder.rv_category.setAdapter(mEightHolder.firstMoreAdapter);
-            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(context, 5), false);
-            mEightHolder.rv_category.addItemDecoration(gridSpacingItemDecoration);
-        }else {
-            mEightHolder.firstMoreAdapter.notifyDataSetChanged();
+    public TextView creatTextTag(String content, int colorRes, Drawable drawable, TenHolder tenHolder) {
+        TextView textView = new TextView(context);
+        textView.setText(content);
+        textView.setTextSize(9);
+        textView.setBackgroundDrawable(drawable);
+        textView.setTextColor(colorRes);
+        int padding = TransformUtil.dip2px(context, 3f);
+        textView.setPadding(padding, 0, padding, 0);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        if (tenHolder.mllayout_tag.getChildCount() == 0) {
+            params.setMargins(0, 0, 0, 0);
+        } else {
+            params.setMargins(TransformUtil.dip2px(context, 5.5f), 0, 0, 0);
         }
-        mEightHolder.firstMoreAdapter.setPageLoading(page, allPage);
-    }
-
-    @Override
-    public void showFailureView(int request_code) {
-
-    }
-
-    @Override
-    public void showDataEmptyView(int request_code) {
-
+        textView.setLayoutParams(params);
+        return textView;
     }
 
 
-    class OneHolder extends BaseRecyclerViewHolder {
+    class NineHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.kanner)
         MyKanner kanner;
 
-        OneHolder(View itemView) {
+        NineHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    class TenHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.miv_photo)
+        MyImageView miv_photo;
+
+        @BindView(R.id.mtv_title)
+        MyTextView mtv_title;
+
+        @BindView(R.id.mllayout_tag)
+        MyLinearLayout mllayout_tag;
+
+        @BindView(R.id.mtv_price)
+        MyTextView mtv_price;
+
+        TenHolder(View itemView) {
             super(itemView);
         }
     }
@@ -640,6 +737,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         MyTextView mtv_four1;
         @BindView(R.id.mtv_four2)
         MyTextView mtv_four2;
+        @BindView(R.id.downTime_first)
+        FirstDownTimerView downTime_first;
 
         FourHolder(View itemView) {
             super(itemView);
@@ -673,6 +772,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
         private FirstHorizonAdapter firstHorizonAdapter;
+
         SixHolder(View itemView) {
             super(itemView);
         }
@@ -682,6 +782,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
         private FirstHorizonAdapter firstHorizonAdapter;
+
         SevenHolder(View itemView) {
             super(itemView);
         }
@@ -692,13 +793,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> i
         MyTextView mtv_meiri;
         @BindView(R.id.rv_categoryMenu)
         RecyclerView rv_categoryMenu;
-        @BindView(R.id.rv_category)
-        RecyclerView rv_category;
         private FirstCategoryMenuAdapter firstCategoryMenuAdapter;
-        private PFirstAd pFirstAd;
-        private String cate_id;
-        private FirstMoreAdapter firstMoreAdapter;
-        private GridLayoutManager gridLayoutManager;
 
         EightHolder(View itemView) {
             super(itemView);

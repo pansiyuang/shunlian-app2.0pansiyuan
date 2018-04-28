@@ -80,7 +80,7 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new SingleViewHolder(mInflater.inflate(R.layout.item_first_more, parent, false));
+        return new SingleViewHolder(mInflater.inflate(R.layout.item_aishang_more, parent, false));
     }
 
     @Override

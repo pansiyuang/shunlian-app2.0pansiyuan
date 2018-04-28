@@ -79,6 +79,15 @@ public class Common {
     private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
 
+    public static boolean isColor(String value) {
+        if (TextUtils.isEmpty(value))
+            return false;
+        String type = "^#[0-9a-fA-F]{6}$";
+        Pattern pattern = Pattern.compile(type);
+        Matcher matcher = pattern.matcher(value);
+        return matcher.matches();
+    }
+
     /**
      * 判断mainactivity是否处于栈底
      *
@@ -133,7 +142,7 @@ public class Common {
                 }
                 break;
             case "hotpush":
-                HotRecommendAct.startAct(context,params[0]);
+                HotRecommendAct.startAct(context, params[0]);
                 break;
             default:
                 MainActivity.startAct(context, "");
@@ -532,26 +541,27 @@ public class Common {
      * @param changeStr 需要改变大小的字符串
      * @return
      */
-    public static SpannableStringBuilder changeColors(String source,  @ColorInt int color,String... changeStr) {
+    public static SpannableStringBuilder changeColors(String source, @ColorInt int color, String... changeStr) {
 //        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
         if (ssb == null)
             ssb = new SpannableStringBuilder();
         ssb.clear();
         ssb.append(source);
-        for (int i=0;i<changeStr.length;i++){
+        for (int i = 0; i < changeStr.length; i++) {
             int m = source.indexOf(changeStr[i]);
             if (m == -1) {
                 return ssb;
             } else {
                 //        如果要改变字符串中多处字体颜色，setSpan方法中第一个参数必须要每次new一个对象出来才能显示效果
-                ssb.setSpan(new ForegroundColorSpan(color), m+2, m + changeStr[i].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssb.setSpan(new ForegroundColorSpan(color), m + 2, m + changeStr[i].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            if (i>=changeStr.length-1){
+            if (i >= changeStr.length - 1) {
                 return ssb;
             }
         }
         return ssb;
     }
+
     /**
      * 文字加粗
      *

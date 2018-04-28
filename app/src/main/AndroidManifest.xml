@@ -647,6 +647,14 @@
             android:name=".ui.core.SearchCouponAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.core.PingpaiListAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.sale_rank.SaleRankAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

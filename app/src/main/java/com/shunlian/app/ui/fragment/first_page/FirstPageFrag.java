@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.GlideUtils;
@@ -24,6 +24,7 @@ import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,21 +36,19 @@ import butterknife.OnClick;
  */
 
 public class FirstPageFrag extends BaseFragment implements View.OnClickListener, IFirstPage {
+    public static String firstId = "";
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
-
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
-
     @BindView(R.id.tabs)
     PagerSlidingTabStrip tabs;
-
     @BindView(R.id.pager)
     ViewPager pager;
-
     @BindView(R.id.mAppbar)
     AppBarLayout mAppbar;
-
+    @BindView(R.id.mllayout_title)
+    MyLinearLayout mllayout_title;
     private PFirstPage pFirstPage;
 
     @Override
@@ -74,6 +73,38 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         super.initListener();
         mll_message.setOnClickListener(this);
         miv_photo.setOnClickListener(this);
+        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
+                    ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
+                            .statusBarColor(R.color.pink_color)
+                            .statusBarDarkFont(false, 0)
+                            .init();
+                    mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
+                } else {
+                    ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
+                            .statusBarColor(R.color.white)
+                            .statusBarDarkFont(true, 0.2f)
+                            .init();
+                    mllayout_title.setBackgroundColor(getColorResouce(R.color.white));
+                }
+            }
+        });
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int arg0) {
+                mAppbar.setExpanded(true);
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
     }
 
 
@@ -83,7 +114,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
-        pFirstPage = new PFirstPage(getContext(), this);
+        pFirstPage = new PFirstPage(getContext(), this, null);
         pFirstPage.getMenuData();
     }
 
@@ -118,9 +149,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
             if (i >= getMenuEntiy.datas.size() - 1) {
-                pager.setAdapter(new MyFrPagerAdapter(getActivity().getSupportFragmentManager(), getMenuEntiy.datas, fragments));
+                firstId = getMenuEntiy.datas.get(0).id;
+                pager.setAdapter(new MyFrPagerAdapter(getChildFragmentManager(), getMenuEntiy.datas, fragments));
                 tabs.setViewPager(pager);
-//        pager.setCurrentItem(1);
                 setTabsValue();
             }
         }
@@ -128,7 +159,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void setContent(GetDataEntity getDataEntity) {
-        LogUtil.augusLogW("ttt");
+
+    }
+
+    @Override
+    public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
+
     }
 
     @Override

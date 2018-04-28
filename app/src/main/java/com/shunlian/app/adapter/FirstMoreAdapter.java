@@ -2,7 +2,9 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -28,25 +32,33 @@ import butterknife.BindView;
 public class FirstMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
 
     private LayoutInflater mInflater;
-    private SearchGoodsEntity.RefStore mStore;
-    private List<GoodsDeatilEntity.Goods> mGoods;
 
-    public FirstMoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists,
-                            SearchGoodsEntity.RefStore store) {
+    public FirstMoreAdapter(Context context, List<GoodsDeatilEntity.Goods> lists) {
         super(context, true, lists);
         mInflater = LayoutInflater.from(context);
-        this.mGoods = lists;
-        this.mStore = store;
     }
 
-    public void setData(List<GoodsDeatilEntity.Goods> lists) {
-        this.mGoods = lists;
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager){
+            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return isBottom(position) ? manager.getSpanCount() : 1;
+                }
+            });
+        }
     }
 
-    public void setStoreData(SearchGoodsEntity.RefStore store) {
-        this.mStore = store;
+    private boolean isBottom(int position) {
+        if (position + 1 == getItemCount()){
+            return true;
+        }
+        return false;
     }
-
     /**
      * 设置baseFooterHolder  layoutparams
      *
@@ -72,46 +84,41 @@ public class FirstMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Good
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SingleViewHolder) {
-            GoodsDeatilEntity.Goods goods;
-            if (mStore != null) {
-                goods = mGoods.get(position - 1);
-            } else {
-                goods = mGoods.get(position);
-            }
-
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
-            viewHolder.tv_title.setText(goods.title);
-            viewHolder.tv_price.setText(goods.price);
+            GoodsDeatilEntity.Goods goods=lists.get(position);
+            GlideUtils.getInstance().loadImage(context, viewHolder.miv_photo, goods.thumb);
+            viewHolder.mtv_title.setText(goods.title);
+            SpannableStringBuilder spannableStringBuilder=Common.changeTextSize(getString(R.string.common_yuan)+goods.price,getString(R.string.common_yuan),12);
+            viewHolder.mtv_price.setText(spannableStringBuilder);
 
-            viewHolder.ll_tag.removeAllViews();
+            viewHolder.mllayout_tag.removeAllViews();
 
             if ("1".equals(goods.is_new)) {
-                viewHolder.ll_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
             }
 
             if ("1".equals(goods.is_hot)) {
-                viewHolder.ll_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
             }
 
             if ("1".equals(goods.is_explosion)) {
-                viewHolder.ll_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
             }
 
             if ("1".equals(goods.is_recommend)) {
-                viewHolder.ll_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
             }
 
             if ("1".equals(goods.has_coupon)) {
-                viewHolder.ll_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
             }
 
             if ("1".equals(goods.has_discount)) {
-                viewHolder.ll_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
             }
 
             if ("1".equals(goods.has_gift)) {
-                viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                viewHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
             }
 
         }
@@ -131,7 +138,7 @@ public class FirstMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Good
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        if (viewHolder.ll_tag.getChildCount() == 0) {
+        if (viewHolder.mllayout_tag.getChildCount() == 0) {
             params.setMargins(0, 0, 0, 0);
         } else {
             params.setMargins(TransformUtil.dip2px(context, 5.5f), 0, 0, 0);
@@ -143,17 +150,17 @@ public class FirstMoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Good
 
 
     public class SingleViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
-        @BindView(R.id.miv_icon)
-        MyImageView miv_icon;
+        @BindView(R.id.miv_photo)
+        MyImageView miv_photo;
 
-        @BindView(R.id.tv_title)
-        TextView tv_title;
+        @BindView(R.id.mtv_title)
+        MyTextView mtv_title;
 
-        @BindView(R.id.ll_tag)
-        LinearLayout ll_tag;
+        @BindView(R.id.mllayout_tag)
+        MyLinearLayout mllayout_tag;
 
-        @BindView(R.id.tv_price)
-        TextView tv_price;
+        @BindView(R.id.mtv_price)
+        MyTextView mtv_price;
 
         public SingleViewHolder(View itemView) {
             super(itemView);
