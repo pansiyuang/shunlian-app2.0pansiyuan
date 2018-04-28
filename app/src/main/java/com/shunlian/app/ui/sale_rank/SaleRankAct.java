@@ -27,6 +27,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,8 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private PWeekSale pWeekSale;
 
@@ -77,6 +80,8 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        nei_empty.setImageResource(R.mipmap.img_empty_youhuiquan).setText(getString(R.string.first_dianpuyouhui));
+        nei_empty.setButtonText(null);
         mrlayout_news.setVisibility(View.GONE);
         mtv_title.setText(getStringResouce(R.string.personal_benzhouxiaoshou));
         pWeekSale = new PWeekSale(this, this);
@@ -90,12 +95,20 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_list);
     }
 
 
     @Override
     public void setApiData(WeekSaleTopEntity weekSaleTopEntity) {
+        if (weekSaleTopEntity.top_list==null||weekSaleTopEntity.top_list.size()<=0){
+            visible(nei_empty);
+            gone(rv_list);
+        }else {
+            gone(nei_empty);
+            visible(rv_list);
+        }
         mtv_time.setText(weekSaleTopEntity.top_date);
         mtv_times.setText(weekSaleTopEntity.last_update_time);
         rv_list.setAdapter(new SaleRankAdapter(getBaseContext(),weekSaleTopEntity.top_list));

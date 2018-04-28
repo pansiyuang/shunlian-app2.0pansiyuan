@@ -48,6 +48,11 @@ public class PWeekSale extends BasePresenter<IWeekSale> {
                 super.onSuccess(entity);
                 iView.setApiData(entity.data);
             }
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.showDataEmptyView(0);
+            }
         });
     }
 

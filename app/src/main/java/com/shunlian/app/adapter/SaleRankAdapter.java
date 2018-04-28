@@ -70,19 +70,19 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
             switch (goods.plus_role) {
                 case "0":
                     viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_putong);
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_putongs);
                     break;
                 case "1":
                     viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_jinpai);
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_jinpais);
                     break;
                 case "2":
                     viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_zuanshi);
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_zuanshis);
                     break;
                 case "3":
                     viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_huangguan);
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_huangguans);
                     break;
             }
             viewHolder.mtv_desc.setText(goods.sale);
