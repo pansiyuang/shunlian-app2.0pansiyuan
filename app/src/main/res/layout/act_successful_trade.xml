@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_title"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@color/pink_color">
@@ -29,6 +29,7 @@
             android:textSize="18sp" />
 
         <RelativeLayout
+            android:id="@+id/rl_more"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -60,7 +61,9 @@
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_success"
         android:layout_width="match_parent"
+        android:layout_below="@+id/mrlayout_title"
         android:layout_height="wrap_content"
         android:background="@color/pink_color"
         app:rl_control_adapter="true"
@@ -101,14 +104,16 @@
             android:layout_centerVertical="true"/>
     </com.shunlian.app.widget.MyRelativeLayout>
 
-
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_look"
+        android:layout_below="@+id/mrlayout_success"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_look_order"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -125,6 +130,7 @@
             android:background="@color/bg_gray_two" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -138,13 +144,17 @@
     </com.shunlian.app.widget.MyLinearLayout>
 
     <View
+        android:id="@+id/view_line"
+        android:layout_below="@+id/mllayout_look"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/white_ash"/>
     <LinearLayout
+        android:id="@+id/llayout_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="18dp"
+        android:layout_below="@+id/view_line"
         android:paddingBottom="18dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -173,6 +183,15 @@
 
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_below="@+id/llayout_like"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-</LinearLayout>
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

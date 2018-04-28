@@ -76,10 +76,10 @@ public class MyCollectionAct extends BaseActivity {
     private int new_text;
     private int pink_color;
     private Map<String,CollectionFrag> fragments;
-    public final String GOODS_FLAG = "goods_flag";
-    public final String STORE_FLAG = "store_flag";
-    public final String FOOTPRINT_FLAG = "footprint_flag";
-    public final String CONTENT_FLAG = "content_flag";
+    public static final String GOODS_FLAG = "goods_flag";
+    public static final String STORE_FLAG = "store_flag";
+    public static final String FOOTPRINT_FLAG = "footprint_flag";
+    public static final String CONTENT_FLAG = "content_flag";
     private CollectionGoodsFrag collectionGoodsFrag;
     private CollectionStoreFrag collectionStoreFrag;
     private FootprintFrag footprintFrag;
@@ -88,8 +88,10 @@ public class MyCollectionAct extends BaseActivity {
     private boolean isSelectAll = false;//选择全部
     private int color_value_6c;
 
-    public static void startAct(Context context){
-        context.startActivity(new Intent(context,MyCollectionAct.class));
+    public static void startAct(Context context,String flag){
+        Intent intent = new Intent(context, MyCollectionAct.class);
+        intent.putExtra("flag",flag);
+        context.startActivity(intent);
     }
 
 
@@ -109,7 +111,24 @@ public class MyCollectionAct extends BaseActivity {
         color_value_6c = getColorResouce(R.color.color_value_6c);
         fragments = new HashMap<>();
         showSataus(0);
-        goodsFrag();
+        String flag = getIntent().getStringExtra("flag");
+        switch (flag == null ? "" : flag){
+            case GOODS_FLAG:
+                goodsFrag();
+                break;
+            case STORE_FLAG:
+                storeFrag();
+                break;
+            case FOOTPRINT_FLAG:
+                footprintFrag();
+                break;
+            case CONTENT_FLAG:
+                contentFrag();
+                break;
+            default:
+                goodsFrag();
+                break;
+        }
     }
 
     /**

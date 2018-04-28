@@ -51,12 +51,17 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -122,7 +127,7 @@ public class Common {
             case "artdetails":
                 CommentListAct.startAct((Activity) context, params[0]);
                 break;
-            case "myorder":
+            case "myorder"://我的订单
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
                 } else {
@@ -134,6 +139,27 @@ public class Common {
                 break;
             case "shoppingcar"://购物车
                 MainActivity.startAct(context, "shoppingcar");
+                break;
+            case "message"://消息
+                MessageActivity.startAct(context);
+                break;
+            case "feedback"://反馈
+                if (params != null)
+                    BeforeFeedBackAct.startAct(context,params[0]);
+                else
+                    BeforeFeedBackAct.startAct(context,null);
+                break;
+            case "help"://帮助
+                HelpOneAct.startAct(context);
+                break;
+            case "search"://搜索
+                SearchGoodsActivity.startActivityForResult((Activity) context);
+                break;
+            case "collection"://收藏
+                MyCollectionAct.startAct(context,null);
+                break;
+            case "footprint"://足迹
+                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             default://首页
                 MainActivity.startAct(context, "");

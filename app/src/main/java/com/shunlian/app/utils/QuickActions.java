@@ -11,10 +11,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.newchat.ui.MessageActivity;
-import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.help.HelpOneAct;
-import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -116,10 +112,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.mrlayout_message:
-                MessageActivity.startAct(getContext());
+                Common.goGoGo(getContext(),"message");
                 hide();
                 break;
             case R.id.mllayout_firstPage:
@@ -137,18 +132,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 hide();
                 break;
             case R.id.mllayout_feedback:
-                BeforeFeedBackAct.startAct(getContext(),null);
+                Common.goGoGo(getContext(),"feedback");
                 hide();
                 break;
             case R.id.mllayout_help:
-                HelpOneAct.startAct(getContext());
+                Common.goGoGo(getContext(),"help");
                 hide();
                 break;
             case R.id.mllayout_search:
-                SearchGoodsActivity.startActivityForResult((Activity) mContext);
+                Common.goGoGo(getContext(),"search");
                 hide();
-                break;
-            default:
                 break;
         }
     }
@@ -331,6 +324,15 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 订单页
      */
     public void order(){
+        setShowItem(1,2,3,6,7);
+    }
+
+    /**
+     * 支付成功
+     */
+    public void paySuccess(){
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
+        rightMargin = px / 6;
         setShowItem(1,2,3,6,7);
     }
 

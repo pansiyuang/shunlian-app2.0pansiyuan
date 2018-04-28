@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
@@ -67,4 +68,10 @@ public interface IGoodsDetailView extends IView {
      * 专题活动
      */
     void specailAct();
+
+    /**
+     * 三个点下拉列表
+     * @param adapter
+     */
+    void setAdapter(BaseRecyclerAdapter adapter);
 }

@@ -18,8 +18,6 @@ import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
-import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.my_comment.MyCommentAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
@@ -470,11 +468,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).number);
             GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
         }
-        if (personalcenterEntity.sl_user_ranks.get(2) != null) {
-            mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
-            mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).number);
-            GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
-        }
+//        if (personalcenterEntity.sl_user_ranks.get(2) != null) {
+//            mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
+//            mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).number);
+//            GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
+//        }
     }
 
     @Override
@@ -531,16 +529,16 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 RefundAfterSaleAct.startAct(baseContext);
                 break;
             case R.id.mllayout_shangping:
-                MyCollectionAct.startAct(baseContext);
+                MyCollectionAct.startAct(baseContext,MyCollectionAct.GOODS_FLAG);
                 break;
             case R.id.mllayout_dianpu:
-                MyCollectionAct.startAct(baseContext);
+                MyCollectionAct.startAct(baseContext,MyCollectionAct.STORE_FLAG);
                 break;
             case R.id.mllayout_neirong:
-                MyCollectionAct.startAct(baseContext);
+                MyCollectionAct.startAct(baseContext,MyCollectionAct.CONTENT_FLAG);
                 break;
             case R.id.mllayout_zuji:
-                MyCollectionAct.startAct(baseContext);
+                MyCollectionAct.startAct(baseContext,MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             case R.id.miv_shezhi:
                 SettingAct.startAct(baseContext);
