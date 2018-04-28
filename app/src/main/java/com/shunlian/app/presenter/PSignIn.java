@@ -58,11 +58,7 @@ public class PSignIn extends BasePresenter<ISignInView> {
 
     }
     public void refreshBaby() {
-        LogUtil.augusLogW("yxf--"+babyAllPage);
-        LogUtil.augusLogW("yxf--"+babyPage);
-        LogUtil.augusLogW("yxf--"+babyIsLoading);
         if (!babyIsLoading && babyPage <= babyAllPage) {
-            LogUtil.augusLogW("yxf--8958");
             babyIsLoading = true;
             getApiData(babyPage);
         }

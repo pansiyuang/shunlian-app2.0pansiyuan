@@ -12,15 +12,16 @@ import com.shunlian.app.adapter.DiscoverNewAdapter;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.presenter.PDiscoverQuanzi;
 import com.shunlian.app.ui.discover.quanzi.DiscoverTieziAct;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverQuanzi;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.DiscoverKanner;
+import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,7 +31,7 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
     @BindView(R.id.rv_new)
     RecyclerView rv_new;
     @BindView(R.id.kanner)
-    DiscoverKanner kanner;
+    MyKanner kanner;
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
@@ -106,13 +107,26 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                 }
             });
             if (data.banner != null&&data.banner.size()>0) {
-                kanner.setBanners(data.banner,mtv_title);
-                kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                    @Override
-                    public void onItemClick(int position) {
-                        DiscoverTieziAct.startAct(getContext(), data.banner.get(position).id);
+                List<String> strings=new ArrayList<>();
+                for (int i=0;i<data.banner.size();i++){
+                    strings.add(data.banner.get(i).img);
+                    if (i>=data.banner.size()-1){
+                        kanner.layoutRes=R.layout.layout_kanner_rectangle_indicator;
+                        kanner.setBanner(strings);
+                        kanner.onPageChangeCall(new BaseBanner.onPageChanged() {
+                            @Override
+                            public void onPageChange(int position) {
+                                mtv_title.setText(data.banner.get(position).title);
+                            }
+                        });
+                        kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                            @Override
+                            public void onItemClick(int position) {
+                                DiscoverTieziAct.startAct(getContext(), data.banner.get(position).id);
+                            }
+                        });
                     }
-                });
+                }
             }
         } else {
             newAdapter.notifyDataSetChanged();

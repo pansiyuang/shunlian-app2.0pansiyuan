@@ -268,6 +268,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             rv_avar.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getBaseContext(), -12)));
             rv_avar.setAdapter(avarAdapter);
             if (data.inv_info != null && data.inv_info.img != null) {
+                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
                 kanner_tiezi.setBanner(data.inv_info.img);
                 kanner_tiezi.setOnItemClickL(new BaseBanner.OnItemClickL() {
                     @Override

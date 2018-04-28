@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp">
+        <EditText
+            android:id="@+id/edt_goods_search"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_toLeftOf="@+id/tv_search_cancel"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
+            android:drawableLeft="@mipmap/icon_common_search_gray"
+            android:drawablePadding="6.5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/search_goods"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="@color/new_text"
+            android:textColorHint="@color/share_text"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"/>
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/tv_search_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/errcode_cancel"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/value_F7F7F7"/>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</com.shunlian.app.widget.MyLinearLayout>

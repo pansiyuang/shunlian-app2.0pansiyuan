@@ -27,10 +27,6 @@ public class Kanner extends BaseBanner<String, Kanner> {
     }
 
     @Override
-    public void onTitleSlect(TextView tv, int position) {
-    }
-
-    @Override
     public View onCreateItemView(final int position) {
         LinearLayout container = new LinearLayout(context);
         ImageView iv = new ImageView(context);
@@ -44,8 +40,7 @@ public class Kanner extends BaseBanner<String, Kanner> {
 
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(R.layout.layout_kanner_round_indicator, null);
-
+        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
         indicator.setViewPager(vp, list.size());
         return indicator;
     }

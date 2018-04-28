@@ -34,6 +34,8 @@ import com.shunlian.app.bean.BalanceDetailEntity;
 import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
+import com.shunlian.app.bean.CoreHotEntity;
+import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CheckInRespondEntity;
 import com.shunlian.app.bean.CheckInStateEntity;
 import com.shunlian.app.bean.CircleAddCommentEntity;
@@ -48,6 +50,8 @@ import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.bean.DetailOrderRecordEntity;
+import com.shunlian.app.bean.CoreNewsEntity;
+import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.bean.DiscoveryMaterialEntity;
@@ -61,7 +65,9 @@ import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.FindCommentListEntity;
 import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetListFilterEntity;
+import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.GetRealInfoEntity;
 import com.shunlian.app.bean.GetusernewsnumEntity;
@@ -72,6 +78,7 @@ import com.shunlian.app.bean.HelpSearchEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
 import com.shunlian.app.bean.HelpcenterSolutionEntity;
+import com.shunlian.app.bean.HotRdEntity;
 import com.shunlian.app.bean.HotSearchEntity;
 import com.shunlian.app.bean.JoinGoodsEntity;
 import com.shunlian.app.bean.LoginFinishEntity;
@@ -116,7 +123,9 @@ import com.shunlian.app.bean.TagEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.bean.UseCommentEntity;
 import com.shunlian.app.bean.UserLoginEntity;
+import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.bean.WeekSaleTopEntity;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
@@ -1905,6 +1914,105 @@ public interface ApiService {
      */
     @GET("chat/message/delete")
     Call<BaseEntity<ServiceEntity>> deleteMessage(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 首页-频道的菜单
+     *
+     * @return
+     */
+    @GET("channel/getMenu")
+    Call<BaseEntity<GetMenuEntity>> channelGetMenu(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取首页或频道数据
+     *
+     * @return
+     */
+    @GET("channel/getData")
+    Call<BaseEntity<GetDataEntity>> channelGetData(@QueryMap Map<String, String> map);
+
+    /**
+     * 爱上新品列表
+     *
+     * @return
+     */
+    @GET("channel/channelCore")
+    Call<BaseEntity<CoreNewEntity>> coreNew(@QueryMap Map<String, String> map);
+
+    /**
+     * 热销
+     *
+     * @return
+     */
+    @GET("channel/channelCore")
+    Call<BaseEntity<CoreHotEntity>> coreHot(@QueryMap Map<String, String> map);
+
+    /**
+     * 品牌特卖列表
+     *
+     * @return
+     */
+    @GET("channel/channelCore")
+    Call<BaseEntity<CorePingEntity>> corePing(@QueryMap Map<String, String> map);
+
+    /**
+     * 品质热推自动生成版
+     *
+     * @return
+     */
+    @GET("channel/hotPush")
+    Call<BaseEntity<HotRdEntity>> hotPush(@QueryMap Map<String, String> map);
+
+    /**
+     * 平台券
+     *
+     * @return
+     */
+    @GET("channel/vouchercenterpl")
+    Call<BaseEntity<VouchercenterplEntity>> vouchercenterpl(@QueryMap Map<String, String> map);
+
+    /**
+     * 领券中心
+     *
+     * @return
+     */
+    @GET("channel/vouchercenter")
+    Call<BaseEntity<VouchercenterplEntity>> vouchercenter(@QueryMap Map<String, String> map);
+
+    /**
+     * 品牌特卖详情
+     *
+     * @return
+     */
+    @GET("channel/branddetail")
+    Call<BaseEntity<CorePingEntity>> branddetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 热销商品分类
+     *
+     * @return
+     */
+    @GET("channel/hotGoodsCate")
+    Call<BaseEntity<CoreHotEntity>> hotGoodsCate(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 爱上新品分类上新
+     *
+     * @return
+     */
+    @GET("channel/newGoodsCate")
+    Call<BaseEntity<CoreNewsEntity>> newGoodsCate(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 小店销售周排行榜
+     *
+     * @return
+     */
+    @GET("top/weekSaleTop")
+    Call<BaseEntity<WeekSaleTopEntity>> weekSaleTop(@QueryMap Map<String, String> map);
 
     /**
      * 猜你喜欢

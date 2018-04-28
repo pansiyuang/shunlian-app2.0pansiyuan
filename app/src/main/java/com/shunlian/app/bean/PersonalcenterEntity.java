@@ -38,6 +38,8 @@ public class PersonalcenterEntity {
     public String my_rank_code;
     public String invite_code;
     public List<User> sl_user_ranks;
+    public List<HelpcenterIndexEntity.ArticleCategory> article;
+
 
     @Override
     public String toString() {
@@ -71,14 +73,15 @@ public class PersonalcenterEntity {
     public static class User {
         public String nickname;
         public String avatar;
-        public String number;
+        public String sale;
+        public String is_mine;
 
         @Override
         public String toString() {
             return "User{" +
                     "nickname='" + nickname + '\'' +
                     ", avatar='" + avatar + '\'' +
-                    ", number='" + number + '\'' +
+                    ", number='" + sale + '\'' +
                     '}';
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,16 +16,15 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
-import com.shunlian.app.ui.fragment.MainPageFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyTextView;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -88,7 +86,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
 
-    private MainPageFrag mainPageFrag;
+//    private MainPageFrag mainPageFrag;
+    private FirstPageFrag mainPageFrag;
     private SortFrag sortFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
@@ -205,9 +204,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public void mainPageClick() {
         if (mainPageFrag == null) {
-            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
+//            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
+            mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
             if (mainPageFrag == null) {
-                mainPageFrag = new MainPageFrag();
+//                mainPageFrag = new MainPageFrag();
+                mainPageFrag = new FirstPageFrag();
                 fragmentMap.put(flags[0], mainPageFrag);
             }
         }

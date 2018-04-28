@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mllayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_marginTop="10dp">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_meiri"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="@string/first_rexiao"
+        android:textColor="@color/new_text"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_categoryMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</com.shunlian.app.widget.MyLinearLayout>
+
+
+

@@ -40,16 +40,16 @@ public class MVerticalItemDecoration extends RecyclerView.ItemDecoration {
         outRect.top = topMargin;
         if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
             if (bottomMargin != 0) {
-                outRect.right = bottomMargin;
+                outRect.bottom = bottomMargin;
             } else {
-                outRect.right = 0;
+                outRect.bottom = 0;
             }
         }
         if (topMargin != 0) {
             if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.left = topMargin;
+                outRect.top = topMargin;
             } else {
-                outRect.left = 0;
+                outRect.top = 0;
             }
         }
     }

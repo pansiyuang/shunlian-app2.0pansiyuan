@@ -466,10 +466,18 @@
 
     <!--个人中心-->
     <string name="personal_yue">余额</string>
+    <string name="personal_gengxin">更新时间</string>
     <string name="personal_youhuiquan">优惠券</string>
     <string name="personal_donglizhishu">收益</string>
     <string name="personal_xiaoshou">销售</string>
     <string name="personal_quanbu">全部</string>
+    <string name="personal_huiyuanguanli">会员管理</string>
+    <string name="personal_huiyuandingdan">会员订单</string>
+    <string name="personal_guanfangkefu">官方客服</string>
+    <string name="personal_yaoqing">邀请朋友创业</string>
+    <string name="personal_zidingyi">自定义我的店</string>
+    <string name="personal_faxian">发现VIP</string>
+    <string name="personal_quzhuangxiu">去装修</string>
     <string name="personal_daifukuan">待付款</string>
     <string name="personal_daishouhuo">待收货</string>
     <string name="personal_daifahuo">待发货</string>
@@ -478,16 +486,19 @@
     <string name="personal_shoucang">收藏</string>
     <string name="personal_shangping">商品</string>
     <string name="personal_dianpu">店铺</string>
+    <string name="personal_qiandao">签到</string>
     <string name="personal_neirong">内容</string>
     <string name="personal_zuji">足迹</string>
     <string name="personal_xiaodianxinxi">小店信息</string>
     <string name="personal_xiaodianhuiyuan">小店会员</string>
     <string name="personal_xiaodiandingdan">小店订单</string>
     <string name="personal_jianghupaiming">江湖排名</string>
+    <string name="personal_benzhouxiaoshou">本周销售排行榜</string>
     <string name="personal_faxianhuiyuan">发现会员</string>
     <string name="personal_yaoqingpengyou">邀请朋友创业</string>
     <string name="personal_mashangyaoqing">马上邀请</string>
     <string name="personal_wodedian">我的店</string>
+    <string name="personal_shangxueyuan">商学院</string>
     <string name="personal_zhuangxiuwode">装修我的店</string>
     <string name="personal_mashangzhuangxiu">马上装修</string>
     <string name="personal_yonghufuwu">用户服务</string>
@@ -495,6 +506,8 @@
     <string name="personal_mashangtiwen">马上提问</string>
     <string name="personal_member">共%s人</string>
     <string name="personal_order">共%s单</string>
+    <string name="personal_dianjichakan">点击查看特权</string>
+    <string name="personal_chakanpaihang">查看排行</string>
 
     <!--邀请朋友创业-->
     <string name="qr_yaoqingpengyouchuangye">邀请朋友创业</string>
@@ -561,8 +574,8 @@
     <string name="punish">处罚</string>
 
     <!--帮助-->
-    <string name="help_zaixiankefu">在线客服(00:00:24:00)</string>
-    <string name="help_bodadianhua">拨打电话(00:00:24:00)</string>
+    <string name="help_zaixiankefu">在线客服(00:00-24:00)</string>
+    <string name="help_bodadianhua">拨打电话(00:00-24:00)</string>
     <string name="help_bangzhuzhongxin">帮助中心</string>
     <string name="help_changjianwenti">常见问题：</string>
     <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>
@@ -652,4 +665,28 @@
     <string name="balance_meirenzhineng">每人只能添加一个支付宝账号，如需更换，请先解绑。</string>
     <string name="balance_wenxintishi">温馨提示：每日余额提现有%s元额度免手续费，今日还剩%s元额度超过部分要缴纳一定手续费。
     您还有%s元收益的免息部分，今日可免手续费的提现额度为%s元。</string>
+
+    <!--首页-->
+    <string name="first_pingzhi">品质热推</string>
+    <string name="first_jingri">今日特推</string>
+    <string name="first_meiri">每日上新</string>
+    <string name="first_rexiao">热销榜单</string>
+    <string name="first_rexiaoxin">热销新品</string>
+    <string name="first_aishangxin">爱上新品</string>
+    <string name="first_pingpaite">品牌特卖</string>
+    <string name="first_koubeire">口碑热销</string>
+    <string name="first_jisufahuo">极速发货</string>
+    <string name="first_zhengpingbaozhang">正品保障</string>
+    <string name="first_shouhouwuyou">售后无忧</string>
+    <string name="first_pingzhijingxuan">品质精选</string>
+    <string name="first_dapaiduyi">大牌独一份</string>
+    <string name="first_remeng">热门</string>
+    <string name="first_zuixinfabu">最新发布</string>
+    <string name="first_dianpumei">店铺美券</string>
+    <string name="first_dianpuyouhui">店铺暂无优惠券，敬请期待</string>
+    <string name="first_yifukuan">%s人已付款</string>
+    <string name="first_haopinglv">好评率%s</string>
+    <string name="first_yigou">%s人已购</string>
+    <string name="first_souni">搜你所想</string>
+
 </resources>

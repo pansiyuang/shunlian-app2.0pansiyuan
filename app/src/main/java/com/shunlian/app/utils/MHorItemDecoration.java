@@ -41,16 +41,16 @@ public class MHorItemDecoration extends RecyclerView.ItemDecoration {
     private int rightMargin;//最后一个item距右边的边距
     private Paint mPaint;
 
-    public MHorItemDecoration(Context context,float space, float leftMargin, float rightMargin) {
-        this.space = TransformUtil.dip2px(context,space);
-        this.leftMargin = TransformUtil.dip2px(context,leftMargin);
-        this.rightMargin = TransformUtil.dip2px(context,rightMargin);
+    public MHorItemDecoration(Context context,float spacedp, float leftMargindp, float rightMargindp) {
+        this.space = TransformUtil.dip2px(context,spacedp);
+        this.leftMargin = TransformUtil.dip2px(context,leftMargindp);
+        this.rightMargin = TransformUtil.dip2px(context,rightMargindp);
     }
 
-    public MHorItemDecoration(Context context,float space, float leftMargin, float rightMargin, @ColorInt int id) {
-        this.space = TransformUtil.dip2px(context,space);
-        this.leftMargin = TransformUtil.dip2px(context,leftMargin);
-        this.rightMargin = TransformUtil.dip2px(context,rightMargin);
+    public MHorItemDecoration(Context context,float spacedp, float leftMargindp, float rightMargindp, @ColorInt int id) {
+        this.space = TransformUtil.dip2px(context,spacedp);
+        this.leftMargin = TransformUtil.dip2px(context,leftMargindp);
+        this.rightMargin = TransformUtil.dip2px(context,rightMargindp);
         mPaint = new Paint();
         mPaint.setColor(id);
         mPaint.setAntiAlias(true);
