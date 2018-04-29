@@ -76,36 +76,54 @@ public class CouponListPresenter extends BasePresenter<ICouponListView> {
 
         getNetData(isShow, baseEntityCall, new
                 SimpleNetDataCallback<BaseEntity<CouponListEntity>>() {
-            @Override
-            public void onSuccess(BaseEntity<CouponListEntity> entity) {
-                super.onSuccess(entity);
-                CouponListEntity data = entity.data;
-                SaleDetailEntity.Page pager = data.pager;
-                currentPage = Integer.parseInt(pager.page);
-                allPage = Integer.parseInt(pager.total_page);
-                voucherLists.addAll(data.voucher_list);
-                if (currentPage == 1){
-                    iView.setCouponNum(data.num_info);
-                }
-                setData();
-                currentPage++;
-            }
-        });
+                    @Override
+                    public void onSuccess(BaseEntity<CouponListEntity> entity) {
+                        super.onSuccess(entity);
+                        isLoading = false;
+                        CouponListEntity data = entity.data;
+                        SaleDetailEntity.Page pager = data.pager;
+                        currentPage = Integer.parseInt(pager.page);
+                        allPage = Integer.parseInt(pager.total_page);
+                        voucherLists.addAll(data.voucher_list);
+                        if (currentPage == 1) {
+                            iView.setCouponNum(data.num_info);
+                        }
+                        setData();
+                        currentPage++;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        super.onFailure();
+                        isLoading = false;
+                    }
+                });
     }
 
     private void setData() {
         if (adapter == null) {
             adapter = new CouponListAdapter(context, voucherLists);
             iView.setAdapter(adapter);
-            adapter.setOnReloadListener(()-> onRefresh());
-        }else {
+            adapter.setOnReloadListener(() -> onRefresh());
+        } else {
             adapter.notifyDataSetChanged();
         }
-        adapter.setPageLoading(currentPage,allPage);
-        if (isEmpty(voucherLists)){
+        adapter.setPageLoading(currentPage, allPage);
+        if (isEmpty(voucherLists)) {
             iView.showDataEmptyView(100);
-        }else {
+        } else {
             iView.showDataEmptyView(0);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        if (!isLoading) {
+            if (currentPage <= allPage) {
+                isLoading = true;
+                paging(false);
+            }
         }
     }
 }
