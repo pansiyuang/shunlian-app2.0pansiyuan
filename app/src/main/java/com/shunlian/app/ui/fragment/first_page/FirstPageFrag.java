@@ -16,7 +16,6 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -144,6 +143,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void setTab(GetMenuEntity getMenuEntiy) {
+        if (getMenuEntiy == null){
+            return;
+        }
         GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
         ArrayList<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {

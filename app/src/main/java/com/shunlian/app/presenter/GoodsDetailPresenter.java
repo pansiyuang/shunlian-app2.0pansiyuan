@@ -330,7 +330,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity.Voucher> entity) {
                 super.onSuccess(entity);
-                Common.staticToast(context.getResources().getString(R.string.get_success));
+                Common.staticToast(entity.message);
                 iView.refreshVoucherState(entity.data);
             }
         });
