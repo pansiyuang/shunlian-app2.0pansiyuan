@@ -159,7 +159,7 @@ public class Common {
                 MessageActivity.startAct(context);
                 break;
             case "feedback"://反馈
-                if (params != null)
+                if (params != null && params.length > 0)
                     BeforeFeedBackAct.startAct(context,params[0]);
                 else
                     BeforeFeedBackAct.startAct(context,null);

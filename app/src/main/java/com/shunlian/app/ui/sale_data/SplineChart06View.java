@@ -204,7 +204,7 @@ public class SplineChart06View extends ChartView {
                     profit.add(new PointD(i, parseDouble(item.profit)));
                 }
             }
-            if (profit.size() < list.size()){
+            if (profit.size() > 0 &&  profit.size() < list.size()){
                 double x = profit.get(0).x - 1;
                 profit.add(0,new PointD(x, 0));
             }
@@ -229,7 +229,7 @@ public class SplineChart06View extends ChartView {
                     xf.add(new PointD(i, parseDouble(item.consume_money)));
                 }
             }
-            if (xf.size() < list.size()){
+            if (xf.size() > 0 && xf.size() < list.size()){
                 double x = xf.get(0).x - 1;
                 xf.add(0,new PointD(x, 0));
             }
@@ -255,7 +255,7 @@ public class SplineChart06View extends ChartView {
                     fd.add(new PointD(i, parseDouble(item.grand_child_store)));
                 }
             }
-            if (fd.size() < list.size()){
+            if (fd.size() > 0 && fd.size() < list.size()){
                 double x = fd.get(0).x - 1;
                 fd.add(0,new PointD(x, 0));
             }
@@ -281,7 +281,7 @@ public class SplineChart06View extends ChartView {
                     xd.add(new PointD(i, parseDouble(item.child_store)));
                 }
             }
-            if (xd.size() > 0 && xd.size() < list.size()){
+            if (xd.size() > 0 && xd.size() > 0 && xd.size() < list.size()){
                 double x = xd.get(0).x - 1;
                 xd.add(0,new PointD(x, 0));
             }

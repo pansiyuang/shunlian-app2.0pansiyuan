@@ -150,6 +150,21 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.rlayout_root)
     RelativeLayout rlayout_root;
 
+    @BindView(R.id.llayout_appoint_sale)
+    LinearLayout llayout_appoint_sale;
+
+    @BindView(R.id.mtv_appoint_child_sale)
+    MyTextView mtv_appoint_child_sale;
+
+    @BindView(R.id.mtv_appoint_grand_child_sale)
+    MyTextView mtv_appoint_grand_child_sale;
+
+    @BindView(R.id.mtv_appoint_consume_child_sale)
+    MyTextView mtv_appoint_consume_sale;
+
+    @BindView(R.id.mtv_date)
+    MyTextView mtv_date;
+
     private String available_profit;//可提现金额
     private MyProfitPresenter presenter;
     private String profit_help_url;
@@ -187,6 +202,43 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         llayout_7day.setOnClickListener(this);
         llayout_30day.setOnClickListener(this);
         llayout_60day.setOnClickListener(this);
+
+        chart_view.setOnSaleChartListener((data, date) -> {
+            if (isEmpty(data)){
+                gone(llayout_appoint_sale);
+                return;
+            }
+            visible(llayout_appoint_sale);
+            mtv_date.setText(date);
+            for (int i = 0; i < data.size(); i++) {
+                switch (i){
+                    case 0:
+                        if (isEmpty(data.get(i))){
+                            gone(mtv_appoint_child_sale);
+                        }else {
+                            visible(mtv_appoint_child_sale);
+                            mtv_appoint_child_sale.setText(data.get(i));
+                        }
+                        break;
+                    case 1:
+                        if (isEmpty(data.get(i))){
+                            gone(mtv_appoint_grand_child_sale);
+                        }else {
+                            visible(mtv_appoint_grand_child_sale);
+                            mtv_appoint_grand_child_sale.setText(data.get(i));
+                        }
+                        break;
+                    case 2:
+                        if (isEmpty(data.get(i))){
+                            gone(mtv_appoint_consume_sale);
+                        }else {
+                            visible(mtv_appoint_consume_sale);
+                            mtv_appoint_consume_sale.setText(data.get(i));
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     /**

@@ -375,7 +375,7 @@
             <LinearLayout
                 android:id="@+id/llayout_day"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_below="@+id/llayout_profit1"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
@@ -462,6 +462,64 @@
                         android:background="@color/pink_color"
                         android:visibility="invisible" />
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <!--点击折线图显示指定数据-->
+            <LinearLayout
+                android:id="@+id/llayout_appoint_sale"
+                android:layout_below="@+id/llayout_profit1"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:layout_height="52dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_appoint_child_sale"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/new_text"/>
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_appoint_grand_child_sale"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:textColor="@color/new_text"/>
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_appoint_consume_child_sale"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                        android:textColor="@color/new_text"/>
+
+                </LinearLayout>
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/pink_color"/>
 
             </LinearLayout>
 
