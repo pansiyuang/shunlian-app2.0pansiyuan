@@ -668,9 +668,14 @@
 
     <!--首页-->
     <string name="first_pingzhi">品质热推</string>
+    <string name="first_mashangshiyong">马上使用</string>
+    <string name="first_yiqiang">已抢</string>
+    <string name="first_jujieshu">距结束</string>
     <string name="first_jingri">今日特推</string>
-    <string name="first_meiri">每日上新</string>
+    <string name="first_xianshi">限时特价</string>
+    <string name="first_jingxuan">精选活动</string>
     <string name="first_rexiao">热销榜单</string>
+    <string name="first_meiri">每日上新</string>
     <string name="first_rexiaoxin">热销新品</string>
     <string name="first_aishangxin">爱上新品</string>
     <string name="first_pingpaite">品牌特卖</string>

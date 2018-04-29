@@ -9,17 +9,17 @@ import com.shunlian.app.R;
  * Created by Administrator on 2018/1/19.
  */
 
-public class FirstDownTimerView extends ItemCountDownTimerView {
+public class DayRedBlackDownTimerView extends ItemCountDownTimerView {
 
-    public FirstDownTimerView(Context context, AttributeSet attrs, int defStyle) {
+    public DayRedBlackDownTimerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public FirstDownTimerView(Context context, AttributeSet attrs) {
+    public DayRedBlackDownTimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FirstDownTimerView(Context context) {
+    public DayRedBlackDownTimerView(Context context) {
         super(context);
     }
 
@@ -66,14 +66,14 @@ public class FirstDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected String[] getTimeUnit() {
-//      String[] timeUnit = {"天","时","分","秒"};
-        String[] timeUnit = {":",":",":",""};
+      String[] timeUnit = {"天","时","分","秒"};
+//        String[] timeUnit = {":",":",":",""};
         return timeUnit;
     }
 
     @Override
     protected int getTimeUnitColor() {
-        return getResources().getColor(R.color.pink_color);
+        return getResources().getColor(R.color.new_text);
     }
 
     @Override
@@ -89,6 +89,6 @@ public class FirstDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected boolean getIsShowDay() {
-        return false;
+        return true;
     }
 }

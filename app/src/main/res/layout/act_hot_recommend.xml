@@ -30,11 +30,50 @@
                     android:layout_height="30dp"
                     android:background="@color/dim50"
                     android:layout_alignParentBottom="true"/>
+                <com.shunlian.app.widget.MyLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/miv_photo"
+                    android:layout_marginLeft="10dp"
+                    android:layout_alignParentBottom="true">
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/first_jujieshu"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@id/downTime_firsts"/>
+                    <com.shunlian.app.utils.timer.DayRedWhiteDownTimerView
+                        android:id="@+id/downTime_firsts"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="wrap_content"/>
+                </com.shunlian.app.widget.MyLinearLayout>
             </com.shunlian.app.widget.MyRelativeLayout>
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mtv_desc"/>
+                android:layout_below="@id/miv_avar"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:lines="2"
+                android:textColor="@color/share_text"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mtv_desc"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
+                android:src="@mipmap/icon_common_arrowdowns" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_list"
                 android:paddingLeft="7.5dp"

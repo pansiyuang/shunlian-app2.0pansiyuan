@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center"
-        android:text="@string/first_jingri"
+        android:text="@string/first_xianshi"
         android:textColor="@color/new_text"
         android:textSize="17sp"
         android:textStyle="bold" />
