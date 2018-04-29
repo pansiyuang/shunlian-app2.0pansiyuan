@@ -141,7 +141,7 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
             visible(rv_search);
         }
         if (couponsAdapter==null){
-            couponsAdapter=new CouponsAdapter(getBaseContext(),true,mData);
+            couponsAdapter=new CouponsAdapter(getBaseContext(),true,mData,pGetCoupon);
             linearLayoutManager=new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
             rv_search.setLayoutManager(linearLayoutManager);
             rv_search.setAdapter(couponsAdapter);
@@ -150,6 +150,11 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
             couponsAdapter.notifyDataSetChanged();
         }
         couponsAdapter.setPageLoading(Integer.parseInt(page), Integer.parseInt(total));
+    }
+
+    @Override
+    public void getCouponCallBack(boolean isCommon, int position) {
+        couponsAdapter.notifyItemChanged(position);
     }
 
 }

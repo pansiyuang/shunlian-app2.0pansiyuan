@@ -11,5 +11,5 @@ import java.util.List;
 public interface IGetCoupon extends IView {
    void setpingData(VouchercenterplEntity vouchercenterplEntity);
    void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total);
-
+   void getCouponCallBack(boolean isCommon,int position);
 }

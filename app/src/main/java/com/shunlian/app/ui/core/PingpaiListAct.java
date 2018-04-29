@@ -7,13 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PingListAdapter;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.timer.DayRedBlackDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IPingList;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
@@ -54,6 +56,9 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
+
+    @BindView(R.id.downTime_firsts)
+    DayRedBlackDownTimerView downTime_firsts;
 
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
@@ -147,8 +152,26 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onDestroy() {
+        if (downTime_firsts!=null){
+            downTime_firsts.cancelDownTimer();
+            downTime_firsts=null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void setApiData(CorePingEntity corePingEntity, List<CorePingEntity.MData> mDatas) {
         if (pingListAdapter==null){
+            downTime_firsts.setDownTime(Integer.parseInt(corePingEntity.brand.count_down));
+            downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    downTime_firsts.cancelDownTimer();
+                }
+
+            });
+            downTime_firsts.startDownTimer();
             mtv_title.setText(corePingEntity.brand.title);
             mtv_desc.setText(corePingEntity.brand.content);
             GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,corePingEntity.brand.img);
@@ -157,6 +180,12 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
             rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
             rv_list.setNestedScrollingEnabled(false);
             rv_list.setAdapter(pingListAdapter);
+            pingListAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(getBaseContext(),mDatas.get(position).id);
+                }
+            });
         }else {
             pingListAdapter.notifyDataSetChanged();
         }

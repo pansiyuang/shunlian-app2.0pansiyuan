@@ -20,6 +20,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -41,6 +42,14 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     MyLinearLayout mll_message;
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
+    @BindView(R.id.miv_news)
+    MyImageView miv_news;
+    @BindView(R.id.miv_scan)
+    MyImageView miv_scan;
+    @BindView(R.id.mtv_scan)
+    MyTextView mtv_scan;
+    @BindView(R.id.mtv_news)
+    MyTextView mtv_news;
     @BindView(R.id.tabs)
     PagerSlidingTabStrip tabs;
     @BindView(R.id.pager)
@@ -82,12 +91,20 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                             .statusBarDarkFont(false, 0)
                             .init();
                     mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
+                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao_w);
+                    miv_news.setImageResource(R.mipmap.icon_home_message_w);
+                    mtv_scan.setTextColor(getColorResouce(R.color.white));
+                    mtv_news.setTextColor(getColorResouce(R.color.white));
                 } else {
                     ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
                             .statusBarColor(R.color.white)
                             .statusBarDarkFont(true, 0.2f)
                             .init();
                     mllayout_title.setBackgroundColor(getColorResouce(R.color.white));
+                    miv_scan.setImageResource(R.mipmap.icon_home_saoyisao);
+                    miv_news.setImageResource(R.mipmap.icon_home_message);
+                    mtv_scan.setTextColor(getColorResouce(R.color.new_text));
+                    mtv_news.setTextColor(getColorResouce(R.color.new_text));
                 }
             }
         });

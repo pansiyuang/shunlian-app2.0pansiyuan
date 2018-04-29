@@ -3,18 +3,60 @@
     android:id="@+id/mllayout_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     android:paddingBottom="25dp">
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_photo"
+    <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="158dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:adjustViewBounds="true" />
+        android:layout_marginTop="15dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="150dp"
+            android:layout_height="116dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@color/white_10dim"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_logo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="8dp"/>
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/new_text"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"/>
+
+            <com.shunlian.app.utils.timer.DayNoBlackDownTimerView
+                android:id="@+id/downTime_firsts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"/>
+
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"

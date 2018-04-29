@@ -13,8 +13,8 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true" />
+        android:layout_height="168dp"
+        android:scaleType="fitXY" />
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_title"

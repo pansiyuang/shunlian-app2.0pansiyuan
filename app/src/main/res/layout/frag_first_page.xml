@@ -24,6 +24,7 @@
             app:ll_margin_left="20">
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
@@ -34,6 +35,7 @@
 
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="扫一扫"
@@ -88,11 +90,13 @@
             android:orientation="vertical">
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_news"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_home_message" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_news"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/message"
