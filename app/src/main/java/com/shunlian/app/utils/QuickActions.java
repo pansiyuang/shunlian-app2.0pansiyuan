@@ -409,6 +409,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
     /**
+     * 课堂详情分享
+     */
+    public void classDetailShare(){
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        rightMargin = px / 6;
+        setShowItem(1,2,3,4,6,8);
+        shareStyle1Dialog();
+    }
+
+    /**
      * 搜索
      */
     public void search(){

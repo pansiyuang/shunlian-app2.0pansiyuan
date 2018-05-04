@@ -13,6 +13,7 @@ public class HelpcenterSolutionEntity {
     public String id;
     public String question;
     public String answer;
+    public String share_url;
     public List<Question> about;
 
     @JsonIgnoreProperties(ignoreUnknown = true)

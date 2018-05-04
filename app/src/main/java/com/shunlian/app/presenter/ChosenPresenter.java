@@ -75,8 +75,10 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 GoodsDeatilEntity.UserInfo user_info = articleEntity.user_info;
                 if (shareInfoParam == null)
                     shareInfoParam = new ShareInfoParam();
-                shareInfoParam.userAvatar = user_info.avatar;
-                shareInfoParam.userName = user_info.nickname;
+                if (user_info != null) {
+                    shareInfoParam.userAvatar = user_info.avatar;
+                    shareInfoParam.userName = user_info.nickname;
+                }
 
                 currentPage++;
             }

@@ -90,8 +90,10 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                 }
                 //分享专用
                 GoodsDeatilEntity.UserInfo user_info = data.user_info;
-                shareInfoParam.userAvatar = user_info.avatar;
-                shareInfoParam.userName = user_info.nickname;
+                if (user_info != null) {
+                    shareInfoParam.userAvatar = user_info.avatar;
+                    shareInfoParam.userName = user_info.nickname;
+                }
 
                 currentPage++;
             }

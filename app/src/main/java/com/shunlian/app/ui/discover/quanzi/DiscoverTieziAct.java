@@ -83,6 +83,8 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             case R.id.miv_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.findDetail();
+                if (pDiscoverTiezi != null)
+                    quick_actions.shareInfo(pDiscoverTiezi.getShareInfoParam());
                 break;
         }
     }
@@ -186,7 +188,6 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             newAdapter.notifyDataSetChanged();
         }
         newAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
-
     }
 
     @Override

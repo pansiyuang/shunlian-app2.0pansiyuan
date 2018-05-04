@@ -13,7 +13,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 

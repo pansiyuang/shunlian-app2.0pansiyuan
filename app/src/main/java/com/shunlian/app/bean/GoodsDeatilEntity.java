@@ -64,10 +64,43 @@ public class GoodsDeatilEntity implements Parcelable {
     public UserInfo user_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class UserInfo{
+    public static class UserInfo implements Parcelable {
         public String nickname;
         public String avatar;
         public String share_url;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.nickname);
+            dest.writeString(this.avatar);
+            dest.writeString(this.share_url);
+        }
+
+        public UserInfo() {
+        }
+
+        protected UserInfo(Parcel in) {
+            this.nickname = in.readString();
+            this.avatar = in.readString();
+            this.share_url = in.readString();
+        }
+
+        public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
+            @Override
+            public UserInfo createFromParcel(Parcel source) {
+                return new UserInfo(source);
+            }
+
+            @Override
+            public UserInfo[] newArray(int size) {
+                return new UserInfo[size];
+            }
+        };
     }
 
 
@@ -132,6 +165,9 @@ public class GoodsDeatilEntity implements Parcelable {
         public Url url;
         public String title;
 
+        public Act() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -140,16 +176,13 @@ public class GoodsDeatilEntity implements Parcelable {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.desc);
-            dest.writeString(this.link);
+            dest.writeParcelable(this.url, flags);
             dest.writeString(this.title);
-        }
-
-        public Act() {
         }
 
         protected Act(Parcel in) {
             this.desc = in.readString();
-            this.link = in.readString();
+            this.url = in.readParcelable(Url.class.getClassLoader());
             this.title = in.readString();
         }
 
@@ -167,9 +200,40 @@ public class GoodsDeatilEntity implements Parcelable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Url{
+    public static class Url implements Parcelable {
         public String type;
         public String item_id;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.type);
+            dest.writeString(this.item_id);
+        }
+
+        public Url() {
+        }
+
+        protected Url(Parcel in) {
+            this.type = in.readString();
+            this.item_id = in.readString();
+        }
+
+        public static final Creator<Url> CREATOR = new Creator<Url>() {
+            @Override
+            public Url createFromParcel(Parcel source) {
+                return new Url(source);
+            }
+
+            @Override
+            public Url[] newArray(int size) {
+                return new Url[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

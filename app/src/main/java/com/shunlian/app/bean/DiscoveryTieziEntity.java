@@ -10,6 +10,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DiscoveryTieziEntity {
     public Mdata list;
+    public String share_url;
+    public GoodsDeatilEntity.UserInfo user_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Mdata {

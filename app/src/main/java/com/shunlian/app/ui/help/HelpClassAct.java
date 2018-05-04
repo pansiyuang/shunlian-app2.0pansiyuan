@@ -131,7 +131,11 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
             helpClasAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
+//                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
+                    ClassDetailAct.startAct(getBaseContext(),
+                            articles.get(position).h5_link,
+                            articles.get(position).id,
+                            H5Act.MODE_SONIC);
                 }
             });
             rv_qCate.setLayoutManager(linearLayoutManager);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lLayout_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,12 +7,14 @@
     android:orientation="vertical">
 
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/status_bar_height"
         android:background="@color/white" />
 
     <RelativeLayout
         android:id="@+id/rl_title"
+        android:layout_below="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@color/white">
@@ -105,49 +107,14 @@
 
     <com.shunlian.app.widget.MyWebView
         android:id="@+id/mwv_h5"
+        android:layout_below="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"/>
 
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/rl_bottom"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:background="@color/white"-->
-    <!--android:paddingBottom="7.5dp"-->
-    <!--android:paddingLeft="10dp"-->
-    <!--android:paddingTop="7.5dp"-->
-    <!--android:visibility="visible">-->
-
-    <!--<com.shunlian.app.widget.MyEditText-->
-    <!--android:id="@+id/met_text"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginRight="65dp"-->
-    <!--android:background="@drawable/rounded_corned_solid_gray_8px"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:hint="添加评论"-->
-    <!--android:maxHeight="60dp"-->
-    <!--android:minHeight="35dp"-->
-    <!--android:paddingLeft="10dp"-->
-    <!--android:paddingRight="10dp"-->
-    <!--android:textColor="@color/new_text"-->
-    <!--android:textColorHint="@color/share_text"-->
-    <!--android:textSize="13sp" />-->
-
-    <!--<com.shunlian.app.widget.MyTextView-->
-    <!--android:id="@+id/mtv_send"-->
-    <!--android:layout_width="65dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:gravity="center"-->
-    <!--android:maxHeight="60dp"-->
-    <!--android:minHeight="35dp"-->
-    <!--android:text="发布"-->
-    <!--android:textColor="#BDBDBD"-->
-    <!--android:textSize="15sp" />-->
-    <!--</RelativeLayout>-->
-</LinearLayout>
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
