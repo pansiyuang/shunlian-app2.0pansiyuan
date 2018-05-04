@@ -2,7 +2,6 @@ package com.shunlian.app.ui.order;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,8 +15,7 @@ import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ExchangeDetailView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyImageView;
@@ -26,6 +24,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ExchangeDetailAct extends BaseActivity implements View.OnClickListener, ExchangeDetailView {
     @BindView(R.id.mtv_state)
@@ -133,6 +132,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.rv_opt)
     RecyclerView rv_opt;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private ExchangeDetailPresenter exchangeDetailPresenter;
     private String refund_id = "53";
 
@@ -166,6 +168,12 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         }
 
         exchangeDetailPresenter = new ExchangeDetailPresenter(this, this, refund_id);
+    }
+
+    @OnClick(R.id.mrlayout_news)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.afterSale();
     }
 
 
@@ -341,5 +349,12 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     public void confirmReceive() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

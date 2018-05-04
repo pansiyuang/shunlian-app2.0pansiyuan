@@ -29,10 +29,6 @@ public class TieziKanner extends BaseBanner<String, TieziKanner> {
     }
 
     @Override
-    public void onTitleSlect(TextView tv, int position) {
-    }
-
-    @Override
     public View onCreateItemView(int position) {
 
         RelativeLayout container = new RelativeLayout(context);
@@ -61,7 +57,7 @@ public class TieziKanner extends BaseBanner<String, TieziKanner> {
 
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(R.layout.layout_kanner_rectangle_indicator, null);
+        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
         indicator.setViewPager(vp, list.size());
         return indicator;
     }

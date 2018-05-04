@@ -22,6 +22,7 @@ import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.presenter.MessagePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.ui.message.SystemMsgAct;
 import com.shunlian.app.view.IMessageView;
 
 import java.util.ArrayList;
@@ -195,6 +196,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @Override
     public void OnSysClick() {
         //系统消息点击
+        SystemMsgAct.startAct(baseContext);
     }
 
     @Override

@@ -439,11 +439,17 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 
+    <View
+        android:id="@+id/view_state"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_height"
+        android:background="@color/transparent" />
+
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_title"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/view_state"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5.5dp"

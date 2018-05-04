@@ -13,12 +13,14 @@ import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.presenter.RefundListPresent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IRefundListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/12/27.
@@ -28,6 +30,10 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private RefundListPresent refundListPresent;
     private LinearLayoutManager manager;
     private RefundAfterSaleAdapter afterSaleAdapter;
@@ -81,6 +87,12 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
         recy_view.setLayoutManager(manager);
     }
 
+    @OnClick(R.id.rl_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.afterSale();
+    }
+
     /**
      * 显示网络请求失败的界面
      *
@@ -125,5 +137,12 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
 
             afterSaleAdapter.setPageLoading(page,allPage);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

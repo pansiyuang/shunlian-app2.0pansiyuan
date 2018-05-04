@@ -373,7 +373,9 @@
             android:paddingBottom="8dp"
             android:paddingTop="10dp">
 
+            <!--首页-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_firstPage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -383,8 +385,9 @@
                 android:text="@string/main_page"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
-
+            <!--搜索-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_search"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -394,8 +397,9 @@
                 android:text="@string/search"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
-
+            <!--消息-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -405,26 +409,28 @@
                 android:text="@string/message"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
-
+            <!--反馈-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_feedback"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_zuji"
                 android:gravity="center"
-                android:text="@string/my_footprint"
+                android:text="@string/feedback"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
-
+            <!--帮助中心-->
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_help"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="11dp"
                 android:drawableTop="@mipmap/img_productdetails_more_shoucang"
                 android:gravity="center"
-                android:text="@string/my_collection"
+                android:text="@string/personal_bangzhuzhongxin"
                 android:textColor="@color/new_gray"
                 android:textSize="10sp" />
 
@@ -436,6 +442,7 @@
             android:background="@color/bg_gray_two" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
             android:layout_width="match_parent"
             android:layout_height="325dp"
             android:background="@color/white" />

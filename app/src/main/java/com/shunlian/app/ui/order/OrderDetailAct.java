@@ -22,6 +22,7 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.OrderdetailView;
 import com.shunlian.app.widget.DiscountListDialog;
@@ -120,6 +121,12 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.mrlayout_cuxiao)
     MyRelativeLayout mrlayout_cuxiao;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mrlayout_news)
+    MyRelativeLayout mrlayout_news;
 
     private OrderDetailPresenter orderDetailPresenter;
     private String storeId, orderId = "54";
@@ -367,6 +374,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         super.initListener();
         mtv_copy.setOnClickListener(this);
         mllayout_store.setOnClickListener(this);
+        mrlayout_news.setOnClickListener(this);
         mtv_title1.setOnClickListener(this);
         mtv_title2.setOnClickListener(this);
         mtv_title3.setOnClickListener(this);
@@ -498,6 +506,17 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.APPEND_COMMENT);
                 }
                 break;
+            case R.id.mrlayout_news:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.order();
+                break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

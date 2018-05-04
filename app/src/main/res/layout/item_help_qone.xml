@@ -12,7 +12,7 @@
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_icon"
             android:layout_width="wrap_content"
-            android:layout_height="21dp"
+            android:layout_height="30dp"
             android:adjustViewBounds="true"/>
 
         <com.shunlian.app.widget.MyTextView

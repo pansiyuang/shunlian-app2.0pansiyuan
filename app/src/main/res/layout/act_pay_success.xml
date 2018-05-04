@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +8,7 @@
     tools:context="com.shunlian.app.ui.order.OrderDetailAct">
 
     <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/rlayout_title"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:background="@mipmap/bg_pay_success">
@@ -29,6 +30,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/rl_more"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
@@ -119,6 +121,8 @@
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_like"
+        android:layout_below="@+id/rlayout_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
@@ -151,7 +155,14 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_goods"
+        android:layout_below="@+id/mllayout_like"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp" />
-</com.shunlian.app.widget.MyLinearLayout>
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</com.shunlian.app.widget.MyRelativeLayout>

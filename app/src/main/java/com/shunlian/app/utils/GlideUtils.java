@@ -311,11 +311,12 @@ public class GlideUtils {
      * 控件放置背景图片
      */
 
-    public void loadImageWithView(Context context, final View view, String imgUrl, int viewWidth, int viewHeight) {
+    public void loadImageWithView(Context context, final View view, String imgUrl) {
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()
-                .into(new SimpleTarget<Bitmap>(viewWidth, viewHeight) {
+                .placeholder(R.mipmap.img_guige_moren)
+                .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         Drawable drawable = new BitmapDrawable(resource);

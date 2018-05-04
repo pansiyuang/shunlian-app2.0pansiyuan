@@ -18,9 +18,11 @@ import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpSolutionView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
@@ -47,6 +49,13 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     MyLinearLayout mllayout_dianhua;
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.mrlayout_news)
+    MyRelativeLayout mrlayout_news;
+
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
     private boolean isChosen=false;
@@ -82,6 +91,10 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 if (!isChosen)
                 pHelpSolution.isSolved("1");
                 break;
+            case R.id.mrlayout_news:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.help();
+                break;
         }
     }
 
@@ -94,6 +107,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         miv_shi.setOnClickListener(this);
         miv_fou.setOnClickListener(this);
         mtv_shi.setOnClickListener(this);
+        mrlayout_news.setOnClickListener(this);
     }
 
     @Override
@@ -210,5 +224,12 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public void callFeedback() {
         dialog_feedback.dismiss();
         Common.staticToasts(getBaseContext(), getStringResouce(R.string.help_xiexiefankui), R.mipmap.icon_common_duihao);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

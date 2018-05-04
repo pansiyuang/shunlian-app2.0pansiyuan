@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
+import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
@@ -216,7 +217,17 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         String id = ordersLists.get(refreshPosition).id;
         refreshOrder(id);
         if (status == OrderListPresenter.CONFIRM_RECEIPT){
-            SuccessfulTradeAct.startAct(baseActivity);
+
+            ArrayList<ReleaseCommentEntity> entities = new ArrayList<>();
+            List<MyOrderEntity.OrderGoodsBean> order_goods = ordersLists
+                    .get(refreshPosition).order_goods;
+            for (int i = 0; i < order_goods.size(); i++) {
+                MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
+                ReleaseCommentEntity entity = new ReleaseCommentEntity(id,
+                        bean.thumb, bean.title, bean.price, bean.goods_id);
+                entities.add(entity);
+            }
+            SuccessfulTradeAct.startAct(baseActivity,entities,id);
         }
     }
 

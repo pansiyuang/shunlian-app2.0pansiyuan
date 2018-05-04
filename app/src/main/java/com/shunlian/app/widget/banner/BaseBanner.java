@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
+import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -39,12 +40,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.OnPageChange;
+
 public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends RelativeLayout {
     protected static final String TAG = BaseBanner.class.getSimpleName();
     protected ScheduledExecutorService stse;
     protected Context context;
     protected DisplayMetrics dm;
-    protected float pi;
+    protected int dimColor;
+    public int  layoutRes=R.layout.layout_kanner_round_indicator;
     /**
      * ViewPager
      */
@@ -80,15 +84,10 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
      */
     protected LinearLayout ll_indicator_container;
 
-    /**
-     * title
-     */
-    protected TextView tv_title;
 
     private MyTextView titleOne, titleTwo;
 
     private List<StoreIndexEntity.Body.Datas> mDatas;
-    private List<DiscoveryCircleEntity.Mdata.Banner> mDatass;
 
     private float slideBackWidth;//侧滑宽度
     private boolean isSlideBackDispatch;//是否进行侧滑兼容处理
@@ -115,11 +114,11 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
             setCurrentIndicator(currentPositon);
 
+            if (onPageChanged!=null)
+            onPageChanged.onPageChange(currentPositon);
+
             textChange(currentPositon + 1);
 
-            textChanges(currentPositon);
-
-            onTitleSlect(tv_title, currentPositon);
             ll_bottom_bar.setVisibility(currentPositon == list.size() - 1 && !isBarShowWhenLast ? GONE : VISIBLE);
 
             lastPositon = currentPositon;
@@ -136,6 +135,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         }
     };
     private OnItemClickL onItemClickL;
+    private onPageChanged onPageChanged;
 
     public BaseBanner(Context context) {
         this(context, null, 0);
@@ -163,6 +163,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         delay = ta.getInt(R.styleable.BaseBanner_bb_delay, 5);
         period = ta.getInt(R.styleable.BaseBanner_bb_period, 5);
         isAutoScrollEnable = ta.getBoolean(R.styleable.BaseBanner_bb_isAutoScrollEnable, true);
+        dimColor = ta.getColor(R.styleable.BaseBanner_bb_dimColor, -1);
 
         int barColor = ta.getColor(R.styleable.BaseBanner_bb_barColor, Color.TRANSPARENT);
         isBarShowWhenLast = ta.getBoolean(R.styleable.BaseBanner_bb_isBarShowWhenLast, true);
@@ -233,13 +234,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         ll_indicator_container.setClipChildren(false);
         ll_indicator_container.setClipToPadding(false);
 
-        // title
-        tv_title = new TextView(context);
-        tv_title.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0F));
-        tv_title.setSingleLine(true);
-        tv_title.setTextColor(textColor);
-        tv_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        tv_title.setVisibility(isTitleShow ? VISIBLE : INVISIBLE);
 
         if (indicatorGravity == Gravity.CENTER) {
             ll_bottom_bar.setGravity(Gravity.CENTER);
@@ -247,20 +241,12 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         } else {
             if (indicatorGravity == Gravity.RIGHT) {
                 ll_bottom_bar.setGravity(Gravity.CENTER_VERTICAL);
-                ll_bottom_bar.addView(tv_title);
                 ll_bottom_bar.addView(ll_indicator_container);
 
-                tv_title.setPadding(0, 0, dp2px(7), 0);
-                tv_title.setEllipsize(TextUtils.TruncateAt.END);
-                tv_title.setGravity(Gravity.LEFT);
             } else if (indicatorGravity == Gravity.LEFT) {
                 ll_bottom_bar.setGravity(Gravity.CENTER_VERTICAL);
                 ll_bottom_bar.addView(ll_indicator_container);
-                ll_bottom_bar.addView(tv_title);
 
-                tv_title.setPadding(dp2px(7), 0, 0, 0);
-                tv_title.setEllipsize(TextUtils.TruncateAt.END);
-                tv_title.setGravity(Gravity.RIGHT);
             }
         }
     }
@@ -295,11 +281,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         }
     }
 
-    public void textChanges(int currentPositon) {
-        if (mDatass != null && mDatass.size() > 1) {
-            titleTwo.setText(mDatass.get(currentPositon).title);
-        }
-    }
     /**
      * set data source list
      */
@@ -349,28 +330,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         startScroll();
     }
 
-    public void setBanners(List<E> list, MyTextView mtv_two) {
-        this.list = list;
-        mDatass = (List<DiscoveryCircleEntity.Mdata.Banner>) list;
-        titleTwo = mtv_two;
-        if (mDatass != null && mDatass.size() == 1) {
-            removeAllViews();
-            MyImageView myImageView = new MyImageView(getContext());
-            myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            GlideUtils.getInstance().loadImage(getContext(), myImageView, mDatass.get(0).img);
-            titleTwo.setText(mDatass.get(0).title);
-            addView(myImageView, 0, lp_vp);
-            myImageView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickL != null) {
-                        onItemClickL.onItemClick(0);
-                    }
-                }
-            });
-        }
-        startScroll();
-    }
     /**
      * set scroll delay before start scroll,unit second,default 5 seconds
      */
@@ -427,29 +386,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return (T) this;
     }
 
-    /**
-     * set title text color,default "#ffffff"
-     */
-    public T setTextColor(int textColor) {
-        tv_title.setTextColor(textColor);
-        return (T) this;
-    }
-
-    /**
-     * set title text size,unit sp,default 14sp
-     */
-    public T setTextSize(float textSize) {
-        tv_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-        return (T) this;
-    }
-
-    /**
-     * set title show or not,default true
-     */
-    public T setTitleShow(boolean isTitleShow) {
-        tv_title.setVisibility(isTitleShow ? VISIBLE : INVISIBLE);
-        return (T) this;
-    }
 
     /**
      * set indicator show or not,default true
@@ -503,10 +439,9 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         if (list == null) {
             throw new IllegalStateException("Data source is empty,you must setBanner(List<E> list) before startScroll()");
         }
+        if (onPageChanged!=null)
+        onPageChanged.onPageChange(currentPositon);
         textChange(currentPositon + 1);
-
-        textChanges(currentPositon);
-        onTitleSlect(tv_title, currentPositon);
         setViewPager();
         //create indicator
         View indicatorViews = onCreateIndicator();
@@ -667,6 +602,15 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 //    public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
 //        onPageChangeListener = listener;
 //    }
+
+    public void onPageChangeCall(onPageChanged onPageChanged) {
+        this.onPageChanged = onPageChanged;
+    }
+
+    public interface onPageChanged {
+        void onPageChange(int position);
+    }
+
 
     public void setOnItemClickL(OnItemClickL onItemClickL) {
         this.onItemClickL = onItemClickL;

@@ -198,9 +198,9 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
-        super.onDestroy();
+        super.onDestroyView();
     }
 }

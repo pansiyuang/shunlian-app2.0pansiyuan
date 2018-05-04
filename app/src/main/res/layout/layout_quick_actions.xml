@@ -9,10 +9,14 @@
     android:focusableInTouchMode="true"
     android:clickable="true"
     android:background="@mipmap/bg_more"
-    android:orientation="vertical"
-    app:ll_control_adapter="true"
-    app:ll_margin_right="30"
-    app:ll_margin_top="60">
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tv_control_adapter="true"
+        app:tv_control_width="1"
+        app:tv_control_height="40" />
 
     <!--消息-->
     <com.shunlian.app.widget.MyRelativeLayout
@@ -21,9 +25,8 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:rl_control_adapter="true"
-        app:rl_control_height="95"
-        app:rl_margin_left="40"
-        app:rl_margin_top="40">
+        app:rl_control_height="90"
+        app:rl_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_message"
@@ -85,7 +88,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -128,7 +131,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -171,7 +174,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -213,7 +216,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -255,7 +258,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -297,7 +300,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView
@@ -339,7 +342,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:ll_control_adapter="true"
-        app:ll_control_height="95"
+        app:ll_control_height="90"
         app:ll_margin_left="40">
 
         <com.shunlian.app.widget.MyImageView

@@ -30,9 +30,6 @@ public class StoreKanner extends BaseBanner<StoreIndexEntity.Body.Datas, StoreKa
         super(context, attrs, defStyle);
     }
 
-    @Override
-    public void onTitleSlect(TextView tv, int position) {
-    }
 
     @Override
     public View onCreateItemView(int position) {
@@ -63,8 +60,7 @@ public class StoreKanner extends BaseBanner<StoreIndexEntity.Body.Datas, StoreKa
 
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(R.layout.layout_kanner_round_indicator, null);
-        indicator.setVisibility(GONE);
+        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
         indicator.setViewPager(vp, list.size());
         return indicator;
     }

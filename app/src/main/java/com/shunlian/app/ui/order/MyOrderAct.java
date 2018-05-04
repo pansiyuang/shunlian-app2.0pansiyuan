@@ -9,6 +9,7 @@ import com.shunlian.app.adapter.MyOrderAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.LazyViewPager;
 import com.shunlian.app.widget.MyImageView;
@@ -62,6 +63,9 @@ public class MyOrderAct extends BaseActivity {
 
     @BindView(R.id.miv_search)
     MyImageView miv_search;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private int pink_color;
     private int new_text;
@@ -127,6 +131,12 @@ public class MyOrderAct extends BaseActivity {
             setStatus(pageItem);
             viewpager.setCurrentItem(pageItem - 1);
         }
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.order();
     }
 
     /**
@@ -199,5 +209,12 @@ public class MyOrderAct extends BaseActivity {
     @OnClick(R.id.miv_search)
     public void search(){
         SearchOrderActivity.startAct(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }
