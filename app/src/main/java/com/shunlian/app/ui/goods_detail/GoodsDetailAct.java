@@ -31,6 +31,8 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -140,6 +142,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mllayout_car)
     MyLinearLayout mllayout_car;
 
+    @BindView(R.id.mll_chat)
+    MyLinearLayout mll_chat;
+
     @BindView(R.id.line)
     View line;
 
@@ -162,6 +167,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public int offset;
     private Map<String,BaseFragment> fragments;
     private CommentFrag commentFrag;
+    private GoodsDeatilEntity.StoreInfo store_info;
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
@@ -197,6 +203,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mtv_buy_immediately.setOnClickListener(this);
         miv_is_fav.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
+        mll_chat.setOnClickListener(this);
     }
 
     @Override
@@ -385,6 +392,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.shop_id = store_id;
+        chatMember.nickname = store_info.decoration_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+        ChatActivity.startAct(this, chatMember);
+    }
+
 
     /**
      * 商品详情数据
@@ -392,7 +409,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
-        GoodsDeatilEntity.StoreInfo store_info = goodsDeatilEntity.store_info;
+        store_info = goodsDeatilEntity.store_info;
         //购物车角标数字
         String member_cart_count = isEmpty(goodsDeatilEntity.member_cart_count) ?
                 "0" : goodsDeatilEntity.member_cart_count;
@@ -646,6 +663,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 setToolbar();
                 setTabBarStatue(COMMENT_ID);
                 goodsDeatilFrag.setScrollPosition(1,offset);
+                break;
+            case R.id.mll_chat:
+                goodsDetailPresenter.getUserId(store_info.store_id);
                 break;
             case R.id.miv_close:
                 backOrder();

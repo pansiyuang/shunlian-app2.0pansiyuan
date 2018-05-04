@@ -11,8 +11,13 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.OrderGoodAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
@@ -31,13 +36,17 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import pay.PayListActivity;
 
-public class OrderDetailAct extends BaseActivity implements View.OnClickListener, OrderdetailView {
+public class OrderDetailAct extends BaseActivity implements View.OnClickListener, OrderdetailView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_state)
     MyTextView mtv_state;
 
@@ -128,6 +137,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mrlayout_news)
     MyRelativeLayout mrlayout_news;
 
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
     private OrderDetailPresenter orderDetailPresenter;
     private String storeId, orderId = "54";
 
@@ -135,6 +147,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     private  int new_gray;
     private  int strokeWidth;
     private OrderdetailEntity orderdetailEntity;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailAct.class);
@@ -160,6 +173,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
         if (!TextUtils.isEmpty(getIntent().getStringExtra("orderId"))) {
             orderId = getIntent().getStringExtra("orderId");
         }
@@ -176,6 +190,19 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         new_gray = getColorResouce(R.color.new_gray);
         strokeWidth = TransformUtil.dip2px(this, 0.5f);
         orderDetailPresenter = new OrderDetailPresenter(this, this, orderId);
+
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        if(messageCountManager.isLoad()){
+            messageCountManager.setTextCount(tv_msg_count);
+        }else{
+            messageCountManager.initData();
+        }
+        super.onResume();
     }
 
     @Override
@@ -360,6 +387,16 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = orderdetailEntity.store_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+        chatMember.shop_id = orderdetailEntity.store_id;
+        ChatActivity.startAct(this, chatMember);
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
@@ -455,7 +492,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case R.id.mtv_title1:
                 text = mtv_title1.getText();
                 if (getString(R.string.contact_seller).equals(text)) {//联系商家
-
+                    orderDetailPresenter.getUserId(storeId);
                 } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
                     orderDetailPresenter.remindseller(orderId);
                 } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
@@ -517,6 +554,22 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

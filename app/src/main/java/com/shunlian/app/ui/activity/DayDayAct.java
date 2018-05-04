@@ -11,18 +11,29 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DayDayMenuAdapter;
 import com.shunlian.app.adapter.DayListAdapter;
 import com.shunlian.app.bean.ActivityListEntity;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.view.DayDayView;
+import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 import butterknife.BindView;
 
-public class DayDayAct extends BaseActivity implements View.OnClickListener, DayDayView{
+public class DayDayAct extends BaseActivity implements View.OnClickListener, DayDayView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.rv_menu)
     RecyclerView rv_menu;
+
+    @BindView(R.id.mtv_msg_count)
+    MyTextView mtv_msg_count;
 
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
@@ -32,6 +43,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     private DayListAdapter dayListAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String id;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, DayDayAct.class);
@@ -74,8 +86,26 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
         closeSideslip();
         minitData();
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        if(messageCountManager.isLoad()){
+            messageCountManager.setTextCount(mtv_msg_count);
+        }else{
+            messageCountManager.initData();
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(mtv_msg_count);
     }
 
     public void minitData(){
@@ -143,5 +173,21 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Override
     public void activityState(int position) {
         dayListAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(mtv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

@@ -216,7 +216,6 @@ public class NetworkUtils {
                     }
                 }
             }
-            Toast.makeText(context, "网络连接失败，请检查您的网络", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

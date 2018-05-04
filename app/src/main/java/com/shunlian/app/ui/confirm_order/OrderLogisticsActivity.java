@@ -11,10 +11,17 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.TraceAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderLogisticsPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.ITraceView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -22,7 +29,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/14.
  */
 
-public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
+public class OrderLogisticsActivity extends BaseActivity implements ITraceView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.recycler_order_logistics)
     RecyclerView recycler_order_logistics;
@@ -39,6 +46,7 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
     public OrderLogisticsPresenter orderLogisticsPresenter;
     public TraceAdapter traceAdapter;
     private String currentOrder;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String orderStr) {
         Intent intent = new Intent(context, OrderLogisticsActivity.class);
@@ -55,7 +63,7 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
+        EventBus.getDefault().register(this);
         rl_title_more.setVisibility(View.VISIBLE);
         tv_title.setText(getStringResouce(R.string.logistics_detail));
         currentOrder = getIntent().getStringExtra("order");
@@ -77,6 +85,23 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
     }
 
     @Override
+    protected void onResume() {
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+        if (messageCountManager.isLoad()) {
+            messageCountManager.setTextCount(tv_title_number);
+        } else {
+            messageCountManager.initData();
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_title_number);
+    }
+
+    @Override
     public void getLogistics(OrderLogisticsEntity logisticsEntity) {
         if (logisticsEntity == null || logisticsEntity.traces == null) {
             return;
@@ -86,5 +111,21 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView {
         recycler_order_logistics.setLayoutManager(linearLayoutManager);
         recycler_order_logistics.setNestedScrollingEnabled(false);
         recycler_order_logistics.setAdapter(traceAdapter);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_title_number);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

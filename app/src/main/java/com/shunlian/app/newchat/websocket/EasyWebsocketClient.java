@@ -1,26 +1,27 @@
 package com.shunlian.app.newchat.websocket;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shunlian.app.App;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
-import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.StatusEntity;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
-import com.shunlian.app.widget.HttpDialog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
@@ -56,9 +57,16 @@ public class EasyWebsocketClient extends WebSocketClient {
 
     //超时时间
     private static long timeout = 15 * 1000;
+    //重连次数
+    private int reconnectCount = 0;
+    //重连最小时间间隔
+    private long minInterval = 3000;
+    //重连最大时间间隔
+    private long maxInterval = 60000;
     private TimeOutThread timeOutThread;
     private Timer timer;
     private MyTimerTask myTimerTask;
+    private Handler mHandler = new Handler();
     private UserInfoEntity userInfoEntity;
     private UserInfoEntity.Info.User mUser;
     private static ObjectMapper objectMapper;
@@ -66,6 +74,7 @@ public class EasyWebsocketClient extends WebSocketClient {
     private String infoStr;
     private String currentPageType = "nomal";
     private static List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
+    private static MessageCountManager messageCountManager;
     //    private GoodsItemEntity.Data.Item goodsItem;
 //    private ShopHomeEntity.Data.ShopInfo shopInfo;
 //    private OrderItemEntity.Data orderItemEntity;
@@ -85,6 +94,8 @@ public class EasyWebsocketClient extends WebSocketClient {
         mContext = context.getApplicationContext();
         objectMapper = new ObjectMapper();
         messageReceiveListeners = new ArrayList<>();
+        messageCountManager = MessageCountManager.getInstance(context);
+
         try {
             mSingleton = null;
             mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
@@ -174,27 +185,13 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
     }
 
-    public void resetSocket() {
-        if (mStatus == Status.DISCONNECTED) {
-            LogUtil.httpLogW("尝试重连服务器....");
-            try {
-                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
-                mSingleton.setTimeOut(timeout);
-                mSingleton.connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                LogUtil.httpLogW("链接服务器失败....");
-            }
-        }
-    }
-
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         timeOutThread.cancel();
         connetService();
         startHeartPin();
         mStatus = Status.CONNECTED;
-
+        cancelReconnect();
         if (mListener != null) {
             mListener.onOpen();
         }
@@ -229,15 +226,25 @@ public class EasyWebsocketClient extends WebSocketClient {
                     BaseMessage baseMessage = objectMapper.readValue(msg, BaseMessage.class);
                     baseMessage.setSendTime(msgInfo.send_time);
 
-                    if (!baseMessage.from_user_id.equals("-1")) { //-1为系统消息
-//                        //通知刷新好友列表
-//                        updateFriendList(baseMessage);
+                    if (!getIsChating()) {
+                        EventBus.getDefault().post(new NewMessageEvent(1));
+                        if (messageCountManager.isLoad()) {
+                            int count = messageCountManager.getAll_msg();
+                            messageCountManager.setAll_msg(count + 1);
+                        }
                     }
                     break;
                 case "pingjia":
                     if (!isEmpty(messageReceiveListeners)) {
                         for (OnMessageReceiveListener listener : messageReceiveListeners) {
                             listener.evaluateMessage(message);
+                        }
+                    }
+                    if (!getIsChating()) {
+                        EventBus.getDefault().post(new NewMessageEvent(1));
+                        if (messageCountManager.isLoad()) {
+                            int count = messageCountManager.getAll_msg();
+                            messageCountManager.setAll_msg(count + 1);
                         }
                     }
                     break;
@@ -271,14 +278,10 @@ public class EasyWebsocketClient extends WebSocketClient {
                             listener.logout();
                         }
                     }
-
                     StatusEntity logout = objectMapper.readValue(message, StatusEntity.class);
                     break;
             }
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -771,6 +774,47 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
         return isSelf;
     }
+
+
+    public void resetSocket() {
+        if (!NetworkUtils.isNetworkOpen(mContext)) {
+            reconnectCount = 0;
+            LogUtil.httpLogW("重连失败网络不可用");
+            return;
+        }
+        if (mStatus != Status.CONNECTING) {//不是正在重连状态
+            reconnectCount++;
+            mStatus = Status.CONNECTING;
+            long reconnectTime = minInterval;
+            if (reconnectCount > 3) {
+                long temp = minInterval * (reconnectCount - 2);
+                reconnectTime = temp > maxInterval ? maxInterval : temp;
+            }
+            LogUtil.httpLogW(String.format("准备开始第%d次重连,重连间隔%d", reconnectCount, reconnectTime));
+            mHandler.postDelayed(mReconnectTask, reconnectTime);
+        }
+    }
+
+    private Runnable mReconnectTask = new Runnable() {
+        @Override
+        public void run() {
+            LogUtil.httpLogW("尝试重连服务器....");
+            try {
+                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
+                mSingleton.setTimeOut(timeout);
+                mSingleton.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                LogUtil.httpLogW("链接服务器失败....");
+            }
+        }
+    };
+
+    private void cancelReconnect() {
+        reconnectCount = 0;
+        mHandler.removeCallbacks(mReconnectTask);
+    }
+
 
     public void setOnClientConnetListener(OnClientConnetListener listener) {
         this.mListener = listener;

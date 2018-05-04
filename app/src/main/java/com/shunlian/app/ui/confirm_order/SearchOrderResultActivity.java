@@ -11,8 +11,11 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.presenter.SearchOrderResultPresent;
 import com.shunlian.app.ui.BaseActivity;
@@ -20,6 +23,10 @@ import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.view.ISearchResultView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +38,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/16.
  */
 
-public class SearchOrderResultActivity extends BaseActivity implements ISearchResultView {
+public class SearchOrderResultActivity extends BaseActivity implements ISearchResultView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.tv_order_search)
     TextView tv_order_search;
@@ -55,6 +62,7 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
     private List<MyOrderEntity.Orders> ordersLists = new ArrayList<>();
     private int refreshPosition;//刷新位置
     public static boolean isRefreshItem;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String keyword) {
         Intent intent = new Intent(context, SearchOrderResultActivity.class);
@@ -71,6 +79,10 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        EventBus.getDefault().register(this);
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
         currentKeyword = getIntent().getStringExtra("keyword");
         mPresenter = new SearchOrderResultPresent(this, this,currentKeyword);
 
@@ -108,6 +120,12 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
                 refreshOrder(id);
             }
             isRefreshItem = false;
+        }
+
+        if (messageCountManager.isLoad()) {
+            messageCountManager.setTextCount(tv_title_number);
+        } else {
+            messageCountManager.initData();
         }
     }
 
@@ -307,5 +325,27 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
         if (mPresenter != null){
             mPresenter.confirmreceipt(order_id);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_title_number);
+    }
+
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_title_number);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:padding="10dp">
 
     <com.shunlian.app.widget.MyImageView
@@ -11,10 +10,22 @@
         android:layout_height="39dp"
         android:scaleType="centerCrop" />
 
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/miv_icon"
+        android:textColor="@color/new_gray"
+        android:textSize="12sp" />
+
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="2.5dp"
+        android:layout_toRightOf="@+id/miv_icon"
         android:scaleType="centerCrop" />
-</LinearLayout>
+</RelativeLayout>

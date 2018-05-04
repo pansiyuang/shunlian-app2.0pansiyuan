@@ -1,19 +1,20 @@
 package com.shunlian.app.newchat.util;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
 
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.presenter.AllMessageCountPresenter;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageCountView;
 
-import java.util.Observable;
 
 /**
  * Created by Administrator on 2018/4/9.
  */
 
-public class MessageCountManager extends Observable implements IMessageCountView {
+public class MessageCountManager implements IMessageCountView {
     private static MessageCountManager manager;
     private AllMessageCountPresenter mPresenter;
     private static Context mContext;
@@ -51,14 +52,14 @@ public class MessageCountManager extends Observable implements IMessageCountView
 
         allMessageCountEntity = messageCountEntity;
 
-        if (mListener == null) {
+        if (mListener != null) {
             mListener.OnLoadSuccess(messageCountEntity);
         }
     }
 
     @Override
     public void getMessageCountFail() {
-        if (mListener == null) {
+        if (mListener != null) {
             mListener.OnLoadFail();
         }
     }
@@ -165,9 +166,22 @@ public class MessageCountManager extends Observable implements IMessageCountView
         return allMessageCountEntity.custom_msg;
     }
 
+
     public void setCustom_msg(int custom_msg) {
         this.allMessageCountEntity.custom_msg = custom_msg;
     }
+
+    public void setTextCount(TextView textView) {
+        if (getAll_msg() > 0) {
+            textView.setVisibility(View.VISIBLE);
+        }
+        if (getAll_msg() > 99) {
+            textView.setText("99+");
+        } else {
+            textView.setText(String.valueOf(getAll_msg()));
+        }
+    }
+
 
     public interface OnGetMessageListener {
         void OnLoadSuccess(AllMessageCountEntity messageCountEntity);

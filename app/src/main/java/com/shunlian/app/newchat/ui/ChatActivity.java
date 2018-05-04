@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +23,7 @@ import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.adapter.ChatMessageAdapter;
 import com.shunlian.app.newchat.entity.BaseMessage;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
@@ -47,6 +46,7 @@ import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.presenter.ChatPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -57,6 +57,7 @@ import com.shunlian.app.widget.ChatOrderDialog;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -109,7 +110,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private ChatMessageAdapter mAdapter;
     private String currentUserId;  //用户ID
     private String chat_m_user_Id; //管理员的id;
-    private String currentRoleType;  //用户ID
     private String chatRoleType; //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
     private String chatName;
     private String chatShopId;
@@ -223,9 +223,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
 //
-//            chatUserId = "40";
+//            chat_m_user_Id = "31";
 //            chatShopId = "26";
-//            chatRoleType = "1";
+//            chatRoleType = "4";
         } else {
             chatRoleType = getIntent().getStringExtra("role_type");
         }
@@ -251,7 +251,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         }
         //获取历史消息
         getChatHistory(isFirst);
-        readedMsg(chat_m_user_Id);
     }
 
     private void initRightTxt() {
@@ -299,6 +298,13 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     @Override
+    protected void onResume() {
+        readedMsg(chat_m_user_Id);
+        mClient.setChating(true);
+        super.onResume();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_title_right:
@@ -318,6 +324,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
                     //跳转帮助中心
+                    HelpOneAct.startAct(this);
                 } else {//对方是商家客服
                     //跳转去店铺
                     StoreAct.startAct(this, chatShopId);
@@ -329,7 +336,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private void initUser(UserInfoEntity.Info.User user) {
         if (user != null) {
             currentUserId = user.user_id;
-            currentRoleType = user.type;
             from_headurl = user.headurl;
             from_id = user.join_id;
             from_nickname = user.nickname;
@@ -796,7 +802,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         if (mClient.getStatus() == Status.CONNECTED) {
             mClient.send(jsonObject.toString());
             LogUtil.httpLogW("消息已读上报:" + jsonObject.toString());
-//            mClient.updateFriendList(chatUserId);
+            int unreadCount = currentChatMember.unread_count;
+            EventBus.getDefault().post(new NewMessageEvent(-unreadCount)); //消息已读,减去消息数量
         }
     }
 
@@ -963,6 +970,19 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
 
+    public int getSendType(String fromUserId) {
+        if (isEmpty(fromUserId)) {
+            return BaseMessage.VALUE_SYSTEM;
+        }
+
+        if (fromUserId.equals(currentUserId)) {
+            return BaseMessage.VALUE_RIGHT;
+        }
+
+        return BaseMessage.VALUE_LEFT;
+    }
+
+
     @Override
     public void initMessage() {
         mCurrentUser = mClient.getUser();
@@ -978,11 +998,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             BaseMessage baseMessage = objectMapper.readValue(message1, BaseMessage.class);
             upDataChatMemberInfo(baseMessage);//更新聊天对象的信息
 
-            if (baseMessage.getSendType() == BaseMessage.VALUE_LEFT) {
+            if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_LEFT) {
                 if (msgInfo.m_user_id.equals(chat_m_user_Id)) {
                     mAdapter.addMsgInfo(msgInfo);
                 }
-            } else if (baseMessage.getSendType() == BaseMessage.VALUE_RIGHT) {
+            } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {
                     //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
                     if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
@@ -993,7 +1013,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                         mAdapter.addMsgInfo(msgInfo);
                     }
                 }
-            } else if (baseMessage.getSendType() == BaseMessage.VALUE_SYSTEM) {
+            } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_SYSTEM) {
                 mAdapter.addMsgInfo(msgInfo);
             }
             runOnUiThread(() -> {

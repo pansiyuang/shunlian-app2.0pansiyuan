@@ -16,4 +16,5 @@ public interface IChatView extends IView {
     void uploadImg(UploadPicEntity picEntity, String tagId, final ImageMessage imageMessage);
 
     void getHistoryMsg(List<MsgInfo> msgInfoList, String lastSendTime, boolean hasMore);
+
 }

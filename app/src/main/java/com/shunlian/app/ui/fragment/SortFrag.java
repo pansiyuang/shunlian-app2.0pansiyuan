@@ -5,25 +5,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SortCategoryAdapter;
 import com.shunlian.app.adapter.SortFragAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SortFragEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.SortFragPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SortFrag extends BaseFragment implements ISortFragView{
+public class SortFrag extends BaseFragment implements ISortFragView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.listView)
     ListView listView;
@@ -48,10 +55,15 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     @BindView(R.id.mtv_search)
     MyTextView mtv_search;
 
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
     private SortFragPresenter presenter;
+    private MessageCountManager messageCountManager;
 
     /**
      * 设置布局id
+     *
      * @param inflater
      * @param container
      * @return
@@ -65,7 +77,7 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             ImmersionBar.with(this).fitsSystemWindows(true)
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
@@ -78,27 +90,45 @@ public class SortFrag extends BaseFragment implements ISortFragView{
      */
     @Override
     protected void initData() {
+
+        EventBus.getDefault().register(this);
+
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
-        presenter = new SortFragPresenter(baseActivity,this);
+        presenter = new SortFragPresenter(baseActivity, this);
 
-        GridLayoutManager manager = new GridLayoutManager(baseActivity,3);
+        GridLayoutManager manager = new GridLayoutManager(baseActivity, 3);
         recycler_sort.setLayoutManager(manager);
     }
 
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(baseContext);
+            if (messageCountManager.isLoad()) {
+                messageCountManager.setTextCount(tv_msg_count);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
     @OnClick(R.id.rl_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.category();
     }
 
     @OnClick(R.id.mtv_search)
-    public void onClickSearch(){
+    public void onClickSearch() {
         CharSequence text = mtv_search.getText();
-        SearchGoodsActivity.startAct(baseActivity,text.toString(),"sortFrag");
+        SearchGoodsActivity.startAct(baseActivity, text.toString(), "sortFrag");
     }
+
     /**
      * 显示网络请求失败的界面
      *
@@ -121,41 +151,39 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     /**
      * 右侧子分类
+     *
      * @param toplist
      */
     public void subRightList(final SortFragEntity.Toplist toplist) {
 
         final List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
         List<SortFragEntity.SubList> children = toplist.children;
-        if (!isEmpty(children)){
+        if (!isEmpty(children)) {
             for (int i = 0; i < children.size(); i++) {//遍历二级分类
                 List<SortFragEntity.ItemList> children1 = children.get(i).children;
-                if (!isEmpty(children1)){
+                if (!isEmpty(children1)) {
                     itemLists.addAll(children1);//对应一级分类下的所有三级分类列表
                 }
             }
         }
 
 
-        final SortCategoryAdapter adapter = new SortCategoryAdapter(baseActivity,itemLists,toplist);
+        final SortCategoryAdapter adapter = new SortCategoryAdapter(baseActivity, itemLists, toplist);
 
         recycler_sort.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (adapter.counts.contains(position)){
-                    SortFragEntity.SubList subList = adapter.titleData.get(position);
-                    RankingListAct.startAct(baseActivity, subList.id,toplist.name,subList.name);
-                }else {
-                    int i = adapter.computeCount(position);
-                    SortFragEntity.ItemList itemList = itemLists.get(position - i);
-                    GoodsSearchParam param = new GoodsSearchParam();
-                    param.cid = itemList.g_cid;
-                    param.attr_data = itemList.attrs;
-                    param.keyword = itemList.name;
-                    CategoryAct.startAct(baseActivity, param);
-                }
+        adapter.setOnItemClickListener((view, position) -> {
+            if (adapter.counts.contains(position)) {
+                SortFragEntity.SubList subList = adapter.titleData.get(position);
+                RankingListAct.startAct(baseActivity, subList.id, toplist.name, subList.name);
+            } else {
+                int i = adapter.computeCount(position);
+                SortFragEntity.ItemList itemList = itemLists.get(position - i);
+                GoodsSearchParam param = new GoodsSearchParam();
+                param.cid = itemList.g_cid;
+                param.attr_data = itemList.attrs;
+                param.keyword = itemList.name;
+                CategoryAct.startAct(baseActivity, param);
             }
         });
     }
@@ -163,11 +191,12 @@ public class SortFrag extends BaseFragment implements ISortFragView{
 
     /**
      * 分类所有类目
+     *
      * @param categoryList
      */
     @Override
     public void categoryAll(final List<SortFragEntity.Toplist> categoryList) {
-        if (isEmpty(categoryList)){
+        if (isEmpty(categoryList)) {
             return;
         }
         SortFragEntity.Toplist toplist = categoryList.get(0);
@@ -176,14 +205,11 @@ public class SortFrag extends BaseFragment implements ISortFragView{
         final SortFragAdapter adapter = new SortFragAdapter(baseActivity, categoryList);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SortFragEntity.Toplist toplist = categoryList.get(position);
-                adapter.currentPosition = position;
-                adapter.notifyDataSetChanged();
-                subRightList(toplist);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            SortFragEntity.Toplist toplist1 = categoryList.get(position);
+            adapter.currentPosition = position;
+            adapter.notifyDataSetChanged();
+            subRightList(toplist1);
         });
     }
 
@@ -201,6 +227,22 @@ public class SortFrag extends BaseFragment implements ISortFragView{
     public void onDestroyView() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroyView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

@@ -16,6 +16,7 @@ public class ChatMemberEntity {
     public static class ChatMember implements Serializable {
         public String user_id;//商家ID 或者系统客服管理员ID
         public String m_user_id;
+        public String friend_user_id;
         public String join_id;
         public String shop_id;
         public String creat_time;//成为好友时间
