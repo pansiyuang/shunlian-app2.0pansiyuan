@@ -16,7 +16,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -1108,7 +1107,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @OnClick(R.id.mtv_act)
         public void actTitle(){
             GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
-            H5Act.startAct(context,activity.link,H5Act.MODE_SONIC);
+            if (activity.url != null){
+                Common.goGoGo(context,activity.url.type,activity.url.item_id);
+            }
+        }
+
+        @OnClick({R.id.miv_share,R.id.mtv_share})
+        public void share(){
+            ((GoodsDetailAct)context).moreAnim();
         }
     }
 

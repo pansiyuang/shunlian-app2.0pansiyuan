@@ -32,9 +32,11 @@
             android:maxLines="1"
             android:textColor="@color/value_60"
             android:textSize="15sp"
+            android:ellipsize="end"
+            android:maxLength="10"
             app:tv_control_adapter="true"
             app:tv_margin_left="25"
-            app:tv_margin_top="50" />
+            app:tv_margin_top="50"/>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_quality_goods"

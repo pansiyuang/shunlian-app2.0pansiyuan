@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_ash"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_control_height="100">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:iv_control_adapter="true"
+            app:iv_control_height="50"
+            app:iv_control_width="50"
+            app:iv_margin_left="25" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        android:paddingTop="15dp"
+        android:textColor="@color/new_text"
+        android:textSize="18sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="7.5dp"
+        android:textColor="@color/share_text"
+        android:textSize="12sp" />
+
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_goods_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iv_control_adapter="true"
+        app:iv_margin_top="30"
+        app:iv_control_height="720"
+        app:iv_control_width="720" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_ash">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:iv_control_adapter="true"
+            app:iv_control_height="180"
+            app:iv_control_width="180"
+            app:iv_margin_left="28" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/miv_code"
+            android:layout_toRightOf="@+id/miv_code"
+            android:textColor="@color/pink_color"
+            android:textSize="21sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_left="30"
+            app:tv_margin_top="10" />
+
+        <LinearLayout
+            android:id="@+id/llayout_day"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_alignLeft="@+id/mtv_price"
+            android:layout_below="@+id/mtv_price"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/edge_pink_1px"
+                android:text="03月15日 18:00开抢"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/pink_color"
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/pink_color"
+                android:text="天天特惠"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/miv_code"
+            android:layout_toRightOf="@+id/miv_code"
+            android:text="长按图片识别二维码"
+            android:textColor="@color/my_gray_one"
+            android:textSize="12sp"
+            app:tv_control_adapter="true"
+            app:tv_margin_bottom="10"
+            app:tv_margin_left="30"
+            app:tv_margin_top="10" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/mtv_prompt"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/img_share_logo"
+            app:iv_control_adapter="true"
+            app:iv_control_height="30"
+            app:iv_control_width="132"
+            app:iv_margin_right="25" />
+
+    </RelativeLayout>
+
+</LinearLayout>

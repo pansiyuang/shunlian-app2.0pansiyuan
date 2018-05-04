@@ -16,6 +16,7 @@ public class GuanzhuEntity {
     public String page;
     public String page_size;
     public List<DynamicListBean> dynamic_list;
+    public GoodsDeatilEntity.UserInfo user_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DynamicListBean {

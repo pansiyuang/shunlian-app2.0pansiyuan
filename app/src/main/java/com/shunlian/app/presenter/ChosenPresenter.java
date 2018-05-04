@@ -5,6 +5,8 @@ import android.content.Context;
 import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IChosenView;
@@ -24,9 +26,11 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
     public static final int MODE_TAG_DETAIL = 10002;
     private int currentMode;
     private String currentTagId;
+    private ShareInfoParam shareInfoParam;
 
     public ChosenPresenter(Context context, IChosenView iView) {
         super(context, iView);
+        shareInfoParam = new ShareInfoParam();
     }
 
     @Override
@@ -67,6 +71,11 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 if (currentPage == 1) {
                     iView.refreshFinish();
                 }
+                //分享专用
+                GoodsDeatilEntity.UserInfo user_info = articleEntity.user_info;
+                shareInfoParam.userAvatar = user_info.avatar;
+                shareInfoParam.userName = user_info.nickname;
+
                 currentPage++;
             }
             @Override

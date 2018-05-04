@@ -1,5 +1,6 @@
 package com.shunlian.app.presenter;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -13,6 +14,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbablyLikeEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -39,6 +41,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private String type = "ALL";
     private int allPage;//总页数
     private String act_id;
+    private String shareLink;
+    private String goodsTitle;
+    private ShareInfoParam shareInfoParam;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -59,6 +64,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
                 super.onSuccess(entity);
+                shareInfoParam = new ShareInfoParam();
                 GoodsDeatilEntity data = entity.data;
                 if (data != null) {
                     iView.goodsDetailData(data);
@@ -74,6 +80,18 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     GoodsDeatilEntity.SpecailAct common_activity = data.common_activity;
                     if (common_activity != null){
                         iView.specailAct();
+                    }
+                    if (data.user_info != null){
+                        shareLink = data.user_info.share_url;
+                        goodsTitle = data.title;
+                        shareInfoParam.userAvatar = data.user_info.avatar;
+                        shareInfoParam.userName = data.user_info.nickname;
+                        shareInfoParam.title = data.title;
+                        shareInfoParam.img = data.pics.get(0);
+                        shareInfoParam.goodsPrice = data.price;
+                        shareInfoParam.desc = data.introduction;
+                        shareInfoParam.downloadPic = data.pics;
+                        shareInfoParam.shareLink = shareLink;
                     }
                 }
             }
@@ -407,5 +425,32 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         }
                     }
                 });
+    }
+
+    /**
+     * 复制链接
+     */
+    public void copyText() {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+        if (!TextUtils.isEmpty(goodsTitle)) {
+            sb.append(goodsTitle);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(shareLink)) {
+            sb.append(shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) context
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        Common.staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
+    }
+
+    /**
+     * 分享数据
+     * @return
+     */
+    public ShareInfoParam getShareInfoParam() {
+        return shareInfoParam;
     }
 }

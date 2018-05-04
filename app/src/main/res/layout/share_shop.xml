@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_shop_share"
+    android:orientation="vertical">
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/llayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:ll_control_adapter="true"
+        app:ll_control_height="100">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:iv_control_adapter="true"
+            app:iv_control_height="50"
+            app:iv_control_width="50"
+            app:iv_margin_left="25" />
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/new_text"
+            android:textSize="12sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
+
+    <RelativeLayout
+        android:id="@+id/rlayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/llayout_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:ll_control_adapter="true"
+            app:ll_control_width="600"
+            app:ll_margin_bottom="90"
+            app:ll_margin_top="156">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="37.5dp"
+                android:maxLines="1"
+                android:textColor="@color/new_text"
+                android:textSize="18sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:iv_control_adapter="true"
+                app:iv_control_height="28"
+                app:iv_margin_top="16"/>
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="400"
+                app:iv_control_width="400"
+                app:iv_margin_top="80" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="长按或扫一扫，即刻进店购买"
+                android:textColor="@color/my_gray_one"
+                android:textSize="12sp" />
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_share_logo"
+                app:iv_control_adapter="true"
+                app:iv_control_height="55"
+                app:iv_control_width="235"
+                app:iv_margin_bottom="100"
+                app:iv_margin_top="90" />
+
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/share_circle"
+            android:gravity="center"
+            app:ll_control_adapter="true"
+            app:ll_control_height="120"
+            app:ll_control_width="120"
+            app:ll_margin_top="90">
+
+            <com.shunlian.app.widget.circle.CircleImageView
+                android:id="@+id/civ_shop_head"
+                android:scaleType="centerCrop"
+                android:layout_width="45dp"
+                android:layout_height="45dp"/>
+
+        </com.shunlian.app.widget.MyLinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

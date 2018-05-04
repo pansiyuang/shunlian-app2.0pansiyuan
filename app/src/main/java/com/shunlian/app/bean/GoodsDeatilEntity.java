@@ -16,6 +16,7 @@ public class GoodsDeatilEntity {
 
     public String id;
     public String title;
+    public String introduction;//商品简介
     public Detail detail;
     public String free_shipping;
     public String shipping_fee;//运费
@@ -59,6 +60,15 @@ public class GoodsDeatilEntity {
     public SpecailAct common_activity;//专题活动
 
     public Act activity;
+    //分享信息
+    public UserInfo user_info;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class UserInfo{
+        public String nickname;
+        public String avatar;
+        public String share_url;
+    }
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -77,8 +87,14 @@ public class GoodsDeatilEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Act{
         public String desc;
-        public String link;
+        public Url url;
         public String title;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Url{
+        public String type;
+        public String item_id;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

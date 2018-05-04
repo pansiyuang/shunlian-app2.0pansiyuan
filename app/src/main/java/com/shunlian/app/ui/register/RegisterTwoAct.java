@@ -389,6 +389,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             SharedPrefUtil.saveSharedPrfString("token", entity.token);
         }
         Common.staticToast("注册成功");
+        finish();
     }
 
     @Override

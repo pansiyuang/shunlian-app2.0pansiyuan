@@ -326,6 +326,7 @@
             android:paddingTop="25dp">
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_weixin_share"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -337,6 +338,7 @@
                 android:textSize="10sp" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_picText_share"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -348,6 +350,7 @@
                 android:textSize="10sp" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_copyLink_share"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -458,4 +461,9 @@
             app:iv_margin_top="40" />
     </com.shunlian.app.widget.MyLinearLayout>
 
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

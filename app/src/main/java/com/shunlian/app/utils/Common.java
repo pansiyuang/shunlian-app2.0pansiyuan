@@ -24,8 +24,11 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.location.Criteria;
@@ -53,8 +56,8 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -712,5 +715,40 @@ public class Common {
                 break;
         }
         return resid;
+    }
+
+
+    public static boolean isWeixinAvilible(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mm")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void openWeiXin(Context context) {
+        if (isWeixinAvilible(context)) {
+            try {
+                Intent intent = new Intent();
+                ComponentName cmp = new ComponentName("com.tencent.mm",
+                        "com.tencent.mm.ui.LauncherUI");
+                intent.setAction(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setComponent(cmp);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                staticToast("打开微信失败，请重试");
+                e.printStackTrace();
+            }
+        } else {
+            staticToast( "请安装微信后重试!");
+        }
     }
 }

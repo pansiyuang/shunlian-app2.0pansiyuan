@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.GuanzhuPresenter;
 import com.shunlian.app.ui.discover.guanzhu.FindSelectShopAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGuanzhuView;
@@ -42,6 +44,8 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
 
+    QuickActions quick_actions;
+
     private LinearLayoutManager manager;
     private GuanzhuPresenter presenter;
 
@@ -66,6 +70,12 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(baseContext);
         }
+
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -163,8 +173,24 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
         }
     }
 
+    /**
+     * 分享
+     *
+     * @param shareInfoParam
+     */
+    @Override
+    public void share(ShareInfoParam shareInfoParam) {
+        if (quick_actions != null){
+            visible(quick_actions);
+            quick_actions.shareInfo(shareInfoParam);
+            quick_actions.shareStyle2Dialog(false);
+        }
+    }
+
     @Override
     public void onDestroyView() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         if (presenter != null) {

@@ -19,6 +19,7 @@ public class ArticleEntity {
     public List<Article> list;
     public List<Topic> topic_list;
     public Tag tag_obj;
+    public GoodsDeatilEntity.UserInfo user_info;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Article {
