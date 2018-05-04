@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;

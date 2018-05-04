@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
@@ -218,7 +219,6 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCornerImage(Context context, ImageView imageView, String imgUrl,int radius) {
-//      图片属性为 android:scaleType="fitXY"，圆角图片才有效
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -227,7 +227,7 @@ public class GlideUtils {
                 .placeholder(R.mipmap.img_guige_moren)
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
-                .bitmapTransform(
+                .bitmapTransform(new CenterCrop(context),
                         new GlideRoundTransform(context, radius))
                 .into(imageView);
     }

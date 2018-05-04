@@ -394,6 +394,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void getUserId(String userId) {
+
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
         chatMember.shop_id = store_id;
         chatMember.nickname = store_info.decoration_name;

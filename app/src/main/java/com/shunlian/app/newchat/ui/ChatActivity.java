@@ -209,6 +209,10 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         ((SimpleItemAnimator) recycler_chat.getItemAnimator()).setSupportsChangeAnimations(false);//取消刷新动画
         recycler_chat.setNestedScrollingEnabled(false);
         manager = new LinearLayoutManager(this);
+        manager.setRecycleChildrenOnDetach(true);
+        RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
+        pool.setMaxRecycledViews(0, 20);
+        recycler_chat.setRecycledViewPool(pool);
         recycler_chat.setLayoutManager(manager);
         mAdapter = new ChatMessageAdapter(this, messages, recycler_chat);
         recycler_chat.setAdapter(mAdapter);

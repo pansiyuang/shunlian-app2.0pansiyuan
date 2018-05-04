@@ -635,6 +635,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     }
                 };
                 HelpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
+                HelpHolder.recycler_help.setNestedScrollingEnabled(false);
             }
         }
         if (!isScrolling) {
@@ -888,6 +889,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         public HelpHolder(View itemView) {
             super(itemView);
             LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setRecycleChildrenOnDetach(true);
+            RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
+            pool.setMaxRecycledViews(0, 20);
+            recycler_help.setRecycledViewPool(pool);
             recycler_help.setLayoutManager(manager);
         }
     }

@@ -137,7 +137,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                     mFragment.toUnLikeArticle(article.id);
                 }
             });
-
+            articleViewHolder.ll_share.setOnClickListener(v -> {
+                //分享点击事件
+            });
             articleViewHolder.ll_comment.setOnClickListener(v -> CommentListAct.startAct(mFragment.getActivity(), article.id));
 
             articleViewHolder.miv_change.setOnClickListener(v -> {
