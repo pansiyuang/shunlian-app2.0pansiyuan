@@ -7,30 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.PinpaiAdapter;
 import com.shunlian.app.adapter.SaleRankAdapter;
-import com.shunlian.app.bean.CoreHotEntity;
-import com.shunlian.app.bean.CoreNewEntity;
-import com.shunlian.app.bean.CoreNewsEntity;
-import com.shunlian.app.bean.CorePingEntity;
-import com.shunlian.app.bean.HotRdEntity;
 import com.shunlian.app.bean.WeekSaleTopEntity;
-import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.presenter.PWeekSale;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.core.PingpaiListAct;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.view.IAishang;
 import com.shunlian.app.view.IWeekSale;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 

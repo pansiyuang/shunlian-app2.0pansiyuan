@@ -6,9 +6,13 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.VouchercenterplEntity;
+import com.shunlian.app.presenter.PGetCoupon;
+import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -23,10 +27,11 @@ import butterknife.BindView;
  */
 
 public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MData> {
-
+    private PGetCoupon pGetCoupon;
     public CouponAdapter(Context context, boolean isShowFooter,
-                         List<VouchercenterplEntity.MData> lists) {
+                         List<VouchercenterplEntity.MData> lists,PGetCoupon pGetCoupon) {
         super(context, isShowFooter, lists);
+        this.pGetCoupon=pGetCoupon;
     }
 
     @Override
@@ -45,7 +50,36 @@ public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MDa
         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan)+data.denomination+data.use_condition
                 , data.denomination, 21);
         mHolder.mtv_price.setText(spannableStringBuilder);
-        mHolder.mtv_yiqiang.setText(data.already_get);
+        if ("0".equals(data.if_get)) {
+            mHolder.mtv_yiqiang.setText(getString(R.string.first_yiqiang) + data.already_get + "%");
+            mHolder.seekbar_grow.setProgress(Integer.parseInt(data.already_get));
+            mHolder.mtv_yiqiang.setVisibility(View.VISIBLE);
+            mHolder.seekbar_grow.setVisibility(View.VISIBLE);
+            mHolder.mtv_yiling.setVisibility(View.INVISIBLE);
+            mHolder.mtv_get.setBackgroundResource(R.drawable.bg_common_round_nobord);
+            mHolder.mtv_get.setText(getString(R.string.chat_lijilingqu));
+            mHolder.mtv_get.setTextColor(getColor(R.color.white));
+            mHolder.mtv_get.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    pGetCoupon.getVoucher(data.id,true,position);
+                }
+            });
+        } else {
+            mHolder.mtv_yiqiang.setVisibility(View.INVISIBLE);
+            mHolder.seekbar_grow.setVisibility(View.INVISIBLE);
+            mHolder.mtv_yiling.setVisibility(View.VISIBLE);
+            mHolder.mtv_get.setBackgroundResource(R.drawable.bg_common_pink_round);
+            mHolder.mtv_get.setText(getString(R.string.first_mashangshiyong));
+            mHolder.mtv_get.setTextColor(getColor(R.color.pink_color));
+            mHolder.mtv_get.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.startAct(context,"mainPage");
+                }
+            });
+        }
+
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -66,6 +100,12 @@ public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MDa
 
         @BindView(R.id.mtv_get)
         MyTextView mtv_get;
+
+        @BindView(R.id.mtv_yiling)
+        MyTextView mtv_yiling;
+
+        @BindView(R.id.seekbar_grow)
+        SeekBar seekbar_grow;
 
         public ActivityMoreHolder(View itemView) {
             super(itemView);

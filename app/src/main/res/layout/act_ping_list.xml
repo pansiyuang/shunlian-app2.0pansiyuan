@@ -35,7 +35,27 @@
                 android:layout_marginTop="-30dp"
                 android:scaleType="fitXY" />
 
-
+            <com.shunlian.app.widget.MyLinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/miv_photo"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true">
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/first_jujieshu"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp"
+                    android:layout_toLeftOf="@id/downTime_firsts"/>
+                <com.shunlian.app.utils.timer.DayRedBlackDownTimerView
+                    android:id="@+id/downTime_firsts"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content"/>
+            </com.shunlian.app.widget.MyLinearLayout>
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_desc"
                 android:layout_width="match_parent"

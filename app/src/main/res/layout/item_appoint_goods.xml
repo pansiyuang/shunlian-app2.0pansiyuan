@@ -30,6 +30,7 @@
         android:layout_toLeftOf="@+id/mtv_price"
         android:layout_toRightOf="@+id/miv_goods"
         android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/new_text"
         android:textSize="13sp"
         app:tv_control_adapter="true"

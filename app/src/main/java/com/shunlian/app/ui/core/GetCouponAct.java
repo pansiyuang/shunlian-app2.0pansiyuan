@@ -23,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,9 +53,11 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
 
     private PGetCoupon pGetCoupon;
     private CouponsAdapter couponsAdapter;
+    private CouponAdapter couponAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String type = "All";
     private MessageCountManager messageCountManager;
+    private List<VouchercenterplEntity.MData> mDatas;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, GetCouponAct.class);
@@ -98,12 +101,16 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
             case R.id.mtv_zuixin:
                 if (rv_dianpu.getScrollState() == 0) {
                     type = "NEW";
+                    mtv_zuixin.setBackgroundResource(R.drawable.bg_hot_top);
+                    mtv_remen.setBackgroundResource(R.drawable.bg_new_top);
                     pGetCoupon.resetBaby(type, "");
                 }
                 break;
             case R.id.mtv_remen:
                 if (rv_dianpu.getScrollState() == 0) {
                     type = "All";
+                    mtv_remen.setBackgroundResource(R.drawable.bg_hot_top);
+                    mtv_zuixin.setBackgroundResource(R.drawable.bg_new_top);
                     pGetCoupon.resetBaby(type, "");
                 }
                 break;
@@ -150,8 +157,11 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
+        mDatas=new ArrayList<>();
+        mDatas.addAll(vouchercenterplEntity.seller_voucher);
         rv_pingtai.setNestedScrollingEnabled(false);
-        rv_pingtai.setAdapter(new CouponAdapter(this, false, vouchercenterplEntity.seller_voucher));
+        couponAdapter= new CouponAdapter(this, false,mDatas,pGetCoupon);
+        rv_pingtai.setAdapter(couponAdapter);
         rv_pingtai.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        rv_pingtai.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
     }
@@ -159,7 +169,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(getBaseContext(), false, mData);
+            couponsAdapter = new CouponsAdapter(getBaseContext(), false, mData,pGetCoupon);
             linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rv_dianpu.setLayoutManager(linearLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);
@@ -184,4 +194,15 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
+    @Override
+    public void getCouponCallBack(boolean isCommon,int position) {
+        if (isCommon){
+            mDatas.get(position).if_get="1";
+            couponAdapter.notifyItemChanged(position);
+        }else {
+            pGetCoupon.mDatas.get(position).if_get="1";
+            couponsAdapter.notifyItemChanged(position);
+        }
+    }
+
 }

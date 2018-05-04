@@ -37,7 +37,7 @@
         android:layout_marginBottom="20dp"/>
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_yiqiang"
-        android:layout_width="80dp"
+        android:layout_width="70dp"
         android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -48,20 +48,20 @@
         android:gravity="center"
         android:layout_marginTop="16dp"/>
 
-    <com.shunlian.app.widget.MyTextView
-        android:id="@+id/mtv_jindu"
-        android:layout_width="80dp"
+    <SeekBar
+        android:id="@+id/seekbar_grow"
+        style="@style/CouponSeekbarStyles"
+        android:layout_width="100dp"
+        android:layout_height="8dp"
+        android:layout_marginRight="-5dp"
         android:layout_alignParentRight="true"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:layout_marginRight="10dp"
-        android:lines="1"
+        android:splitTrack="false"
         android:layout_marginTop="34dp"/>
+
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_get"
         android:layout_height="20dp"
         android:layout_width="70dp"
-        android:background="@drawable/rounded_corner_pink_26px"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
         android:ellipsize="end"
@@ -70,7 +70,23 @@
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"
         android:textSize="10sp"
-        android:layout_marginBottom="14dp"/>
+        android:layout_marginBottom="20dp"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_yiling"
+        android:layout_width="70dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:layout_alignParentRight="true"
+        android:lines="1"
+        android:visibility="gone"
+        android:text="@string/hava_received"
+        android:textColor="@color/pink_color"
+        android:textSize="10sp"
+        android:gravity="center"
+        android:layout_marginTop="27dp"/>
+
 </com.shunlian.app.widget.MyRelativeLayout>
 
 

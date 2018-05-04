@@ -68,6 +68,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     public final LayoutInflater mInflater;
 
     public BaseRecyclerAdapter(Context context, boolean isShowFooter, List<T> lists) {
+        if (lists == null){
+           lists = new ArrayList<>();
+        }
         this.context = context;
         this.lists = lists;
         this.isShowFooter = isShowFooter;

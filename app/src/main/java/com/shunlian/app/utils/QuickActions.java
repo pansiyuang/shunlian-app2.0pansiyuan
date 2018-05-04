@@ -350,4 +350,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     public void help(){
         setShowItem(1,2,3,4,6);
     }
+
+    /**
+     * 搜索
+     */
+    public void search(){
+        setShowItem(1,3,4,5,6,7);
+    }
 }

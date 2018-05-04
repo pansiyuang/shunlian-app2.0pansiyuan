@@ -20,6 +20,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.view.IAishang;
@@ -183,6 +184,12 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
             linearLayoutManager=new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
             rv_category.setLayoutManager(linearLayoutManager);
             rv_category.setAdapter(koubeiAdapter);
+            koubeiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(getBaseContext(),mData.get(position).id);
+                }
+            });
         }else {
             koubeiAdapter.notifyDataSetChanged();
         }

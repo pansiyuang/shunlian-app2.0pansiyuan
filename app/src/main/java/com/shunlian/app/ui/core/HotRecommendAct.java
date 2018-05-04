@@ -3,13 +3,11 @@ package com.shunlian.app.ui.core;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotPushAdapter;
-import com.shunlian.app.adapter.PinpaiAdapter;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
@@ -17,16 +15,14 @@ import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.timer.DayRedWhiteDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.banner.BaseBanner;
-import com.shunlian.app.widget.banner.MyKanner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,16 +47,48 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
 
+    @BindView(R.id.downTime_firsts)
+    DayRedWhiteDownTimerView downTime_firsts;
+
+    @BindView(R.id.miv_arrow)
+    MyImageView miv_arrow;
 
     private PAishang pAishang;
     private HotPushAdapter hotPushAdapter;
     private String hotId;
+    private boolean isMore=false;
 
     public static void startAct(Context context,String hotId) {
         Intent intent = new Intent(context, HotRecommendAct.class);
         intent.putExtra("hotId",hotId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (downTime_firsts!=null){
+            downTime_firsts.cancelDownTimer();
+            downTime_firsts=null;
+        }
+        super.onDestroy();
+    }
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.miv_arrow:
+                if (isMore){
+                    miv_arrow.setImageResource(R.mipmap.icon_common_arrowdowns);
+                    mtv_desc.setLines(2);
+                    isMore=false;
+                }else {
+                    isMore=true;
+                    mtv_desc.setLines(3);
+                    miv_arrow.setImageResource(R.mipmap.icon_common_arrowups);
+                }
+                break;
+        }
     }
 
     @Override
@@ -94,10 +122,18 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setPushData(List<HotRdEntity.MData> mData, HotRdEntity data) {
-        mtv_title.setText(data.name);
-        mtv_desc.setText(data.content);
-        GlideUtils.getInstance().loadImage(getBaseContext(),miv_bg,data.pic);
         if (hotPushAdapter==null){
+            mtv_title.setText(data.name);
+            mtv_desc.setText(data.content);
+            GlideUtils.getInstance().loadImage(getBaseContext(),miv_bg,data.pic);
+            downTime_firsts.setDownTime(Integer.parseInt(data.count_down));
+            downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    downTime_firsts.cancelDownTimer();
+                }
+
+            });
             hotPushAdapter=new HotPushAdapter(getBaseContext(),mData);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
             rv_list.setLayoutManager(gridLayoutManager);

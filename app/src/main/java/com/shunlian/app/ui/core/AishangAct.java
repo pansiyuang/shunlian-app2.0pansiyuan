@@ -22,6 +22,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.MHorItemDecoration;
@@ -161,6 +162,12 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         rv_goods.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         rv_goods.setAdapter(aishangHorizonAdapter);
         rv_goods.addItemDecoration(new MHorItemDecoration(getBaseContext(), 10, 10, 10));
+        aishangHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GoodsDetailAct.startAct(getBaseContext(),coreNewEntity.hot_goods.get(position).id);
+            }
+        });
         CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(getBaseContext(), false, coreNewEntity.cate_name);
         cate_id=coreNewEntity.cate_name.get(0).cate_id;
         pAishang.resetBaby("new",cate_id);
@@ -197,6 +204,12 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             gridLayoutManager=new GridLayoutManager(getBaseContext(),2);
             rv_category.setLayoutManager(gridLayoutManager);
             rv_category.setAdapter(aiMoreAdapter);
+            aiMoreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(getBaseContext(),mData.get(position).id);
+                }
+            });
             //在CoordinatorLayout中使用添加分割线失效
 //            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(getBaseContext(), 5), false);
 //            rv_category.addItemDecoration(gridSpacingItemDecoration);

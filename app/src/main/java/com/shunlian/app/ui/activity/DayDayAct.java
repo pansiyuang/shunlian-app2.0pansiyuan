@@ -17,6 +17,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.DayDayView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DayDayAct extends BaseActivity implements View.OnClickListener, DayDayView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.rv_menu)
@@ -37,6 +39,9 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private DayDayPresenter dayDayPresenter;
     private DayDayMenuAdapter dayDayMenuAdapter;
@@ -80,6 +85,12 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
                 }
             }
         });
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.activity();
     }
 
     @Override
@@ -187,6 +198,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

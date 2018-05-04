@@ -38,7 +38,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
     private boolean isFirst = false;
-    private FirstPageFrag firstPageFrag;
 
     public static BaseFragment getInstance(String channel_id) {
         CateGoryFrag fragment = new CateGoryFrag();
@@ -68,6 +67,10 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
             public void onRefresh() {
                 mDatasss.clear();
                 pFirstPage.getContentData(channel_id);
+                if (firstPageAdapter!=null){
+                    firstPageAdapter.showPosition=-1;
+                    firstPageAdapter.isShow=false;
+                }
             }
         });
 
@@ -138,16 +141,22 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        for (int i = 0; i < mDatas.size(); i++) {
-            GetDataEntity.MData mData = new GetDataEntity.MData();
-            mData.module = "moreGoods";
-            mData.moreGoods = mDatas.get(i);
-            mDatasss.add(mData);
-            if (i >= mDatas.size() - 1) {
-                mDatass.addAll(mDatasss);
+        if (rv_view.getScrollState()== 0){
+            for (int i = 0; i < mDatas.size(); i++) {
+                GetDataEntity.MData mData = new GetDataEntity.MData();
+                mData.module = "moreGoods";
+                mData.moreGoods = mDatas.get(i);
+                mDatasss.add(mData);
+                if (i >= mDatas.size() - 1) {
+                    mDatass.addAll(mDatasss);
+                    firstPageAdapter.notifyDataSetChanged();
+                }
+            }
+            if (mDatas.size()<=0){
                 firstPageAdapter.notifyDataSetChanged();
             }
+            firstPageAdapter.setPageLoading(page, allPage);
         }
-        firstPageAdapter.setPageLoading(page, allPage);
+
     }
 }
