@@ -25,4 +25,5 @@ public interface StoreView extends IView {
     void storeFocus();
     void storeDiscountTwo(List<StorePromotionGoodsListTwoEntity.Lists.Good> mDatas);
     void refreshVoucherState(GoodsDeatilEntity.Voucher voucher);
+    void getUserId(String userId);
 }

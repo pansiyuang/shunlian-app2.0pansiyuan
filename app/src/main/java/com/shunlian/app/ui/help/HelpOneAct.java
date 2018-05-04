@@ -14,6 +14,8 @@ import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.adapter.HelpQoneAdapter;
 import com.shunlian.app.adapter.HelpQtwoAdapter;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.presenter.PHelpOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
@@ -75,7 +77,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mllayout_kefu:
-
+                pHelpOne.getUserId();
                 break;
             case R.id.mllayout_dianhua:
                 if (promptDialog == null) {
@@ -96,19 +98,11 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
 
     public void initDialog() {
         promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
-                startActivity(intentServePhoneOne);
-                promptDialog.dismiss();
-            }
-        }, "取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                promptDialog.dismiss();
-            }
-        }).show();
+        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
     }
 
     @Override
@@ -147,40 +141,40 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_qOne.setLayoutManager(new GridLayoutManager(this, 2));
         HelpQoneAdapter helpQoneAdapter = new HelpQoneAdapter(this, false, helpcenterIndexEntity.questionCategory);
         rv_qOne.setAdapter(helpQoneAdapter);
-        helpQoneAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                HelpcenterIndexEntity.QuestionCategory questionCategory = helpcenterIndexEntity.questionCategory.get(position);
-                HelpTwoAct.startAct(getBaseContext(), questionCategory.id, questionCategory.name);
-            }
+        helpQoneAdapter.setOnItemClickListener((view, position) -> {
+            HelpcenterIndexEntity.QuestionCategory questionCategory = helpcenterIndexEntity.questionCategory.get(position);
+            HelpTwoAct.startAct(getBaseContext(), questionCategory.id, questionCategory.name);
         });
         rv_article.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rv_article.addItemDecoration(new MHorItemDecoration(this, 5, 10, 10));
         HelpArticleAdapter helpArticleAdapter = new HelpArticleAdapter(this, false, helpcenterIndexEntity.articleCategory);
         rv_article.setAdapter(helpArticleAdapter);
-        helpArticleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                HelpcenterIndexEntity.ArticleCategory questionCategory = helpcenterIndexEntity.articleCategory.get(position);
-                HelpClassAct.startAct(getBaseContext(), questionCategory.id);
-            }
+        helpArticleAdapter.setOnItemClickListener((view, position) -> {
+            HelpcenterIndexEntity.ArticleCategory questionCategory = helpcenterIndexEntity.articleCategory.get(position);
+            HelpClassAct.startAct(getBaseContext(), questionCategory.id);
         });
         rv_qTwo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         HelpQtwoAdapter helpQtwoAdapter = new HelpQtwoAdapter(this, false, helpcenterIndexEntity.questionCommon);
         rv_qTwo.setAdapter(helpQtwoAdapter);
         rv_qTwo.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.value_EFEEEE)));
-        helpQtwoAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                HelpcenterIndexEntity.QuestionCommon common = helpcenterIndexEntity.questionCommon.get(position);
-                HelpTwoAct.startAct(getBaseContext(), common.id, common.title);
-            }
+        helpQtwoAdapter.setOnItemClickListener((view, position) -> {
+            HelpcenterIndexEntity.QuestionCommon common = helpcenterIndexEntity.questionCommon.get(position);
+            HelpTwoAct.startAct(getBaseContext(), common.id, common.title);
         });
     }
 
     @Override
     public void setPhoneNum(String phoneNum) {
         Constant.HELP_PHONE = phoneNum;
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "在线客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatActivity.startAct(this, chatMember);
     }
 
     @Override

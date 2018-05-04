@@ -1852,6 +1852,14 @@ public interface ApiService {
     Call<BaseEntity<ChatGoodsEntity>> chatGoodsList(@QueryMap Map<String, String> map);
 
     /**
+     * 获取商家客服聊天用户ID
+     *
+     * @return
+     */
+    @GET("chat/chat/getUserId")
+    Call<BaseEntity<CommonEntity>> getUserId(@QueryMap Map<String, String> map);
+
+    /**
      * 普通用户查看聊天记录
      *
      * @return
@@ -1912,8 +1920,8 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("chat/message/delete")
-    Call<BaseEntity<ServiceEntity>> deleteMessage(@QueryMap Map<String, String> map);
+    @POST("chat/message/delete")
+    Call<BaseEntity<CommonEntity>> deleteMessage(@Body RequestBody body);
 
 
     /**

@@ -1,10 +1,7 @@
 package com.shunlian.app.newchat.entity;
 
-import android.text.TextUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shunlian.app.newchat.websocket.MessageStatus;
-import com.shunlian.app.utils.SharedPrefUtil;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -36,20 +33,10 @@ public class BaseMessage {
     public String id;
     public String sid;
     public boolean isFirst;
+    public String m_user_id;
     private int sendType;
     private int uReadNum;
     private int status = MessageStatus.SendSucc;
-
-    public int getSendType() {
-        if (TextUtils.isEmpty(from_user_id) || "-1".equals(from_user_id)) {
-            return VALUE_SYSTEM;
-        }
-        if (isSelf()) {
-            return VALUE_RIGHT;
-        } else {
-            return VALUE_LEFT;
-        }
-    }
 
     public int getuReadNum() {
         return uReadNum;
@@ -77,14 +64,6 @@ public class BaseMessage {
 
     public void setSendTime(long sendTime) {
         this.sendTime = sendTime;
-    }
-
-    public boolean isSelf() {//当前号的id为810
-        String userId = SharedPrefUtil.getSharedPrfString("user_id", "");
-        if (userId.equals(from_user_id)) {
-            return true;
-        }
-        return false;
     }
 
 

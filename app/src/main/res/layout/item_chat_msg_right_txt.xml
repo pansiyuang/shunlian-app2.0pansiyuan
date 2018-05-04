@@ -20,10 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_chat_me"
-            android:gravity="center"
             android:maxWidth="260dp"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
     </RelativeLayout>
 
     <com.shunlian.app.widget.MyImageView

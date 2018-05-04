@@ -453,4 +453,26 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public ShareInfoParam getShareInfoParam() {
         return shareInfoParam;
     }
+
+    public void getUserId(String shopId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_id", shopId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getUserId(commonEntity.user_id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
 }

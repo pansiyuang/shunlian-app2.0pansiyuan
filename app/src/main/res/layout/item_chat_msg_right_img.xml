@@ -16,6 +16,7 @@
         android:id="@+id/miv_icon"
         android:layout_width="39dp"
         android:layout_height="39dp"
+        android:scaleType="centerCrop"
         android:layout_alignParentRight="true" />
 
     <RelativeLayout

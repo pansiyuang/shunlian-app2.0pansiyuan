@@ -45,7 +45,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
-    private String mArticleId = "";
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -70,13 +69,10 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @Override
     protected void initListener() {
-        lay_refresh.setOnRefreshListener(new onRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getArticleList(true);
-                }
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getArticleList(true);
             }
         });
 
@@ -160,6 +156,10 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             mArticleAdapter.notifyDataSetChanged();
         }
     }
+    //分享文章方法
+    public void shareArticle(String articleId){
+
+    }
 
     public void toLikeArticle(String articleId) {
         mPresenter.articleLike(articleId);
@@ -216,7 +216,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position - 1);
-        mArticleId = article.id;
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
 

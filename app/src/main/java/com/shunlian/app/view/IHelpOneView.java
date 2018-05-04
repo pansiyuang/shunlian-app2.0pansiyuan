@@ -9,4 +9,5 @@ import com.shunlian.app.bean.HelpcenterIndexEntity;
 public interface IHelpOneView extends IView {
     void setApiData(HelpcenterIndexEntity helpcenterIndexEntity);
     void setPhoneNum(String phoneNum);
+    void getUserId(String userId);
 }

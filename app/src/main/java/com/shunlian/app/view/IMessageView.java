@@ -14,4 +14,6 @@ public interface IMessageView extends IView {
     void getSysMessageList(List<MessageListEntity.Msg> msgList);
 
     void getMessageList(  List<ChatMemberEntity.ChatMember> members);
+
+    void delSuccess(String msg);
 }

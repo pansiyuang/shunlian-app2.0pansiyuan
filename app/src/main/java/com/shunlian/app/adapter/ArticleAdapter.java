@@ -88,12 +88,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             chosenTagAdapter = new ChosenTagAdapter(context, mTags);
             tagViewHolder.recycler_tags.setAdapter(chosenTagAdapter);
 
-            chosenTagAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    TagDetailActivity.startAct(context, mTags.get(position).id);
-                }
-            });
+            chosenTagAdapter.setOnItemClickListener((view, position) -> TagDetailActivity.startAct(context, mTags.get(position).id));
         }
     }
 
@@ -119,9 +114,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             articleViewHolder.tv_share_count.setText(article.forwards);
             articleViewHolder.tv_comment_count.setText(article.comments);
             if ("0".equals(article.had_like)) {
-                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_zan_n);
             } else {
-                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_pinglun_zan_h);
+                articleViewHolder.miv_evaluate.setImageResource(R.mipmap.icon_found_zan_h);
             }
             articleViewHolder.tv_evaluate_count.setText(article.likes);
 
@@ -132,35 +127,26 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 articleViewHolder.tv_big_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
             }
 
-            articleViewHolder.ll_evaluate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFastClick()) {
-                        return;
-                    }
-                    if ("0".equals(article.had_like)) {
-                        mFragment.toLikeArticle(article.id);
-                    } else {
-                        mFragment.toUnLikeArticle(article.id);
-                    }
+            articleViewHolder.ll_evaluate.setOnClickListener(v -> {
+                if (isFastClick()) {
+                    return;
+                }
+                if ("0".equals(article.had_like)) {
+                    mFragment.toLikeArticle(article.id);
+                } else {
+                    mFragment.toUnLikeArticle(article.id);
                 }
             });
-
-            articleViewHolder.ll_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentListAct.startAct(mFragment.getActivity(), article.id);
-                }
+            articleViewHolder.ll_share.setOnClickListener(v -> {
+                mFragment.shareArticle(article.id);
             });
+            articleViewHolder.ll_comment.setOnClickListener(v -> CommentListAct.startAct(mFragment.getActivity(), article.id));
 
-            articleViewHolder.miv_change.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFastClick()) {
-                        return;
-                    }
-                    mFragment.toGetOtherTopiscList();
+            articleViewHolder.miv_change.setOnClickListener(v -> {
+                if (isFastClick()) {
+                    return;
                 }
+                mFragment.toGetOtherTopiscList();
             });
 
             setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);

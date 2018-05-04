@@ -74,4 +74,6 @@ public interface IGoodsDetailView extends IView {
      * @param adapter
      */
     void setAdapter(BaseRecyclerAdapter adapter);
+
+    void getUserId(String userId);
 }

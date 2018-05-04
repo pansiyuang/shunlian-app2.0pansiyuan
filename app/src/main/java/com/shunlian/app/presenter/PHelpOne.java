@@ -8,6 +8,7 @@ import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.view.IHelpOneView;
 
@@ -68,6 +69,28 @@ public class PHelpOne extends BasePresenter<IHelpOneView> {
                 if (data != null) {
                     iView.setPhoneNum(data.tell);
                 }
+            }
+        });
+    }
+
+    public void getUserId() {
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_id", "-1");
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getUserId(commonEntity.user_id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }

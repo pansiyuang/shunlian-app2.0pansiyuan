@@ -14,20 +14,28 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DoubleCategoryAdapter;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
 import com.shunlian.app.widget.MyImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +50,7 @@ import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
  * Created by Administrator on 2018/1/2.
  */
 
-public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener {
+public class CategoryAct extends SideslipBaseActivity implements ICategoryView, OnClickListener, CategorySortPopWindow.OnSortSelectListener, PopupWindow.OnDismissListener, MessageCountManager.OnGetMessageListener {
 
     public static final int MODE_SINGLE = 1;
     public static final int MODE_DOUBLE = 2;
@@ -61,6 +69,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @BindView(R.id.tv_keyword)
     TextView tv_keyword;
+
+    @BindView(R.id.tv_msg_count)
+    TextView tv_msg_count;
 
     @BindView(R.id.tv_general_sort)
     TextView tv_general_sort;
@@ -98,6 +109,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     private boolean hasChange;
     private int totalPage;
     private int currentPage;
+    private int totalMsgCount;
+    private MessageCountManager messageCountManager;
 
     /**
      * 布局id
@@ -122,7 +135,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
+        EventBus.getDefault().register(this);
         searchParam = (GoodsSearchParam) getIntent().getSerializableExtra("param");
         if (searchParam == null) {
             searchParam = new GoodsSearchParam();
@@ -159,6 +172,20 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }
         });
+
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            if (messageCountManager.isLoad()) {
+                totalMsgCount = messageCountManager.getAll_msg();
+                if (totalMsgCount > 0) {
+                    tv_msg_count.setVisibility(View.VISIBLE);
+                }
+                tv_msg_count.setText(String.valueOf(totalMsgCount));
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
     }
 
     @OnClick(R.id.rl_title_more)
@@ -208,6 +235,11 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 }
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
     }
 
     @Override
@@ -417,7 +449,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 if (isEmpty(searchParam.brand_ids)) {
                     searchParam.brand_ids = "";
                 }
-                if (isEmpty(searchParam.send_area)||getStringResouce(R.string.category_dingwei).equals(searchParam.send_area)) {
+                if (isEmpty(searchParam.send_area) || getStringResouce(R.string.category_dingwei).equals(searchParam.send_area)) {
                     searchParam.send_area = "";
                 }
                 if (isEmpty(searchParam.is_free_ship)) {
@@ -487,6 +519,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         initFiltrate();
     }
 
@@ -502,5 +535,15 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         Constant.REBRAND_ATTRS = null;//筛选属性(重新赋值用)
         Constant.LISTFILTER = null;//列表属性(重新赋值用)
         Constant.DINGWEI = null;
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

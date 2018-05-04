@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/icon_found_pinglun_n" />
+                    android:src="@mipmap/icon_found_zan_n" />
 
                 <TextView
                     android:id="@+id/tv_evaluate_count"

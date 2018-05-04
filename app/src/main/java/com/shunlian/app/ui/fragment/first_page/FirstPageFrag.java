@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
@@ -149,7 +150,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.mll_message:
                 mAppbar.setExpanded(false);
-//                MessageActivity.startAct(getActivity());
+                MessageActivity.startAct(getActivity());
                 break;
             case R.id.miv_photo:
 

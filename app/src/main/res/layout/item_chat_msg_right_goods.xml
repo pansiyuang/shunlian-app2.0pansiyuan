@@ -30,7 +30,6 @@
             android:layout_toRightOf="@+id/miv_good_img"
             android:includeFontPadding="false"
             android:maxLines="2"
-            android:text="2016年夏季新款两侧大口袋收腰欧美风时尚中长款连衣裙低价处.."
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 
@@ -44,7 +43,6 @@
             android:includeFontPadding="false"
             android:maxLines="2"
             android:maxWidth="180dp"
-            android:text="¥260-560"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -53,7 +51,8 @@
         android:id="@+id/miv_icon"
         android:layout_width="39dp"
         android:layout_height="39dp"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:id="@+id/rl_msg_status"

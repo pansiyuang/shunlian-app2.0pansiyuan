@@ -72,14 +72,16 @@
                 android:src="@mipmap/icon_common_more_black" />
 
             <TextView
-                android:id="@+id/tv_title_number"
+                android:id="@+id/tv_msg_count"
                 android:layout_width="wrap_content"
                 android:layout_height="12dp"
+                android:layout_above="@+id/miv_title_more"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/rounded_corner_pink_12px"
                 android:gravity="center"
                 android:paddingLeft="3dp"
+                android:layout_marginBottom="3dp"
                 android:paddingRight="3dp"
                 android:textColor="@color/white"
                 android:textSize="9sp"
@@ -91,8 +93,8 @@
         android:id="@+id/rl_sort"
         android:layout_below="@+id/rl_title"
         android:layout_width="match_parent"
-        android:background="@color/white"
         android:layout_height="40dp"
+        android:background="@color/white"
         android:paddingLeft="27dp"
         android:paddingRight="20dp"
         android:paddingTop="9dp">

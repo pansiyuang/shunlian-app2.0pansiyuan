@@ -483,26 +483,26 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             }
         }else {
             mlLayout_member.setVisibility(View.GONE);
-            if (personalcenterEntity.sl_user_ranks.get(0) != null) {
-                if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
-                    miv_equal.setVisibility(View.VISIBLE);
-                    mtv_equal.setVisibility(View.VISIBLE);
-                    mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
-                }
-                mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
-                mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-                GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
-            }
-            if (personalcenterEntity.sl_user_ranks.get(1) != null) {
-                if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)){
-                    miv_equals.setVisibility(View.VISIBLE);
-                    mtv_equals.setVisibility(View.VISIBLE);
-                    mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
-                }
-                mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
-                mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
-                GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
-            }
+//            if (personalcenterEntity.sl_user_ranks.get(0) != null) {
+//                if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
+//                    miv_equal.setVisibility(View.VISIBLE);
+//                    mtv_equal.setVisibility(View.VISIBLE);
+//                    mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
+//                }
+//                mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
+//                mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
+//                GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+//            }
+//            if (personalcenterEntity.sl_user_ranks.get(1) != null) {
+//                if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)){
+//                    miv_equals.setVisibility(View.VISIBLE);
+//                    mtv_equals.setVisibility(View.VISIBLE);
+//                    mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
+//                }
+//                mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
+//                mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
+//                GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+//            }
         }
         if (helpArticleAdapter==null){
             helpArticleAdapter = new HelpArticleAdapter(getContext(), false, personalcenterEntity.article);

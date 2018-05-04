@@ -23,6 +23,7 @@ import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.presenter.MessagePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.message.SystemMsgAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageView;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     protected void initData() {
         mPresenter = new MessagePresenter(getActivity(), this);
         mPresenter.getSystemMessage();
-        mPresenter.getMessageList(true, "","");
+        mPresenter.getMessageList(true, "", "");
         msgs = new ArrayList<>();
         memberList = new ArrayList<>();
 
@@ -137,7 +138,14 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void delSuccess(String msg) {
+
+    }
+
     public void updateFriendList(String message) {
+        LogUtil.httpLogW("message:" + message
+        );
         BaseMessage baseMessage = null;
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
@@ -151,7 +159,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         if (!isEmpty(memberList)) {
             for (int i = 0; i < memberList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_user_id.equals(memberList.get(i).m_user_id)) {
+                if (baseMessage.from_user_id.equals(memberList.get(i).friend_user_id)) {
                     unReadNum = memberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     memberList.get(i).unread_count = unReadNum;
@@ -217,6 +225,11 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         } else {
             CustomerListActivity.startAct(getActivity());
         }
+    }
+
+    @Override
+    public void OnMessageDel(String userId) {
+        mPresenter.deleteMessage(userId);
     }
 
     @Override

@@ -12,11 +12,14 @@ import com.shunlian.app.adapter.AiMoreAdapter;
 import com.shunlian.app.adapter.CoreNewMenuAdapter;
 import com.shunlian.app.adapter.AishangHorizonAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -29,6 +32,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +45,12 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/7.
  */
 
-public class AishangAct extends BaseActivity implements View.OnClickListener, IAishang {
+public class AishangAct extends BaseActivity implements View.OnClickListener, IAishang, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
 
     @BindView(R.id.kanner)
     MyKanner kanner;
@@ -58,6 +68,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
     private AiMoreAdapter aiMoreAdapter;
     private GridLayoutManager gridLayoutManager;
     private String cate_id;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AishangAct.class);
@@ -92,11 +103,29 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
         mtv_title.setText(getStringResouce(R.string.first_aishangxin));
         pAishang = new PAishang(this, this);
         pAishang.getCoreNew();
+
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        if(messageCountManager.isLoad()){
+            messageCountManager.setTextCount(tv_msg_count);
+        }else{
+            messageCountManager.initData();
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -198,5 +227,21 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
     @Override
     public void setPingData(CorePingEntity corePingEntity) {
 
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

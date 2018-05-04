@@ -37,16 +37,20 @@ import com.shunlian.app.newchat.entity.ImageMessage;
 import com.shunlian.app.newchat.entity.LinkMessage;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.OrderMessage;
-import com.shunlian.app.newchat.entity.SellerHelpMessage;
+import com.shunlian.app.newchat.entity.HelpMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.TransferMessage;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.CenterAlignImageSpan;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TimeUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RatingBarView;
@@ -54,6 +58,7 @@ import com.shunlian.app.widget.RatingBarView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -85,13 +90,15 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public static final int CHECK_ORDER = 10;
     public static final int SYS_MSG = 11;
     public static final int SELLER_HELP = 12;
-    public static final int TRANSFER_MSG = 13;
-    public static final int SYS_TEXT = 14;
+    public static final int ADMIN_HELP = 13;
+    public static final int TRANSFER_MSG = 14;
+    public static final int SYS_TEXT = 15;
 
     private final ObjectMapper objectMapper;
     private RecyclerView recycler;
     private AssetManager am;
     private Pattern patternEmotion;
+    private String currentUserId;
 
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
@@ -99,16 +106,27 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         recycler = recyclerView;
         am = context.getAssets();
 
+        patternEmotion = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]");
+        currentUserId = SharedPrefUtil.getSharedPrfString("user_id", "");
+    }
 
-        String regexEmotion = "\\[([\u4e00-\u9fa5\\w])+\\]";
-        patternEmotion = Pattern.compile(regexEmotion);
+    public int getSendType(String fromUserId) {
+        if (isEmpty(fromUserId)) {
+            return BaseMessage.VALUE_SYSTEM;
+        }
+
+        if (fromUserId.equals(currentUserId)) {
+            return BaseMessage.VALUE_RIGHT;
+        }
+
+        return BaseMessage.VALUE_LEFT;
     }
 
     public void addMsgInfo(MsgInfo msgInfo) {
         BaseMessage message;
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
-            if (message.getSendType() != BaseMessage.VALUE_SYSTEM) {
+            if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
                 addTimeMessage(msgInfo.send_time, getLastMessageTime(false));
             }
         } catch (Exception e) {
@@ -125,7 +143,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         BaseMessage message;
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
-            if (message.getSendType() != BaseMessage.VALUE_SYSTEM) {
+            if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
                 addTimeMessage(true, msgInfo.send_time, getLastMessageTime(true));
             }
         } catch (Exception e) {
@@ -164,7 +182,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public int getItemViewType(int position) {
         String message = lists.get(position).message;
         BaseMessage baseMessage = str2Msg(message);
-        int sendType = baseMessage.getSendType();
+        int sendType = getSendType(baseMessage.from_user_id);
         if (sendType == BaseMessage.VALUE_LEFT) { //左边消息
             switch (baseMessage.msg_type) {
                 case "text":
@@ -179,6 +197,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     return EVALUATE_MSG;
                 case "seller_help":
                     return SELLER_HELP;
+                case "admin_help":
+                    return ADMIN_HELP;
                 case "sys_text":
                     return SYS_TEXT;
                 case "order":
@@ -233,7 +253,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             case SYS_MSG:
                 return new SysMsgViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_system, parent, false));
             case SELLER_HELP:
-                return new SellerHelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_left_seller_help, parent, false));
+            case ADMIN_HELP:
+                return new HelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_left_seller_help, parent, false));
             case TRANSFER_MSG:
                 return new TransferViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_transfer, parent, false));
             case SYS_TEXT:
@@ -290,7 +311,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 handSysMsg(holder, baseMessage);
                 break;
             case SELLER_HELP:
-                handSellerHelp(holder, baseMessage);
+                handHelp(holder, baseMessage, true);
+                break;
+            case ADMIN_HELP:
+                handHelp(holder, baseMessage, false);
                 break;
             case TRANSFER_MSG:
                 handTransfer(holder, baseMessage);
@@ -305,6 +329,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TextMessage textMessage = (TextMessage) baseMessage;
         TextMessage.TextMessageBody messageBody = textMessage.msg_body;
         LeftTxtViewHolder leftTxtViewHolder = (LeftTxtViewHolder) holder;
+        leftTxtViewHolder.tv_name.setText(textMessage.from_nickname);
         GlideUtils.getInstance().loadCornerImage(context, leftTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
         leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
     }
@@ -332,6 +357,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         ImageMessage imageMessage = (ImageMessage) baseMessage;
         ImageMessage.ImageBody imageBody = imageMessage.msg_body;
         List<String> imgs = new ArrayList<>();
+        leftImgViewHolder.tv_name.setText(imageMessage.from_nickname);
         if (imageMessage.msg_body != null) {
             ImageMessage.Image image = imageBody.image;
             String imgUrl = image.img_host + image.img_small;
@@ -418,6 +444,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         LeftGoodsViewHolder leftGoodsViewHolder = (LeftGoodsViewHolder) holder;
         GoodsMessage goodsMessage = (GoodsMessage) baseMessage;
         GoodsMessage.GoodsBody goodsBody = goodsMessage.msg_body;
+        leftGoodsViewHolder.tv_name.setText(goodsMessage.from_nickname);
         GlideUtils.getInstance().loadCornerImage(context, leftGoodsViewHolder.miv_icon, goodsMessage.from_headurl, 3);
         if (goodsBody.goods != null) {
             GoodsMessage.Goods goods = goodsBody.goods;
@@ -431,7 +458,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             leftGoodsViewHolder.tv_goods_price.setText(goods.price);
 
             leftGoodsViewHolder.layout_goods.setOnClickListener(v -> {
-                // TODO: 2018/4/13 点击无法跳转
                 GoodsDetailAct.startAct(context, goods.goodsId);
             });
         }
@@ -453,7 +479,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             rightGoodsViewHolder.tv_goods_price.setText(goods.price);
 
             rightGoodsViewHolder.layout_goods.setOnClickListener(v -> {
-                // TODO: 2018/4/13 点击无法跳转
                 GoodsDetailAct.startAct(context, goods.goodsId);
             });
         }
@@ -587,31 +612,36 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         sysMsgViewHolder.tv_systemMessage.setText(getNewChatTime(currentTime));
     }
 
-    public void handSellerHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
-        SellerHelpHolder sellerHelpHolder = (SellerHelpHolder) holder;
-        SellerHelpMessage sellerHelpMessage = (SellerHelpMessage) baseMessage;
-        if (sellerHelpMessage.msg_body != null) {
-            SellerHelpMessage.HelpBody msgBody = sellerHelpMessage.msg_body;
-            sellerHelpHolder.tv_content.setText(msgBody.help_item);
+    public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller) {
+        HelpHolder HelpHolder = (HelpHolder) holder;
+        HelpMessage helpMessage = (HelpMessage) baseMessage;
+        if (helpMessage.msg_body != null) {
+            HelpMessage.HelpBody msgBody = helpMessage.msg_body;
+            HelpHolder.tv_content.setText(msgBody.help_item);
             if (!isEmpty(msgBody.help_list)) {
-                List<SellerHelpMessage.HelpEntity> helpEntityList = msgBody.help_list;
-                SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<SellerHelpMessage.HelpEntity>(context, R.layout.item_seller_help, helpEntityList) {
+                List<HelpMessage.HelpEntity> helpEntityList = msgBody.help_list;
+                SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<HelpMessage.HelpEntity>(context, R.layout.item_seller_help, helpEntityList) {
                     @Override
-                    public void convert(SimpleViewHolder holder, SellerHelpMessage.HelpEntity helpEntity, int position) {
+                    public void convert(SimpleViewHolder holder, HelpMessage.HelpEntity helpEntity, int position) {
                         TextView textView = holder.getView(R.id.tv_seller_help);
                         textView.setText(helpEntity.item);
                         textView.setOnClickListener(v -> {
-                            ((ChatActivity) context).getHelpContent(helpEntity.id, sellerHelpMessage.sid);
+                            if (isSeller) {
+                                ((ChatActivity) context).getHelpContent(helpEntity.id, helpMessage.sid);
+                            } else {
+                                HelpTwoAct.startAct(context, helpEntity.id, helpEntity.item);
+                            }
                         });
                     }
                 };
-                sellerHelpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
+                HelpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
+                HelpHolder.recycler_help.setNestedScrollingEnabled(false);
             }
         }
         if (!isScrolling) {
-            GlideUtils.getInstance().loadCornerImage(context, sellerHelpHolder.miv_icon, sellerHelpMessage.from_headurl, 3);
+            GlideUtils.getInstance().loadCornerImage(context, HelpHolder.miv_icon, helpMessage.from_headurl, 3);
         } else {
-            sellerHelpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
+            HelpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
         }
     }
 
@@ -628,6 +658,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public class LeftTxtViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
 
         @BindView(R.id.tv_content)
         TextView tv_content;
@@ -661,6 +694,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public class LeftImgViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
 
         @BindView(R.id.miv_img)
         MyImageView miv_img;
@@ -699,6 +735,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         @BindView(R.id.tv_goods_price)
         TextView tv_goods_price;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
 
         @BindView(R.id.tv_goods_title)
         TextView tv_goods_title;
@@ -837,7 +876,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    public class SellerHelpHolder extends BaseRecyclerViewHolder {
+    public class HelpHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.tv_content)
         TextView tv_content;
 
@@ -847,9 +886,13 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         @BindView(R.id.recycler_help)
         RecyclerView recycler_help;
 
-        public SellerHelpHolder(View itemView) {
+        public HelpHolder(View itemView) {
             super(itemView);
             LinearLayoutManager manager = new LinearLayoutManager(context);
+            manager.setRecycleChildrenOnDetach(true);
+            RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
+            pool.setMaxRecycledViews(0, 20);
+            recycler_help.setRecycledViewPool(pool);
             recycler_help.setLayoutManager(manager);
         }
     }
@@ -912,7 +955,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     message = objectMapper.readValue(msg, TransferMessage.class);
                     break;
                 case "seller_help":
-                    message = objectMapper.readValue(msg, SellerHelpMessage.class);
+                case "admin_help":
+                    message = objectMapper.readValue(msg, HelpMessage.class);
                     break;
             }
         } catch (Exception e) {
@@ -1067,7 +1111,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             try {
                 is = am.open(String.format("emojis/%d.png", position));
                 // 压缩表情图片
-                int size = TransformUtil.dip2px(context, 28);
+                int size = TransformUtil.dip2px(context, 34);
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
                 Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
                 int end = start + value.length();

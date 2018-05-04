@@ -8,4 +8,5 @@ import com.shunlian.app.bean.OrderdetailEntity;
 
 public interface OrderdetailView extends IView {
     void setOrder(OrderdetailEntity orderdetailEntity);
+    void getUserId(String userId);
 }

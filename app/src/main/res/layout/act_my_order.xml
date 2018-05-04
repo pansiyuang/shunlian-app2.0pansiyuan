@@ -44,6 +44,7 @@
                 android:src="@mipmap/icon_more_n" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/tv_msg_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

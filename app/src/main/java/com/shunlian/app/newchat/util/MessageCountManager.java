@@ -1,11 +1,14 @@
 package com.shunlian.app.newchat.util;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
 
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.presenter.AllMessageCountPresenter;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageCountView;
+
 
 /**
  * Created by Administrator on 2018/4/9.
@@ -22,7 +25,11 @@ public class MessageCountManager implements IMessageCountView {
     public static MessageCountManager getInstance(Context context) {
         mContext = context;
         if (manager == null) {
-            manager = new MessageCountManager();
+            synchronized (MessageCountManager.class) {
+                if (manager == null) {
+                    manager = new MessageCountManager();
+                }
+            }
         }
         return manager;
     }
@@ -35,7 +42,7 @@ public class MessageCountManager implements IMessageCountView {
         mPresenter.messageAllCount();
     }
 
-    public void upDateMessageCount(){
+    public void upDateMessageCount() {
         mPresenter.messageAllCount();
     }
 
@@ -45,14 +52,14 @@ public class MessageCountManager implements IMessageCountView {
 
         allMessageCountEntity = messageCountEntity;
 
-        if (mListener == null) {
+        if (mListener != null) {
             mListener.OnLoadSuccess(messageCountEntity);
         }
     }
 
     @Override
     public void getMessageCountFail() {
-        if (mListener == null) {
+        if (mListener != null) {
             mListener.OnLoadFail();
         }
     }
@@ -159,9 +166,22 @@ public class MessageCountManager implements IMessageCountView {
         return allMessageCountEntity.custom_msg;
     }
 
+
     public void setCustom_msg(int custom_msg) {
         this.allMessageCountEntity.custom_msg = custom_msg;
     }
+
+    public void setTextCount(TextView textView) {
+        if (getAll_msg() > 0) {
+            textView.setVisibility(View.VISIBLE);
+        }
+        if (getAll_msg() > 99) {
+            textView.setText("99+");
+        } else {
+            textView.setText(String.valueOf(getAll_msg()));
+        }
+    }
+
 
     public interface OnGetMessageListener {
         void OnLoadSuccess(AllMessageCountEntity messageCountEntity);
