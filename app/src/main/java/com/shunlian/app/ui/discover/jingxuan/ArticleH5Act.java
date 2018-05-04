@@ -3,6 +3,8 @@ package com.shunlian.app.ui.discover.jingxuan;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
@@ -25,6 +27,12 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
 
     @BindView(R.id.miv_favorite)
     MyImageView miv_favorite;
+
+    @BindView(R.id.rl_title_more)
+    RelativeLayout rl_title_more;
+
+    @BindView(R.id.tv_msg_count)
+    TextView tv_msg_count;
 
 
     private String articleId;
@@ -63,19 +71,26 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
 
     @Override
     protected void initListener() {
-        miv_favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        miv_favorite.setOnClickListener(this);
+        rl_title_more.setOnClickListener(this);
+        super.initListener();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.miv_favorite:
                 if (currentFavoriteStatus == 1) {
                     mPresent.unFavoriteArticle(articleId);
                 } else {
                     mPresent.favoriteArticle(articleId);
                 }
-            }
-        });
-        super.initListener();
+                break;
+            case R.id.rl_title_more:
+                break;
+        }
+        super.onClick(view);
     }
-
 
     @Override
     public void showFailureView(int request_code) {

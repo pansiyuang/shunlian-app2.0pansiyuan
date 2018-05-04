@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/8.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GoodsDeatilEntity {
+public class GoodsDeatilEntity implements Parcelable {
 
     public String id;
     public String title;
@@ -72,7 +72,7 @@ public class GoodsDeatilEntity {
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class SpecailAct{
+    public static class SpecailAct implements Parcelable {
         public String act_id;
         public String detail_pic;
         public String if_act_price;
@@ -82,13 +82,88 @@ public class GoodsDeatilEntity {
         public String start_remain_seconds;
         public String end_remain_seconds;
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.act_id);
+            dest.writeString(this.detail_pic);
+            dest.writeString(this.if_act_price);
+            dest.writeString(this.if_time);
+            dest.writeString(this.actprice);
+            dest.writeString(this.activity_status);
+            dest.writeString(this.start_remain_seconds);
+            dest.writeString(this.end_remain_seconds);
+        }
+
+        public SpecailAct() {
+        }
+
+        protected SpecailAct(Parcel in) {
+            this.act_id = in.readString();
+            this.detail_pic = in.readString();
+            this.if_act_price = in.readString();
+            this.if_time = in.readString();
+            this.actprice = in.readString();
+            this.activity_status = in.readString();
+            this.start_remain_seconds = in.readString();
+            this.end_remain_seconds = in.readString();
+        }
+
+        public static final Creator<SpecailAct> CREATOR = new Creator<SpecailAct>() {
+            @Override
+            public SpecailAct createFromParcel(Parcel source) {
+                return new SpecailAct(source);
+            }
+
+            @Override
+            public SpecailAct[] newArray(int size) {
+                return new SpecailAct[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Act{
+    public static class Act implements Parcelable {
         public String desc;
         public Url url;
         public String title;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.desc);
+            dest.writeString(this.link);
+            dest.writeString(this.title);
+        }
+
+        public Act() {
+        }
+
+        protected Act(Parcel in) {
+            this.desc = in.readString();
+            this.link = in.readString();
+            this.title = in.readString();
+        }
+
+        public static final Creator<Act> CREATOR = new Creator<Act>() {
+            @Override
+            public Act createFromParcel(Parcel source) {
+                return new Act(source);
+            }
+
+            @Override
+            public Act[] newArray(int size) {
+                return new Act[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -98,7 +173,7 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class TTAct{
+    public static class TTAct implements Parcelable {
         public String id;
         public String goods_id;
         public String title;
@@ -115,10 +190,69 @@ public class GoodsDeatilEntity {
         public String content;
         public String percent;
         public String str_surplus_stock;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.goods_id);
+            dest.writeString(this.title);
+            dest.writeString(this.market_price);
+            dest.writeString(this.store_id);
+            dest.writeString(this.act_price);
+            dest.writeString(this.session_status);
+            dest.writeString(this.stock);
+            dest.writeString(this.surplus_stock);
+            dest.writeString(this.remind_status);
+            dest.writeString(this.remind_count);
+            dest.writeString(this.sale);
+            dest.writeString(this.time);
+            dest.writeString(this.content);
+            dest.writeString(this.percent);
+            dest.writeString(this.str_surplus_stock);
+        }
+
+        public TTAct() {
+        }
+
+        protected TTAct(Parcel in) {
+            this.id = in.readString();
+            this.goods_id = in.readString();
+            this.title = in.readString();
+            this.market_price = in.readString();
+            this.store_id = in.readString();
+            this.act_price = in.readString();
+            this.session_status = in.readString();
+            this.stock = in.readString();
+            this.surplus_stock = in.readString();
+            this.remind_status = in.readString();
+            this.remind_count = in.readString();
+            this.sale = in.readString();
+            this.time = in.readString();
+            this.content = in.readString();
+            this.percent = in.readString();
+            this.str_surplus_stock = in.readString();
+        }
+
+        public static final Creator<TTAct> CREATOR = new Creator<TTAct>() {
+            @Override
+            public TTAct createFromParcel(Parcel source) {
+                return new TTAct(source);
+            }
+
+            @Override
+            public TTAct[] newArray(int size) {
+                return new TTAct[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ActivityDetail {
+    public static class ActivityDetail implements Parcelable {
         public String goods_id;//商品id
         public String prom_title;
         public String promotion_gift_id; //买赠活动id
@@ -138,16 +272,112 @@ public class GoodsDeatilEntity {
         public String end_unixtime;// 结束时间的unix时间戳
         public String for_goods; // 是否全部商品  ALL为全部  CUSTOM为指定
         public String where_used;   //使用位置，1为通用 2为app
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.goods_id);
+            dest.writeString(this.prom_title);
+            dest.writeString(this.promotion_gift_id);
+            dest.writeString(this.promotion_title);
+            dest.writeString(this.gift_goodsid);
+            dest.writeString(this.promotion_discount_id);
+            dest.writeString(this.qty_type_condition);
+            dest.writeString(this.qty_type_discount);
+            dest.writeString(this.title);
+            dest.writeString(this.type);
+            dest.writeString(this.money_type_condition);
+            dest.writeString(this.money_type_discount);
+            dest.writeString(this.money_type_loop);
+            dest.writeString(this.start_time);
+            dest.writeString(this.end_time);
+            dest.writeString(this.start_unixtime);
+            dest.writeString(this.end_unixtime);
+            dest.writeString(this.for_goods);
+            dest.writeString(this.where_used);
+        }
+
+        public ActivityDetail() {
+        }
+
+        protected ActivityDetail(Parcel in) {
+            this.goods_id = in.readString();
+            this.prom_title = in.readString();
+            this.promotion_gift_id = in.readString();
+            this.promotion_title = in.readString();
+            this.gift_goodsid = in.readString();
+            this.promotion_discount_id = in.readString();
+            this.qty_type_condition = in.readString();
+            this.qty_type_discount = in.readString();
+            this.title = in.readString();
+            this.type = in.readString();
+            this.money_type_condition = in.readString();
+            this.money_type_discount = in.readString();
+            this.money_type_loop = in.readString();
+            this.start_time = in.readString();
+            this.end_time = in.readString();
+            this.start_unixtime = in.readString();
+            this.end_unixtime = in.readString();
+            this.for_goods = in.readString();
+            this.where_used = in.readString();
+        }
+
+        public static final Creator<ActivityDetail> CREATOR = new Creator<ActivityDetail>() {
+            @Override
+            public ActivityDetail createFromParcel(Parcel source) {
+                return new ActivityDetail(source);
+            }
+
+            @Override
+            public ActivityDetail[] newArray(int size) {
+                return new ActivityDetail[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Detail {
+    public static class Detail implements Parcelable {
         public String text;
         public ArrayList<String> pics;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.text);
+            dest.writeStringList(this.pics);
+        }
+
+        public Detail() {
+        }
+
+        protected Detail(Parcel in) {
+            this.text = in.readString();
+            this.pics = in.createStringArrayList();
+        }
+
+        public static final Creator<Detail> CREATOR = new Creator<Detail>() {
+            @Override
+            public Detail createFromParcel(Parcel source) {
+                return new Detail(source);
+            }
+
+            @Override
+            public Detail[] newArray(int size) {
+                return new Detail[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Comments {
+    public static class Comments implements Parcelable {
         public String id;
         public String star_level;
         public String addtime;
@@ -160,16 +390,98 @@ public class GoodsDeatilEntity {
         public String nickname;
         public String avatar;
         public ArrayList<String> pics;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.star_level);
+            dest.writeString(this.addtime);
+            dest.writeString(this.buytime);
+            dest.writeString(this.sku_desc);
+            dest.writeString(this.content);
+            dest.writeString(this.reply);
+            dest.writeString(this.reply_time);
+            dest.writeString(this.vip_level);
+            dest.writeString(this.nickname);
+            dest.writeString(this.avatar);
+            dest.writeStringList(this.pics);
+        }
+
+        public Comments() {
+        }
+
+        protected Comments(Parcel in) {
+            this.id = in.readString();
+            this.star_level = in.readString();
+            this.addtime = in.readString();
+            this.buytime = in.readString();
+            this.sku_desc = in.readString();
+            this.content = in.readString();
+            this.reply = in.readString();
+            this.reply_time = in.readString();
+            this.vip_level = in.readString();
+            this.nickname = in.readString();
+            this.avatar = in.readString();
+            this.pics = in.createStringArrayList();
+        }
+
+        public static final Creator<Comments> CREATOR = new Creator<Comments>() {
+            @Override
+            public Comments createFromParcel(Parcel source) {
+                return new Comments(source);
+            }
+
+            @Override
+            public Comments[] newArray(int size) {
+                return new Comments[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Attrs {
+    public static class Attrs implements Parcelable {
         public String label;
         public String value;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.label);
+            dest.writeString(this.value);
+        }
+
+        public Attrs() {
+        }
+
+        protected Attrs(Parcel in) {
+            this.label = in.readString();
+            this.value = in.readString();
+        }
+
+        public static final Creator<Attrs> CREATOR = new Creator<Attrs>() {
+            @Override
+            public Attrs createFromParcel(Parcel source) {
+                return new Attrs(source);
+            }
+
+            @Override
+            public Attrs[] newArray(int size) {
+                return new Attrs[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Combo {
+    public static class Combo implements Parcelable {
         public String combo_id;
         public String combo_thumb;
         public String combo_title;
@@ -179,10 +491,53 @@ public class GoodsDeatilEntity {
         public String max_old_combo_price;
 
         public ArrayList<Goods> goods;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.combo_id);
+            dest.writeString(this.combo_thumb);
+            dest.writeString(this.combo_title);
+            dest.writeString(this.combo_price);
+            dest.writeString(this.max_combo_price);
+            dest.writeString(this.old_combo_price);
+            dest.writeString(this.max_old_combo_price);
+            dest.writeTypedList(this.goods);
+        }
+
+        public Combo() {
+        }
+
+        protected Combo(Parcel in) {
+            this.combo_id = in.readString();
+            this.combo_thumb = in.readString();
+            this.combo_title = in.readString();
+            this.combo_price = in.readString();
+            this.max_combo_price = in.readString();
+            this.old_combo_price = in.readString();
+            this.max_old_combo_price = in.readString();
+            this.goods = in.createTypedArrayList(Goods.CREATOR);
+        }
+
+        public static final Creator<Combo> CREATOR = new Creator<Combo>() {
+            @Override
+            public Combo createFromParcel(Parcel source) {
+                return new Combo(source);
+            }
+
+            @Override
+            public Combo[] newArray(int size) {
+                return new Combo[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class StoreInfo {
+    public static class StoreInfo implements Parcelable {
         public String decoration_name;//店铺名字
         public String star; //星级
         public String quality_logo;  //是否有品质标志1是0否
@@ -198,18 +553,110 @@ public class GoodsDeatilEntity {
         public ArrayList<Item> push;//店主推荐
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Item {
+        public static class Item implements Parcelable {
             public String id;
             public String title;
             public String thumb;
             public String price;
             public String whole_thumb;
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.id);
+                dest.writeString(this.title);
+                dest.writeString(this.thumb);
+                dest.writeString(this.price);
+                dest.writeString(this.whole_thumb);
+            }
+
+            public Item() {
+            }
+
+            protected Item(Parcel in) {
+                this.id = in.readString();
+                this.title = in.readString();
+                this.thumb = in.readString();
+                this.price = in.readString();
+                this.whole_thumb = in.readString();
+            }
+
+            public static final Creator<Item> CREATOR = new Creator<Item>() {
+                @Override
+                public Item createFromParcel(Parcel source) {
+                    return new Item(source);
+                }
+
+                @Override
+                public Item[] newArray(int size) {
+                    return new Item[size];
+                }
+            };
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.decoration_name);
+            dest.writeString(this.star);
+            dest.writeString(this.quality_logo);
+            dest.writeString(this.goods_count);
+            dest.writeString(this.decoration_banner);
+            dest.writeString(this.attention_count);
+            dest.writeString(this.description_consistency);
+            dest.writeString(this.quality_satisfy);
+            dest.writeString(this.is_attention);
+            dest.writeString(this.store_id);
+            dest.writeString(this.store_icon);
+            dest.writeList(this.hot);
+            dest.writeList(this.push);
+        }
+
+        public StoreInfo() {
+        }
+
+        protected StoreInfo(Parcel in) {
+            this.decoration_name = in.readString();
+            this.star = in.readString();
+            this.quality_logo = in.readString();
+            this.goods_count = in.readString();
+            this.decoration_banner = in.readString();
+            this.attention_count = in.readString();
+            this.description_consistency = in.readString();
+            this.quality_satisfy = in.readString();
+            this.is_attention = in.readString();
+            this.store_id = in.readString();
+            this.store_icon = in.readString();
+            this.hot = new ArrayList<Item>();
+            in.readList(this.hot, Item.class.getClassLoader());
+            this.push = new ArrayList<Item>();
+            in.readList(this.push, Item.class.getClassLoader());
+        }
+
+        public static final Creator<StoreInfo> CREATOR = new Creator<StoreInfo>() {
+            @Override
+            public StoreInfo createFromParcel(Parcel source) {
+                return new StoreInfo(source);
+            }
+
+            @Override
+            public StoreInfo[] newArray(int size) {
+                return new StoreInfo[size];
+            }
+        };
     }
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Voucher {
+    public static class Voucher implements Parcelable {
         public String voucher_id;
         public String id;
         public String store_id;
@@ -221,11 +668,60 @@ public class GoodsDeatilEntity {
         public String memo;
         public String is_get; //1为已经领取 未登录就返回0
         public String goods_scope;//ALL为全店 ASSIGN为指定
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.voucher_id);
+            dest.writeString(this.id);
+            dest.writeString(this.store_id);
+            dest.writeString(this.title);
+            dest.writeString(this.start_time);
+            dest.writeString(this.end_time);
+            dest.writeString(this.denomination);
+            dest.writeString(this.use_condition);
+            dest.writeString(this.memo);
+            dest.writeString(this.is_get);
+            dest.writeString(this.goods_scope);
+        }
+
+        public Voucher() {
+        }
+
+        protected Voucher(Parcel in) {
+            this.voucher_id = in.readString();
+            this.id = in.readString();
+            this.store_id = in.readString();
+            this.title = in.readString();
+            this.start_time = in.readString();
+            this.end_time = in.readString();
+            this.denomination = in.readString();
+            this.use_condition = in.readString();
+            this.memo = in.readString();
+            this.is_get = in.readString();
+            this.goods_scope = in.readString();
+        }
+
+        public static final Creator<Voucher> CREATOR = new Creator<Voucher>() {
+            @Override
+            public Voucher createFromParcel(Parcel source) {
+                return new Voucher(source);
+            }
+
+            @Override
+            public Voucher[] newArray(int size) {
+                return new Voucher[size];
+            }
+        };
     }
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class GoodsData {
+    public static class GoodsData implements Parcelable {
         //销量
         public String sales;
         //浏览量
@@ -234,6 +730,41 @@ public class GoodsDeatilEntity {
         public String star_rate;
         //该商品评论数
         public String comments_num;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.sales);
+            dest.writeString(this.views);
+            dest.writeString(this.star_rate);
+            dest.writeString(this.comments_num);
+        }
+
+        public GoodsData() {
+        }
+
+        protected GoodsData(Parcel in) {
+            this.sales = in.readString();
+            this.views = in.readString();
+            this.star_rate = in.readString();
+            this.comments_num = in.readString();
+        }
+
+        public static final Creator<GoodsData> CREATOR = new Creator<GoodsData>() {
+            @Override
+            public GoodsData createFromParcel(Parcel source) {
+                return new GoodsData(source);
+            }
+
+            @Override
+            public GoodsData[] newArray(int size) {
+                return new GoodsData[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -624,7 +1155,7 @@ public class GoodsDeatilEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class AllProm {
+    public static class AllProm implements Parcelable {
         public String promotion_gift_id;
         public String promotion_title;
         public String gift_goodsid;
@@ -638,10 +1169,63 @@ public class GoodsDeatilEntity {
         public String prom_id;
         public String prom_title;
         public boolean isSelect;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.promotion_gift_id);
+            dest.writeString(this.promotion_title);
+            dest.writeString(this.gift_goodsid);
+            dest.writeString(this.start_time);
+            dest.writeString(this.end_time);
+            dest.writeString(this.start_unixtime);
+            dest.writeString(this.end_unixtime);
+            dest.writeString(this.for_goods);
+            dest.writeString(this.where_used);
+            dest.writeString(this.gift_goodstitle);
+            dest.writeString(this.prom_id);
+            dest.writeString(this.prom_title);
+            dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
+        }
+
+        public AllProm() {
+        }
+
+        protected AllProm(Parcel in) {
+            this.promotion_gift_id = in.readString();
+            this.promotion_title = in.readString();
+            this.gift_goodsid = in.readString();
+            this.start_time = in.readString();
+            this.end_time = in.readString();
+            this.start_unixtime = in.readString();
+            this.end_unixtime = in.readString();
+            this.for_goods = in.readString();
+            this.where_used = in.readString();
+            this.gift_goodstitle = in.readString();
+            this.prom_id = in.readString();
+            this.prom_title = in.readString();
+            this.isSelect = in.readByte() != 0;
+        }
+
+        public static final Creator<AllProm> CREATOR = new Creator<AllProm>() {
+            @Override
+            public AllProm createFromParcel(Parcel source) {
+                return new AllProm(source);
+            }
+
+            @Override
+            public AllProm[] newArray(int size) {
+                return new AllProm[size];
+            }
+        };
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Promotion {
+    public static class Promotion implements Parcelable {
         public String prom_status;
         public String prom_id;               //活动id
         public String prom_label;            //活动label
@@ -651,5 +1235,158 @@ public class GoodsDeatilEntity {
         public String title_label;           //优惠
         public String prom_title;            //优惠标题
         public String prom_reduce;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.prom_status);
+            dest.writeString(this.prom_id);
+            dest.writeString(this.prom_label);
+            dest.writeString(this.prom_type);
+            dest.writeTypedList(this.goods);
+            dest.writeString(this.hint);
+            dest.writeString(this.title_label);
+            dest.writeString(this.prom_title);
+            dest.writeString(this.prom_reduce);
+        }
+
+        public Promotion() {
+        }
+
+        protected Promotion(Parcel in) {
+            this.prom_status = in.readString();
+            this.prom_id = in.readString();
+            this.prom_label = in.readString();
+            this.prom_type = in.readString();
+            this.goods = in.createTypedArrayList(Goods.CREATOR);
+            this.hint = in.readString();
+            this.title_label = in.readString();
+            this.prom_title = in.readString();
+            this.prom_reduce = in.readString();
+        }
+
+        public static final Creator<Promotion> CREATOR = new Creator<Promotion>() {
+            @Override
+            public Promotion createFromParcel(Parcel source) {
+                return new Promotion(source);
+            }
+
+            @Override
+            public Promotion[] newArray(int size) {
+                return new Promotion[size];
+            }
+        };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.title);
+        dest.writeParcelable(this.detail, flags);
+        dest.writeString(this.free_shipping);
+        dest.writeString(this.shipping_fee);
+        dest.writeString(this.area);
+        dest.writeString(this.market_price);
+        dest.writeString(this.price);
+        dest.writeString(this.max_price);
+        dest.writeString(this.stock);
+        dest.writeString(this.thumb);
+        dest.writeString(this.status);
+        dest.writeString(this.is_fav);
+        dest.writeStringList(this.pics);
+        dest.writeString(this.has_option);
+        dest.writeString(this.return_7);
+        dest.writeString(this.send_time);
+        dest.writeString(this.is_preferential);
+        dest.writeString(this.member_cart_count);
+        dest.writeString(this.is_new);
+        dest.writeString(this.is_explosion);
+        dest.writeString(this.is_hot);
+        dest.writeString(this.is_recommend);
+        dest.writeTypedList(this.sku);
+        dest.writeTypedList(this.specs);
+        dest.writeParcelable(this.goods_data, flags);
+        dest.writeList(this.full_cut);
+        dest.writeList(this.full_discount);
+        dest.writeList(this.buy_gift);
+        dest.writeList(this.voucher);
+        dest.writeParcelable(this.store_info, flags);
+        dest.writeList(this.combo);
+        dest.writeList(this.attrs);
+        dest.writeList(this.comments);
+        dest.writeParcelable(this.tt_act, flags);
+        dest.writeParcelable(this.common_activity, flags);
+        dest.writeParcelable(this.activity, flags);
+    }
+
+    public GoodsDeatilEntity() {
+    }
+
+    protected GoodsDeatilEntity(Parcel in) {
+        this.id = in.readString();
+        this.title = in.readString();
+        this.detail = in.readParcelable(Detail.class.getClassLoader());
+        this.free_shipping = in.readString();
+        this.shipping_fee = in.readString();
+        this.area = in.readString();
+        this.market_price = in.readString();
+        this.price = in.readString();
+        this.max_price = in.readString();
+        this.stock = in.readString();
+        this.thumb = in.readString();
+        this.status = in.readString();
+        this.is_fav = in.readString();
+        this.pics = in.createStringArrayList();
+        this.has_option = in.readString();
+        this.return_7 = in.readString();
+        this.send_time = in.readString();
+        this.is_preferential = in.readString();
+        this.member_cart_count = in.readString();
+        this.is_new = in.readString();
+        this.is_explosion = in.readString();
+        this.is_hot = in.readString();
+        this.is_recommend = in.readString();
+        this.sku = in.createTypedArrayList(Sku.CREATOR);
+        this.specs = in.createTypedArrayList(Specs.CREATOR);
+        this.goods_data = in.readParcelable(GoodsData.class.getClassLoader());
+        this.full_cut = new ArrayList<ActivityDetail>();
+        in.readList(this.full_cut, ActivityDetail.class.getClassLoader());
+        this.full_discount = new ArrayList<ActivityDetail>();
+        in.readList(this.full_discount, ActivityDetail.class.getClassLoader());
+        this.buy_gift = new ArrayList<ActivityDetail>();
+        in.readList(this.buy_gift, ActivityDetail.class.getClassLoader());
+        this.voucher = new ArrayList<Voucher>();
+        in.readList(this.voucher, Voucher.class.getClassLoader());
+        this.store_info = in.readParcelable(StoreInfo.class.getClassLoader());
+        this.combo = new ArrayList<Combo>();
+        in.readList(this.combo, Combo.class.getClassLoader());
+        this.attrs = new ArrayList<Attrs>();
+        in.readList(this.attrs, Attrs.class.getClassLoader());
+        this.comments = new ArrayList<Comments>();
+        in.readList(this.comments, Comments.class.getClassLoader());
+        this.tt_act = in.readParcelable(TTAct.class.getClassLoader());
+        this.common_activity = in.readParcelable(SpecailAct.class.getClassLoader());
+        this.activity = in.readParcelable(Act.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<GoodsDeatilEntity> CREATOR = new Parcelable.Creator<GoodsDeatilEntity>() {
+        @Override
+        public GoodsDeatilEntity createFromParcel(Parcel source) {
+            return new GoodsDeatilEntity(source);
+        }
+
+        @Override
+        public GoodsDeatilEntity[] newArray(int size) {
+            return new GoodsDeatilEntity[size];
+        }
+    };
 }

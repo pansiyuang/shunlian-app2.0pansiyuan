@@ -223,8 +223,13 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 case "sys_text":
                     return SYS_TEXT;
             }
-        } else { //系统消息
-            return SYS_MSG;
+        } else if (sendType == BaseMessage.VALUE_SYSTEM) { //系统消息
+            switch (baseMessage.msg_type) {
+                case "sys_link":
+                    return LINK_MSG;
+                default:
+                    return SYS_MSG;
+            }
         }
         return super.getItemViewType(position);
     }
@@ -579,7 +584,26 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public void handLink(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
+        LinkViewHolder linkViewHolder = (LinkViewHolder) holder;
+        LinkMessage linkMessage = (LinkMessage) baseMessage;
+        LinkMessage.LinkBody msg_body = linkMessage.msg_body;
+        if (msg_body != null) {
+            GlideUtils.getInstance().loadImage(context, linkViewHolder.miv_icon, msg_body.goodsImage);
+            linkViewHolder.tv_goods_title.setText(msg_body.title);
+            linkViewHolder.tv_goods_price.setText(msg_body.price);
 
+            linkViewHolder.tv_send_goods.setOnClickListener(v -> {
+                GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();
+                GoodsMessage.Goods goods = new GoodsMessage.Goods();
+                goods.goodsId = msg_body.goodsId;
+                goods.goodsImage = msg_body.goodsImage;
+                goods.price = msg_body.price;
+                goods.title = msg_body.title;
+                goodsBody.goods = goods;
+
+                ((ChatActivity) context).sendGoodsMessage(goodsBody);
+            });
+        }
     }
 
     public void handTransfer(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -861,6 +885,18 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     }
 
     public class LinkViewHolder extends BaseRecyclerViewHolder {
+
+        @BindView(R.id.miv_icon)
+        MyImageView miv_icon;
+
+        @BindView(R.id.tv_goods_title)
+        TextView tv_goods_title;
+
+        @BindView(R.id.tv_goods_price)
+        TextView tv_goods_price;
+
+        @BindView(R.id.tv_send_goods)
+        TextView tv_send_goods;
 
         public LinkViewHolder(View itemView) {
             super(itemView);

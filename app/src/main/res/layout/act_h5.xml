@@ -14,7 +14,7 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
@@ -64,12 +64,43 @@
             android:id="@+id/miv_favorite"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/rl_title_more"
             android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_found_souchang_n"
-            android:visibility="gone" />
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/rl_title_more"
+            android:layout_width="60dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:visibility="visible">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_title_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_common_more_black" />
+
+            <TextView
+                android:id="@+id/tv_msg_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_above="@+id/miv_title_more"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/rounded_corner_pink_12px"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:visibility="gone" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <com.shunlian.app.widget.MyWebView

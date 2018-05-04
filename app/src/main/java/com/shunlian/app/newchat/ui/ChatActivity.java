@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.StoreGoodsListEntity;
@@ -32,6 +33,7 @@ import com.shunlian.app.newchat.entity.EvaluateEntity;
 import com.shunlian.app.newchat.entity.EvaluateMessage;
 import com.shunlian.app.newchat.entity.GoodsMessage;
 import com.shunlian.app.newchat.entity.ImageMessage;
+import com.shunlian.app.newchat.entity.LinkMessage;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.OrderMessage;
@@ -121,10 +123,18 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private ChatOrderDialog chatOrderDialog;
     private String lastMessageSendTime;
     private boolean isFirst = true;
+    private GoodsDeatilEntity mGoodsDeatilEntity;
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("chatMember", chatMember);
+        context.startActivity(intent);
+    }
+
+    public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember, GoodsDeatilEntity goodsDeatilEntity) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra("chatMember", chatMember);
+        intent.putExtra("goods", goodsDeatilEntity);
         context.startActivity(intent);
     }
 
@@ -141,6 +151,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 .keyboardEnable(true).init();
 
         currentChatMember = (ChatMemberEntity.ChatMember) getIntent().getSerializableExtra("chatMember");
+        mGoodsDeatilEntity = getIntent().getParcelableExtra("goods");
 
         currentDeviceId = DeviceInfoUtil.getDeviceId(this);
         chatName = getIntent().getStringExtra("chatName");
@@ -226,10 +237,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             chat_m_user_Id = currentChatMember.m_user_id;
             chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
-//
-//            chat_m_user_Id = "31";
-//            chatShopId = "26";
-//            chatRoleType = "4";
         } else {
             chatRoleType = getIntent().getStringExtra("role_type");
         }
@@ -596,6 +603,37 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             mAdapter.addMsgInfo(msgInfo);
         }
     }
+    /**
+     * 构建一条商品消息
+     */
+    public void sendGoodsMessage(GoodsMessage.GoodsBody body) {
+        MsgInfo msgInfo = new MsgInfo();
+
+        currentTagId = creatMsgTagId(from_id);
+        GoodsMessage goodsMessage = new GoodsMessage();
+        goodsMessage.from_user_id = currentUserId;
+        goodsMessage.from_type = from_type;
+        goodsMessage.from_nickname = from_nickname;
+        goodsMessage.from_headurl = from_headurl;
+        goodsMessage.to_user_id = chat_m_user_Id;
+        goodsMessage.to_type = chatRoleType;
+        goodsMessage.to_shop_id = chatShopId;
+        goodsMessage.msg_type = "goods";
+        goodsMessage.setSendType(BaseMessage.VALUE_RIGHT);
+        goodsMessage.tag_id = currentTagId;
+        goodsMessage.type = "send_message";
+
+        goodsMessage.msg_body = body;
+
+        if (mClient.getStatus() == Status.CONNECTED) {
+            LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
+            mClient.send(mAdapter.msg2Str(goodsMessage));
+            msgInfo.send_time = System.currentTimeMillis() / 1000;
+            goodsMessage.setStatus(MessageStatus.Sending);
+            msgInfo.message = mAdapter.msg2Str(goodsMessage);
+            mAdapter.addMsgInfo(msgInfo);
+        }
+    }
 
     /**
      * 发送一条评价消息
@@ -728,68 +766,24 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     /**
      * 构建一条链接系统消息
      */
-//    public void buildLinkMessage(GoodsItemEntity.Data.Item goodsItem) {
-//        MsgInfo msgInfo = new MsgInfo();
-//
-//        LinkMessage linkMessage = new LinkMessage();
-//        linkMessage.msg_type = "sys_link";
-//        linkMessage.setSendType(BaseMessage.VALUE_SYSTEM);
-//
-//        LinkMessage.LinkBody linkBody = new LinkMessage.LinkBody();
-//        linkBody.goodsImage = goodsItem.getThumb();
-//        linkBody.title = goodsItem.getTitle();
-//        linkBody.price = goodsItem.getMarketprice();
-//        linkBody.goodsId = goodsItem.getGoodsId();
-//        linkMessage.msg_body = linkBody;
-//        msgInfo.setMessage(chatAdpater.msg2Str(linkMessage));
-//
-//        chatAdpater.addMsgInfo(msgInfo);
-//        chatAdpater.notifyDataSetChanged();
-//        lv_chat.setSelection(ListView.FOCUS_DOWN);//刷新到底部
-//    }
+    public void buildLinkMessage(GoodsDeatilEntity goodsDeatilEntity) {
+        MsgInfo msgInfo = new MsgInfo();
 
-    /**
-     * 发送链接消息
-     */
-//    public void sendLinkMessage(GoodsItemEntity.Data.Item goodsItem) {
-//        MsgInfo msgInfo = new MsgInfo();
-//
-//        currentTagId = creatMsgTagId(from_id);
-//        LinkMessage linkMessage = new LinkMessage();
-//        linkMessage.from_user_id = currentUserId;
-//        linkMessage.from_id = from_id;
-//        linkMessage.from_type = from_type;
-//        linkMessage.from_nickname = from_nickname;
-//        linkMessage.from_headurl = from_headurl;
-//        linkMessage.to_id = chatUserId;
-//        linkMessage.msg_type = "link";
-//        linkMessage.setSendType(BaseMessage.VALUE_RIGHT);
-//        linkMessage.tag_id = currentTagId;
-//        linkMessage.type = "send_message";
-//
-//        LinkMessage.LinkBody linkBody = new LinkMessage.LinkBody();
-//        linkBody.goodsImage = goodsItem.getThumb();
-//        linkBody.title = goodsItem.getTitle();
-//        linkBody.price = goodsItem.getMarketprice();
-//        linkBody.goodsId = goodsItem.getGoodsId();
-//        linkMessage.msg_body = linkBody;
-//        String body;
-//        try {
-//            body = mObjectMapper.writeValueAsString(linkMessage);
-//            mClient.send(body);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        msgInfo.setSend_time(System.currentTimeMillis() / 1000);
-//        linkMessage.setStatus(MessageStatus.Sending);
-//        msgInfo.setMessage(chatAdpater.msg2Str(linkMessage));
-//
-//        if (mClient.getStatus() == Status.CONNECTED) {
-//            chatAdpater.addMsgInfo(msgInfo);
-//            chatAdpater.notifyDataSetChanged();
-//            lv_chat.setSelection(ListView.FOCUS_DOWN);//刷新到底部
-//        }
-//    }
+        LinkMessage linkMessage = new LinkMessage();
+        linkMessage.msg_type = "sys_link";
+        linkMessage.setSendType(BaseMessage.VALUE_SYSTEM);
+
+        LinkMessage.LinkBody linkBody = new LinkMessage.LinkBody();
+        linkBody.goodsImage = goodsDeatilEntity.thumb;
+        linkBody.title = goodsDeatilEntity.title;
+        linkBody.price = goodsDeatilEntity.price;
+        linkBody.goodsId = goodsDeatilEntity.id;
+        linkMessage.msg_body = linkBody;
+        msgInfo.message = mAdapter.msg2Str(linkMessage);
+
+        mAdapter.addMsgInfo(0, msgInfo);
+    }
+
 
     /**
      * 消息已读上报
@@ -916,6 +910,10 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         if (isFirst) {
             messages.clear();
+
+            if (mGoodsDeatilEntity != null) {
+                buildLinkMessage(mGoodsDeatilEntity);
+            }
         }
 
         if (!isEmpty(msgInfoList)) {
