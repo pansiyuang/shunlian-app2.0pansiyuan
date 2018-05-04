@@ -114,6 +114,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String activity_status;
         public String start_remain_seconds;
         public String end_remain_seconds;
+        public String start_time;
 
         @Override
         public int describeContents() {
@@ -254,6 +255,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String content;
         public String percent;
         public String str_surplus_stock;
+        public String start_time;
 
         @Override
         public int describeContents() {

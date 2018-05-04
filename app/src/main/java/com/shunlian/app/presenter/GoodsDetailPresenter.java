@@ -75,6 +75,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         if (tt_act != null){
                             act_id = tt_act.id;
                             iView.activityState(tt_act.sale,tt_act.remind_status);
+                            shareInfoParam.start_time = tt_act.start_time;
+                            shareInfoParam.act_label = "天天特惠";
                         }
                     }
                     GoodsDeatilEntity.SpecailAct common_activity = data.common_activity;
@@ -92,6 +94,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         shareInfoParam.desc = data.introduction;
                         shareInfoParam.downloadPic = data.pics;
                         shareInfoParam.shareLink = shareLink;
+                    }
+                    if (data.common_activity != null){
+                        shareInfoParam.start_time = data.common_activity.start_time;
+                        shareInfoParam.act_label = data.is_preferential;
                     }
                 }
             }

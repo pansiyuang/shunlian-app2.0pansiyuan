@@ -45,6 +45,8 @@
         android:layout_marginLeft="13dp"
         android:layout_marginRight="13dp"
         android:paddingTop="15dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/new_text"
         android:textSize="18sp" />
 
@@ -55,6 +57,8 @@
         android:layout_marginLeft="13dp"
         android:layout_marginRight="13dp"
         android:paddingBottom="15dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:paddingTop="7.5dp"
         android:textColor="@color/share_text"
         android:textSize="12sp" />
@@ -118,10 +122,10 @@
                 android:textSize="12sp" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_act_label"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@color/pink_color"
-                android:text="天天特惠"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:textColor="@color/white"

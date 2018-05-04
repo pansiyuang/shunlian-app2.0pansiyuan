@@ -27,4 +27,6 @@ public class ShareInfoParam implements Serializable {
 
     //发现
     public String thumb_type;//0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）
+    public String start_time;//活动开始时间
+    public String act_label;//活动开始时间
 }

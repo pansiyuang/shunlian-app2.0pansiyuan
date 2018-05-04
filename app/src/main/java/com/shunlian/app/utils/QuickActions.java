@@ -616,12 +616,20 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_price.setText("￥"+mShareInfoParam.goodsPrice);
 
         MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
+        MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
 
         LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
 
+        if (TextUtils.isEmpty(mShareInfoParam.start_time)){
+            llayout_day.setVisibility(GONE);
+        }else {
+            mtv_time.setText(mShareInfoParam.start_time);
+            mtv_act_label.setText(mShareInfoParam.act_label);
+        }
+
         //下载图片
-//        DownLoadImageThread thread = new DownLoadImageThread(mContext,mShareInfoParam.downloadPic);
-//        thread.start();
+        DownLoadImageThread thread = new DownLoadImageThread(mContext,mShareInfoParam.downloadPic);
+        thread.start();
 
         MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
         GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
@@ -702,9 +710,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         if ("1".equals(mShareInfoParam.thumb_type)){//显示大图
                             miv_bigpic.setVisibility(VISIBLE);
                             miv_smallpic.setVisibility(GONE);
-//                            int i1 = TransformUtil.countRealWidth(getContext(), 10);
-//                            Bitmap fillet = BitmapFillet.fillet(resource, i1);
-                            miv_bigpic.setImageBitmap(resource);
+
+                            int i1 = TransformUtil.dip2px(getContext(), 10);
+                            int[] ints = TransformUtil.countRealWH(mContext, 640, 300);
+                            Bitmap fillet = BitmapFillet.fillet(ints[0],ints[1],
+                                    resource, i1,BitmapFillet.CORNER_TOP);
+
+                            miv_bigpic.setImageBitmap(fillet);
                         }else {
                             miv_bigpic.setVisibility(GONE);
                             miv_smallpic.setVisibility(VISIBLE);
