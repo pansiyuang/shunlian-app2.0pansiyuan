@@ -73,6 +73,8 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 }
                 //分享专用
                 GoodsDeatilEntity.UserInfo user_info = articleEntity.user_info;
+                if (shareInfoParam == null)
+                    shareInfoParam = new ShareInfoParam();
                 shareInfoParam.userAvatar = user_info.avatar;
                 shareInfoParam.userName = user_info.nickname;
 
@@ -198,5 +200,9 @@ public class ChosenPresenter extends BasePresenter<IChosenView> {
                 }
             }
         }
+    }
+
+    public ShareInfoParam getShareInfoParam() {
+        return shareInfoParam;
     }
 }

@@ -13,7 +13,7 @@ import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.presenter.PDiscoverTiezi;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IDiscoverTiezi;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
@@ -54,6 +54,9 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @BindView(R.id.mtv_attend)
     MyTextView mtv_attend;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private PDiscoverTiezi pDiscoverTiezi;
     private LinearLayoutManager linearLayoutManager;
     private DiscoverHotAdapter newAdapter;
@@ -77,6 +80,10 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             case R.id.mtv_attend:
                 DiscoverPublishPhotoAct.startAct(DiscoverTieziAct.this, circle_id);
                 break;
+            case R.id.miv_more:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.findDetail();
+                break;
         }
     }
 
@@ -84,6 +91,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     protected void initListener() {
         super.initListener();
         mtv_attend.setOnClickListener(this);
+        miv_more.setOnClickListener(this);
         rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -181,4 +189,10 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     }
 
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 }

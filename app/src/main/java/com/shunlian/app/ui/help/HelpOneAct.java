@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.adapter.HelpQoneAdapter;
 import com.shunlian.app.adapter.HelpQtwoAdapter;

@@ -304,7 +304,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 发现详情页
      */
     public void findDetail() {
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
+        shareStyle2Dialog(false,false);
     }
 
     /**
@@ -314,7 +317,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
         rightMargin = px / 6;
         setShowItem(1, 3, 4, 6, 8);
-        shareStyle2Dialog(true);
+        shareStyle2Dialog(false,true);
     }
 
     /**
@@ -398,6 +401,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
     /**
+     * 要分享的帮助
+     */
+    public void shareHelp(){
+        setShowItem(1,2,3,4,6,8);
+        shareStyle1Dialog();
+    }
+
+    /**
      * 搜索
      */
     public void search(){
@@ -439,7 +450,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 分享微信和复制链接，图文分享
      */
-    public void shareStyle2Dialog(boolean isShop){
+    public void shareStyle2Dialog(boolean isShow,boolean isShop){
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("图文分享", getResources().getDrawable(R.mipmap.icon_erweima)))
@@ -475,7 +486,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         hide();
                     }
                 }).build();
-        if (!isShop){
+        if (isShow){
             removeAllViews();
             if (!mPopMenu.isShowing()) {
                 mPopMenu.show();

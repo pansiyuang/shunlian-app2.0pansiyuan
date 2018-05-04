@@ -31,7 +31,6 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.entity.Message;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;

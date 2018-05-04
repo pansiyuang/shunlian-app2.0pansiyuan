@@ -748,6 +748,11 @@
             android:name=".ui.sale_rank.SaleRankAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.help.HelpSolutionAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

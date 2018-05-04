@@ -22,7 +22,6 @@ import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISortFragView;
 import com.shunlian.app.widget.MyTextView;

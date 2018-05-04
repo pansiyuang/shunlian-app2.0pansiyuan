@@ -157,4 +157,10 @@
 
     </com.shunlian.app.widget.MyRelativeLayout>
 
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </com.shunlian.app.widget.MyRelativeLayout>

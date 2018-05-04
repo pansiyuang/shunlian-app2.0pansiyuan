@@ -93,7 +93,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.mrlayout_news:
                 quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.help();
+                quick_actions.shareHelp();
                 break;
         }
     }
