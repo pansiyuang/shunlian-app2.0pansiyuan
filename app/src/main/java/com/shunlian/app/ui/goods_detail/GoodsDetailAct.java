@@ -168,6 +168,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private Map<String,BaseFragment> fragments;
     private CommentFrag commentFrag;
     private GoodsDeatilEntity.StoreInfo store_info;
+    private GoodsDeatilEntity mGoodsDeatilEntity;
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
@@ -394,13 +395,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void getUserId(String userId) {
-
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
         chatMember.shop_id = store_id;
         chatMember.nickname = store_info.decoration_name;
         chatMember.type = "3";
         chatMember.m_user_id = userId;
-        ChatActivity.startAct(this, chatMember);
+        ChatActivity.startAct(this, chatMember ,mGoodsDeatilEntity);
     }
 
 
@@ -409,6 +409,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
+        mGoodsDeatilEntity = goodsDeatilEntity;
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
         store_info = goodsDeatilEntity.store_info;
         //购物车角标数字
