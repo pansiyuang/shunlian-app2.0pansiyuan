@@ -27,6 +27,7 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
+import com.shunlian.app.widget.circle.RoundRectImageView;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
@@ -699,8 +700,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             mtv_desc.setText(mShareInfoParam.desc);
         }
 
-        MyImageView miv_bigpic = (MyImageView) inflate.findViewById(R.id.miv_bigpic);
+        RoundRectImageView miv_bigpic = (RoundRectImageView) inflate.findViewById(R.id.miv_bigpic);
         MyImageView miv_smallpic = (MyImageView) inflate.findViewById(R.id.miv_smallpic);
+
+        int[] ints = TransformUtil.countRealWH(mContext, 640, 300);
+        ViewGroup.LayoutParams layoutParams = miv_bigpic.getLayoutParams();
+        layoutParams.width = ints[0];
+        layoutParams.height = ints[1];
 
         GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
                 new SimpleTarget<Bitmap>() {
@@ -710,13 +716,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         if ("1".equals(mShareInfoParam.thumb_type)){//显示大图
                             miv_bigpic.setVisibility(VISIBLE);
                             miv_smallpic.setVisibility(GONE);
-
-                            int i1 = TransformUtil.dip2px(getContext(), 10);
-                            int[] ints = TransformUtil.countRealWH(mContext, 640, 300);
-                            Bitmap fillet = BitmapFillet.fillet(ints[0],ints[1],
-                                    resource, i1,BitmapFillet.CORNER_TOP);
-
-                            miv_bigpic.setImageBitmap(fillet);
+                            miv_bigpic.setImageBitmap(resource);
                         }else {
                             miv_bigpic.setVisibility(GONE);
                             miv_smallpic.setVisibility(VISIBLE);

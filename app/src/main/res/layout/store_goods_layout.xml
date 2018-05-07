@@ -61,7 +61,7 @@
             android:id="@+id/mtv_collection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/collection"
+            android:text="@string/discover_follow"
             android:textSize="12sp"
             android:textColor="@color/pink_color"
             android:background="@drawable/edge_frame_r3"
@@ -163,7 +163,7 @@
                 <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/attention_count"
+                    android:text="@string/follow_count"
                     android:textColor="@color/value_9B"
                     android:textSize="11sp"
                     app:tv_control_adapter="true"

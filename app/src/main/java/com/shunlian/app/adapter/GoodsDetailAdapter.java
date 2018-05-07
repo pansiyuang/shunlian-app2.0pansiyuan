@@ -1390,11 +1390,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             if (state == 1){
                 background.setColor(getResources().getColor(R.color.pink_color));
                 mtv_collection.setTextColor(Color.WHITE);
-                mtv_collection.setText(getString(R.string.already_collected));
+                mtv_collection.setText(getString(R.string.discover_alear_follow));
             }else {
                 background.setColor(getResources().getColor(R.color.transparent));
                 mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_collection.setText(getString(R.string.collection));
+                mtv_collection.setText(getString(R.string.discover_follow));
             }
         }
 

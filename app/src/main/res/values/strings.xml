@@ -165,6 +165,7 @@
     <string name="already_collected">已收藏</string>
     <string name="goods_count">商品数</string>
     <string name="attention_count">收藏数</string>
+    <string name="follow_count">关注数</string>
     <string name="description">描述相符</string>
     <string name="quality_satisfy">质量满意</string>
     <string name="this_store_sells_well">本店热销</string>

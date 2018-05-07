@@ -61,15 +61,13 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.shunlian.app.widget.MyImageView
+        <!--circle.RoundRectImageView-->
+        <com.shunlian.app.widget.circle.RoundRectImageView
             android:id="@+id/miv_bigpic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="320dp"
+            android:layout_height="150dp"
             android:visibility="visible"
-            android:scaleType="centerCrop"
-            app:iv_control_adapter="true"
-            app:iv_control_height="300"
-            app:iv_control_width="640" />
+            android:scaleType="centerCrop"/>
 
 
         <com.shunlian.app.widget.MyImageView
