@@ -142,13 +142,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 //                if (h5_mwb.canGoBack()) {
 //                    h5_mwb.goBack();// 返回前一个页面
 //                } else {
-                finish();
+//                  finish();
 //                }
+                finish();
                 break;
 //            case R.id.layout_backtToUp:
 //                h5_mwb.scrollTo(0, 0);
 //                break;
-
         }
     }
 
@@ -174,11 +174,11 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         mIntent = getIntent();
-        if (!TextUtils.isEmpty(mIntent.getStringExtra("url"))) {
-            h5Url = mIntent.getStringExtra("url");
+        mode = mIntent.getIntExtra("mode", 0);
+        h5Url = mIntent.getStringExtra("url");
+        if (!isEmpty(h5Url)) {
             initSonic();
         }
-        mode = mIntent.getIntExtra("mode", 0);
         return R.layout.act_h5;
     }
 
@@ -187,26 +187,12 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      */
     @Override
     protected void initData() {
-        if (h5Url.startsWith(InterentTools.H5_HOST+"special")){
-            visible(rl_title_more);
-            rl_title_more.setOnClickListener(v -> {
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.special();
-            });
-        }else if (h5Url.startsWith(InterentTools.H5_HOST+"activity")){
-            visible(rl_title_more);
-            rl_title_more.setOnClickListener(v -> {
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.activity();
-            });
-        }
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
         httpDialog = new HttpDialog(this);
         initWebView();
-//        addJs();
         if (!isEmpty(h5Url)) {
             loadUrl();
         }
@@ -254,6 +240,22 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     protected void loadUrl() {
         LogUtil.zhLogW("h5Url====="+h5Url);
+        if (!isEmpty(h5Url)) {
+            if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
+                visible(rl_title_more);
+                rl_title_more.setOnClickListener(v -> {
+                    quick_actions.setVisibility(View.VISIBLE);
+                    quick_actions.special();
+                });
+            } else if (h5Url.startsWith(InterentTools.H5_HOST + "activity")) {
+                visible(rl_title_more);
+                rl_title_more.setOnClickListener(v -> {
+                    quick_actions.setVisibility(View.VISIBLE);
+                    quick_actions.activity();
+                });
+            }
+        }
+
         // webview is ready now, just tell session client to bind
         if (sonicSessionClient != null) {
             sonicSessionClient.bindWebView(mwv_h5);
@@ -262,8 +264,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             if (!isEmpty(h5Url))
                 mwv_h5.loadUrl(h5Url, setWebviewHeader());
         }
-//        String targetUrl = "file:///android_asset/up.html";
-//        mwv_h5.loadUrl(targetUrl);
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
@@ -299,12 +299,12 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         webSetting.setSaveFormData(false);
         webSetting.setUseWideViewPort(true);
         webSetting.setLoadWithOverviewMode(true);
-//        mwv_h5.setWebChromeClient(new WebChromeClient());
 
         mwv_h5.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                LogUtil.zhLogW("=onPageStarted======="+url);
                 if (!isFinishing() && httpDialog != null) {
                     httpDialog.show();
                 }
@@ -316,6 +316,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                LogUtil.zhLogW("=onPageFinished======="+url);
                 title = view.getTitle();
                 setTitle();
                 if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
@@ -328,8 +329,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                LogUtil.zhLogW("=error======="+error.getPrimaryError());
                 handler.proceed();//接受证书
-//                view.loadUrl(h5Url,setWebviewHeader());
                 if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
                     httpDialog.dismiss();
                 }
@@ -337,7 +338,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-//                view.loadUrl(h5Url,setWebviewHeader());
                 if (mwv_h5 != null) {
                     mwv_h5.setVisibility(View.INVISIBLE);
                     Common.staticToast("网络连接错误，请稍后再试");
@@ -390,14 +390,16 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             // For Android >= 5.0
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
+                                             WebChromeClient.FileChooserParams fileChooserParams) {
                 uploadMessageAboveL = filePathCallback;
                 openImageChooserActivity();
                 return true;
             }
         });
         addCookie();
-        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
+        mwv_h5.getSettings().setUserAgentString(SharedPrefUtil
+                .getSharedPrfString("User-Agent", "Shunlian Android 1.1.1/0.0.0"));
     }
 
     @Override
@@ -415,15 +417,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
 
-//        h5_mwb.setWebChromeClient(new WebChromeClient());
         CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
-
-//        if (BuildConfig.DEBUG) {
-//            domain ="api-test.shunliandongli.com";
-//        }
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
@@ -490,10 +487,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             sonicSessionClient.destroy();
             sonicSessionClient = null;
         }
-//        if (mwv_h5 != null) {
-//            mwv_h5.clearHistory();
-//            mwv_h5.clearCache(true);
-//        }
         super.onDestroy();
     }
 
