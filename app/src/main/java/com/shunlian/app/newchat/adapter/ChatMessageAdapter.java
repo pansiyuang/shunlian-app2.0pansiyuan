@@ -71,6 +71,7 @@ import static com.shunlian.app.utils.BitmapUtil.MAX_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MAX_WIDTH;
 import static com.shunlian.app.utils.BitmapUtil.MIN_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MIN_WIDTH;
+import static com.shunlian.app.utils.Common.firstSmallText;
 
 /**
  * Created by Administrator on 2018/4/10.
@@ -460,7 +461,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             }
 
             leftGoodsViewHolder.tv_goods_title.setText(goods.title);
-            leftGoodsViewHolder.tv_goods_price.setText(goods.price);
+
+            String price = getString(R.string.rmb) + goods.price;
+            leftGoodsViewHolder.tv_goods_price.setText(price);
 
             leftGoodsViewHolder.layout_goods.setOnClickListener(v -> {
                 GoodsDetailAct.startAct(context, goods.goodsId);
@@ -481,7 +484,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 rightGoodsViewHolder.miv_good_img.setImageResource(R.mipmap.img_guige_moren);
             }
             rightGoodsViewHolder.tv_goods_title.setText(goods.title);
-            rightGoodsViewHolder.tv_goods_price.setText(goods.price);
+
+            String price = getString(R.string.rmb) + goods.price;
+            rightGoodsViewHolder.tv_goods_price.setText(price);
 
             rightGoodsViewHolder.layout_goods.setOnClickListener(v -> {
                 GoodsDetailAct.startAct(context, goods.goodsId);
@@ -590,7 +595,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         if (msg_body != null) {
             GlideUtils.getInstance().loadImage(context, linkViewHolder.miv_icon, msg_body.goodsImage);
             linkViewHolder.tv_goods_title.setText(msg_body.title);
-            linkViewHolder.tv_goods_price.setText(msg_body.price);
+
+            String price = getString(R.string.rmb) + msg_body.price;
+            firstSmallText(linkViewHolder.tv_goods_price, price, 11);
 
             linkViewHolder.tv_send_goods.setOnClickListener(v -> {
                 GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();

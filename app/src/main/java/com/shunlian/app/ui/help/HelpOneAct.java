@@ -15,6 +15,7 @@ import com.shunlian.app.adapter.HelpQtwoAdapter;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.PHelpOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
@@ -173,7 +174,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         chatMember.nickname = "在线客服";
         chatMember.m_user_id = userId;
         chatMember.type = "1";
-        ChatActivity.startAct(this, chatMember);
+        ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
     }
 
     @Override

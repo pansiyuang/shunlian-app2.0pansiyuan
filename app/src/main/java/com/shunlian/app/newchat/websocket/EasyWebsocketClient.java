@@ -75,6 +75,7 @@ public class EasyWebsocketClient extends WebSocketClient {
     private String currentPageType = "nomal";
     private static List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
     private static MessageCountManager messageCountManager;
+    private MemberStatus currentMemberStatus = MemberStatus.Member;
     //    private GoodsItemEntity.Data.Item goodsItem;
 //    private ShopHomeEntity.Data.ShopInfo shopInfo;
 //    private OrderItemEntity.Data orderItemEntity;
@@ -204,7 +205,6 @@ public class EasyWebsocketClient extends WebSocketClient {
             BaseEntity baseEntity = objectMapper.readValue(message, BaseEntity.class);
             switch (baseEntity.message_type) {
                 case "init":
-
                     if (!isEmpty(messageReceiveListeners)) {
                         for (OnMessageReceiveListener listener : messageReceiveListeners) {
                             listener.initMessage();
@@ -255,7 +255,9 @@ public class EasyWebsocketClient extends WebSocketClient {
                         }
                     }
                     SwitchStatusEntity switchStatusEntity = objectMapper.readValue(message, SwitchStatusEntity.class);
-                    updateRoleType(switchStatusEntity.to_role);
+                    if (switchStatusEntity.status.equals("0")) {
+                        updateRoleType(switchStatusEntity.to_role);
+                    }
                     new Thread() {
                         public void run() {
                             Looper.prepare();
@@ -489,9 +491,26 @@ public class EasyWebsocketClient extends WebSocketClient {
     public void setUserInfoEntity(String str) {
         try {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
-            SharedPrefUtil.saveSharedPrfString("user_id", userInfoEntity.info.user.user_id);
-            SharedPrefUtil.saveSharedPrfString("role_type", userInfoEntity.info.role_type);
-//            setFriendList(userInfoEntity);
+
+            LogUtil.httpLogW("setUserInfoEntity:" + currentMemberStatus);
+
+            if (currentMemberStatus != MemberStatus.Member) {
+                switchStatus(currentMemberStatus);
+            } else {
+                switch (userInfoEntity.info.role_type) {
+                    case "seller":
+                        currentMemberStatus = MemberStatus.Seller;
+                        break;
+                    case "admin":
+                        currentMemberStatus = MemberStatus.Admin;
+                        break;
+                    default:
+                        currentMemberStatus = MemberStatus.Member;
+                        break;
+                }
+                SharedPrefUtil.saveSharedPrfString("user_id", userInfoEntity.info.user.user_id);
+                LogUtil.httpLogW("用户状态初始化为:" + currentMemberStatus);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -536,48 +555,26 @@ public class EasyWebsocketClient extends WebSocketClient {
         }
         userInfoEntity.info.role_type = roleType;
         SharedPrefUtil.saveSharedPrfString("role_type", roleType);
-        String userId;
         switch (roleType) {
             case "seller":
-                userId = userInfoEntity.info.bind.bind_seller.user.user_id;
+                mUser = userInfoEntity.info.bind.bind_seller.user;
+                currentMemberStatus = MemberStatus.Seller;
                 break;
             case "admin":
-                userId = userInfoEntity.info.bind.bind_admin.user.user_id;
+                mUser = userInfoEntity.info.bind.bind_admin.user;
+                currentMemberStatus = MemberStatus.Admin;
                 break;
             default:
-                userId = userInfoEntity.info.user.user_id;
+                mUser = userInfoEntity.info.user;
+                currentMemberStatus = MemberStatus.Member;
                 break;
         }
-        SharedPrefUtil.saveSharedPrfString("user_id", userId);
-    }
-
-    public String getCurrentRoleType() {
-        if (userInfoEntity == null) {
-            return "member";
-        }
-        if (userInfoEntity.info == null) {
-            return "member";
-        }
-        UserInfoEntity.Info info = userInfoEntity.info;
-        return info.role_type;
+        LogUtil.httpLogW("用户状态更新为:" + currentMemberStatus);
+        SharedPrefUtil.saveSharedPrfString("user_id", mUser.user_id);
     }
 
     public MemberStatus getMemberStatus() {
-        if (userInfoEntity == null) {
-            return MemberStatus.Member;
-        }
-        if (userInfoEntity.info == null) {
-            return MemberStatus.Member;
-        }
-        UserInfoEntity.Info info = userInfoEntity.info;
-        switch (info.role_type) {
-            case "seller":
-                return MemberStatus.Seller;
-            case "admin":
-                return MemberStatus.Admin;
-            default:
-                return MemberStatus.Member;
-        }
+        return currentMemberStatus;
     }
 
     /**
@@ -614,14 +611,7 @@ public class EasyWebsocketClient extends WebSocketClient {
      * @return
      */
     public boolean isMember() {
-        if (userInfoEntity == null) {
-            return true;
-        }
-        if (userInfoEntity.info == null) {
-            return true;
-        }
-        UserInfoEntity.Info info = userInfoEntity.info;
-        return "member".equals(info.role_type);
+        return currentMemberStatus == MemberStatus.Member;
     }
 
     /**
@@ -630,14 +620,7 @@ public class EasyWebsocketClient extends WebSocketClient {
      * @return
      */
     public boolean isAdmin() {
-        if (userInfoEntity == null) {
-            return false;
-        }
-        if (userInfoEntity.info == null) {
-            return false;
-        }
-        UserInfoEntity.Info info = userInfoEntity.info;
-        return "admin".equals(info.role_type);
+        return currentMemberStatus == MemberStatus.Admin;
     }
 
     /**
@@ -668,11 +651,7 @@ public class EasyWebsocketClient extends WebSocketClient {
      * @return
      */
     public boolean isSeller() {
-        if (userInfoEntity == null) {
-            return false;
-        }
-        UserInfoEntity.Info info = userInfoEntity.info;
-        return "seller".equals(info.role_type);
+        return currentMemberStatus == MemberStatus.Seller;
     }
 
     /**
@@ -814,7 +793,6 @@ public class EasyWebsocketClient extends WebSocketClient {
         reconnectCount = 0;
         mHandler.removeCallbacks(mReconnectTask);
     }
-
 
     public void setOnClientConnetListener(OnClientConnetListener listener) {
         this.mListener = listener;

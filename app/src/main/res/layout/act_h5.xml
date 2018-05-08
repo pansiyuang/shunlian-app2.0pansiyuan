@@ -70,14 +70,14 @@
             android:layout_centerVertical="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_found_souchang_n"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rl_title_more"
             android:layout_width="60dp"
             android:layout_height="44dp"
             android:layout_alignParentRight="true"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_title_more"

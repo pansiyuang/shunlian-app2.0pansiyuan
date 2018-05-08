@@ -17,6 +17,7 @@ import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -143,23 +144,23 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     private OrderDetailPresenter orderDetailPresenter;
     private String storeId, orderId = "54";
 
-    private  int pink_color;
-    private  int new_gray;
-    private  int strokeWidth;
+    private int pink_color;
+    private int new_gray;
+    private int strokeWidth;
     private OrderdetailEntity orderdetailEntity;
     private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailAct.class);
         intent.putExtra("orderId", orderId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (orderDetailPresenter!=null){
+        if (orderDetailPresenter != null) {
             orderDetailPresenter.initApiData();
         }
     }
@@ -197,9 +198,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onResume() {
-        if(messageCountManager.isLoad()){
+        if (messageCountManager.isLoad()) {
             messageCountManager.setTextCount(tv_msg_count);
-        }else{
+        } else {
             messageCountManager.initData();
         }
         super.onResume();
@@ -207,17 +208,17 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void setOrder(OrderdetailEntity orderdetailEntity) {
-        this.orderdetailEntity=orderdetailEntity;
+        this.orderdetailEntity = orderdetailEntity;
         mtv_state.setText(orderdetailEntity.notice_status.status_text);
         mtv_time.setText(orderdetailEntity.notice_status.status_small);
         mtv_number.setText("订单号：" + orderdetailEntity.order_sn);
-        mtv_phone.setText("联系电话："+orderdetailEntity.receipt_address.mobile);
-        mtv_name.setText("收件人："+orderdetailEntity.receipt_address.realname);
-        mtv_address.setText("收货地址："+orderdetailEntity.receipt_address.receipt_address);
-        if (TextUtils.isEmpty(orderdetailEntity.remark)){
+        mtv_phone.setText("联系电话：" + orderdetailEntity.receipt_address.mobile);
+        mtv_name.setText("收件人：" + orderdetailEntity.receipt_address.realname);
+        mtv_address.setText("收货地址：" + orderdetailEntity.receipt_address.receipt_address);
+        if (TextUtils.isEmpty(orderdetailEntity.remark)) {
             mtv_message.setVisibility(View.GONE);
             view_message.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_message.setText("用户留言：" + orderdetailEntity.remark);
             mtv_message.setVisibility(View.VISIBLE);
             view_message.setVisibility(View.VISIBLE);
@@ -225,46 +226,46 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_storeName.setText(orderdetailEntity.store_name);
         mtv_zongjia.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.goods_amount);
         mtv_yunfei.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.shipping_fee);
-        if (!TextUtils.isEmpty(orderdetailEntity.promotion)){
-            mtv_cuxiao.setText("-" + getStringResouce(R.string.common_yuan) +orderdetailEntity.promotion);
+        if (!TextUtils.isEmpty(orderdetailEntity.promotion)) {
+            mtv_cuxiao.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.promotion);
             mrlayout_cuxiao.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mrlayout_cuxiao.setVisibility(View.GONE);
         }
-        if (!TextUtils.isEmpty(orderdetailEntity.voucher_amount)){
+        if (!TextUtils.isEmpty(orderdetailEntity.voucher_amount)) {
             mtv_youhuiquan.setText("-" + getStringResouce(R.string.common_yuan) + orderdetailEntity.voucher_amount);
             mrlayout_youhuiquan.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mrlayout_youhuiquan.setVisibility(View.GONE);
         }
         mtv_shifu.setText(getStringResouce(R.string.common_yuan) + orderdetailEntity.total_amount);
-        if (TextUtils.isEmpty(orderdetailEntity.paytype)){
+        if (TextUtils.isEmpty(orderdetailEntity.paytype)) {
             mtv_zhifufangshi.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_zhifufangshi.setVisibility(View.VISIBLE);
             mtv_zhifufangshi.setText("支付方式：" + orderdetailEntity.paytype);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.create_time)){
+        if (TextUtils.isEmpty(orderdetailEntity.create_time)) {
             mtv_xiadanshijian.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_xiadanshijian.setVisibility(View.VISIBLE);
             mtv_xiadanshijian.setText("下单时间：" + orderdetailEntity.create_time);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.pay_time)){
+        if (TextUtils.isEmpty(orderdetailEntity.pay_time)) {
             mtv_fukuanshijian.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_fukuanshijian.setVisibility(View.VISIBLE);
             mtv_fukuanshijian.setText("付款时间：" + orderdetailEntity.pay_time);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.send_time)){
+        if (TextUtils.isEmpty(orderdetailEntity.send_time)) {
             mtv_fahuojian.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_fahuojian.setVisibility(View.VISIBLE);
             mtv_fahuojian.setText("发货时间：" + orderdetailEntity.send_time);
         }
-        if (TextUtils.isEmpty(orderdetailEntity.receive_time)){
+        if (TextUtils.isEmpty(orderdetailEntity.receive_time)) {
             mtv_chengjiaoshijian.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_chengjiaoshijian.setVisibility(View.VISIBLE);
             mtv_chengjiaoshijian.setText("成交时间：" + orderdetailEntity.receive_time);
         }
@@ -325,9 +326,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 break;
             case "2":
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daishouhuo);
-                if ("1".equals(orderdetailEntity.is_postpone)){
+                if ("1".equals(orderdetailEntity.is_postpone)) {
                     mtv_title1.setVisibility(View.GONE);
-                }else {
+                } else {
                     mtv_title1.setVisibility(View.VISIBLE);
                     t1Dackground = (GradientDrawable) mtv_title1.getBackground();
                     t1Dackground.setStroke(strokeWidth, new_gray);
@@ -393,7 +394,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         chatMember.type = "3";
         chatMember.m_user_id = userId;
         chatMember.shop_id = orderdetailEntity.store_id;
-        ChatActivity.startAct(this, chatMember);
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
     }
 
     @Override
@@ -416,6 +417,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_title2.setOnClickListener(this);
         mtv_title3.setOnClickListener(this);
     }
+
     /**
      * 确认收货
      */
@@ -448,7 +450,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onSelect(int position) {
                 if (orderDetailPresenter != null) {
-                    orderDetailPresenter.cancleOrder(orderId,position + 1);
+                    orderDetailPresenter.cancleOrder(orderId, position + 1);
                 }
             }
         });
@@ -474,6 +476,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             }
         }).show();
     }
+
     @Override
     public void onClick(View view) {
         if (FastClickListener.isFastClick()) {
@@ -506,7 +509,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     cancleOrder();
                 } else if (getString(R.string.order_wuliu).equals(text)) {//物流
                     //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-                    OrderLogisticsActivity.startAct(this,orderId);
+                    OrderLogisticsActivity.startAct(this, orderId);
                 }
                 break;
             case R.id.mtv_title3:
@@ -514,7 +517,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
                     AllFrag.isRefreshItem = true;
                     SearchOrderResultActivity.isRefreshItem = true;
-                    PayListActivity.startAct(this, null,null,orderId,orderdetailEntity.total_amount);
+                    PayListActivity.startAct(this, null, null, orderId, orderdetailEntity.total_amount);
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价

@@ -20,6 +20,7 @@ import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.CustomerPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.ICustomerView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -80,6 +81,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         chatMemberList = new ArrayList<>();
         mPresenter = new CustomerPresenter(this, this);
 
+        LogUtil.httpLogW("member:"+mClient.getMemberStatus());
         if (mClient.getUser() != null) {
             mUser = mClient.getUser();
             mPresenter.getReception(mUser.user_id);

@@ -13,10 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.FastClickListener;
@@ -104,26 +106,20 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         tv_time.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
 
-        input_code.setOnCompleteListener(new VerificationCodeInput.Listener() {
-            @Override
-            public void onComplete(String content) {
-                mCode = content;
+        input_code.setOnCompleteListener(content -> {
+            mCode = content;
 //                if (!smsCode.equals(content)){
 //                    Common.staticToast(getString(R.string.RegisterTwoAct_shyzmcw));
 //                }else {
-                    setEdittextFocusable(true,et_pwd);
+                setEdittextFocusable(true,et_pwd);
 //                }
-            }
         });
 
-        et_pwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (checkCode(et_pwd)){
-                    return false;
-                }
+        et_pwd.setOnTouchListener((v, event) -> {
+            if (checkCode(et_pwd)){
                 return false;
             }
+            return false;
         });
 
 
@@ -141,25 +137,22 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        et_rpwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (checkCode(et_rpwd))
-                    return false;
-                if (isEtPwdEmpty(et_pwd,et_rpwd)){
-                    return false;
-                }
-                String pwd = et_pwd.getText().toString();
-                if (!Common.regularPwd(pwd)){
-                    Common.staticToast(getString(R.string.RegisterTwoAct_mmzh));
-                    setEdittextFocusable(true,et_pwd);
-                    setEdittextFocusable(false,et_rpwd);
-                    return false;
-                }else {
-                    setEdittextFocusable(true,et_rpwd);
-                }
+        et_rpwd.setOnTouchListener((v, event) -> {
+            if (checkCode(et_rpwd))
+                return false;
+            if (isEtPwdEmpty(et_pwd,et_rpwd)){
                 return false;
             }
+            String pwd = et_pwd.getText().toString();
+            if (!Common.regularPwd(pwd)){
+                Common.staticToast(getString(R.string.RegisterTwoAct_mmzh));
+                setEdittextFocusable(true,et_pwd);
+                setEdittextFocusable(false,et_rpwd);
+                return false;
+            }else {
+                setEdittextFocusable(true,et_rpwd);
+            }
+            return false;
         });
 
         et_rpwd.addTextChangedListener(new SimpleTextWatcher() {
@@ -175,31 +168,28 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        et_nickname.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (checkCode(et_nickname))
-                    return false;
-                if (isEtPwdEmpty(et_pwd,et_nickname)){
-                    return false;
-                }
-
-                if (isEtPwdEmpty(et_rpwd,et_nickname)){
-                    return false;
-                }else {
-                    String pwd = et_pwd.getText().toString();
-                    String rpwd = et_rpwd.getText().toString();
-                    if (!pwd.equals(rpwd)){
-                        Common.staticToast(getString(R.string.RegisterTwoAct_mmbyz));
-                        setEdittextFocusable(true,et_rpwd);
-                        setEdittextFocusable(false,et_nickname);
-                        return false;
-                    }else {
-                        setEdittextFocusable(true, et_nickname);
-                    }
-                }
+        et_nickname.setOnTouchListener((v, event) -> {
+            if (checkCode(et_nickname))
+                return false;
+            if (isEtPwdEmpty(et_pwd,et_nickname)){
                 return false;
             }
+
+            if (isEtPwdEmpty(et_rpwd,et_nickname)){
+                return false;
+            }else {
+                String pwd = et_pwd.getText().toString();
+                String rpwd = et_rpwd.getText().toString();
+                if (!pwd.equals(rpwd)){
+                    Common.staticToast(getString(R.string.RegisterTwoAct_mmbyz));
+                    setEdittextFocusable(true,et_rpwd);
+                    setEdittextFocusable(false,et_nickname);
+                    return false;
+                }else {
+                    setEdittextFocusable(true, et_nickname);
+                }
+            }
+            return false;
         });
 
         et_nickname.addTextChangedListener(new SimpleTextWatcher() {
@@ -374,11 +364,11 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         }
     }
 
-
     @Override
     public void resetPsw(String message) {
         Common.staticToast(message);
-        finish();
+        App.getActivityHelper().finishAllActivity();
+        LoginAct.startAct(this);
     }
 
     @Override

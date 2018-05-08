@@ -32,6 +32,7 @@ import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -683,7 +684,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         chatMember.m_user_id = userId;
         chatMember.type = "3";
         chatMember.nickname = mtv_storeName.getText().toString();
-        ChatActivity.startAct(this, chatMember);
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
     }
 
 

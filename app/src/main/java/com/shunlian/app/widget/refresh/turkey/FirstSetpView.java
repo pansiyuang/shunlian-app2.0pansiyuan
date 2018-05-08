@@ -98,9 +98,13 @@ public class FirstSetpView extends View{
 		measuredWidth = w;
 		measuredHeight = h;
 		//根据测量后的宽高来对火鸡做一个缩放
-		scaledTurkey = Bitmap.createScaledBitmap(left,measuredWidth*98/219,measuredHeight,true);
-		//根据测量后的宽高来对文字做一个缩放
-		scaledLetter = Bitmap.createScaledBitmap(right, measuredWidth*123/219, measuredHeight*51/93, true);
+		try {
+			scaledTurkey = Bitmap.createScaledBitmap(left, measuredWidth * 98 / 219, measuredHeight, true);
+			//根据测量后的宽高来对文字做一个缩放
+			scaledLetter = Bitmap.createScaledBitmap(right, measuredWidth * 123 / 219, measuredHeight * 51 / 93, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

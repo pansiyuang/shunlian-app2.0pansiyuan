@@ -8,13 +8,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_icon"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginLeft="5dp"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10.5dp"
+            android:layout_marginRight="5.5dp"
             android:text="96%好评"
             android:textColor="@color/my_dark_grey"
             android:textSize="11sp" />
@@ -94,9 +94,9 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_bananer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:scaleType="centerCrop" />
+        android:layout_height="113dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

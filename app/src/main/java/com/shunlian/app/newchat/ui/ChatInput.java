@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.Spannable;
@@ -127,6 +128,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             inputMethodHeight = height - rect.bottom;
             LinearLayout.LayoutParams rlayout_emoji_Params = new LinearLayout.LayoutParams(getRootView().getWidth(), inputMethodHeight);
             rlayout_emoji.setLayoutParams(rlayout_emoji_Params);
+            morePanel.setLayoutParams(rlayout_emoji_Params);
 
             RelativeLayout.LayoutParams emoji_vp_Params = new RelativeLayout.LayoutParams(getRootView().getWidth(), (int) (inputMethodHeight * 0.8f));
             emoji_vp.setLayoutParams(emoji_vp_Params);
@@ -164,7 +166,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         leavingCurrentState(isAdd);
         switch (inputMode = mode) {
             case MORE:
-                morePanel.setVisibility(VISIBLE);
+                new Handler().postDelayed(() -> morePanel.setVisibility(VISIBLE), 300);
                 break;
             case TEXT:
                 if (editText.requestFocus()) {
@@ -178,7 +180,8 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                     prepareEmoticon();
                 }
                 btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
-                rlayout_emoji.setVisibility(VISIBLE);
+
+                new Handler().postDelayed(() -> rlayout_emoji.setVisibility(VISIBLE), 300);
                 break;
         }
 

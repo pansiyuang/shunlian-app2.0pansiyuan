@@ -12,6 +12,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.bean.PersonalcenterEntity;
+import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.balance.BalanceMainAct;
@@ -603,6 +604,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MyLittleStoreActivity.startAct(getActivity());
                 break;
             case R.id.rl_more:
+                MessageActivity.startAct(getActivity());
+                break;
             case R.id.mllayout_yue:
                 BalanceMainAct.startAct(baseContext,false);
                 break;

@@ -151,7 +151,7 @@
             android:layout_marginRight="14dp"
             android:layout_toLeftOf="@+id/view_lin"
             android:scaleType="centerCrop"
-            android:src="@mipmap/img_yilei" />
+            android:src="@mipmap/img_lianglei" />
 
         <View
             android:id="@+id/view_lin"

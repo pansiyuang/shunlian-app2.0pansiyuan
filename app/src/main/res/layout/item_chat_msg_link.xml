@@ -40,7 +40,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/my_gray_two"
+                android:textColor="@color/new_text"
                 android:textSize="14sp" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:ellipsize="end"
                 android:gravity="bottom"
                 android:textColor="@color/pink_color"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
