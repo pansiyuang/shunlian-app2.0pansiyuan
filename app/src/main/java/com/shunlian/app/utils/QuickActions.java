@@ -1,19 +1,37 @@
 package com.shunlian.app.utils;
 
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
+import com.shunlian.app.widget.circle.RoundRectImageView;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemListener;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.List;
@@ -23,17 +41,18 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+
 /**
  * Created by Administrator on 2018/1/8.
  * 快速操作
  * <p>
- * 默认全部隐藏，1 消息 2 首页 3 分享 4 个人中心 5足迹 6 我要反馈
+ * 默认全部隐藏，1消息、2搜索、3首页、4个人中心、5购物车、6反馈、7帮助中心、8分享
  */
 
 public class QuickActions extends RelativeLayout implements View.OnClickListener {
 
     private Context mContext;
-    private View view;
+    private View mActionView;
 
     //消息
     @BindView(R.id.mrlayout_message)
@@ -73,6 +92,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private int topMargin;
     private int rightMargin;
     private int px;
+    private PopMenu mPopMenu;
+    private ShareInfoParam mShareInfoParam;
 
 
     public QuickActions(@NonNull Context context) {
@@ -87,9 +108,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         super(context, attrs, defStyleAttr);
         mContext = context;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.layout_quick_actions, this, false);
-        addView(view);
-        bind = ButterKnife.bind(this, view);
+        mActionView = LayoutInflater.from(mContext).inflate(R.layout.layout_quick_actions, this, false);
+        addView(mActionView);
+        bind = ButterKnife.bind(this, mActionView);
 
         mrlayout_message.setOnClickListener(this);
         mllayout_firstPage.setOnClickListener(this);
@@ -122,6 +143,21 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 hide();
                 break;
             case R.id.mllayout_share:
+                if (!Common.isAlreadyLogin()){
+                    final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
+                    promptDialog.setTvSureColor(R.color.white);
+                    promptDialog.setTvSureBg(R.color.pink_color);
+                    promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
+                            (view) -> {
+                                Common.goGoGo(mContext,"login");
+                                promptDialog.dismiss();
+                            }, "取消", (view) -> promptDialog.dismiss()).show();
+                    return;
+                }
+                mllayout_content.setVisibility(GONE);
+                if (!mPopMenu.isShowing()) {
+                    mPopMenu.show();
+                }
                 break;
             case R.id.mllayout_PersonalCenter:
                 Common.goGoGo(getContext(),"personCenter");
@@ -183,6 +219,12 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     public void destoryQuickActions() {
         hide();
+        if (mPopMenu != null) {
+            if (mPopMenu.isShowing()) {
+                mPopMenu.hide();
+            }
+            mPopMenu = null;
+        }
         if (bind != null)
             bind.unbind();
     }
@@ -255,11 +297,18 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         return true;
     }
 
+    public void shareInfo(ShareInfoParam shareInfoParam){
+        mShareInfoParam = shareInfoParam;
+    }
+
     /**
-     * 商品详情
+     * 发现详情页
      */
-    public void goodsDetail() {
+    public void findDetail() {
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
+        shareStyle2Dialog(false,false);
     }
 
     /**
@@ -269,6 +318,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
         rightMargin = px / 6;
         setShowItem(1, 3, 4, 6, 8);
+        shareStyle2Dialog(false,true);
     }
 
     /**
@@ -347,8 +397,26 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 帮助
      */
-    public void help(){
+    public void help() {
         setShowItem(1,2,3,4,6);
+    }
+
+    /**
+     * 要分享的帮助
+     */
+    public void shareHelp(){
+        setShowItem(1,2,3,4,6,8);
+        shareStyle1Dialog();
+    }
+
+    /**
+     * 课堂详情分享
+     */
+    public void classDetailShare(){
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        rightMargin = px / 6;
+        setShowItem(1,2,3,4,6,8);
+        shareStyle1Dialog();
     }
 
     /**
@@ -356,5 +424,358 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     public void search(){
         setShowItem(1,3,4,5,6,7);
+    }
+
+    /**
+     * 只能分享微信和复制链接
+     */
+    public void shareStyle1Dialog(){
+        mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                mllayout_content.setVisibility(VISIBLE);
+                                WXEntryActivity.startAct(getContext(),
+                                        "shareFriend", mShareInfoParam);
+                                hide();
+                                break;
+                            case 1:
+                                mllayout_content.setVisibility(VISIBLE);
+                                copyText();
+                                hide();
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onClickClose(View view) {
+                        mllayout_content.setVisibility(VISIBLE);
+                        hide();
+                    }
+                }).build();
+    }
+
+    /**
+     * 分享微信和复制链接，图文分享
+     */
+    public void shareStyle2Dialog(boolean isShow,boolean isShop){
+        mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("图文分享", getResources().getDrawable(R.mipmap.icon_erweima)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                mllayout_content.setVisibility(VISIBLE);
+                                WXEntryActivity.startAct(getContext(),
+                                        "shareFriend", mShareInfoParam);
+                                hide();
+                                break;
+                            case 1:
+                                mllayout_content.setVisibility(VISIBLE);
+                                if (isShop)
+                                    saveshareShopPic();
+                                else
+                                    saveshareFindPic();
+                                setVisibility(INVISIBLE);
+                                break;
+                            case 2:
+                                mllayout_content.setVisibility(VISIBLE);
+                                copyText();
+                                hide();
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onClickClose(View view) {
+                        mllayout_content.setVisibility(VISIBLE);
+                        hide();
+                    }
+                }).build();
+        if (isShow){
+            removeAllViews();
+            if (!mPopMenu.isShowing()) {
+                mPopMenu.show();
+            }
+        }
+    }
+
+    /**
+     * 保存店铺分享图
+     */
+    private void saveshareShopPic() {
+        final View inflate = LayoutInflater.from(getContext())
+                .inflate(R.layout.share_shop, this, false);
+        ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;//
+        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        inflate.setLayoutParams(layoutParams1);
+        removeAllViews();
+        addView(inflate);
+
+        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        GlideUtils.getInstance().loadCircleImage(getContext(),
+                miv_user_head,mShareInfoParam.userAvatar);
+
+        int i = TransformUtil.countRealWidth(getContext(), 400);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
+        miv_code.setImageBitmap(qrImage);
+
+        MyImageView miv_star = (MyImageView) inflate.findViewById(R.id.miv_star);
+        GlideUtils.getInstance().loadBitmapSync(getContext(),
+                mShareInfoParam.shop_star, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_star.setVisibility(VISIBLE);
+                        miv_star.setImageBitmap(resource);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        miv_star.setVisibility(GONE);
+                    }
+                });
+
+        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+
+        MyTextView mtv_shop_name = (MyTextView) inflate.findViewById(R.id.mtv_shop_name);
+        mtv_shop_name.setText(mShareInfoParam.shop_name);
+
+        CircleImageView miv_shop_head = (CircleImageView) inflate.findViewById(R.id.civ_shop_head);
+        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
+            miv_shop_head.setVisibility(GONE);
+            savePic(inflate);
+            return;
+        }
+        GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.shop_logo,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_shop_head.setImageBitmap(resource);
+                        miv_shop_head.setVisibility(VISIBLE);
+                        savePic(inflate);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+    /**
+     * 保存商品分享图
+     */
+    public void saveshareGoodsPic() {
+        removeAllViews();
+        setVisibility(INVISIBLE);
+        final View inflate = LayoutInflater.from(getContext())
+                .inflate(R.layout.share_goods, this, false);
+        ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;//
+        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        inflate.setLayoutParams(layoutParams1);
+        removeAllViews();
+        addView(inflate);
+
+        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        GlideUtils.getInstance().loadCircleImage(getContext(),
+                miv_user_head,mShareInfoParam.userAvatar);
+
+        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
+        int i = TransformUtil.countRealWidth(getContext(), 185);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+        miv_code.setImageBitmap(qrImage);
+
+        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+
+
+        MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
+        mtv_title.setText(mShareInfoParam.title);
+
+        MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
+        if (!TextUtils.isEmpty(mShareInfoParam.desc)){
+            mtv_desc.setVisibility(VISIBLE);
+            mtv_desc.setText(mShareInfoParam.desc);
+        }else {
+            mtv_desc.setVisibility(GONE);
+        }
+
+        MyTextView mtv_price = (MyTextView) inflate.findViewById(R.id.mtv_price);
+        mtv_price.setText("￥"+mShareInfoParam.goodsPrice);
+
+        MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
+        MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
+
+        LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
+
+        if (TextUtils.isEmpty(mShareInfoParam.start_time)){
+            llayout_day.setVisibility(GONE);
+        }else {
+            mtv_time.setText(mShareInfoParam.start_time);
+            mtv_act_label.setText(mShareInfoParam.act_label);
+        }
+
+        //下载图片
+        DownLoadImageThread thread = new DownLoadImageThread(mContext,mShareInfoParam.downloadPic);
+        thread.start();
+
+        MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
+        GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_goods_pic.setImageBitmap(resource);
+                        inflate.postDelayed(()->{
+                            Bitmap bitmapByView = getBitmapByView(inflate);
+                            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+                            if (isSuccess) {
+                                if (mContext instanceof GoodsDetailAct){
+                                    ((GoodsDetailAct)mContext).moreHideAnim();
+                                }
+                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext);
+                                dialog.show();
+                            } else {
+                                Common.staticToast("分享失败");
+                            }
+                            reset();
+                        },100);
+                    }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+
+    /**
+     * 保存发现分享图
+     */
+    private void saveshareFindPic() {
+        removeAllViews();
+        setVisibility(INVISIBLE);
+        final View inflate = LayoutInflater.from(getContext())
+                .inflate(R.layout.share_find, this, false);
+        ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;//
+        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        inflate.setLayoutParams(layoutParams1);
+        removeAllViews();
+        addView(inflate);
+
+        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        GlideUtils.getInstance().loadCircleImage(mContext,miv_user_head,mShareInfoParam.userAvatar);
+
+        int i = TransformUtil.countRealWidth(getContext(), 320);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+        MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
+        miv_code.setImageBitmap(qrImage);
+
+        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+
+        MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
+        mtv_title.setText(mShareInfoParam.title);
+
+        MyTextView mtv_desc = (MyTextView) inflate.findViewById(R.id.mtv_desc);
+        if (TextUtils.isEmpty(mShareInfoParam.desc)){
+            mtv_desc.setVisibility(GONE);
+        }else {
+            mtv_desc.setVisibility(VISIBLE);
+            mtv_desc.setText(mShareInfoParam.desc);
+        }
+
+        RoundRectImageView miv_bigpic = (RoundRectImageView) inflate.findViewById(R.id.miv_bigpic);
+        MyImageView miv_smallpic = (MyImageView) inflate.findViewById(R.id.miv_smallpic);
+
+        int[] ints = TransformUtil.countRealWH(mContext, 640, 300);
+        ViewGroup.LayoutParams layoutParams = miv_bigpic.getLayoutParams();
+        layoutParams.width = ints[0];
+        layoutParams.height = ints[1];
+
+        GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        if ("1".equals(mShareInfoParam.thumb_type)){//显示大图
+                            miv_bigpic.setVisibility(VISIBLE);
+                            miv_smallpic.setVisibility(GONE);
+                            miv_bigpic.setImageBitmap(resource);
+                        }else {
+                            miv_bigpic.setVisibility(GONE);
+                            miv_smallpic.setVisibility(VISIBLE);
+                            miv_smallpic.setImageBitmap(resource);
+                        }
+                        savePic(inflate);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+    private void copyText() {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
+            sb.append(mShareInfoParam.desc);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
+            sb.append(mShareInfoParam.shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) getContext()
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        Common.staticToasts(getContext(), "复制链接成功", R.mipmap.icon_common_duihao);
+    }
+
+
+    public Bitmap getBitmapByView(View view) {
+        Bitmap bitmap = null;
+        bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                view.getMeasuredHeight(), Bitmap.Config.RGB_565);
+        final Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    private void reset(){
+        removeAllViews();
+        addView(mActionView);
+        hide();
+    }
+
+    private void savePic(View inflate) {
+        inflate.postDelayed(() -> {
+            Bitmap bitmapByView = getBitmapByView(inflate);
+            boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
+            if (isSuccess) {
+                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext);
+                dialog.show();
+            } else {
+                Common.staticToast("分享失败");
+            }
+            reset();
+        }, 100);
     }
 }

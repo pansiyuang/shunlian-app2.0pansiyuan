@@ -2037,5 +2037,10 @@ public interface ApiService {
     @POST("goods/mayBeBuy")
     Call<BaseEntity<ProbablyLikeEntity>> mayBeBuy(@Body RequestBody body);
 
-
+    /**
+     * 课堂详情分享
+     * @return
+     */
+    @GET("helpcenter/classesshare")
+    Call<BaseEntity<CommonEntity>> classesshare(@QueryMap Map<String, String> map);
 }

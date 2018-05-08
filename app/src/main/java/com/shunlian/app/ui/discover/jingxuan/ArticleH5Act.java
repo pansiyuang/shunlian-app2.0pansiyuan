@@ -10,11 +10,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -39,13 +41,15 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     @BindView(R.id.tv_msg_count)
     TextView tv_msg_count;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private String articleId;
 
     private MessageCountManager messageCountManager;
     private ArticleDetailPresenter mPresent;
     private int currentFavoriteStatus;
-
+    private ShareInfoParam shareInfoParam;
 
 
     public static void startAct(Context context, String articleId, int mode) {
@@ -107,6 +111,9 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
                 }
                 break;
             case R.id.rl_title_more:
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.findDetail();
+                quick_actions.shareInfo(shareInfoParam);
                 break;
         }
         super.onClick(view);
@@ -137,6 +144,19 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         }
         currentFavoriteStatus = Integer.valueOf(detailEntity.had_favorites);
         miv_favorite.setVisibility(View.VISIBLE);
+        if (shareInfoParam == null) {
+            shareInfoParam = new ShareInfoParam();
+        }
+        shareInfoParam.shareLink = detailEntity.share_url;
+        shareInfoParam.title = detailEntity.title;
+        shareInfoParam.desc = detailEntity.full_title;
+        shareInfoParam.img = detailEntity.thumb;
+        shareInfoParam.thumb_type = "1";
+        if (detailEntity.user_info != null){
+            shareInfoParam.userName = detailEntity.user_info.nickname;
+            shareInfoParam.userAvatar = detailEntity.user_info.avatar;
+        }
+
     }
 
     @Override
@@ -166,9 +186,10 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     public void refreshData(NewMessageEvent event) {
         messageCountManager.setTextCount(tv_msg_count);
     }
-
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

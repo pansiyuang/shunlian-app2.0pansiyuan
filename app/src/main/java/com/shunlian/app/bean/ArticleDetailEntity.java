@@ -11,4 +11,8 @@ public class ArticleDetailEntity {
     public String had_favorites;
     public String h5_detail_url;
     public String share_url;
+    public String title;
+    public String full_title;
+    public String thumb;
+    public GoodsDeatilEntity.UserInfo user_info;
 }

@@ -138,7 +138,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 }
             });
             articleViewHolder.ll_share.setOnClickListener(v -> {
-                mFragment.shareArticle(article.id);
+                mFragment.shareArticle(position);
             });
             articleViewHolder.ll_comment.setOnClickListener(v -> CommentListAct.startAct(mFragment.getActivity(), article.id));
 

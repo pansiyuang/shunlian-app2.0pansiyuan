@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringChain;
-import com.facebook.rebound.SpringConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
@@ -145,6 +144,9 @@ public class PopMenu {
         mAnimateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mPopMenuItemListener != null){
+                    mPopMenuItemListener.onClickClose(view);
+                }
                 hide();
             }
         });
@@ -214,6 +216,9 @@ public class PopMenu {
         mCloseIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPopMenuItemListener != null){
+                    mPopMenuItemListener.onClickClose(v);
+                }
                 hide();
             }
         });

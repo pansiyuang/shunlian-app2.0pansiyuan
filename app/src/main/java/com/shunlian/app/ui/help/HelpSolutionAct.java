@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpSolutionAdapter;
 import com.shunlian.app.bean.HelpcenterSolutionEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -59,6 +60,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
     private boolean isChosen=false;
+    private ShareInfoParam shareInfoParam;
 
     public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, HelpSolutionAct.class);
@@ -93,7 +95,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.mrlayout_news:
                 quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.help();
+                quick_actions.shareHelp();
+                quick_actions.shareInfo(shareInfoParam);
                 break;
         }
     }
@@ -146,6 +149,11 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 HelpTwoAct.startAct(getBaseContext(), question.id, question.title);
             }
         });
+        if (shareInfoParam == null)
+            shareInfoParam = new ShareInfoParam();
+        shareInfoParam.shareLink = solution.share_url;
+        shareInfoParam.title = solution.question;
+        shareInfoParam.desc = solution.answer;
     }
 
     public void initDialog() {

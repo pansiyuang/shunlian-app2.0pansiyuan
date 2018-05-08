@@ -22,6 +22,7 @@ import com.shunlian.app.adapter.StoreNewAdapter;
 import com.shunlian.app.adapter.StoreVoucherAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
@@ -30,7 +31,6 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.entity.Message;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -218,6 +218,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private StoreVoucherAdapter storeVoucherAdapter;
     private GridLayoutManager babyManager, discountManager;
     private boolean isFocus;
+    private ShareInfoParam shareInfoParam;
     private MessageCountManager messageCountManager;
 
     public static void startAct(Context context,String storeId) {
@@ -488,6 +489,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             case R.id.mrLayout_operates:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.shop();
+                quick_actions.shareInfo(shareInfoParam);
                 break;
             case R.id.mll_chat:
                 storePresenter.getUserId(storeId);
@@ -575,6 +577,13 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
         mtv_newNum.setText(head.new_count);
+        shareInfoParam = new ShareInfoParam();
+        shareInfoParam.shareLink = head.share_url;
+        shareInfoParam.shop_logo = head.decoration_logo;
+        shareInfoParam.shop_name = head.decoration_name;
+        shareInfoParam.shop_star = head.star;
+        shareInfoParam.userName = head.nickname;
+        shareInfoParam.userAvatar = head.avatar;
     }
 
     @Override
