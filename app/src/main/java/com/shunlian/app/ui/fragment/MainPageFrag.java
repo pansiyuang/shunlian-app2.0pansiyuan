@@ -27,7 +27,6 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.message.SystemMsgAct;
 import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMainPageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -141,8 +140,6 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
         recy_view.setAdapter(adapter);
 
         adapterList = new LinkedList<>();
-
-
     }
 
     /**
@@ -167,7 +164,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-        StoreAct.startAct(baseActivity,"14046");
+        StoreAct.startAct(baseActivity, "14046");
 //        ZXingDemoAct.startAct(baseActivity, false, 0);
     }
 
@@ -200,8 +197,7 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
      * @param newGoods
      */
     @Override
-    public void daySpecialAndNewGoods(MainPageEntity.DaySpecial daySpecial,
-                                      MainPageEntity.NewGoods newGoods) {
+    public void daySpecialAndNewGoods(MainPageEntity.DaySpecial daySpecial, MainPageEntity.NewGoods newGoods) {
 
         SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
 
@@ -223,12 +219,9 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
                 SingleLayoutHelper singleLayoutHelper = new SingleLayoutHelper();
                 BrandTitleAdapter brandTitleAdapter = new BrandTitleAdapter(baseActivity, singleLayoutHelper);
                 adapterList.add(brandTitleAdapter);
-                brandTitleAdapter.setOnAnotherBatchListener(new BrandTitleAdapter.OnAnotherBatchListener() {
-                    @Override
-                    public void onBatch() {
-                        if (pagePresenter != null) {
-                            pagePresenter.onBatch();
-                        }
+                brandTitleAdapter.setOnAnotherBatchListener(() -> {
+                    if (pagePresenter != null) {
+                        pagePresenter.onBatch();
                     }
                 });
 
@@ -242,20 +235,17 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
                 brandAdapter = new BrandAdapter(brands.data, baseActivity, helper);
                 adapterList.add(brandAdapter);
 
-                brandAdapter.setOnItemClickListener(new BrandAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        int i = 0;
-                        if (!isEmptyBanner) {
-                            i = position - 3;
-                        } else {
-                            i = position - 2;
-                        }
-                        MainPageEntity.Data data = brands.data.get(i);
-                        GoodsSearchParam param = new GoodsSearchParam();
-                        param.brand_ids = data.item_id;
-                        CategoryAct.startAct(baseActivity, param);
+                brandAdapter.setOnItemClickListener((v, position) -> {
+                    int i1 = 0;
+                    if (!isEmptyBanner) {
+                        i1 = position - 3;
+                    } else {
+                        i1 = position - 2;
                     }
+                    MainPageEntity.Data data = brands.data.get(i1);
+                    GoodsSearchParam param = new GoodsSearchParam();
+                    param.brand_ids = data.item_id;
+                    CategoryAct.startAct(baseActivity, param);
                 });
             } else {
                 brandAdapter.notifyDataSetChanged();
@@ -287,14 +277,12 @@ public class MainPageFrag extends BaseFragment implements IMainPageView, View.On
 
             adapter.setAdapters(adapterList);
 
-            firstPageGoodsAdapter.setOnItemClickListener((v,position)-> {
+            firstPageGoodsAdapter.setOnItemClickListener((v, position) -> {
                 int i;
                 if (!isEmptyBanner) {
                     i = position - itemCount - 4;
                     if (i == 0) {
-                        H5Act.startAct(baseActivity,
-                                "http://v20-wx.shunliandongli.com/special/14",
-                                H5Act.MODE_SONIC);
+                        H5Act.startAct(baseActivity, "http://v20-wx.shunliandongli.com/special/14", H5Act.MODE_SONIC);
                         return;
                     } else if (i == 1) {
                         SystemMsgAct.startAct(baseActivity);

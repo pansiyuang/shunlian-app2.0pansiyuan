@@ -457,17 +457,13 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
 
     @Override
     public void OnItemSelect(int position, FootprintEntity.MarkData markData) {
-        if (!footprintAdapter.getEditMode()) {
-            GoodsDetailAct.startAct(baseActivity, markDataList.get(position).goods_id);
+        if (markData.isSelect) {
+            delItem(markData.id);
         } else {
-            if (markData.isSelect) {
-                delItem(markData.id);
-            } else {
-                selectItem(markData.id);
-            }
-            checkSelctStatus();
-            footprintAdapter.notifyDataSetChanged();
+            selectItem(markData.id);
         }
+        checkSelctStatus();
+        footprintAdapter.notifyDataSetChanged();
     }
 
     /**

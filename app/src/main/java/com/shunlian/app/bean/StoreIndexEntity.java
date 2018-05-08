@@ -41,6 +41,9 @@ public class StoreIndexEntity {
         public String promotion_count;
         public String new_count;
         public String is_mark;
+        public String share_url;
+        public String avatar;
+        public String nickname;
 
         @Override
         public String toString() {

@@ -20,13 +20,20 @@ import com.shunlian.app.adapter.StoreDiscountTwoAdapter;
 import com.shunlian.app.adapter.StoreFirstAdapter;
 import com.shunlian.app.adapter.StoreNewAdapter;
 import com.shunlian.app.adapter.StoreVoucherAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.StoreGoodsListEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.bean.StoreNewGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -40,6 +47,10 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,7 +59,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/11/7.
  */
 
-public class StoreAct extends BaseActivity implements View.OnClickListener, StoreView {
+public class StoreAct extends BaseActivity implements View.OnClickListener, StoreView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.store_ctLayout)
     CollapsingToolbarLayout store_ctLayout;
 
@@ -168,6 +179,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.tv_price)
     MyTextView tv_price;
 
+    @BindView(R.id.mtv_msg_count)
+    MyTextView mtv_msg_count;
+
     @BindView(R.id.iv_price)
     MyImageView iv_price;
 
@@ -189,6 +203,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.mll_chat)
+    MyLinearLayout mll_chat;
+
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew;
     private String storeId = "26",star;
@@ -201,6 +218,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private StoreVoucherAdapter storeVoucherAdapter;
     private GridLayoutManager babyManager, discountManager;
     private boolean isFocus;
+    private ShareInfoParam shareInfoParam;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context,String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
@@ -230,6 +249,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mrlayout_sort.setOnClickListener(this);
         mrlayout_sorts.setOnClickListener(this);
         mrLayout_operates.setOnClickListener(this);
+        mll_chat.setOnClickListener(this);
         store_abLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -280,15 +300,33 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 }
             }
         });
-
     }
+
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         if (!TextUtils.isEmpty(getIntent().getStringExtra("storeId"))){
             storeId=getIntent().getStringExtra("storeId");
         }
         storePresenter = new StorePresenter(this, this, storeId);
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        if(messageCountManager.isLoad()){
+            messageCountManager.setTextCount(mtv_msg_count);
+        }else{
+            messageCountManager.initData();
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(mtv_msg_count);
     }
 
     public void storeMenu(View v) {
@@ -451,6 +489,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             case R.id.mrLayout_operates:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.shop();
+                quick_actions.shareInfo(shareInfoParam);
+                break;
+            case R.id.mll_chat:
+                storePresenter.getUserId(storeId);
                 break;
         }
     }
@@ -535,6 +577,13 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
         mtv_newNum.setText(head.new_count);
+        shareInfoParam = new ShareInfoParam();
+        shareInfoParam.shareLink = head.share_url;
+        shareInfoParam.shop_logo = head.decoration_logo;
+        shareInfoParam.shop_name = head.decoration_name;
+        shareInfoParam.shop_star = head.star;
+        shareInfoParam.userName = head.nickname;
+        shareInfoParam.userAvatar = head.avatar;
     }
 
     @Override
@@ -628,6 +677,17 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.shop_id = storeId;
+        chatMember.m_user_id = userId;
+        chatMember.type = "3";
+        chatMember.nickname = mtv_storeName.getText().toString();
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
+    }
+
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -643,6 +703,17 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(mtv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

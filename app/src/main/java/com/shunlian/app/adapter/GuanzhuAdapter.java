@@ -76,10 +76,10 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 mHolder.mtv_pl_count.setText(dy.comments);
                 mHolder.mtv_zan_count.setText(dy.likes);
                 if ("1".equals(dy.has_like)){//点赞
-                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
+                    mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
                     mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
                 }else {
-                    mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
+                    mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_n);
                     mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
                 }
             }

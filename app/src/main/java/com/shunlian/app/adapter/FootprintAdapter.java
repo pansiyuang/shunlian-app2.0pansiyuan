@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.FootprintEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -235,9 +235,10 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
                 }
 
-                mHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                mHolder.itemView.setOnClickListener(v -> {
+                    if (!isEdit) {
+                        GoodsDetailAct.startAct(context, lists.get(index).goods_id);
+                    } else {
                         if (mListener != null) {
                             mListener.OnItemSelect(position, markData);
                         }

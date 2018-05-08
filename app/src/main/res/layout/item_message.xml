@@ -43,7 +43,7 @@
                     android:layout_height="13dp"
                     android:layout_centerInParent="true"
                     android:layout_gravity="right"
-                    android:background="@drawable/rounded_corner_pink_26px"
+                    android:background="@drawable/rounded_corner_solid_pink_26px"
                     android:gravity="center"
                     android:minWidth="13dp"
                     android:paddingLeft="2dp"

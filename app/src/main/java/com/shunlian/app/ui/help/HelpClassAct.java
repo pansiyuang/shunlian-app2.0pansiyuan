@@ -91,8 +91,8 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
                     int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
                         if (pHelpTwo != null) {
-//                            pHelpTwo.refreshBabys(cate_id);
-                            pHelpTwo.refreshBabys("3");
+                            pHelpTwo.refreshBabys(cate_id);
+//                            pHelpTwo.refreshBabys("3");
                         }
                     }
                 }
@@ -108,8 +108,8 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("cate_id")))
         cate_id=getIntent().getStringExtra("cate_id");
         pHelpTwo = new PHelpTwo(this, this);
-        pHelpTwo.resetBabys("3");
-//        pHelpTwo.resetBabys(cate_id);
+//        pHelpTwo.resetBabys("3");
+        pHelpTwo.resetBabys(cate_id);
         mtv_title.setText(getStringResouce(R.string.help_xinshouketang));
     }
 
@@ -131,7 +131,11 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
             helpClasAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
+//                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
+                    ClassDetailAct.startAct(getBaseContext(),
+                            articles.get(position).h5_link,
+                            articles.get(position).id,
+                            H5Act.MODE_SONIC);
                 }
             });
             rv_qCate.setLayoutManager(linearLayoutManager);

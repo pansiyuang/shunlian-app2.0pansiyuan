@@ -15,4 +15,5 @@ public class AllMessageCountEntity {
     public int discover_topic_msg; //发现头条未读数
     public int discover_comment_msg; //发现评论未读数
     public int custom_msg; //客服消息未读数
+    public int platform_msg; //商家客服消息未读数
 }

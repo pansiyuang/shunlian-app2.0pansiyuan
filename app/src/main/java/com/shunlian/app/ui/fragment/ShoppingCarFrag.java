@@ -294,7 +294,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             recyclerDialog.setVoucheres(voucherList);
             recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
                 @Override
-                public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+                public void onVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
                     shopCarPresenter.getVoucher(voucher.voucher_id);
                 }
             });

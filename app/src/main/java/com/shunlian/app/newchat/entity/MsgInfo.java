@@ -16,6 +16,7 @@ public class MsgInfo {
     public String message;
     public long send_time;
     public String id;
+    public String m_user_id;
     public String msg_id;
 
 

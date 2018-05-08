@@ -15,6 +15,8 @@ import com.shunlian.app.newchat.adapter.TopMessageAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.ui.MessageListFragment;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
@@ -113,7 +115,13 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         } else {
             messageViewHolder.tv_count.setVisibility(View.GONE);
         }
+        messageViewHolder.tv_del.setOnClickListener((View v) -> {
+            if (mListener != null) {
+                mListener.OnMessageDel(chatMember.m_user_id);
+            }
+        });
     }
+
 
     @Override
     public void OnSysMsgClick() {
@@ -208,5 +216,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         void OnSellerClick();
 
         void OnAdminClick();
+
+        void OnMessageDel(String userId);
     }
 }

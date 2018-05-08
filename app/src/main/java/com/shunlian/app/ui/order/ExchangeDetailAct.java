@@ -10,7 +10,10 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ExchangeDetailMsgAdapter;
 import com.shunlian.app.adapter.ExchangeDetailOptAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -23,10 +26,14 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ExchangeDetailAct extends BaseActivity implements View.OnClickListener, ExchangeDetailView {
+public class ExchangeDetailAct extends BaseActivity implements View.OnClickListener, ExchangeDetailView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_state)
     MyTextView mtv_state;
 
@@ -41,6 +48,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
 
     @BindView(R.id.mtv_phone)
     MyTextView mtv_phone;
@@ -137,6 +147,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     private ExchangeDetailPresenter exchangeDetailPresenter;
     private String refund_id = "53";
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String refund_id) {
         Intent intent = new Intent(context, ExchangeDetailAct.class);
@@ -162,12 +173,24 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-
+        EventBus.getDefault().register(this);
         if (!TextUtils.isEmpty(getIntent().getStringExtra("refund_id"))) {
             refund_id = getIntent().getStringExtra("refund_id");
         }
 
         exchangeDetailPresenter = new ExchangeDetailPresenter(this, this, refund_id);
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        if (messageCountManager.isLoad()) {
+            messageCountManager.setTextCount(tv_msg_count);
+        } else {
+            messageCountManager.initData();
+        }
+        super.onResume();
     }
 
     @OnClick(R.id.mrlayout_news)
@@ -186,6 +209,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     public void showDataEmptyView(int request_code) {
 
     }
+
 
     @Override
     protected void initListener() {
@@ -355,6 +379,24 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     public void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
 }

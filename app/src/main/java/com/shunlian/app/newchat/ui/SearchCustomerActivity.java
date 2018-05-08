@@ -153,6 +153,11 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
+    public void delSuccess(String msg) {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }

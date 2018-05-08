@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 
 import com.alipay.sdk.app.PayTask;
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PayListAdapter;
 import com.shunlian.app.bean.PayListEntity;
 import com.shunlian.app.bean.PayOrderEntity;
@@ -194,18 +193,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
                 .setSureAndCancleListener(getStringResouce(R.string.cancel_the_pay),
-                        getStringResouce(R.string.next_the_pay), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-            }
-        }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-                finish();
-            }
-        }).show();
+                        getStringResouce(R.string.next_the_pay), (v)-> promptDialog.dismiss()
+                        , getStringResouce(R.string.SelectRecommendAct_sure), (v)-> {
+                            promptDialog.dismiss();
+                            finish();})
+                .show();
     }
 
     @Override
@@ -252,12 +244,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         PayListAdapter adapter = new PayListAdapter(this,false,payTypes);
         recy_pay.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                PayListEntity.PayTypes pay_types = payTypes.get(position);
-                submitOrder(pay_types);
-            }
+        adapter.setOnItemClickListener((view,position)-> {
+            PayListEntity.PayTypes pay_types = payTypes.get(position);
+            submitOrder(pay_types);
         });
     }
 
@@ -361,23 +350,17 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             case "credit":
                 final PromptDialog promptDialog = new PromptDialog(this);
                 promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                        .setSureAndCancleListener("确定使用余额支付吗？\n(￥：-￥".concat(price + ")"),
-                                getString(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (!isEmpty(shop_goods)) {
-                                            payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
-                                        } else if (!isEmpty(orderId)) {
-                                            payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
-                                        }
-                                        promptDialog.dismiss();
-                                    }
-                                }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        promptDialog.dismiss();
-                                    }
-                                }).show();
+                        .setSureAndCancleListener("确认用余额支付吗？\n￥".concat(price),
+                                getString(R.string.SelectRecommendAct_sure), (v) -> {
+                                    if (!isEmpty(shop_goods))
+                                        payListPresenter.orderCheckout(shop_goods,
+                                                addressId, pay_types.code);
+                                     else if (!isEmpty(orderId))
+                                        payListPresenter.fromOrderListGoPay(orderId,
+                                                pay_types.code);
+                                    promptDialog.dismiss();
+                                }, getString(R.string.errcode_cancel), (v) -> promptDialog.dismiss()
+                        ).show();
                 break;
         }
     }

@@ -23,6 +23,7 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;

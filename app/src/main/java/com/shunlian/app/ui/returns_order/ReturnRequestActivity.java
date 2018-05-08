@@ -15,9 +15,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SingleImgAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.presenter.ReturnRequestPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -30,6 +33,10 @@ import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +53,7 @@ import static com.shunlian.app.adapter.SingleImgAdapter.REQUEST_CAMERA_CODE;
  * Created by Administrator on 2017/12/27.
  */
 
-public class ReturnRequestActivity extends BaseActivity implements CustomerGoodsView.IChangeCountListener, ReturnGoodsDialog.ISelectListener, View.OnClickListener, IReturnRequestView {
+public class ReturnRequestActivity extends BaseActivity implements CustomerGoodsView.IChangeCountListener, ReturnGoodsDialog.ISelectListener, View.OnClickListener, IReturnRequestView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.customer_goods)
     CustomerGoodsView customer_goods;
@@ -90,6 +97,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
 
+    @BindView(R.id.mtv_toolbar_msgCount)
+    MyTextView mtv_toolbar_msgCount;
+
     /**
      * 输入框小数的位数
      */
@@ -110,6 +120,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private ReturnRequestPresenter presenter;
     private boolean isEdit; //是否是编辑
     private int index;
+    private MessageCountManager messageCountManager;
 
     @Override
     protected int getLayoutId() {
@@ -129,6 +140,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        EventBus.getDefault().register(this);
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
 
         currentInfoEntity = (RefundDetailEntity.RefundDetail.Edit) getIntent().getSerializableExtra("infoEntity");
         isEdit = getIntent().getBooleanExtra("isEdit", false);
@@ -150,6 +164,16 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             initViews(currentServiceType);
         }
         presenter = new ReturnRequestPresenter(this, this);
+    }
+
+    @Override
+    protected void onResume() {
+        if(messageCountManager.isLoad()){
+            messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        }else{
+            messageCountManager.initData();
+        }
+        super.onResume();
     }
 
     @OnClick(R.id.mrlayout_toolbar_more)
@@ -428,6 +452,22 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(mtv_toolbar_msgCount);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(mtv_toolbar_msgCount);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

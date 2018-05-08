@@ -6,6 +6,9 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MyOrderAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
@@ -14,6 +17,10 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.LazyViewPager;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +32,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/13.
  */
 
-public class MyOrderAct extends BaseActivity {
+public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGetMessageListener {
 
 
     @BindView(R.id.viewpager)
@@ -58,6 +65,9 @@ public class MyOrderAct extends BaseActivity {
     @BindView(R.id.mtv_wait_comment)
     MyTextView mtv_wait_comment;
 
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
     @BindView(R.id.view_wait_comment)
     View view_wait_comment;
 
@@ -71,7 +81,7 @@ public class MyOrderAct extends BaseActivity {
     private int new_text;
     private List<BaseFragment> fragments;
     private int pageItem;
-
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context,int positionItem) {
         Intent intent = new Intent(context, MyOrderAct.class);
@@ -111,6 +121,8 @@ public class MyOrderAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        EventBus.getDefault().register(this);
         pageItem = getIntent().getIntExtra("item",0);
         int width = TransformUtil.dip2px(this, 10);
         TransformUtil.expandViewTouchDelegate(miv_search,width,width,width,width);
@@ -121,7 +133,18 @@ public class MyOrderAct extends BaseActivity {
             fragments.add(AllFrag.getInstance(i));
         }
         viewpager.setAdapter(new MyOrderAdapter(getSupportFragmentManager(), fragments));
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
 
+    @Override
+    protected void onResume() {
+        if (messageCountManager.isLoad()) {
+            messageCountManager.setTextCount(tv_msg_count);
+        } else {
+            messageCountManager.isLoad();
+        }
+        super.onResume();
     }
 
     @Override
@@ -211,10 +234,26 @@ public class MyOrderAct extends BaseActivity {
         SearchOrderActivity.startAct(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

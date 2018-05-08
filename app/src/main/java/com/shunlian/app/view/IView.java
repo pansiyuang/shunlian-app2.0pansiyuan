@@ -38,4 +38,5 @@ public interface IView {
      * 显示空数据界面
      */
     void showDataEmptyView(int request_code);
+
 }

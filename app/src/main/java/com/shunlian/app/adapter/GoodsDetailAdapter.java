@@ -16,7 +16,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
@@ -98,9 +97,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
     private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
-    private int detailBottomCouponPosition = -1;//详情下的优惠券位置
+    private int detailCouponPosi = -1;//详情下的优惠券位置
     private StoreVoucherAdapter couponAdapter;
     private boolean isStartDownTime = false;
+    private int voucherPosition;//点击优惠券位置
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -273,22 +273,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof CouponHolder){
             CouponHolder mHolder = (CouponHolder) holder;
             RecyclerView recy_view_coupon = (RecyclerView) mHolder.itemView;
-            final ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
+//            final ArrayList<GoodsDeatilEntity.Voucher> vouchers = mGoodsEntity.voucher;
             //详情优惠券
-            couponAdapter = new StoreVoucherAdapter(context,false,vouchers);
+            couponAdapter = new StoreVoucherAdapter(context,false,mGoodsEntity.voucher);
             recy_view_coupon.setAdapter(couponAdapter);
 
-            couponAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
+            couponAdapter.setOnItemClickListener((view,posi)-> {
+                    GoodsDeatilEntity.Voucher voucher = mGoodsEntity.voucher.get(posi);
                     if (context instanceof GoodsDetailAct){
                         GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                         goodsDetailAct.getCouchers(voucher.voucher_id);
-                        voucher.is_get = "1";
-                        detailBottomCouponPosition = position;
+                        detailCouponPosi = posi;
                     }
-                }
             });
         }
     }
@@ -944,16 +940,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
      * @param voucher
      */
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if (detailBottomCouponPosition != -1){
+        if (detailCouponPosi != -1){
             if (couponAdapter != null){
-                couponAdapter.notifyItemChanged(detailBottomCouponPosition);
+                mGoodsEntity.voucher.remove(detailCouponPosi);
+                mGoodsEntity.voucher.add(detailCouponPosi,voucher);
+                couponAdapter.notifyItemChanged(detailCouponPosi);
             }
         }else {
             if (recyclerDialog != null){//领取成功之后id == voucher_id
-                recyclerDialog.getVoucherSuccess(voucher.id);
+                recyclerDialog.getVoucherSuccess(voucher,voucherPosition);
             }
         }
-        detailBottomCouponPosition = -1;
+        detailCouponPosi = -1;
     }
 
 
@@ -1109,7 +1107,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @OnClick(R.id.mtv_act)
         public void actTitle(){
             GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
-            H5Act.startAct(context,activity.link,H5Act.MODE_SONIC);
+            if (activity.url != null){
+                Common.goGoGo(context,activity.url.type,activity.url.item_id);
+            }
+        }
+
+        @OnClick({R.id.miv_share,R.id.mtv_share})
+        public void share(){
+            ((GoodsDetailAct)context).moreAnim();
         }
     }
 
@@ -1173,8 +1178,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         recyclerDialog.show();
                         recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
                             @Override
-                            public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
+                            public void itemVoucher(GoodsDeatilEntity.Voucher voucher, int position){
                                 if (context instanceof GoodsDetailAct){
+                                    voucherPosition = position;
                                     GoodsDetailAct goodsDetailAct = (GoodsDetailAct) context;
                                     goodsDetailAct.getCouchers(voucher.voucher_id);
                                 }
@@ -1384,11 +1390,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             if (state == 1){
                 background.setColor(getResources().getColor(R.color.pink_color));
                 mtv_collection.setTextColor(Color.WHITE);
-                mtv_collection.setText(getString(R.string.already_collected));
+                mtv_collection.setText(getString(R.string.discover_alear_follow));
             }else {
                 background.setColor(getResources().getColor(R.color.transparent));
                 mtv_collection.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_collection.setText(getString(R.string.collection));
+                mtv_collection.setText(getString(R.string.discover_follow));
             }
         }
 

@@ -1,10 +1,8 @@
 package com.shunlian.app.ui.discover;
 
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,14 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.ArticleAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
-import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
-import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,7 +43,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private List<ArticleEntity.Article> mArticleList;
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
-    private String mArticleId = "";
+    private QuickActions quick_actions;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -66,17 +64,20 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         mPresenter.getArticleList(true);
         mTags = new ArrayList<>();
         mArticleList = new ArrayList<>();
+
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected void initListener() {
-        lay_refresh.setOnRefreshListener(new onRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mPresenter != null) {
-                    mPresenter.initPage();
-                    mPresenter.getArticleList(true);
-                }
+        lay_refresh.setOnRefreshListener(() -> {
+            if (mPresenter != null) {
+                mPresenter.initPage();
+                mPresenter.getArticleList(true);
             }
         });
 
@@ -160,6 +161,24 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             mArticleAdapter.notifyDataSetChanged();
         }
     }
+    //分享文章方法
+    public void shareArticle(int position){
+        ArticleEntity.Article article = mArticleList.get(position - 1);
+        if (mPresenter != null){
+            ShareInfoParam shareInfoParam = mPresenter.getShareInfoParam();
+            shareInfoParam.title = article.title;
+            shareInfoParam.desc = article.full_title;
+            shareInfoParam.img = article.thumb;
+            shareInfoParam.shareLink = article.share_url;
+            shareInfoParam.thumb_type = article.thumb_type;
+            if (quick_actions != null){
+                visible(quick_actions);
+                quick_actions.shareInfo(shareInfoParam);
+                quick_actions.shareStyle2Dialog(true,false);
+            }
+        }
+
+    }
 
     public void toLikeArticle(String articleId) {
         mPresenter.articleLike(articleId);
@@ -216,7 +235,6 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     @Override
     public void onItemClick(View view, int position) {
         ArticleEntity.Article article = mArticleList.get(position - 1);
-        mArticleId = article.id;
         ArticleH5Act.startAct(getActivity(), article.id, ArticleH5Act.MODE_SONIC);
     }
 
@@ -228,6 +246,13 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroyView();
     }
 
     @Override

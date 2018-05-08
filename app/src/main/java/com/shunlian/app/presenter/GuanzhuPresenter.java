@@ -7,7 +7,9 @@ import com.shunlian.app.adapter.GuanzhuAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.GuanzhuEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
@@ -32,9 +34,11 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     private final String page_size = "10";
     private int operationId = 0;
     private int currentPosition;
+    private ShareInfoParam shareInfoParam;
 
     public GuanzhuPresenter(Context context, IGuanzhuView iView) {
         super(context, iView);
+        shareInfoParam = new ShareInfoParam();
         initApi();
     }
 
@@ -84,6 +88,13 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                 if (currentPage == 1){
                     iView.refreshFinish();
                 }
+                //分享专用
+                GoodsDeatilEntity.UserInfo user_info = data.user_info;
+                if (user_info != null) {
+                    shareInfoParam.userAvatar = user_info.avatar;
+                    shareInfoParam.userName = user_info.nickname;
+                }
+
                 currentPage++;
             }
 
@@ -127,10 +138,15 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
 
             adapter.setOnShareLikeListener((position,isShare)-> {
                 currentPosition = position;
+                GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                 if (isShare){//分享
-
+                    shareInfoParam.shareLink = dynamicListBean.share_url;
+                    shareInfoParam.thumb_type = "1";
+                    shareInfoParam.img = dynamicListBean.thumb;
+                    shareInfoParam.title = dynamicListBean.title;
+                    shareInfoParam.desc = dynamicListBean.full_title;
+                    iView.share(shareInfoParam);
                 }else {//点赞
-                    GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                     if ("1".equals(dynamicListBean.has_like)){
                         articleUnLike(dynamicListBean.id);
                     }else {

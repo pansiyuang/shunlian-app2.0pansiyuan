@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CouponListEntity;
+import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -60,7 +62,7 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
         CouponListEntity.VoucherList voucherList = lists.get(position);
         //状态 0是未使用 1已经使用  -2已经过期
         String voucher_type_desc = voucherList.voucher_type_desc;
-        changeState(voucherList.stauts,mHolder,voucher_type_desc);
+        changeState(voucherList.stauts,mHolder,voucher_type_desc,voucherList.expired);
         mHolder.mtv_rule.setText(voucher_type_desc);
 
         mHolder.mtv_price.setText(voucherList.denomination);
@@ -84,8 +86,8 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
 
     }
 
-    private void changeState(String state, CouponListHolder mHolder, String text){
-        //状态 0是未使用 1已经使用  -2已经过期
+    private void changeState(String state, CouponListHolder mHolder, String text, String expired){
+        //状态 0是未使用 1已经使用    expired 是否过期  1为已经过期
         if (isEmpty(text)){
             text = "";
         }
@@ -93,39 +95,36 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
         int pink_color = 0;
         int new_text = 0;
         int value_555555 = 0;
-        switch (state){
-            case "0":
-                pink_color = getColor(R.color.pink_color);
-                new_text = getColor(R.color.new_text);
-                value_555555 = getColor(R.color.value_555555);
 
-                visible(mHolder.mtv_use_coupon);
+        if ("1".equals(state) || "1".equals(expired)){//已使用  已过期
+            pink_color = getColor(R.color.share_text);
+            new_text = pink_color;
+            value_555555 = pink_color;
+            gone(mHolder.mtv_use_coupon);
+
+            if ("1".equals(state)){//已使用
                 if (length > 26){
                     mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_gao);
                 }else {
                     mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_di);
                 }
-                break;
-            case "1":
-                pink_color = getColor(R.color.share_text);
-                new_text = pink_color;
-                value_555555 = pink_color;
-
-                gone(mHolder.mtv_use_coupon);
-                if (length > 26){
-                    mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_gao);
-                }else {
-                    mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_di);
-                }
-                break;
-            case "-2":
-                gone(mHolder.mtv_use_coupon);
+            }else if ("1".equals(expired)){//已过期
                 if (length > 26){
                     mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_gao);
                 }else {
                     mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_guoqi_di);
                 }
-                break;
+            }
+        }else {//未使用
+            pink_color = getColor(R.color.pink_color);
+            new_text = getColor(R.color.new_text);
+            value_555555 = getColor(R.color.value_555555);
+            visible(mHolder.mtv_use_coupon);
+            if (length > 26){
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_gao);
+            }else {
+                mHolder.rlayout_root.setBackgroundResource(R.mipmap.img_youhuiquan_di);
+            }
         }
         mHolder.mtv_rmb.setTextColor(pink_color);
         mHolder.mtv_price.setTextColor(pink_color);
@@ -173,6 +172,14 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
 
         public CouponListHolder(View itemView) {
             super(itemView);
+            mtv_use_coupon.setOnClickListener((v)->{
+                CouponListEntity.VoucherList voucherList = lists.get(getAdapterPosition());
+                if ("0".equals(voucherList.store_id)){//平台的
+                    Common.goGoGo(context,"");
+                }else {
+                    StoreAct.startAct(context,voucherList.store_id);
+                }
+            });
         }
     }
 }

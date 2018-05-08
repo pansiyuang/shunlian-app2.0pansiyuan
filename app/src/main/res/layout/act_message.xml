@@ -38,7 +38,7 @@
                 android:layout_marginLeft="-6.5dp"
                 android:layout_marginTop="-6.5dp"
                 android:layout_toRightOf="@+id/tv_sys_title"
-                android:background="@drawable/rounded_corner_pink_26px"
+                android:background="@drawable/rounded_corner_solid_pink_26px"
                 android:gravity="center"
                 android:minWidth="13dp"
                 android:paddingLeft="2dp"

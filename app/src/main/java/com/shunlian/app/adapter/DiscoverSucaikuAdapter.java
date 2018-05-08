@@ -1,6 +1,7 @@
 package com.shunlian.app.adapter;
 
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PADiscoverSucaiku;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
@@ -123,12 +125,21 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         viewHolder.mtv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DownLoadImageThread thread = new DownLoadImageThread(context,
+                        (ArrayList<String>) content.image);
+                thread.start();
+                ClipboardManager cm = (ClipboardManager) context
+                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(content.content);
+
                 if (viewHolder.promptDialog==null){
                     viewHolder.promptDialog = new PromptDialog((Activity) context);
-                    viewHolder.promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi), getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
+                    viewHolder.promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
+                            getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           Common.staticToast("调味新");
+                            Common.openWeiXin(context);
+                            viewHolder.promptDialog.dismiss();
                         }
                     }, getString(R.string.errcode_cancel), new View.OnClickListener() {
                         @Override

@@ -21,9 +21,8 @@ import com.shunlian.app.adapter.PromotionAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.MyOrderEntity;
-import com.shunlian.app.newchat.adapter.ChatOrderAdapter;
 import com.shunlian.app.ui.goods_detail.ComboDetailAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 
@@ -39,7 +38,7 @@ import static com.shunlian.app.utils.DeviceInfoUtil.getDeviceHeight;
  * Created by Administrator on 2017/11/10.
  */
 
-public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSelectCallBack {
+public class RecyclerDialog extends Dialog{
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
@@ -148,14 +147,13 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         }
         dialog_title.setText(mContext.getResources().getText(R.string.select_voucher));
         recycler_list.setAdapter(voucherAdapter);
-        voucherAdapter.setOnVoucherSelectCallBack(this);
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
-        voucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                // TODO: 2017/11/24 跳转优惠券
-                GoodsDeatilEntity.Voucher voucher = voucheres.get(position);
-                OnVoucherSelect(voucher);
+        voucherAdapter.setOnItemClickListener((v, p) -> {
+            GoodsDeatilEntity.Voucher voucher = voucheres.get(p);
+            if (mCallBack != null) {
+                LogUtil.zhLogW("=setVoucheres============="+voucher.voucher_id);
+                mCallBack.onVoucherSelect(voucher);
+                mCallBack.itemVoucher(voucher,p);
             }
         });
     }
@@ -212,24 +210,24 @@ public class RecyclerDialog extends Dialog implements VoucherAdapter.OnVoucherSe
         recycler_list.setAdapter(adapter);
     }
 
-    @Override
-    public void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher) {
-        if (mCallBack != null) {
-            mCallBack.OnVoucherSelect(voucher);
-        }
-    }
-
     public void setOnVoucherCallBack(OnVoucherCallBack callBack) {
         this.mCallBack = callBack;
     }
 
     public interface OnVoucherCallBack {
-        void OnVoucherSelect(GoodsDeatilEntity.Voucher voucher);
+        default void onVoucherSelect(GoodsDeatilEntity.Voucher voucher){}
+        default void itemVoucher(GoodsDeatilEntity.Voucher voucher,int position){}
     }
 
     public void getVoucherSuccess(String voucherId) {
         if (voucherAdapter != null) {
             voucherAdapter.getItemSuccess(voucherId);
+        }
+    }
+
+    public void getVoucherSuccess(GoodsDeatilEntity.Voucher voucher,int position) {
+        if (voucherAdapter != null) {
+            voucherAdapter.getItemSuccess(voucher,position);
         }
     }
 }

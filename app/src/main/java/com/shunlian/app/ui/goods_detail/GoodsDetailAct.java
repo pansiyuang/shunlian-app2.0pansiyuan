@@ -31,6 +31,9 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -41,6 +44,8 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 import com.shunlian.app.widget.FootprintDialog;
@@ -48,6 +53,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.HashMap;
@@ -140,6 +146,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.mllayout_car)
     MyLinearLayout mllayout_car;
 
+    @BindView(R.id.mll_chat)
+    MyLinearLayout mll_chat;
+
     @BindView(R.id.line)
     View line;
 
@@ -148,6 +157,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private PathMeasure mPathMeasure;
     private boolean isStopAnimation;
@@ -162,6 +174,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public int offset;
     private Map<String,BaseFragment> fragments;
     private CommentFrag commentFrag;
+    private GoodsDeatilEntity.StoreInfo store_info;
+    private GoodsDeatilEntity mGoodsDeatilEntity;
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
@@ -197,6 +211,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mtv_buy_immediately.setOnClickListener(this);
         miv_is_fav.setOnClickListener(this);
         mllayout_car.setOnClickListener(this);
+        mll_chat.setOnClickListener(this);
     }
 
     @Override
@@ -385,14 +400,26 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.shop_id = store_id;
+        chatMember.nickname = store_info.decoration_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember,mGoodsDeatilEntity);
+    }
+
 
     /**
      * 商品详情数据
      */
     @Override
     public void goodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
+        mGoodsDeatilEntity = goodsDeatilEntity;
         goodsDeatilFrag.setGoodsDetailData(goodsDeatilEntity);
-        GoodsDeatilEntity.StoreInfo store_info = goodsDeatilEntity.store_info;
+        store_info = goodsDeatilEntity.store_info;
         //购物车角标数字
         String member_cart_count = isEmpty(goodsDeatilEntity.member_cart_count) ?
                 "0" : goodsDeatilEntity.member_cart_count;
@@ -647,6 +674,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 setTabBarStatue(COMMENT_ID);
                 goodsDeatilFrag.setScrollPosition(1,offset);
                 break;
+            case R.id.mll_chat:
+                goodsDetailPresenter.getUserId(store_info.store_id);
+                break;
             case R.id.miv_close:
                 backOrder();
                 break;
@@ -735,7 +765,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     }
 
-    private void moreHideAnim() {
+    public void moreHideAnim() {
         immersionBar.getTag(GoodsDetailAct.class.getName()).init();
         mll_share.setVisibility(View.GONE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
@@ -762,7 +792,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         });
     }
 
-    private void moreAnim() {
+    /**
+     * 显示分享框
+     */
+    public void moreAnim() {
         sv_mask.setVisibility(View.VISIBLE);
         immersionBar.statusBarColor(R.color.white).init();
         mll_share.setVisibility(View.VISIBLE);
@@ -1013,6 +1046,51 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         moreHideAnim();
     }
 
+    @OnClick(R.id.mtv_weixin_share)
+    public void weChatShare(){
+        if (!Common.isAlreadyLogin()){
+            sharePrompt();
+            return;
+        }
+        currentQuickAction = 6;
+        moreHideAnim();
+    }
+
+    @OnClick(R.id.mtv_picText_share)
+    public void picTextShare(){
+        if (!Common.isAlreadyLogin()){
+            sharePrompt();
+            return;
+        }
+        if (goodsDetailPresenter != null){
+            quick_actions.shareInfo(goodsDetailPresenter.getShareInfoParam());
+            quick_actions.saveshareGoodsPic();
+        }
+    }
+
+    @OnClick(R.id.mtv_copyLink_share)
+    public void copyLinkShare(){
+        if (!Common.isAlreadyLogin()){
+            sharePrompt();
+            return;
+        }
+        if (goodsDetailPresenter != null){
+            goodsDetailPresenter.copyText();
+        }
+        moreHideAnim();
+    }
+
+    public void sharePrompt(){
+        final PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setTvSureColor(R.color.white);
+        promptDialog.setTvSureBg(R.color.pink_color);
+        promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
+                (view) -> {
+                    Common.goGoGo(this,"login");
+                    promptDialog.dismiss();
+                }, "取消", (view) -> promptDialog.dismiss()).show();
+    }
+
     private void quickAction(){
         switch (currentQuickAction){
             case 1:
@@ -1030,6 +1108,19 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             case 5:
                 Common.goGoGo(this,"help");
                 break;
+            case 6://分享到微信
+                if (goodsDetailPresenter != null){
+                    WXEntryActivity.startAct(this, "shareFriend",
+                            goodsDetailPresenter.getShareInfoParam());
+                }
+                break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

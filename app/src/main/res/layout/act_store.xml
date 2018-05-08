@@ -526,13 +526,14 @@
                 android:src="@mipmap/icon_common_more_white" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_msg_count"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
-                android:text="9+"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 android:textSize="9sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
@@ -603,6 +604,7 @@
         </com.shunlian.app.widget.MyRelativeLayout>
 
         <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mll_chat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="11"

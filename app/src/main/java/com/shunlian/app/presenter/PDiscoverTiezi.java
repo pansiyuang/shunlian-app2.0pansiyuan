@@ -3,11 +3,11 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
+import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.view.IDiscoverQuanzi;
 import com.shunlian.app.view.IDiscoverTiezi;
 
 import java.util.ArrayList;
@@ -29,6 +29,7 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
     private boolean babyIsLoading;
     private String circle_id;
     private List<DiscoveryTieziEntity.Mdata.Hot> mDatas = new ArrayList<>();
+    private ShareInfoParam shareInfoParam;
 
     public PDiscoverTiezi(Context context, IDiscoverTiezi iView,String circle_id) {
         super(context, iView);
@@ -81,8 +82,25 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
                 mDatas.addAll(data.list.new_inv);
                 iView.setApiData(data.list,mDatas);
                 isFirst=false;
+
+                if (shareInfoParam == null)
+                    shareInfoParam = new ShareInfoParam();
+                shareInfoParam.shareLink = data.share_url;
+                GoodsDeatilEntity.UserInfo user_info = data.user_info;
+                if (user_info != null){
+                    shareInfoParam.userAvatar = user_info.avatar;
+                    shareInfoParam.userName = user_info.nickname;
+                }
+                DiscoveryTieziEntity.Mdata.TopicDetail topicDetail = data.list.topicDetail;
+                shareInfoParam.title = topicDetail.title;
+                shareInfoParam.desc = topicDetail.content;
+                shareInfoParam.img = topicDetail.img;
+                shareInfoParam.thumb_type = "1";
             }
         });
     }
 
+    public ShareInfoParam getShareInfoParam() {
+        return shareInfoParam;
+    }
 }
