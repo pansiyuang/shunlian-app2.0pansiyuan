@@ -53,8 +53,8 @@ public class ComboDetailPresenter extends BasePresenter<IComboDetailView> {
      */
     public void getcombodetail(String combo_id, String goods_id){
         Map<String,String> map = new HashMap<>();
-        map.put("combo_id","14");
-        map.put("goods_id","54");
+        map.put("combo_id",combo_id);
+        map.put("goods_id",goods_id);
         sortAndMD5(map);
 
         Call<BaseEntity<ComboDetailEntity>> getcombodetail = getAddCookieApiService().getcombodetail(getRequestBody(map));

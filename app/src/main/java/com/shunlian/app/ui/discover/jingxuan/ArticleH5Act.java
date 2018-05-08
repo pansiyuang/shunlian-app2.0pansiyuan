@@ -3,8 +3,6 @@ package com.shunlian.app.ui.discover.jingxuan;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleDetailEntity;
@@ -13,31 +11,15 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IArticleDetailView;
-import com.shunlian.app.widget.MyImageView;
 
 import org.greenrobot.eventbus.EventBus;
-
-import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/3/19.
  */
 
 public class ArticleH5Act extends H5Act implements IArticleDetailView {
-
-    @BindView(R.id.miv_favorite)
-    MyImageView miv_favorite;
-
-    @BindView(R.id.rl_title_more)
-    RelativeLayout rl_title_more;
-
-    @BindView(R.id.tv_msg_count)
-    TextView tv_msg_count;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
 
     private String articleId;
 
@@ -149,12 +131,5 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
     public void unFavoriteSuccess() {
         currentFavoriteStatus = 0;
         miv_favorite.setImageResource(R.mipmap.icon_found_souchang_n);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        super.onDestroy();
     }
 }

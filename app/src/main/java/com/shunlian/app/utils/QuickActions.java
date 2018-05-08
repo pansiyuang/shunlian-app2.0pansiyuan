@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -198,13 +199,15 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             showItem(showItemPos[i],showItemPos[0]);
         }
 
-
-        int i = showItemPos.length * 90 + px;
-        mllayout_content.setWHProportion(300,i);
+        int totalHeight = showItemPos.length * 90 + 60;
+        mllayout_content.setWHProportion(300,totalHeight);
 
         RelativeLayout.LayoutParams layoutParams = (LayoutParams)
                 mllayout_content.getLayoutParams();
-        layoutParams.topMargin = topMargin;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            layoutParams.topMargin = topMargin;
+        else
+            layoutParams.topMargin = px;
         layoutParams.rightMargin = rightMargin;
 
         requestLayout();
@@ -315,7 +318,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 店铺
      */
     public void shop() {
-        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px /10;
+        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px - px / 10;
         rightMargin = px / 6;
         setShowItem(1, 3, 4, 6, 8);
         shareStyle2Dialog(false,true);
@@ -368,6 +371,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      */
     public void activity(){
         setShowItem(1,2,3,4,5,6);
+    }
+
+    /**
+     * 专题页
+     */
+    public void special(){
+        setShowItem(1,2,3,6,7,8);
+        shareStyle1Dialog();
     }
 
     /**

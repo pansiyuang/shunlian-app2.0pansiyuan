@@ -60,7 +60,7 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         viewHolder.recycler_combo.setAdapter(comboPicAdapter);
         comboPicAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, int pos) {
                 if (listener != null){
                     listener.onItemClick(view,position);
                 }

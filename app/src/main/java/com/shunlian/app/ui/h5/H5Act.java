@@ -24,17 +24,22 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MarqueeTextView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.MyWebView;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
@@ -75,14 +80,31 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     protected Intent mIntent;
+
     @BindView(R.id.mtv_close)
-    MyTextView mtv_close;
+    public MyTextView mtv_close;
+
     @BindView(R.id.mar_title)
-    MarqueeTextView mar_title;
+    public MarqueeTextView mar_title;
+
     @BindView(R.id.mtv_title)
-    MyTextView mtv_title;
+    public MyTextView mtv_title;
+
     @BindView(R.id.mwv_h5)
-    MyWebView mwv_h5;
+    public MyWebView mwv_h5;
+
+    @BindView(R.id.rl_title_more)
+    public RelativeLayout rl_title_more;
+
+    @BindView(R.id.tv_msg_count)
+    public TextView tv_msg_count;
+
+    @BindView(R.id.quick_actions)
+    public QuickActions quick_actions;
+
+    @BindView(R.id.miv_favorite)
+    public MyImageView miv_favorite;
+
     SonicSessionClientImpl sonicSessionClient = null;
     private boolean isLogin = false;
 
@@ -149,7 +171,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      */
     @Override
     protected int getLayoutId() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         mIntent = getIntent();
         if (!TextUtils.isEmpty(mIntent.getStringExtra("url"))) {
             h5Url = mIntent.getStringExtra("url");
@@ -164,6 +187,19 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      */
     @Override
     protected void initData() {
+        if (h5Url.startsWith(InterentTools.H5_HOST+"special")){
+            visible(rl_title_more);
+            rl_title_more.setOnClickListener(v -> {
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.special();
+            });
+        }else if (h5Url.startsWith(InterentTools.H5_HOST+"activity")){
+            visible(rl_title_more);
+            rl_title_more.setOnClickListener(v -> {
+                quick_actions.setVisibility(View.VISIBLE);
+                quick_actions.activity();
+            });
+        }
         immersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
@@ -171,7 +207,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         httpDialog = new HttpDialog(this);
         initWebView();
 //        addJs();
-        if (!TextUtils.isEmpty(h5Url)) {
+        if (!isEmpty(h5Url)) {
             loadUrl();
         }
     }
@@ -217,6 +253,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     }
 
     protected void loadUrl() {
+        LogUtil.zhLogW("h5Url====="+h5Url);
         // webview is ready now, just tell session client to bind
         if (sonicSessionClient != null) {
             sonicSessionClient.bindWebView(mwv_h5);
@@ -443,6 +480,8 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         if (null != sonicSession) {
             sonicSession.destroy();
             sonicSession = null;

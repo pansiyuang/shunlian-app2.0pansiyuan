@@ -22,7 +22,6 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
@@ -208,13 +207,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             networkBroadcast = new NetworkBroadcast();
             registerReceiver(networkBroadcast, filter);
-            networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
-
-                @Override
-                public void updateUI(boolean isShow) {
-                    showPopup(isShow);
-                }
-            });
+            networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
         }
     }
 
@@ -235,10 +228,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         View byId = ButterKnife.findById(this, R.id.miv_close);
         if (byId != null) {
             TransformUtil.expandViewTouchDelegate(byId, 50, 50, 50, 50);
-            byId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+            byId.setOnClickListener(v ->  {
+                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.
+                            transClassName(Constant.JPUSH.get(0)))){
                         MainActivity.startAct(getBaseContext(),"");
                     }
                     InputMethodManager imm = (InputMethodManager)
@@ -247,7 +239,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
                     finish();
-                }
             });
         }
     }
