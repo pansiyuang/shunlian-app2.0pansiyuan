@@ -33,11 +33,12 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     private String mpsw, before, tag, key;
 
 
-    public static void startAct(Context context, String before, String tag, String key) {
+    public static void startAct(Context context, String before, String tag, String key,boolean isPaySet) {
         Intent intent = new Intent(context, BalancePaySetTwoAct.class);
         intent.putExtra("before", before);
         intent.putExtra("tag", tag);
         intent.putExtra("key", key);
+        intent.putExtra("isPaySet", isPaySet);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -75,6 +76,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
                             pBalancePaySetTwo.changePayPassword(psw, key);
                         }
                     } else {
+                        Common.staticToast(getStringResouce(R.string.RegisterTwoAct_mmbyz));
                         finish();
                     }
                 } else if ("unbind".equals(tag)) {
@@ -131,7 +133,11 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void setPasswordCall() {
         Common.staticToasts(this, getStringResouce(R.string.balance_shezhichenggong), R.mipmap.icon_common_duihao);
-        BalancePaySetAct.startAct(this, true, true);
+        if (getIntent().getBooleanExtra("isPaySet",false)){
+            BalancePaySetAct.startAct(this, true, true);
+        }else {
+            AlipayAddAct.startAct(this);
+        }
     }
 
     @Override
@@ -144,7 +150,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     public void checkPasswordCall(boolean isRight, String key) {
         if (isRight) {
             if ("modify".equals(tag)) {
-                BalancePaySetTwoAct.startAct(this, "", "sets", key);
+                BalancePaySetTwoAct.startAct(this, "", "sets", key,false);
             } else {
                 AlipayAddAct.startAct(this);
             }
@@ -156,7 +162,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void unbindAliPayCall(boolean isOk) {
         if (isOk) {
-            AlipayMyAct.startAct(this, false, true, "");
+            AlipayMyAct.startAct(this, false,true, true, "");
         } else {
             gpv_customUi.clearPassword();
         }
@@ -165,7 +171,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void checkRuleValidCall(boolean isOk) {
         if (isOk) {
-            BalancePaySetTwoAct.startAct(this, mpsw, tag, key);
+            BalancePaySetTwoAct.startAct(this, mpsw, tag, key,false);
         } else {
             gpv_customUi.clearPassword();
         }

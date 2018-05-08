@@ -74,7 +74,7 @@ public final class Constant {
     public static Map<String, List<String>> REBRAND_ATTRS;//筛选属性(重新赋值用)
     public static GetListFilterEntity LISTFILTER;//列表属性(重新赋值用)
     public static String DINGWEI;//定位
-
+    public static boolean IS_DOWNLOAD = false;
     public static List<String> JPUSH;//推送
 
     public static String MOBILE;//手机号

@@ -11,10 +11,9 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.StoreLicensePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.StoreLicenseView;
-import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -94,7 +93,7 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (FastClickListener.isFastClick()) {
+        if (MyOnClickListener.isFastClick()) {
             return;
         }
         switch (view.getId()) {

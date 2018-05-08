@@ -41,15 +41,15 @@ public class AlipayDetailAct extends BaseActivity implements View.OnClickListene
         if (promptDialog == null) {
             promptDialog = new PromptDialog(this);
         }
-        promptDialog.setSureAndCancleListener(getStringResouce(R.string.balance_quedingyao), getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.balance_quedingyao), getStringResouce(R.string.balance_wozaixiang), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BalancePaySetTwoAct.startAct(getBaseContext(),"","unbind","");
                 promptDialog.dismiss();
             }
-        }, getStringResouce(R.string.balance_wozaixiang), new View.OnClickListener() {
+        }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                BalancePaySetTwoAct.startAct(getBaseContext(),"","unbind","",false);
                 promptDialog.dismiss();
             }
         }).show();

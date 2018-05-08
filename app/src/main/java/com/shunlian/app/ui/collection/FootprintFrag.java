@@ -32,7 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.utils.FastClickListener.isFastClick;
+import static com.shunlian.app.utils.MyOnClickListener.isFastClick;
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**

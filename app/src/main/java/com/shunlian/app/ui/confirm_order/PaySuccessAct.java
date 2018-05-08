@@ -12,7 +12,7 @@ import com.shunlian.app.presenter.PaySuccessPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -82,7 +82,7 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        if (FastClickListener.isFastClick()) {
+        if (MyOnClickListener.isFastClick()) {
             return;
         }
         switch (view.getId()) {

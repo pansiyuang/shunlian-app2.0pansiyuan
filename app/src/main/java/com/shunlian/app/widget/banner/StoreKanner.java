@@ -56,17 +56,28 @@ public class StoreKanner extends BaseBanner<StoreIndexEntity.Body.Datas, StoreKa
         return container;
     }
 
-    private RoundCornerIndicaor indicator;
-
     @Override
     public View onCreateIndicator() {
-        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
-        indicator.setViewPager(vp, list.size());
-        return indicator;
+        return null;
     }
 
     @Override
-    public void setCurrentIndicator(int i) {
-        indicator.setCurrentItem(i);
+    public void setCurrentIndicator(int position) {
+
     }
+
+//    private RoundCornerIndicaor indicator;
+//
+//
+//    @Override
+//    public View onCreateIndicator() {
+//        indicator = (RoundCornerIndicaor) LayoutInflater.from(context).inflate(layoutRes, null);
+//        indicator.setViewPager(vp, list.size());
+//        return indicator;
+//    }
+//
+//    @Override
+//    public void setCurrentIndicator(int i) {
+//        indicator.setCurrentItem(i);
+//    }
 }

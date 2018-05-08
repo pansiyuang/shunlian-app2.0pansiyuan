@@ -122,7 +122,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setApiData(CommonEntity data) {
-        SpannableStringBuilder tishiBuilder = Common.changeColorAndSize(data.account_type + " " + data.account_number
+        SpannableStringBuilder tishiBuilder = Common.changeColorAndSize(data.account_type + " (" + data.account_number+")"
                 , data.account_type, 15, getColorResouce(R.color.new_text));
         account = data.account_number;
         accountType = data.account_type;

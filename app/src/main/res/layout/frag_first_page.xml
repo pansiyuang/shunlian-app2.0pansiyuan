@@ -134,34 +134,37 @@
                     android:layout_height="40dp"
                     android:layout_gravity="bottom"
                     android:background="@color/white_ash"
-                    app:layout_collapseMode="pin"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    app:layout_collapseMode="pin" />
 
                 <com.shunlian.app.widget.MyLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_photo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="57dp"
                         android:layout_height="32dp"
-                        android:adjustViewBounds="true"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="10dp"
+                        android:scaleType="fitXY" />
+
                     <com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip
                         android:id="@+id/tabs"
-                        android:overScrollMode="never"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never" />
                 </com.shunlian.app.widget.MyLinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 
 </com.shunlian.app.widget.MyLinearLayout>

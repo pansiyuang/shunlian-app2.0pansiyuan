@@ -223,6 +223,10 @@
     <color name="value_FFD11B">#FFD11B</color>
     <color name="value_FDDB77">#FDDB77</color>
     <color name="value_E6E4E4">#E6E4E4</color>
+
+    <!--闪屏页-->
+    <color name="value_DB1211">#DB1211</color>
+    <color name="value_979FA3">#979FA3</color>
 </resources>
 
 

@@ -154,7 +154,7 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void bindAlipayCall(String account_number) {
-        AlipayMyAct.startAct(this,true,true,account_number);
+        AlipayMyAct.startAct(this,true,true,false,account_number);
     }
 
     @Override

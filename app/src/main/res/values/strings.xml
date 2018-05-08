@@ -53,6 +53,8 @@
     <string name="discover_center">发现中心</string>
     <string name="shopping_car">购物车</string>
     <string name="person_center">个人中心</string>
+    <string name="common_zhifubaohint">您还没有安装支付宝，请先安装~</string>
+    <string name="common_weixinhint">您还没有安装微信，请先安装~</string>
 
     <!--注册-->
     <string name="RegisterOneAct_qsrtjrid">请输入推荐人ID</string>
@@ -664,8 +666,7 @@
     <string name="balance_tianjiazhifu">添加支付宝账号</string>
     <string name="balance_ninhaimeiyoutianjia">您还没有添加支付宝账户，请添加完支付宝账户再进行提现！</string>
     <string name="balance_meirenzhineng">每人只能添加一个支付宝账号，如需更换，请先解绑。</string>
-    <string name="balance_wenxintishi">温馨提示：每日余额提现有%s元额度免手续费，今日还剩%s元额度超过部分要缴纳一定手续费。
-    您还有%s元收益的免息部分，今日可免手续费的提现额度为%s元。</string>
+    <string name="balance_wenxintishi">温馨提示：您今日提现可免手续费额度为%s元，超过部分按千分之%s收取提现手续费。</string>
 
     <!--首页-->
     <string name="first_pingzhi">品质热推</string>
@@ -694,5 +695,8 @@
     <string name="first_haopinglv">好评率%s</string>
     <string name="first_yigou">%s人已购</string>
     <string name="first_souni">搜你所想</string>
+    <string name="first_tianguo">跳过</string>
+    <string name="first_lijigengxin">立即更新</string>
+    <string name="first_shaohougengxin">稍后更新</string>
 
 </resources>

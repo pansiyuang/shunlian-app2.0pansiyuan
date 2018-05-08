@@ -350,7 +350,36 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 LogUtil.httpLogW("========h5Url==========" + h5Url);
-                if (url.contains("slmall://")) {
+                if (url.startsWith("alipay")) {
+//                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
+                    try {
+                        // 以下固定写法
+                        final Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(url));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // 防止没有安装的情况
+                        Common.staticToast(getStringResouce(R.string.common_zhifubaohint));
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
+                    return true;
+                }else if (url.startsWith("weixin://")){
+                    try {
+                        // 以下固定写法
+                        final Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(url));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // 防止没有安装的情况
+                        Common.staticToast(getStringResouce(R.string.common_weixinhint));
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
+                    return true;
+                }else if (url.contains("slmall://")) {
                     analysisUrl(url);
                     return true;
                 } else {

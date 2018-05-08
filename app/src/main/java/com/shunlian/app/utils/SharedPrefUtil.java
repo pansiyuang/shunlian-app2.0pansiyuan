@@ -46,6 +46,45 @@ public class SharedPrefUtil {
         return Common.getApplicationContext().getSharedPreferences(file_name, Context.MODE_PRIVATE);
     }
 
+    /**
+     * 从sp中获取boolean
+     * @param key
+     * @param def
+     * @return
+     */
+    public static boolean getSharedPrfBoolean(String key,boolean def){
+        return getsharedPreferences().getBoolean(key,def);
+    }
+
+    /**
+     * 将boolean保存到sp中
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean saveSharedPrfBoolean(String key,boolean value){
+        return getsharedPreferences().edit().putBoolean(key,value).commit();
+    }
+
+    /**
+     * 从sp中获取long
+     * @param key
+     * @param def
+     * @return
+     */
+    public static long getSharedPrfLong(String key,long def){
+        return getsharedPreferences().getLong(key,def);
+    }
+
+    /**
+     * 将long保存到sp中
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean saveSharedPrfLong(String key,long value){
+        return getsharedPreferences().edit().putLong(key,value).commit();
+    }
 
     /**
      * 从sp中获取string

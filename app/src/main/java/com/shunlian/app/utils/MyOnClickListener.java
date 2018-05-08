@@ -6,7 +6,7 @@ import android.app.Activity;
  * Created by Administrator on 2017/10/27.
  */
 
-public class FastClickListener {
+public class MyOnClickListener {
     private static long lastClickTime;
 
     /**
@@ -32,6 +32,16 @@ public class FastClickListener {
             return false;
         }
         if (!NetworkUtils.isNetworkAvailable(activity)){
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isWIFIState(Activity activity) {
+        if (isFastClick()) {
+            return false;
+        }
+        if (!HttpJudge.isWifi(activity)){
             return false;
         }
         return true;
