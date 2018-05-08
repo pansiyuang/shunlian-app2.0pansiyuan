@@ -201,7 +201,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/rounded_corner_solid_da_50px"
         android:gravity="center"
-        android:text="@string/balance_xiayibu"
+        android:text="@string/RegisterTwoAct_finish"
         android:textColor="@color/white"
         android:textSize="15sp" />
 </com.shunlian.app.widget.MyLinearLayout>

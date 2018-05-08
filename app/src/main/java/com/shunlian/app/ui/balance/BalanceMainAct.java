@@ -62,7 +62,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.mtv_count:
                 if (data != null)
-                    BalanceXQAct.startAct(getBaseContext(), data);
+                    BalanceXQAct.startAct(getBaseContext(), data,false);
                 break;
             case R.id.mtv_yueminxi:
                 BalanceDetailAct.startAct(getBaseContext());
@@ -71,7 +71,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 BalancePaySetAct.startAct(this,data.is_set_password,false);
                 break;
             case R.id.mrlayout_tixiandao:
-                AlipayMyAct.startAct(this,data.havePayAccount,false,data.account_number);
+                AlipayMyAct.startAct(this,data.havePayAccount,!data.is_set_password,false,data.account_number);
                 break;
             case R.id.mrlayout_licai:
 

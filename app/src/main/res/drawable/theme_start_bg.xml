@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape> <!-- 第一层的颜色为白色 -->
+            <!--<solid android:color="@color/white" />-->
+            <solid android:color="@color/value_DB1211" />
+        </shape>
+    </item>
+
+    <!--<item-->
+    <!--android:bottom="120dp"-->
+    <!--&gt;-->
+    <!--<bitmap-->
+    <!--android:antialias="true"-->
+    <!--android:dither="true"-->
+    <!--android:filter="true"-->
+    <!--android:gravity="center"-->
+    <!--android:src="@drawable/default_bj"-->
+    <!--android:tileMode="disabled"/>-->
+
+    <!--</item>-->
+
+    <item >
+        <bitmap
+            android:antialias="true"
+            android:dither="true"
+            android:filter="true"
+            android:gravity="top|fill_horizontal"
+            android:src="@mipmap/img_head"
+            android:tileMode="disabled" />
+
+    </item>
+
+    <item
+       android:bottom="50dp">
+        <bitmap
+            android:antialias="true"
+            android:dither="true"
+            android:filter="true"
+            android:gravity="bottom|left"
+            android:src="@mipmap/img_shunlian"
+            android:tileMode="disabled" />
+    </item>
+
+
+</layer-list>

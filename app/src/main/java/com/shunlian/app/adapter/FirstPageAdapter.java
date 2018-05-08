@@ -19,14 +19,12 @@ import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
-import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.PingpaiAct;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
@@ -60,7 +58,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     public boolean isFirst = false, isShow = false;
     public int mergePosition = 0, showPosition = -1;
     private CateGoryFrag cateGoryFrag;
-    private int second=(int)(System.currentTimeMillis()/1000);
+    private int second = (int) (System.currentTimeMillis() / 1000);
 
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
@@ -200,8 +198,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
                         twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
                     }
-                    if (Common.isColor(data.bg_color))
+                    if (!TextUtils.isEmpty(data.bg_pic)) {
+                        GlideUtils.getInstance().loadBgImage(context, twoHolder.mllayout_nav, data.bg_pic);
+                    } else if (Common.isColor(data.bg_color)) {
                         twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
+                    }
                     twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -371,17 +372,17 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     GetDataEntity.MData data = lists.get(position);
                     if (Common.isColor(data.bg_color))
                         fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
-                    GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_one,
+                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_one,
                             data.ttth.thumb);
-                    GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_two,
+                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_two,
                             data.pptm.thumb);
-                    GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_three,
+                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_three,
                             data.asxp.thumb);
-                    GlideUtils.getInstance().loadImageWithView(context, fourHolder.mllayout_four,
+                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_four,
                             data.kbrx.thumb);
-                    int seconds=(int)(System.currentTimeMillis()/1000)-second;
+                    int seconds = (int) (System.currentTimeMillis() / 1000) - second;
                     fourHolder.downTime_first.cancelDownTimer();
-                    fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down)-seconds);
+                    fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
                     fourHolder.downTime_first.startDownTimer();
                     if (Common.isColor(data.ttth.t_color)) {
                         fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
@@ -457,12 +458,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         fiveHolder.mtv_title.setText(data.content);
                         fiveHolder.mtv_desc.setVisibility(View.GONE);
                     }
-                    if (!TextUtils.isEmpty(data.price)){
+                    if (!TextUtils.isEmpty(data.price)) {
                         SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
                                 getString(R.string.common_yuan), 11);
                         fiveHolder.mtv_price.setText(priceBuilder);
                         fiveHolder.mtv_price.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                     }
 
@@ -493,7 +494,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                GoodsDetailAct.startAct(context,data.datass.get(position).url.item_id);
+                                GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
                             }
                         });
                     }
@@ -512,7 +513,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                            GoodsDetailAct.startAct(context,data.datass.get(position).url.item_id);
+                                GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
                             }
                         });
                     }
@@ -539,7 +540,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         });
                         eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
                         eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                    }else {
+                    } else {
                         eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
                     }
                     if (isFirst) {
@@ -563,7 +564,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            GoodsDetailAct.startAct(context,goods.id);
+                            GoodsDetailAct.startAct(context, goods.id);
                         }
                     });
                     if ("1".equals(goods.is_new)) {
@@ -774,8 +775,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             downTime_first.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    if (downTime_first!=null)
-                    downTime_first.cancelDownTimer();
+                    if (downTime_first != null)
+                        downTime_first.cancelDownTimer();
                 }
 
             });

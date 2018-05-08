@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cb="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <com.shunlian.app.widget.CBProgressBar
+        android:id="@+id/my_progress"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_centerInParent="true"
+        cb:orientation="circle"
+        cb:percent_text_color="@color/white"
+        cb:percent_text_size="22sp"
+        cb:progressBarBgColor="#5b5b5b"
+        cb:progressColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_checkUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_progress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="请先升级到最新版本"
+        android:textColor="@color/my_gray_two"
+        android:textSize="20sp" />
+</RelativeLayout>
+

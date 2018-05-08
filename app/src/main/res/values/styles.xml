@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.Start" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/theme_start_bg</item>
+    </style>
 
     <style name="SpinKitView">
         <item name="android:indeterminateOnly">true</item>
@@ -98,6 +101,14 @@
         <item name="android:background">@drawable/rounded_corner_dialog</item>
     </style>
 
+    <style name="popAd" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item> <!--Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item><!-- 是否漂现在activity上 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="AnimBottom">
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
@@ -211,6 +222,7 @@
             <enum name="Full" value="1" />
         </attr>
     </declare-styleable>
+
     <style name="GridPasswordView" />
 
     <style name="GridPasswordView.TextView">

@@ -11,8 +11,7 @@ import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.ui.category.CategoryLetterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.FastClickListener;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
@@ -80,7 +79,7 @@ public class PingpaiAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Reco
         viewHolder.mtv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (FastClickListener.isFastClick()) {
+                if (MyOnClickListener.isFastClick()) {
                     return;
                 }
                 if (viewHolder.mtv_name.getText().toString().equals(getString(R.string.category_quanbu)) && letters != null && brands != null && letters.size() > 0) {

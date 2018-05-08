@@ -311,7 +311,7 @@ public class GlideUtils {
      * 控件放置背景图片
      */
 
-    public void loadImageWithView(Context context, final View view, String imgUrl) {
+    public void loadBgImage(Context context, final View view, String imgUrl) {
         Glide.with(context)
                 .load(imgUrl)
                 .asBitmap()

@@ -112,7 +112,7 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
 
     @Override
     public void nextCall(String key) {
-        BalancePaySetTwoAct.startAct(this,"","set",key);
+        BalancePaySetTwoAct.startAct(this,"","set",key,false);
     }
 
     @Override

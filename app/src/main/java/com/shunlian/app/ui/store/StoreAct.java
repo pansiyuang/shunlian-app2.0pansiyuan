@@ -517,7 +517,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void storeHeader(StoreIndexEntity.Head head) {
         GlideUtils.getInstance().loadImage(this, miv_storeLogo, head.decoration_logo);
-        GlideUtils.getInstance().loadImageWithView(this, mrlayout_bg, head.decoration_banner);
+        GlideUtils.getInstance().loadBgImage(this, mrlayout_bg, head.decoration_banner);
         if ("false".equals(head.is_mark)) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);

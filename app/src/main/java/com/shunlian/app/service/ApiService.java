@@ -22,110 +22,7 @@ package com.shunlian.app.service;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
-import com.shunlian.app.bean.ActivityListEntity;
-import com.shunlian.app.bean.AddGoodsEntity;
-import com.shunlian.app.bean.AddressDataEntity;
-import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.AmountDetailEntity;
-import com.shunlian.app.bean.ArtTagEntity;
-import com.shunlian.app.bean.ArticleDetailEntity;
-import com.shunlian.app.bean.ArticleEntity;
-import com.shunlian.app.bean.BalanceDetailEntity;
-import com.shunlian.app.bean.BalanceInfoEntity;
-import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.CateEntity;
-import com.shunlian.app.bean.CoreHotEntity;
-import com.shunlian.app.bean.CoreNewEntity;
-import com.shunlian.app.bean.CheckInRespondEntity;
-import com.shunlian.app.bean.CheckInStateEntity;
-import com.shunlian.app.bean.CircleAddCommentEntity;
-import com.shunlian.app.bean.CollectionGoodsEntity;
-import com.shunlian.app.bean.CollectionStoresEntity;
-import com.shunlian.app.bean.ComboDetailEntity;
-import com.shunlian.app.bean.CommentDetailEntity;
-import com.shunlian.app.bean.CommentListEntity;
-import com.shunlian.app.bean.CommentSuccessEntity;
-import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.ConfirmOrderEntity;
-import com.shunlian.app.bean.ConsultHistoryEntity;
-import com.shunlian.app.bean.CouponListEntity;
-import com.shunlian.app.bean.DetailOrderRecordEntity;
-import com.shunlian.app.bean.CoreNewsEntity;
-import com.shunlian.app.bean.CorePingEntity;
-import com.shunlian.app.bean.DiscoveryCircleEntity;
-import com.shunlian.app.bean.DiscoveryCommentListEntity;
-import com.shunlian.app.bean.DiscoveryMaterialEntity;
-import com.shunlian.app.bean.DiscoveryNavEntity;
-import com.shunlian.app.bean.DiscoveryTieziEntity;
-import com.shunlian.app.bean.DistrictAllEntity;
-import com.shunlian.app.bean.DistrictGetlocationEntity;
-import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.ExchangDetailEntity;
-import com.shunlian.app.bean.ExperienceEntity;
-import com.shunlian.app.bean.FindCommentListEntity;
-import com.shunlian.app.bean.FindSelectShopEntity;
-import com.shunlian.app.bean.FootprintEntity;
-import com.shunlian.app.bean.GetDataEntity;
-import com.shunlian.app.bean.GetListFilterEntity;
-import com.shunlian.app.bean.GetMenuEntity;
-import com.shunlian.app.bean.GetQrCardEntity;
-import com.shunlian.app.bean.GetRealInfoEntity;
-import com.shunlian.app.bean.GetusernewsnumEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.GuanzhuEntity;
-import com.shunlian.app.bean.HelpClassEntity;
-import com.shunlian.app.bean.HelpSearchEntity;
-import com.shunlian.app.bean.HelpcenterIndexEntity;
-import com.shunlian.app.bean.HelpcenterQuestionEntity;
-import com.shunlian.app.bean.HelpcenterSolutionEntity;
-import com.shunlian.app.bean.HotRdEntity;
-import com.shunlian.app.bean.HotSearchEntity;
-import com.shunlian.app.bean.JoinGoodsEntity;
-import com.shunlian.app.bean.LoginFinishEntity;
-import com.shunlian.app.bean.LogisticsNameEntity;
-import com.shunlian.app.bean.MainPageEntity;
-import com.shunlian.app.bean.MemberCodeListEntity;
-import com.shunlian.app.bean.MyCommentListEntity;
-import com.shunlian.app.bean.MyHomeEntity;
-import com.shunlian.app.bean.MyOrderEntity;
-import com.shunlian.app.bean.MyProfitEntity;
-import com.shunlian.app.bean.OrderLogisticsEntity;
-import com.shunlian.app.bean.OrderdetailEntity;
-import com.shunlian.app.bean.PayListEntity;
-import com.shunlian.app.bean.PayOrderEntity;
-import com.shunlian.app.bean.PersonShopEntity;
-import com.shunlian.app.bean.PersonalDataEntity;
-import com.shunlian.app.bean.PersonalcenterEntity;
-import com.shunlian.app.bean.ProbablyLikeEntity;
-import com.shunlian.app.bean.RankingListEntity;
-import com.shunlian.app.bean.RefreshTokenEntity;
-import com.shunlian.app.bean.RefundDetailEntity;
-import com.shunlian.app.bean.RefundListEntity;
-import com.shunlian.app.bean.RegisterFinishEntity;
-import com.shunlian.app.bean.SaleDataEntity;
-import com.shunlian.app.bean.SaleDetailEntity;
-import com.shunlian.app.bean.SalesChartEntity;
-import com.shunlian.app.bean.SearchGoodsEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
-import com.shunlian.app.bean.SortFragEntity;
-import com.shunlian.app.bean.StoreCategoriesEntity;
-import com.shunlian.app.bean.StoreGoodsListEntity;
-import com.shunlian.app.bean.StoreIndexEntity;
-import com.shunlian.app.bean.StoreIntroduceEntity;
-import com.shunlian.app.bean.StoreLicenseEntity;
-import com.shunlian.app.bean.StoreNewGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
-import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
-import com.shunlian.app.bean.SubmitLogisticsInfoEntity;
-import com.shunlian.app.bean.SystemMsgEntity;
-import com.shunlian.app.bean.TagEntity;
-import com.shunlian.app.bean.UploadPicEntity;
-import com.shunlian.app.bean.UseCommentEntity;
-import com.shunlian.app.bean.UserLoginEntity;
-import com.shunlian.app.bean.VouchercenterplEntity;
-import com.shunlian.app.bean.WXLoginEntity;
-import com.shunlian.app.bean.WeekSaleTopEntity;
+import com.shunlian.app.bean.*;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
@@ -156,6 +53,54 @@ import retrofit2.http.Url;
  */
 
 public interface ApiService {
+    int SC_ACCEPTED = 202;
+    int SC_BAD_GATEWAY = 502;
+    int SC_BAD_REQUEST = 400;
+    int SC_CONFLICT = 409;
+    int SC_CONTINUE = 100;
+    int SC_CREATED = 201;
+    int SC_EXPECTATION_FAILED = 417;
+    int SC_FAILED_DEPENDENCY = 424;
+    int SC_FORBIDDEN = 403;
+    int SC_GATEWAY_TIMEOUT = 504;
+    int SC_GONE = 410;
+    int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
+    int SC_INSUFFICIENT_SPACE_ON_RESOURCE = 419;
+    int SC_INSUFFICIENT_STORAGE = 507;
+    int SC_INTERNAL_SERVER_ERROR = 500;
+    int SC_LENGTH_REQUIRED = 411;
+    int SC_LOCKED = 423;
+    int SC_METHOD_FAILURE = 420;
+    int SC_METHOD_NOT_ALLOWED = 405;
+    int SC_MOVED_PERMANENTLY = 301;
+    int SC_MOVED_TEMPORARILY = 302;
+    int SC_MULTIPLE_CHOICES = 300;
+    int SC_MULTI_STATUS = 207;
+    int SC_NON_AUTHORITATIVE_INFORMATION = 203;
+    int SC_NOT_ACCEPTABLE = 406;
+    int SC_NOT_FOUND = 404;
+    int SC_NOT_IMPLEMENTED = 501;
+    int SC_NOT_MODIFIED = 304;
+    int SC_NO_CONTENT = 204;
+    int SC_OK = 200;
+    int SC_PARTIAL_CONTENT = 206;
+    int SC_PAYMENT_REQUIRED = 402;
+    int SC_PRECONDITION_FAILED = 412;
+    int SC_PROCESSING = 102;
+    int SC_PROXY_AUTHENTICATION_REQUIRED = 407;
+    int SC_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+    int SC_REQUEST_TIMEOUT = 408;
+    int SC_REQUEST_TOO_LONG = 413;
+    int SC_REQUEST_URI_TOO_LONG = 414;
+    int SC_RESET_CONTENT = 205;
+    int SC_SEE_OTHER = 303;
+    int SC_SERVICE_UNAVAILABLE = 503;
+    int SC_SWITCHING_PROTOCOLS = 101;
+    int SC_TEMPORARY_REDIRECT = 307;
+    int SC_UNAUTHORIZED = 401;
+    int SC_UNPROCESSABLE_ENTITY = 422;
+    int SC_UNSUPPORTED_MEDIA_TYPE = 415;
+    int SC_USE_PROXY = 305;
 
     @GET("user/getQrCard")
     Call<BaseEntity<GetQrCardEntity>> userGetQrCard(@QueryMap Map<String, String> map);
@@ -1707,7 +1652,7 @@ public interface ApiService {
     Call<BaseEntity<AmountDetailEntity>> amountDetails(@QueryMap Map<String, String> map);
 
     /**
-     * 余额明细详情
+     * 获取提现账户
      *
      * @return
      */
@@ -2029,5 +1974,27 @@ public interface ApiService {
     @POST("goods/mayBeBuy")
     Call<BaseEntity<ProbablyLikeEntity>> mayBeBuy(@Body RequestBody body);
 
+
+    /**
+     * 闪屏广告
+     * @return
+     */
+    @GET("adpush/splashScreen")
+    Call<BaseEntity<AdEntity>> splashScreen(@QueryMap Map<String, String> map);
+
+    /**
+     * 弹窗广告
+     * @return
+     */
+    @GET("adpush/popup")
+    Call<BaseEntity<AdEntity>> popup(@QueryMap Map<String, String> map);
+
+
+    /**
+     * 弹窗广告
+     * @return
+     */
+    @GET("adpush/updateappcheck")
+    Call<BaseEntity<UpdateEntity>> updateappcheck(@QueryMap Map<String, String> map);
 
 }

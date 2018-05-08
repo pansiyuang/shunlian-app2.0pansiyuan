@@ -106,6 +106,7 @@ public class Common {
     }
 
     public static String transClassName(String toPage) {
+        LogUtil.augusLogW("yyy---"+toPage);
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";

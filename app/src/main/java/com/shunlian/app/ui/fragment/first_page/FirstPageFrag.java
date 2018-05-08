@@ -219,7 +219,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         // 设置Tab标题文字的大小,传入的是sp
         tabs.setTextSize(15);
         // 设置选中Tab文字的颜色
-        tabs.setSelectedTextColor(getColorResouce(R.color.pink_color));
+        tabs.setSelectedTextColor(getColorResouce(R.color.colorAccent));
         //设置正常Tab文字的颜色
         tabs.setTextColor(getColorResouce(R.color.new_text));
 

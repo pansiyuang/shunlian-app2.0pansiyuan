@@ -19,7 +19,7 @@ import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -302,7 +302,7 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (FastClickListener.isFastClick()){
+        if (MyOnClickListener.isFastClick()){
             return;
         }
         switch (v.getId()) {
