@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -105,7 +106,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             TitleViewHolder viewHolder = (TitleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, mStore.store_logo);
             viewHolder.tv_name.setText(mStore.store_name);
-            viewHolder.tv_comment.setText(mStore.praise_rate);
+            viewHolder.tv_comment.setText(mStore.praise_rate + "好评");
             if (!isEmpty(mStore.head_banner)) {
                 GlideUtils.getInstance().loadImage(context, viewHolder.miv_bananer, mStore.head_banner);
                 viewHolder.miv_bananer.setVisibility(View.VISIBLE);
@@ -158,6 +159,8 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
             viewHolder.tv_title.setText(goods.title);
             viewHolder.tv_price.setText(goods.price);
+            String price = getString(R.string.common_yuan) + goods.price;
+            Common.firstSmallText(viewHolder.tv_price, price, 12);
 
             if ("1".equals(goods.free_ship)) {
                 viewHolder.tv_free.setVisibility(View.VISIBLE);

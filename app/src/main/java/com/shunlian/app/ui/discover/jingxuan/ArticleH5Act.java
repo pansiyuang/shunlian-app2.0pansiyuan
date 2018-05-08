@@ -7,15 +7,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.view.IArticleDetailView;
 import com.shunlian.app.widget.MyImageView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -23,7 +28,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/3/19.
  */
 
-public class ArticleH5Act extends H5Act implements IArticleDetailView {
+public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.miv_favorite)
     MyImageView miv_favorite;
@@ -37,7 +42,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
 
     private String articleId;
 
-
+    private MessageCountManager messageCountManager;
     private ArticleDetailPresenter mPresent;
     private int currentFavoriteStatus;
 
@@ -63,10 +68,25 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
     @Override
     protected void initData() {
         super.initData();
+        EventBus.getDefault().register(this);
+        miv_favorite.setVisibility(View.VISIBLE);
+        rl_title_more.setVisibility(View.VISIBLE);
         addJs("praiseBack");
         articleId = mIntent.getStringExtra("articleId");
         mPresent = new ArticleDetailPresenter(this, this);
         mPresent.getArticleDetail(articleId);
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        if (messageCountManager.isLoad()) {
+            messageCountManager.setTextCount(tv_msg_count);
+        } else {
+            messageCountManager.initData();
+        }
+        super.onResume();
     }
 
     @Override
@@ -132,4 +152,24 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView {
     }
 
 
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

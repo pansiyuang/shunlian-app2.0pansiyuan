@@ -33,6 +33,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -400,7 +401,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         chatMember.nickname = store_info.decoration_name;
         chatMember.type = "3";
         chatMember.m_user_id = userId;
-        ChatActivity.startAct(this, chatMember ,mGoodsDeatilEntity);
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember,mGoodsDeatilEntity);
     }
 
 

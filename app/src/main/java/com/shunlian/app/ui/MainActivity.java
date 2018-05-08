@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intent);
     }
 

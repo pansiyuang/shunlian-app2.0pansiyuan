@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 
 /**
@@ -33,13 +35,15 @@ public class NetworkBroadcast extends BroadcastReceiver {
                 updateUIListenner.updateUI(false);
             }
             int netWorkStatus = NetworkUtils.getNetWorkStatus(context);
-            switch (netWorkStatus){
+            switch (netWorkStatus) {
                 case NetworkUtils.NETWORK_CLASS_4_G:
                 case NetworkUtils.NETWORK_CLASS_3_G:
                 case NetworkUtils.NETWORK_CLASS_2_G:
                     Common.staticToast("已切换到4G/3G/2G");
                     break;
             }
+//            LogUtil.httpLogW("网络发生了改变");
+//            EasyWebsocketClient.initWebsocketClient(context);
         }
     }
 

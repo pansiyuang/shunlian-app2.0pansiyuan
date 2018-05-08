@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:text="￥869.5"
                     android:textColor="@color/pink_color"
-                    android:textSize="11.5sp" />
+                    android:textSize="14.5sp" />
 
                 <TextView
                     android:id="@+id/tv_free"

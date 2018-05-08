@@ -282,13 +282,13 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     public void setListMode(int mode) {
         if (mode == MODE_SINGLE) {
             recycle_category.setLayoutManager(linearLayoutManager);
-            miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_yilei));
+            miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_lianglei));
             if (singleAdapter != null) {
                 recycle_category.setAdapter(singleAdapter);
             }
         } else if (mode == MODE_DOUBLE) {
             recycle_category.setLayoutManager(gridLayoutManager);
-            miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_lianglei));
+            miv_change_mode.setImageDrawable(getDrawableResouce(R.mipmap.img_yilei));
             if (doubleAdapter != null) {
                 recycle_category.setAdapter(doubleAdapter);
             }

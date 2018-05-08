@@ -256,12 +256,12 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         mClient.addOnMessageReceiveListener(this);
 
-        //判断网络是否连接  连接使用网络，否则获取数据库
-        if (NetworkUtils.isNetworkOpen(this)) {
-            getHistoryFromNetwork();
-        }
         //获取历史消息
-        getChatHistory(isFirst);
+        if (NetworkUtils.isNetworkOpen(this)) {
+            getChatHistory(isFirst);
+        }
+
+        readedMsg(chat_m_user_Id);
     }
 
     private void initRightTxt() {
@@ -310,8 +310,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected void onResume() {
-        readedMsg(chat_m_user_Id);
-        mClient.setChating(true);
+        if (mClient.getStatus() == Status.CONNECTED) {
+            mClient.setChating(true);
+        }
         super.onResume();
     }
 
@@ -413,30 +414,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     /**
-     * 网络获取历史消息
-     */
-
-    public void getHistoryFromNetwork() {
-//        getHistoryCallBack = new MyHttpUtil.HttpCallback() {
-//            @Override
-//            public void getHistory(Context context, HistoryEntity historyEntity) {
-//                if (historyEntity != null && historyEntity.getData().getMessage_list() != null) {
-//                    final int beforeCount = messages.size();
-//                    chatAdpater.addMsgInfos(0, historyEntity.getData().getMessage_list());
-//                    final int afterCount = messages.size();
-//                    chatAdpater.notifyDataSetChanged();
-//                    lv_chat.setSelection(afterCount - beforeCount);
-//                }
-//                super.getHistory(context, historyEntity);
-//            }
-//        };
-//        if ("sys_link".equals(getLastMessageId())) {
-//            return;
-//        }
-//        MyHttpUtil.getHistoryMessage(this, getLastMessageId(), chatUserId, true, getHistoryCallBack);
-    }
-
-    /**
      * 发送文字消息
      */
     private void sendTextMessage(String msg) {
@@ -522,7 +499,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
      * 发送图片消息
      */
     private void sendImgMessage(ImageMessage imageMessage) {
-        mClient.send(mAdapter.msg2Str(imageMessage));
+        if (mClient.getStatus() == Status.CONNECTED) {
+            mClient.send(mAdapter.msg2Str(imageMessage));
+        }
     }
 
     /**
@@ -603,6 +582,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             mAdapter.addMsgInfo(msgInfo);
         }
     }
+
     /**
      * 构建一条商品消息
      */

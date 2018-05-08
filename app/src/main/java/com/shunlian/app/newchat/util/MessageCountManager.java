@@ -172,6 +172,9 @@ public class MessageCountManager implements IMessageCountView {
     }
 
     public void setTextCount(TextView textView) {
+        if (textView == null) {
+            return;
+        }
         if (getAll_msg() > 0) {
             textView.setVisibility(View.VISIBLE);
         }
