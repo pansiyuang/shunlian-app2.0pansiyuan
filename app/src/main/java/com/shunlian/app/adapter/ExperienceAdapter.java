@@ -28,7 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.utils.FastClickListener.isFastClick;
+import static com.shunlian.app.utils.MyOnClickListener.isFastClick;
 
 /**
  * Created by Administrator on 2018/3/16.

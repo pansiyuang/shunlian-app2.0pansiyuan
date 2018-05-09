@@ -169,7 +169,8 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @Override
     protected void onResume() {
         if(messageCountManager.isLoad()){
-            messageCountManager.setTextCount(mtv_toolbar_msgCount);
+            String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+            quick_actions.setMessageCount(s);
         }else{
             messageCountManager.initData();
         }
@@ -458,12 +459,14 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -22,13 +23,12 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.broadcast.NetDialog;
 import com.shunlian.app.broadcast.NetworkBroadcast;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -208,13 +208,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             networkBroadcast = new NetworkBroadcast();
             registerReceiver(networkBroadcast, filter);
-            networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
-
-                @Override
-                public void updateUI(boolean isShow) {
-                    showPopup(isShow);
-                }
-            });
+            networkBroadcast.setOnUpdateUIListenner(isShow ->showPopup(isShow));
         }
     }
 
@@ -231,14 +225,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void finishAct() {
+    protected void finishAct() {
         View byId = ButterKnife.findById(this, R.id.miv_close);
         if (byId != null) {
             TransformUtil.expandViewTouchDelegate(byId, 50, 50, 50, 50);
-            byId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+            byId.setOnClickListener(v ->  {
+                    if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.
+                            transClassName(Constant.JPUSH.get(0)))){
                         MainActivity.startAct(getBaseContext(),"");
                     }
                     InputMethodManager imm = (InputMethodManager)
@@ -247,7 +240,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
                     finish();
-                }
             });
         }
     }
@@ -303,8 +295,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         extraHeaders.put("Accept-Encoding", "gzip,deflate");
         extraHeaders.put("Content-Type", "application/json");
         extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
-        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
-        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
         extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
         return extraHeaders;
     }
@@ -507,9 +497,25 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
     @Override
     public void onClick(View view) {
-        if (FastClickListener.isFastClick()) {
+        if (MyOnClickListener.isFastClick()) {
             return;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+            MainActivity.startAct(getBaseContext(),"");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void finish() {
+        if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){
+            MainActivity.startAct(getBaseContext(),"");
+        }
+        super.finish();
     }
 
     @Override

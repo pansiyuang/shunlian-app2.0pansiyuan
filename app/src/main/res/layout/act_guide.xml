@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_start"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@color/transparent"
+        android:visibility="gone" />
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_point_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"></com.shunlian.app.widget.MyLinearLayout>
+
+        <View
+            android:id="@+id/view_point"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@drawable/point_guide" />
+    </com.shunlian.app.widget.MyRelativeLayout>
+
+</com.shunlian.app.widget.MyRelativeLayout>

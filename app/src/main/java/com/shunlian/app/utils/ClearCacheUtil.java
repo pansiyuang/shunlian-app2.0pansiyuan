@@ -25,18 +25,19 @@ public class ClearCacheUtil extends AsyncTask<Void, Void, Integer> {
      */
     @Override
     protected Integer doInBackground(Void... voids) {
-        executeClear();
+        executeClear(Constant.CACHE_PATH_EXTERNAL);
         return 1000;
     }
 
-    private void executeClear() {
-        File file = new File(Constant.CACHE_PATH_EXTERNAL);
+    private void executeClear(String path) {
+        File file = new File(path);
         if (file.exists()) {
-            if (file.isDirectory()) {
-                File[] files = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    files[i].delete();
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()){
+                    executeClear(files[i].getAbsolutePath());
                 }
+                files[i].delete();
             }
         }
     }

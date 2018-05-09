@@ -2,12 +2,12 @@ package com.shunlian.app.ui.confirm_order;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.support.design.widget.TabLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.fragment.RecommendFrag;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMegerView;
 import com.shunlian.app.widget.MyImageView;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.shunlian.app.App.getContext;
 
@@ -66,6 +68,9 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     @BindView(R.id.tv_to_shopcar)
     TextView tv_to_shopcar;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     public MegerPresenter megerPresenter;
     private String currentNeedId;
     private GoodsDeatilEntity.Goods currentGoods;
@@ -100,6 +105,12 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     protected void initListener() {
         tv_to_shopcar.setOnClickListener(this);
         super.initListener();
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.afterSale();
     }
 
     @Override
@@ -248,5 +259,12 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }

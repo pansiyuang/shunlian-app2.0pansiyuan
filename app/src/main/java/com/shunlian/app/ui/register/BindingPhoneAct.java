@@ -15,7 +15,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
@@ -183,7 +183,7 @@ public class BindingPhoneAct extends BaseActivity implements IRegisterOneView, V
 
     @Override
     public void onClick(View v) {
-        if (FastClickListener.isFastClick()){
+        if (MyOnClickListener.isFastClick()){
             return;
         }
         switch (v.getId()) {

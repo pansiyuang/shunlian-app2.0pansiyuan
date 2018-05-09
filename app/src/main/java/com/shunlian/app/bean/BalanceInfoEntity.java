@@ -18,6 +18,8 @@ public class BalanceInfoEntity implements Serializable{
     public String quota;
     public String total;
     public String mobile;
+    public String rate;
+    public String rate_name;
     public String account_number;
     public boolean havePayAccount;
     public boolean is_set_password;

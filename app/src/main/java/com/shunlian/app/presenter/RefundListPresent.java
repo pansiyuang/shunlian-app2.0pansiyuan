@@ -2,11 +2,14 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
+import com.shunlian.app.adapter.RefundAfterSaleAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.view.IRefundListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,9 @@ import retrofit2.Call;
 public class RefundListPresent extends BasePresenter<IRefundListView> {
 
     public static final int PAGE_SIZE = 10;
+    private RefundAfterSaleAdapter afterSaleAdapter;
+    private List<RefundListEntity.RefundList> refundLists = new ArrayList<>();
+
 
     public RefundListPresent(Context context, IRefundListView iView) {
         super(context, iView);
@@ -62,10 +68,13 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 RefundListEntity data = entity.data;
-                List<RefundListEntity.RefundList> refund_list = data.refund_list;
                 currentPage = Integer.parseInt(data.page);
                 allPage = Integer.parseInt(data.total_page);
-                iView.refundList(refund_list,currentPage,allPage);
+                if (!isEmpty(data.refund_list)){
+                    refundLists.addAll(data.refund_list);
+                }
+                setAdapter();
+                currentPage++;
             }
 
             @Override
@@ -76,13 +85,34 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
         });
     }
 
+    private void setAdapter() {
+        if (afterSaleAdapter == null) {
+            afterSaleAdapter = new RefundAfterSaleAdapter(context, true, refundLists);
+            iView.setAdapter(afterSaleAdapter);
+            afterSaleAdapter.setPageLoading(currentPage,allPage);
+            afterSaleAdapter.setOnItemClickListener((view,position)->
+                    ExchangeDetailAct.startAct(context,refundLists.get(position).refund_id));
+        }else {
+            if (refundLists.size() <= RefundListPresent.PAGE_SIZE){
+                afterSaleAdapter.notifyDataSetChanged();
+            }else {
+                afterSaleAdapter.notifyItemInserted(RefundListPresent.PAGE_SIZE);
+            }
+            afterSaleAdapter.setPageLoading(currentPage,allPage);
+        }
+
+        if (!isEmpty(refundLists))
+            iView.showDataEmptyView(0);
+        else
+            iView.showDataEmptyView(100);
+    }
+
     @Override
     public void onRefresh() {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
             if (currentPage < allPage){
-                currentPage ++;
                 refundlist(false);
             }
         }

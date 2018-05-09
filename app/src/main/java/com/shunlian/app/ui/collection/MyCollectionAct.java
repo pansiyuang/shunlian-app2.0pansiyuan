@@ -110,23 +110,27 @@ public class MyCollectionAct extends BaseActivity {
         new_text = getColorResouce(R.color.new_text);
         color_value_6c = getColorResouce(R.color.color_value_6c);
         fragments = new HashMap<>();
-        showSataus(0);
         String flag = getIntent().getStringExtra("flag");
         switch (flag == null ? "" : flag){
             case GOODS_FLAG:
                 goodsFrag();
+                showSataus(0);
                 break;
             case STORE_FLAG:
                 storeFrag();
+                showSataus(1);
                 break;
             case FOOTPRINT_FLAG:
                 footprintFrag();
+                showSataus(2);
                 break;
             case CONTENT_FLAG:
                 contentFrag();
+                showSataus(3);
                 break;
             default:
                 goodsFrag();
+                showSataus(0);
                 break;
         }
     }

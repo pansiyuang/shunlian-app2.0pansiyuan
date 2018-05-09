@@ -16,7 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ExchangeDetailView;
@@ -186,7 +186,8 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_msg_count);
+            String s = messageCountManager.setTextCount(tv_msg_count);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -219,7 +220,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (FastClickListener.isFastClick()) {
+        if (MyOnClickListener.isFastClick()) {
             return;
         }
         CharSequence text = null;
@@ -386,12 +387,14 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

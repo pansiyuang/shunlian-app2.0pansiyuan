@@ -8,13 +8,17 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
+import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.view.IBalanceMain;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
-public class BalanceResultAct extends BaseActivity implements View.OnClickListener{
+public class BalanceResultAct extends BaseActivity implements View.OnClickListener, IBalanceMain {
     @BindView(R.id.mtv_finish)
     MyTextView mtv_finish;
 
@@ -24,6 +28,11 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
     @BindView(R.id.mtv_amount)
     MyTextView mtv_amount;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+    private PBalanceMain pBalanceMain;
+    private BalanceInfoEntity data;
 
     public static void startAct(Context context,String amount,String account,String accountType) {
         Intent intent = new Intent(context, BalanceResultAct.class);
@@ -43,6 +52,9 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_finish:
+            case R.id.miv_close:
+                if (data != null)
+                    BalanceXQAct.startAct(getBaseContext(), data,true);
                 finish();
                 break;
         }
@@ -52,15 +64,36 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
     protected void initListener() {
         super.initListener();
         mtv_finish.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        BalanceXQAct.startAct(getBaseContext(), data,true);
+    }
     @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         GradientDrawable copyBackground = (GradientDrawable) mtv_finish.getBackground();
         copyBackground.setColor(getColorResouce(R.color.pink_color));
-        mtv_account.setText(getIntent().getStringExtra("accountType")+getIntent().getStringExtra("account"));
+        mtv_account.setText(getIntent().getStringExtra("accountType")+"("+getIntent().getStringExtra("account")+")");
         mtv_amount.setText(getIntent().getStringExtra("amount"));
+        pBalanceMain = new PBalanceMain(this, this);
+    }
+
+    @Override
+    public void setApiData(BalanceInfoEntity data) {
+        this.data=data;
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

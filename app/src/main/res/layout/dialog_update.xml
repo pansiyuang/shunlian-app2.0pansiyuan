@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="298dp"
+    android:layout_height="wrap_content">
+
+    <com.shunlian.app.widget.MyImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@mipmap/img_gengxin" />
+
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/bg_dialog_bottoms"
+        android:orientation="vertical">
+
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="12"
+            android:padding="20dp"
+            android:scrollbars="vertical"
+            android:ellipsize="marquee"
+            android:textColor="@color/new_text"
+            android:textSize="15sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_update"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/bg_common_round_nobord"
+            android:gravity="center"
+            android:text="@string/first_lijigengxin"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="22dp"
+            android:text="@string/first_shaohougengxin"
+            android:textColor="@color/value_979FA3"
+            android:textSize="14sp" />
+    </com.shunlian.app.widget.MyLinearLayout>
+</com.shunlian.app.widget.MyRelativeLayout>

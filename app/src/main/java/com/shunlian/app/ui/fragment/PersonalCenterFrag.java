@@ -151,6 +151,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.mllayout_daishouhuo)
     MyLinearLayout mllayout_daishouhuo;
 
+    @BindView(R.id.mllayout_paihang)
+    MyLinearLayout mllayout_paihang;
+
     @BindView(R.id.mllayout_daifahuo)
     MyLinearLayout mllayout_daifahuo;
 
@@ -189,6 +192,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @BindView(R.id.mllayout_yue)
     MyLinearLayout mllayout_yue;
+
+    @BindView(R.id.mllayout_mid)
+    MyLinearLayout mllayout_mid;
 
     @BindView(R.id.mllayout_youhuiquan)
     MyLinearLayout mllayout_youhuiquan;
@@ -232,6 +238,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @BindView(R.id.rLayout_title)
     MyRelativeLayout rLayout_title;
+
+    @BindView(R.id.mrlayout_paihang)
+    MyRelativeLayout mrlayout_paihang;
 
     private PersonalcenterPresenter personalcenterPresenter;
     private HelpArticleAdapter helpArticleAdapter;
@@ -461,49 +470,75 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         miv_equals.setVisibility(View.INVISIBLE);
         mtv_equals.setVisibility(View.INVISIBLE);
         mtv_mids.setTextColor(getColorResouce(R.color.new_text));
+        mrlayout_paihang.setVisibility(View.VISIBLE);
+        mllayout_paihang.setVisibility(View.VISIBLE);
+        mlLayout_member.setVisibility(View.GONE);
+        mllayout_mid.setVisibility(View.GONE);
 
-        if (personalcenterEntity.sl_user_ranks!=null&&personalcenterEntity.sl_user_ranks.size()>2){
-            mlLayout_member.setVisibility(View.VISIBLE);
-            if (personalcenterEntity.sl_user_ranks.get(0) != null) {
-                mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
-                mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-                GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+        if (personalcenterEntity.sl_user_ranks!=null){
+            switch (personalcenterEntity.sl_user_ranks.size()){
+                case 1:
+                    if (personalcenterEntity.sl_user_ranks.get(0) != null) {
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
+                            miv_equal.setVisibility(View.VISIBLE);
+                            mtv_equal.setVisibility(View.VISIBLE);
+                            mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
+                        }
+                        mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
+                        mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                    }
+                    break;
+                case 2:
+                    mllayout_mid.setVisibility(View.VISIBLE);
+                    if (personalcenterEntity.sl_user_ranks.get(0) != null) {
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
+                            miv_equal.setVisibility(View.VISIBLE);
+                            mtv_equal.setVisibility(View.VISIBLE);
+                            mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
+                        }
+                        mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
+                        mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                    }
+                    if (personalcenterEntity.sl_user_ranks.get(1) != null) {
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)){
+                            miv_equals.setVisibility(View.VISIBLE);
+                            mtv_equals.setVisibility(View.VISIBLE);
+                            mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
+                        }
+                        mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
+                        mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+                    }
+                    break;
+                case 3:
+                    mllayout_mid.setVisibility(View.VISIBLE);
+                    mlLayout_member.setVisibility(View.VISIBLE);
+                    if (personalcenterEntity.sl_user_ranks.get(0) != null) {
+                        mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
+                        mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                    }
+                    if (personalcenterEntity.sl_user_ranks.get(1) != null) {
+                        miv_equals.setVisibility(View.VISIBLE);
+                        mtv_equals.setVisibility(View.VISIBLE);
+                        mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
+                        mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
+                        mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+                    }
+                    if (personalcenterEntity.sl_user_ranks.get(2) != null) {
+                        mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
+                        mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).sale);
+                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
+                    }
+                    break;
+                default:
+                    mrlayout_paihang.setVisibility(View.GONE);
+                    mllayout_paihang.setVisibility(View.GONE);
+                    break;
             }
-            if (personalcenterEntity.sl_user_ranks.get(1) != null) {
-                miv_equals.setVisibility(View.VISIBLE);
-                mtv_equals.setVisibility(View.VISIBLE);
-                mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
-                mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
-                mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
-                GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
-            }
-            if (personalcenterEntity.sl_user_ranks.get(2) != null) {
-                mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
-                mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).sale);
-                GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
-            }
-        }else {
-            mlLayout_member.setVisibility(View.GONE);
-//            if (personalcenterEntity.sl_user_ranks.get(0) != null) {
-//                if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
-//                    miv_equal.setVisibility(View.VISIBLE);
-//                    mtv_equal.setVisibility(View.VISIBLE);
-//                    mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
-//                }
-//                mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
-//                mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-//                GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
-//            }
-//            if (personalcenterEntity.sl_user_ranks.get(1) != null) {
-//                if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)){
-//                    miv_equals.setVisibility(View.VISIBLE);
-//                    mtv_equals.setVisibility(View.VISIBLE);
-//                    mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
-//                }
-//                mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
-//                mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
-//                GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
-//            }
         }
         if (helpArticleAdapter==null){
             helpArticleAdapter = new HelpArticleAdapter(getContext(), false, personalcenterEntity.article);

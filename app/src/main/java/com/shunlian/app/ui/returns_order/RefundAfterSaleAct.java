@@ -8,16 +8,11 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.adapter.RefundAfterSaleAdapter;
-import com.shunlian.app.bean.RefundListEntity;
 import com.shunlian.app.presenter.RefundListPresent;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IRefundListView;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,11 +29,11 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     private RefundListPresent refundListPresent;
     private LinearLayoutManager manager;
-    private RefundAfterSaleAdapter afterSaleAdapter;
-    private List<RefundListEntity.RefundList> refundLists = new ArrayList<>();
-
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,RefundAfterSaleAct.class));
@@ -100,7 +95,11 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
      */
     @Override
     public void showFailureView(int request_code) {
-
+        nei_empty.setNetExecption().setOnClickListener(v ->  {
+            if (refundListPresent != null) {
+                refundListPresent.onRefresh();
+            }
+        });
     }
 
     /**
@@ -110,32 +109,14 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
      */
     @Override
     public void showDataEmptyView(int request_code) {
-
-    }
-
-    @Override
-    public void refundList(List<RefundListEntity.RefundList> refundList, int page, int allPage) {
-        if (!isEmpty(refundList)){
-            this.refundLists.addAll(refundList);
-        }
-        if (afterSaleAdapter == null) {
-            afterSaleAdapter = new RefundAfterSaleAdapter(this, true, refundLists);
-            recy_view.setAdapter(afterSaleAdapter);
-            afterSaleAdapter.setPageLoading(page,allPage);
-            afterSaleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    ExchangeDetailAct.startAct(RefundAfterSaleAct.this, refundLists.get(position).refund_id);
-                }
-            });
+        if (request_code == 100){
+            gone(recy_view);
+            visible(nei_empty);
+            nei_empty.setImageResource(R.mipmap.img_empty_dingdan)
+                    .setText(getString(R.string.no_order_info)).setButtonText("");
         }else {
-            if (refundList.size() <= RefundListPresent.PAGE_SIZE){
-                afterSaleAdapter.notifyDataSetChanged();
-            }else {
-                afterSaleAdapter.notifyItemInserted(RefundListPresent.PAGE_SIZE);
-            }
-
-            afterSaleAdapter.setPageLoading(page,allPage);
+            visible(recy_view);
+            gone(nei_empty);
         }
     }
 
@@ -144,5 +125,10 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView 
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         super.onDestroy();
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
     }
 }

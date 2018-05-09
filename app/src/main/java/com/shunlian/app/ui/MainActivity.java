@@ -1,5 +1,6 @@
 package com.shunlian.app.ui;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
+import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
@@ -22,9 +26,14 @@ import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.UpdateUtil;
+import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.UpdateDialog;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,60 +42,42 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, MessageCountManager.OnGetMessageListener {
-    @BindView(R.id.fl_main)
-    MyFrameLayout fl_main;
-
-    @BindView(R.id.ll_tab_main_page)
-    LinearLayout ll_tab_main_page;
-
-    @BindView(R.id.miv_tab_main)
-    MyImageView miv_tab_main;
-
-    @BindView(R.id.tv_tab_main)
-    TextView tv_tab_main;
-
-    @BindView(R.id.ll_tab_sort)
-    LinearLayout ll_tab_sort;
-
-    @BindView(R.id.miv_tab_sort)
-    MyImageView miv_tab_sort;
-
-    @BindView(R.id.tv_tab_sort)
-    TextView tv_tab_sort;
-
-    @BindView(R.id.ll_tab_discover)
-    LinearLayout ll_tab_discover;
-
-    @BindView(R.id.miv_tab_discover)
-    MyImageView miv_tab_discover;
-
-    @BindView(R.id.tv_tab_discover)
-    TextView tv_tab_discover;
-
-    @BindView(R.id.ll_tab_shopping_car)
-    LinearLayout ll_tab_shopping_car;
-
-    @BindView(R.id.miv_shopping_car)
-    MyImageView miv_shopping_car;
-
-    @BindView(R.id.tv_shopping_car)
-    TextView tv_shopping_car;
-
-    @BindView(R.id.ll_tab_person_center)
-    LinearLayout ll_tab_person_center;
-
-    @BindView(R.id.miv_person_center)
-    MyImageView miv_person_center;
-
-    @BindView(R.id.tv_person_center)
-    TextView tv_person_center;
-
-
+public class MainActivity extends BaseActivity implements View.OnClickListener, MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
-
-//    private MainPageFrag mainPageFrag;
+    @BindView(R.id.fl_main)
+    MyFrameLayout fl_main;
+    @BindView(R.id.ll_tab_main_page)
+    LinearLayout ll_tab_main_page;
+    @BindView(R.id.miv_tab_main)
+    MyImageView miv_tab_main;
+    @BindView(R.id.tv_tab_main)
+    TextView tv_tab_main;
+    @BindView(R.id.ll_tab_sort)
+    LinearLayout ll_tab_sort;
+    @BindView(R.id.miv_tab_sort)
+    MyImageView miv_tab_sort;
+    @BindView(R.id.tv_tab_sort)
+    TextView tv_tab_sort;
+    @BindView(R.id.ll_tab_discover)
+    LinearLayout ll_tab_discover;
+    @BindView(R.id.miv_tab_discover)
+    MyImageView miv_tab_discover;
+    @BindView(R.id.tv_tab_discover)
+    TextView tv_tab_discover;
+    @BindView(R.id.ll_tab_shopping_car)
+    LinearLayout ll_tab_shopping_car;
+    @BindView(R.id.miv_shopping_car)
+    MyImageView miv_shopping_car;
+    @BindView(R.id.tv_shopping_car)
+    TextView tv_shopping_car;
+    @BindView(R.id.ll_tab_person_center)
+    LinearLayout ll_tab_person_center;
+    @BindView(R.id.miv_person_center)
+    MyImageView miv_person_center;
+    @BindView(R.id.tv_person_center)
+    TextView tv_person_center;
+    //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
     private SortFrag sortFrag;
     private DiscoverFrag discoverFrag;
@@ -97,7 +88,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
+    private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
+    private PMain pMain;
+    private UpdateDialog updateDialog;//判断是否需要跟新
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -130,6 +124,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             messageCountManager = MessageCountManager.getInstance(this);
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);
+        }
+        if (pMain==null){
+            pMain=new PMain(this,this);
+            pMain.getPopAD();
         }
     }
 
@@ -370,6 +368,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onDestroy() {
+        if (updateDialog != null) {
+            if (updateDialog.updateDialog != null) {
+                updateDialog.updateDialog.dismiss();
+            }
+            PromptDialog promptDialog = updateDialog.getPromptDialog();
+            if (promptDialog != null) {
+                promptDialog.dismiss();
+                promptDialog = null;
+            }
+        }
         super.onDestroy();
     }
 
@@ -382,5 +390,54 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void OnLoadFail() {
         //可以开始设置消息数量的数据了
+    }
+
+    public void initDialog(AdEntity data) {
+        if (dialog_ad == null) {
+            dialog_ad = new Dialog(this, R.style.popAd);
+            dialog_ad.setContentView(R.layout.dialog_ad);
+            MyImageView miv_close = (MyImageView) dialog_ad.findViewById(R.id.miv_close);
+            MyImageView miv_photo = (MyImageView) dialog_ad.findViewById(R.id.miv_photo);
+            MyImageView miv_button = (MyImageView) dialog_ad.findViewById(R.id.miv_button);
+            GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.list.ad_img);
+            GlideUtils.getInstance().loadImage(getBaseContext(), miv_button, data.list.button);
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog_ad.dismiss();
+                }
+            });
+            miv_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Common.goGoGo(getBaseContext(), data.list.link.type, data.list.link.item_id);
+                    dialog_ad.dismiss();
+                }
+            });
+            dialog_ad.setCancelable(false);
+        }
+        dialog_ad.show();
+    }
+
+    @Override
+    public void setAD(AdEntity data) {
+        if ("1".equals(data.show)){
+            initDialog(data);
+        }
+    }
+
+    @Override
+    public void setUpdateInfo(UpdateEntity data) {
+        updateDialog = new UpdateDialog(this);
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

@@ -630,7 +630,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     @Override
     public void onClick(View v) {
-//        if (FastClickListener.isClickable(this)){
+//        if (MyOnClickListener.isClickable(this)){
 //            return;
 //        }
         switch (v.getId()){

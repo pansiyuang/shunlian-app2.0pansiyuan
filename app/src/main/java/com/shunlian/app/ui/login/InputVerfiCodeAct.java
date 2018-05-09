@@ -16,7 +16,7 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
@@ -120,7 +120,7 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (FastClickListener.isFastClick()) {
+        if (MyOnClickListener.isFastClick()) {
             return;
         }
         switch (view.getId()) {

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ConsultHistoryAdapter;
@@ -102,7 +101,8 @@ public class ConsultHistoryAct extends BaseActivity implements IConsultHistoryVi
     @Override
     protected void onResume() {
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_msg_count);
+            String s = messageCountManager.setTextCount(tv_msg_count);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -152,12 +152,14 @@ public class ConsultHistoryAct extends BaseActivity implements IConsultHistoryVi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

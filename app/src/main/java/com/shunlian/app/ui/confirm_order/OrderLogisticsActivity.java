@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderLogisticsPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ITraceView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/12/14.
@@ -42,6 +43,9 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
 
     @BindView(R.id.tv_title)
     TextView tv_title;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public OrderLogisticsPresenter orderLogisticsPresenter;
     public TraceAdapter traceAdapter;
@@ -74,6 +78,12 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
         }
     }
 
+    @OnClick(R.id.rl_title_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.order();
+    }
+
     @Override
     public void showFailureView(int request_code) {
 
@@ -89,7 +99,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_title_number);
+            String s = messageCountManager.setTextCount(tv_title_number);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -98,7 +109,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_title_number);
+        String s = messageCountManager.setTextCount(tv_title_number);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -115,7 +127,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_title_number);
+        String s = messageCountManager.setTextCount(tv_title_number);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -125,6 +138,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

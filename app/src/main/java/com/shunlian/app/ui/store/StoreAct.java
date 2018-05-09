@@ -31,7 +31,6 @@ import com.shunlian.app.bean.StorePromotionGoodsListOneEntity;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;
@@ -317,7 +316,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void onResume() {
         if(messageCountManager.isLoad()){
-            messageCountManager.setTextCount(mtv_msg_count);
+            String s = messageCountManager.setTextCount(mtv_msg_count);
+            quick_actions.setMessageCount(s);
         }else{
             messageCountManager.initData();
         }
@@ -326,7 +326,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(mtv_msg_count);
+        String s = messageCountManager.setTextCount(mtv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     public void storeMenu(View v) {
@@ -559,7 +560,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void storeHeader(StoreIndexEntity.Head head) {
         GlideUtils.getInstance().loadImage(this, miv_storeLogo, head.decoration_logo);
-        GlideUtils.getInstance().loadImageWithView(this, mrlayout_bg, head.decoration_banner);
+        GlideUtils.getInstance().loadBgImage(this, mrlayout_bg, head.decoration_banner);
         if ("false".equals(head.is_mark)) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
@@ -709,7 +710,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(mtv_msg_count);
+        String s = messageCountManager.setTextCount(mtv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

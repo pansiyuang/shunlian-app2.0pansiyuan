@@ -10,7 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public class ContactsAdapter extends BaseRecyclerAdapter<GetListFilterEntity.Bra
         viewHolder.mtv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (FastClickListener.isFastClick()) {
+                if (MyOnClickListener.isFastClick()) {
                     return;
                 }
                 if (Constant.BRAND_IDS.size() > 0) {

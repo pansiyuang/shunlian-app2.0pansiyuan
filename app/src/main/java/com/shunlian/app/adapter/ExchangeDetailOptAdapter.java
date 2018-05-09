@@ -15,7 +15,7 @@ import com.shunlian.app.ui.order.PlatformInterventionRequestActivity;
 import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
-import com.shunlian.app.utils.FastClickListener;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyTextView;
@@ -70,7 +70,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
         mHolder.mtv_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (FastClickListener.isFastClick()) {
+                if (MyOnClickListener.isFastClick()) {
                     return;
                 }
                 switch (opt.code){

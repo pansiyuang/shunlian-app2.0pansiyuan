@@ -21,6 +21,7 @@ import com.shunlian.app.presenter.SearchOrderResultPresent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISearchResultView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -54,6 +55,9 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
 
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private SearchOrderResultPresent mPresenter;
     private String currentKeyword;
@@ -91,6 +95,12 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
         recy_view.setNestedScrollingEnabled(false);
     }
 
+    @OnClick(R.id.rl_title_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.order();
+    }
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -123,7 +133,8 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
         }
 
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_title_number);
+            String s = messageCountManager.setTextCount(tv_title_number);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -329,19 +340,23 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_title_number);
+        String s = messageCountManager.setTextCount(tv_title_number);
+        quick_actions.setMessageCount(s);
     }
 
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_title_number);
+        String s = messageCountManager.setTextCount(tv_title_number);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

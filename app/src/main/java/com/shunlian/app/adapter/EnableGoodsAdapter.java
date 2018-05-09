@@ -3,7 +3,6 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,7 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.utils.FastClickListener.isFastClick;
+import static com.shunlian.app.utils.MyOnClickListener.isFastClick;
 
 /**
  * Created by Administrator on 2017/11/20.

@@ -3,16 +3,11 @@ package com.shunlian.app.ui.help;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.ClassDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IClassDetailView;
-
-import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/5/4.
@@ -20,14 +15,7 @@ import butterknife.BindView;
 
 public class ClassDetailAct extends H5Act implements IClassDetailView{
 
-    @BindView(R.id.rl_title_more)
-    RelativeLayout rl_title_more;
 
-    @BindView(R.id.tv_msg_count)
-    TextView tv_msg_count;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
     private ClassDetailPresenter mPresenter;
 
 
@@ -88,12 +76,5 @@ public class ClassDetailAct extends H5Act implements IClassDetailView{
                     quick_actions.shareInfo(mPresenter.getShareInfoParam());
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        super.onDestroy();
     }
 }

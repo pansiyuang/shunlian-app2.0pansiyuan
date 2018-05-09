@@ -45,6 +45,7 @@ public class App extends Application {
     private ActivityHelper mActivityHelper;
     private static Context context;
     public static String CACHE_PATH;
+    public static String DOWNLOAD_PATH;
 
     public static ActivityHelper getActivityHelper() {
         return mApp.mActivityHelper;
@@ -80,10 +81,15 @@ public class App extends Application {
 
         if (Common.hasSD() && Common.getSDFreeSize() > 1024 * 1024) {
             CACHE_PATH = Constant.CACHE_PATH_EXTERNAL;
+            DOWNLOAD_PATH = Constant.DOWNLOAD_PATH_EXTERNAL;
             try {
                 File dirs = new File(App.CACHE_PATH);
                 if (!dirs.exists()) {
                     dirs.mkdirs();
+                }
+                File dirss = new File(App.DOWNLOAD_PATH);
+                if (!dirss.exists()) {
+                    dirss.mkdirs();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,6 +97,7 @@ public class App extends Application {
 
         } else if (Common.getMemoryFreeSize(this) > 1024 * 1024) {
             CACHE_PATH = this.getCacheDir().getPath();
+            DOWNLOAD_PATH = this.getCacheDir().getPath();
         }
         initJPush();
     }
