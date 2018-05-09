@@ -69,9 +69,9 @@ public class AlipayMyAct extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.mtv_tianjiazhi:
                 if (isPaySet){
-                    BalanceVerifyPhoneAct.startAct(this,true);
+                    BalanceVerifyPhoneAct.startAct(this,true,true);
                 }else {
-                    BalancePaySetTwoAct.startAct(this, "", "bindPay", "",false);
+                    BalancePaySetTwoAct.startAct(this, "", "bindPay", "",false,true);
                 }
                 break;
         }

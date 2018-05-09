@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
@@ -59,6 +60,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.mllayout_title)
     MyLinearLayout mllayout_title;
     private PFirstPage pFirstPage;
+    private String logoType,logoId;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -153,7 +155,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.miv_photo:
-
+                Common.goGoGo(getContext(),logoType,logoId);
                 break;
         }
 
@@ -164,6 +166,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (getMenuEntiy == null){
             return;
         }
+        logoType=getMenuEntiy.logo.type;
+        logoId=getMenuEntiy.logo.item_id;
         GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
         ArrayList<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {

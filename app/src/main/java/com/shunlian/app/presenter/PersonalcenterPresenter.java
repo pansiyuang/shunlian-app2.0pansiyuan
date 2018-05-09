@@ -40,7 +40,7 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
 
     }
     /**
-     * 移除收藏
+     *
      * @param
      */
     public void getApiData(){

@@ -51,9 +51,10 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
     private GradientDrawable background;
     private boolean isAgree = false;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,boolean isAli) {
         Intent intent = new Intent(context, AlipayAddAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("isAli",isAli);
         context.startActivity(intent);
     }
 
@@ -123,6 +124,7 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
                 getStringResouce(R.string.balance_yonghuxieyi), getColorResouce(R.color.pink_color));
         mtv_xieyi.setText(titleBuilder);
         background = (GradientDrawable) mtv_next.getBackground();
+        background.setColor(getColorResouce(R.color.color_value_6c));
         mtv_next.setClickable(false);
         mtv_phone.setText(Constant.MOBILE);
         pBalancePaySetOne = new PBalancePaySetOne(this, this);
@@ -154,7 +156,11 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void bindAlipayCall(String account_number) {
-        AlipayMyAct.startAct(this,true,true,false,account_number);
+        if (getIntent().getBooleanExtra("isAli",false)){
+            AlipayMyAct.startAct(this,true,true,true,account_number);
+        }else {
+            BalanceTXAct.startAct(this);
+        }
     }
 
     @Override

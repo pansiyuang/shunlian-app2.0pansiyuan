@@ -115,6 +115,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     @Override
     protected void initData() {
+        if (pMain==null){
+            pMain=new PMain(this,this);
+            pMain.getPopAD();
+        }
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
 
@@ -124,10 +128,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             messageCountManager = MessageCountManager.getInstance(this);
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);
-        }
-        if (pMain==null){
-            pMain=new PMain(this,this);
-            pMain.getPopAD();
         }
     }
 

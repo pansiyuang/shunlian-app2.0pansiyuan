@@ -34,6 +34,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     NestedRefreshLoadMoreLayout lay_refresh;
     @BindView(R.id.rv_view)
     RecyclerView rv_view;
+//    @BindView(R.id.mtv_empty)
+//    MyTextView mtv_empty;
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
@@ -125,14 +127,26 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setContent(GetDataEntity getDataEntity) {
-        lay_refresh.setRefreshing(false);
-        mDatass.clear();
-        mDatass.addAll(getDataEntity.datas);
+//        if (getDataEntity.datas!=null&&getDataEntity.datas.size()>0){
+////            mtv_empty.setVisibility(View.GONE);
+////            rv_view.setVisibility(View.VISIBLE);
+//            mtv_empty.setVisibility(View.VISIBLE);
+//            rv_view.setVisibility(View.GONE);
+            lay_refresh.setRefreshing(false);
+            mDatass.clear();
+            mDatass.addAll(getDataEntity.datas);
 //        if (firstPageAdapter==null){
-        firstPageAdapter = new FirstPageAdapter(baseActivity, false,mDatass, isFirst, this, getDataEntity.datas.size());
-        gridLayoutManager = new GridLayoutManager(baseActivity, 2);
-        rv_view.setLayoutManager(gridLayoutManager);
-        rv_view.setAdapter(firstPageAdapter);
+            firstPageAdapter = new FirstPageAdapter(baseActivity, false,mDatass, isFirst, this, getDataEntity.datas.size());
+            gridLayoutManager = new GridLayoutManager(baseActivity, 2);
+            rv_view.setLayoutManager(gridLayoutManager);
+            rv_view.setAdapter(firstPageAdapter);
+//        }else {
+////            mtv_empty.setVisibility(View.VISIBLE);
+////            rv_view.setVisibility(View.GONE);
+//            mtv_empty.setVisibility(View.GONE);
+//            rv_view.setVisibility(View.VISIBLE);
+//        }
+
 //        }else {
 //            LogUtil.augusLogW("lll");
 //            firstPageAdapter.notifyDataSetChanged();
