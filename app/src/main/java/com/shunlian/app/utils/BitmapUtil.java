@@ -227,22 +227,25 @@ public class BitmapUtil {
             return false;
         }
         // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "sldl");
+        File appDir = new File(Constant.CACHE_PATH_EXTERNAL, "sldl");
         if (!appDir.exists()) {
-            appDir.mkdir();
+            appDir.mkdirs();
         }
         String fileName = System.currentTimeMillis() + ".jpg";
         File file = new File(appDir, fileName);
+        FileOutputStream fos = null;
+        File fileUri= null;
         try {
-            FileOutputStream fos = new FileOutputStream(file);
+            fos = new FileOutputStream(file);
             boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
             if (isSuccess) {
                 // 其次把文件插入到系统图库
-                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
                 // 最后通知图库更新
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(file.getPath()))));
+                fileUri = new File(path);
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
                 return true;
             } else {
                 return false;
@@ -251,6 +254,11 @@ public class BitmapUtil {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            appDir = null;
+            file = null;
+            fileUri = null;
+            fos = null;
         }
         return false;
     }

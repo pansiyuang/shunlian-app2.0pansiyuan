@@ -155,6 +155,7 @@ public class SettingAct extends BaseActivity implements ISettingView{
                 if (!isEmpty(mtv_count.getText())){
                     ClearCacheUtil cacheUtil = new ClearCacheUtil();
                     cacheUtil.execute();
+                    mtv_count.setText("");
                 }
                 break;
             case R.id.llayout_message:

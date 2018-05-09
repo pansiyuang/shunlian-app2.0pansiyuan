@@ -19,13 +19,28 @@ public class HttpDialog extends Dialog {
     private static Context mContext;
     private ProgressView mProgressBar;
     private long startTime;
-    private static final long min_show_tile = 500;//最少显示时间(毫秒)
+    private static final long min_show_time = 500;//最少显示时间(毫秒)
+    private static final long quest_time = 500;//请求网络时间少于quest_time(毫秒)不显示动画
+    private boolean isRealShow = false;//真正显示动画
+    private boolean isRunDismiss = false;//是否执行dismiss
     public Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            dismiss();
+            switch (msg.what){
+                case 0:
+                    dismiss();
+                    break;
+                case 100:
+                    if (!isRunDismiss){
+                        isRealShow = true;
+                        show();
+                    }else {
+                        isRunDismiss = false;
+                    }
+                    break;
+            }
         }
     };
 
@@ -49,11 +64,24 @@ public class HttpDialog extends Dialog {
 
     @Override
     public void dismiss() {
-        long dt = System.currentTimeMillis() - startTime;
-        if (dt >= min_show_tile) {
-
-            try {
+        /***********少于quest_time毫秒 不执行动画*****************/
+        isRunDismiss = true;
+        try {
+            if (isShowing())
                 super.dismiss();
+            if (mProgressBar != null && mProgressBar.isRunning()) {
+                mProgressBar.stopAnimation();
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        /***********至少执行min_show_time毫秒*****************/
+        /*long dt = System.currentTimeMillis() - startTime;
+        if (dt >= min_show_time) {
+            try {
+                if (isShowing())
+                    super.dismiss();
                 if (mProgressBar != null && mProgressBar.isRunning()) {
                     mProgressBar.stopAnimation();
                 }
@@ -61,13 +89,31 @@ public class HttpDialog extends Dialog {
                 e.printStackTrace();
             }
         } else {
-            mHandler.sendEmptyMessageDelayed(0, min_show_tile - dt);
-        }
+            mHandler.sendEmptyMessageDelayed(0, min_show_time - dt);
+        }*/
     }
 
     @Override
     public void show() {
-        startTime = System.currentTimeMillis();
+        /***********少于quest_time毫秒 不执行动画*****************/
+        if (isRealShow) {
+            try {
+                super.show();
+                if (mProgressBar != null && !mProgressBar.isRunning()) {
+                    mProgressBar.startAnimation();
+                }
+            } catch (WindowManager.BadTokenException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            isRealShow = false;
+        }else {
+            mHandler.sendEmptyMessageDelayed(100, quest_time);
+        }
+
+        /***********至少执行min_show_time毫秒*****************/
+        /*startTime = System.currentTimeMillis();
         try {
             super.show();
             if (mProgressBar != null && !mProgressBar.isRunning()) {
@@ -77,6 +123,6 @@ public class HttpDialog extends Dialog {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

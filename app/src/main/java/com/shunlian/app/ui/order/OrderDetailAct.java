@@ -16,7 +16,6 @@ import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderDetailPresenter;
@@ -199,7 +198,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_msg_count);
+            String s = messageCountManager.setTextCount(tv_msg_count);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -563,12 +563,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

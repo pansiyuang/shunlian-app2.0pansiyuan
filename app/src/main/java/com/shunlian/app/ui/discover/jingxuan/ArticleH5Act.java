@@ -3,8 +3,6 @@ package com.shunlian.app.ui.discover.jingxuan;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -16,33 +14,17 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IArticleDetailView;
-import com.shunlian.app.widget.MyImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/3/19.
  */
 
 public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCountManager.OnGetMessageListener {
-
-    @BindView(R.id.miv_favorite)
-    MyImageView miv_favorite;
-
-    @BindView(R.id.rl_title_more)
-    RelativeLayout rl_title_more;
-
-    @BindView(R.id.tv_msg_count)
-    TextView tv_msg_count;
-
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
 
     private String articleId;
 
@@ -86,7 +68,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     @Override
     protected void onResume() {
         if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_msg_count);
+            String s = messageCountManager.setTextCount(tv_msg_count);
+            quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -174,7 +157,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -184,12 +168,11 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
     @Override
     protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

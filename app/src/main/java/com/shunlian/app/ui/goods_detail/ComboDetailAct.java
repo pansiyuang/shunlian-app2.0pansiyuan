@@ -111,7 +111,7 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
 //            }
 //        }
 
-        ComboEntity comboEntity = new ComboEntity("14",goods_sku);
+        ComboEntity comboEntity = new ComboEntity(combo_id,goods_sku);
         try {
             String s = new ObjectMapper().writeValueAsString(comboEntity);
 //            System.out.println("========="+s);
