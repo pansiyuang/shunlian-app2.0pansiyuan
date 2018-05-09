@@ -142,6 +142,7 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             itemView.setOnClickListener(this);
             RecyclerView.LayoutParams rootParams = (RecyclerView.LayoutParams)
                     card_rootview.getLayoutParams();
+            rootParams.height = TransformUtil.dip2px(context,117);
             int top = TransformUtil.dip2px(context, 16);
             int bottom = TransformUtil.dip2px(context, 19);
             rootParams.topMargin = top;
@@ -195,6 +196,7 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             mtv_content.setWHProportion(261,99);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams)
                     card_rootview.getLayoutParams();
+            layoutParams.height = TransformUtil.dip2px(context,117);
             int top = TransformUtil.dip2px(context, 16);
             int bottom = TransformUtil.dip2px(context, 19);
             layoutParams.topMargin = top;

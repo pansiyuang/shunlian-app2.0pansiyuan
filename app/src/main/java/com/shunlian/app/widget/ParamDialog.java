@@ -19,11 +19,9 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,7 +148,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public void initViews() {
         if (goodsDeatilEntity != null) {
-            dia_tv_price.setText("¥" + goodsDeatilEntity.price);
+            GoodsDeatilEntity.SpecailAct common_activity = goodsDeatilEntity.common_activity;
+            GoodsDeatilEntity.TTAct tt_act = goodsDeatilEntity.tt_act;
+            if (common_activity != null && "2".equals(common_activity.activity_status)){
+                dia_tv_price.setText("¥" + common_activity.actprice);
+            }else if (tt_act != null && "1".equals(tt_act.sale)){
+                dia_tv_price.setText("¥" + tt_act.act_price);
+            }else {
+                dia_tv_price.setText("¥" + goodsDeatilEntity.price);
+            }
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);

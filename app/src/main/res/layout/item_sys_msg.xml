@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_rectangle_10px"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/llayout_coupon_title"
@@ -110,7 +110,7 @@
         android:id="@+id/rlayout_goods"
         style="@style/TV_SystemMsg3"
         android:background="@drawable/rounded_rectangle_10px"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
 
@@ -120,6 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
             android:layout_marginTop="22dp"
+            android:layout_toLeftOf="@+id/miv_icon"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -134,6 +135,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="@color/new_text"
                 android:textSize="16sp" />
 

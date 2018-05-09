@@ -122,7 +122,7 @@ public class DiscountListDialog extends Dialog {
         if (!"no_0".equals(voucher1.voucher_id)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
             voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
-            voucher.voucher_id = "no_0";
+            voucher.voucher_id = "";
             voucher.denomination = "0";
             mVouchers.add(voucher);
         }

@@ -765,6 +765,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
             sb.append(mShareInfoParam.shareLink);
         }
+        sb.append("\n复制这条信息，打开顺联APP~");
         ClipboardManager cm = (ClipboardManager) getContext()
                 .getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());

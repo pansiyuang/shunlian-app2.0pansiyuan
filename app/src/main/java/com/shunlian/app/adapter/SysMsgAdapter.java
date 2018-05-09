@@ -350,6 +350,12 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
             d.setCornerRadii(f);
             d.mutate();
             llayout_coupon_title.setBackgroundDrawable(d);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null){
+                    listener.onItemClick(v,getAdapterPosition());
+                }
+            });
         }
     }
 }

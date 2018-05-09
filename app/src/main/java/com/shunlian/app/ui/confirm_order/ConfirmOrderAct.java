@@ -309,7 +309,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 }
                 int selectVoucherId = enabled.selectVoucherId;
                 List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
-                if (!isEmpty(voucher) && selectVoucherId != 0){
+                if (!isEmpty(voucher)){
                     goodsEntity.voucher_id = voucher.get(selectVoucherId).voucher_id;
                 }
 
