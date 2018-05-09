@@ -131,6 +131,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMsgEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1464,6 +1465,30 @@ public interface ApiService {
      */
     @GET("message/sys")
     Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取小店消息
+     *
+     * @return
+     */
+    @GET("message/store")
+    Call<BaseEntity<MessageListEntity>> getStoremMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取店铺会员消息列表
+     *
+     * @return
+     */
+    @GET("message/vipmsg")
+    Call<BaseEntity<StoreMsgEntity>> getVipMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取店铺会员消息列表
+     *
+     * @return
+     */
+    @GET("message/ordermsg")
+    Call<BaseEntity<StoreMsgEntity>> getOrderMessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取消息列表

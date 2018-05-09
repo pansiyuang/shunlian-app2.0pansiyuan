@@ -301,7 +301,6 @@ public class EasyWebsocketClient extends WebSocketClient {
         LogUtil.httpLogW("连接关闭:" + code + "," + reason + "," + remote);
         if (mStatus != Status.TIMEOUT) {
             mStatus = Status.DISCONNECTED;
-            mSingleton = null;
             timeOutThread.cancel();
             stopPin();
 
@@ -493,7 +492,6 @@ public class EasyWebsocketClient extends WebSocketClient {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
 
             LogUtil.httpLogW("setUserInfoEntity:" + currentMemberStatus);
-
             if (currentMemberStatus != MemberStatus.Member) {
                 switchStatus(currentMemberStatus);
             } else {
@@ -569,7 +567,6 @@ public class EasyWebsocketClient extends WebSocketClient {
                 currentMemberStatus = MemberStatus.Member;
                 break;
         }
-        LogUtil.httpLogW("用户状态更新为:" + currentMemberStatus);
         SharedPrefUtil.saveSharedPrfString("user_id", mUser.user_id);
     }
 

@@ -151,6 +151,20 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         }
     }
 
+    @Override
+    public void OnOrderMsgClick() {
+        if (mListener != null) {
+            mListener.OnOrderClick();
+        }
+    }
+
+    @Override
+    public void OnStoreMsgClick() {
+        if (mListener != null) {
+            mListener.OnStoreMessageClick();
+        }
+    }
+
     public class TopViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.recycler_list)
         RecyclerView recycler_list;
@@ -218,5 +232,9 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         void OnAdminClick();
 
         void OnMessageDel(String userId);
+
+        void OnStoreMessageClick();
+
+        void OnOrderClick();
     }
 }

@@ -104,6 +104,34 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
                     }
                 }
                 break;
+            case "6": //小店会员通知
+                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_huiyuan, viewHolder.miv_icon);
+                viewHolder.tv_name.setText(getString(R.string.little_store_vip_notice));
+                viewHolder.tv_official.setVisibility(View.GONE);
+                if (isLoad) {
+                    String sys_notice_msg = Common.formatBadgeNumber(manager.getVip_notice_msg());
+                    if (isEmpty(sys_notice_msg)) {
+                        viewHolder.tv_count.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tv_count.setText(sys_notice_msg);
+                        viewHolder.tv_count.setVisibility(View.VISIBLE);
+                    }
+                }
+                break;
+            case "7": //订单通知
+                GlideUtils.getInstance().loadLocalImageWithView(context, R.mipmap.img_dingdan, viewHolder.miv_icon);
+                viewHolder.tv_name.setText(getString(R.string.order_notice));
+                viewHolder.tv_official.setVisibility(View.GONE);
+                if (isLoad) {
+                    String discover_topic_msg = Common.formatBadgeNumber(manager.getOrder_notice_msg());
+                    if (isEmpty(discover_topic_msg)) {
+                        viewHolder.tv_count.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tv_count.setText(discover_topic_msg);
+                        viewHolder.tv_count.setVisibility(View.VISIBLE);
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -130,6 +158,16 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
                 case "5":
                     if (messageClickListener != null) {
                         messageClickListener.OnTopMsgClick();
+                    }
+                    break;
+                case "6":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnStoreMsgClick();
+                    }
+                    break;
+                case "7":
+                    if (messageClickListener != null) {
+                        messageClickListener.OnOrderMsgClick();
                     }
                     break;
             }
@@ -181,5 +219,9 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
         void OnAdminMsgClick();
 
         void OnSellerMsgClick();
+
+        void OnOrderMsgClick();
+
+        void OnStoreMsgClick();
     }
 }

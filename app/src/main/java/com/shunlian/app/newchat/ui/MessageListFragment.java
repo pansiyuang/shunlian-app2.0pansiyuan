@@ -49,7 +49,6 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     private EasyWebsocketClient mClient;
     private MemberStatus mStatus;
     private ObjectMapper mObjectMapper;
-    private UserInfoEntity.Info.User mUser;
 
     public static MessageListFragment getInstance() {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -85,9 +84,6 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         }
 
         if (mClient != null) {
-            if (mClient.getUser() != null) {
-                mUser = mClient.getUser();
-            }
             mClient.addOnMessageReceiveListener(this);
         }
 
@@ -131,8 +127,8 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void getMessageList(List<ChatMemberEntity.ChatMember> members) {
+        memberList.clear();
         if (!isEmpty(members)) {
-            memberList.clear();
             memberList.addAll(members);
         }
         mAdapter.notifyDataSetChanged();
@@ -144,8 +140,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     public void updateFriendList(String message) {
-        LogUtil.httpLogW("message:" + message
-        );
+        LogUtil.httpLogW("message:" + message);
         BaseMessage baseMessage = null;
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
@@ -230,6 +225,16 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @Override
     public void OnMessageDel(String userId) {
         mPresenter.deleteMessage(userId);
+    }
+
+    @Override
+    public void OnStoreMessageClick() {
+
+    }
+
+    @Override
+    public void OnOrderClick() {
+
     }
 
     @Override

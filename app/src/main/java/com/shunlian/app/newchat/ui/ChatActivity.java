@@ -234,7 +234,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         mObjectMapper = new ObjectMapper();
 
         if (currentChatMember != null) {
-            chat_m_user_Id = currentChatMember.m_user_id;
+            if (isEmpty(currentChatMember.m_user_id)) {
+                chat_m_user_Id = currentChatMember.user_id;
+            } else {
+                chat_m_user_Id = currentChatMember.m_user_id;
+            }
             chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
         } else {
@@ -981,7 +985,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             upDataChatMemberInfo(baseMessage);//更新聊天对象的信息
 
             if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_LEFT) {
-                if (msgInfo.m_user_id.equals(chat_m_user_Id)) {
+                if (msgInfo.m_user_id.equals(chat_m_user_Id) || baseMessage.from_user_id.equals(chat_m_user_Id)) {
                     mAdapter.addMsgInfo(msgInfo);
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
