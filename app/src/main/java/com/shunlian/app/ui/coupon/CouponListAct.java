@@ -12,6 +12,7 @@ import com.shunlian.app.bean.CouponListEntity;
 import com.shunlian.app.presenter.CouponListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.core.GetCouponAct;
+import com.shunlian.app.ui.help.HelpSolutionAct;
 import com.shunlian.app.view.ICouponListView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -65,6 +66,7 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
 
     private CouponListPresenter presenter;
     private LinearLayoutManager manager;
+    private String helpId;
 
 
     public static void startAct(Context context){
@@ -86,6 +88,7 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
         llayout_no_used.setOnClickListener(this);
         llayout_used.setOnClickListener(this);
         llayout_already_used.setOnClickListener(this);
+        mtv_rule.setOnClickListener(this);
 
         recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -169,6 +172,7 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
         mtv_no_used.setText("未使用("+numInfo.not_used+")");
         mtv_used.setText("已使用("+numInfo.used+")");
         mtv_already_used.setText("已过期("+numInfo.expired+")");
+        helpId = numInfo.help_id;
     }
 
     private void state(int state){
@@ -209,6 +213,9 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
                     presenter.current_state = presenter.already_used;
                     presenter.initApi();
                 }
+                break;
+            case R.id.mtv_rule:
+                HelpSolutionAct.startAct(this,helpId);
                 break;
         }
     }

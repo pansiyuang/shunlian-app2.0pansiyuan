@@ -21,6 +21,7 @@ public class SystemMsgEntity {
         public String url;
         public String msg_id;
         public String is_read;
+        public String is_del;
         public ContentBean content;
     }
 
@@ -38,5 +39,4 @@ public class SystemMsgEntity {
         public String expire;
         public String remark;
     }
-
 }

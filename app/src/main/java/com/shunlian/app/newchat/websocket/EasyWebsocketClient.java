@@ -133,9 +133,9 @@ public class EasyWebsocketClient extends WebSocketClient {
 
     @Override
     public void connect() {
-        mStatus = Status.CONNECTING;
-        onConnecting();
-        super.connect();
+//        mStatus = Status.CONNECTING;
+//        onConnecting();
+//        super.connect();
     }
 
     @Override

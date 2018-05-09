@@ -105,17 +105,15 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 }
             };
             mHolder.gv_section.setAdapter(tagAdapter);
-            mHolder.gv_section.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                @Override
-                public boolean onTagClick(View view, int position, FlowLayout parent) {
-                    selectId = position;
-                    tagAdapter.notifyDataChanged();
-                    if (mCommentTypeListener != null){
-                        CommentListEntity.Label label = mLabel.get(position);
-                        mCommentTypeListener.onCommentType(label.type);
-                    }
-                    return true;
+            mHolder.gv_section.setOnTagClickListener((view,posi,parent)-> {
+                selectId = posi;
+                tagAdapter.notifyDataChanged();
+                if (mCommentTypeListener != null){
+                    CommentListEntity.Label label = mLabel.get(posi);
+                    mCommentTypeListener.onCommentType(label.type);
                 }
+                return true;
+
             });
         }
     }
@@ -169,11 +167,14 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
         if (holder instanceof CommentHolder){
             CommentHolder mHolder = (CommentHolder) holder;
             if (isEmpty(lists)){
-                mHolder.mll_item.setVisibility(View.GONE);
-                mHolder.nei_empty.setVisibility(View.VISIBLE);
+                gone(mHolder.mll_item);
+                visible(mHolder.nei_empty);
                 mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
                         .setText("该商品还没有评价").setButtonText("");
                 return;
+            }else {
+                visible(mHolder.mll_item);
+                gone(mHolder.nei_empty);
             }
             final CommentListEntity.Data data = lists.get(position - 1);
 
@@ -211,7 +212,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.mrl_reply.setVisibility(View.GONE);
             }else {
                 mHolder.mrl_reply.setVisibility(View.VISIBLE);
-                SpannableStringBuilder spannableStringBuilder = Common.changeColor("商家回复: " + data.reply, "商家回复: ", getColor(R.color.pink_color));
+                SpannableStringBuilder spannableStringBuilder = Common.changeColor("商家回复: "
+                        + data.reply, "商家回复: ", getColor(R.color.pink_color));
                 mHolder.mtv_reply.setText(spannableStringBuilder);
             }
 
@@ -230,15 +232,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.recy_view.setVisibility(View.VISIBLE);
                 PicAdapter picAdapter = new PicAdapter(context,false,pics);
                 mHolder.recy_view.setAdapter(picAdapter);
-                picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) pics;
-                        bigImgEntity.index = position;
-                        bigImgEntity.desc = data.content;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
+                picAdapter.setOnItemClickListener((v,pos)-> {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) pics;
+                    bigImgEntity.index = pos;
+                    bigImgEntity.desc = data.content;
+                    LookBigImgAct.startAct(context, bigImgEntity);
                 });
             }
 
@@ -250,15 +249,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.recy_view1.setVisibility(View.VISIBLE);
                 PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
                 mHolder.recy_view1.setAdapter(picAdapter);
-                picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList) append_pics;
-                        bigImgEntity.index = position;
-                        bigImgEntity.desc = data.append;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
+                picAdapter.setOnItemClickListener((v,pos)-> {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList) append_pics;
+                    bigImgEntity.index = pos;
+                    bigImgEntity.desc = data.append;
+                    LookBigImgAct.startAct(context, bigImgEntity);
                 });
             }
         }
@@ -347,15 +343,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             recy_view1.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,5),false));
             recy_view1.setLayoutManager(manager1);
 
-            mHeadView.post(new Runnable() {
-                @Override
-                public void run() {
-                    int measuredHeight = mHeadView.getMeasuredHeight();
-                    GoodsDetailAct act = (GoodsDetailAct) context;
-                    ViewGroup.LayoutParams layoutParams = nei_empty.getLayoutParams();
-                    layoutParams.height = DeviceInfoUtil.getDeviceHeight(context) - measuredHeight - act.bottomListHeight;
-                    nei_empty.setLayoutParams(layoutParams);
-                }
+            mHeadView.post(()-> {
+                int measuredHeight = mHeadView.getMeasuredHeight();
+                GoodsDetailAct act = (GoodsDetailAct) context;
+                ViewGroup.LayoutParams layoutParams = nei_empty.getLayoutParams();
+                layoutParams.height = DeviceInfoUtil.getDeviceHeight(context) - measuredHeight - act.bottomListHeight;
+                nei_empty.setLayoutParams(layoutParams);
             });
 
         }

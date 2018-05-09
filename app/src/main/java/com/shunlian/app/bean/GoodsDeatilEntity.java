@@ -115,6 +115,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String start_remain_seconds;
         public String end_remain_seconds;
         public String start_time;
+        public String old_price;
 
         @Override
         public int describeContents() {

@@ -18,6 +18,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentRank;
 import com.shunlian.app.widget.MyImageView;
@@ -95,6 +96,9 @@ public class CommentDetailAct extends BaseActivity {
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private CommentListEntity.Data data;
 
     public static void startAct(Context context, CommentListEntity.Data data,String nickname,String avatar) {
@@ -119,6 +123,12 @@ public class CommentDetailAct extends BaseActivity {
     protected void initListener() {
         super.initListener();
 
+    }
+
+    @OnClick(R.id.rLayout_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.comment();
     }
 
     /**
@@ -283,7 +293,8 @@ public class CommentDetailAct extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
-
     }
 }

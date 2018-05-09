@@ -446,6 +446,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         if (!TextUtils.isEmpty(shareLink)) {
             sb.append(shareLink);
         }
+        sb.append("\n复制这条信息，打开顺联APP~");
         ClipboardManager cm = (ClipboardManager) context
                 .getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());

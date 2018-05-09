@@ -22,6 +22,7 @@ import com.shunlian.app.adapter.VoucherAdapter;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.ComboDetailAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -160,7 +161,7 @@ public class RecyclerDialog extends Dialog{
 
     public void setActivity(List<GoodsDeatilEntity.ActivityDetail> full_cut,
                             List<GoodsDeatilEntity.ActivityDetail> full_discount,
-                            List<GoodsDeatilEntity.ActivityDetail> buy_gift) {
+                            List<GoodsDeatilEntity.ActivityDetail> buy_gift, String store_id) {
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         if (full_cut != null && full_cut.size() > 0) {
             fullCut = full_cut.size();
@@ -184,17 +185,15 @@ public class RecyclerDialog extends Dialog{
         }
         dialog_title.setText(mContext.getResources().getText(R.string.shop_promotion_activity));
         recycler_list.setAdapter(moreAdapter);
-        moreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (position < fullCut) {
-                    //满减
-                } else if (position < fullCut + fullDiscount) {
-                    //打折
-                } else {
-                    //买赠
-                }
-            }
+        moreAdapter.setOnItemClickListener((view,position)-> {
+            /*if (position < fullCut) {
+                //满减
+            } else if (position < fullCut + fullDiscount) {
+                //打折
+            } else {
+                //买赠
+            }*/
+            StoreAct.startAct(mContext,store_id);
         });
     }
 

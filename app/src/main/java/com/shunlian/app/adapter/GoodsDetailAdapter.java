@@ -26,14 +26,12 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
-import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.RecyclerDialog;
-import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.Kanner;
 
 import java.util.ArrayList;
@@ -101,6 +99,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private StoreVoucherAdapter couponAdapter;
     private boolean isStartDownTime = false;
     private int voucherPosition;//点击优惠券位置
+    private long day = 0l;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -346,13 +345,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view.addItemDecoration(new HorItemDecoration(space,0,0));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, storeItems);
             recy_view.setAdapter(goodsDetailShopAdapter);
-            goodsDetailShopAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    GoodsDeatilEntity.StoreInfo.Item i1 = storeItems.get(position);
-                    GoodsDetailAct.startAct(context,i1.id);
-                }
-            });
+            goodsDetailShopAdapter.setOnItemClickListener((v,position)-> {
+                GoodsDeatilEntity.StoreInfo.Item i1 = storeItems.get(position);
+                GoodsDetailAct.startAct(context,i1.id);});
         }else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
@@ -386,15 +381,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.view_line2.setVisibility(View.GONE);
                 CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context, false, comments);
                 mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
-                commentCardViewAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        if (position >= comments.size()) {
-                            valueAnimator(view, null);
-                        } else {
-                            GoodsDeatilEntity.Comments comments1 = comments.get(position);
-                            valueAnimator(view, comments1.id);
-                        }
+                commentCardViewAdapter.setOnItemClickListener((view,pos)-> {
+                    if (pos >= comments.size()) {
+                        valueAnimator(view, null);
+                    } else {
+                        GoodsDeatilEntity.Comments comments1 = comments.get(pos);
+                        valueAnimator(view, comments1.id);
                     }
                 });
             }
@@ -553,7 +545,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 sb.append(ad.prom_title);
             }
             sb.append(",");
-
         }
         sb.replace(sb.length()-1,sb.length(),"");
         textView.setText(sb);
@@ -672,7 +663,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         mHolder.miv_special_pic,
                         mHolder.mllayout_specail_before_act,
                         mHolder.mllayout_specail_before_downtime);
-
                 gone(
                         mHolder.mtv_marketPrice,
                         mHolder.mrlayout_special_preBgL,
@@ -683,8 +673,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                 mHolder.mtv_special_before_original_price.setStrikethrough()
                         .setText(getString(R.string.rmb).concat(mGoodsEntity.market_price));
-                mHolder.mtv_special_before_price.setText(
-                        "活动价:" + getString(R.string.rmb).concat(common_activity.actprice));
+                if ("1".equals(common_activity.if_act_price)) {//显示预览价格
+                    visible( mHolder.mtv_special_before_price);
+                    mHolder.mtv_special_before_price.setText(
+                            "活动价:" + getString(R.string.rmb).concat(common_activity.actprice));
+                }else {
+                   gone( mHolder.mtv_special_before_price);
+                }
 
                 GradientDrawable background = (GradientDrawable) mHolder
                         .mllayout_before_downTime.getBackground();
@@ -694,37 +689,37 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
                 GlideUtils.getInstance().loadImage(context,
                         mHolder.miv_special_before_pic,mGoodsEntity.pics.get(0));
+                if ("1".equals(common_activity.if_time)) {//显示预览倒计时
+                    visible(mHolder.mllayout_specail_before_downtime);
+                    mHolder.ddp_special_before_downTime.setLabelBackgroundColor(getColor(R.color.transparent));
+                    mHolder.ddp_special_before_downTime.setTimeUnitTextColor(getColor(R.color.my_gray_one));
+                    mHolder.ddp_special_before_downTime.setTimeTextColor(getColor(R.color.my_gray_one));
+                    mHolder.ddp_special_before_downTime.setTimeTextSize(11);
+                    mHolder.ddp_special_before_downTime.setTimeUnitTextSize(11);
+                    mHolder.ddp_special_before_downTime.setTimeUnitPadding(0);
 
-                mHolder.ddp_special_before_downTime.setLabelBackgroundColor(getColor(R.color.transparent));
-                mHolder.ddp_special_before_downTime.setTimeUnitTextColor(getColor(R.color.my_gray_one));
-                mHolder.ddp_special_before_downTime.setTimeTextColor(getColor(R.color.my_gray_one));
-                mHolder.ddp_special_before_downTime.setTimeTextSize(11);
-                mHolder.ddp_special_before_downTime.setTimeUnitTextSize(11);
-                mHolder.ddp_special_before_downTime.setTimeUnitPadding(0);
-
-                if (!isStartDownTime) {
-                    String time = isEmpty(common_activity.start_remain_seconds) ? "0" :
-                            common_activity.start_remain_seconds;
-
-//                    time = "10";
-                    mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time));
-                    mHolder.ddp_special_before_downTime.startDownTimer();
-                    isStartDownTime = true;
-                }
-                mHolder.ddp_special_before_downTime.setDownTimerListener(new OnCountDownTimerListener() {
-                    @Override
-                    public void onFinish() {
+                    if (!isStartDownTime) {
+                        String time = isEmpty(common_activity.start_remain_seconds) ? "0" :
+                                common_activity.start_remain_seconds;
+                        //time = "10";
+                        mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time));
+                        mHolder.ddp_special_before_downTime.startDownTimer();
+                        isStartDownTime = true;
+                    }
+                    mHolder.ddp_special_before_downTime.setDownTimerListener(() -> {
                         isStartDownTime = false;
-                        if (context instanceof GoodsDetailAct){
+                        if (context instanceof GoodsDetailAct) {
                             GoodsDetailAct act = (GoodsDetailAct) context;
-                            if (act.isFinishing()){
+                            if (act.isFinishing()) {
                                 mHolder.ddp_special_before_downTime.cancelDownTimer();
                                 return;
                             }
                             act.refreshDetail();
                         }
-                    }
-                });
+                    });
+                }else {
+                    gone(mHolder.mllayout_specail_before_downtime);
+                }
 
             }else {//活动开始
                 visible(
@@ -743,28 +738,45 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         getString(R.string.rmb).concat(common_activity.actprice));
 
                 mHolder.mtv_special_original_price.setStrikethrough().setText(
-                        "原价:"+getString(R.string.rmb).concat(mGoodsEntity.price)
-                );
+                        "原价:"+getString(R.string.rmb).concat(common_activity.old_price));
                 mHolder.ddp_special_downTime.setLabelBackgroundColor(getColor(R.color.white));
                 mHolder.ddp_special_downTime.setTimeUnitTextColor(getColor(R.color.pink_color));
                 mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
+                String format = "距结束仅剩%d天";
 
                 if (!isStartDownTime) {
                     String time = isEmpty(common_activity.end_remain_seconds) ? "0" :
                             common_activity.end_remain_seconds;
 
 //                    time = "10";
-                    mHolder.ddp_special_downTime.setDownTime(Integer.parseInt(time));
+                    long down_time = Long.parseLong(time);
+                    day = down_time / (3600 * 24);
+                    if (day > 0){
+                        mHolder.mtv_special_title.setText(String.format(format,day));
+                    }else {
+                        mHolder.mtv_special_title.setText("距结束");
+                    }
+                    long inner_day = down_time % (3600 * 24);
+                    mHolder.ddp_special_downTime.setDownTime((int) inner_day);
                     mHolder.ddp_special_downTime.startDownTimer();
                     isStartDownTime = true;
                 }
-                mHolder.ddp_special_downTime.setDownTimerListener(new OnCountDownTimerListener() {
-                    @Override
-                    public void onFinish() {
+                mHolder.ddp_special_downTime.setDownTimerListener(()-> {
+                    if (day > 0){
+                        day = day - 1;
+                        if (day > 0){
+                            mHolder.mtv_special_title.setText(String.format(format,day));
+                        }else {
+                            mHolder.mtv_special_title.setText("距结束");
+                        }
+                        mHolder.ddp_special_downTime.cancelDownTimer();
+                        mHolder.ddp_special_downTime.setDownTime(3600);
+                        mHolder.ddp_special_downTime.startDownTimer();
+                    }else {
                         isStartDownTime = false;
-                        if (context instanceof GoodsDetailAct){
+                        if (context instanceof GoodsDetailAct) {
                             GoodsDetailAct act = (GoodsDetailAct) context;
-                            if (act.isFinishing()){
+                            if (act.isFinishing()) {
                                 mHolder.ddp_special_downTime.cancelDownTimer();
                                 return;
                             }
@@ -809,10 +821,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 gone(mHolder.seekbar_grow,mHolder.mtv_desc);
             }
 
-            mHolder.mtv_pPrice.setText(mGoodsEntity.price);
+            mHolder.mtv_pPrice.setText(tt_act.act_price);
             mHolder.mtv_pmarketPrice.setStrikethrough()
-                    .setText(getString(R.string.rmb)
-                            .concat(mGoodsEntity.market_price));
+                    .setText(getString(R.string.rmb).concat(tt_act.market_price));
             mHolder.mtv_act_title.setText(tt_act.content);
 
             if (!isStartDownTime) {
@@ -822,18 +833,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.startDownTimer();
                 isStartDownTime = true;
             }
-            mHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
-                @Override
-                public void onFinish() {
-                    isStartDownTime = false;
-                    if (context instanceof GoodsDetailAct){
-                        GoodsDetailAct act = (GoodsDetailAct) context;
-                        if (act.isFinishing()){
-                            mHolder.ddp_downTime.cancelDownTimer();
-                            return;
-                        }
-                        act.refreshDetail();
+            mHolder.ddp_downTime.setDownTimerListener(()-> {
+                isStartDownTime = false;
+                if (context instanceof GoodsDetailAct){
+                    GoodsDetailAct act = (GoodsDetailAct) context;
+                    if (act.isFinishing()){
+                        mHolder.ddp_downTime.cancelDownTimer();
+                        return;
                     }
+                    act.refreshDetail();
                 }
             });
         }else {
@@ -852,14 +860,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
                 mHolder.kanner.setBanner(mGoodsEntity.pics);
-                mHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                    @Override
-                    public void onItemClick(int position) {
-                        BigImgEntity entity = new BigImgEntity();
-                        entity.itemList = mGoodsEntity.pics;
-                        entity.index = position;
-                        LookBigImgAct.startAct(context,entity);
-                    }
+                mHolder.kanner.setOnItemClickL(pos-> {
+                    BigImgEntity entity = new BigImgEntity();
+                    entity.itemList = mGoodsEntity.pics;
+                    entity.index = pos;
+                    LookBigImgAct.startAct(context,entity);
                 });
             }
         }
@@ -926,7 +931,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
 //        Common.staticToast("skuid:" + sku.name + "\n" + "count:" + count);
-        if (tv_select_param != null)
+        if (tv_select_param != null && sku != null)
             tv_select_param.setText(getString(R.string.selection).concat("  ").concat(sku.name));
 
         if (context instanceof GoodsDetailAct){
@@ -1101,6 +1106,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.miv_special_before_pic)
         MyImageView miv_special_before_pic;
 
+        @BindView(R.id.mtv_special_title)
+        MyTextView mtv_special_title;
+
         public TitleHolder(View itemView) {
             super(itemView);
         }
@@ -1202,7 +1210,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                         recyclerDialog = new RecyclerDialog(context);
                     }
                     if (!recyclerDialog.isShowing()){
-                        recyclerDialog.setActivity(mGoodsEntity.full_cut,mGoodsEntity.full_discount,mGoodsEntity.buy_gift);
+                        String store_id = mGoodsEntity.store_info.store_id;
+                        recyclerDialog.setActivity(mGoodsEntity.full_cut,
+                                mGoodsEntity.full_discount,mGoodsEntity.buy_gift,store_id);
                         recyclerDialog.show();
                     }
                     break;
