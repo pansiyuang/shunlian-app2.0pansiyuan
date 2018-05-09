@@ -107,7 +107,8 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseContext);
             if (messageCountManager.isLoad()) {
-                messageCountManager.setTextCount(tv_msg_count);
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
             } else {
                 messageCountManager.initData();
             }
@@ -232,12 +233,14 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
     }
 
     @Override

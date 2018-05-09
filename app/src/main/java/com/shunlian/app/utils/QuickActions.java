@@ -305,6 +305,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
     /**
+     * 消息数量
+     * @param count
+     */
+    public void setMessageCount(String count){
+        mtv_message_count.setText(count);
+    }
+
+    /**
      * 发现详情页
      */
     public void findDetail() {
