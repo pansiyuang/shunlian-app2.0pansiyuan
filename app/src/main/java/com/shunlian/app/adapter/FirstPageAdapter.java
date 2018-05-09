@@ -79,8 +79,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (position < mergePosition) {
                         return manager.getSpanCount();
                     } else {
-//                        return isBottom(position) ? manager.getSpanCount() : 1;
-                        return 1;
+                        return isBottom(position) ? manager.getSpanCount() : 1;
                     }
                 }
             });
@@ -124,6 +123,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     @Override
     public int getItemViewType(int position) {
+        if (position>lists.size()-1)
+            return super.getItemViewType(position);
         switch (lists.get(position).module) {
             case "banner":
                 return TYPE9;

@@ -125,7 +125,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
                 mtv_tixian.setClickable(true);
             } else {
                 copyBackground.setColor(getColorResouce(R.color.color_value_6c));
-                mtv_tixian.setClickable(true);
+                mtv_tixian.setClickable(false);
             }
             String free= String.valueOf(Float.parseFloat(balanceInfoEntity.limit_amount)+Float.parseFloat(balanceInfoEntity.profit));
             String content = String.format(getStringResouce(R.string.balance_wenxintishi),free

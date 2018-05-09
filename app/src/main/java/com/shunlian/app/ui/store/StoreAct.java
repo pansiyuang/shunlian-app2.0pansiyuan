@@ -206,7 +206,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyLinearLayout mll_chat;
 
     private StorePresenter storePresenter;
-    private boolean isPriceUp, initBaby, initDiscount, initNew;
+    private boolean isPriceUp, initBaby, initDiscount, initNew,initFirst;
     private String storeId = "26",star;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
@@ -309,6 +309,11 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeId=getIntent().getStringExtra("storeId");
         }
         storePresenter = new StorePresenter(this, this, storeId);
+        if (getIntent().getBooleanExtra("discount",false)){
+            discountClick();
+        }else {
+            firstClick();
+        }
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
     }
@@ -330,25 +335,54 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         quick_actions.setMessageCount(s);
     }
 
+    public void firstClick(){
+        miv_store.setImageResource(R.mipmap.icon_shop_shop_h);
+        mtv_store.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        line_first.setVisibility(View.VISIBLE);
+        line_baby.setVisibility(View.GONE);
+        line_discount.setVisibility(View.GONE);
+        line_new.setVisibility(View.GONE);
+        mllayout_first.setVisibility(View.VISIBLE);
+        mllayout_baby.setVisibility(View.GONE);
+        mllayout_discount.setVisibility(View.GONE);
+        rv_new.setVisibility(View.GONE);
+        if (!initFirst) {
+            storePresenter.initFirst(storeId);
+            initFirst = true;
+        }
+    }
+    public void discountClick(){
+        miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
+        mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discount.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_discountNum.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        line_first.setVisibility(View.GONE);
+        line_baby.setVisibility(View.GONE);
+        line_discount.setVisibility(View.VISIBLE);
+        line_new.setVisibility(View.GONE);
+        mllayout_first.setVisibility(View.GONE);
+        mllayout_baby.setVisibility(View.GONE);
+        mllayout_discount.setVisibility(View.VISIBLE);
+        rv_new.setVisibility(View.GONE);
+        if (!initDiscount) {
+            storePresenter.initDiscount(storeId);
+            initDiscount = true;
+        }
+    }
     public void storeMenu(View v) {
         switch (v.getId()) {
             case R.id.mrlayout_stores:
-                miv_store.setImageResource(R.mipmap.icon_shop_shop_h);
-                mtv_store.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                line_first.setVisibility(View.VISIBLE);
-                line_baby.setVisibility(View.GONE);
-                line_discount.setVisibility(View.GONE);
-                line_new.setVisibility(View.GONE);
-                mllayout_first.setVisibility(View.VISIBLE);
-                mllayout_baby.setVisibility(View.GONE);
-                mllayout_discount.setVisibility(View.GONE);
-                rv_new.setVisibility(View.GONE);
+                firstClick();
                 break;
             case R.id.mrlayout_baby:
                 miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
@@ -373,26 +407,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 }
                 break;
             case R.id.mrlayout_discount:
-                miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
-                mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discount.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_discountNum.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_new.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_newNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                line_first.setVisibility(View.GONE);
-                line_baby.setVisibility(View.GONE);
-                line_discount.setVisibility(View.VISIBLE);
-                line_new.setVisibility(View.GONE);
-                mllayout_first.setVisibility(View.GONE);
-                mllayout_baby.setVisibility(View.GONE);
-                mllayout_discount.setVisibility(View.VISIBLE);
-                rv_new.setVisibility(View.GONE);
-                if (!initDiscount) {
-                    storePresenter.initDiscount(storeId);
-                    initDiscount = true;
-                }
+                discountClick();
                 break;
             case R.id.mrlayout_new:
                 miv_store.setImageResource(R.mipmap.icon_shop_shop_n);

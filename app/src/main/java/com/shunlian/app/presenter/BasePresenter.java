@@ -106,21 +106,6 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         return tools.getRetrofit();
     }
 
-    /*
-    * 需要保存和携带cookie
-    * @return
-    */
-    private Retrofit getSaveAndAddCookieRetrofit() {
-        InterentTools tools = new InterentTools.Builder()
-                .isOpenLogging(true)
-                .connectTimeout()
-                .addHeaderInterceptor()
-                .addReceivedCookiesInterceptor()
-                .build();
-
-
-        return tools.getRetrofit();
-    }
 
     /*
      * 需要保存cookie
@@ -160,15 +145,6 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         return apiService;
     }
 
-    /**
-     * 需要保存和携带cookie调用这个
-     *
-     * @return
-     */
-    protected ApiService getSaveAndAddCookieApiService() {
-        ApiService apiService = getSaveAndAddCookieRetrofit().create(ApiService.class);
-        return apiService;
-    }
 
     /**
      * 需要保存cookie调用这个

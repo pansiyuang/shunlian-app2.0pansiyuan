@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CouponAdapter;
@@ -15,6 +16,8 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IGetCoupon;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
@@ -39,9 +43,6 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.mtv_zuixin)
     MyTextView mtv_zuixin;
 
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
-
     @BindView(R.id.rv_pingtai)
     RecyclerView rv_pingtai;
 
@@ -51,12 +52,22 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.miv_search)
     MyImageView miv_search;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
     private PGetCoupon pGetCoupon;
     private CouponsAdapter couponsAdapter;
     private CouponAdapter couponAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String type = "All";
-    private MessageCountManager messageCountManager;
     private List<VouchercenterplEntity.MData> mDatas;
 
     public static void startAct(Context context) {
@@ -68,6 +79,47 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @Override
     protected int getLayoutId() {
         return R.layout.act_get_coupon;
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.channel();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
@@ -130,20 +182,6 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         messageCountManager.setOnGetMessageListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        if (messageCountManager.isLoad()) {
-            messageCountManager.setTextCount(tv_msg_count);
-        } else {
-            messageCountManager.initData();
-        }
-        super.onResume();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
-    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -157,10 +195,10 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setpingData(VouchercenterplEntity vouchercenterplEntity) {
-        mDatas=new ArrayList<>();
+        mDatas = new ArrayList<>();
         mDatas.addAll(vouchercenterplEntity.seller_voucher);
         rv_pingtai.setNestedScrollingEnabled(false);
-        couponAdapter= new CouponAdapter(this, false,mDatas,pGetCoupon);
+        couponAdapter = new CouponAdapter(this, false, mDatas, pGetCoupon);
         rv_pingtai.setAdapter(couponAdapter);
         rv_pingtai.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        rv_pingtai.addItemDecoration(new MVerticalItemDecoration(this,10,0,0));
@@ -169,7 +207,7 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
         if (couponsAdapter == null) {
-            couponsAdapter = new CouponsAdapter(getBaseContext(), false, mData,pGetCoupon);
+            couponsAdapter = new CouponsAdapter(getBaseContext(), false, mData, pGetCoupon);
             linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rv_dianpu.setLayoutManager(linearLayoutManager);
             rv_dianpu.setAdapter(couponsAdapter);
@@ -179,10 +217,6 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
         couponsAdapter.setPageLoading(Integer.parseInt(page), Integer.parseInt(total));
     }
 
-    @Override
-    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
-    }
 
     @Override
     public void OnLoadFail() {
@@ -190,17 +224,12 @@ public class GetCouponAct extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-    @Override
-    public void getCouponCallBack(boolean isCommon,int position) {
-        if (isCommon){
-            mDatas.get(position).if_get="1";
+    public void getCouponCallBack(boolean isCommon, int position) {
+        if (isCommon) {
+            mDatas.get(position).if_get = "1";
             couponAdapter.notifyItemChanged(position);
-        }else {
-            pGetCoupon.mDatas.get(position).if_get="1";
+        } else {
+            pGetCoupon.mDatas.get(position).if_get = "1";
             couponsAdapter.notifyItemChanged(position);
         }
     }
