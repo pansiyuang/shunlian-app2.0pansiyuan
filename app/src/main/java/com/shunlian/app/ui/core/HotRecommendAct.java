@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HotPushAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CoreHotEntity;
@@ -205,6 +206,12 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
             rv_list.setLayoutManager(gridLayoutManager);
             rv_list.setAdapter(hotPushAdapter);
             rv_list.setNestedScrollingEnabled(false);
+            hotPushAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Common.goGoGo(getBaseContext(),data.datas.get(position).url.type,data.datas.get(position).url.item_id);
+                }
+            });
             //在CoordinatorLayout中使用添加分割线失效
 //            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(getBaseContext(), 5), false);
 //            rv_category.addItemDecoration(gridSpacingItemDecoration);

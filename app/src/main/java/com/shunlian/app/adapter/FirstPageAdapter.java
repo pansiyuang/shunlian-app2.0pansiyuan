@@ -511,7 +511,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                         sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
                         sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                        sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
+                        sevenHolder.firstHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener()  {
                             @Override
                             public void onItemClick(View view, int position) {
                                 GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);

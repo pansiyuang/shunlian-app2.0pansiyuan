@@ -185,6 +185,7 @@ public class Common {
                 MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             default://首页
+                LogUtil.augusLogW("wheremain");
                 MainActivity.startAct(context, "");
                 break;
         }

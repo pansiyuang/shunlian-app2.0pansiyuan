@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="5dp">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
