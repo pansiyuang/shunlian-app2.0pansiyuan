@@ -309,7 +309,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * @param count
      */
     public void setMessageCount(String count){
-        mtv_message_count.setText(count);
+        if (!TextUtils.isEmpty(count)) {
+            mtv_message_count.setVisibility(VISIBLE);
+            mtv_message_count.setText(count);
+        }
     }
 
     /**

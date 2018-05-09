@@ -1,8 +1,6 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.bean.RefundListEntity;
-
-import java.util.List;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 
 /**
  * Created by Administrator on 2017/12/27.
@@ -10,5 +8,5 @@ import java.util.List;
 
 public interface IRefundListView extends IView{
 
-    void refundList(List<RefundListEntity.RefundList> refundLists,int page,int allPage);
+    void setAdapter(BaseRecyclerAdapter adapter);
 }

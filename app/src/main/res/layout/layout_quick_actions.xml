@@ -60,6 +60,7 @@
             android:background="@drawable/rounded_corner_pink_12px"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textSize="8.5sp"
             app:tv_control_adapter="true"
