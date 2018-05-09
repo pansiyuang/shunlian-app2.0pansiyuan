@@ -88,19 +88,6 @@ public class PMain extends BasePresenter<IMain> {
                 if (data != null) {
                     iView.setAD(data);
                 }
-                iView.setUpdateInfo(null);
-            }
-
-            @Override
-            public void onErrorCode(int code, String message) {
-                super.onErrorCode(code, message);
-                iView.setUpdateInfo(null);
-            }
-
-            @Override
-            public void onFailure() {
-                super.onFailure();
-                iView.setUpdateInfo(null);
             }
         });
     }

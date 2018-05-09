@@ -78,8 +78,8 @@ public class PSignIn extends BasePresenter<ISignInView> {
                 CheckInStateEntity checkInStateEntity =entity.data;
                 babyIsLoading = false;
                 babyPage++;
-                LogUtil.augusLogW("yxf---sdfsdfs");
                 babyAllPage = checkInStateEntity.goodslist.total_page;
+                if (checkInStateEntity.goodslist.list!=null)
                 mDatas.addAll(checkInStateEntity.goodslist.list);
                 iView.setApiData(checkInStateEntity,mDatas);
                 isFirst=false;

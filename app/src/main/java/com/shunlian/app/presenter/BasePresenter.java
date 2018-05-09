@@ -106,6 +106,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         return tools.getRetrofit();
     }
 
+
     /*
      * 需要保存cookie
      * @return
@@ -115,6 +116,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 .isOpenLogging(true)
                 .connectTimeout()
                 .addHeaderInterceptor()
+                .addCookiesInterceptor()
                 .addReceivedCookiesInterceptor()
                 .build();
 
@@ -142,6 +144,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         ApiService apiService = getRetrofit().create(ApiService.class);
         return apiService;
     }
+
 
     /**
      * 需要保存cookie调用这个

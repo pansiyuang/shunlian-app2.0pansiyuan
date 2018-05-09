@@ -52,7 +52,6 @@ public class StorePresenter extends BasePresenter<StoreView> {
     public StorePresenter(Context context, StoreView iView, String storeId) {
         super(context, iView);
         this.storeId = storeId;
-        initApi();
     }
 
 
@@ -89,8 +88,7 @@ public class StorePresenter extends BasePresenter<StoreView> {
         initDiscountOne(storeId, promotionId, discountType, discountPage, count);
     }
 
-    @Override
-    protected void initApi() {
+    public void initFirst(String storeId){
         Map<String, String> map = new HashMap<>();
         map.put("storeId", storeId);
         sortAndMD5(map);
@@ -111,6 +109,10 @@ public class StorePresenter extends BasePresenter<StoreView> {
                 }
             }
         });
+    }
+    @Override
+    protected void initApi() {
+
     }
 
     /**

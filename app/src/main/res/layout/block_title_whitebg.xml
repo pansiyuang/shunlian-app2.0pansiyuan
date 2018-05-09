@@ -34,8 +34,9 @@
         android:textColor="#1c1b20"
         android:textSize="18sp"
         android:visibility="gone" />
+
     <com.shunlian.app.widget.MyRelativeLayout
-        android:id="@+id/mrlayout_news"
+        android:id="@+id/rl_more"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
@@ -59,24 +60,26 @@
             android:background="@drawable/bg_message_more_red"
             android:gravity="center"
             android:textColor="@color/white"
-            android:visibility="gone"
-            android:textSize="9sp" />
+            android:textSize="9sp"
+            android:visibility="gone" />
     </com.shunlian.app.widget.MyRelativeLayout>
+
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_sousuo"
         android:layout_centerVertical="true"
-        android:paddingTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/rl_more"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:visibility="gone"
-        android:layout_toLeftOf="@id/mrlayout_news"/>
+        android:paddingTop="10dp"
+        android:src="@mipmap/icon_sousuo"
+        android:visibility="gone" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/light_gray_two"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_gray_two" />
 </com.shunlian.app.widget.MyRelativeLayout>

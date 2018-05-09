@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PingListAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CorePingEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.timer.DayRedBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IPingList;
@@ -21,15 +27,20 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
 
-public class PingpaiListAct extends BaseActivity implements View.OnClickListener, IPingList {
+public class PingpaiListAct extends BaseActivity implements View.OnClickListener, IPingList, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
@@ -63,9 +74,71 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
     private PPingList pPingList;
     private PingListAdapter pingListAdapter;
     private boolean isMore=false;
+
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.channel();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        if (downTime_firsts!=null){
+            downTime_firsts.cancelDownTimer();
+            downTime_firsts=null;
+        }
+        super.onDestroy();
+    }
 
     public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, PingpaiListAct.class);
@@ -135,6 +208,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
 //        pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
         pPingList = new PPingList(this, this, "1");
         pPingList.getApiData();
@@ -151,14 +225,6 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     }
 
-    @Override
-    protected void onDestroy() {
-        if (downTime_firsts!=null){
-            downTime_firsts.cancelDownTimer();
-            downTime_firsts=null;
-        }
-        super.onDestroy();
-    }
 
     @Override
     public void setApiData(CorePingEntity corePingEntity, List<CorePingEntity.MData> mDatas) {

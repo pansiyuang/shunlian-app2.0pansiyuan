@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -23,6 +24,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
@@ -44,9 +47,6 @@ import butterknife.BindView;
 public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAishang, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
-
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
 
     @BindView(R.id.kanner)
     MyKanner kanner;
@@ -58,11 +58,67 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
     @BindView(R.id.rv_category)
     RecyclerView rv_category;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
     private PAishang pAishang;
     private KoubeiAdapter koubeiAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String cate_id;
-    private MessageCountManager messageCountManager;
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.channel();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, KouBeiAct.class);
@@ -107,20 +163,6 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
         messageCountManager.setOnGetMessageListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        if(messageCountManager.isLoad()){
-            messageCountManager.setTextCount(tv_msg_count);
-        }else{
-            messageCountManager.initData();
-        }
-        super.onResume();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
-    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -211,19 +253,4 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
 
     }
 
-    @Override
-    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
-    }
-
-    @Override
-    public void OnLoadFail() {
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 }

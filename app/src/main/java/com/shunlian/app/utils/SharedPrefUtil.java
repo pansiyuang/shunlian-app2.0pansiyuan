@@ -52,8 +52,8 @@ public class SharedPrefUtil {
      * @param def
      * @return
      */
-    public static boolean getSharedPrfBoolean(String key,boolean def){
-        return getsharedPreferences().getBoolean(key,def);
+    public static boolean getCacheSharedPrfBoolean(String key, boolean def){
+        return getsharedPreferences(shunlian_cache).getBoolean(key,def);
     }
 
     /**
@@ -62,8 +62,8 @@ public class SharedPrefUtil {
      * @param value
      * @return
      */
-    public static boolean saveSharedPrfBoolean(String key,boolean value){
-        return getsharedPreferences().edit().putBoolean(key,value).commit();
+    public static boolean saveCacheSharedPrfBoolean(String key, boolean value){
+        return getsharedPreferences(shunlian_cache).edit().putBoolean(key,value).commit();
     }
 
     /**
@@ -72,8 +72,8 @@ public class SharedPrefUtil {
      * @param def
      * @return
      */
-    public static long getSharedPrfLong(String key,long def){
-        return getsharedPreferences().getLong(key,def);
+    public static long getCacheSharedPrfLong(String key, long def){
+        return getsharedPreferences(shunlian_cache).getLong(key,def);
     }
 
     /**
@@ -82,8 +82,8 @@ public class SharedPrefUtil {
      * @param value
      * @return
      */
-    public static boolean saveSharedPrfLong(String key,long value){
-        return getsharedPreferences().edit().putLong(key,value).commit();
+    public static boolean saveCacheSharedPrfLong(String key, long value){
+        return getsharedPreferences(shunlian_cache).edit().putLong(key,value).commit();
     }
 
     /**
@@ -142,7 +142,7 @@ public class SharedPrefUtil {
      */
     public static String getCacheSharedPrf(String key,String def){
         return getsharedPreferences(shunlian_cache).getString(key,def);
-    }
+}
 
     /**
      * 将string保存到sp中

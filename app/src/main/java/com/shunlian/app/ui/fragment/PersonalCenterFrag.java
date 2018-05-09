@@ -139,6 +139,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.mllayout_quanbu)
     MyLinearLayout mllayout_quanbu;
 
+    @BindView(R.id.mllayout_huiyuanguanli)
+    MyLinearLayout mllayout_huiyuanguanli;
+
+    @BindView(R.id.mllayout_huiyuandingdan)
+    MyLinearLayout mllayout_huiyuandingdan;
+
     @BindView(R.id.mllayout_guanfangkefu)
     MyLinearLayout mllayout_guanfangkefu;
 
@@ -244,7 +250,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     private PersonalcenterPresenter personalcenterPresenter;
     private HelpArticleAdapter helpArticleAdapter;
-//    private Timer outTimer;
+
+    //    private Timer outTimer;
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.frag_mine, container, false);
@@ -253,9 +260,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @Override
     public void onResume() {
         if (!isHidden()) {
-            if (personalcenterPresenter==null){
+            if (personalcenterPresenter == null) {
                 personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
-            }else {
+            } else {
                 personalcenterPresenter.getApiData();
             }
         }
@@ -265,12 +272,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
 //            ImmersionBar.with(this).fitsSystemWindows(true)
 //                    .statusBarColor(R.color.white)
 //                    .statusBarDarkFont(true, 0.2f)
 //                    .init();
-            ImmersionBar.with(this).titleBar(rLayout_title,false).init();
+            ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         }
     }
 
@@ -280,7 +287,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                .statusBarColor(R.color.white)
 //                .statusBarDarkFont(true, 0.2f)
 //                .init();
-        ImmersionBar.with(this).titleBar(rLayout_title,false).init();
+        ImmersionBar.with(this).titleBar(rLayout_title, false).init();
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
@@ -292,6 +299,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mtv_qiandao.setOnClickListener(this);
         mllayout_quanbu.setOnClickListener(this);
         mllayout_guanfangkefu.setOnClickListener(this);
+        mllayout_huiyuanguanli.setOnClickListener(this);
+        mllayout_huiyuandingdan.setOnClickListener(this);
         mllayout_daifukuan.setOnClickListener(this);
         mllayout_daishouhuo.setOnClickListener(this);
         mllayout_daifahuo.setOnClickListener(this);
@@ -316,12 +325,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
-                if (y>30){
+                if (y > 30) {
                     view_bg.setAlpha(1);
-                }else if (y>0){
+                } else if (y > 0) {
                     float alpha = ((float) y) / 30;
                     view_bg.setAlpha(alpha);
-                }else {
+                } else {
                     view_bg.setAlpha(0);
                 }
             }
@@ -331,6 +340,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             public void onRefresh() {
                 personalcenterPresenter.getApiData();
             }
+
             @Override
             public void onLoadMore() {
             }
@@ -343,7 +353,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
 //        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
-       //percent为10的倍数
+        //percent为10的倍数
 //        showLevel(10, personalcenterEntity.next_level_info);
         mtv_refundNum.setVisibility(View.VISIBLE);
         if (Integer.parseInt(personalcenterEntity.new_refund_num) <= 0) {
@@ -475,11 +485,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         mlLayout_member.setVisibility(View.GONE);
         mllayout_mid.setVisibility(View.GONE);
 
-        if (personalcenterEntity.sl_user_ranks!=null){
-            switch (personalcenterEntity.sl_user_ranks.size()){
+        if (personalcenterEntity.sl_user_ranks != null) {
+            switch (personalcenterEntity.sl_user_ranks.size()) {
                 case 1:
                     if (personalcenterEntity.sl_user_ranks.get(0) != null) {
-                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)) {
                             miv_equal.setVisibility(View.VISIBLE);
                             mtv_equal.setVisibility(View.VISIBLE);
                             mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
@@ -492,7 +502,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 case 2:
                     mllayout_mid.setVisibility(View.VISIBLE);
                     if (personalcenterEntity.sl_user_ranks.get(0) != null) {
-                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)){
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(0).is_mine)) {
                             miv_equal.setVisibility(View.VISIBLE);
                             mtv_equal.setVisibility(View.VISIBLE);
                             mtv_befores.setTextColor(getColorResouce(R.color.pink_color));
@@ -502,7 +512,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
                     }
                     if (personalcenterEntity.sl_user_ranks.get(1) != null) {
-                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)){
+                        if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)) {
                             miv_equals.setVisibility(View.VISIBLE);
                             mtv_equals.setVisibility(View.VISIBLE);
                             mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
@@ -540,7 +550,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     break;
             }
         }
-        if (helpArticleAdapter==null){
+        if (helpArticleAdapter == null) {
             helpArticleAdapter = new HelpArticleAdapter(getContext(), false, personalcenterEntity.article);
             rv_article.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             rv_article.addItemDecoration(new MHorItemDecoration(getContext(), 5, 10, 10));
@@ -552,7 +562,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     HelpClassAct.startAct(getContext(), questionCategory.id);
                 }
             });
-        }else {
+        } else {
             helpArticleAdapter.notifyDataSetChanged();
         }
 
@@ -618,16 +628,16 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 RefundAfterSaleAct.startAct(baseContext);
                 break;
             case R.id.mllayout_shangping:
-                MyCollectionAct.startAct(baseContext,MyCollectionAct.GOODS_FLAG);
+                MyCollectionAct.startAct(baseContext, MyCollectionAct.GOODS_FLAG);
                 break;
             case R.id.mllayout_dianpu:
-                MyCollectionAct.startAct(baseContext,MyCollectionAct.STORE_FLAG);
+                MyCollectionAct.startAct(baseContext, MyCollectionAct.STORE_FLAG);
                 break;
             case R.id.mllayout_neirong:
-                MyCollectionAct.startAct(baseContext,MyCollectionAct.CONTENT_FLAG);
+                MyCollectionAct.startAct(baseContext, MyCollectionAct.CONTENT_FLAG);
                 break;
             case R.id.mllayout_zuji:
-                MyCollectionAct.startAct(baseContext,MyCollectionAct.FOOTPRINT_FLAG);
+                MyCollectionAct.startAct(baseContext, MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             case R.id.miv_shezhi:
                 SettingAct.startAct(baseContext);
@@ -642,7 +652,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.mllayout_yue:
-                BalanceMainAct.startAct(baseContext,false);
+                BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.mllayout_youhuiquan:
                 CouponListAct.startAct(baseActivity);
@@ -655,6 +665,15 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_qiandao:
                 SignInAct.startAct(baseContext);
+                break;
+            case R.id.mllayout_huiyuanguanli:
+               //会员管理
+                break;
+            case R.id.mllayout_huiyuandingdan:
+                //会员订单
+                break;
+            case R.id.mtv_chakan:
+                //点击查看特权
                 break;
         }
     }

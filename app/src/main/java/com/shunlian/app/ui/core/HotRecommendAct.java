@@ -5,17 +5,23 @@ import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HotPushAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.timer.DayRedWhiteDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IAishang;
@@ -23,15 +29,20 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
  */
 
-public class HotRecommendAct extends BaseActivity implements View.OnClickListener, IAishang {
+public class HotRecommendAct extends BaseActivity implements View.OnClickListener, IAishang, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
@@ -53,10 +64,71 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.miv_arrow)
     MyImageView miv_arrow;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
     private PAishang pAishang;
     private HotPushAdapter hotPushAdapter;
     private String hotId;
     private boolean isMore=false;
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.channel();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        if (downTime_firsts!=null){
+            downTime_firsts.cancelDownTimer();
+            downTime_firsts=null;
+        }
+        super.onDestroy();
+    }
 
     public static void startAct(Context context,String hotId) {
         Intent intent = new Intent(context, HotRecommendAct.class);
@@ -65,14 +137,6 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         context.startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        if (downTime_firsts!=null){
-            downTime_firsts.cancelDownTimer();
-            downTime_firsts=null;
-        }
-        super.onDestroy();
-    }
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -99,6 +163,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     @Override
     protected void initListener() {
         super.initListener();
+        miv_arrow.setOnClickListener(this);
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -113,6 +178,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         hotId=getIntent().getStringExtra("hotId");

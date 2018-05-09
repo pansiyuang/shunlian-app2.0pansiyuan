@@ -11,6 +11,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -37,6 +38,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
     private BalanceInfoEntity balanceInfoEntity;
     private PromptDialog promptDialog;
     private boolean isBack;
+    private GradientDrawable copyBackground;
 
     public static void startAct(Context context, BalanceInfoEntity balanceInfoEntity, boolean isBack) {
         Intent intent = new Intent(context, BalanceXQAct.class);
@@ -87,9 +89,9 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 if (balanceInfoEntity.is_set_password){
-                    BalancePaySetTwoAct.startAct(getBaseContext(), "", "bindPay", "",true);
+                    BalancePaySetTwoAct.startAct(getBaseContext(), "", "bindPay", "",true,false);
                 }else {
-                    BalanceVerifyPhoneAct.startAct(getBaseContext(),false);
+                    BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false);
                 }
                 promptDialog.dismiss();
             }
@@ -117,18 +119,20 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
         balanceInfoEntity = (BalanceInfoEntity) getIntent().getSerializableExtra("balance");
         if (balanceInfoEntity != null) {
             mtv_count.setText(getStringResouce(R.string.common_yuan) + balanceInfoEntity.balance);
+            copyBackground = (GradientDrawable) mtv_tixian.getBackground();
             if (!TextUtils.isEmpty(balanceInfoEntity.balance) && Float.parseFloat(balanceInfoEntity.balance) > 0) {
-                GradientDrawable copyBackground = (GradientDrawable) mtv_tixian.getBackground();
                 copyBackground.setColor(getColorResouce(R.color.pink_color));
                 mtv_tixian.setClickable(true);
             } else {
+                copyBackground.setColor(getColorResouce(R.color.color_value_6c));
                 mtv_tixian.setClickable(false);
             }
-            String content = String.format(getStringResouce(R.string.balance_wenxintishi), balanceInfoEntity.limit_amount
-                    , balanceInfoEntity.quota, balanceInfoEntity.profit, balanceInfoEntity.total);
+            String free= String.valueOf(Float.parseFloat(balanceInfoEntity.limit_amount)+Float.parseFloat(balanceInfoEntity.profit));
+            String content = String.format(getStringResouce(R.string.balance_wenxintishi),free
+                    ,balanceInfoEntity.rate_name);
             SpannableStringBuilder tishiBuilder = Common.changeColors(content,
-                    getColorResouce(R.color.pink_color), "现有" + balanceInfoEntity.limit_amount
-                    , "还剩" + balanceInfoEntity.quota, "还有" + balanceInfoEntity.profit, "度为" + balanceInfoEntity.total);
+                    getColorResouce(R.color.pink_color), "度为" + free
+                    ,"分按"+balanceInfoEntity.rate_name);
             mtv_tishi.setText(tishiBuilder);
         }
     }

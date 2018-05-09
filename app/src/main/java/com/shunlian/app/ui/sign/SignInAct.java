@@ -47,8 +47,8 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
     @BindView(R.id.mtv_score)
     MyTextView mtv_score;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     @BindView(R.id.miv_sign)
     MyImageView miv_sign;
@@ -146,7 +146,7 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
         pSignIn = new PSignIn(this, this);
         mtv_title.setText("签到");
         mtv_score.setAlpha(0);
-        mrlayout_news.setVisibility(View.GONE);
+        rl_more.setVisibility(View.GONE);
         miv_sign.setBackgroundResource(R.drawable.sign_in_animation);
         signAnimation = (AnimationDrawable) miv_sign.getBackground();
     }

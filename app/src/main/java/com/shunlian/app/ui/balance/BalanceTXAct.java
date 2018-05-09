@@ -46,6 +46,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     private Dialog dialog_pay;
     private MyTextView mtv_amount, mtv_fee;
     private PromptDialog promptDialog;
+    private GridPasswordView gpv_customUi;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, BalanceTXAct.class);
@@ -73,13 +74,15 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initDialog() {
+        if (gpv_customUi!=null)
+            gpv_customUi.clearPassword();
         if (dialog_pay == null) {
             dialog_pay = new Dialog(this, R.style.Mydialog);
             dialog_pay.setContentView(R.layout.dialog_pay_password);
             MyImageView miv_close = (MyImageView) dialog_pay.findViewById(R.id.miv_close);
             mtv_amount = (MyTextView) dialog_pay.findViewById(R.id.mtv_amount);
             mtv_fee = (MyTextView) dialog_pay.findViewById(R.id.mtv_fee);
-            GridPasswordView gpv_customUi = (GridPasswordView) dialog_pay.findViewById(R.id.gpv_customUi);
+            gpv_customUi = (GridPasswordView) dialog_pay.findViewById(R.id.gpv_customUi);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

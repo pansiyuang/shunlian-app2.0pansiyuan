@@ -134,8 +134,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
@@ -412,7 +412,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         super.initListener();
         mtv_copy.setOnClickListener(this);
         mllayout_store.setOnClickListener(this);
-        mrlayout_news.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
         mtv_title1.setOnClickListener(this);
         mtv_title2.setOnClickListener(this);
         mtv_title3.setOnClickListener(this);
@@ -546,7 +546,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.APPEND_COMMENT);
                 }
                 break;
-            case R.id.mrlayout_news:
+            case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.order();
                 break;

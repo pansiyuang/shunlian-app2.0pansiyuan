@@ -145,7 +145,9 @@ public class UpdateDialog implements IMain {
             updateDialog.show();
         }
     }
+    public void initDialogFinish(){
 
+    }
     private void updataApk() {
         Constant.IS_DOWNLOAD = true;
         Intent intent = new Intent(activity, DownloadService.class);
@@ -239,7 +241,7 @@ public class UpdateDialog implements IMain {
         SharedPrefUtil.saveSharedPrfString("updateUrl", updateUrl);
         SharedPrefUtil.saveSharedPrfString("fileMd5", fileMd5);
 //                    updateType = "force";//调试强制更新
-        if ("yes".equals(needUpdate)) {
+        if ("no".equals(needUpdate)) {
             initUpdateDialog();
         } else {
             File file = new File(App.DOWNLOAD_PATH + DownloadService.fileName);
@@ -248,7 +250,7 @@ public class UpdateDialog implements IMain {
             }
 //                        enter();
         }
-
+        initDialogFinish();
     }
 
     @Override

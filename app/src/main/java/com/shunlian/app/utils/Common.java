@@ -134,6 +134,10 @@ public class Common {
 
     public static void goGoGo(Context context, String type, String... params) {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
+        LogUtil.augusLogW("where---"+type);
+        if (type==null){
+            return;
+        }
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);

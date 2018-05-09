@@ -49,7 +49,7 @@ public class AlipayDetailAct extends BaseActivity implements View.OnClickListene
         }, getStringResouce(R.string.SelectRecommendAct_sure), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BalancePaySetTwoAct.startAct(getBaseContext(),"","unbind","",false);
+                BalancePaySetTwoAct.startAct(getBaseContext(),"","unbind","",false,true);
                 promptDialog.dismiss();
             }
         }).show();

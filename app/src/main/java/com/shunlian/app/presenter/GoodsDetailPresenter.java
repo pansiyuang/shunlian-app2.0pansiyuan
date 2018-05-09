@@ -17,6 +17,7 @@ import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("goods_id", goods_id);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getApiService().goodsDetail(requestBody);
+        Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getSaveCookieApiService().goodsDetail(requestBody);
         getNetData(0,0,true,baseEntityCall,
                 new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override
@@ -66,6 +67,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 shareInfoParam = new ShareInfoParam();
                 GoodsDeatilEntity data = entity.data;
+                LogUtil.augusLogW("dfdfd---"+data.credit);
+                if (!TextUtils.isEmpty(data.credit)&&Integer.parseInt(data.credit)>0){
+                    Common.staticToasts(context,String.format(getStringResouce(R.string.common_gongxinin),data.credit),R.mipmap.icon_jifen);
+                }
                 if (data != null) {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
