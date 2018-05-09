@@ -2,6 +2,7 @@ package com.shunlian.app.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -193,7 +194,10 @@ public class RecyclerDialog extends Dialog{
             } else {
                 //买赠
             }*/
-            StoreAct.startAct(mContext,store_id);
+            Intent intent = new Intent(mContext, StoreAct.class);
+            intent.putExtra("storeId",store_id);
+            intent.putExtra("discount",true);
+            mContext.startActivity(intent);
         });
     }
 
