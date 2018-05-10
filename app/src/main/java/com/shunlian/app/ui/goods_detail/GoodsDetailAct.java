@@ -32,7 +32,6 @@ import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
 import com.shunlian.app.ui.BaseFragment;
@@ -687,7 +686,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     if (goodsCount == 0){
                         goodsDeatilFrag.showParamDialog();
                     }else {
-                        ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+                        ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku==null?"":sku.id);
                     }
                 }else {//设置提醒
                     if (getStringResouce(R.string.day_setting_remind).equals(buyText)){//设置提醒
@@ -991,12 +990,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (isAddcart){
             isAddcart = false;
             rnview.setVisibility(View.VISIBLE);
-            goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
+            goodsDetailPresenter.addCart(goodsId,sku==null?"":sku.id,String.valueOf(goodsCount));
         }
 
         if (isNowBuy){
             isNowBuy = false;
-            ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku.id);
+            ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku==null?"":sku.id);
         }
     }
 
