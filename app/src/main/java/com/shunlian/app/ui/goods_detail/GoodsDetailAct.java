@@ -24,7 +24,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -136,9 +135,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
-    @BindView(R.id.sv_mask)
-    ScrollView sv_mask;
-
     @BindView(R.id.mll_bottom)
     MyLinearLayout mll_bottom;
 
@@ -218,32 +214,32 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     protected void initData() {
         defToolbar();
         goodsId = getIntent().getStringExtra("goodsId");
-        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-        offset = toolbarParams.height;
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
         fragments = new HashMap();
         goodsFrag();
 
-        rnview.setMode(RollNumView.Mode.UP);
-        rnview.setTextColor(Color.WHITE);
-        rnview.setTextSize(10);
-        rnview.setVisibility(View.GONE);
+        carNum();
 
+        //轮播高
         bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
                 - offset - ImmersionBar.getStatusBarHeight(this);
-        mll_bottom.post(new Runnable() {
-            @Override
-            public void run() {
-                bottomListHeight = mll_bottom.getMeasuredHeight();
-            }
-        });
+        //底部按钮高
+        mll_bottom.post(()-> bottomListHeight = mll_bottom.getMeasuredHeight());
 
-        //三个点下拉列表
+        //猜你喜欢列表初始化
         GridLayoutManager manager = new GridLayoutManager(this,2);
         recy_view.setLayoutManager(manager);
         recy_view.addItemDecoration(new GridSpacingItemDecoration
                 (TransformUtil.dip2px(this, 5), false));
     }
+
+    private void carNum() {
+        rnview.setMode(RollNumView.Mode.UP);
+        rnview.setTextColor(Color.WHITE);
+        rnview.setTextSize(10);
+        rnview.setVisibility(View.GONE);
+    }
+
     public void defToolbar(){
         if (immersionBar == null){
             immersionBar = ImmersionBar.with(this);
@@ -252,8 +248,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 .statusBarDarkFont(true, 0.2f)
                 .addTag(GoodsDetailAct.class.getName())
                 .init();
-    }
 
+        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+        offset = toolbarParams.height;
+    }
+    /*
+    商品
+     */
     public void goodsFrag(){
         if (goodsDeatilFrag == null) {
             goodsDeatilFrag = new GoodsDeatilFrag();
@@ -267,7 +268,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mll_detail.setEnabled(true);
         switchContent(goodsDeatilFrag);
     }
-
+    /*
+    评价
+     */
     public void commentFrag(String id){
         if (commentFrag == null) {
             commentFrag = new CommentFrag();
@@ -361,7 +364,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             ft.commit();
         }
     }
-
+    /*
+    滑动过程中顶部图片改变状态
+     */
     private void setImg(int status,int oldStatus){
         if (status != oldStatus) {
             if (status == 1) {
@@ -379,7 +384,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }else {
                     miv_is_fav.setImageResource(R.mipmap.icon_xiangqingye_souchag_h);
                 }
-
                 miv_more.setImageResource(R.mipmap.icon_more_n);
             }
         }
@@ -559,6 +563,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             mtv_buy_immediately.setEnabled(true);
         }
     }
+
     /**
      * 活动状态
      */
@@ -590,7 +595,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
-     * 三个点下拉列表
+     * 你可能还想买
      *
      * @param adapter
      */
@@ -768,7 +773,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         immersionBar.getTag(GoodsDetailAct.class.getName()).init();
         mll_share.setVisibility(View.GONE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
-                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1);
+                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
+                Animation.RELATIVE_TO_SELF,-1);
 
         animation.setDuration(250);
         mll_share.setAnimation(animation);
@@ -780,8 +786,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                sv_mask.setVisibility(View.GONE);
                 quickAction();
+                if (goodsDetailPresenter != null)
+                    goodsDetailPresenter.mayBeBuyGoods();
+
             }
 
             @Override
@@ -795,7 +803,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 显示分享框
      */
     public void moreAnim() {
-        sv_mask.setVisibility(View.VISIBLE);
         immersionBar.statusBarColor(R.color.white).init();
         mll_share.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
@@ -872,9 +879,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
         // 匀速线性插值器
         valueAnimator1.setInterpolator(new LinearInterpolator());
-        valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
+        valueAnimator1.addUpdateListener((animation)-> {
                 if (myImageView == null){
                     return;
                 }
@@ -883,7 +888,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 float value = (Float) animation.getAnimatedValue("parabola");
                 // 获取当前点坐标封装到mCurrentPosition
                 // boolean getPosTan(float distance, float[] pos, float[] tan) ：
-                // 传入一个距离distance(0<=distance<=getLength())，然后会计算当前距离的坐标点和切线，pos会自动填充上坐标，这个方法很重要。
+                // 传入一个距离distance(0<=distance<=getLength())，然后会计算当前距离的坐标点和切线，
+                // pos会自动填充上坐标，这个方法很重要。
                 // mCurrentPosition此时就是中间距离点的坐标值
                 mPathMeasure.getPosTan(value, mCurrentPosition, null);
 //                System.out.println("mCurrentPosition[0]=="+mCurrentPosition[0]);
@@ -894,7 +900,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 float scale = (float) animation.getAnimatedValue("scale");
                 myImageView.setScaleX(scale);
                 myImageView.setScaleY(scale);
-            }
         });
 
         // 开始执行动画
@@ -928,14 +933,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         valueAnimator.setInterpolator(new OvershootInterpolator());
         valueAnimator.setDuration(600);
         valueAnimator.start();
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float scale = (float) animation.getAnimatedValue();
-                if (rnview != null) {
-                    rnview.setScaleX(scale);
-                    rnview.setScaleY(scale);
-                }
+        valueAnimator.addUpdateListener((animation)-> {
+            float scale = (float) animation.getAnimatedValue();
+            if (rnview != null) {
+                rnview.setScaleX(scale);
+                rnview.setScaleY(scale);
             }
         });
         valueAnimator.addListener(new Animator.AnimatorListener() {

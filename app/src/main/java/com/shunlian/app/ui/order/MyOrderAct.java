@@ -107,7 +107,8 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             @Override
             public void onPageSelected(int position) {
-                setStatus(position + 1);
+                pageItem = position+1;
+                setStatus(pageItem);
             }
             @Override
             public void onPageScrollStateChanged(int state) {}
@@ -168,8 +169,9 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
      */
     @OnClick(R.id.ll_all)
     public void orderAll() {
-        setStatus(1);
-        viewpager.setCurrentItem(0);
+        pageItem = 1;
+        setStatus(pageItem);
+        viewpager.setCurrentItem(pageItem-1);
     }
 
     /**
@@ -177,8 +179,9 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
      */
     @OnClick(R.id.ll_wait_pay)
     public void orderPay() {
-        setStatus(2);
-        viewpager.setCurrentItem(1);
+        pageItem = 2;
+        setStatus(pageItem);
+        viewpager.setCurrentItem(pageItem-1);
     }
 
     /**
@@ -186,8 +189,9 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
      */
     @OnClick(R.id.ll_wait_send)
     public void orderSend() {
-        setStatus(3);
-        viewpager.setCurrentItem(2);
+        pageItem = 3;
+        setStatus(pageItem);
+        viewpager.setCurrentItem(pageItem-1);
     }
 
     /**
@@ -195,8 +199,9 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
      */
     @OnClick(R.id.ll_wait_receive)
     public void orderReceive() {
-        setStatus(4);
-        viewpager.setCurrentItem(3);
+        pageItem = 4;
+        setStatus(pageItem);
+        viewpager.setCurrentItem(pageItem-1);
     }
 
     /**
@@ -204,8 +209,9 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
      */
     @OnClick(R.id.ll_wait_comment)
     public void orderComment() {
+        pageItem = 5;
         setStatus(5);
-        viewpager.setCurrentItem(4);
+        viewpager.setCurrentItem(pageItem-1);
     }
 
     /**
@@ -246,6 +252,7 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
+        pageItem = 0;
         super.onDestroy();
     }
 
