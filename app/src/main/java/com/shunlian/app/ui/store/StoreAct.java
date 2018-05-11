@@ -322,7 +322,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     protected void onResume() {
         if(messageCountManager.isLoad()){
             String s = messageCountManager.setTextCount(mtv_msg_count);
-            quick_actions.setMessageCount(s);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
         }else{
             messageCountManager.initData();
         }
@@ -332,7 +333,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(mtv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     public void firstClick(){
@@ -726,7 +728,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(mtv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override

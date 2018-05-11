@@ -240,7 +240,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -541,7 +542,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
