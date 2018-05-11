@@ -577,8 +577,19 @@
             android:name=".newchat.ui.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".newchat.ui.MessageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".newchat.ui.StoreMsgActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".newchat.ui.FoundMsgActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

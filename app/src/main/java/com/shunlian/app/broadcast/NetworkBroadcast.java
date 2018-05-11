@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
+import com.shunlian.app.newchat.websocket.Status;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
@@ -23,8 +24,7 @@ public class NetworkBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             if (updateUIListenner != null) {
@@ -42,8 +42,16 @@ public class NetworkBroadcast extends BroadcastReceiver {
                     Common.staticToast("已切换到4G/3G/2G");
                     break;
             }
-//            LogUtil.httpLogW("网络发生了改变");
-//            EasyWebsocketClient.initWebsocketClient(context);
+            LogUtil.httpLogW("网络发生了改变");
+            if (EasyWebsocketClient.getClient() == null) {
+                EasyWebsocketClient.initWebsocketClient(context);
+            } else {
+                EasyWebsocketClient client = EasyWebsocketClient.getClient();
+                if (client.getStatus() == Status.DISCONNECTED) {
+                    LogUtil.httpLogW("member111:" + client.getMemberStatus());
+                    client.resetSocket();
+                }
+            }
         }
     }
 

@@ -9,16 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/miv_icon"
-        android:clickable="true"
-        android:gravity="right"
-        android:longClickable="true"
-        android:visibility="visible">
+        android:layout_toLeftOf="@+id/miv_icon">
 
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:background="@drawable/bg_chat_me"
             android:maxWidth="260dp"
             android:textColor="@color/white"

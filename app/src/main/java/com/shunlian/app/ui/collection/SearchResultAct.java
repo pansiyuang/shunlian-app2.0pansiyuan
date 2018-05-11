@@ -136,12 +136,9 @@ public class SearchResultAct extends BaseActivity implements ICollectionSearchRe
         if (request_code == SearchResultPresenter.FIRST_NET_FAIL){
             visible(nei_empty);
             gone(recycler_search);
-            nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null){
-                        mPresenter.againRequest();
-                    }
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (mPresenter != null){
+                    mPresenter.againRequest();
                 }
             });
         }else {

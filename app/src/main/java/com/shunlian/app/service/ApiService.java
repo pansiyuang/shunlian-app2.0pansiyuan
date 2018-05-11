@@ -28,6 +28,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMsgEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1411,6 +1412,30 @@ public interface ApiService {
     Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
 
     /**
+     * 获取小店消息
+     *
+     * @return
+     */
+    @GET("message/store")
+    Call<BaseEntity<MessageListEntity>> getStoremMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取店铺会员消息列表
+     *
+     * @return
+     */
+    @GET("message/vipmsg")
+    Call<BaseEntity<StoreMsgEntity>> getVipMessage(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取店铺会员消息列表
+     *
+     * @return
+     */
+    @GET("message/ordermsg")
+    Call<BaseEntity<StoreMsgEntity>> getOrderMessage(@QueryMap Map<String, String> map);
+
+    /**
      * 获取消息列表
      *
      * @return
@@ -1427,31 +1452,34 @@ public interface ApiService {
     Call<BaseEntity<AllMessageCountEntity>> messageAllCount(@QueryMap Map<String, String> map);
 
     /**
-     *销售数据
+     * 销售数据
      */
     @GET("member/salesdata/generalsales")
     Call<BaseEntity<SaleDataEntity>> salesdata(@QueryMap Map<String, String> map);
 
     /**
      * 销售数据折线图
+     *
      * @param body
      * @return
      */
     @POST("member/salesdata/{name}")
-    Call<BaseEntity<SalesChartEntity>> salesChart(@Path("name")String path_name,@Body RequestBody body);
+    Call<BaseEntity<SalesChartEntity>> salesChart(@Path("name") String path_name, @Body RequestBody body);
 
     /**
      * 销售详情 和奖励明细 myprofit/rewarddetail   salesdata/salesDetail
+     *
      * @param body
      * @return
      */
     @POST("member/{path1}/{path2}")
-    Call<BaseEntity<SaleDetailEntity>> salesDetail(@Path("path1")String path_name1,
-                                                   @Path("path2")String path_name2,
+    Call<BaseEntity<SaleDetailEntity>> salesDetail(@Path("path1") String path_name1,
+                                                   @Path("path2") String path_name2,
                                                    @Body RequestBody body);
 
     /**
      * 我的收益
+     *
      * @param body
      * @return
      */
@@ -1460,6 +1488,7 @@ public interface ApiService {
 
     /**
      * 收益折线走势图
+     *
      * @param body
      * @return
      */
@@ -1468,14 +1497,16 @@ public interface ApiService {
 
     /**
      * 收益提现
+     *
      * @param map
      * @return
      */
     @GET("member/myprofit/withdrawProfit")
-    Call<BaseEntity<EmptyEntity>> withdrawProfit(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> withdrawProfit(@QueryMap Map<String, String> map);
 
     /**
      * 预估收益  详情订单记录
+     *
      * @param body
      * @return
      */
@@ -1484,11 +1515,13 @@ public interface ApiService {
 
     /**
      * 领取月奖励和周奖励
+     *
      * @param map
      * @return
      */
     @GET("member/myprofit/receiveReward")
-    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String,String> map);
+    Call<BaseEntity<EmptyEntity>> receiveReward(@QueryMap Map<String, String> map);
+
     /**
      * 帮助首页
      *
@@ -1677,6 +1710,7 @@ public interface ApiService {
 
     /**
      * 个人中心优惠券列表
+     *
      * @param body
      * @return
      */
@@ -1685,22 +1719,25 @@ public interface ApiService {
 
     /**
      * 用户画像标签
+     *
      * @param body
      * @return
      */
     @POST("member/portrait/artTag")
-    Call<BaseEntity<ArtTagEntity>>  portraitArtTag(@Body RequestBody body);
+    Call<BaseEntity<ArtTagEntity>> portraitArtTag(@Body RequestBody body);
 
     /**
      * 提交用户画像
+     *
      * @param body
      * @return
      */
     @POST("member/portrait/addPortrait")
-    Call<BaseEntity<EmptyEntity>>  addPortrait(@Body RequestBody body);
+    Call<BaseEntity<EmptyEntity>> addPortrait(@Body RequestBody body);
 
     /**
      * 设置数据
+     *
      * @param map
      * @return
      */
@@ -1709,6 +1746,7 @@ public interface ApiService {
 
     /**
      * 设置个人信息
+     *
      * @param body
      * @return
      */
@@ -1717,6 +1755,7 @@ public interface ApiService {
 
     /**
      * 设置数据
+     *
      * @param map
      * @return
      */
@@ -1725,6 +1764,7 @@ public interface ApiService {
 
     /**
      * 获取手机号
+     *
      * @param map
      * @return
      */
@@ -1733,14 +1773,16 @@ public interface ApiService {
 
     /**
      * 更换账号和密码
+     *
      * @param body
      * @return
      */
     @POST("personalcenter/{path}")
-    Call<BaseEntity<EmptyEntity>> userAndPwd(@Path("path") String path,@Body RequestBody body);
+    Call<BaseEntity<EmptyEntity>> userAndPwd(@Path("path") String path, @Body RequestBody body);
 
     /**
      * 验证短信验证码
+     *
      * @param body
      * @return
      */
@@ -1749,6 +1791,7 @@ public interface ApiService {
 
     /**
      * 检验新手机
+     *
      * @param body
      * @return
      */
@@ -1757,6 +1800,7 @@ public interface ApiService {
 
     /**
      * 发送短信验证码
+     *
      * @param body
      * @return
      */
@@ -1765,6 +1809,7 @@ public interface ApiService {
 
     /**
      * 我要反馈
+     *
      * @param body
      * @return
      */
@@ -1773,6 +1818,7 @@ public interface ApiService {
 
     /**
      * 设置
+     *
      * @param map
      * @return
      */
@@ -1781,6 +1827,7 @@ public interface ApiService {
 
     /**
      * 更新推送设置
+     *
      * @param body
      * @return
      */
@@ -1867,6 +1914,30 @@ public interface ApiService {
      */
     @POST("chat/message/delete")
     Call<BaseEntity<CommonEntity>> deleteMessage(@Body RequestBody body);
+
+    /**
+     * 删除消息
+     *
+     * @return
+     */
+    @POST("message/del")
+    Call<BaseEntity<CommonEntity>> messageDel(@Body RequestBody body);
+
+    /**
+     * 发现头条列表
+     *
+     * @return
+     */
+    @GET("message/head")
+    Call<BaseEntity<StoreMsgEntity>> foundTopicList(@QueryMap Map<String, String> map);
+
+    /**
+     * 发现评论列表
+     *
+     * @return
+     */
+    @GET("message/comment")
+    Call<BaseEntity<StoreMsgEntity>> foundCommentList(@QueryMap Map<String, String> map);
 
 
     /**
@@ -1969,6 +2040,7 @@ public interface ApiService {
 
     /**
      * 猜你喜欢
+     *
      * @return
      */
     @GET("order/payresult")
@@ -1976,6 +2048,7 @@ public interface ApiService {
 
     /**
      * 猜你喜欢
+     *
      * @param body
      * @return
      */
@@ -1985,6 +2058,7 @@ public interface ApiService {
 
     /**
      * 闪屏广告
+     *
      * @return
      */
     @GET("adpush/splashScreen")
@@ -1992,6 +2066,7 @@ public interface ApiService {
 
     /**
      * 弹窗广告
+     *
      * @return
      */
     @GET("adpush/popup")
@@ -2000,6 +2075,7 @@ public interface ApiService {
 
     /**
      * 弹窗广告
+     *
      * @return
      */
     @GET("adpush/updateappcheck")
@@ -2007,6 +2083,7 @@ public interface ApiService {
 
     /**
      * 课堂详情分享
+     *
      * @return
      */
     @GET("helpcenter/classesshare")

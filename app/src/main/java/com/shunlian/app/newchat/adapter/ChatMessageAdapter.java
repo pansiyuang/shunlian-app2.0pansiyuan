@@ -7,11 +7,15 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -337,7 +341,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         LeftTxtViewHolder leftTxtViewHolder = (LeftTxtViewHolder) holder;
         leftTxtViewHolder.tv_name.setText(textMessage.from_nickname);
         GlideUtils.getInstance().loadCornerImage(context, leftTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
-        leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
+        leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text, leftTxtViewHolder.tv_content));
     }
 
     public void handRightTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -345,7 +349,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TextMessage.TextMessageBody messageBody = textMessage.msg_body;
         RightTxtViewHolder rightTxtViewHolder = (RightTxtViewHolder) holder;
         GlideUtils.getInstance().loadCornerImage(context, rightTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
-        rightTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
+        rightTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text, rightTxtViewHolder.tv_content));
 
         if (baseMessage.getStatus() == MessageStatus.SendFail) {
             rightTxtViewHolder.miv_status_error.setVisibility(View.VISIBLE);
@@ -1131,7 +1135,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         return m;
     }
 
-    public SpannableString getEmotionContent(String source) {
+    public SpannableString getEmotionContent(String source, TextView tv) {
         int position = -1;
         SpannableString spannableString = new SpannableString(source);
         Matcher matcherEmotion = patternEmotion.matcher(spannableString);
@@ -1154,11 +1158,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             try {
                 is = am.open(String.format("emojis/%d.png", position));
                 // 压缩表情图片
-                int size = TransformUtil.dip2px(context, 34);
+                int size = (int) tv.getTextSize() * 13 / 10;
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
                 Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
                 int end = start + value.length();
-                CenterAlignImageSpan span = new CenterAlignImageSpan(scaleBitmap);
+                ImageSpan span = new ImageSpan(context, scaleBitmap);
                 spannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -428,4 +428,11 @@
         <attr name="only_week_view" format="boolean" />
         <attr name="calendar_content_view_id" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="hprogress">
+        <attr name="progress" />
+        <attr name="max" />
+        <attr name="progressHeight" />
+        <attr name="progressColor" />
+    </declare-styleable>
 </resources>
