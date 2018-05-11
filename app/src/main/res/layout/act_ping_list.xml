@@ -118,11 +118,11 @@
             android:src="@mipmap/icon_common_back_white" />
 
         <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/mrlayout_news"
-            android:layout_width="60dp"
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingRight="8dp">
+            android:layout_marginRight="10dp">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_dot"
@@ -130,9 +130,10 @@
                 android:layout_height="4dp"
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_common_more_white" />
+                android:src="@mipmap/icon_common_more_black" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/tv_msg_count"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
                 android:layout_above="@id/miv_dot"
@@ -140,8 +141,8 @@
                 android:layout_marginBottom="1dp"
                 android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
-                android:text="9+"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 android:textSize="9sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
@@ -151,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="60dp"
             android:layout_toLeftOf="@id/miv_share"
             android:layout_toRightOf="@id/miv_close"
             android:ellipsize="end"
@@ -161,4 +162,9 @@
             android:textSize="14sp" />
 
     </com.shunlian.app.widget.MyRelativeLayout>
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </com.shunlian.app.widget.MyRelativeLayout>

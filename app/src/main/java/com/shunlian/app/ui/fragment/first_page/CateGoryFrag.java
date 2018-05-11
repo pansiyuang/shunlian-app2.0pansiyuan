@@ -34,10 +34,13 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     NestedRefreshLoadMoreLayout lay_refresh;
     @BindView(R.id.rv_view)
     RecyclerView rv_view;
+    //    @BindView(R.id.mtv_empty)
+//    MyTextView mtv_empty;
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
-    private boolean isFirst = false;
+    private boolean isFirst = false, isShowfoot = false;
+
 
     public static BaseFragment getInstance(String channel_id) {
         CateGoryFrag fragment = new CateGoryFrag();
@@ -67,9 +70,9 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
             public void onRefresh() {
                 mDatasss.clear();
                 pFirstPage.getContentData(channel_id);
-                if (firstPageAdapter!=null){
-                    firstPageAdapter.showPosition=-1;
-                    firstPageAdapter.isShow=false;
+                if (firstPageAdapter != null) {
+                    firstPageAdapter.showPosition = -1;
+                    firstPageAdapter.isShow = false;
                 }
             }
         });
@@ -125,14 +128,27 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setContent(GetDataEntity getDataEntity) {
+//        if (getDataEntity.datas!=null&&getDataEntity.datas.size()>0){
+////            mtv_empty.setVisibility(View.GONE);
+////            rv_view.setVisibility(View.VISIBLE);
+//            mtv_empty.setVisibility(View.VISIBLE);
+//            rv_view.setVisibility(View.GONE);
         lay_refresh.setRefreshing(false);
         mDatass.clear();
         mDatass.addAll(getDataEntity.datas);
 //        if (firstPageAdapter==null){
-        firstPageAdapter = new FirstPageAdapter(baseActivity, false,mDatass, isFirst, this, getDataEntity.datas.size());
+        isShowfoot = false;
+        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, getDataEntity.datas.size());
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
+//        }else {
+////            mtv_empty.setVisibility(View.VISIBLE);
+////            rv_view.setVisibility(View.GONE);
+//            mtv_empty.setVisibility(View.GONE);
+//            rv_view.setVisibility(View.VISIBLE);
+//        }
+
 //        }else {
 //            LogUtil.augusLogW("lll");
 //            firstPageAdapter.notifyDataSetChanged();
@@ -141,7 +157,9 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        if (rv_view.getScrollState()== 0){
+        if (rv_view.getScrollState() == 0) {
+            isShowfoot=true;
+            firstPageAdapter.setPageLoading(page, allPage);
             for (int i = 0; i < mDatas.size(); i++) {
                 GetDataEntity.MData mData = new GetDataEntity.MData();
                 mData.module = "moreGoods";
@@ -152,10 +170,9 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
                     firstPageAdapter.notifyDataSetChanged();
                 }
             }
-            if (mDatas.size()<=0){
+            if (mDatas.size() <= 0) {
                 firstPageAdapter.notifyDataSetChanged();
             }
-            firstPageAdapter.setPageLoading(page, allPage);
         }
 
     }

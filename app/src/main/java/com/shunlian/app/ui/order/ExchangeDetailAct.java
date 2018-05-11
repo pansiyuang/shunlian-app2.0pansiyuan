@@ -194,7 +194,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         super.onResume();
     }
 
-    @OnClick(R.id.mrlayout_news)
+    @OnClick(R.id.rl_more)
     public void more(){
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.afterSale();

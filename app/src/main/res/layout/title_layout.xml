@@ -29,7 +29,7 @@
             android:id="@+id/mrlayout_special_preBgL"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.78"
+            android:layout_weight="0.75"
             android:background="@drawable/special_activity">
 
             <com.shunlian.app.widget.MyTextView
@@ -37,7 +37,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="￥69"
                 android:textSize="29sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"/>
@@ -48,7 +47,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="原价:￥69"
                 android:textColor="@color/white"
                 android:layout_toRightOf="@+id/mtv_special_price"
                 app:tv_control_adapter="true"
@@ -63,7 +61,7 @@
             android:id="@+id/mrlayout_special_preBgR"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.22"
+            android:layout_weight="0.25"
             android:background="@mipmap/img_huodong_shijian">
 
             <com.shunlian.app.widget.MyTextView
@@ -483,7 +481,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="距活动开抢还剩,"
+            android:text="距活动开抢还剩"
             android:layout_marginLeft="7.5dp"
             android:textColor="@color/my_gray_one"
             android:textSize="11sp" />
@@ -516,7 +514,7 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请提前加入购物车"
+            android:text=",请提前加入购物车"
             android:textColor="@color/my_gray_one"
             android:textSize="11sp" />
 

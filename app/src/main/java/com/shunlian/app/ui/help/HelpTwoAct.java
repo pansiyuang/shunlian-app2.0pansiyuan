@@ -50,8 +50,8 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     private PHelpTwo pHelpTwo;
     private LinearLayoutManager linearLayoutManager;
@@ -90,7 +90,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             case R.id.mllayout_kefu:
 
                 break;
-            case R.id.mrlayout_news:
+            case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.help();
                 break;
@@ -102,7 +102,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         super.initListener();
         mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
-        mrlayout_news.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

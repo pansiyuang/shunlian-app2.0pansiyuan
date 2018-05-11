@@ -95,10 +95,32 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         if (adapter == null) {
             adapter = new SysMsgAdapter(context, msgTypes);
             iView.setAdapter(adapter);
+
+            adapter.setOnItemClickListener((v,position)->{
+                SystemMsgEntity.MsgType msgType = msgTypes.get(position);
+                handlerType(msgType);
+            });
         } else {
             adapter.notifyDataSetChanged();
         }
         adapter.setPageLoading(currentPage, allPage);
+    }
+
+    private void handlerType(SystemMsgEntity.MsgType msgType) {
+        switch (msgType.type){
+            case "1":
+
+                break;
+            case "2":
+//                Common.goGoGo(context,"goods",msgType.);
+                break;
+
+            case "3":
+                break;
+            case "4":
+//                PunishAct
+                break;
+        }
     }
 
 

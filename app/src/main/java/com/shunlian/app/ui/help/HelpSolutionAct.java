@@ -54,8 +54,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
@@ -93,7 +93,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 if (!isChosen)
                 pHelpSolution.isSolved("1");
                 break;
-            case R.id.mrlayout_news:
+            case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.shareHelp();
                 quick_actions.shareInfo(shareInfoParam);
@@ -110,7 +110,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         miv_shi.setOnClickListener(this);
         miv_fou.setOnClickListener(this);
         mtv_shi.setOnClickListener(this);
-        mrlayout_news.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
     }
 
     @Override

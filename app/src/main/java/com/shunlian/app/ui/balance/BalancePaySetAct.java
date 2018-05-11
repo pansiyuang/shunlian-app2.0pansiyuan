@@ -50,10 +50,10 @@ public class BalancePaySetAct extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.mrlayout_xiugai:
-                BalancePaySetTwoAct.startAct(this,"","modify","",false);
+                BalancePaySetTwoAct.startAct(this,"","modify","",false,false);
                 break;
             case R.id.mrlayout_zhaohui:
-                BalanceVerifyPhoneAct.startAct(this,false);
+                BalanceVerifyPhoneAct.startAct(this,false,false);
                 break;
             case R.id.mrlayout_mimashezhi:
                 BalancePaySetOneAct.startAct(this);

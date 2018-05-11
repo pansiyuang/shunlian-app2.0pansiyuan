@@ -38,7 +38,7 @@ public class StartAct extends MBaseActivity implements IMain {
     protected void initData() {
         versionJudge();
         //假如时间间隔超过一天则自动清除图片缓存
-        long lastTime = SharedPrefUtil.getSharedPrfLong("lastTime", -1);
+        long lastTime = SharedPrefUtil.getCacheSharedPrfLong("lastTime", -1);
         if (lastTime != -1 && System.currentTimeMillis() - lastTime > 24 * 60 * 60 * 1000) {
             new Handler().post(new Runnable() {
                 @Override
@@ -48,7 +48,7 @@ public class StartAct extends MBaseActivity implements IMain {
                     LogUtil.httpLogW("-----clear cache---end----");
                 }
             });
-            SharedPrefUtil.saveSharedPrfLong("lastTime", System.currentTimeMillis());
+            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
         }
         MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
         miv_anim.setBackgroundResource(R.drawable.flash_animation);
@@ -132,13 +132,13 @@ public class StartAct extends MBaseActivity implements IMain {
 
     public void isFirstJudge() {
         //如果是第一次启动app，或者版本更新后需要启动引导页
-        if (SharedPrefUtil.getSharedPrfBoolean("isFirst", true) || !SharedPrefUtil.getSharedPrfString("localVersion", "-1").equals(localVersion)) {
+        if (SharedPrefUtil.getCacheSharedPrfBoolean("isFirst", true) || !SharedPrefUtil.getSharedPrfString("localVersion", "-1").equals(localVersion)) {
 //            Constant.IS_GUIDE = true;
             deleteShortCut();
             createShortCut();
             SharedPrefUtil.saveSharedPrfString("localVersion", localVersion);
-            SharedPrefUtil.saveSharedPrfBoolean("isFirst", false);
-            SharedPrefUtil.saveSharedPrfLong("lastTime", System.currentTimeMillis());
+            SharedPrefUtil.saveCacheSharedPrfBoolean("isFirst", false);
+            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
 //            Intent intent = new Intent(baseFragActivity, GuideAct.class);
 //            startActivity(intent);
             GuideAct.startAct(this);

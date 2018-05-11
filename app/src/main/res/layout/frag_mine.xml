@@ -22,13 +22,13 @@
 
                 <com.shunlian.app.widget.MyImageView
                     android:layout_width="match_parent"
-                    android:layout_height="154dp"
+                    android:layout_height="144dp"
                     android:background="@mipmap/img_personalcenter_beijing" />
 
                 <com.shunlian.app.widget.MyLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="60dp"
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp">
@@ -758,7 +758,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="@string/personal_huiyuanguanli"
+                                android:text="@string/personal_huiyuandingdan"
                                 android:textColor="@color/new_text"
                                 android:textSize="12sp" />
                         </com.shunlian.app.widget.MyLinearLayout>
@@ -1086,20 +1086,20 @@
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:background="@color/pink_color" />
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="54dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_shezhi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:src="@mipmap/icon_personalcenter_shezhi" />
 
         <com.shunlian.app.widget.MyRelativeLayout
@@ -1107,7 +1107,6 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_marginRight="10dp">
 
             <com.shunlian.app.widget.MyImageView

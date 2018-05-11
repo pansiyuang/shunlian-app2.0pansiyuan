@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
-    private UpdateDialog updateDialog;//判断是否需要跟新
+    private UpdateDialog updateDialogV;//判断是否需要跟新
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -115,6 +115,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     @Override
     protected void initData() {
+        if (updateDialogV==null)
+            updateDialogV = new UpdateDialog(this) {
+            @Override
+            public void initDialogFinish() {
+                if (updateDialogV.updateDialog==null){
+                    pMain=new PMain(MainActivity.this,MainActivity.this);
+                    pMain.getPopAD();
+                }
+            }
+        };
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
 
@@ -124,10 +134,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             messageCountManager = MessageCountManager.getInstance(this);
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);
-        }
-        if (pMain==null){
-            pMain=new PMain(this,this);
-            pMain.getPopAD();
         }
     }
 
@@ -368,11 +374,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onDestroy() {
-        if (updateDialog != null) {
-            if (updateDialog.updateDialog != null) {
-                updateDialog.updateDialog.dismiss();
+        if (updateDialogV != null) {
+            if (updateDialogV.updateDialog != null) {
+                updateDialogV.updateDialog.dismiss();
             }
-            PromptDialog promptDialog = updateDialog.getPromptDialog();
+            PromptDialog promptDialog = updateDialogV.getPromptDialog();
             if (promptDialog != null) {
                 promptDialog.dismiss();
                 promptDialog = null;
@@ -428,7 +434,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setUpdateInfo(UpdateEntity data) {
-        updateDialog = new UpdateDialog(this);
     }
 
     @Override

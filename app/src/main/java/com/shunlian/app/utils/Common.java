@@ -55,6 +55,7 @@ import android.widget.Toast;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
@@ -62,6 +63,7 @@ import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
@@ -123,6 +125,8 @@ public class Common {
                 return "OrderDetailAct";
             case "hotpush":
                 return "HotRecommendAct";
+            case "special":
+                return "H5Act";
             default:
                 return "";
         }
@@ -130,6 +134,10 @@ public class Common {
 
     public static void goGoGo(Context context, String type, String... params) {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
+        LogUtil.augusLogW("where---"+type);
+        if (type==null){
+            return;
+        }
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
@@ -153,9 +161,11 @@ public class Common {
             case "hotpush":
                 HotRecommendAct.startAct(context, params[0]);
                 break;
+            case "my":
             case "personCenter"://个人中心
                 MainActivity.startAct(context, "personCenter");
                 break;
+            case "cart":
             case "shoppingcar"://购物车
                 MainActivity.startAct(context, "shoppingcar");
                 break;
@@ -179,6 +189,10 @@ public class Common {
                 break;
             case "footprint"://足迹
                 MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                break;
+            case "special":
+                String url = InterentTools.H5_HOST + "special/" + params[0];
+                H5Act.startAct(context,url,H5Act.MODE_SONIC);
                 break;
             default://首页
                 MainActivity.startAct(context, "");

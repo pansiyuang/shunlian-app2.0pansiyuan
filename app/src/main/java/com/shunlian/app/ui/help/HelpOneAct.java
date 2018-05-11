@@ -53,8 +53,8 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
@@ -86,7 +86,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
                     promptDialog.show();
                 }
                 break;
-            case R.id.mrlayout_news:
+            case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.help();
                 break;
@@ -111,7 +111,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
         miv_search.setOnClickListener(this);
-        mrlayout_news.setOnClickListener(this);
+        rl_more.setOnClickListener(this);
     }
 
     @Override

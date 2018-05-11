@@ -32,8 +32,8 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     @BindView(R.id.mtv_times)
     MyTextView mtv_times;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
 
     @BindView(R.id.rv_list)
@@ -66,7 +66,7 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
         setStatusBarFontDark();
         nei_empty.setImageResource(R.mipmap.img_empty_youhuiquan).setText(getString(R.string.first_dianpuyouhui));
         nei_empty.setButtonText(null);
-        mrlayout_news.setVisibility(View.GONE);
+        rl_more.setVisibility(View.GONE);
         mtv_title.setText(getStringResouce(R.string.personal_benzhouxiaoshou));
         pWeekSale = new PWeekSale(this, this);
     }

@@ -44,5 +44,6 @@ public class CouponListEntity {
         public String not_used;
         public String used;
         public String expired;
+        public String help_id;
     }
 }

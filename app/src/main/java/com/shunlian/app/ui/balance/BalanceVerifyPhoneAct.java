@@ -38,10 +38,11 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
     private GradientDrawable background;
     private String code;
 
-    public static void startAct(Context context,boolean isPaySet) {
+    public static void startAct(Context context,boolean isPaySet,boolean isAli) {
         Intent intent = new Intent(context, BalanceVerifyPhoneAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("isPaySet",isPaySet);
+        intent.putExtra("isAli",isAli);
         context.startActivity(intent);
     }
 
@@ -110,8 +111,8 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
 
     @Override
     public void nextCall(String key) {
-        BalancePaySetTwoAct.startAct(this,"","sets",key
-        ,getIntent().getBooleanExtra("isPaySet",false));
+        BalancePaySetTwoAct.startAct(this,"","set",key
+        ,getIntent().getBooleanExtra("isPaySet",false),getIntent().getBooleanExtra("isAli",false));
     }
 
     @Override

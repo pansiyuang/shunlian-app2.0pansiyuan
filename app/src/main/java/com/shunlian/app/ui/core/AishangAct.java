@@ -6,12 +6,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.AiMoreAdapter;
-import com.shunlian.app.adapter.CoreNewMenuAdapter;
 import com.shunlian.app.adapter.AishangHorizonAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.CoreNewMenuAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
@@ -24,9 +25,8 @@ import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.MHorItemDecoration;
-import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
@@ -48,9 +49,6 @@ import butterknife.BindView;
 public class AishangAct extends BaseActivity implements View.OnClickListener, IAishang, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
-
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
 
     @BindView(R.id.kanner)
     MyKanner kanner;
@@ -63,6 +61,16 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     @BindView(R.id.rv_category)
     RecyclerView rv_category;
+
+
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
 
     private PAishang pAishang;
     private AiMoreAdapter aiMoreAdapter;
@@ -91,12 +99,33 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pAishang != null) {
-                            pAishang.refreshBaby("new",cate_id);
+                            pAishang.refreshBaby("new", cate_id);
                         }
                     }
                 }
             }
         });
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.channel();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
     }
 
     @Override
@@ -112,20 +141,6 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         messageCountManager.setOnGetMessageListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        if(messageCountManager.isLoad()){
-            messageCountManager.setTextCount(tv_msg_count);
-        }else{
-            messageCountManager.initData();
-        }
-        super.onResume();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
-    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -165,20 +180,20 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         aishangHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                GoodsDetailAct.startAct(getBaseContext(),coreNewEntity.hot_goods.get(position).id);
+                GoodsDetailAct.startAct(getBaseContext(), coreNewEntity.hot_goods.get(position).id);
             }
         });
         CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(getBaseContext(), false, coreNewEntity.cate_name);
-        cate_id=coreNewEntity.cate_name.get(0).cate_id;
-        pAishang.resetBaby("new",cate_id);
+        cate_id = coreNewEntity.cate_name.get(0).cate_id;
+        pAishang.resetBaby("new", cate_id);
         coreNewMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 coreNewMenuAdapter.selectedPosition = position;
                 coreNewMenuAdapter.notifyDataSetChanged();
-                cate_id=coreNewEntity.cate_name.get(position).cate_id;
+                cate_id = coreNewEntity.cate_name.get(position).cate_id;
                 if (rv_category.getScrollState() == 0) {
-                    pAishang.resetBaby("new",cate_id);
+                    pAishang.resetBaby("new", cate_id);
                 }
             }
         });
@@ -199,21 +214,21 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     @Override
     public void setNewsData(List<CoreNewsEntity.Goods> mData, String page, String total) {
-        if (aiMoreAdapter==null){
-            aiMoreAdapter=new AiMoreAdapter(getBaseContext(),mData);
-            gridLayoutManager=new GridLayoutManager(getBaseContext(),2);
+        if (aiMoreAdapter == null) {
+            aiMoreAdapter = new AiMoreAdapter(getBaseContext(), mData);
+            gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
             rv_category.setLayoutManager(gridLayoutManager);
             rv_category.setAdapter(aiMoreAdapter);
             aiMoreAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getBaseContext(),mData.get(position).id);
+                    GoodsDetailAct.startAct(getBaseContext(), mData.get(position).id);
                 }
             });
             //在CoordinatorLayout中使用添加分割线失效
 //            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(getBaseContext(), 5), false);
 //            rv_category.addItemDecoration(gridSpacingItemDecoration);
-        }else {
+        } else {
             aiMoreAdapter.notifyDataSetChanged();
         }
         aiMoreAdapter.setPageLoading(Integer.parseInt(page), Integer.parseInt(total));
@@ -229,18 +244,27 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     }
 
-    @Override
-    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-
-    }
 
     @Override
     public void OnLoadFail() {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        quick_actions.setMessageCount(s);
+    }
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

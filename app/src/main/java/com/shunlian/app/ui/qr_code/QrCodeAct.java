@@ -31,8 +31,8 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     @BindView(R.id.mtv_chakanxiaodian)
     MyTextView mtv_chakanxiaodian;
 
-    @BindView(R.id.mrlayout_news)
-    MyRelativeLayout mrlayout_news;
+    @BindView(R.id.rl_more)
+    MyRelativeLayout rl_more;
 
     @BindView(R.id.miv_code)
     MyImageView miv_code;
@@ -89,7 +89,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
 //        storeId = getIntent().getStringExtra("storeId");
         pQrCode = new PQrCode(this, this);
         mtv_title.setText(getStringResouce(R.string.personal_yaoqingpengyou));
-        mrlayout_news.setVisibility(View.GONE);
+        rl_more.setVisibility(View.GONE);
     }
 
     @Override

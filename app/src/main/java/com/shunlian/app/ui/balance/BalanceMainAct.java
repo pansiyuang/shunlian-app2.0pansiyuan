@@ -48,6 +48,12 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        pBalanceMain = new PBalanceMain(this, this);
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.act_balance_main;
     }
@@ -95,7 +101,6 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         isBack=getIntent().getBooleanExtra("isBack", false);
-        pBalanceMain = new PBalanceMain(this, this);
     }
 
     @Override

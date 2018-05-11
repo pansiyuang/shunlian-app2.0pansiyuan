@@ -32,6 +32,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String has_option;
     public String return_7;
     public String send_time;
+    public String credit;
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
     public String member_cart_count;//详情页用户购物车角标数字
@@ -115,6 +116,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public String start_remain_seconds;
         public String end_remain_seconds;
         public String start_time;
+        public String old_price;
 
         @Override
         public int describeContents() {
@@ -1372,6 +1374,7 @@ public class GoodsDeatilEntity implements Parcelable {
         dest.writeString(this.has_option);
         dest.writeString(this.return_7);
         dest.writeString(this.send_time);
+        dest.writeString(this.credit);
         dest.writeString(this.is_preferential);
         dest.writeString(this.member_cart_count);
         dest.writeString(this.is_new);
@@ -1415,6 +1418,7 @@ public class GoodsDeatilEntity implements Parcelable {
         this.has_option = in.readString();
         this.return_7 = in.readString();
         this.send_time = in.readString();
+        this.credit = in.readString();
         this.is_preferential = in.readString();
         this.member_cart_count = in.readString();
         this.is_new = in.readString();

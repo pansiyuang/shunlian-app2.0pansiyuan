@@ -112,7 +112,6 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
             @Override
             public void onSuccess(BaseEntity<GetDataEntity> entity) {
                 super.onSuccess(entity);
-                LogUtil.augusLogW("yf1--"+id);
                 iView.setContent(entity.data);
             }
         });
