@@ -33,8 +33,10 @@
                 android:id="@+id/tv_combo_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
+                android:layout_marginLeft="3dp"
                 android:padding="3dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/my_orange_red"
                 android:textSize="14.5sp" />
 
@@ -42,8 +44,10 @@
                 android:id="@+id/tv_market_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8.5dp"
+                android:layout_marginLeft="3dp"
                 android:padding="3dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/new_gray"
                 android:textSize="12sp" />
         </LinearLayout>
