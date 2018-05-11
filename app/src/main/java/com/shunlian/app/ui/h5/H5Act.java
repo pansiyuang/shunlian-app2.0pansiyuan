@@ -9,11 +9,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
@@ -24,6 +28,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +40,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.widget.HttpDialog;
@@ -42,6 +48,8 @@ import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.MyWebView;
+import com.shunlian.app.widget.WebViewProgressBar;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicConstants;
@@ -76,7 +84,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
-    protected HttpDialog httpDialog;
+    //    protected HttpDialog httpDialog;
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     protected Intent mIntent;
@@ -105,8 +113,15 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @BindView(R.id.miv_favorite)
     public MyImageView miv_favorite;
 
+    @BindView(R.id.mProgressbar)
+    public WebViewProgressBar mProgressbar;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     SonicSessionClientImpl sonicSessionClient = null;
     private boolean isLogin = false;
+    private boolean isContinue = false;
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5Act.class);
@@ -191,7 +206,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
-        httpDialog = new HttpDialog(this);
+//        httpDialog = new HttpDialog(this);
         initWebView();
         if (!isEmpty(h5Url)) {
             loadUrl();
@@ -239,7 +254,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     }
 
     protected void loadUrl() {
-        LogUtil.zhLogW("h5Url====="+h5Url);
+        LogUtil.zhLogW("h5Url=====" + h5Url);
         if (!isEmpty(h5Url)) {
             if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
                 visible(rl_title_more);
@@ -286,11 +301,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
+        webSetting.setAppCacheMaxSize(5*1024*1024);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
 //        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
         webSetting.setAppCacheEnabled(true);
+        webSetting.setAllowFileAccess(true);
         //开启DOM缓存，关闭的话H5自身的一些操作是无效的
         webSetting.setDomStorageEnabled(true);
         webSetting.setAllowContentAccess(true);
@@ -301,13 +318,15 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         webSetting.setLoadWithOverviewMode(true);
 
         mwv_h5.setWebViewClient(new WebViewClient() {
+
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                LogUtil.zhLogW("=onPageStarted======="+url);
-                if (!isFinishing() && httpDialog != null) {
-                    httpDialog.show();
-                }
+                LogUtil.zhLogW("=onPageStarted=======" + url);
+//                if (!isFinishing() && httpDialog != null) {
+//                    httpDialog.show();
+//                }
                 if (mwv_h5 != null) {
                     mwv_h5.setVisibility(View.VISIBLE);
                 }
@@ -316,12 +335,12 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                LogUtil.zhLogW("=onPageFinished======="+url);
+                LogUtil.zhLogW("=onPageFinished=======" + url);
                 title = view.getTitle();
                 setTitle();
-                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-                    httpDialog.dismiss();
-                }
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
+//                }
                 if (sonicSession != null) {
                     sonicSession.getSessionClient().pageFinish(url);
                 }
@@ -329,22 +348,23 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                LogUtil.zhLogW("=error======="+error.getPrimaryError());
+                LogUtil.zhLogW("=error=======" + error.getPrimaryError());
                 handler.proceed();//接受证书
-                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-                    httpDialog.dismiss();
-                }
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
+//                }
             }
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 if (mwv_h5 != null) {
-                    mwv_h5.setVisibility(View.INVISIBLE);
+                    mwv_h5.setVisibility(View.GONE);
                     Common.staticToast("网络连接错误，请稍后再试");
+                    errorOperation();
                 }
-                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
-                    httpDialog.dismiss();
-                }
+//                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
+//                    httpDialog.dismiss();
+//                }
             }
 
             @Override
@@ -365,7 +385,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                         return super.shouldOverrideUrlLoading(view, url);
                     }
                     return true;
-                }else if (url.startsWith("weixin://")){
+                } else if (url.startsWith("weixin://")) {
                     try {
                         // 以下固定写法
                         final Intent intent = new Intent(Intent.ACTION_VIEW,
@@ -379,7 +399,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                         return super.shouldOverrideUrlLoading(view, url);
                     }
                     return true;
-                }else if (url.contains("slmall://")) {
+                } else if (url.contains("slmall://")) {
                     analysisUrl(url);
                     return true;
                 } else {
@@ -398,6 +418,31 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
         });
         mwv_h5.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                //如果没有网络直接跳出方法
+                if (!NetworkUtils.isNetworkAvailable(H5Act.this)) {
+                    return;
+                }
+                //如果进度条隐藏则让它显示
+                if (View.INVISIBLE == mProgressbar.getVisibility() && isContinue == false) {
+                    mProgressbar.setVisibility(View.VISIBLE);
+                }
+                //大于80的进度的时候,放慢速度加载,否则交给自己加载
+                if (newProgress >= 80) {
+                    //拦截webView自己的处理方式
+                    if (isContinue) {
+                        return;
+                    }
+                    mProgressbar.setCurProgress(100, 3000, () -> {
+                        finishOperation(true);
+                    });
+                    isContinue = true;
+                } else {
+                    mProgressbar.setNormalProgress(newProgress);
+                }
+            }
 
             // For Android < 3.0
             public void openFileChooser(ValueCallback<Uri> valueCallback) {
@@ -640,5 +685,76 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         public String getResponseHeaderField(String key) {
             return "";
         }
+    }
+
+
+    /**
+     * 错误的时候进行的操作
+     */
+    private void errorOperation() {
+        //隐藏webview
+        mwv_h5.setVisibility(View.GONE);
+        if (View.INVISIBLE == mProgressbar.getVisibility()) {
+            mProgressbar.setVisibility(View.VISIBLE);
+        }
+        //3.5s 加载 0->80 进度的加载 为了实现,特意调节长了事件
+        mProgressbar.setCurProgress(80, 3500, () -> {
+            //3.5s 加载 80->100 进度的加载
+            mProgressbar.setCurProgress(100, 3500, () -> finishOperation(false));
+        });
+    }
+
+    /**
+     * 结束进行的操作
+     */
+    private void finishOperation(boolean flag) {
+        //最后加载设置100进度
+        mProgressbar.setNormalProgress(100);
+        //显示网络异常布局
+        nei_empty.setVisibility(flag ? View.GONE : View.VISIBLE);
+        mwv_h5.setVisibility(flag ? View.VISIBLE : View.GONE);
+        //点击重新连接网络
+        nei_empty.setNetExecption().setOnClickListener(v -> {
+            mwv_h5.setVisibility(View.VISIBLE);
+            nei_empty.setVisibility(View.GONE);
+            mwv_h5.reload();
+        });
+        hideProgressWithAnim();
+    }
+
+    /**
+     * 隐藏加载对话框
+     */
+    private void hideProgressWithAnim() {
+        AnimationSet animation = getDismissAnim(H5Act.this);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mProgressbar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        mProgressbar.startAnimation(animation);
+    }
+
+    /**
+     * 获取消失的动画
+     *
+     * @param context
+     * @return
+     */
+    private AnimationSet getDismissAnim(Context context) {
+        AnimationSet dismiss = new AnimationSet(context, null);
+        AlphaAnimation alpha = new AlphaAnimation(1.0f, 0.0f);
+        alpha.setDuration(1000);
+        dismiss.addAnimation(alpha);
+        return dismiss;
     }
 }

@@ -687,8 +687,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 int i = TransformUtil.dip2px(context, 1);
                 background.setStroke(i,getColor(R.color.my_gray_one));
 
-                GlideUtils.getInstance().loadImage(context,
-                        mHolder.miv_special_before_pic,mGoodsEntity.pics.get(0));
+//                GlideUtils.getInstance().loadImage(context,
+//                        mHolder.miv_special_before_pic,mGoodsEntity.pics.get(0));
                 if ("1".equals(common_activity.if_time)) {//显示预览倒计时
                     visible(mHolder.mllayout_specail_before_downtime);
                     mHolder.ddp_special_before_downTime.setLabelBackgroundColor(getColor(R.color.transparent));

@@ -298,23 +298,15 @@
         android:textSize="15sp"
         android:visibility="gone" />
 
-    <!--遮罩-->
-    <ScrollView
-        android:id="@+id/sv_mask"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-    </ScrollView>
     <!--分享-->
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mll_share"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/value_11"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:visibility="gone">
 

@@ -15,6 +15,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2.5dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/miv_icon"
         android:textColor="@color/new_gray"
@@ -25,19 +26,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_name"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="2.5dp"
-        android:layout_toRightOf="@+id/miv_icon"
-        android:background="@drawable/bg_chat_other"
-        android:clickable="true"
-        android:gravity="center"
-        android:longClickable="true">
+        android:layout_toRightOf="@+id/miv_icon">
 
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_chat_other"
+            android:gravity="center_vertical"
             android:maxWidth="260dp"
             android:textColor="@color/new_text"
             android:textSize="17dp" />

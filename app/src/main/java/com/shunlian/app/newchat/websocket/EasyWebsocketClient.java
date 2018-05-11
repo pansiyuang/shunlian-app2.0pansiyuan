@@ -59,10 +59,6 @@ public class EasyWebsocketClient extends WebSocketClient {
     private static long timeout = 15 * 1000;
     //重连次数
     private int reconnectCount = 0;
-    //重连最小时间间隔
-    private long minInterval = 3000;
-    //重连最大时间间隔
-    private long maxInterval = 60000;
     private TimeOutThread timeOutThread;
     private Timer timer;
     private MyTimerTask myTimerTask;
@@ -133,9 +129,9 @@ public class EasyWebsocketClient extends WebSocketClient {
 
     @Override
     public void connect() {
-//        mStatus = Status.CONNECTING;
-//        onConnecting();
-//        super.connect();
+        mStatus = Status.CONNECTING;
+        onConnecting();
+        super.connect();
     }
 
     @Override
@@ -149,7 +145,9 @@ public class EasyWebsocketClient extends WebSocketClient {
      * 连接中
      */
     public void onConnecting() {
-        timeOutThread = new TimeOutThread();//开启超时任务线程
+        if (timeOutThread == null) {
+            timeOutThread = new TimeOutThread();//开启超时任务线程
+        }
         timeOutThread.start();
 
         if (mListener != null) {
@@ -299,37 +297,40 @@ public class EasyWebsocketClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         LogUtil.httpLogW("连接关闭:" + code + "," + reason + "," + remote);
-        if (mStatus != Status.TIMEOUT) {
-            mStatus = Status.DISCONNECTED;
-            mSingleton = null;
-            timeOutThread.cancel();
-            stopPin();
-
-            if (mListener != null) {
-                mListener.onClose();
+        if (reconnectCount == 0) {
+            resetSocket();
+        } else if (reconnectCount < 3) {
+            mStatus = Status.CONNECTING;
+        } else {
+            if (mStatus != Status.TIMEOUT) {
+                mStatus = Status.DISCONNECTED;
+                timeOutThread.cancel();
+                stopPin();
+                if (mListener != null) {
+                    mListener.onClose();
+                }
+            }
+            if (timer != null) {
+                timer.cancel();
             }
         }
-        if (timer != null) {
-            timer.cancel();
-        }
-
-        resetSocket();
     }
 
     @Override
     public void onError(Exception ex) {
         LogUtil.httpLogW("连接错误:" + ex.getMessage());
-        if (mStatus != Status.TIMEOUT) {
-            ex.printStackTrace();
-            mStatus = Status.ERROR;
-            timeOutThread.cancel();
-            stopPin();
-
-            if (mListener != null) {
-                mListener.onError();
-            }
-
+        if (reconnectCount == 0) {
             resetSocket();
+        } else if (reconnectCount < 3) {
+            mStatus = Status.CONNECTING;
+        } else {
+            if (mStatus != Status.TIMEOUT) {
+                ex.printStackTrace();
+                mStatus = Status.ERROR;
+                if (mListener != null) {
+                    mListener.onError();
+                }
+            }
         }
     }
 
@@ -481,8 +482,10 @@ public class EasyWebsocketClient extends WebSocketClient {
                     LogUtil.httpLogW("心跳包发送");
                     break;
             }
-            LogUtil.httpLogW("发送的json：" + jsonObject.toString());
-            send(jsonObject.toString());
+            if (mStatus == Status.CONNECTED) {
+                LogUtil.httpLogW("发送的json：" + jsonObject.toString());
+                send(jsonObject.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -493,7 +496,6 @@ public class EasyWebsocketClient extends WebSocketClient {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
 
             LogUtil.httpLogW("setUserInfoEntity:" + currentMemberStatus);
-
             if (currentMemberStatus != MemberStatus.Member) {
                 switchStatus(currentMemberStatus);
             } else {
@@ -569,7 +571,6 @@ public class EasyWebsocketClient extends WebSocketClient {
                 currentMemberStatus = MemberStatus.Member;
                 break;
         }
-        LogUtil.httpLogW("用户状态更新为:" + currentMemberStatus);
         SharedPrefUtil.saveSharedPrfString("user_id", mUser.user_id);
     }
 
@@ -734,58 +735,39 @@ public class EasyWebsocketClient extends WebSocketClient {
         isChating = chating;
     }
 
-    public boolean isSelf(BaseMessage baseMessage) {
-        boolean isSelf = false;
-        if (userInfoEntity == null) {
-            isSelf = false;
-        }
-
-        if (baseMessage == null) {
-            isSelf = false;
-        }
-
-        if (baseMessage.from_user_id.equals(userInfoEntity.info.user.user_id)) {
-            isSelf = true;
-        }
-
-        if (baseMessage.to_user_id.equals(userInfoEntity.info.user.user_id)) {
-            isSelf = false;
-        }
-        return isSelf;
-    }
-
-
     public void resetSocket() {
         if (!NetworkUtils.isNetworkOpen(mContext)) {
             reconnectCount = 0;
             LogUtil.httpLogW("重连失败网络不可用");
             return;
         }
-        if (mStatus != Status.CONNECTING) {//不是正在重连状态
-            reconnectCount++;
-            mStatus = Status.CONNECTING;
-            long reconnectTime = minInterval;
-            if (reconnectCount > 3) {
-                long temp = minInterval * (reconnectCount - 2);
-                reconnectTime = temp > maxInterval ? maxInterval : temp;
-            }
-            LogUtil.httpLogW(String.format("准备开始第%d次重连,重连间隔%d", reconnectCount, reconnectTime));
-            mHandler.postDelayed(mReconnectTask, reconnectTime);
+
+        if (reconnectCount > 3) {
+            LogUtil.httpLogW(String.format("准备开始第%d次重连,重连间隔%d", reconnectCount, 1000));
+            cancelReconnect();
+            return;
         }
+        mHandler.postDelayed(mReconnectTask, 1000);
     }
 
     private Runnable mReconnectTask = new Runnable() {
         @Override
         public void run() {
-            LogUtil.httpLogW("尝试重连服务器....");
-//            try {
-//                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
-//                mSingleton.setTimeOut(timeout);
-//                mSingleton.connect();
-//            } catch (URISyntaxException e) {
-//                e.printStackTrace();
-//                LogUtil.httpLogW("链接服务器失败....");
-//            }
+            LogUtil.httpLogW("尝试重连服务器...." + mStatus);
+
+            if (mStatus != Status.CONNECTING) {//不是正在重连状态
+                reconnectCount++;
+                mStatus = Status.CONNECTING;
+            }
+            try {
+                mSingleton = null;
+                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
+                mSingleton.setTimeOut(timeout);
+                mSingleton.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                LogUtil.httpLogW("链接服务器失败....");
+            }
         }
     };
 

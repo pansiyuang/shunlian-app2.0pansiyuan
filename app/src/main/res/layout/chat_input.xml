@@ -34,7 +34,7 @@
             android:textColor="#666666"
             android:textColorHint="@color/text_gray1"
             android:textCursorDrawable="@null"
-            android:textSize="14dp" />
+            android:textSize="17dp" />
         <!--android:background="@drawable/input_type"-->
         <ImageButton
             android:id="@+id/btnEmoticon"

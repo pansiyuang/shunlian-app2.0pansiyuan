@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 
 import com.shunlian.app.R;
@@ -36,6 +38,7 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     protected void initData() {
+        setHeader();
         versionJudge();
         //假如时间间隔超过一天则自动清除图片缓存
         long lastTime = SharedPrefUtil.getCacheSharedPrfLong("lastTime", -1);
@@ -182,5 +185,33 @@ public class StartAct extends MBaseActivity implements IMain {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tryRecycleAnimationDrawable(flashAnimation);
+    }
+
+    private static void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
+        if (animationDrawable != null) {
+            animationDrawable.stop();
+            for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
+                Drawable frame = animationDrawable.getFrame(i);
+                if (frame instanceof BitmapDrawable) {
+                    ((BitmapDrawable) frame).getBitmap().recycle();
+                }
+                frame.setCallback(null);
+            }
+            animationDrawable.setCallback(null);
+            animationDrawable = null;
+            System.gc();
+        }
     }
 }

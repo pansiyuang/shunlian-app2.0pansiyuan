@@ -100,7 +100,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
         messageCountManager.setOnGetMessageListener(this);
         if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(tv_title_number);
-            quick_actions.setMessageCount(s);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -110,7 +111,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_title_number);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -128,7 +130,8 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(tv_title_number);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override

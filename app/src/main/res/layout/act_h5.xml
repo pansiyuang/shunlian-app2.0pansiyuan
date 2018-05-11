@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lLayout_rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,9 +13,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_title"
-        android:layout_below="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_below="@+id/view_line"
         android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
@@ -64,8 +65,8 @@
             android:id="@+id/miv_favorite"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_toLeftOf="@+id/rl_title_more"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rl_title_more"
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_found_souchang_n"
             android:visibility="gone" />
@@ -105,14 +106,30 @@
 
     <com.shunlian.app.widget.MyWebView
         android:id="@+id/mwv_h5"
-        android:layout_below="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"/>
+        android:layout_below="@+id/rl_title"
+        android:scrollbars="none" />
+
+    <com.shunlian.app.widget.WebViewProgressBar
+        android:id="@+id/mProgressbar"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/rl_title"
+        app:max="100"
+        app:progressColor="@color/pink_color"
+        app:progressHeight="3" />
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title"
+        android:visibility="gone" />
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </RelativeLayout>

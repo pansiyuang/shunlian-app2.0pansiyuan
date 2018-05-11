@@ -1,12 +1,10 @@
 package com.shunlian.app.ui;
 
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,8 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
-import com.shunlian.app.broadcast.NetDialog;
-import com.shunlian.app.broadcast.NetworkBroadcast;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -27,7 +23,6 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,9 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public abstract class MBaseActivity extends FragmentActivity implements View.OnClickListener{
-    public static Map<Integer, NetDialog> dialogLists = new HashMap<>();
     private Unbinder unbinder;
-    private NetworkBroadcast networkBroadcast;
     private Resources resources;
 
     /**
@@ -56,33 +49,9 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
     }
 
-    public void showPopup(boolean isShow) {
-        boolean b = dialogLists.containsKey(this.hashCode());
-        if (!b) {
-            NetDialog netDialog = new NetDialog(this);
-            dialogLists.put(this.hashCode(), netDialog);
-        }
-        if (isShow) {
-            dialogLists.get(this.hashCode()).show();
-        } else {
-            dismissDialog(true);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        networkBroadcast = new NetworkBroadcast();
-        registerReceiver(networkBroadcast, filter);
-        networkBroadcast.setOnUpdateUIListenner(new NetworkBroadcast.UpdateUIListenner() {
-
-            @Override
-            public void updateUI(boolean isShow) {
-                showPopup(isShow);
-            }
-        });
     }
 
     private void finishAct() {
@@ -157,8 +126,6 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
         extraHeaders.put("Accept-Encoding", "gzip,deflate");
         extraHeaders.put("Content-Type", "application/json");
         extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type", ""));
-        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
-        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
         extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
         return extraHeaders;
     }
@@ -238,11 +205,6 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        if (networkBroadcast != null ) {
-            unregisterReceiver(networkBroadcast);
-            networkBroadcast = null;
-        }
-        dismissDialog(false);
     }
 
 
@@ -268,29 +230,6 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
             if (focusable) {
                 editText[i].requestFocus();
             }
-        }
-    }
-
-    private void dismissDialog(boolean isClearAll) {
-        if (!isClearAll) {
-            NetDialog netDialog = dialogLists.get(hashCode());
-            if (netDialog != null && netDialog.isShowing()) {
-                netDialog.dismiss();
-                netDialog = null;
-            }
-            return;
-        }
-        if (dialogLists != null && dialogLists.size() > 0) {
-            Iterator<Integer> iterator = dialogLists.keySet().iterator();
-            while (iterator.hasNext()) {
-                Integer next = iterator.next();
-                NetDialog netDialog = dialogLists.get(next);
-                if (netDialog != null && netDialog.isShowing()) {
-                    netDialog.dismiss();
-                }
-                netDialog = null;
-            }
-            dialogLists.clear();
         }
     }
 

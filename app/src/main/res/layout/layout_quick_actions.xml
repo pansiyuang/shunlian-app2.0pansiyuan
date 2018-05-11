@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mllayout_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentRight="true"
+    android:background="@mipmap/bg_more"
+    android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:clickable="true"
-    android:background="@mipmap/bg_more"
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyTextView
@@ -366,4 +366,4 @@
 
 
 
-</com.shunlian.app.widget.MyLinearLayout>
+</LinearLayout>

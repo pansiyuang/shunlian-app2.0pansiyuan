@@ -472,18 +472,18 @@
             android:id="@+id/miv_special_before_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/img_huodong"
             app:iv_control_adapter="true"
-            app:iv_control_width="58"
             app:iv_control_height="58"
-            app:iv_margin_left="20"
-            android:scaleType="centerCrop"/>
+            app:iv_control_width="58"
+            app:iv_margin_left="20" />
 
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="距活动开抢还剩"
+            android:text="距活动开抢还剩 "
             android:layout_marginLeft="7.5dp"
-            android:textColor="@color/my_gray_one"
+            android:textColor="@color/new_text"
             android:textSize="11sp" />
 
         <com.shunlian.app.widget.MyLinearLayout
@@ -514,8 +514,8 @@
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=",请提前加入购物车"
-            android:textColor="@color/my_gray_one"
+            android:text="  ,请提前加入购物车"
+            android:textColor="@color/new_text"
             android:textSize="11sp" />
 
     </com.shunlian.app.widget.MyLinearLayout>
