@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -59,12 +60,12 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
         ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, false, combo.goods);
         viewHolder.recycler_combo.setAdapter(comboPicAdapter);
-        comboPicAdapter.setOnItemClickListener((v,pos)-> {
-            if (listener != null){
+        viewHolder.recycler_combo.setOnTouchListener((v,e)-> {
+            if (e.getAction() == MotionEvent.ACTION_UP && listener != null){
                 listener.onItemClick(v,position);
             }
+            return false;
         });
-
     }
 
     public class ComboViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
