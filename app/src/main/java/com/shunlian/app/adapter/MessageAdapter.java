@@ -7,21 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.adapter.TopMessageAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
-import com.shunlian.app.newchat.ui.MessageListFragment;
-import com.shunlian.app.newchat.util.MessageCountManager;
-import com.shunlian.app.newchat.util.SwitchStatusDialog;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SwipeMenuLayout;
 import com.shunlian.app.widget.MyImageView;
 
