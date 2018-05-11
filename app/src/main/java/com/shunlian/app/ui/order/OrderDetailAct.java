@@ -140,6 +140,12 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
 
+    @BindView(R.id.mtv_more)
+    MyTextView mtv_more;
+
+    @BindView(R.id.mtv_contact)
+    MyTextView mtv_contact;
+
     private OrderDetailPresenter orderDetailPresenter;
     private String storeId, orderId = "54";
 
@@ -279,6 +285,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         GradientDrawable t2Dackground;
         GradientDrawable t3Dackground;
         mtv_time.setVisibility(View.GONE);
+        mtv_more.setVisibility(View.GONE);
         switch (orderdetailEntity.status) {
             case "-1":
                 mtv_time.setVisibility(View.VISIBLE);
@@ -315,16 +322,24 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 break;
             case "1":
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daifahuo);
+
                 mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mtv_title1.getBackground();
                 t1Dackground.setStroke(strokeWidth, new_gray);
                 mtv_title1.setTextColor(new_gray);
-                mtv_title1.setText(getString(R.string.remind_send));
+                mtv_title1.setText(getString(R.string.contact_seller));
 
-                mtv_title2.setVisibility(View.GONE);
+                mtv_title2.setVisibility(View.VISIBLE);
+                t2Dackground = (GradientDrawable) mtv_title2.getBackground();
+                t2Dackground.setStroke(strokeWidth, pink_color);
+                mtv_title2.setTextColor(pink_color);
+                mtv_title2.setText(getString(R.string.remind_send));
+
                 mtv_title3.setVisibility(View.GONE);
                 break;
             case "2":
+                mtv_more.setVisibility(View.VISIBLE);
+                mtv_time.setVisibility(View.VISIBLE);
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daishouhuo);
                 if ("1".equals(orderdetailEntity.is_postpone)) {
                     mtv_title1.setVisibility(View.GONE);
@@ -351,7 +366,12 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             case "3":
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_success);
 
-                mtv_title1.setVisibility(View.GONE);
+                mtv_title1.setVisibility(View.VISIBLE);
+                t1Dackground = (GradientDrawable) mtv_title1.getBackground();
+                t1Dackground.setStroke(strokeWidth, new_gray);
+                mtv_title1.setTextColor(new_gray);
+                mtv_title1.setText(getString(R.string.contact_seller));
+
 
                 mtv_title2.setVisibility(View.VISIBLE);
                 t2Dackground = (GradientDrawable) mtv_title2.getBackground();
@@ -367,7 +387,12 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 break;
             case "4":
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_common);
-                mtv_title1.setVisibility(View.GONE);
+
+                mtv_title1.setVisibility(View.VISIBLE);
+                t1Dackground = (GradientDrawable) mtv_title1.getBackground();
+                t1Dackground.setStroke(strokeWidth, new_gray);
+                mtv_title1.setTextColor(new_gray);
+                mtv_title1.setText(getString(R.string.contact_seller));
 
                 t2Dackground = (GradientDrawable) mtv_title2.getBackground();
                 t2Dackground.setStroke(strokeWidth, new_gray);
@@ -416,6 +441,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_title1.setOnClickListener(this);
         mtv_title2.setOnClickListener(this);
         mtv_title3.setOnClickListener(this);
+        mtv_more.setOnClickListener(this);
+        mtv_contact.setOnClickListener(this);
     }
 
     /**
@@ -484,6 +511,17 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         }
         CharSequence text = null;
         switch (view.getId()) {
+            case R.id.mtv_more:
+               if (mtv_contact.getVisibility()==View.VISIBLE){
+                   mtv_contact.setVisibility(View.GONE);
+               }else {
+                   mtv_contact.setVisibility(View.VISIBLE);
+               }
+                break;
+            case R.id.mtv_contact:
+                mtv_contact.setVisibility(View.GONE);
+                orderDetailPresenter.getUserId(storeId);
+                break;
             case R.id.mtv_copy:
                 ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(mtv_number.getText()); //将内容放入粘贴管理器,在别的地方长按选择"粘贴"即可
@@ -496,8 +534,6 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 text = mtv_title1.getText();
                 if (getString(R.string.contact_seller).equals(text)) {//联系商家
                     orderDetailPresenter.getUserId(storeId);
-                } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
-                    orderDetailPresenter.remindseller(orderId);
                 } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
                     extendTheCollection();
                 }
@@ -507,7 +543,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 text = mtv_title2.getText();
                 if (getString(R.string.cancel_order).equals(text)) {//取消订单
                     cancleOrder();
-                } else if (getString(R.string.order_wuliu).equals(text)) {//物流
+                } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
+                    orderDetailPresenter.remindseller(orderId);
+                }else if (getString(R.string.order_wuliu).equals(text)) {//物流
                     //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                     OrderLogisticsActivity.startAct(this, orderId);
                 }

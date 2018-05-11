@@ -9,4 +9,5 @@ import com.shunlian.app.bean.RefundDetailEntity;
 public interface ExchangeDetailView extends IView {
     void setData(RefundDetailEntity refundDetailEntity);
     void confirmReceive();
+    void getUserId(String userId);
 }

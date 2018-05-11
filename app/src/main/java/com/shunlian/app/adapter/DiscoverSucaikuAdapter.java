@@ -104,7 +104,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                     viewHolder.rv_pics.setNestedScrollingEnabled(false);
                     if (viewHolder.rv_pics==null)
                     {
-                        viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
+                        viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,90),false));
                     }
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
                     viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {

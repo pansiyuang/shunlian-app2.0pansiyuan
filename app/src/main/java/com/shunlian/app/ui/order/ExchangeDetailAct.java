@@ -13,12 +13,16 @@ import com.shunlian.app.adapter.ExchangeDetailOptAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.timer.HourNoWhiteDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.ExchangeDetailView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyImageView;
@@ -145,9 +149,14 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.downTime_order)
+    HourNoWhiteDownTimerView downTime_order;
+
     private ExchangeDetailPresenter exchangeDetailPresenter;
     private String refund_id = "53";
     private MessageCountManager messageCountManager;
+    private RefundDetailEntity.RefundDetail refundDetail;
+    private boolean isFirst=true;
 
     public static void startAct(Context context, String refund_id) {
         Intent intent = new Intent(context, ExchangeDetailAct.class);
@@ -223,19 +232,10 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         if (MyOnClickListener.isFastClick()) {
             return;
         }
-        CharSequence text = null;
         switch (view.getId()) {
-//            case R.id.mtv_title1:
-//                text = mtv_title1.getText();
-//                if (getString(R.string.contact_seller).equals(text)) {//联系商家
-//
-//                } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
-//                    orderDetailPresenter.remindseller(orderId);
-//                } else if (getString(R.string.extend_the_collection).equals(text)) {//延长收货
-//                    extendTheCollection();
-//                }
-//
-//                break;
+            case R.id.mtv_contact:
+                exchangeDetailPresenter.getUserId(refundDetail.store_id);
+                break;
 
         }
     }
@@ -252,7 +252,26 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void setData(RefundDetailEntity refundDetailEntity) {
-        RefundDetailEntity.RefundDetail refundDetail = refundDetailEntity.refund_detail;
+        refundDetail = refundDetailEntity.refund_detail;
+        int time=Integer.parseInt(refundDetail.rest_second);
+        if (!TextUtils.isEmpty(refundDetail.rest_second)&&time>0){
+            downTime_order.setDownTime(time);
+            downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    downTime_order.cancelDownTimer();
+                    exchangeDetailPresenter.initApiData();
+                }
+
+            });
+            downTime_order.startDownTimer();
+            mtv_time.setVisibility(View.GONE);
+            downTime_order.setVisibility(View.VISIBLE);
+        }else {
+            mtv_time.setVisibility(View.VISIBLE);
+            downTime_order.setVisibility(View.GONE);
+            mtv_time.setText(refundDetail.time_desc);
+        }
         GlideUtils.getInstance().loadImage(this, ctgv_goods.getGoodsIcon(), refundDetail.thumb);
         ctgv_goods.setLabelName(refundDetail.store_name, true);
         ctgv_goods.setGoodsTitle(refundDetail.title);
@@ -271,8 +290,8 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.order_id,refundDetail.edit));
 
         mtv_state.setText(refundDetail.status_desc);
-        mtv_time.setText(refundDetail.time_desc);
-        if (refundDetail.return_address != null) {
+        if (refundDetail.return_address != null
+                &&!TextUtils.isEmpty(refundDetail.return_address.address)) {
             mtv_tuihuo.setVisibility(View.VISIBLE);
             view_tuihuo.setVisibility(View.VISIBLE);
             view_tuihuos.setVisibility(View.VISIBLE);
@@ -286,7 +305,8 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             view_tuihuos.setVisibility(View.GONE);
             mrlayout_tuihuo.setVisibility(View.GONE);
         }
-        if (refundDetail.member_address != null) {
+        if (refundDetail.member_address != null
+                &&!TextUtils.isEmpty(refundDetail.member_address.address)) {
             mtv_shouhuo.setVisibility(View.VISIBLE);
             view_shouhuo.setVisibility(View.VISIBLE);
             view_shouhuos.setVisibility(View.VISIBLE);
@@ -323,12 +343,12 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mtv_wulius.setText(refundDetail.express);
         }
 
-        if (refundDetail.gift==null){
-            mlLayout_gift.setVisibility(View.GONE);
-        }else {
+        if (refundDetail.gift!=null&&!TextUtils.isEmpty(refundDetail.gift.thumb)){
             mlLayout_gift.setVisibility(View.VISIBLE);
             GlideUtils.getInstance().loadImage(this,miv_gift,refundDetail.gift.thumb);
             mtv_gift.setText(refundDetail.gift.title);
+        }else {
+            mlLayout_gift.setVisibility(View.GONE);
         }
 //        web_desc.loadData("测试", "text/html; charset=UTF-8", null);//解决加载html代码乱码
         String key;
@@ -348,7 +368,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         if (TextUtils.isEmpty(refundDetail.refund_amount)){
             mtv_money.setVisibility(View.GONE);
         }else {
-            mtv_money.setText("退款金额：" + refundDetail.refund_amount);
+            mtv_money.setText("退款金额：" +getStringResouce(R.string.common_yuan)+ refundDetail.refund_amount);
             mtv_money.setVisibility(View.VISIBLE);
         }
         if (TextUtils.isEmpty(refundDetail.goods_num)){
@@ -377,7 +397,21 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     }
 
     @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = refundDetail.store_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+        chatMember.shop_id = refundDetail.store_id;
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
+    }
+
+    @Override
     public void onDestroy() {
+        if (downTime_order!=null){
+            downTime_order.cancelDownTimer();
+            downTime_order=null;
+        }
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);

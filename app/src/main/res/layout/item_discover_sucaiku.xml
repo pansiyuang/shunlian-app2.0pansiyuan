@@ -38,7 +38,7 @@
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="14dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">

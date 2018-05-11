@@ -101,15 +101,6 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.mrlayout_time.setVisibility(View.GONE);
                 oneHolder.view_title.setVisibility(View.GONE);
             }
-            if ("1".equals(data.remind_status)) {
-                oneHolder.isRemind = true;
-                oneHolder.miv_clock.setVisibility(View.GONE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
-            } else {
-                oneHolder.isRemind = false;
-                oneHolder.miv_clock.setVisibility(View.VISIBLE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
-            }
             GradientDrawable copyBackground = (GradientDrawable) oneHolder.mllayout_remind.getBackground();
             if ("1".equals(isStart)) {
                 //设置圆角背景
@@ -133,6 +124,16 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.seekbar_grow.setVisibility(View.GONE);
                 oneHolder.mtv_number.setVisibility(View.VISIBLE);
                 oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+            }
+            if ("1".equals(data.remind_status)) {
+                oneHolder.isRemind = true;
+                oneHolder.miv_clock.setVisibility(View.GONE);
+                oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
+                copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
+            } else {
+                oneHolder.isRemind = false;
+                oneHolder.miv_clock.setVisibility(View.VISIBLE);
+                oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
             }
             GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
         }

@@ -18,6 +18,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.help.HelpClassAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
@@ -250,6 +251,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     private PersonalcenterPresenter personalcenterPresenter;
     private HelpArticleAdapter helpArticleAdapter;
+    private String managerUrl,orderUrl;
 
     //    private Timer outTimer;
     @Override
@@ -349,6 +351,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        managerUrl=personalcenterEntity.son_manage_url;
+        orderUrl=personalcenterEntity.son_order_url;
         refreshview.stopRefresh(true);
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
@@ -667,9 +671,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 SignInAct.startAct(baseContext);
                 break;
             case R.id.mllayout_huiyuanguanli:
+                H5Act.startAct(getContext(),managerUrl,H5Act.MODE_SONIC);
                //会员管理
                 break;
             case R.id.mllayout_huiyuandingdan:
+                H5Act.startAct(getContext(),orderUrl,H5Act.MODE_SONIC);
                 //会员订单
                 break;
             case R.id.mtv_chakan:

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.ui.discover.other.SearchArticleActivity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
@@ -307,7 +308,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             flashAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(getContext(), navEntity.flash_list.get(position).id);
+                    ArticleH5Act.startAct(getActivity(), navEntity.flash_list.get(position).id, ArticleH5Act.MODE_SONIC);
                 }
             });
         } else {

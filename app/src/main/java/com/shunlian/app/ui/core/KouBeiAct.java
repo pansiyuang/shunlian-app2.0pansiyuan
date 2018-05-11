@@ -154,7 +154,6 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
-        mtv_title.setText(getStringResouce(R.string.first_pingpaite));
         mtv_title.setText(getStringResouce(R.string.first_koubeire));
         pAishang = new PAishang(this, this);
         pAishang.getCoreHot();

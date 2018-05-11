@@ -43,7 +43,7 @@ public class StoreVoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.V
             VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
             GoodsDeatilEntity.Voucher voucher = mData.get(position);
             voucherViewHolder.mtv_price.setText(voucher.denomination);
-            voucherViewHolder.mtv_name.setText(voucher.title);
+//            voucherViewHolder.mtv_name.setText(voucher.title);
             String format = "满%s元可用";
             if (!isEmpty(voucher.use_condition) && "0".equals(voucher.use_condition)){
                 voucherViewHolder.mtv_full_cut.setText(getString(R.string.no_doorsill_voucher));

@@ -490,7 +490,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (sixHolder.firstHorizonAdapter == null) {
                         sixHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, false);
                         sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        sixHolder.rv_goods.setAdapter(new FirstHorizonAdapter(context, false, data.datass, false));
+                        sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
+                        sixHolder.rv_goods.setNestedScrollingEnabled(false);
                         sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
                         sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
@@ -500,6 +501,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         });
                     }
                     sixHolder.firstHorizonAdapter.notifyDataSetChanged();
+                    sixHolder.rv_goods.setFocusable(false);
                 }
                 break;
             case TYPE7:
@@ -510,8 +512,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
                         sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                         sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
+                        sevenHolder.rv_goods.setNestedScrollingEnabled(false);
                         sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                        sevenHolder.firstHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener()  {
+                        sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
                                 GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
@@ -519,6 +522,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         });
                     }
                     sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
+                    sevenHolder.rv_goods.setFocusable(false);
                 }
                 break;
             case TYPE8:
