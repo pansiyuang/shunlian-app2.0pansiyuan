@@ -1,77 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.utils.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="16dp"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="5dp">
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:ios="false"
+    app:leftSwipe="true"
+    app:swipeEnable="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="17dp"
-            android:textColor="@color/my_dark_grey"
-            android:textSize="13sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/bg_gray_four" />
-
-        <RelativeLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp">
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="5dp">
 
-            <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_icon"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_marginRight="13dp"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/miv_icon"
-                android:includeFontPadding="false"
-                android:textColor="@color/new_text"
-                android:textSize="13sp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_id_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_name"
-                android:layout_marginTop="7dp"
-                android:layout_toRightOf="@+id/miv_icon"
-                android:includeFontPadding="false"
-                android:textColor="@color/new_text"
-                android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="17dp"
+                    android:text="加勒比海龟关注了您，您的小店又新会员啦，快来和他联系吧"
+                    android:textColor="@color/my_dark_grey"
+                    android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tv_attention_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_id_number"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/miv_icon"
-                android:includeFontPadding="false"
-                android:textColor="@color/my_gray_one"
-                android:textSize="10sp" />
-        </RelativeLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/bg_gray_four" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="18dp">
+
+                    <com.shunlian.app.widget.MyImageView
+                        android:id="@+id/miv_icon"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginRight="13dp"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/miv_icon"
+                        android:includeFontPadding="false"
+                        android:text="加勒比海盗"
+                        android:textColor="@color/new_text"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_id_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_name"
+                        android:layout_marginTop="7dp"
+                        android:layout_toRightOf="@+id/miv_icon"
+                        android:includeFontPadding="false"
+                        android:text="会员ID：54656566"
+                        android:textColor="@color/new_text"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_attention_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_id_number"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/miv_icon"
+                        android:includeFontPadding="false"
+                        android:text="关注时间：2018/7/12  16:35"
+                        android:textColor="@color/my_gray_one"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_msg_del"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/pink_color"
+        android:gravity="center"
+        android:text="@string/del"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</com.shunlian.app.utils.SwipeMenuLayout>

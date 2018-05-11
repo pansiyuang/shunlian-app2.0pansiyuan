@@ -2,6 +2,7 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
@@ -11,7 +12,6 @@ import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.VipMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.IVipMsgView;
-import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -24,10 +24,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/5/8.
  */
 
-public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
-
-    @BindView(R.id.tv_vip_list)
-    TextView tv_vip_list;
+public class StoreMsgActivity extends BaseActivity implements IVipMsgView, StoreMsgAdapter.OnDelMessageListener {
 
     @BindView(R.id.refreshview)
     SlRefreshView refreshview;
@@ -42,6 +39,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
     private StoreMsgAdapter msgAdapter;
     private List<StoreMsgEntity.StoreMsg> storeMsgList;
     private boolean isGetVip;
+    private int currentDelType;
 
     @Override
     protected int getLayoutId() {
@@ -72,7 +70,9 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
         storeMsgList = new ArrayList<>();
 
         refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(true);
+        refreshview.setCanLoad(false);
+
+        recycler_list.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -109,8 +109,9 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
     }
 
     @Override
-    public void getStoreMsgs(List<StoreMsgEntity.StoreMsg> msgList, int page, int total) {
+    public void getStoreMsgs(List<StoreMsgEntity.StoreMsg> msgList, int page, int total, int delType) {
         refreshview.stopRefresh(true);
+        currentDelType = delType;
         if (page == 1) {
             storeMsgList.clear();
         }
@@ -118,18 +119,18 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
         if (!isEmpty(msgList)) {
             storeMsgList.addAll(msgList);
         }
-
         if (msgAdapter == null) {
-            msgAdapter = new StoreMsgAdapter(this, storeMsgList);
+            msgAdapter = new StoreMsgAdapter(this, storeMsgList, isGetVip);
+            msgAdapter.setOnDelMessageListener(this);
             recycler_list.setAdapter(msgAdapter);
         }
         msgAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void getOrderMsgs(List<StoreMsgEntity.StoreMsg> msgList, int page, int total) {
+    public void getOrderMsgs(List<StoreMsgEntity.StoreMsg> msgList, int page, int total, int delType) {
         refreshview.stopRefresh(true);
-
+        currentDelType = delType;
         if (page == 1) {
             storeMsgList.clear();
         }
@@ -139,9 +140,27 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView {
         }
 
         if (msgAdapter == null) {
-            msgAdapter = new StoreMsgAdapter(this, storeMsgList);
+            msgAdapter = new StoreMsgAdapter(this, storeMsgList, isGetVip);
+            msgAdapter.setOnDelMessageListener(this);
             recycler_list.setAdapter(msgAdapter);
         }
         msgAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void delSuccess(String msgId) {
+        for (int i = 0; i < storeMsgList.size(); i++) {
+            if (msgId.equals(storeMsgList.get(i).msg_id)) {
+                storeMsgList.remove(i);
+                break;
+            }
+        }
+        msgAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDel(int position) {
+        StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
+        vipMsgPresenter.deleteMessage(String.valueOf(currentDelType), storeMsg.msg_id);
     }
 }

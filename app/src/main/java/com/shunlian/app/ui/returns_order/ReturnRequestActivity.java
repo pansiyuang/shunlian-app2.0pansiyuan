@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -168,17 +170,17 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @Override
     protected void onResume() {
-        if(messageCountManager.isLoad()){
+        if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
             quick_actions.setMessageCount(s);
-        }else{
+        } else {
             messageCountManager.initData();
         }
         super.onResume();
     }
 
     @OnClick(R.id.mrlayout_toolbar_more)
-    public void more(){
+    public void more() {
         visible(quick_actions);
         quick_actions.afterSale();
     }
@@ -194,7 +196,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
 
-                edt_return_money.setFilters(new InputFilter[]{lengthFilter});
                 setMaxPrice(customer_goods.getCurrentCount());
                 break;
             case "3": //退货换货
@@ -202,7 +203,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
-                edt_return_money.setFilters(new InputFilter[]{lengthFilter});
 
                 setMaxPrice(customer_goods.getCurrentCount());
                 break;
@@ -244,6 +244,50 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         customer_goods.setIChangeCountListener(this);
         rl_return_reason.setOnClickListener(this);
         tv_request_complete.setOnClickListener(this);
+
+        edt_return_money.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //删除“.”后面超过2位后的数据
+                if (s.toString().contains(".")) {
+                    if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                        s = s.toString().subSequence(0, s.toString().indexOf(".") + 3);
+                        edt_return_money.setText(s);
+                        edt_return_money.setSelection(s.length()); //光标移到最后
+                    }
+                }
+                //如果"."在起始位置,则起始位置自动补0
+                if (s.toString().trim().substring(0).equals(".")) {
+                    s = "0" + s;
+                    edt_return_money.setText(s);
+                    edt_return_money.setSelection(2);
+                }
+                //如果起始位置为0,且第二位跟的不是".",则无法后续输入
+                if (s.toString().startsWith("0") && s.toString().trim().length() > 1) {
+                    if (!s.toString().substring(1, 2).equals(".")) {
+                        edt_return_money.setText(s.subSequence(0, 1));
+                        edt_return_money.setSelection(1);
+                        return;
+                    }
+                }
+
+                if (!isEmpty(s.toString())) {
+                    if (Double.valueOf(s.toString()) > maxPrice) {
+                        edt_return_money.setText(String.valueOf(maxPrice));
+                        edt_return_money.setSelection(String.valueOf(maxPrice).length());
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
         super.initListener();
     }
 
@@ -310,29 +354,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             tv_freight.setText("您最多能退¥" + maxPrice);
         }
     }
-
-    private InputFilter lengthFilter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            if (dest.length() == 0 && source.equals(".")) {
-                return "0.";
-            }
-            if (dest.length() == 0 && source.equals("0")) {
-                return "0.";
-            }
-
-            String dValue = dest.toString();
-            String[] splitArray = dValue.split("\\.");
-            if (splitArray.length > 1) {
-                String dotValue = splitArray[1];
-                if (dotValue.length() == DECIMAL_DIGITS) {
-                    return "";
-                }
-            }
-            return null;
-        }
-    };
 
     private List<ImageEntity> getImageEntityList() {
         if (currentInfoEntity.member_evidence_seller == null || currentInfoEntity.member_evidence_seller.size() == 0) {

@@ -27,17 +27,6 @@
             android:textColor="@color/my_dark_grey"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_vip_list"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/rl_title_more"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:text="会员列表"
-            android:textColor="@color/my_dark_grey"
-            android:textSize="15sp" />
-
         <RelativeLayout
             android:id="@+id/rl_title_more"
             android:layout_width="60dp"

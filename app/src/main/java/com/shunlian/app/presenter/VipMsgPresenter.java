@@ -60,7 +60,7 @@ public class VipMsgPresenter extends BasePresenter<IVipMsgView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 StoreMsgEntity storeMsgEntity = entity.data;
-                iView.getStoreMsgs(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total);
+                iView.getStoreMsgs(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total, storeMsgEntity.read_del_type);
                 currentPage = storeMsgEntity.page;
                 allPage = storeMsgEntity.total;
                 currentPage++;
@@ -87,7 +87,7 @@ public class VipMsgPresenter extends BasePresenter<IVipMsgView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 StoreMsgEntity storeMsgEntity = entity.data;
-                iView.getOrderMsgs(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total);
+                iView.getOrderMsgs(storeMsgEntity.list, storeMsgEntity.page, storeMsgEntity.total, storeMsgEntity.read_del_type);
                 currentPage = storeMsgEntity.page;
                 allPage = storeMsgEntity.total;
                 currentPage++;
@@ -96,6 +96,27 @@ public class VipMsgPresenter extends BasePresenter<IVipMsgView> {
             @Override
             public void onErrorCode(int code, String message) {
                 Common.staticToast(message);
+            }
+        });
+    }
+
+    public void deleteMessage(String type, String msgId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("msg_id", msgId);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().messageDel(getRequestBody(map));
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                iView.delSuccess(msgId);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }

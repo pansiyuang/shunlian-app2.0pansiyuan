@@ -10,7 +10,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreMsgEntity {
-    public String read_del_type;
+    public int read_del_type;
     public int page;
     public int page_size;
     public int total;
@@ -35,5 +35,8 @@ public class StoreMsgEntity {
         public String username;
         public String sl_id;
         public String create_time;
+        public String money;
+        public String is_hide;
+        public String is_child;
     }
 }

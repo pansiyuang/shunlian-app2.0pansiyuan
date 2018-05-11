@@ -3,6 +3,7 @@ package com.shunlian.app.newchat.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -176,12 +178,13 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 }
                 break;
             case EMOTICON:
-                if (!isEmoticonReady) {
-                    prepareEmoticon();
-                }
-                btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
-
-                new Handler().postDelayed(() -> rlayout_emoji.setVisibility(VISIBLE), 300);
+                new Handler().postDelayed(() -> {
+                    if (!isEmoticonReady) {
+                        prepareEmoticon();
+                    }
+                    btnEmotion.setBackgroundResource(R.mipmap.icon_chat_smiley_h);
+                    rlayout_emoji.setVisibility(VISIBLE);
+                }, 100);
                 break;
         }
 
@@ -391,8 +394,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         String content = String.valueOf(EmojisUtils.emojisName(emojiIndex));
         SpannableString str = new SpannableString(content);
         Bitmap emojiBitmap = EmojisUtils.getEmojiBitmap(getContext(), emojiIndex);
+        int size = (int) editText.getTextSize() * 13 / 10;
+        Bitmap scaleBitmap = Bitmap.createScaledBitmap(emojiBitmap, size, size, true);
         if (emojiBitmap != null) {
-            CenterAlignImageSpan span = new CenterAlignImageSpan(emojiBitmap);
+            ImageSpan span = new ImageSpan(getContext(), scaleBitmap);
             str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             editText.setGravity(Gravity.CENTER_VERTICAL);
             editText.append(str);
