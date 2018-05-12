@@ -60,6 +60,11 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
         ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, false, combo.goods);
         viewHolder.recycler_combo.setAdapter(comboPicAdapter);
+        comboPicAdapter.setOnItemClickListener((v,p)->{
+            if (listener != null){
+                listener.onItemClick(v,position);
+            }
+        });
         viewHolder.recycler_combo.setOnTouchListener((v,e)-> {
             if (e.getAction() == MotionEvent.ACTION_UP && listener != null){
                 listener.onItemClick(v,position);

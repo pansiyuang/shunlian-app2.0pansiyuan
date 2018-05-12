@@ -11,6 +11,7 @@ public class SaleDataEntity {
     public UserInfoBean user_info;
     public SalesInfoBean sales_info;
     public MasterInfo master_info;
+    public String tip;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UserInfoBean {
