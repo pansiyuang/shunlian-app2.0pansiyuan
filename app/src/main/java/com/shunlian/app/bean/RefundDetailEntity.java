@@ -50,6 +50,7 @@ public class RefundDetailEntity implements Serializable{
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Edit implements Serializable{
+            public String og_id;
             public String og_Id;
             public String store_name;
             public String refund_type;

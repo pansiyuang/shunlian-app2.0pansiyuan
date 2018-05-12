@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.shunlian.app.ui.store.StoreIntroduceAct">
 
@@ -30,11 +29,12 @@
             android:textColor="@color/my_dark_grey"
             android:textSize="18sp" />
 
-        <RelativeLayout
-            android:layout_width="60dp"
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingRight="8dp">
+            android:layout_marginRight="10dp">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_dot"
@@ -45,6 +45,7 @@
                 android:src="@mipmap/icon_common_more_black" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/tv_msg_count"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
                 android:layout_above="@id/miv_dot"
@@ -52,20 +53,23 @@
                 android:layout_marginBottom="1dp"
                 android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
-                android:text="9+"
                 android:textColor="@color/white"
-                android:textSize="9sp" />
-        </RelativeLayout>
+                android:textSize="9sp"
+                android:visibility="gone" />
+        </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/light_gray_two" />
+        android:background="@color/light_gray_two"
+        android:layout_below="@id/mrlayout_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="0.5dp"
+        android:layout_below="@id/mrlayout_title">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
@@ -395,4 +399,9 @@
             </com.shunlian.app.widget.MyRelativeLayout>
         </com.shunlian.app.widget.MyLinearLayout>
     </ScrollView>
-</com.shunlian.app.widget.MyLinearLayout>
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</com.shunlian.app.widget.MyRelativeLayout>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -40,13 +41,25 @@ public class StoreDiscountTwoAdapter extends BaseRecyclerAdapter<StorePromotionG
             TwoHolder twoHolder = (TwoHolder) holder;
             StorePromotionGoodsListTwoEntity.Lists.Good mData = mDatas.get(position);
             twoHolder.mtv_title.setText(mData.title);
-            twoHolder.mtv_marketPrice.setText(mData.old_price);
+            twoHolder.mtv_marketPrice.setText(getString(R.string.store_taocan)+mData.old_price);
             twoHolder.mtv_original.setText(mData.price);
             twoHolder.rv_combo.setVisibility(View.GONE);
+            twoHolder.rv_combo.setNestedScrollingEnabled(false);//防止横滑的view区域上划失效
             if (mData.data != null && mData.data.size() > 0) {
+                if (twoHolder.storeDiscountTwoAdapters==null){
+                    twoHolder.rv_combo.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                    twoHolder.storeDiscountTwoAdapters=new StoreDiscountTwoAdapters(context, false, mData.data);
+                    twoHolder.storeDiscountTwoAdapters.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            GoodsDetailAct.startAct(context,mData.data.get(position).id);
+                        }
+                    });
+                }else {
+                    twoHolder.storeDiscountTwoAdapters=new StoreDiscountTwoAdapters(context, false, mData.data);
+                }
                 twoHolder.rv_combo.setVisibility(View.VISIBLE);
-                twoHolder.rv_combo.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                twoHolder.rv_combo.setAdapter(new StoreDiscountTwoAdapters(context, false, mData.data));
+                twoHolder.rv_combo.setAdapter(twoHolder.storeDiscountTwoAdapters);
             }
         }
     }
@@ -54,7 +67,7 @@ public class StoreDiscountTwoAdapter extends BaseRecyclerAdapter<StorePromotionG
     class TwoHolder extends RecyclerView.ViewHolder {
         private MyTextView mtv_title, mtv_marketPrice, mtv_original;
         private RecyclerView rv_combo;
-
+        private StoreDiscountTwoAdapters storeDiscountTwoAdapters;
         TwoHolder(View itemView) {
             super(itemView);
             mtv_title = (MyTextView) itemView.findViewById(R.id.mtv_title);

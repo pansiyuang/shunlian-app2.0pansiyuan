@@ -19,6 +19,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IADiscoverSucaiku;
@@ -98,28 +99,27 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             } else {
                 viewHolder.miv_pic.setVisibility(View.GONE);
                 viewHolder.rv_pics.setVisibility(View.VISIBLE);
-//                if (viewHolder.picAdapter==null){//此处不能复用，不能用notify，因为content.image复用导致布局混乱
+                if (viewHolder.picAdapter==null){//此处不能复用，不能用notify，因为content.image复用导致布局混乱
                     viewHolder.picAdapter  = new SinglePicAdapter(context, false, content.image);
                     viewHolder.rv_pics.setLayoutManager(new GridLayoutManager(context, 3));
                     viewHolder.rv_pics.setNestedScrollingEnabled(false);
-                    if (viewHolder.rv_pics==null)
-                    {
-                        viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,90),false));
-                    }
+                    viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false,0,false));
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
-                    viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            //点击查看大图
-                            BigImgEntity bigImgEntity = new BigImgEntity();
-                            bigImgEntity.itemList = (ArrayList<String>) content.image;
-                            bigImgEntity.index = position;
-                            LookBigImgAct.startAct(context, bigImgEntity);
-                        }
-                    });
-//                }else {
+                }else {
+                    viewHolder.picAdapter  = new SinglePicAdapter(context, false, content.image);
+                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
 //                    viewHolder.picAdapter.notifyDataSetChanged();
-//                }
+                }
+                viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        //点击查看大图
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>) content.image;
+                        bigImgEntity.index = position;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
         }
         viewHolder.mtv_share.setOnClickListener(new View.OnClickListener() {

@@ -80,14 +80,14 @@ public class ExchangeDetailPresenter extends BasePresenter<ExchangeDetailView> {
         });
     }
     /**
-     * 确认收货
-     * @param order_id
+     * 换货确认收货
+     * @param refund_id
      */
-    public void confirmreceipt(String order_id){
+    public void confirmReceive(String refund_id){
         Map<String,String> map = new HashMap<>();
-        map.put("order_id",order_id);
+        map.put("refund_id",refund_id);
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().confirmreceipt(getRequestBody(map));
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().confirmReceive(getRequestBody(map));
         getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {

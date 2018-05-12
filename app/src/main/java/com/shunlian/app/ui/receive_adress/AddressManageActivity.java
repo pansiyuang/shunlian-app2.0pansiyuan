@@ -55,12 +55,17 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        orderAddressPresenter.getAddressList();
+    }
+
+    @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         tv_title.setText(getString(R.string.address_manage));
         orderAddressPresenter = new OrderAddressPresenter(this, this);
-        orderAddressPresenter.getAddressList();
     }
 
     @Override

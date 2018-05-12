@@ -146,7 +146,7 @@ public class UpdateDialog implements IMain {
         }
     }
     public void initDialogFinish(){
-
+        //用于方法重写回调
     }
     private void updataApk() {
         Constant.IS_DOWNLOAD = true;
@@ -241,7 +241,7 @@ public class UpdateDialog implements IMain {
         SharedPrefUtil.saveSharedPrfString("updateUrl", updateUrl);
         SharedPrefUtil.saveSharedPrfString("fileMd5", fileMd5);
 //                    updateType = "force";//调试强制更新
-        if ("no".equals(needUpdate)) {
+        if ("yes".equals(needUpdate)) {
             initUpdateDialog();
         } else {
             File file = new File(App.DOWNLOAD_PATH + DownloadService.fileName);

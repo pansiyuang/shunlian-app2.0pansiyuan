@@ -26,5 +26,15 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mtv_toasts"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/bg_gray_three"
+        android:textSize="10sp" />
 </RelativeLayout>
 

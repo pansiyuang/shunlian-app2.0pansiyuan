@@ -69,7 +69,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager manager = (GridLayoutManager) layoutManager;
@@ -79,18 +78,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (position < mergePosition) {
                         return manager.getSpanCount();
                     } else {
-                        return isBottom(position) ? manager.getSpanCount() : 1;
+                        return isBottoms(position) ? manager.getSpanCount() : 1;
                     }
                 }
             });
         }
-    }
-
-    private boolean isBottom(int position) {
-        if (position + 1 == getItemCount()) {
-            return true;
-        }
-        return false;
     }
 
     @Override

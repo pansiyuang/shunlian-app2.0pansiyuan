@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -36,6 +37,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.QuickActions;
@@ -53,6 +55,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/7.
@@ -178,9 +181,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.tv_price)
     MyTextView tv_price;
 
-    @BindView(R.id.mtv_msg_count)
-    MyTextView mtv_msg_count;
-
     @BindView(R.id.iv_price)
     MyImageView iv_price;
 
@@ -196,11 +196,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.mrlayout_sorts)
     MyRelativeLayout mrlayout_sorts;
 
-    @BindView(R.id.mrLayout_operates)
-    MyRelativeLayout mrLayout_operates;
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
 
     @BindView(R.id.mll_chat)
     MyLinearLayout mll_chat;
@@ -218,7 +223,57 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private GridLayoutManager babyManager, discountManager;
     private boolean isFocus;
     private ShareInfoParam shareInfoParam;
-    private MessageCountManager messageCountManager;
+
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.shop();
+        quick_actions.shareInfo(shareInfoParam);
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     public static void startAct(Context context,String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
@@ -247,7 +302,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mrlayout_jianjie.setOnClickListener(this);
         mrlayout_sort.setOnClickListener(this);
         mrlayout_sorts.setOnClickListener(this);
-        mrLayout_operates.setOnClickListener(this);
         mll_chat.setOnClickListener(this);
         store_abLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -316,25 +370,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        if(messageCountManager.isLoad()){
-            String s = messageCountManager.setTextCount(mtv_msg_count);
-            if (quick_actions != null)
-                quick_actions.setMessageCount(s);
-        }else{
-            messageCountManager.initData();
-        }
-        super.onResume();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(mtv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
     }
 
     public void firstClick(){
@@ -503,11 +538,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 } else {
                     storePresenter.followStore(storeId);
                 }
-                break;
-            case R.id.mrLayout_operates:
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.shop();
-                quick_actions.shareInfo(shareInfoParam);
                 break;
             case R.id.mll_chat:
                 storePresenter.getUserId(storeId);
@@ -717,23 +747,4 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     }
 
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-
-    @Override
-    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(mtv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
-    }
-
-    @Override
-    public void OnLoadFail() {
-
-    }
 }

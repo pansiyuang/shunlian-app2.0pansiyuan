@@ -56,6 +56,8 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
     @Override
     protected void initData() {
 //        seller_id = getIntent().getStringExtra("seller_id");
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         seller_id = "206";
         storeLicensePresenter = new StoreLicensePresenter(this, this);
     }

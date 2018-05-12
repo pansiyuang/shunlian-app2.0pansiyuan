@@ -34,6 +34,7 @@ import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -84,9 +85,8 @@ import java.util.regex.Pattern;
 
 public class Common {
     private static Toast toast, toasts;
-    private static MyTextView mtv_toast, mtv_toasts;
+    private static MyTextView mtv_toast, mtv_toasts, mtv_desc;
     private static SpannableStringBuilder ssb;
-    private static PromptDialog promptDialog;
     private static MyImageView miv_logo;
 
     public static boolean isColor(String value) {
@@ -111,7 +111,7 @@ public class Common {
     }
 
     public static String transClassName(String toPage) {
-        LogUtil.augusLogW("yyy---"+toPage);
+        LogUtil.augusLogW("yyy---" + toPage);
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";
@@ -134,8 +134,8 @@ public class Common {
 
     public static void goGoGo(Context context, String type, String... params) {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
-        LogUtil.augusLogW("where---"+type);
-        if (type==null){
+        LogUtil.augusLogW("where---" + type);
+        if (type == null) {
             return;
         }
         switch (type) {
@@ -174,9 +174,9 @@ public class Common {
                 break;
             case "feedback"://反馈
                 if (params != null && params.length > 0)
-                    BeforeFeedBackAct.startAct(context,params[0]);
+                    BeforeFeedBackAct.startAct(context, params[0]);
                 else
-                    BeforeFeedBackAct.startAct(context,null);
+                    BeforeFeedBackAct.startAct(context, null);
                 break;
             case "help"://帮助
                 HelpOneAct.startAct(context);
@@ -185,14 +185,14 @@ public class Common {
                 SearchGoodsActivity.startActivityForResult((Activity) context);
                 break;
             case "collection"://收藏
-                MyCollectionAct.startAct(context,null);
+                MyCollectionAct.startAct(context, null);
                 break;
             case "footprint"://足迹
-                MyCollectionAct.startAct(context,MyCollectionAct.FOOTPRINT_FLAG);
+                MyCollectionAct.startAct(context, MyCollectionAct.FOOTPRINT_FLAG);
                 break;
             case "special":
                 String url = InterentTools.H5_HOST + "special/" + params[0];
-                H5Act.startAct(context,url,H5Act.MODE_SONIC);
+                H5Act.startAct(context, url, H5Act.MODE_SONIC);
                 break;
             default://首页
                 LogUtil.augusLogW("wheremain");
@@ -279,6 +279,7 @@ public class Common {
 
         Location location = null;
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            LogUtil.augusLogW("opop1111");
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // 通过GPS获取位置
             //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
@@ -288,30 +289,45 @@ public class Common {
                     //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
                 }
             }
+            if (location==null)
+                locateDialog(activity);
             return location;
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            LogUtil.augusLogW("opop2222");
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
             //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            if (location==null)
+                locateDialog(activity);
             return location;
         } else {
-            promptDialog = new PromptDialog(activity);
-            promptDialog.setTvSureColor(R.color.new_text);
-            promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
-            promptDialog.setSureAndCancleListener("无法获取您的位置信息，请在设置中打开定位功能.", "去开启", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
-                    promptDialog.dismiss();
-                }
-            }, "取消", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    promptDialog.dismiss();
-                }
-            }).show();
-
+            LogUtil.augusLogW("opop3333");
+            locateDialog(activity);
             return null;
         }
+    }
+
+    public static void locateDialog(Activity activity) {
+        PromptDialog promptDialog = new PromptDialog(activity);
+        promptDialog.setTvSureColor(R.color.new_text);
+        promptDialog.setTvSureBg(R.drawable.bg_dialog_bottomr);
+        promptDialog.setSureAndCancleListener("无法获取您的位置信息，请在设置中打开定位功能.", "去开启", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Uri packageURI = Uri.parse("package:" + "com.shunlian.app");
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+                    activity.startActivity(intent);
+                }catch (Exception e) {
+                    activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                }
+                promptDialog.dismiss();
+            }
+        }, "取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+            }
+        }).show();
     }
 
     /**
@@ -356,23 +372,12 @@ public class Common {
         toast.show();
     }
 
+    public static void staticToasts(Context context, String content, String desc, int imgSource) {
+        initToast(context, content, desc, imgSource);
+    }
+
     public static void staticToasts(Context context, String content, int imgSource) {
-        if (toasts == null) {
-            View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
-            mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
-            miv_logo = (MyImageView) v.findViewById(R.id.miv_logo);
-            mtv_toasts.setText(content);
-            miv_logo.setImageResource(imgSource);
-            toasts = new Toast(context);
-//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
-            toasts.setDuration(Toast.LENGTH_SHORT);
-            toasts.setView(v);
-            toasts.setGravity(Gravity.CENTER, 0, 0);
-        } else {
-            mtv_toasts.setText(content);
-            miv_logo.setImageResource(imgSource);
-        }
-        toasts.show();
+        initToast(context, content, "", imgSource);
     }
 
     //隐藏虚拟键盘
@@ -706,17 +711,16 @@ public class Common {
     }
 
     /**
-     *
      * @param plusRoleCode
      * @return
      */
-    public static int plusRoleCode(String plusRoleCode){
+    public static int plusRoleCode(String plusRoleCode) {
         int resid = 0;
-        if (TextUtils.isEmpty(plusRoleCode)){
+        if (TextUtils.isEmpty(plusRoleCode)) {
             plusRoleCode = "0";
         }
         int code = Integer.parseInt(plusRoleCode);
-        switch (code){//1 普通 2黄金  3钻石 4皇冠;
+        switch (code) {//1 普通 2黄金  3钻石 4皇冠;
             case 1:
                 resid = R.mipmap.img_putong;
                 break;
@@ -732,7 +736,6 @@ public class Common {
         }
         return resid;
     }
-
 
     public static boolean isWeixinAvilible(Context context) {
         final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
@@ -764,7 +767,30 @@ public class Common {
                 e.printStackTrace();
             }
         } else {
-            staticToast( "请安装微信后重试!");
+            staticToast("请安装微信后重试!");
         }
+    }
+
+    public static void initToast(Context context, String content, String desc, int imgSource) {
+        if (toasts == null) {
+            View v = LayoutInflater.from(context).inflate(R.layout.toasts, null);
+            mtv_toasts = (MyTextView) v.findViewById(R.id.mtv_toasts);
+            mtv_desc = (MyTextView) v.findViewById(R.id.mtv_desc);
+            miv_logo = (MyImageView) v.findViewById(R.id.miv_logo);
+            toasts = new Toast(context);
+//            toast = Toast.makeText(getApplicationContext(), "ceshi", Toast.LENGTH_SHORT);
+            toasts.setDuration(Toast.LENGTH_SHORT);
+            toasts.setView(v);
+            toasts.setGravity(Gravity.CENTER, 0, 0);
+        }
+        mtv_toasts.setText(content);
+        miv_logo.setImageResource(imgSource);
+        if (TextUtils.isEmpty(desc)) {
+            mtv_desc.setVisibility(View.GONE);
+        } else {
+            mtv_desc.setText(desc);
+            mtv_desc.setVisibility(View.VISIBLE);
+        }
+        toasts.show();
     }
 }

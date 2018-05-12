@@ -146,6 +146,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.rv_opt)
     RecyclerView rv_opt;
 
+    @BindView(R.id.mllayout_time)
+    MyLinearLayout mllayout_time;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
@@ -242,12 +245,12 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     }
 
     /**
-     * 确认收货
-     * @param order_id
+     * 换货确认收货
+     * @param refund_id
      */
-    public void confirmreceipt(String order_id){
+    public void confirmreceipt(String refund_id){
         if (exchangeDetailPresenter != null){
-            exchangeDetailPresenter.confirmreceipt(order_id);
+            exchangeDetailPresenter.confirmReceive(refund_id);
         }
     }
 
@@ -267,10 +270,10 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             });
             downTime_order.startDownTimer();
             mtv_time.setVisibility(View.GONE);
-            downTime_order.setVisibility(View.VISIBLE);
+            mllayout_time.setVisibility(View.VISIBLE);
         }else {
             mtv_time.setVisibility(View.VISIBLE);
-            downTime_order.setVisibility(View.GONE);
+            mllayout_time.setVisibility(View.GONE);
             mtv_time.setText(refundDetail.time_desc);
         }
         GlideUtils.getInstance().loadImage(this, ctgv_goods.getGoodsIcon(), refundDetail.thumb);
@@ -288,7 +291,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         rv_opt.setLayoutManager(managerH);
         rv_opt.setNestedScrollingEnabled(false);
         refundDetail.edit.store_name = refundDetail.store_name;
-        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.order_id,refundDetail.edit));
+        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.edit));
 
         mtv_state.setText(refundDetail.status_desc);
         if (refundDetail.return_address != null

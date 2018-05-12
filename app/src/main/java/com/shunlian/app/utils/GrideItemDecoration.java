@@ -16,7 +16,7 @@ public class GrideItemDecoration extends RecyclerView.ItemDecoration {
     private final int spaceBottom;
     private boolean isPage;
 
-    public GrideItemDecoration(int spaceLeft, int spaceTop, int spaceRight, int spaceBottom,  boolean isPage) {
+    public GrideItemDecoration(int spaceLeft, int spaceTop, int spaceRight, int spaceBottom, boolean isPage) {
         this.spaceLeft = spaceLeft;
         this.spaceTop = spaceTop;
         this.spaceRight = spaceRight;
@@ -35,16 +35,14 @@ public class GrideItemDecoration extends RecyclerView.ItemDecoration {
             outRect.right = 0;
         }
 
-        if (isPage) {
-            if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
-                outRect.bottom = 0;
-                outRect.right = 0;
-            }
+        if (isPage && parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
+            outRect.bottom = 0;
+            outRect.right = 0;
         } else {
             if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
                 outRect.bottom = 0;
             }
-            if (parent.getChildAdapterPosition(view) + 2 == state.getItemCount()) {
+            if (parent.getChildAdapterPosition(view) + 2 == state.getItemCount() && parent.getChildAdapterPosition(view) % 2 == 0) {
                 outRect.bottom = 0;
             }
         }

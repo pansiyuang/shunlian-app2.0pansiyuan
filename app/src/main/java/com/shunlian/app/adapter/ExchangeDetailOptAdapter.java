@@ -14,7 +14,9 @@ import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.order.PlatformInterventionRequestActivity;
 import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
+import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
@@ -32,15 +34,14 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
     private int pink_color;
     private int new_gray;
     private int strokeWidth;
-    private String refund_id,order_id;
+    private String refund_id;
     private ExchangeDetailAct exchangeDetailAct;
     private RefundDetailEntity.RefundDetail.Edit mEdit;
 
-    public ExchangeDetailOptAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Opt> opts,String refund_id,String order_id,RefundDetailEntity.RefundDetail.Edit edit) {
+    public ExchangeDetailOptAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Opt> opts,String refund_id,RefundDetailEntity.RefundDetail.Edit edit) {
         super(context, isShowFooter,opts);
         exchangeDetailAct= (ExchangeDetailAct) context;
         this.refund_id=refund_id;
-        this.order_id=order_id;
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
         strokeWidth = TransformUtil.dip2px(context, 0.5f);
@@ -78,7 +79,11 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                         ConsultHistoryAct.startAct(context,refund_id);
                         break;
                     case "edit_apply_enable":
-                        ReturnRequestActivity.startAct(context,mEdit,true,refund_id);
+                        if ("1".equals(mEdit.edit_apply_type)){
+                            SelectServiceActivity.startAct(context, mEdit.og_id);
+                        }else {
+                            ReturnRequestActivity.startAct(context,mEdit,true,refund_id);
+                        }
                         break;
                     case "call_plat_enable":
                         PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,false);
@@ -93,7 +98,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                         SubmitLogisticsInfoAct.startAct(context,refund_id,SubmitLogisticsInfoAct.MODIFY);
                         break;
                     case "check_receive_enable":
-                        confirmreceipt(order_id);
+                        confirmreceipt(refund_id);
                         break;
                 }
             }
@@ -103,7 +108,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
     /**
      * 确认收货
      */
-    public void confirmreceipt(final String order_id) {
+    public void confirmreceipt(final String refund_id) {
         final PromptDialog promptDialog = new PromptDialog((Activity) context);
         promptDialog.setSureAndCancleListener(getString(R.string.confirm_goods_receipt),
                 getString(R.string.confirm_goods_receipt_label),
@@ -111,7 +116,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                     @Override
                     public void onClick(View v) {
                         if (exchangeDetailAct != null){
-                            exchangeDetailAct.confirmreceipt(order_id);
+                            exchangeDetailAct.confirmreceipt(refund_id);
                         }
                         promptDialog.dismiss();
                     }
