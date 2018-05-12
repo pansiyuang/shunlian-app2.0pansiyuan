@@ -708,18 +708,20 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      * 结束进行的操作
      */
     private void finishOperation(boolean flag) {
-        //最后加载设置100进度
-        mProgressbar.setNormalProgress(100);
-        //显示网络异常布局
-        nei_empty.setVisibility(flag ? View.GONE : View.VISIBLE);
-        mwv_h5.setVisibility(flag ? View.VISIBLE : View.GONE);
-        //点击重新连接网络
-        nei_empty.setNetExecption().setOnClickListener(v -> {
-            mwv_h5.setVisibility(View.VISIBLE);
-            nei_empty.setVisibility(View.GONE);
-            mwv_h5.reload();
-        });
-        hideProgressWithAnim();
+        if (mProgressbar != null) {
+            //最后加载设置100进度
+            mProgressbar.setNormalProgress(100);
+            //显示网络异常布局
+            nei_empty.setVisibility(flag ? View.GONE : View.VISIBLE);
+            mwv_h5.setVisibility(flag ? View.VISIBLE : View.GONE);
+            //点击重新连接网络
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                mwv_h5.setVisibility(View.VISIBLE);
+                nei_empty.setVisibility(View.GONE);
+                mwv_h5.reload();
+            });
+            hideProgressWithAnim();
+        }
     }
 
     /**

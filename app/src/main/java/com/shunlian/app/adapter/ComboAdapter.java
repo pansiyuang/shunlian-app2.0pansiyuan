@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -40,7 +41,8 @@ public class ComboAdapter extends BaseRecyclerAdapter {
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        ComboViewHolder viewHolder = new ComboViewHolder(LayoutInflater.from(context).inflate(R.layout.item_dialog_combo, parent, false));
+        ComboViewHolder viewHolder = new ComboViewHolder(LayoutInflater
+                .from(context).inflate(R.layout.item_dialog_combo, parent, false));
         return viewHolder;
     }
 
@@ -48,25 +50,22 @@ public class ComboAdapter extends BaseRecyclerAdapter {
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ComboViewHolder viewHolder = (ComboAdapter.ComboViewHolder) holder;
         GoodsDeatilEntity.Combo combo = combos.get(position);
-        String comboPrice = context.getResources().getString(R.string.rmb) + " " +
-                combo.combo_price.concat("-").concat(combo.max_combo_price);
+        String comboPrice = context.getResources().getString(R.string.rmb)+ combo.combo_price+"-"+combo.max_combo_price;
         firstSmallText(viewHolder.tv_combo_price, comboPrice, 9);
-        viewHolder.tv_market_price.setText(String.format(context.getResources().
-                getString(R.string.combo_original_price), combo.old_combo_price).concat("-").concat(combo.max_old_combo_price));
+        viewHolder.tv_market_price.setText(String.format(getString(R.string.combo_original_price),
+                combo.old_combo_price+"-"+combo.max_old_combo_price));
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,
+                LinearLayoutManager.HORIZONTAL, false);
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
         ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, false, combo.goods);
         viewHolder.recycler_combo.setAdapter(comboPicAdapter);
-        comboPicAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int pos) {
-                if (listener != null){
-                    listener.onItemClick(view,position);
-                }
+        viewHolder.recycler_combo.setOnTouchListener((v,e)-> {
+            if (e.getAction() == MotionEvent.ACTION_UP && listener != null){
+                listener.onItemClick(v,position);
             }
+            return false;
         });
-
     }
 
     public class ComboViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -103,7 +102,8 @@ public class ComboAdapter extends BaseRecyclerAdapter {
 
         @Override
         protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-            PicViewHolder viewHolder = new PicViewHolder(LayoutInflater.from(context).inflate(R.layout.item_combo_pic, parent, false));
+            PicViewHolder viewHolder = new PicViewHolder(LayoutInflater
+                    .from(context).inflate(R.layout.item_combo_pic, parent, false));
             return viewHolder;
         }
 

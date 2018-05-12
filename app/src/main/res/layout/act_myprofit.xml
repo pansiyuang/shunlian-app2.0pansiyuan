@@ -586,6 +586,7 @@
                 android:background="@color/light_gray_three" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_profitTip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_line1"
@@ -594,7 +595,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
-                android:text="提示：此收益折线图是今日收益的一个累积记录，不包含周奖励和月奖励，发生退换货的不进行扣减，只是为了给创客展示收益的一个走势，跟实际发放收益没有关系，实际收益以可提现为准。"
                 android:textColor="@color/share_text"
                 android:textSize="12sp" />
 

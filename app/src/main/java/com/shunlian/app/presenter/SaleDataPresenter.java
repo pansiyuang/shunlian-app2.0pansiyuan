@@ -88,7 +88,7 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                 SalesChartEntity data = entity.data;
                 iView.setSaleData(data.total_child_store,
                         data.total_grand_child_store,data.total_consume);
-
+                iView.setSaleTip(data.tip);
                 iView.setSaleChart(data);
             }
         });

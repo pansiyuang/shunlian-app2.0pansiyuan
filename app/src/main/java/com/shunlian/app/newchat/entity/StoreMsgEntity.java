@@ -22,8 +22,9 @@ public class StoreMsgEntity {
         public int type;
         public String url;
         public String msg_id;
-        public int is_read;
-        public String article_id;//是否已读 0 未读  1 已读
+        public String expire;
+        public int is_read;//是否已读 0 未读  1 已读
+        public String article_id;
         public Content content;
         public int is_del;  //是否可删除 0 否 1可以
     }
@@ -38,5 +39,7 @@ public class StoreMsgEntity {
         public String money;
         public String is_hide;
         public String is_child;
+        public String content;
+        public String time;
     }
 }

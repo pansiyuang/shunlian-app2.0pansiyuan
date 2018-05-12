@@ -398,6 +398,7 @@
         <activity
             android:name=".ui.order.ExchangeDetailAct"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.h5.H5Act"

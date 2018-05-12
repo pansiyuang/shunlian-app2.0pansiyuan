@@ -2,6 +2,7 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/5/10.
  */
 
-public class FoundMsgActivity extends BaseActivity {
+public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     public static final String[] tabTitle = new String[]{"头条", "小店消息"};
 
@@ -68,7 +69,8 @@ public class FoundMsgActivity extends BaseActivity {
     private CommonLazyPagerAdapter mPagerAdapter;
     private int topicCount, commentCount;
     private MessageCountManager messageCountManager;
-    private MessageListFragment messageListFragment;
+    private TopicFragment topicFragment;
+    private CommentFragment commentFragment;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, FoundMsgActivity.class);
@@ -85,26 +87,51 @@ public class FoundMsgActivity extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        tv_title.setText(getStringResouce(R.string.message));
+        tv_title.setText(getStringResouce(R.string.found_msg));
         miv_title_right.setVisibility(View.VISIBLE);
         miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
         line_title.setVisibility(View.GONE);
 
+        messageCountManager = MessageCountManager.getInstance(this);
 
         if (messageCountManager.isLoad()) {
             topicCount = messageCountManager.getDiscover_topic_msg();
             commentCount = messageCountManager.getDiscover_comment_msg();
         }
 
-        messageListFragment = MessageListFragment.getInstance();
-        mFrags.add(messageListFragment);
-        mFrags.add(CommentFragment.getInstance());
+        topicFragment = TopicFragment.getInstance();
+        commentFragment = CommentFragment.getInstance();
+        mFrags.add(topicFragment);
+        mFrags.add(commentFragment);
 
         mPagerAdapter = new CommonLazyPagerAdapter(getSupportFragmentManager(), mFrags, tabTitle);
         view_pager.setAdapter(mPagerAdapter);
         view_pager.setOffscreenPageLimit(2);
 
         topicClick();
+    }
+
+    @Override
+    protected void initListener() {
+        rl_topic.setOnClickListener(this);
+        rl_comment.setOnClickListener(this);
+        view_pager.addOnPageChangeListener(this);
+        super.initListener();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_topic:
+                topicClick();
+                view_pager.setCurrentItem(0);
+                break;
+            case R.id.rl_comment:
+                commentClick();
+                view_pager.setCurrentItem(1);
+                break;
+        }
+        super.onClick(view);
     }
 
     private void topicClick() {
@@ -143,4 +170,20 @@ public class FoundMsgActivity extends BaseActivity {
         line_comment.setBackgroundColor(getColorResouce(R.color.pink_color));
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position == 0) {
+            topicClick();
+        } else {
+            commentClick();
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
 }

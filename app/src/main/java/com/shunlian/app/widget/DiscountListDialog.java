@@ -16,7 +16,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.ConfirmOrderEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.util.Arrays;
@@ -84,27 +83,21 @@ public class DiscountListDialog extends Dialog {
         recycler_list.setLayoutManager(linearLayoutManager);
         recycler_list.setLayoutParams(params);
 
-        mtv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null){
-                    listener.onSelect(currentPosition);
-                }
-                dismiss();
-                if (bind != null){
-                    bind.unbind();
-                }
+        mtv_close.setOnClickListener(view -> {
+            if (listener != null){
+                listener.onSelect(currentPosition);
+            }
+            dismiss();
+            if (bind != null){
+                bind.unbind();
             }
         });
 
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isShowing()){
-                    dismiss();
-                    if (bind != null){
-                        bind.unbind();
-                    }
+        miv_close.setOnClickListener(v -> {
+            if (isShowing()){
+                dismiss();
+                if (bind != null){
+                    bind.unbind();
                 }
             }
         });
@@ -122,6 +115,7 @@ public class DiscountListDialog extends Dialog {
         if (!"no_0".equals(voucher1.voucher_id)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
             voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
+            voucher.voucher_hint = mContext.getResources().getString(R.string.not_use_voucher);
             voucher.voucher_id = "";
             voucher.denomination = "0";
             mVouchers.add(voucher);
@@ -132,7 +126,7 @@ public class DiscountListDialog extends Dialog {
             @Override
             public void convert(SimpleViewHolder holder, ConfirmOrderEntity.Voucher s, int position) {
                 TextView tv_prefer = holder.getView(R.id.tv_prefer);
-                tv_prefer.setText(s.title);
+                tv_prefer.setText(s.voucher_hint);
                 MyImageView miv_prefer_select = holder.getView(R.id.miv_prefer_select);
                 holder.addOnClickListener(R.id.rl_item);
                 if (currentPosition == position) {
@@ -146,12 +140,9 @@ public class DiscountListDialog extends Dialog {
         recycler_list.setPadding(space1,0,space1,0);
         recycler_list.setAdapter(recyclerAdapter);
 
-        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                currentPosition = position;
-                recyclerAdapter.notifyDataSetChanged();
-            }
+        recyclerAdapter.setOnItemClickListener((view, position) -> {
+            currentPosition = position;
+            recyclerAdapter.notifyDataSetChanged();
         });
     }
 
@@ -182,12 +173,9 @@ public class DiscountListDialog extends Dialog {
         recycler_list.setPadding(space1,0,space1,0);
         recycler_list.setAdapter(recyclerAdapter);
 
-        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                currentPosition = position;
-                recyclerAdapter.notifyDataSetChanged();
-            }
+        recyclerAdapter.setOnItemClickListener((view, position) -> {
+            currentPosition = position;
+            recyclerAdapter.notifyDataSetChanged();
         });
     }
 
@@ -223,12 +211,9 @@ public class DiscountListDialog extends Dialog {
 
         recycler_list.setAdapter(recyclerAdapter);
 
-        recyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                currentPosition = position;
-                recyclerAdapter.notifyDataSetChanged();
-            }
+        recyclerAdapter.setOnItemClickListener((view, position) -> {
+            currentPosition = position;
+            recyclerAdapter.notifyDataSetChanged();
         });
     }
 

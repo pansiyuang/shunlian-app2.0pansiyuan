@@ -50,6 +50,7 @@
     <string name="order_notice">订单通知</string>
     <string name="order_msg">订单消息</string>
     <string name="vip_msg">会员消息</string>
+    <string name="found_msg">发现消息</string>
 
     <!--主页tab-->
     <string name="main_page">首页</string>
@@ -188,7 +189,7 @@
     <string name="count">数量</string>
     <string name="goods_pleaseselectparam">请选择规格</string>
     <string name="combo_price">套餐价</string>
-    <string name="combo_original_price">套餐原价%s</string>
+    <string name="combo_original_price">套餐原价￥%s</string>
     <string name="select_combo">选择套餐</string>
     <string name="goods_attribute">商品参数</string>
     <string name="select_voucher">领取店铺优惠券</string>
@@ -220,7 +221,7 @@
     <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
-    <string name="buy_gift">满赠</string>
+    <string name="buy_gift">买赠</string>
     <string name="full_discount_">满%s打%s折</string>
     <string name="share">分享</string>
     <string name="activity">活动</string>

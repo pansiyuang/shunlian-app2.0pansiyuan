@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.GridView;
 
 import com.shunlian.app.R;
@@ -53,7 +52,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     @BindView(R.id.mtv_logistics)
     MyTextView mtv_logistics;
 
-    private List<ImageEntity> listExplains = new ArrayList();
+//    private List<ImageEntity> listExplains = new ArrayList();
     private List<ImageEntity> imgList = new ArrayList();
     private SingleImgAdapter singleImgAdapter;
 
@@ -88,12 +87,9 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
     @Override
     protected void initListener() {
         super.initListener();
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Common.hideKeyboard(met_logistics);
-                finish();
-            }
+        miv_close.setOnClickListener((v)-> {
+            Common.hideKeyboard(met_logistics);
+            finish();
         });
 
 
@@ -136,7 +132,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
 
         met_explain.setText(Common.getPlaceholder(3));
 
-        singleImgAdapter = new SingleImgAdapter(this, listExplains);
+        singleImgAdapter = new SingleImgAdapter(this, imgList);
         gv_proof.setAdapter(singleImgAdapter);
     }
 
@@ -179,8 +175,19 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
             Common.staticToast("请填写申请说明");
             return;
         }
-
+        handlerImgUrl();
         presenter.submitLogisticsInfo(text.toString(),logistics_code,explain,picstr.toString());
+    }
+
+    private void handlerImgUrl() {
+        picstr.delete(0, picstr.length());
+        if (!isEmpty(imgList)) {
+            for (int i = 0; i < imgList.size(); i++) {
+                String path = imgList.get(i).imgUrl;
+                picstr.append(path);
+                picstr.append(",");
+            }
+        }
     }
 
     @Override
@@ -302,15 +309,9 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
             for (String picturePath : pics) {
                 ImageEntity imageEntity = new ImageEntity();
                 imageEntity.imgUrl = picturePath;
-                listExplains.add(imageEntity);
+                imgList.add(imageEntity);
             }
             singleImgAdapter.notifyDataSetChanged();
-        }
-        picstr.delete(0, picstr.length());
-        for (int i = 0; i < pics.size(); i++) {
-            String path = pics.get(i);
-            picstr.append(path);
-            picstr.append(",");
         }
     }
 
@@ -319,8 +320,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
         for (int i = 0; i < picEntity.relativePath.size(); i++) {
             imgList.get(i).imgUrl = picEntity.relativePath.get(i);
         }
-        listExplains.addAll(imgList);
-        singleImgAdapter.setData(listExplains);
+        singleImgAdapter.setData(imgList);
     }
 
     @Override

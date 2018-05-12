@@ -338,7 +338,7 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                     mtv_select.setText("已选择:".concat(name).concat("  ")
                             .concat(String.valueOf(count)).concat("件"));
                     if (mParamsListener != null){
-                        mParamsListener.selectParam(goods.goods_id,sku.id);
+                        mParamsListener.selectParam(goods.goods_id,sku==null?"":sku.id);
                     }
                 }
             });

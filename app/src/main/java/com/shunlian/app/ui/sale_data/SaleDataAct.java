@@ -394,6 +394,17 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         mtv_gStore_total_sum.setText(masterInfo.level2_active_num);
     }
 
+    /**
+     * 销售数据说明
+     *
+     * @param tip
+     */
+    @Override
+    public void setSaleTip(String tip) {
+        if (mtv_sale_Explain != null)
+            mtv_sale_Explain.setText(tip);
+    }
+
     @Override
     public void onClick(View view) {
         super.onClick(view);

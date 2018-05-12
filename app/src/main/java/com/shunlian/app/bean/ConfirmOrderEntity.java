@@ -104,6 +104,7 @@ public class ConfirmOrderEntity {
         public String title;
         public String voucher_id;
         public String denomination;
+        public String voucher_hint;
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods{
