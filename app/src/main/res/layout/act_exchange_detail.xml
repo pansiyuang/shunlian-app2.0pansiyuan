@@ -44,8 +44,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9.5dp"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:textSize="12sp" />
+
+                <com.shunlian.app.utils.timer.HourNoWhiteDownTimerView
+                    android:id="@+id/downTime_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9.5dp" />
             </com.shunlian.app.widget.MyLinearLayout>
 
 
@@ -78,7 +83,7 @@
                 android:text="@string/exchange_tuihuodizhi"
                 android:textColor="@color/new_text"
                 android:textSize="14sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/view_tuihuo"
@@ -87,8 +92,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="13dp"
-                android:visibility="gone"
-                android:background="@color/white_ash" />
+                android:background="@color/white_ash"
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_tuihuo"
@@ -137,7 +142,7 @@
                 android:layout_height="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/white_ash"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_shouhuo"
@@ -148,7 +153,7 @@
                 android:text="@string/exchange_shouhuodizhi"
                 android:textColor="@color/new_text"
                 android:textSize="14sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/view_shouhuo"
@@ -158,7 +163,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="13dp"
                 android:background="@color/white_ash"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_shouhuo"
@@ -207,7 +212,7 @@
                 android:layout_height="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/white_ash"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_wuliu"
@@ -256,7 +261,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/white_ash"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_wulius"
@@ -305,7 +310,7 @@
                 android:layout_height="10dp"
                 android:layout_marginTop="14dp"
                 android:background="@color/white_ash"
-                android:visibility="gone"/>
+                android:visibility="gone" />
             <!--<android.support.v7.widget.RecyclerView-->
             <!--android:id="@+id/rv_goods"-->
             <!--android:layout_width="match_parent"-->
@@ -322,10 +327,10 @@
                 android:id="@+id/mlLayout_gift"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_marginBottom="10dp">
+                android:visibility="gone">
 
                 <View
                     android:layout_width="0.5dp"
@@ -443,7 +448,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:background="@drawable/edge_frame_r27px"
+            android:background="@drawable/bg_order_contact"
             android:gravity="center"
             android:text="@string/order_lianxishangjia"
             android:textColor="@color/pink_color"
@@ -452,7 +457,7 @@
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </com.shunlian.app.widget.MyRelativeLayout>

@@ -37,6 +37,8 @@ public class PersonalcenterEntity {
     public String my_rank_info;
     public String my_rank_code;
     public String invite_code;
+    public String son_manage_url;
+    public String son_order_url;
     public List<User> sl_user_ranks;
     public List<HelpcenterIndexEntity.ArticleCategory> article;
 

@@ -31,6 +31,7 @@
         <View
             android:id="@+id/view_logistics_line"
             android:layout_width="1dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@color/my_line_gray"/>
     </com.shunlian.app.widget.MyLinearLayout>

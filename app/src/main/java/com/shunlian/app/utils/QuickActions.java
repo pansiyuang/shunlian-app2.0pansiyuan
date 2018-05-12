@@ -83,7 +83,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     MyLinearLayout mllayout_help;
 
     @BindView(R.id.mllayout_content)
-    MyLinearLayout mllayout_content;
+    LinearLayout mllayout_content;
 
     @BindViews({R.id.view_search, R.id.view_firstPage, R.id.view_PersonalCenter
             , R.id.view_car, R.id.view_feedback, R.id.view_help, R.id.view_share})
@@ -200,10 +200,12 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
 
         int totalHeight = showItemPos.length * 90 + 60;
-        mllayout_content.setWHProportion(300,totalHeight);
 
+        int[] realWH = TransformUtil.countRealWH(getContext(), 300, totalHeight);
         RelativeLayout.LayoutParams layoutParams = (LayoutParams)
                 mllayout_content.getLayoutParams();
+        layoutParams.width =realWH[0];
+        layoutParams.height =realWH[1];
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             layoutParams.topMargin = topMargin;
         else

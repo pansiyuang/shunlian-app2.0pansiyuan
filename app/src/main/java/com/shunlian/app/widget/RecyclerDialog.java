@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.ActivityMoreAdapter;
 import com.shunlian.app.adapter.AttributeAdapter;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ComboAdapter;
 import com.shunlian.app.adapter.PromotionAdapter;
 import com.shunlian.app.adapter.VoucherAdapter;
@@ -115,14 +114,11 @@ public class RecyclerDialog extends Dialog{
         recycler_list.setAdapter(comboAdapter);
 
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white_ash));
-        comboAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                GoodsDeatilEntity.Combo combo = mCombos.get(position);
-                ComboDetailAct.startAct(mContext, combo.combo_id, goods_id);
-                if (isShowing()) {
-                    dismiss();
-                }
+        comboAdapter.setOnItemClickListener((view,position)-> {
+            GoodsDeatilEntity.Combo combo = mCombos.get(position);
+            ComboDetailAct.startAct(mContext, combo.combo_id, goods_id);
+            if (isShowing()) {
+                dismiss();
             }
         });
     }

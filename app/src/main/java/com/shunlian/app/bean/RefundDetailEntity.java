@@ -25,6 +25,7 @@ public class RefundDetailEntity implements Serializable{
         public String refund_id;
         public String refund_type;
         public String store_name;
+        public String store_id;
         public String refund_amount;
         public String goods_num;
         public String refund_sn;

@@ -16,6 +16,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -45,9 +46,12 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private String shareLink;
     private String goodsTitle;
     private ShareInfoParam shareInfoParam;
+    private String mayBeBuyGoodsId;
+    private final GoodsDetailAct mDetailAct;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
+        mDetailAct = (GoodsDetailAct) context;
         this.goods_id = goods_id;
         initApi();
         mayBeBuy();
@@ -427,9 +431,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                                     (context,entity.data.may_be_buy_list);
                             iView.setAdapter(adapter);
                             adapter.setOnItemClickListener((v,p)->{
+                                mDetailAct.moreHideAnim();
                                 ProbablyLikeEntity.MayBuyList mayBuyList = entity.
                                         data.may_be_buy_list.get(p);
-                                Common.goGoGo(context,"goods",mayBuyList.id);
+                                mayBeBuyGoodsId = mayBuyList.id;
                             });
                         }else {
                             iView.showDataEmptyView(100);
@@ -486,5 +491,13 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onErrorCode(code, message);
             }
         });
+    }
+
+    /**
+     * 可能想买的商品
+     */
+    public void mayBeBuyGoods() {
+        if (!isEmpty(mayBeBuyGoodsId))
+            Common.goGoGo(context,"goods",mayBeBuyGoodsId);
     }
 }

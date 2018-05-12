@@ -135,4 +135,10 @@
         android:text="@string/subimt_request"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

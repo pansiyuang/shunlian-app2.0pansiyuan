@@ -69,7 +69,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     protected void onResume() {
         if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(tv_msg_count);
-            quick_actions.setMessageCount(s);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -171,7 +172,8 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
     @Override
     protected void onDestroy() {

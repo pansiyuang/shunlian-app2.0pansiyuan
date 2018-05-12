@@ -10,7 +10,8 @@
         android:id="@+id/rv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/value_F7F7F7" />
+        android:background="@color/value_F7F7F7"
+        android:overScrollMode="never"/>
     <!--<android.support.v4.widget.NestedScrollView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent">-->

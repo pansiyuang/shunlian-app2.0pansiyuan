@@ -134,7 +134,8 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
 
         if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(tv_title_number);
-            quick_actions.setMessageCount(s);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
         } else {
             messageCountManager.initData();
         }
@@ -349,14 +350,16 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_title_number);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(tv_title_number);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -169,8 +167,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     protected void onResume() {
         if (messageCountManager.isLoad()) {
             String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
-            quick_actions.setMessageCount(s);
-        } else {
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
+        } else{
             messageCountManager.initData();
         }
         super.onResume();
@@ -478,13 +477,15 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override

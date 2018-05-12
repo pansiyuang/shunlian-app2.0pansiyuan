@@ -301,11 +301,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
+        webSetting.setAppCacheMaxSize(5*1024*1024);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
 //        h5_mwb.addJavascriptInterface(new SonicJavaScriptInterface(sonicSessionClient, getIntent()), "sonic");
         webSetting.setAppCacheEnabled(true);
+        webSetting.setAllowFileAccess(true);
         //开启DOM缓存，关闭的话H5自身的一些操作是无效的
         webSetting.setDomStorageEnabled(true);
         webSetting.setAllowContentAccess(true);

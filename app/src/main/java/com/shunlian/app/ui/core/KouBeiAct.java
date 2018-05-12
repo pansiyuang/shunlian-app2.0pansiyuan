@@ -86,7 +86,8 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
             messageCountManager = MessageCountManager.getInstance(getBaseContext());
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
-                quick_actions.setMessageCount(s);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
             } else {
                 messageCountManager.initData();
             }
@@ -98,13 +99,15 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -154,7 +157,6 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         EventBus.getDefault().register(this);
-        mtv_title.setText(getStringResouce(R.string.first_pingpaite));
         mtv_title.setText(getStringResouce(R.string.first_koubeire));
         pAishang = new PAishang(this, this);
         pAishang.getCoreHot();

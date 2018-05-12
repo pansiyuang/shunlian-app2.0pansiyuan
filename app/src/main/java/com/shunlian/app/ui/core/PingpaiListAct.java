@@ -209,8 +209,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-//        pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
-        pPingList = new PPingList(this, this, "1");
+        pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
+//        pPingList = new PPingList(this, this, "1");
         pPingList.getApiData();
     }
 

@@ -108,7 +108,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     protected void onResume() {
         if(messageCountManager.isLoad()){
             String s = messageCountManager.setTextCount(mtv_msg_count);
-            quick_actions.setMessageCount(s);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
         }else{
             messageCountManager.initData();
         }
@@ -118,7 +119,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
         String s = messageCountManager.setTextCount(mtv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     public void minitData(){
@@ -191,7 +193,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(mtv_msg_count);
-        quick_actions.setMessageCount(s);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override

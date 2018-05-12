@@ -74,9 +74,10 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
 
             List<ConsultHistoryEntity.Content> content = historyList.content;
             if (isEmpty(content)){
-                mHolder.lLayout_text_detail.setVisibility(View.GONE);
+                gone(mHolder.lLayout_text_detail);
             }else {
-                mHolder.lLayout_text_detail.setVisibility(View.VISIBLE);
+                visible(mHolder.lLayout_text_detail);
+                mHolder.lLayout_text_detail.removeAllViews();
                 for (int i = 0; i < content.size(); i++) {
                     ConsultHistoryEntity.Content content1 = content.get(i);
                     MyTextView textView = new MyTextView(context);
@@ -111,14 +112,12 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
                     }
                 };
                 mHolder.recy_view.setAdapter(adapter);
-                adapter.setOnItemClickListener(new com.shunlian.app.listener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {//查看大图
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList<String>) historyList.images;
-                        bigImgEntity.index = position;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
+                adapter.setOnItemClickListener((view,pos)-> {
+                    //查看大图
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList<String>) historyList.images;
+                    bigImgEntity.index = pos;
+                    LookBigImgAct.startAct(context, bigImgEntity);
                 });
             }
 
@@ -130,6 +129,12 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
                 mHolder.view_logistics_line1.setVisibility(View.VISIBLE);
                 mHolder.miv_logistics.setImageResource(R.mipmap.img_wuliu_before);
             }
+
+            mHolder.mrl_detail.post(()-> {
+                int measuredHeight = mHolder.mrl_detail.getMeasuredHeight();
+                mHolder.ll_logistics.setWHProportion(TransformUtil
+                        .dip2px(context,14),measuredHeight);
+            });
         }
     }
 
@@ -175,14 +180,6 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
             recy_view.setNestedScrollingEnabled(false);
             GridLayoutManager manager = new GridLayoutManager(context,3);
             recy_view.setLayoutManager(manager);
-
-            mrl_detail.post(new Runnable() {
-                @Override
-                public void run() {
-                    int measuredHeight = mrl_detail.getMeasuredHeight();
-                    ll_logistics.setWHProportion(TransformUtil.dip2px(context,14),measuredHeight);
-                }
-            });
         }
     }
 }

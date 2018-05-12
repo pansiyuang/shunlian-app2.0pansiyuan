@@ -394,7 +394,6 @@
         android:background="@color/white"
         android:gravity="center_vertical|right"
         android:orientation="horizontal">
-
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_title1"
             android:layout_width="wrap_content"
@@ -427,6 +426,35 @@
 
     </com.shunlian.app.widget.MyLinearLayout>
 
+    <com.shunlian.app.widget.MyLinearLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="22dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_contact"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="@string/order_lianxishangjia"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:gravity="center_horizontal"
+            android:paddingTop="6dp"
+            android:background="@mipmap/img_common_orderdetails_more"
+            android:visibility="gone"/>
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_gengduo"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:textColor="@color/share_text"/>
+    </com.shunlian.app.widget.MyLinearLayout>
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
         android:visibility="gone"

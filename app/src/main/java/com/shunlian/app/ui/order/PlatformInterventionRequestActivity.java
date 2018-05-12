@@ -22,6 +22,7 @@ import com.shunlian.app.presenter.PlatformInterventionPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPlatformInterventionRequestView;
 import com.shunlian.app.widget.MyTextView;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -62,6 +64,9 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
 
     @BindView(R.id.grid_imgs)
     GridView grid_imgs;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public RefundDetailEntity.RefundDetail.Edit mEdit;
     private ReturnGoodsDialog dialog;
@@ -132,6 +137,12 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         tv_request_complete.setOnClickListener(this);
         TransformUtil.expandViewTouchDelegate(tv_select_status, TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f), TransformUtil.dip2px(this, 9f));
         super.initListener();
+    }
+
+    @OnClick(R.id.rl_title_more)
+    public void more(){
+        visible(quick_actions);
+        quick_actions.afterSale();
     }
 
     @Override
@@ -283,4 +294,11 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
+    }
 }
