@@ -18,17 +18,19 @@
             android:text="@string/store_quanbu"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
+
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/store_chakanquanbu"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/store_chakanquanbu"
             android:textColor="@color/share_text"
-            android:textSize="11sp"/>
+            android:textSize="11sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/rv_sort"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </com.shunlian.app.widget.MyLinearLayout>

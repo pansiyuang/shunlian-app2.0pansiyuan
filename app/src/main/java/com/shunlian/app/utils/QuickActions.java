@@ -451,6 +451,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
     /**
+     * 店铺二级
+     */
+    public void Store(){
+        setShowItem(1,3,4,6,7);
+    }
+
+    /**
      * 只能分享微信和复制链接
      */
     public void shareStyle1Dialog(){

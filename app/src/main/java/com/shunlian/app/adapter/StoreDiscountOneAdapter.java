@@ -35,27 +35,6 @@ public class StoreDiscountOneAdapter extends BaseRecyclerAdapter<StorePromotionG
         this.mDatas = mDatas;
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
-            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    return isBottom(position) ? manager.getSpanCount() : 1;
-                }
-            });
-        }
-    }
-
-    private boolean isBottom(int position) {
-        if (position + 1 == getItemCount()) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

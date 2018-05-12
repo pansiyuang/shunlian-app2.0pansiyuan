@@ -5,22 +5,33 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.StoreEvaluateAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.StoreIntroduceView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import butterknife.BindView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class StoreIntroduceAct extends BaseActivity implements View.OnClickListener, StoreIntroduceView {
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class StoreIntroduceAct extends BaseActivity implements View.OnClickListener, StoreIntroduceView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_storeName)
     TextView mtv_storeName;
 
@@ -54,10 +65,69 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mrlayout_yingye)
     MyRelativeLayout mrlayout_yingye;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
 
     private boolean isFocus;
     private String storeId,seller_id,storeScore;
     private StoreIntroducePresenter storeIntroducePresenter;
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.Store();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     public static void startAct(Context context, String storeId,String storeScore,boolean isFocus) {
         Intent intent = new Intent(context, StoreIntroduceAct.class);
@@ -97,6 +167,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         storeId = getIntent().getStringExtra("storeId");
         storeScore= getIntent().getStringExtra("storeScore");
         isFocus = getIntent().getBooleanExtra("isFocus",false);

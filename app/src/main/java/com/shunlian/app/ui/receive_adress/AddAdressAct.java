@@ -3,6 +3,8 @@ package com.shunlian.app.ui.receive_adress;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -143,7 +145,6 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                         addAddressPresenter.addressEdit(addressId, et_realname.getText().toString(), et_mobile.getText().toString(), et_address.getText().toString(), isDefaults, district_ids);
                     }
                  }
-
                 break;
             case R.id.miv_default:
                 if (isDefault) {

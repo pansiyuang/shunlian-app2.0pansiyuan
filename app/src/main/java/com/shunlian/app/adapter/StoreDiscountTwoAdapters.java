@@ -14,6 +14,8 @@ import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+
 /**
  * Created by augus on 2017/11/13 0013.
  */
@@ -45,14 +47,15 @@ public class StoreDiscountTwoAdapters extends BaseRecyclerAdapter<StorePromotion
         }
     }
 
-    class TwoHolder extends RecyclerView.ViewHolder {
-        private MyTextView mtv_text;
-        private MyImageView miv_img;
+    class TwoHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.mtv_text)
+        MyTextView mtv_text;
+
+        @BindView(R.id.miv_img)
+        MyImageView miv_img;
 
         TwoHolder(View itemView) {
             super(itemView);
-            mtv_text = (MyTextView) itemView.findViewById(R.id.mtv_text);
-            miv_img = (MyImageView) itemView.findViewById(R.id.miv_img);
         }
     }
 
