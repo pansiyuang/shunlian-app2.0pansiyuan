@@ -73,6 +73,7 @@ public class RefundDetailEntity implements Serializable{
             public String is_last;
             public String return_price;
             public String shipping_fee;
+            public String real_amount;
             public List<Reason> reason;
             public List<RefundChoice> refund_choice;
             public List<String> member_evidence_seller;

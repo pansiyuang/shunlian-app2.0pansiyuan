@@ -223,7 +223,11 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             enableViewHolder.rl_goods_param.setVisibility(View.GONE);
             if (!isEditAll) {  //编辑所有商品
                 enableViewHolder.tv_edit_param.setVisibility(View.GONE);
-                enableViewHolder.rl_goods_attribute.setVisibility(View.VISIBLE);
+                if (!isEmpty(goods.sku)) {
+                    enableViewHolder.rl_goods_attribute.setVisibility(View.VISIBLE);
+                }else{
+                    enableViewHolder.rl_goods_attribute.setVisibility(View.GONE);
+                }
             } else {
                 enableViewHolder.tv_edit_param.setVisibility(View.VISIBLE);
                 enableViewHolder.rl_goods_attribute.setVisibility(View.GONE);

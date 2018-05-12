@@ -159,8 +159,9 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
+        if (quick_actions != null) {
             quick_actions.setMessageCount(s);
+        }
     }
 
     @Override

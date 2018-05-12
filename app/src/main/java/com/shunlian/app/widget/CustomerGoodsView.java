@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.ui.CustomerListActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 
 /**
@@ -59,7 +61,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
         LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParamsName.leftMargin = TransformUtil.dip2px(getContext(),10);
+        layoutParamsName.leftMargin = TransformUtil.dip2px(getContext(), 10);
         layoutName.setLayoutParams(layoutParamsName);
 
         layoutName.setGravity(Gravity.CENTER_VERTICAL);
@@ -69,7 +71,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         imgShop.setImageResource(R.mipmap.img_shoppingcar_shop);
         layoutName.addView(imgShop);
         LinearLayout.LayoutParams imgParams = (LayoutParams) imgShop.getLayoutParams();
-        imgParams.rightMargin = TransformUtil.dip2px(getContext(),7.5f);
+        imgParams.rightMargin = TransformUtil.dip2px(getContext(), 7.5f);
         imgShop.setLayoutParams(imgParams);
 
         //店铺名
@@ -77,7 +79,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         textView.setTextColor(getResources().getColor(R.color.new_text));
         textView.setTextSize(14);
         int padding = TransformUtil.dip2px(getContext(), 13);
-        textView.setPadding(0,padding,0,padding);
+        textView.setPadding(0, padding, 0, padding);
         layoutName.addView(textView);
 
         //箭头
@@ -85,7 +87,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         imgArrow.setImageResource(R.mipmap.img_common_viewarrow_1);
         layoutName.addView(imgArrow);
         LinearLayout.LayoutParams arrowParams = (LayoutParams) imgArrow.getLayoutParams();
-        arrowParams.leftMargin = TransformUtil.dip2px(getContext(),5f);
+        arrowParams.leftMargin = TransformUtil.dip2px(getContext(), 5f);
         imgArrow.setLayoutParams(arrowParams);
         imgArrow.setVisibility(INVISIBLE);
 
@@ -94,7 +96,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         //分割线
         View viewLine = new View(getContext());
         viewLine.setBackgroundColor(getResources().getColor(R.color.light_gray_three));
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,px);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, px);
         viewLine.setLayoutParams(layoutParams);
         addView(viewLine);
 
@@ -136,6 +138,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 商品title
+     *
      * @param sequence
      * @return
      */
@@ -146,6 +149,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 商品属性
+     *
      * @param sequence
      * @return
      */
@@ -156,6 +160,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 商品价格
+     *
      * @param sequence
      * @return
      */
@@ -166,6 +171,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 商品数量
+     *
      * @param sequence
      * @return
      */
@@ -177,25 +183,41 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
     }
 
     /**
+     * 初始化选择的商品数量
+     */
+
+    public CustomerGoodsView setEdittextGoodsCount(int count) {
+        if (mtv_count.getVisibility() == VISIBLE) {
+            if (count <= maxCount) {
+                mtv_count.setText(String.valueOf(count));
+            } else {
+                mtv_count.setText(maxCount + "");
+            }
+        }
+        return this;
+    }
+
+    /**
      * 设置标签名字
+     *
      * @param sequence
      * @param isStoreName 第一个参数如果是店铺名，该参数是true
      * @return
      */
-    public CustomerGoodsView setLabelName(CharSequence sequence,boolean isStoreName){
+    public CustomerGoodsView setLabelName(CharSequence sequence, boolean isStoreName) {
         if (isStoreName) {
             imgShop.setVisibility(VISIBLE);
-        }else {
+        } else {
             imgShop.setVisibility(GONE);
         }
         textView.setText(sequence);
         return this;
     }
 
-    public CustomerGoodsView setIsArrow(boolean isShow){
-        if (isShow){
+    public CustomerGoodsView setIsArrow(boolean isShow) {
+        if (isShow) {
             imgArrow.setVisibility(VISIBLE);
-        }else {
+        } else {
             imgArrow.setVisibility(INVISIBLE);
         }
         return this;
@@ -203,17 +225,19 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 设置选择商品的最大数量
+     *
      * @param maxCount
      */
-    public void selectCount(int maxCount){
+    public CustomerGoodsView selectCount(int maxCount) {
         this.maxCount = maxCount;
         tv_goods_count.setVisibility(GONE);
         mllayout_count.setVisibility(VISIBLE);
-
+        return this;
     }
 
     /**
      * 获取商品数量
+     *
      * @return
      */
     public int getCurrentCount() {
@@ -222,10 +246,11 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
 
     /**
      * 设置退款金额
+     *
      * @param sequence
      * @return
      */
-    public CustomerGoodsView setRefundPrice(CharSequence sequence){
+    public CustomerGoodsView setRefundPrice(CharSequence sequence) {
         mtv_refund_price.setVisibility(VISIBLE);
         mtv_refund_price.setText(sequence);
         return this;
@@ -238,20 +263,21 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
-        if (mtv_count == null){
+        if (mtv_count == null) {
             return;
         }
         CharSequence text = mtv_count.getText();
         int i = Integer.parseInt(text.toString());
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mtv_count_add:
-                if (i >= maxCount){
+                if (i >= maxCount) {
+                    Common.staticToast("最多选择只能选" + maxCount + "件喔！");
                     return;
                 }
                 i++;
                 break;
             case R.id.mtv_count_reduce:
-                if (i <= 1){
+                if (i <= 1) {
                     return;
                 }
                 i--;
@@ -259,22 +285,24 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         }
         mtv_count.setText(String.valueOf(i));
 
-        if (mListener != null){
+        if (mListener != null) {
             mListener.onChangeCount(i);
         }
     }
 
     /**
      * 数量改变监听
+     *
      * @param listener
      */
-    public void setIChangeCountListener(IChangeCountListener listener){
+    public void setIChangeCountListener(IChangeCountListener listener) {
         mListener = listener;
     }
 
-    public interface IChangeCountListener{
+    public interface IChangeCountListener {
         /**
          * 数量改变
+         *
          * @param count
          */
         void onChangeCount(int count);
