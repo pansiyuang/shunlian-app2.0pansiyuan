@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_tag"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:gravity="center">
-
-    <TextView
-        android:id="@+id/tv_tag"
-        android:layout_width="65dp"
-        android:layout_height="30dp"
-        android:background="@drawable/shape_tag_nomal"
-        android:gravity="center"
-        android:text="烈焰红"
-        android:textColor="@color/new_text"
-        android:textSize="12sp" />
-</LinearLayout>
+    android:layout_height="30dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/shape_tag_nomal"
+    android:gravity="center"
+    android:minWidth="65dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:singleLine="true"
+    android:text="烈焰红"
+    android:textColor="@color/new_text"
+    android:textSize="12sp" />

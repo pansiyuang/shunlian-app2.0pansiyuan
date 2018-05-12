@@ -200,6 +200,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @Override
     public void OnTopicClick() {
         //头条消息点击
+        FoundMsgActivity.startAct(getActivity());
     }
 
     @Override

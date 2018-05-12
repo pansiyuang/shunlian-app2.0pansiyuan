@@ -424,16 +424,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             rl_total.setVisibility(View.GONE);
             nei_empty.setVisibility(View.VISIBLE);
             tv_title_right.setVisibility(View.GONE);
-            nei_empty.setImageResource(R.mipmap.img_empty_gouwuche).setText(getString(R.string.shopcar_is_empty));
-            MyButton myButton = nei_empty.setButtonText(getString(R.string.go_to_visit));
-            myButton.setBackgroundDrawable(null);
-            myButton.setTextColor(getColorResouce(R.color.shape3));
-            myButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MainActivity.startAct(baseContext, "mainPage");
-                }
-            });
+            nei_empty.setImageResource(R.mipmap.img_empty_gouwuche)
+                    .setText(getString(R.string.shopcar_is_empty))
+                    .setButtonText(getString(R.string.go_to_visit))
+                    .setOnClickListener(v -> MainActivity.startAct(baseContext, "mainPage"));
         }
     }
 
