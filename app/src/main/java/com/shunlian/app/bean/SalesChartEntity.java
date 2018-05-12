@@ -17,6 +17,7 @@ public class SalesChartEntity {
     public String max_value;
     public String start_date;
     public String end_date;
+    public String tip;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {

@@ -64,6 +64,7 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
                 MyProfitEntity data = entity.data;
                 iView.setUserInfo(data.user_info);
                 iView.setProfitInfo(data.profit_info);
+                iView.setProfitTip(data.tip);
             }
         });
     }

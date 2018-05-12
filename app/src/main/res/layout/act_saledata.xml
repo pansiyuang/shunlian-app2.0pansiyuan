@@ -592,7 +592,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="24dp"
-                android:text="说明:此收益是销售订单产生的预估收益，不是最终发放的收益，订单发生退换货会此收益无效，不能进入可提现里面。最终发放收益以可提现数据为准。"
                 android:textColor="@color/share_text"
                 android:textSize="12sp" />
             <!--会员数据-->

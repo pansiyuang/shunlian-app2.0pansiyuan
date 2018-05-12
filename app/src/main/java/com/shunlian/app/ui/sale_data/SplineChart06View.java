@@ -163,7 +163,7 @@ public class SplineChart06View extends ChartView {
         //激活点击监听
         chart.ActiveListenItemClick();
         //为了让触发更灵敏，可以扩大5px的点击监听范围
-        chart.extPointClickRange(TransformUtil.dip2px(getContext(), 5));
+        chart.extPointClickRange(TransformUtil.dip2px(getContext(), 10));
         chart.showClikedFocus();
 
         //显示平滑曲线
@@ -367,11 +367,13 @@ public class SplineChart06View extends ChartView {
         List<String> data = new ArrayList<>();
         for (int i = 0; i < mChartData.size(); i++) {
             SplineData splineData = mChartData.get(i);
-            PointD pointD = splineData.getLineDataSet().get(record.getDataChildID());
+            if (record.getDataChildID() < splineData.getLineDataSet().size()) {
+                PointD pointD = splineData.getLineDataSet().get(record.getDataChildID());
 //            LogUtil.zhLogW(splineData.getLineKey()+"："+pointD.y);
 //            LogUtil.zhLogW("pointD.x="+pointD.x);
-            xAxisPos = (int) pointD.x;
-            data.add(splineData.getLineKey() + "：" + pointD.y);
+                xAxisPos = (int) pointD.x;
+                data.add(splineData.getLineKey() + "：" + pointD.y);
+            }
         }
 //        LogUtil.zhLogW("--------------------------------------------------------------------------");
         if (mChartListener != null) {

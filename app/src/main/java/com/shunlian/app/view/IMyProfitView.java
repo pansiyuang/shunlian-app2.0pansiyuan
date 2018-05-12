@@ -32,4 +32,10 @@ public interface IMyProfitView extends IView {
      * @param type 1周奖励 2月奖励
      */
     void receiveReward(String type);
+
+    /**
+     * 收益说明
+     * @param tip
+     */
+    void setProfitTip(String tip);
 }

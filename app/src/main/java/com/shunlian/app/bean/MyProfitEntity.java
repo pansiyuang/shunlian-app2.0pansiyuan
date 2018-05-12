@@ -10,6 +10,7 @@ public class MyProfitEntity {
 
     public UserInfo user_info;
     public ProfitInfo profit_info;
+    public String tip;
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
