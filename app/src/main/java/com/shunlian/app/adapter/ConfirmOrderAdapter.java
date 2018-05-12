@@ -206,7 +206,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
             if (!isEmpty(voucher)) {//有可用优惠券，默认使用第一张
                 ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
-                mHolder.mtv_discount.setText(voucher1.title);
+                mHolder.mtv_discount.setText(voucher1.voucher_hint );
                 enabled.post_discount_price = Common.formatFloat(enabled.sub_total,voucher1.denomination);
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
@@ -336,38 +336,35 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 case R.id.mllayout_discount://选择优惠券
                     DiscountListDialog discountDialog = new DiscountListDialog(context);
                     discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1));
-                    discountDialog.setSelectListener(new DiscountListDialog.ISelectListener() {
-                        @Override
-                        public void onSelect(int position) {
-                            if (position < 0){
-                                return;
-                            }
-                            ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
-                            ConfirmOrderEntity.Voucher voucher = enabled.voucher.get(position);
-                            mtv_discount.setText(voucher.title);
+                    discountDialog.setSelectListener(position -> {
+                        if (position < 0){
+                            return;
+                        }
+                        ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
+                        ConfirmOrderEntity.Voucher voucher = enabled.voucher.get(position);
+                        mtv_discount.setText(voucher.voucher_hint);
 
-                            String sub_total = enabled.sub_total;
-                            enabled.selectVoucherId = position;
+                        String sub_total = enabled.sub_total;
+                        enabled.selectVoucherId = position;
 
-                            /**********计算折后小计***************/
-                            if (enabled.selectPromotionId == -1){
-                                enabled.post_discount_price = Common.formatFloat(sub_total,
-                                        voucher.denomination);
-                            }else {
-                                if (!isEmpty(enabled.promotion_info)){
-                                    String prom_reduce = enabled.promotion_info.
-                                            get(enabled.selectPromotionId).prom_reduce;
-                                    String s = Common.formatFloat(sub_total, voucher.denomination);
-                                    enabled.post_discount_price = Common.formatFloat(s,
-                                            isEmpty(prom_reduce) ? "0" : prom_reduce);
-                                }
+                        /**********计算折后小计***************/
+                        if (enabled.selectPromotionId == -1){
+                            enabled.post_discount_price = Common.formatFloat(sub_total,
+                                    voucher.denomination);
+                        }else {
+                            if (!isEmpty(enabled.promotion_info)){
+                                String prom_reduce = enabled.promotion_info.
+                                        get(enabled.selectPromotionId).prom_reduce;
+                                String s = Common.formatFloat(sub_total, voucher.denomination);
+                                enabled.post_discount_price = Common.formatFloat(s,
+                                        isEmpty(prom_reduce) ? "0" : prom_reduce);
                             }
-                            /************计算折后小计*************/
-                            //显示店铺小计
-                            mtv_goods_price.setText(getString(R.string.rmb).concat(enabled.post_discount_price));
-                            if (mListener != null){
-                                mListener.onSelectVoucher(position);
-                            }
+                        }
+                        /************计算折后小计*************/
+                        //显示店铺小计
+                        mtv_goods_price.setText(getString(R.string.rmb).concat(enabled.post_discount_price));
+                        if (mListener != null){
+                            mListener.onSelectVoucher(position);
                         }
                     });
                     discountDialog.show();
@@ -381,40 +378,37 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     if (mIsOrderBuy){
                         final DiscountListDialog promotionDialog = new DiscountListDialog(context);
                         promotionDialog.setPromotion(lists.get(getAdapterPosition() - 1));
-                        promotionDialog.setSelectListener(new DiscountListDialog.ISelectListener() {
-                            @Override
-                            public void onSelect(int position) {
-                                if (position < 0){
-                                    return;
-                                }
-                                ConfirmOrderEntity.Enabled enabled = lists.
-                                        get(getAdapterPosition() - 1);
-                                ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.
-                                        promotion_info.get(position);
-                                mtv_promotion.setText(promotionInfo.prom_title);
-                                enabled.selectPromotionId = position;
+                        promotionDialog.setSelectListener(position -> {
+                            if (position < 0){
+                                return;
+                            }
+                            ConfirmOrderEntity.Enabled enabled = lists.
+                                    get(getAdapterPosition() - 1);
+                            ConfirmOrderEntity.PromotionInfo promotionInfo = enabled.
+                                    promotion_info.get(position);
+                            mtv_promotion.setText(promotionInfo.prom_title);
+                            enabled.selectPromotionId = position;
 
-                                /*********优惠券额度*************/
-                                if (!isEmpty(enabled.voucher)){
-                                    String denomination = enabled.voucher.get(enabled.
-                                            selectVoucherId).denomination;
-                                    String s1 = Common.formatFloat(enabled.sub_total, denomination);
-                                    enabled.post_discount_price = Common.formatFloat(s1,
-                                            isEmpty(promotionInfo.prom_reduce) ?
-                                                    "0" : promotionInfo.prom_reduce);
-                                }else {
-                                    enabled.post_discount_price = Common.formatFloat(enabled.sub_total,
-                                            isEmpty(promotionInfo.prom_reduce) ?
-                                                    "0" : promotionInfo.prom_reduce);
-                                }
-                                /*********优惠券额度*************/
+                            /*********优惠券额度*************/
+                            if (!isEmpty(enabled.voucher)){
+                                String denomination = enabled.voucher.get(enabled.
+                                        selectVoucherId).denomination;
+                                String s1 = Common.formatFloat(enabled.sub_total, denomination);
+                                enabled.post_discount_price = Common.formatFloat(s1,
+                                        isEmpty(promotionInfo.prom_reduce) ?
+                                                "0" : promotionInfo.prom_reduce);
+                            }else {
+                                enabled.post_discount_price = Common.formatFloat(enabled.sub_total,
+                                        isEmpty(promotionInfo.prom_reduce) ?
+                                                "0" : promotionInfo.prom_reduce);
+                            }
+                            /*********优惠券额度*************/
 
-                                //显示店铺小计
-                                mtv_goods_price.setText(getString(R.string.rmb)
-                                        .concat(enabled.post_discount_price));
-                                if (mListener != null){
-                                    mListener.onSelectVoucher(position);
-                                }
+                            //显示店铺小计
+                            mtv_goods_price.setText(getString(R.string.rmb)
+                                    .concat(enabled.post_discount_price));
+                            if (mListener != null){
+                                mListener.onSelectVoucher(position);
                             }
                         });
                         promotionDialog.show();
