@@ -144,6 +144,8 @@
         android:layout_width="match_parent"
         android:layout_height="122dp"
         android:background="@drawable/rounded_corner_solid_gray_3px"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="top|left"
         android:maxEms="500"
         android:paddingBottom="14dp"

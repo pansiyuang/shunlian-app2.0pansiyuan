@@ -169,7 +169,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
             if (quick_actions != null)
                 quick_actions.setMessageCount(s);
-        } else{
+        } else {
             messageCountManager.initData();
         }
         super.onResume();
@@ -394,7 +394,10 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                         return;
                     }
                 }
-
+                if (isEmpty(edt_refunds.getText().toString())) {
+                    Common.staticToast("请输入退款说明");
+                    return;
+                }
                 String imageStr = getImageString();
                 presenter.applyRefund(currentRefundId, currentInfoEntity.og_Id, String.valueOf(customer_goods.getCurrentCount()), edt_return_money.getText().toString(), currentServiceType, currentReasonId, edt_refunds.getText().toString(), imageStr, isEdit);
                 break;

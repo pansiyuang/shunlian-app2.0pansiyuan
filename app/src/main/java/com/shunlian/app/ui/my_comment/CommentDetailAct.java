@@ -10,9 +10,9 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.PicAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
-import com.shunlian.app.bean.PicAdapter;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;

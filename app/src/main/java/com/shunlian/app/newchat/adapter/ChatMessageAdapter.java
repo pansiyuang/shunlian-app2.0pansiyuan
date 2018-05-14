@@ -428,7 +428,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 List<String> imgs = new ArrayList<>();
                 imgs.clear();
                 if (isEmpty(image.localUrl)) {
-                    imgs.add(image.localUrl + image.img_small);
+                    imgs.add(image.img_host + image.img_small);
                 } else {
                     imgs.add("file://" + image.localUrl);
                 }

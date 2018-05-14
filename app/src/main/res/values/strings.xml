@@ -325,6 +325,7 @@
     <string name="this_append_comment">这些商品可追加</string>
     <string name="ready_to_cancel_comment">确定取消发布吗？</string>
     <string name="logistics_detail">物流详情</string>
+    <string name="ready_cancel">确定取消</string>
 
     <!--换货详情-->
     <string name="exchange_xieshanglishi">协商历史</string>
