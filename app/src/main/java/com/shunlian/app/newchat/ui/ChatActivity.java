@@ -273,23 +273,26 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             case Admin: //
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showCommentBtn();
+                tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Seller:
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showGoodsBtn();
                 et_input.showCommentBtn();
+                tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { //对方是平台客服
                     tv_title_right.setText(getStringResouce(R.string.help_center));
                     et_input.showOrderBtn();
+                    tv_title_right.setVisibility(View.GONE);
                 } else {
                     tv_title_right.setText(getStringResouce(R.string.to_shop));
+                    tv_title_right.setVisibility(View.VISIBLE);
                 }
                 et_input.showGoodsBtn();
                 break;
         }
-        tv_title_right.setVisibility(View.VISIBLE);
     }
 
     public void getChatHistory(boolean b) {

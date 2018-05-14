@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
-import com.shunlian.app.bean.PicAdapter;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;

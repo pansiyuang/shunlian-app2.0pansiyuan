@@ -55,9 +55,6 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
     private void requestData(GoodsSearchParam goodsSearchParam, boolean isShowLoading) {
         Map<String, String> map = new HashMap<>();
         LogUtil.augusLogW("yxf--"+goodsSearchParam);
-        if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
-            map.put("keyword", goodsSearchParam.keyword);
-        }
 
         if (!TextUtils.isEmpty(goodsSearchParam.min_price)) {
             map.put("min_price", goodsSearchParam.min_price);

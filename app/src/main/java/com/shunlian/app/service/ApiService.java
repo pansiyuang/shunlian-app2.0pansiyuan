@@ -354,6 +354,12 @@ public interface ApiService {
     Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
 
     /**
+     * 你可能还想买
+     */
+    @GET("cart/getMemberProbablyLike")
+    Call<BaseEntity<CommonEntity>> getProbablyLikeList(@QueryMap Map<String, String> map);
+
+    /**
      * 商品详情页足迹
      *
      * @param body
