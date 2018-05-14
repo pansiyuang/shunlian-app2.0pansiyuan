@@ -40,7 +40,7 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:layout_above="@+id/ll_bottom"
-        android:layout_below="@+id/rl_title"
+        android:layout_below="@+id/llayout_title"
         android:layout_weight="1" />
 
     <RelativeLayout

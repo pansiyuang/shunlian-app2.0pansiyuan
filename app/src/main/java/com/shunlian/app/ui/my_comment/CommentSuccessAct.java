@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentSuccessAdapter;
 import com.shunlian.app.bean.CommentSuccessEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
@@ -82,23 +80,20 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
                 CommentSuccessAdapter(this,false,otherComments,commentSize);
         recy_view.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                CommentSuccessEntity.Comment comment1 = otherComments.get(position - 1);
-                if (position < commentSize + 1){
-                    ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.order_sn,comment1.thumb,
-                            comment1.title,comment1.price,comment1.goods_id);
+        adapter.setOnItemClickListener((view, position) -> {
+            CommentSuccessEntity.Comment comment1 = otherComments.get(position - 1);
+            if (position < commentSize + 1){
+                ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.order_sn,comment1.thumb,
+                        comment1.title,comment1.price,comment1.goods_id);
 
-                    CreatCommentActivity.startAct(CommentSuccessAct.this,
-                            entity,CreatCommentActivity.CREAT_COMMENT);
-                }else {
-                    ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.thumb,
-                            comment1.title,comment1.price,comment1.comment_id);
-
-                    CreatCommentActivity.startAct(CommentSuccessAct.this,
-                            entity,CreatCommentActivity.APPEND_COMMENT);
-                }
+                CreatCommentActivity.startAct(CommentSuccessAct.this,
+                        entity,CreatCommentActivity.CREAT_COMMENT);
+            }else {
+                ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.thumb,
+                        comment1.title,comment1.price,comment1.comment_id);
+                entity.order = comment1.order_sn;
+                CreatCommentActivity.startAct(CommentSuccessAct.this,
+                        entity,CreatCommentActivity.APPEND_COMMENT);
             }
         });
     }

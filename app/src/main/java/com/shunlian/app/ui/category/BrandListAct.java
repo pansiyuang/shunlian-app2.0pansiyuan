@@ -87,6 +87,7 @@ public class BrandListAct extends BaseActivity implements IBrandListView {
             public void onItemClick(View view, int position) {
                 GoodsSearchParam param = new GoodsSearchParam();
                 param.keyword = mLogisticsName.get(position).brand_name;
+                param.brand_ids = mLogisticsName.get(position).id;
                 GoodsSearchAct.startAct(BrandListAct.this,param);
             }
         });

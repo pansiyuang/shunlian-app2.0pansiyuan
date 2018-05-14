@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -153,19 +154,18 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
         promptDialog = new PromptDialog(this);
         promptDialog.setSureAndCancleListener(getStringResouce(R.string.ready_to_cancel_comment),
-                getStringResouce(R.string.SelectRecommendAct_sure),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                }, getStringResouce(R.string.errcode_cancel),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        promptDialog.dismiss();
-                    }
-                });
+                getStringResouce(R.string.continue_to_publish), v -> promptDialog.dismiss(), getStringResouce(R.string.ready_cancel),
+                v -> finish());
+        recycler_creat_comment.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+            return false;
+        });
         super.initListener();
     }
 
@@ -326,7 +326,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     }
                     for (int j = 0; j < releaseCommentEntity.imgs.size(); j++) {
                         stringBuffer.append(releaseCommentEntity.imgs.get(j));
-                        if (i != releaseCommentEntity.imgs.size() - 1) {
+                        if (j != releaseCommentEntity.imgs.size() - 1) {
                             stringBuffer.append(",");
                         }
                     }
@@ -374,12 +374,14 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         switch (currentType) {
             case CREAT_COMMENT:
                 Common.staticToast("评价成功");
+                CommentSuccessAct.startAct(this);
                 break;
             case CHANGE_COMMENT:
                 Common.staticToast("修改评价成功");
                 break;
             case APPEND_COMMENT:
                 Common.staticToast("追加评价成功");
+                CommentSuccessAct.startAct(this);
                 break;
         }
         finish();

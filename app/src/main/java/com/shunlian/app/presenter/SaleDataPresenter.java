@@ -68,6 +68,7 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                         data.sales_info.today_members,data.sales_info.today_orders);
                 iView.setEliteTutorData(data.master_info);
                 iView.setplusrole(data.user_info.plus_role_code);
+                iView.setSaleTip(data.tip);
             }
         });
     }
@@ -88,7 +89,7 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                 SalesChartEntity data = entity.data;
                 iView.setSaleData(data.total_child_store,
                         data.total_grand_child_store,data.total_consume);
-                iView.setSaleTip(data.tip);
+
                 iView.setSaleChart(data);
             }
         });

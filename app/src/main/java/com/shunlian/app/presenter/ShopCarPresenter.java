@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
@@ -237,6 +238,27 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
                     if (shoppingCarEntity != null) {
                         iView.OnEditEntity(shoppingCarEntity);
                     }
+                    super.onSuccess(entity);
+                }
+
+                @Override
+                public void onFailure() {
+                    super.onFailure();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getProbablyLikeList() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+        try {
+            Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getProbablyLikeList(map);
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<CommonEntity> entity) {
                     super.onSuccess(entity);
                 }
 

@@ -188,20 +188,12 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     public void delPrompt() {
         final PromptDialog dialog = new PromptDialog(this);
         dialog.setSureAndCancleListener(getStringResouce(R.string.are_you_sure_del_comment),
-                getStringResouce(R.string.confirm), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (presenter != null){
-                    presenter.delComment();
-                }
-                dialog.dismiss();
-            }
-        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        }).show();
+                getStringResouce(R.string.confirm), v -> {
+                    if (presenter != null){
+                        presenter.delComment();
+                    }
+                    dialog.dismiss();
+                }, getStringResouce(R.string.errcode_cancel), v -> dialog.dismiss()).show();
     }
 
     /**
