@@ -37,6 +37,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -639,6 +640,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 //        }
         switch (v.getId()){
             case R.id.mtv_add_car:
+                if (!Common.isAlreadyLogin()){
+                    LoginAct.startAct(this);
+                    return;
+                }
                 isAddcart = true;
                 /*if (goodsCount == 0){//此流程：如果选过商品属性，不需要勾选
                     goodsDeatilFrag.showParamDialog();
@@ -685,6 +690,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 backOrder();
                 break;
             case R.id.mtv_buy_immediately:
+                if (!Common.isAlreadyLogin()){
+                    LoginAct.startAct(this);
+                    return;
+                }
                 String buyText = mtv_buy_immediately.getText().toString();
                 if (getStringResouce(R.string.now_buy).equals(buyText)){//立刻购买
                     isNowBuy = true;

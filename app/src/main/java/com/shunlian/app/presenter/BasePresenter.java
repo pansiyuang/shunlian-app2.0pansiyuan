@@ -264,8 +264,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     goLogin();
                 }else {
                     requestCount++;
-                    if (requestCount >= 5){
+                    if (requestCount > 5){
                         clone.cancel();
+                        requestCount = 0;
                         return;
                     }
                     refreshToken(clone,emptyCode,failureCode,isLoading);
