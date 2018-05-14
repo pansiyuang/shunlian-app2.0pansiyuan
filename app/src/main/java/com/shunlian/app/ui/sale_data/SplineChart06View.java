@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.SalesChartEntity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.zh.chartlibrary.chart.PointD;
 import com.zh.chartlibrary.chart.SplineChart;
@@ -35,10 +36,10 @@ public class SplineChart06View extends ChartView {
     //数据源集合
     private LinkedList<SplineData> mChartData = new LinkedList<>();
     //自定义线
-//    private List<CustomLineData> mXCustomLineDataset = new ArrayList<>();
-//    private List<CustomLineData> mYCustomLineDataset = new ArrayList<>();
+    //private List<CustomLineData> mXCustomLineDataset = new ArrayList<>();
+    //private List<CustomLineData> mYCustomLineDataset = new ArrayList<>();
 
-//    private Paint mPaintTooltips = new Paint(Paint.ANTI_ALIAS_FLAG);
+    //private Paint mPaintTooltips = new Paint(Paint.ANTI_ALIAS_FLAG);
     private SalesChartEntity mSalesChart;
     private int child_store_color;//小店颜色
     private int grand_child_store_color;//分店颜色
@@ -75,7 +76,7 @@ public class SplineChart06View extends ChartView {
         custome_line_color = Color.parseColor("#eeeeee");
         lable_text_color = getResources().getColor(R.color.new_text);
         creatLables();
-//        chartCustomeLines();
+        //chartCustomeLines();
         creatChartData();
         chartRender();
         this.invalidate();
@@ -118,8 +119,8 @@ public class SplineChart06View extends ChartView {
         chart.setPadding(bs[2], bs[0], bs[2], bs[0]);
 
         //设置自定义线
-//        chart.setCustomLines(mYCustomLineDataset);
-//        chart.setCategoryAxisCustomLines(mXCustomLineDataset);
+        //chart.setCustomLines(mYCustomLineDataset);
+        //chart.setCategoryAxisCustomLines(mXCustomLineDataset);
 
         //设置数据源
         chart.setCategories(mLabels);
@@ -162,7 +163,7 @@ public class SplineChart06View extends ChartView {
 
         //激活点击监听
         chart.ActiveListenItemClick();
-        //为了让触发更灵敏，可以扩大5px的点击监听范围
+        //为了让触发更灵敏，可以扩大20px的点击监听范围
         chart.extPointClickRange(TransformUtil.dip2px(getContext(), 10));
         chart.showClikedFocus();
 
@@ -200,14 +201,14 @@ public class SplineChart06View extends ChartView {
             List<PointD> profit = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 SalesChartEntity.Item item = list.get(i);
-                if (!TextUtils.isEmpty(item.profit) && !"0".equals(item.profit)) {
+                if (!TextUtils.isEmpty(item.profit)/* && !"0".equals(item.profit)*/) {
                     profit.add(new PointD(i, parseDouble(item.profit)));
                 }
             }
-            if (profit.size() > 0 &&  profit.size() < list.size()){
+            /*if (profit.size() > 0 &&  profit.size() < list.size()){
                 double x = profit.get(0).x - 1;
                 profit.add(0,new PointD(x, 0));
-            }
+            }*/
             SplineData splineData4 = new SplineData(key_line4, profit, child_store_color);
             splineData4.getLinePaint().setStrokeWidth(3);
             splineData4.setLineStyle(XEnum.LineStyle.DASH);
@@ -225,14 +226,14 @@ public class SplineChart06View extends ChartView {
             List<PointD> xf = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 SalesChartEntity.Item item = list.get(i);
-                if (!TextUtils.isEmpty(item.consume_money) && !"0".equals(item.consume_money)) {
+                if (!TextUtils.isEmpty(item.consume_money) /*&& !"0".equals(item.consume_money)*/) {
                     xf.add(new PointD(i, parseDouble(item.consume_money)));
                 }
             }
-            if (xf.size() > 0 && xf.size() < list.size()){
+           /* if (xf.size() > 0 && xf.size() < list.size()){
                 double x = xf.get(0).x - 1;
                 xf.add(0,new PointD(x, 0));
-            }
+            }*/
             SplineData splineData3 = new SplineData(key_line3, xf, consume_money_color);
             splineData3.getLinePaint().setStrokeWidth(3);
             splineData3.setLineStyle(XEnum.LineStyle.DASH);
@@ -251,14 +252,14 @@ public class SplineChart06View extends ChartView {
             for (int i = 0; i < list.size(); i++) {
                 SalesChartEntity.Item item = list.get(i);
                 if (!TextUtils.isEmpty(item.grand_child_store)
-                        && !"0".equals(item.grand_child_store)) {
+                        /*&& !"0".equals(item.grand_child_store)*/) {
                     fd.add(new PointD(i, parseDouble(item.grand_child_store)));
                 }
             }
-            if (fd.size() > 0 && fd.size() < list.size()){
+            /*if (fd.size() > 0 && fd.size() < list.size()){
                 double x = fd.get(0).x - 1;
                 fd.add(0,new PointD(x, 0));
-            }
+            }*/
             SplineData splineData2 = new SplineData(key_line2, fd, grand_child_store_color);
             //设置线的粗细
             splineData2.getLinePaint().setStrokeWidth(3);
@@ -277,14 +278,14 @@ public class SplineChart06View extends ChartView {
             List<PointD> xd = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 SalesChartEntity.Item item = list.get(i);
-                if (!TextUtils.isEmpty(item.child_store) && !"0".equals(item.child_store)) {
+                if (!TextUtils.isEmpty(item.child_store)/* && !"0".equals(item.child_store)*/) {
                     xd.add(new PointD(i, parseDouble(item.child_store)));
                 }
             }
-            if (xd.size() > 0 && xd.size() > 0 && xd.size() < list.size()){
+            /*if (xd.size() > 0 && xd.size() > 0 && xd.size() < list.size()){
                 double x = xd.get(0).x - 1;
                 xd.add(0,new PointD(x, 0));
-            }
+            }*/
             SplineData splineData1 = new SplineData(key_line1, xd, child_store_color);
             //设置线的粗细
             splineData1.getLinePaint().setStrokeWidth(3);
@@ -369,13 +370,13 @@ public class SplineChart06View extends ChartView {
             SplineData splineData = mChartData.get(i);
             if (record.getDataChildID() < splineData.getLineDataSet().size()) {
                 PointD pointD = splineData.getLineDataSet().get(record.getDataChildID());
-//            LogUtil.zhLogW(splineData.getLineKey()+"："+pointD.y);
-//            LogUtil.zhLogW("pointD.x="+pointD.x);
+                LogUtil.zhLogW(splineData.getLineKey()+"："+pointD.y);
+                LogUtil.zhLogW("pointD.x="+pointD.x);
                 xAxisPos = (int) pointD.x;
                 data.add(splineData.getLineKey() + "：" + pointD.y);
             }
         }
-//        LogUtil.zhLogW("--------------------------------------------------------------------------");
+        //LogUtil.zhLogW("--------------------------------------------------------------------------");
         if (mChartListener != null) {
             List<SalesChartEntity.Item> list = mSalesChart.list;
             mChartListener.onSaleCharts(data, list.get(xAxisPos).date);
