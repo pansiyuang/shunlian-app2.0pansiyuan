@@ -120,12 +120,9 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
 
         OrderGoodsAdapter adapter = new OrderGoodsAdapter(context, orders.order_goods);
         mHolder.recy_view.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int posi) {
-                if (listener != null) {
-                    listener.onItemClick(view, position);
-                }
+        adapter.setOnItemClickListener((view, posi) -> {
+            if (listener != null) {
+                listener.onItemClick(view, position);
             }
         });
     }
@@ -397,23 +394,15 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             final PromptDialog promptDialog = new PromptDialog((Activity) context);
             promptDialog.setSureAndCancleListener(getString(R.string.confirm_goods_receipt),
                     getString(R.string.confirm_goods_receipt_label),
-                    getString(R.string.confirm_goods), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mAllFrag != null){
-                        mAllFrag.confirmreceipt(orders.id);
-                    }
-                    if (mSearchOrderAct != null){
-                        mSearchOrderAct.confirmreceipt(orders.id);
-                    }
-                    promptDialog.dismiss();
-                }
-            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    promptDialog.dismiss();
-                }
-            }).show();
+                    getString(R.string.confirm_goods), v -> {
+                        if (mAllFrag != null){
+                            mAllFrag.confirmreceipt(orders.id);
+                        }
+                        if (mSearchOrderAct != null){
+                            mSearchOrderAct.confirmreceipt(orders.id);
+                        }
+                        promptDialog.dismiss();
+                    }, getString(R.string.errcode_cancel), v -> promptDialog.dismiss()).show();
         }
 
         /*
@@ -423,15 +412,12 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             DiscountListDialog dialog = new DiscountListDialog(context);
             dialog.setSelectReason();
             dialog.show();
-            dialog.setSelectListener(new DiscountListDialog.ISelectListener() {
-                @Override
-                public void onSelect(int position) {
-                    if (mAllFrag != null) {
-                        mAllFrag.cancleOrder(orders.id,position + 1);
-                    }
-                    if (mSearchOrderAct != null) {
-                        mSearchOrderAct.cancleOrder(orders.id,position + 1);
-                    }
+            dialog.setSelectListener(position -> {
+                if (mAllFrag != null) {
+                    mAllFrag.cancleOrder(orders.id,position + 1);
+                }
+                if (mSearchOrderAct != null) {
+                    mSearchOrderAct.cancleOrder(orders.id,position + 1);
                 }
             });
         }
@@ -443,24 +429,16 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             final PromptDialog promptDialog = new PromptDialog((Activity) context);
             promptDialog.setSureAndCancleListener(getString(R.string.confirm_extend_goods_time),
                     getString(R.string.order_extend_once),
-                    getString(R.string.confirm), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mAllFrag != null) {
-                        mAllFrag.postpone(orders.id);
-                    }
-                    if (mSearchOrderAct != null) {
-                        mSearchOrderAct.postpone(orders.id);
-                    }
+                    getString(R.string.confirm), v -> {
+                        if (mAllFrag != null) {
+                            mAllFrag.postpone(orders.id);
+                        }
+                        if (mSearchOrderAct != null) {
+                            mSearchOrderAct.postpone(orders.id);
+                        }
 
-                    promptDialog.dismiss();
-                }
-            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    promptDialog.dismiss();
-                }
-            }).show();
+                        promptDialog.dismiss();
+                    }, getString(R.string.errcode_cancel), v -> promptDialog.dismiss()).show();
         }
     }
 
