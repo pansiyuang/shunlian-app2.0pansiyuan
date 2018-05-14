@@ -47,29 +47,6 @@ public class ChatGoodsAdapter extends BaseRecyclerAdapter<ChatGoodsEntity.Goods>
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-
-        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-        if (manager instanceof GridLayoutManager) {
-            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
-            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    return isBottom(position) ? gridManager.getSpanCount() : 1;
-                }
-            });
-        }
-    }
-
-    private boolean isBottom(int position) {
-        if (position + 1 == getItemCount()) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GoodsViewHolder) {
             GoodsViewHolder goodsHolderView = (GoodsViewHolder) holder;

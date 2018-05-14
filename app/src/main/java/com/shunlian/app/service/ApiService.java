@@ -707,6 +707,12 @@ public interface ApiService {
     Call<BaseEntity<CommonEntity>> confirmreceipt(@Body RequestBody body);
 
     /**
+     * 换货确认收货
+     */
+    @POST("member/refund/confirmReceive")
+    Call<BaseEntity<CommonEntity>> confirmReceive(@Body RequestBody body);
+
+    /**
      * 获取支付列表
      *
      * @param map

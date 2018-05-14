@@ -16,7 +16,8 @@ import android.view.View;
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private int spanCount; //列数
     private int spacing;   //间距大小
-    private boolean includeEdge;  //表格边缘是否需要添加
+    private boolean includeEdge, isPage;  //表格边缘是否需要添加
+    private int top = 0, bottom = 0;
 
     public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
         this.spanCount = spanCount;
@@ -29,6 +30,13 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         this.includeEdge = includeEdge;
     }
 
+    public GridSpacingItemDecoration(int spacing, boolean includeEdge, int top, boolean isPage) {
+        this.spacing = spacing;
+        this.includeEdge = includeEdge;
+        this.top = top;
+        this.isPage = isPage;
+    }
+
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
@@ -36,7 +44,9 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view); // item position
         int column = position % spanCount; // item column
 
-        if (includeEdge) {
+        if (isPage && parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
+            outRect.top = spacing;
+        } else if (includeEdge) {
             outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
             outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
 
@@ -47,7 +57,9 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         } else {
             outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
             outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-            if (position >= spanCount) {
+            if (position < spanCount) {
+                outRect.top = top;
+            } else {
                 outRect.top = spacing; // item top
             }
         }

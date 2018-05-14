@@ -512,13 +512,12 @@
         </com.shunlian.app.widget.MyRelativeLayout>
 
         <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/mrLayout_operates"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="7dp">
+            android:id="@+id/rl_more"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_dot"
                 android:layout_width="wrap_content"
                 android:layout_height="4dp"
                 android:layout_centerInParent="true"
@@ -526,15 +525,17 @@
                 android:src="@mipmap/icon_common_more_white" />
 
             <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_msg_count"
+                android:id="@+id/tv_msg_count"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
+                android:layout_above="@id/miv_dot"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="1dp"
                 android:background="@drawable/bg_message_more_red"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:visibility="gone"
-                android:textSize="9sp" />
+                android:textSize="9sp"
+                android:visibility="gone" />
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 
@@ -630,4 +631,5 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </RelativeLayout>

@@ -146,6 +146,7 @@
     <string name="store_taocanjia">套餐价</string>
     <string name="store_zengpin">赠品</string>
     <string name="store_kanzhizhao">*输入验证码查看执照信息</string>
+    <string name="store_taocan">套餐原价￥</string>
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
@@ -220,7 +221,7 @@
     <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
-    <string name="buy_gift">满赠</string>
+    <string name="buy_gift">买赠</string>
     <string name="full_discount_">满%s打%s折</string>
     <string name="share">分享</string>
     <string name="activity">活动</string>
@@ -344,6 +345,7 @@
     <string name="order_youhuiquan">优惠券</string>
     <string name="order_shifu">实付金额</string>
     <string name="order_lianxishangjia">联系商家</string>
+    <string name="order_haisheng">还剩</string>
     <string name="order_quxiaodingdan">取消订单</string>
     <string name="order_fukuan">付款</string>
     <string name="order_wuliu">查看物流</string>
@@ -451,6 +453,7 @@
     <string name="day_lijiqianggou">立即抢购</string>
     <string name="day_setting_remind">设置提醒</string>
     <string name="day_set_remind">设置提醒成功</string>
+    <string name="day_jiangzaikaiqiang">将在开抢前三分钟提醒您</string>
     <string name="day_cancel_remind">取消提醒成功</string>
     <item name="tag_day_menu_id" type="id" />
 
@@ -537,6 +540,7 @@
     <string name="customize_my_store">自定义我的小店</string>
     <string name="store_empty">您的店铺还没有商品,赶紧去添加吧</string>
     <string name="to_mainpage">去首页</string>
+
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>

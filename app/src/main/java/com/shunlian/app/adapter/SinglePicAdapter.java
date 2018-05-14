@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
@@ -55,19 +56,10 @@ public class SinglePicAdapter extends BaseRecyclerAdapter<String> {
 
         public MViewHolder(View itemView) {
             super(itemView);
-//            int picWidth = (Common.getScreenWidth((Activity) context) - 18 - 40) / 3;
-//
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
-//            miv_pic.setLayoutParams(params);
-//
-            itemView.setOnClickListener(this);
+            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,18) - TransformUtil.dip2px(context,38)) / 3;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
+            miv_pic.setLayoutParams(params);
         }
 
-        @Override
-        public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClick(v, getAdapterPosition());
-            }
-        }
     }
 }

@@ -93,12 +93,9 @@ public class RecyclerDialog extends Dialog{
         recycler_list.setNestedScrollingEnabled(false);
         recycler_list.setLayoutManager(linearLayoutManager);
 
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isShowing()) {
-                    dismiss();
-                }
+        miv_close.setOnClickListener(view -> {
+            if (isShowing()) {
+                dismiss();
             }
         });
     }

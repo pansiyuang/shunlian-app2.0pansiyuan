@@ -759,15 +759,15 @@ public class EasyWebsocketClient extends WebSocketClient {
                 reconnectCount++;
                 mStatus = Status.CONNECTING;
             }
-            try {
-                mSingleton = null;
-                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
-                mSingleton.setTimeOut(timeout);
-                mSingleton.connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                LogUtil.httpLogW("链接服务器失败....");
-            }
+//            try {
+//                mSingleton = null;
+//                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
+//                mSingleton.setTimeOut(timeout);
+//                mSingleton.connect();
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//                LogUtil.httpLogW("链接服务器失败....");
+//            }
         }
     };
 

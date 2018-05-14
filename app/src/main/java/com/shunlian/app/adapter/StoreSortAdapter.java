@@ -2,6 +2,7 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreCategoriesEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -79,9 +81,10 @@ public class StoreSortAdapter extends BaseRecyclerAdapter<StoreCategoriesEntity.
                     ThreeHolder threeHolder = (ThreeHolder) holder;
                     StoreCategoriesEntity.MData data = datas.get(position);
                     threeHolder.mtv_name.setText(data.name);
-                    GridLayoutManager babyManager = new GridLayoutManager(context, 2);
+                    GridLayoutManager babyManager = new GridLayoutManager(context, 2, LinearLayoutManager.HORIZONTAL,false);
                     threeHolder.rv_sort.setLayoutManager(babyManager);
                     threeHolder.rv_sort.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(context, 5), TransformUtil.dip2px(context, 5), false));
+//                    threeHolder.rv_sort.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context, 5),false));
                     StoreSortAdapters storeSortAdapters = new StoreSortAdapters(context, false, data.children);
                     threeHolder.rv_sort.setAdapter(storeSortAdapters);
                     storeSortAdapters.setOnItemClickListener((view, position1) -> {

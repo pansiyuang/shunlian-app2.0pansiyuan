@@ -55,4 +55,10 @@ public interface ISaleDataView extends IView {
      * @param masterInfo
      */
     void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo);
+
+    /**
+     * 销售数据说明
+     * @param tip
+     */
+    void setSaleTip(String tip);
 }

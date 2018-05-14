@@ -32,28 +32,6 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager){
-            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
-            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    return isBottom(position) ? manager.getSpanCount() : 1;
-                }
-            });
-        }
-    }
-
-    private boolean isBottom(int position) {
-        if (position + 1 == getItemCount()){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new OneHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_store_baby, parent, false));
     }

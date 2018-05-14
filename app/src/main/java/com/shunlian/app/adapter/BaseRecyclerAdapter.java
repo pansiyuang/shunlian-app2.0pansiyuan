@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -77,6 +78,24 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(context);
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager&&isShowFooter) {
+            final GridLayoutManager manager = (GridLayoutManager) layoutManager;
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return isBottoms(position) ? manager.getSpanCount() : 1;
+                }
+            });
+        }
+    }
+
+    protected boolean isBottoms(int position) {
+        return position + 1 == getItemCount();
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isShowFooter) {
@@ -345,12 +364,20 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
 
-    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public BaseRecyclerViewHolder(View itemView) {
             super(itemView);
             Unbinder bind = ButterKnife.bind(this, itemView);
             unbinders.add(bind);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.onItemClick(view,getAdapterPosition());
+            }
         }
     }
 

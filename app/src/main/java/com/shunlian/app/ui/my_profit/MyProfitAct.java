@@ -165,6 +165,9 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.mtv_date)
     MyTextView mtv_date;
 
+    @BindView(R.id.mtv_profitTip)
+    MyTextView mtv_profitTip;
+
     private String available_profit;//可提现金额
     private MyProfitPresenter presenter;
     private String profit_help_url;
@@ -363,6 +366,17 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             energySphereClick(miv_month, Color.parseColor("#FEE8DD"));
             mtv_month_reward.setText("0.00");
         }
+    }
+
+    /**
+     * 收益说明
+     *
+     * @param tip
+     */
+    @Override
+    public void setProfitTip(String tip) {
+        if (mtv_profitTip != null)
+            mtv_profitTip.setText(tip);
     }
 
     @Override

@@ -100,7 +100,7 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
                 super.onSuccess(entity);
                 babyDatas.get(position).remind_status="1";
                 iView.activityState(position);
-                Common.staticToasts(context,context.getString(R.string.day_set_remind),R.mipmap.icon_common_duihao);
+                Common.staticToasts(context,context.getString(R.string.day_set_remind),context.getString(R.string.day_jiangzaikaiqiang),R.mipmap.icon_common_duihao);
             }
         });
     }
