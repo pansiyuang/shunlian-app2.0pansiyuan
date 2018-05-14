@@ -466,6 +466,7 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="217dp"
             android:layout_height="match_parent"
+            android:id="@+id/mllayout_search"
             android:layout_marginLeft="20dp"
             android:background="@drawable/shape_store_title_bg"
             android:gravity="center_vertical"
@@ -478,7 +479,7 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/icon_shop_search" />
 
-            <com.shunlian.app.widget.MyEditText
+            <com.shunlian.app.widget.MyTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"

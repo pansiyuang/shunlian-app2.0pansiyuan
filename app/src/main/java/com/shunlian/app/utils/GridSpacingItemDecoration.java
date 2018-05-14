@@ -16,7 +16,7 @@ import android.view.View;
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private int spanCount; //列数
     private int spacing;   //间距大小
-    private boolean includeEdge, isPage;  //表格边缘是否需要添加
+    private boolean includeEdge, isPage=false;  //表格边缘是否需要添加
     private int top = 0, bottom = 0;
 
     public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
