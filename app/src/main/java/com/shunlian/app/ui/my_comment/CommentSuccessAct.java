@@ -91,7 +91,7 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
             }else {
                 ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.thumb,
                         comment1.title,comment1.price,comment1.comment_id);
-
+                entity.order = comment1.order_sn;
                 CreatCommentActivity.startAct(CommentSuccessAct.this,
                         entity,CreatCommentActivity.APPEND_COMMENT);
             }
