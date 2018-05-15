@@ -29,6 +29,7 @@ import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,6 +65,9 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @BindView(R.id.miv_arrow)
     MyImageView miv_arrow;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
@@ -188,10 +192,20 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         hotId=getIntent().getStringExtra("hotId");
         pAishang = new PAishang(this, this);
         pAishang.getHotRd(hotId);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setButtonText(null);
     }
 
     @Override
     public void setPushData(List<HotRdEntity.MData> mData, HotRdEntity data) {
+        if (mData==null||mData.size()<=0){
+            visible(nei_empty);
+            gone(rv_list);
+        }else {
+            gone(nei_empty);
+            visible(rv_list);
+        }
         if (hotPushAdapter==null){
             mtv_title.setText(data.name);
             mtv_desc.setText(data.content);
@@ -230,7 +244,8 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_list);
     }
 
     @Override

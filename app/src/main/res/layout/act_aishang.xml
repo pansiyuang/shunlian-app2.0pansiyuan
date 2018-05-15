@@ -48,6 +48,7 @@
                         app:bb_scale="0.5" />
 
                     <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_rexiao"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:gravity="center"
@@ -63,9 +64,11 @@
                         android:layout_marginBottom="25dp" />
 
                     <View
+                        android:id="@+id/view_rexiao"
                         android:layout_width="match_parent"
                         android:layout_height="10dp"
-                        android:background="@color/value_F7F7F7"/>
+                        android:background="@color/value_F7F7F7" />
+
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
@@ -79,7 +82,7 @@
                         android:id="@+id/rv_categoryMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/light_gray_three"/>
+                        android:background="@color/light_gray_three" />
                 </com.shunlian.app.widget.MyLinearLayout>
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -87,16 +90,31 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_category"
-            android:paddingLeft="7.5dp"
-            android:paddingRight="7.5dp"
-            android:background="@color/value_F7F7F7"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/value_F7F7F7"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv_out"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="150dp"/>
+        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </com.shunlian.app.widget.MyRelativeLayout>

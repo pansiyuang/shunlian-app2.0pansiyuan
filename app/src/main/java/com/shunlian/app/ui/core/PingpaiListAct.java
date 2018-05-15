@@ -16,6 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -26,6 +27,8 @@ import com.shunlian.app.view.IPingList;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,6 +76,9 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
@@ -167,7 +173,6 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected int getLayoutId() {
-        setHideStatus();
         return R.layout.act_ping_list;
     }
 
@@ -193,7 +198,13 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                     miv_dot.setImageResource(R.mipmap.icon_common_more_black);
                     miv_close.setAlpha(alpha);
                     miv_dot.setAlpha(alpha);
+                    ImmersionBar.with(PingpaiListAct.this)
+                            .statusBarDarkFont(true, 0.2f)
+                            .init();
                 } else if (y > 0) {
+                    ImmersionBar.with(PingpaiListAct.this)
+                            .statusBarDarkFont(true, 0.0f)
+                            .init();
                     mtv_title.setTextColor(getColorResouce(R.color.white));
                     view_bg.setAlpha(0);
                     mtv_title.setAlpha(1);
@@ -212,6 +223,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
         pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
 //        pPingList = new PPingList(this, this, "1");
         pPingList.getApiData();
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setButtonText(null);
     }
 
 
@@ -222,12 +235,20 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_list);
     }
 
 
     @Override
     public void setApiData(CorePingEntity corePingEntity, List<CorePingEntity.MData> mDatas) {
+        if (isEmpty(mDatas)) {
+            visible(nei_empty);
+            gone(rv_list);
+        } else {
+            gone(nei_empty);
+            visible(rv_list);
+        }
         if (pingListAdapter==null){
             downTime_firsts.setDownTime(Integer.parseInt(corePingEntity.brand.count_down));
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {

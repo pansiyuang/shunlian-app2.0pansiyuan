@@ -9,5 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GetQrCardEntity {
     public String card_path;
+    public String qrcode_path;
     public String invited;
 }
