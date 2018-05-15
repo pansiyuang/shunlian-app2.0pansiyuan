@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,8 +29,10 @@ import butterknife.BindView;
  */
 
 public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity.Mdata.Hot>  {
-    public DiscoverHotAdapter(Context context, boolean isShowFooter, List<DiscoveryTieziEntity.Mdata.Hot> list) {
+    private Activity activity;
+    public DiscoverHotAdapter(Context context, boolean isShowFooter, List<DiscoveryTieziEntity.Mdata.Hot> list,Activity activity) {
         super(context, isShowFooter, list);
+        this.activity=activity;
     }
 
     @Override
@@ -75,7 +78,7 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
                 viewHolder.miv_pic.setVisibility(View.GONE);
                 viewHolder.rv_pics.setVisibility(View.VISIBLE);
                 if (viewHolder.picAdapter==null){
-                    viewHolder.picAdapter  = new SinglePicAdapter(context, false,  hot.imgs);
+                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false,  hot.imgs);
                     viewHolder.rv_pics.setLayoutManager(new GridLayoutManager(context, 3));
                     viewHolder.rv_pics.setNestedScrollingEnabled(false);
                     viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
