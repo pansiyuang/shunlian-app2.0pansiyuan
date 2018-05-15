@@ -2,7 +2,7 @@
 <com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mlLayout_bottom"
     android:layout_width="match_parent"
-    android:layout_height="57dp"
+    android:layout_height="50dp"
     android:layout_alignParentBottom="true"
     android:background="@color/white"
     android:orientation="horizontal">
@@ -11,49 +11,44 @@
         android:id="@+id/mllayout_kefu"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="270"
         android:gravity="center"
-        android:orientation="vertical">
+        android:background="@color/pink_color"
+        android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_bangzhu_kefu" />
+            android:src="@mipmap/img_zaixiankefu" />
 
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:text="@string/help_zaixiankefu"
-            android:textColor="@color/value_555555"
-            android:textSize="12sp" />
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="4dp"/>
     </com.shunlian.app.widget.MyLinearLayout>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="25dp"
-        android:layout_gravity="center"
-        android:background="@color/light_gray_three" />
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_dianhua"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="100"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_bangzhu_dianhua" />
+            android:src="@mipmap/img_dianhuakefu" />
 
         <com.shunlian.app.widget.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:text="@string/help_bodadianhua"
-            android:textColor="@color/value_555555"
-            android:textSize="12sp" />
+            android:textColor="@color/line_btn"
+            android:textSize="14sp"
+            android:layout_marginLeft="7dp"/>
     </com.shunlian.app.widget.MyLinearLayout>
 </com.shunlian.app.widget.MyLinearLayout>

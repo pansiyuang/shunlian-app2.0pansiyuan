@@ -39,6 +39,7 @@ public class DiscoveryTieziEntity {
             public String nickname;
             public String avatar;
             public String is_likes;
+            public String create_time;
         }
     }
 }

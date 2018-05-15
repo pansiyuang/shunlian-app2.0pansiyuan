@@ -48,6 +48,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -249,6 +250,7 @@ public class Common {
     public static int getScreenWidth(Activity ac) {
         return ac.getWindowManager().getDefaultDisplay().getWidth();
     }
+
 
     /**
      * 获取屏幕高
