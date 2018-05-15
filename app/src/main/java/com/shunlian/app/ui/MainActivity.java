@@ -92,6 +92,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
+    private boolean isPerson=false;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -147,6 +148,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ll_tab_person_center.setOnClickListener(this);
     }
 
+
+    @Override
+    protected void onResume() {
+        if (isPerson&&Common.isAlreadyLogin()){
+            personCenterClick();
+            isPerson=false;
+        }
+        super.onResume();
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -167,7 +178,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 fragmentManager.beginTransaction().show(show).commitAllowingStateLoss();
             }
-
             if (fragmentMap != null && fragmentMap.size() > 0) {
                 Set<String> keySet = fragmentMap.keySet();
                 Iterator<String> iterator = keySet.iterator();
@@ -271,6 +281,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void personCenterClick() {
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
+            isPerson=true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -283,7 +294,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }/*else {
             personalCenterFrag.initData();
         }*/
-
+//        if (personalCenterFrag.personalcenterPresenter!=null){
+//            personalCenterFrag.personalcenterPresenter.getApiData();
+//        }
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(personalCenterFrag);
         pageIndex = 4;
