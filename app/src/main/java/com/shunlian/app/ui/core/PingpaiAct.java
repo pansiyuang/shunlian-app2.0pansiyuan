@@ -26,6 +26,7 @@ import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,6 +49,10 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
     @BindView(R.id.kanner)
     MyKanner kanner;
 
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
 
@@ -65,6 +70,11 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
     private PAishang pAishang;
     private PinpaiAdapter pinpaiAdapter;
 
+    public static void startAct(Context context) {
+        Intent intent = new Intent(context, PingpaiAct.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -115,12 +125,6 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         super.onDestroy();
     }
 
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, PingpaiAct.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_ping_pai;
@@ -141,6 +145,8 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         pAishang.getCorePing();
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setButtonText(null);
     }
 
 
@@ -151,7 +157,8 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_list);
     }
 
     @Override
@@ -200,9 +207,16 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         } else {
             kanner.setVisibility(View.GONE);
         }
+        if (isEmpty(corePingEntity.brand_list)) {
+            visible(nei_empty);
+            gone(rv_list);
+        } else {
+            gone(nei_empty);
+            visible(rv_list);
+        }
         rv_list.setNestedScrollingEnabled(false);
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        pinpaiAdapter = new PinpaiAdapter(getBaseContext(), false, corePingEntity.brand_list);
+        pinpaiAdapter = new PinpaiAdapter(getBaseContext(), true, corePingEntity.brand_list);
         rv_list.setAdapter(pinpaiAdapter);
         pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override

@@ -92,14 +92,19 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/miv_arrow"
                 android:layout_marginTop="25dp" />
-
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:layout_below="@id/miv_arrow"/>
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyScrollView>
 
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
-        android:layout_height="76dp"
+        android:layout_height="66dp"
         android:alpha="0"
         android:background="@color/white" />
 
@@ -166,5 +171,6 @@
         android:id="@+id/quick_actions"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"/>
 </com.shunlian.app.widget.MyRelativeLayout>

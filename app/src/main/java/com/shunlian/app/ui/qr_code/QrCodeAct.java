@@ -105,7 +105,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     @Override
     public void setApiData(GetQrCardEntity data) {
         codeUrl = data.card_path;
-        GlideUtils.getInstance().loadImage(this, miv_code, codeUrl);
+        GlideUtils.getInstance().loadImage(this, miv_code, data.qrcode_path);
         String invitedNum = String.format(getString(R.string.qr_yiyaoqing), data.invited);
         SpannableStringBuilder invitedNumBuilder = Common.changeColorAndSize(invitedNum, data.invited, 16, getColorResouce(R.color.pink_color));
         mtv_yiyaoqing.setText(invitedNumBuilder);
