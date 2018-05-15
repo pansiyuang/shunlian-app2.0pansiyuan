@@ -24,7 +24,7 @@ public class DataDetailAdapter extends BaseRecyclerAdapter<SaleDetailEntity.Item
     private int mType;
 
     public DataDetailAdapter(Context context, List<SaleDetailEntity.Item> lists, int type) {
-        super(context, true, lists);
+        super(context, false, lists);
         mType = type;
     }
 
