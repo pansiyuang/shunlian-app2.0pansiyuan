@@ -7,9 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
-import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.DetailOrderRecordPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.TransformUtil;
@@ -18,10 +15,6 @@ import com.shunlian.app.view.IDetailOrderRecordView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -63,12 +56,18 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
     @Override
     protected void initListener() {
         super.initListener();
-        if (manager != null && presenter != null){
-            int lastPosition = manager.findLastVisibleItemPosition();
-            if (lastPosition +1 == manager.getItemCount()){
-                presenter.onRefresh();
+        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (manager != null && presenter != null){
+                    int lastPosition = manager.findLastVisibleItemPosition();
+                    if (lastPosition +1 == manager.getItemCount()){
+                        presenter.onRefresh();
+                    }
+                }
             }
-        }
+        });
     }
 
     /**
@@ -85,7 +84,7 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
         int i = TransformUtil.dip2px(this, 10);
-        recy_view.addItemDecoration(new VerticalItemDecoration(i, 0,0,getColorResouce(R.color.white_ash)));
+        recy_view.addItemDecoration(new VerticalItemDecoration(i,0,0));
 
         presenter = new DetailOrderRecordPresenter(this,this);
 

@@ -113,24 +113,19 @@ public class MyCollectionAct extends BaseActivity {
         String flag = getIntent().getStringExtra("flag");
         switch (flag == null ? "" : flag){
             case GOODS_FLAG:
-                goodsFrag();
-                showSataus(0);
+                collectionGoods();
                 break;
             case STORE_FLAG:
-                storeFrag();
-                showSataus(1);
+                collectionStore();
                 break;
             case FOOTPRINT_FLAG:
-                footprintFrag();
-                showSataus(2);
+                collectionFootprint();
                 break;
             case CONTENT_FLAG:
-                contentFrag();
-                showSataus(3);
+                collectionContent();
                 break;
             default:
-                goodsFrag();
-                showSataus(0);
+                collectionGoods();
                 break;
         }
     }

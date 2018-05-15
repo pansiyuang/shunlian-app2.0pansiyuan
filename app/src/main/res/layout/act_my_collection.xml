@@ -56,10 +56,10 @@
     <!--条目分类-->
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="bottom"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:paddingTop="27dp">
+        android:orientation="horizontal">
 
         <!--商品-->
         <com.shunlian.app.widget.MyLinearLayout
