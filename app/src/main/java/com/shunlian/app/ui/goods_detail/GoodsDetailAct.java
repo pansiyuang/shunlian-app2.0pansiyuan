@@ -213,11 +213,11 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
 
     protected void initData() {
+        fragments = new HashMap();
+        goodsFrag();
         defToolbar();
         goodsId = getIntent().getStringExtra("goodsId");
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
-        fragments = new HashMap();
-        goodsFrag();
 
         carNum();
 

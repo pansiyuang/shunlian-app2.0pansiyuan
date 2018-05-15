@@ -48,7 +48,6 @@ public class NetAndEmptyInterface extends LinearLayout {
         textView = new MyTextView(getContext());
         textView.setTextColor(getResources().getColor(R.color.color_value_6c));
         textView.setTextSize(15);
-        textView.setMaxLines(1);
         textView.setGravity(Gravity.CENTER);
 
 

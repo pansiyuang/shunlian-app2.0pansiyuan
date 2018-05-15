@@ -117,6 +117,11 @@ public class SaleDetailPresenter extends BasePresenter<ISaleDetailView> {
             adapter.notifyDataSetChanged();
         }
         adapter.setPageLoading(currentPage,allPage);
+        if (!isEmpty(dataItems)){
+            iView.showDataEmptyView(0);
+        }else {
+            iView.showDataEmptyView(100);
+        }
     }
 
     @Override
