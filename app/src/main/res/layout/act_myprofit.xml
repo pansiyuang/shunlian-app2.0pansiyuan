@@ -333,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="本月收益"
-                        android:textColor="#FC686A"
+                        android:textColor="#FF7646"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -363,7 +363,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="精英专享"
-                        android:textColor="#FF7646"
+                        android:textColor="#FC686A"
                         android:textSize="14sp" />
 
                 </LinearLayout>

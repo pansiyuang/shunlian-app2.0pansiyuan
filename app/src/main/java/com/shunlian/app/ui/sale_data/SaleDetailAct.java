@@ -17,6 +17,7 @@ import com.shunlian.app.view.ISaleDetailView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 
@@ -79,6 +80,15 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
 
     @BindView(R.id.mtv_type4)
     MyTextView mtv_type4;
+
+    @BindView(R.id.llayout_column)
+    LinearLayout llayout_column;
+
+    @BindView(R.id.view_line)
+    View view_line;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private LinearLayoutManager manager;
     private SaleDetailPresenter presenter;
@@ -192,7 +202,15 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
      */
     @Override
     public void showDataEmptyView(int request_code) {
-
+        if (request_code == 100){
+            gone(llayout_column,view_line,recy_view);
+            visible(nei_empty);
+            nei_empty.setImageResource(R.mipmap.img_empty_common);
+//                    .setText()
+        }else {
+            visible(llayout_column,view_line,recy_view);
+            gone(nei_empty);
+        }
     }
 
     @Override

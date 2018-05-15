@@ -451,7 +451,7 @@
             android:layout_gravity="center"
             android:src="@mipmap/img_productdetails_more_close"
             app:iv_control_adapter="true"
-            app:iv_margin_top="40" />
+            app:iv_margin_top="90" />
     </com.shunlian.app.widget.MyLinearLayout>
 
     <com.shunlian.app.utils.QuickActions
