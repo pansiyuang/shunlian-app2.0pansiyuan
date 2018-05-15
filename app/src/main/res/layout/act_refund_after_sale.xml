@@ -67,6 +67,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
         android:layout_below="@+id/mrlayout_title"
+        android:background="@color/white_ash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
