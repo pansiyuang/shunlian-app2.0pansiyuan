@@ -60,6 +60,7 @@
             android:layout_height="15dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:layout_toLeftOf="@+id/rl_more"
             android:src="@mipmap/icon_more_search" />
     </com.shunlian.app.widget.MyRelativeLayout>
