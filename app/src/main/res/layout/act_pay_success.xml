@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context="com.shunlian.app.ui.order.OrderDetailAct">
 
-    <com.shunlian.app.widget.MyRelativeLayout
+    <RelativeLayout
         android:id="@+id/rlayout_title"
         android:layout_width="match_parent"
         android:layout_height="230dp"
@@ -118,7 +118,7 @@
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </com.shunlian.app.widget.MyLinearLayout>
-    </com.shunlian.app.widget.MyRelativeLayout>
+    </RelativeLayout>
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_like"

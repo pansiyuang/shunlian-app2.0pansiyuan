@@ -1329,7 +1329,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_comment_num.setOnClickListener(this);
             miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
-            LinearLayoutManager manager1 = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            LinearLayoutManager manager1 = new LinearLayoutManager
+                    (context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
         }

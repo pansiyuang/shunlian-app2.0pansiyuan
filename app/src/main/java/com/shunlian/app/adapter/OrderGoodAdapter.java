@@ -16,7 +16,6 @@ import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -57,7 +56,8 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         OrderGoodsHolder mHolder = (OrderGoodsHolder) holder;
         final OrderdetailEntity.Good orderGoodsBean = lists.get(position);
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,orderGoodsBean.thumb);
+        GlideUtils.getInstance().loadOverrideImage(context,
+                mHolder.miv_goods_pic,orderGoodsBean.thumb,160,160);
         mHolder.mtv_title.setText(orderGoodsBean.title);
         mHolder.mtv_attribute.setText(orderGoodsBean.sku_desc);
         mHolder.mtv_price.setText(getString(R.string.rmb)+orderGoodsBean.price);
