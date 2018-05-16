@@ -166,7 +166,7 @@ public class SplineChart extends LnChart {
 	/**
 	 * 返回标签显示格式
 	 * 
-	 * @param value 传入当前值
+	 * @param text 传入当前值
 	 * @return 显示格式
 	 */
 	protected String getFormatterDotLabel(String text) {
@@ -229,30 +229,30 @@ public class SplineChart extends LnChart {
 											
 	    //画出数据集对应的线条						
 		int count = chartValues.size();
-		for(int i=0;i<count;i++)
-		{
-				PointD  entry = chartValues.get(i);
-            	lineStopX = getLnXValPosition(entry.x,mMaxValue,mMinValue);
-            	lineStopY = getVPValPosition(entry.y);
-            	            	
-            	if(0 == i )
-        		{
-            		lineStartX = lineStopX;
-					lineStartY = lineStopY;
-					
-            		//line
-            		lstPoints.add( new PointF(lineStartX,lineStartY));
-            		lstPoints.add( new PointF(lineStopX,lineStopY));
-        		}else{     
-        			//line
-        			lstPoints.add( new PointF(lineStopX,lineStopY));
-        		}            		
-        
-            	//dot
-            	lstDotInfo.add(new DotInfo(entry.x,entry.y,lineStopX,lineStopY));
-                         					
+		for (int i = 0; i < count; i++) {
+			PointD entry = chartValues.get(i);
+			lineStopX = getLnXValPosition(entry.x, mMaxValue, mMinValue);
+			lineStopY = getVPValPosition(entry.y);
+
+			if (0 == i) {
 				lineStartX = lineStopX;
-				lineStartY = lineStopY;       								
+				lineStartY = lineStopY;
+
+				//line
+				lstPoints.add(new PointF(lineStartX, lineStartY));
+				lstPoints.add(new PointF(lineStopX, lineStopY));
+			} else {
+				//line
+				lstPoints.add(new PointF(lineStartX, lineStartY));
+			}
+			if (i == count - 1){
+				lstPoints.add(new PointF(lineStopX, lineStopY));
+			}
+			//dot
+			lstDotInfo.add(new DotInfo(entry.x, entry.y, lineStopX, lineStopY));
+
+			lineStartX = lineStopX;
+			lineStartY = lineStopY;
 		}								
 	}
 	
@@ -350,29 +350,27 @@ public class SplineChart extends LnChart {
 				
 		//开始处 X 轴 即分类轴              	
 		int count = mDataSet.size();
-		for(int i=0;i<count;i++)
-		{															
-			SplineData spData = mDataSet.get(i);			
-			calcAllPoints( spData,mLstPoints,mLstDotInfo);					
-			
-			switch(getCrurveLineStyle())
-			{
-				case BEZIERCURVE:								
-					renderBezierCurveLine(canvas,mBezierPath,spData,mLstPoints);
+		for (int i = 0; i < count; i++) {
+			SplineData spData = mDataSet.get(i);
+			calcAllPoints(spData, mLstPoints, mLstDotInfo);
+
+			switch (getCrurveLineStyle()) {
+				case BEZIERCURVE:
+					renderBezierCurveLine(canvas, mBezierPath, spData, mLstPoints);
 					break;
-				case BEELINE:				
-					renderLine(canvas,spData,mLstPoints);	
+				case BEELINE:
+					renderLine(canvas, spData, mLstPoints);
 					break;
 				default:
-					Log.e(TAG,"未知的枚举类型.");
-					continue;				
-			}	
-			renderDotAndLabel(canvas,spData,i,mLstPoints);
+					Log.e(TAG, "未知的枚举类型.");
+					continue;
+			}
+			renderDotAndLabel(canvas, spData, i, mLstPoints);
 			mLstKey.add(mDataSet.get(i));
-			
+
 			mLstDotInfo.clear();
 			mLstPoints.clear();
-			mBezierPath.reset();			
+			mBezierPath.reset();
 		}	
 		
 		return true;

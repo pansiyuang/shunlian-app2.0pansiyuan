@@ -333,22 +333,26 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     public void setMaxPrice(int count) {
         float totalPrice;
         if (isLast == 1) { //是最后一件
-            totalPrice = count * (Float.valueOf(currentInfoEntity.price));
-            if (freightPrice <= 0) {
-                tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
+            String freePrice = ",含邮费 ¥ ";
+            if (freightPrice > 0){
+                freePrice += Common.formatFloat(freightPrice);
+            }else {
+                freePrice = "";
+            }
+
+            if (count == goodsCount) {
+                totalPrice = (Float.valueOf(currentInfoEntity.real_amount));
+                tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice) + freePrice);
             } else {
-                totalPrice = count * (Float.valueOf(currentInfoEntity.price)) + freightPrice;
-                if (count == goodsCount) {
-                    tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice) + ",含邮费 ¥ " + Common.formatFloat(freightPrice));
-                } else {
-                    tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
-                }
+                totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
+                tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
             }
         } else {
-            totalPrice = count * (Float.valueOf(currentInfoEntity.price));
+            totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
             tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
         }
         edt_return_money.setText(Common.formatFloat(totalPrice));
+        edt_return_money.setSelection(edt_return_money.getText().length());
     }
 
     private List<ImageEntity> getImageEntityList() {

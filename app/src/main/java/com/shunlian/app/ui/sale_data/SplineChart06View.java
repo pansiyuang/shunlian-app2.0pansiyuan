@@ -128,7 +128,7 @@ public class SplineChart06View extends ChartView {
 
         int line_w = TransformUtil.dip2px(getContext(), 0.5f);
         PlotGrid plotGrid = chart.getPlotGrid();
-        plotGrid.showHorizontalLines();
+        plotGrid.showHorizontalLines();//LnChart 修改折线图网格线样式
         plotGrid.showVerticalLines();
 
         plotGrid.getHorizontalLinePaint().setStrokeWidth(line_w);
