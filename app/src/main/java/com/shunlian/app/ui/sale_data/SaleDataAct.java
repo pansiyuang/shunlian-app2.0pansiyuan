@@ -499,18 +499,18 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售额");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售额");
                 gone(rlayout_vip);
-                visible(llayout_mark3,mtv_sale_Explain);
+                visible(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
             case 2:
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售订单");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售订单");
-                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain);
+                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
             case 3:
                 mtv_mark1.setText(chart_view.key_line1 = "小店会员");
                 mtv_mark2.setText(chart_view.key_line2 = "分店会员");
                 visible(rlayout_vip);
-                gone(llayout_mark3,mtv_sale_Explain);
+                gone(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
         }
     }

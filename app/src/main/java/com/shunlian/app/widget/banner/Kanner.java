@@ -6,9 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.shunlian.app.R;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 
 
@@ -30,8 +29,9 @@ public class Kanner extends BaseBanner<String, Kanner> {
     public View onCreateItemView(final int position) {
         LinearLayout container = new LinearLayout(context);
         ImageView iv = new ImageView(context);
-        iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        GlideUtils.getInstance().loadImage(getContext(),iv,list.get(position));
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
+        GlideUtils.getInstance().loadOverrideImage(getContext(),iv,list.get(position),deviceWidth,deviceWidth);
         container.addView(iv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         return container;
     }
