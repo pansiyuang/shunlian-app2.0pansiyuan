@@ -61,6 +61,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv_out"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="150dp"/>
+        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"

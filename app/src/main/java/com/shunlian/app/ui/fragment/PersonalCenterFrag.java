@@ -250,7 +250,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     @BindView(R.id.mrlayout_paihang)
     MyRelativeLayout mrlayout_paihang;
 
-    private PersonalcenterPresenter personalcenterPresenter;
+    public PersonalcenterPresenter personalcenterPresenter;
     private HelpArticleAdapter helpArticleAdapter;
     private String managerUrl,orderUrl;
 

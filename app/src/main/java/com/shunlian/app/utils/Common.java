@@ -48,6 +48,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -249,6 +250,7 @@ public class Common {
     public static int getScreenWidth(Activity ac) {
         return ac.getWindowManager().getDefaultDisplay().getWidth();
     }
+
 
     /**
      * 获取屏幕高
@@ -792,5 +794,32 @@ public class Common {
             mtv_desc.setVisibility(View.VISIBLE);
         }
         toasts.show();
+    }
+
+    /**
+     * 判断昵称是否合法
+     * @param nickname 最多12个汉字 24个字母
+     * @return 昵称过长返回false
+     */
+    public static boolean isNicknameLegitimate(String nickname){
+        if (TextUtils.isEmpty(nickname)){
+            return true;
+        }
+        String Reg="^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
+        int charLength = 0;
+        String[] split = nickname.split("");
+        for (int i = 0; i < split.length; i++) {
+            if (Pattern.matches(Reg,split[i])){
+                charLength += 2;
+            }else {
+                charLength++;
+            }
+        }
+        if (charLength > 25){
+            Common.staticToast(getResources().getString(R.string.RegisterTwoAct_ncszgc));
+            return false;
+        }else {
+            return true;
+        }
     }
 }

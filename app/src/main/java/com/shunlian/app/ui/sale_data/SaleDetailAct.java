@@ -17,6 +17,7 @@ import com.shunlian.app.view.ISaleDetailView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 
@@ -79,6 +80,15 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
 
     @BindView(R.id.mtv_type4)
     MyTextView mtv_type4;
+
+    @BindView(R.id.llayout_column)
+    LinearLayout llayout_column;
+
+    @BindView(R.id.view_line)
+    View view_line;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private LinearLayoutManager manager;
     private SaleDetailPresenter presenter;
@@ -192,7 +202,40 @@ public class SaleDetailAct extends BaseActivity implements ISaleDetailView{
      */
     @Override
     public void showDataEmptyView(int request_code) {
-
+        if (request_code == 100){
+            gone(llayout_column,view_line,recy_view);
+            visible(nei_empty);
+            String msg = null;
+            if (type == SALE_DETAIL && presenter != null) {
+                switch (presenter.curType){
+                    case "1":
+                        msg = "您还没有领取过小店销售~\n是不是你太懒了";
+                        break;
+                    case "2":
+                        msg = "您还没有领取过分店销售~\n是不是你太懒了";
+                        break;
+                    case "3":
+                        msg = "您还没有领取过总销售~\n是不是你太懒了";
+                        break;
+                }
+            }else if (type == REWARD_DETAIL && presenter != null){
+                switch (presenter.curType){
+                    case "1":
+                        msg = "您还没有领取过周奖励~\n是不是你太懒了";
+                        break;
+                    case "2":
+                        msg = "您还没有领取过月奖励~\n是不是你太懒了";
+                        break;
+                    case "3":
+                        msg = "您还没有领取过总奖励~\n是不是你太懒了";
+                        break;
+                }
+            }
+            nei_empty.setImageResource(R.mipmap.img_empty_common).setText(msg).setButtonText("");
+        }else {
+            visible(llayout_column,view_line,recy_view);
+            gone(nei_empty);
+        }
     }
 
     @Override

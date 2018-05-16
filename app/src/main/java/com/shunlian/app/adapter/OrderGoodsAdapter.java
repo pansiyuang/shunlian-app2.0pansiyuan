@@ -50,7 +50,8 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         OrderGoodsHolder mHolder = (OrderGoodsHolder) holder;
         MyOrderEntity.OrderGoodsBean orderGoodsBean = lists.get(position);
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,orderGoodsBean.thumb);
+        GlideUtils.getInstance().loadOverrideImage(context,
+                mHolder.miv_goods_pic,orderGoodsBean.thumb,160,160);
         mHolder.mtv_attribute.setText(orderGoodsBean.sku_desc);
         mHolder.mtv_price.setText(getString(R.string.rmb)+orderGoodsBean.price);
         mHolder.mtv_market_price.setStrikethrough().setText(getString(R.string.rmb)+orderGoodsBean.market_price);

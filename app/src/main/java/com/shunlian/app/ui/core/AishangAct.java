@@ -2,6 +2,7 @@ package com.shunlian.app.ui.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +73,18 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+
+    @BindView(R.id.mtv_rexiao)
+    MyTextView mtv_rexiao;
+
+    @BindView(R.id.view_rexiao)
+    View view_rexiao;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.nsv_out)
+    NestedScrollView nsv_out;
 
     private PAishang pAishang;
     private AiMoreAdapter aiMoreAdapter;
@@ -137,7 +151,8 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         mtv_title.setText(getStringResouce(R.string.first_aishangxin));
         pAishang = new PAishang(this, this);
         pAishang.getCoreNew();
-
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setButtonText(null);
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
     }
@@ -150,7 +165,8 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nsv_out);
+        gone(rv_category);
     }
 
     @Override
@@ -174,16 +190,26 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         } else {
             kanner.setVisibility(View.GONE);
         }
-        AishangHorizonAdapter aishangHorizonAdapter = new AishangHorizonAdapter(getBaseContext(), false, coreNewEntity.hot_goods);
-        rv_goods.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
-        rv_goods.setAdapter(aishangHorizonAdapter);
-        rv_goods.addItemDecoration(new MHorItemDecoration(getBaseContext(), 10, 10, 10));
-        aishangHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                GoodsDetailAct.startAct(getBaseContext(), coreNewEntity.hot_goods.get(position).id);
-            }
-        });
+        if (coreNewEntity.hot_goods!=null&&coreNewEntity.hot_goods.size()>0){
+            AishangHorizonAdapter aishangHorizonAdapter = new AishangHorizonAdapter(getBaseContext(), false, coreNewEntity.hot_goods);
+            rv_goods.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+            rv_goods.setAdapter(aishangHorizonAdapter);
+            rv_goods.addItemDecoration(new MHorItemDecoration(getBaseContext(), 10, 10, 10));
+            aishangHorizonAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    GoodsDetailAct.startAct(getBaseContext(), coreNewEntity.hot_goods.get(position).id);
+                }
+            });
+            view_rexiao.setVisibility(View.VISIBLE);
+            mtv_rexiao.setVisibility(View.VISIBLE);
+            rv_goods.setVisibility(View.VISIBLE);
+        }else {
+            view_rexiao.setVisibility(View.GONE);
+            mtv_rexiao.setVisibility(View.GONE);
+            rv_goods.setVisibility(View.GONE);
+        }
+
         CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(getBaseContext(), false, coreNewEntity.cate_name);
         cate_id = coreNewEntity.cate_name.get(0).cate_id;
         pAishang.resetBaby("new", cate_id);
@@ -215,6 +241,13 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
     @Override
     public void setNewsData(List<CoreNewsEntity.Goods> mData, String page, String total) {
+        if (mData==null||mData.size()<=0){
+            visible(nsv_out);
+            gone(rv_category);
+        }else {
+            gone(nsv_out);
+            visible(rv_category);
+        }
         if (aiMoreAdapter == null) {
             aiMoreAdapter = new AiMoreAdapter(getBaseContext(), mData);
             gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);

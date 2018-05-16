@@ -29,7 +29,7 @@ public class MyCommentListPresenter extends BasePresenter<IMyCommentListView> {
 
     public MyCommentListPresenter(Context context, IMyCommentListView iView) {
         super(context, iView);
-        initApi();
+        //initApi();
     }
 
     /**

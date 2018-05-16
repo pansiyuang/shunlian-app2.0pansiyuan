@@ -232,7 +232,7 @@ public class PopMenu {
                 Gravity.CENTER);
         textView.setText("分享");
         textView.setTextColor(Common.getResources().getColor(R.color.new_text));
-        textView.setTextSize(TransformUtil.sp2px(mActivity,14));
+        textView.setTextSize(18);
         titleLayout.addView(textView, tvLp);
 
         View view = new View(mActivity);

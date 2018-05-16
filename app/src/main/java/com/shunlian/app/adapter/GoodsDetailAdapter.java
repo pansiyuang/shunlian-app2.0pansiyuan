@@ -1240,6 +1240,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.miv_send_time)
         MyImageView miv_send_time;
 
+        @BindView(R.id.mtv_certified_products)
+        MyTextView mtv_certified_products;
+
+        @BindView(R.id.miv_certified_products)
+        MyImageView miv_certified_products;
+
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
@@ -1247,17 +1253,25 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_params.setOnClickListener(this);
             if (!isEmpty(mGoodsEntity.return_7)){
                 mtv_reason.setText(mGoodsEntity.return_7);
-                miv_reason.setVisibility(View.VISIBLE);
+                visible(miv_reason,mtv_reason);
             }else {
-                miv_reason.setVisibility(View.GONE);
+                gone(miv_reason,mtv_reason);
             }
 
             if (!isEmpty(mGoodsEntity.send_time)){
                 mtv_send_time.setText(mGoodsEntity.send_time);
-                miv_send_time.setVisibility(View.VISIBLE);
+                visible(miv_send_time,mtv_send_time);
             }else {
-                miv_send_time.setVisibility(View.GONE);
+                gone(miv_send_time,mtv_send_time);
             }
+
+            if (!isEmpty(mGoodsEntity.quality_guarantee)){
+                mtv_certified_products.setText(mGoodsEntity.quality_guarantee);
+                visible(miv_certified_products,mtv_certified_products);
+            }else {
+                gone(miv_certified_products,mtv_certified_products);
+            }
+
         }
 
         /**
@@ -1315,7 +1329,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_comment_num.setOnClickListener(this);
             miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
-            LinearLayoutManager manager1 = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+            LinearLayoutManager manager1 = new LinearLayoutManager
+                    (context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
         }

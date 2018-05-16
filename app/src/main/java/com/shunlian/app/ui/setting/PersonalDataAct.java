@@ -246,9 +246,10 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     @Override
     public void setLocation(String district, String district_ids) {
         mtv_region.setText(district);
+        //LogUtil.zhLogW(district+"===setLocation==="+district_ids);
         if (!isEmpty(district_ids)){
             if (presenter != null){
-                presenter.setInfo("location",district);
+                presenter.setInfo("location",district_ids);
             }
         }
     }

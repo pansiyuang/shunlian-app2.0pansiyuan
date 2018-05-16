@@ -46,8 +46,9 @@
         android:value="GlideModule" />-->
 
     <!--配置glide缓存-->
-    <meta-data android:name="com.shunlian.app.utils.GlideCacheUtil"
-        android:value="GlideModule"/>
+    <meta-data
+        android:name="com.shunlian.app.utils.GlideCacheUtil"
+        android:value="GlideModule" />
 
     <application
         android:name=".App"
@@ -202,8 +203,8 @@
         <!--jpush-->
 
         <activity
-            android:label="@string/app_name"
             android:name=".ui.start.StartAct"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Start">
             <intent-filter>
@@ -222,9 +223,9 @@
             android:supportsPictureInPicture="true"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
 
         </activity>
@@ -241,6 +242,7 @@
         <activity
             android:name=".ui.login.LoginAct"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
@@ -251,7 +253,7 @@
             android:name=".ui.start.GuideAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/android:Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.login.InputVerfiCodeAct"
             android:exported="false"
@@ -318,11 +320,11 @@
             android:name=".ui.start.ADAct"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/android:Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.receive_adress.AddAdressAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="pay.PayListActivity"
             android:exported="false"
@@ -478,6 +480,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.sign.SignInAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.store.StoreSearchAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -789,12 +795,11 @@
         <activity
             android:name=".ui.help.HelpSolutionAct"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.ClassDetailAct"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -161,12 +161,12 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             mtv_titles.setText(data.topicDetail.title);
             mtv_desc.setText(data.topicDetail.content);
             GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.topicDetail.img);
-            newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas);
+            newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas,this);
             linearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_new.setLayoutManager(linearLayoutManager);
             rv_new.setNestedScrollingEnabled(false);
             rv_new.setAdapter(newAdapter);
-            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(getBaseContext(), false, data.hot_inv);
+            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(getBaseContext(), false, data.hot_inv,this);
             LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_hot.setLayoutManager(mlinearLayoutManager);
             rv_hot.setNestedScrollingEnabled(false);

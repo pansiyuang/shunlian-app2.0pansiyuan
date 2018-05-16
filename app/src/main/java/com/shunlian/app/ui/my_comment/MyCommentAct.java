@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MyCommentAdapter;
 import com.shunlian.app.adapter.WaitAppendCommentAdapter;
 import com.shunlian.app.bean.CommentListEntity;
@@ -133,6 +132,19 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switch (currentPageStatus) {
+            case MyCommentListPresenter.ALL:
+                allComment();
+                break;
+            case MyCommentListPresenter.APPEND:
+                appendComment();
+                break;
+        }
+    }
+
     @OnClick(R.id.mllayout_all)
     public void allComment() {
         currentPageStatus = MyCommentListPresenter.ALL;
@@ -149,7 +161,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     }
 
     @OnClick(R.id.rl_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.comment();
     }
@@ -213,17 +225,18 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             appendComment(currentPage, allPage);
         }
 
-        if (isEmpty(this.lists)){
+        if (isEmpty(this.lists)) {
             nei_empty.setVisibility(View.VISIBLE);
             nei_empty.setImageResource(R.mipmap.img_empty_common)
                     .setText("您还没有需要追评的商品").setButtonText("");
-        }else {
+        } else {
             nei_empty.setVisibility(View.GONE);
         }
     }
 
     /**
      * 设置昵称和头像
+     *
      * @param nickname
      * @param avatar
      */
@@ -231,7 +244,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     public void setNicknameAndAvatar(String nickname, String avatar) {
         this.nickname = nickname;
         this.avatar = avatar;
-        GlideUtils.getInstance().loadImage(this,civ_head,avatar);
+        GlideUtils.getInstance().loadImage(this, civ_head, avatar);
         mtv_nickname.setText(nickname);
     }
 
@@ -240,21 +253,15 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             waitAdapter = new WaitAppendCommentAdapter(this, true, this.lists);
             waitAdapter.setPageLoading(currentPage, allPage);
             recy_view.setAdapter(waitAdapter);
-            waitAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (presenter != null) {
-                        presenter.onRefresh();
-                    }
+            waitAdapter.setOnReloadListener(() -> {
+                if (presenter != null) {
+                    presenter.onRefresh();
                 }
             });
 
-            waitAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CommentListEntity.Data data = lists.get(position);
-                    CommentDetailAct.startAct(MyCommentAct.this, data,nickname,avatar);
-                }
+            waitAdapter.setOnItemClickListener((view, position) -> {
+                CommentListEntity.Data data = lists.get(position);
+                CommentDetailAct.startAct(MyCommentAct.this, data, nickname, avatar);
             });
         } else {
             waitAdapter.setPageLoading(currentPage, allPage);
@@ -267,21 +274,15 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             allAdapter = new MyCommentAdapter(this, true, this.lists);
             allAdapter.setPageLoading(currentPage, allPage);
             recy_view.setAdapter(allAdapter);
-            allAdapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (presenter != null) {
-                        presenter.onRefresh();
-                    }
+            allAdapter.setOnReloadListener(() -> {
+                if (presenter != null) {
+                    presenter.onRefresh();
                 }
             });
 
-            allAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CommentListEntity.Data data = lists.get(position);
-                    CommentDetailAct.startAct(MyCommentAct.this, data,nickname,avatar);
-                }
+            allAdapter.setOnItemClickListener((view, position) -> {
+                CommentListEntity.Data data = lists.get(position);
+                CommentDetailAct.startAct(MyCommentAct.this, data, nickname, avatar);
             });
         } else {
             allAdapter.setPageLoading(currentPage, allPage);

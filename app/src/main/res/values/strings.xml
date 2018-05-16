@@ -164,7 +164,7 @@
     <string name="coupons">领券</string>
     <string name="package_details">套餐详情</string>
     <string name="look_package_details">套餐 查看套餐</string>
-    <string name="product_parameter">产品参数</string>
+    <string name="product_parameter">商品参数</string>
     <string name="select_size_color">选择  尺码  颜色分类</string>
     <string name="_7_days_no_reason_to_return">7天无理由退货</string>
     <string name="genuine_guarantee">正品保障</string>
@@ -588,8 +588,8 @@
     <string name="punish">处罚</string>
 
     <!--帮助-->
-    <string name="help_zaixiankefu">在线客服(00:00-24:00)</string>
-    <string name="help_bodadianhua">拨打电话(00:00-24:00)</string>
+    <string name="help_zaixiankefu">在线客服(08:30-22:30)</string>
+    <string name="help_bodadianhua">电话客服</string>
     <string name="help_bangzhuzhongxin">帮助中心</string>
     <string name="help_changjianwenti">常见问题：</string>
     <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>
@@ -702,6 +702,7 @@
     <string name="first_zuixinfabu">最新发布</string>
     <string name="first_dianpumei">店铺美券</string>
     <string name="first_dianpuyouhui">店铺暂无优惠券，敬请期待</string>
+    <string name="first_shangping">暂时还没发现商品哦，请耐心等待~</string>
     <string name="first_yifukuan">%s人已付款</string>
     <string name="first_haopinglv">好评率%s</string>
     <string name="first_yigou">%s人已购</string>

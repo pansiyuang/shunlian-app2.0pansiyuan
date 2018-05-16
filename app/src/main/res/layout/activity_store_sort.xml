@@ -59,49 +59,58 @@
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
 
-    <View
+    <com.shunlian.app.widget.MyScrollView
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_below="@id/mrlayout_title"
-        android:background="@color/white_ash" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/mrlayout_title">
 
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/mrlayout_title"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
-
-        <com.shunlian.app.widget.MyTextView
-            android:layout_width="wrap_content"
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/store_quanbu"
-            android:textColor="@color/new_text"
-            android:textSize="14sp" />
+            android:orientation="vertical">
 
-        <com.shunlian.app.widget.MyImageView
-            android:layout_width="5.5dp"
-            android:layout_height="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/img_common_viewarrow" />
-    </com.shunlian.app.widget.MyRelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/mrlayout_title"
+                android:background="@color/white_ash" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_below="@id/mrlayout_title"
-        android:layout_marginTop="60dp"
-        android:background="@color/white_ash" />
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:id="@+id/mrlayout_all"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_sort"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/mrlayout_title"
-        android:layout_marginTop="70dp" />
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/store_quanbu"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="5.5dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/img_common_viewarrow" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/mrlayout_title"
+                android:background="@color/white_ash" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_sort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mrlayout_title"/>
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyScrollView>
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"

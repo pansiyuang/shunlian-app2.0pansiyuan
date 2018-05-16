@@ -2,6 +2,7 @@ package com.shunlian.app.ui.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.shunlian.app.view.IAishang;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +53,12 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
     @BindView(R.id.kanner)
     MyKanner kanner;
 
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.nsv_out)
+    NestedScrollView nsv_out;
 
     @BindView(R.id.rv_categoryMenu)
     RecyclerView rv_categoryMenu;
@@ -163,6 +171,9 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
 
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setButtonText(null);
     }
 
 
@@ -173,7 +184,8 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nsv_out);
+        gone(rv_category);
     }
 
     @Override
@@ -223,6 +235,13 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
 
     @Override
     public void setHotsData(List<CoreHotEntity.Hot.Goods> mData, String page, String total) {
+        if (mData==null||mData.size()<=0){
+            visible(nsv_out);
+            gone(rv_category);
+        }else {
+            gone(nsv_out);
+            visible(rv_category);
+        }
         if (koubeiAdapter==null){
             koubeiAdapter=new KoubeiAdapter(getBaseContext(),true,mData);
             linearLayoutManager=new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);

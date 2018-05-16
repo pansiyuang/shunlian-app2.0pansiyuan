@@ -2,6 +2,7 @@ package com.shunlian.app.ui.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -81,7 +82,7 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
                     int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
                         if (pGetCoupon != null) {
-                            pGetCoupon.refreshBaby("",key);
+                            pGetCoupon.refreshBaby("", key);
                         }
                     }
                 }
@@ -92,12 +93,12 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        key=edt_goods_search.getText().toString();
-                        if (TextUtils.isEmpty(key)){
-                            Common.staticToast("请先输入关键字...");
-                        }else {
-                            pGetCoupon.resetBaby("",key);
-                        }
+                    key = edt_goods_search.getText().toString();
+                    if (TextUtils.isEmpty(key)) {
+                        Common.staticToast("请先输入关键字...");
+                    } else {
+                        pGetCoupon.resetBaby("", key);
+                    }
                     return true;
                 }
                 return false;
@@ -133,20 +134,20 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setdianData(List<VouchercenterplEntity.MData> mData, String page, String total) {
-        if (mData==null||mData.size()<=0){
+        if (mData == null || mData.size() <= 0) {
             visible(nei_empty);
             gone(rv_search);
-        }else {
+        } else {
             gone(nei_empty);
             visible(rv_search);
         }
-        if (couponsAdapter==null){
-            couponsAdapter=new CouponsAdapter(getBaseContext(),true,mData,pGetCoupon);
-            linearLayoutManager=new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
+        if (couponsAdapter == null) {
+            couponsAdapter = new CouponsAdapter(getBaseContext(), true, mData, pGetCoupon);
+            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rv_search.setLayoutManager(linearLayoutManager);
             rv_search.setAdapter(couponsAdapter);
-            rv_search.addItemDecoration(new MVerticalItemDecoration(getBaseContext(),10,10,0));
-        }else {
+            rv_search.addItemDecoration(new MVerticalItemDecoration(getBaseContext(), 10, 10, 0));
+        } else {
             couponsAdapter.notifyDataSetChanged();
         }
         couponsAdapter.setPageLoading(Integer.parseInt(page), Integer.parseInt(total));

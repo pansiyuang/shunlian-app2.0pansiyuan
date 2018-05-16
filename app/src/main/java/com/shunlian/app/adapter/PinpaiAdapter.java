@@ -29,6 +29,23 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         super(context, isShowFooter, lists);
     }
 
+    /**
+     * 设置baseFooterHolder  layoutparams
+     *
+     * @param baseFooterHolder
+     */
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_goods));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_ping_pai, parent, false);

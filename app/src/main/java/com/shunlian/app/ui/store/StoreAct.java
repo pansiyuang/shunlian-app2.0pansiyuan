@@ -205,14 +205,14 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
 
-    private MessageCountManager messageCountManager;
-
+    @BindView(R.id.mllayout_search)
+    MyLinearLayout mllayout_search;
     @BindView(R.id.mll_chat)
     MyLinearLayout mll_chat;
-
+    private MessageCountManager messageCountManager;
     private StorePresenter storePresenter;
-    private boolean isPriceUp, initBaby, initDiscount, initNew,initFirst;
-    private String storeId = "26",star;
+    private boolean isPriceUp, initBaby, initDiscount, initNew, initFirst;
+    private String storeId = "26", star;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
@@ -224,6 +224,12 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private boolean isFocus;
     private ShareInfoParam shareInfoParam;
 
+    public static void startAct(Context context, String storeId) {
+        Intent intent = new Intent(context, StoreAct.class);
+        intent.putExtra("storeId", storeId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -275,13 +281,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         super.onDestroy();
     }
 
-    public static void startAct(Context context,String storeId) {
-        Intent intent = new Intent(context, StoreAct.class);
-        intent.putExtra("storeId",storeId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.act_store;
@@ -294,6 +293,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         mrlayout_stores.setOnClickListener(this);
         mrlayout_baby.setOnClickListener(this);
         mrlayout_discount.setOnClickListener(this);
+        mllayout_search.setOnClickListener(this);
         mrlayout_new.setOnClickListener(this);
         tv_zonghe.setOnClickListener(this);
         tv_xiaoliang.setOnClickListener(this);
@@ -359,20 +359,20 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("storeId"))){
-            storeId=getIntent().getStringExtra("storeId");
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("storeId"))) {
+            storeId = getIntent().getStringExtra("storeId");
         }
         storePresenter = new StorePresenter(this, this, storeId);
-        if (getIntent().getBooleanExtra("discount",false)){
+        if (getIntent().getBooleanExtra("discount", false)) {
             discountClick();
-        }else {
+        } else {
             firstClick();
         }
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
     }
 
-    public void firstClick(){
+    public void firstClick() {
         miv_store.setImageResource(R.mipmap.icon_shop_shop_h);
         mtv_store.setTextColor(getResources().getColor(R.color.pink_color));
         mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
@@ -394,7 +394,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             initFirst = true;
         }
     }
-    public void discountClick(){
+
+    public void discountClick() {
         miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
         mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
         mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
@@ -416,6 +417,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             initDiscount = true;
         }
     }
+
     public void storeMenu(View v) {
         switch (v.getId()) {
             case R.id.mrlayout_stores:
@@ -524,13 +526,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startAct(this, storeId,star,isFocus);
+                StoreIntroduceAct.startAct(this, storeId, star, isFocus);
+                break;
+            case R.id.mllayout_search:
+                StoreSearchAct.startAct(this,storeId,"","","");
                 break;
             case R.id.mrlayout_sort:
-                StoreSortAct.startAct(this, storeId);
+                StoreSortAct.startAct(this, storeId,true);
                 break;
             case R.id.mrlayout_sorts:
-                StoreSortAct.startAct(this, storeId);
+                StoreSortAct.startAct(this, storeId,true);
                 break;
             case R.id.mtv_attention:
                 if (isFocus) {
@@ -568,7 +573,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeBabyAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    GoodsDetailAct.startAct(StoreAct.this,mDataList.get(position).id);
+                    GoodsDetailAct.startAct(StoreAct.this, mDataList.get(position).id);
                 }
             });
         } else {
@@ -617,7 +622,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
         }
-        star=head.star;
+        star = head.star;
         mtv_storeName.setText(head.decoration_name);
         GlideUtils.getInstance().loadImage(this, miv_star, star);
 
@@ -645,7 +650,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             storeDiscountMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    if (rv_discount.getScrollState()==0){
+                    if (rv_discount.getScrollState() == 0) {
                         storeDiscountMenuAdapter.selectPosition = position;
                         storeDiscountMenuAdapter.notifyDataSetChanged();
                         if ("combo".equals(view.getTag(R.id.tag_store_discount_menu_type).toString())) {
@@ -664,7 +669,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void storeVoucher(final List<GoodsDeatilEntity.Voucher> vouchers) {
-        if (vouchers!=null&&vouchers.size()>0){
+        if (vouchers != null && vouchers.size() > 0) {
             rv_firstVouch.setVisibility(View.VISIBLE);
             if (storeVoucherAdapter == null) {
                 storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
@@ -675,16 +680,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 storeVoucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                            GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
-                            storePresenter.getVoucher(voucher.voucher_id);
-                            voucher.is_get = "1";
-                            storeVoucherAdapter.detailBottomCouponPosition = position;
+                        GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
+                        storePresenter.getVoucher(voucher.voucher_id);
+                        voucher.is_get = "1";
+                        storeVoucherAdapter.detailBottomCouponPosition = position;
                     }
                 });
             } else {
                 storeVoucherAdapter.notifyDataSetChanged();
             }
-        }else {
+        } else {
             rv_firstVouch.setVisibility(View.GONE);
         }
     }
@@ -717,8 +722,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
-        if (storeVoucherAdapter!=null){
-            if (storeVoucherAdapter.detailBottomCouponPosition != -1){
+        if (storeVoucherAdapter != null) {
+            if (storeVoucherAdapter.detailBottomCouponPosition != -1) {
                 storeVoucherAdapter.notifyItemChanged(storeVoucherAdapter.detailBottomCouponPosition);
             }
             storeVoucherAdapter.detailBottomCouponPosition = -1;

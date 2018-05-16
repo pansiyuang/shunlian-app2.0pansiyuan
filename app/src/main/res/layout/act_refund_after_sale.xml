@@ -60,6 +60,7 @@
             android:layout_height="15dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:visibility="gone"
             android:layout_toLeftOf="@+id/rl_more"
             android:src="@mipmap/icon_more_search" />
     </com.shunlian.app.widget.MyRelativeLayout>
@@ -67,6 +68,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
         android:layout_below="@+id/mrlayout_title"
+        android:background="@color/white_ash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

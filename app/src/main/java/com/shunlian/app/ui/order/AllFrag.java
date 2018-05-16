@@ -202,8 +202,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         if (isEmpty(ordersLists)) {
             empty();
         } else {
-            recy_view.setVisibility(View.VISIBLE);
-            nei_empty.setVisibility(View.GONE);
+            visible(recy_view);
+            gone(nei_empty);
         }
     }
 
@@ -309,8 +309,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     }
 
     private void empty() {
-        recy_view.setVisibility(View.GONE);
-        nei_empty.setVisibility(View.VISIBLE);
+        visible(nei_empty);
+        gone(recy_view);
         nei_empty.setImageResource(R.mipmap.img_empty_dingdan)
                 .setText(getString(R.string.no_order_info)).setButtonText("");
     }

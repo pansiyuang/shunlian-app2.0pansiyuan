@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -28,8 +29,8 @@ import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
-import com.shunlian.app.utils.UpdateUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
@@ -42,7 +43,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, MessageCountManager.OnGetMessageListener, IMain {
+public class MainActivity extends BaseActivity implements  MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     @BindView(R.id.fl_main)
@@ -69,6 +70,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     LinearLayout ll_tab_shopping_car;
     @BindView(R.id.miv_shopping_car)
     MyImageView miv_shopping_car;
+    @BindView(R.id.miv_first)
+    MyImageView miv_first;
     @BindView(R.id.tv_shopping_car)
     TextView tv_shopping_car;
     @BindView(R.id.ll_tab_person_center)
@@ -92,6 +95,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
+    private boolean isPerson=false;
+    private Handler handler;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -147,6 +152,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ll_tab_person_center.setOnClickListener(this);
     }
 
+
+    @Override
+    protected void onResume() {
+        if (isPerson&&Common.isAlreadyLogin()){
+            personCenterClick();
+            isPerson=false;
+        }
+        super.onResume();
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -167,7 +182,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 fragmentManager.beginTransaction().show(show).commitAllowingStateLoss();
             }
-
             if (fragmentMap != null && fragmentMap.size() > 0) {
                 Set<String> keySet = fragmentMap.keySet();
                 Iterator<String> iterator = keySet.iterator();
@@ -187,25 +201,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ll_tab_main_page:
-                mainPageClick();
-                break;
-            case R.id.ll_tab_sort:
-                sortClick();
-                break;
-            case R.id.ll_tab_discover:
-                discoverClick();
-                break;
-            case R.id.ll_tab_shopping_car:
-                shoppingCarClick();
-                break;
-            case R.id.ll_tab_person_center:
-                personCenterClick();
-                break;
+        if (MyOnClickListener.isFastClick()) {
+            return;
         }
+        if (view.getId()==R.id.ll_tab_main_page){
+            miv_first.setVisibility(View.VISIBLE);
+            miv_tab_main.setVisibility(View.GONE);
+            tv_tab_main.setVisibility(View.GONE);
+            miv_first.animate().rotation(0).setDuration(0).start();
+            miv_first.animate().rotation(360).setDuration(300).start();
+        }else {
+            miv_first.setVisibility(View.GONE);
+            miv_tab_main.setVisibility(View.VISIBLE);
+            tv_tab_main.setVisibility(View.VISIBLE);
+            view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
+            view.animate().scaleX(1).scaleY(1).setDuration(300).start();
+        }
+        if (handler==null)
+            handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (view.getId()) {
+                    case R.id.ll_tab_main_page:
+                        mainPageClick();
+                        break;
+                    case R.id.ll_tab_sort:
+                        sortClick();
+                        break;
+                    case R.id.ll_tab_discover:
+                        discoverClick();
+                        break;
+                    case R.id.ll_tab_shopping_car:
+                        shoppingCarClick();
+                        break;
+                    case R.id.ll_tab_person_center:
+                        personCenterClick();
+                        break;
+                }
+            }
+        },300);
     }
-
     public void mainPageClick() {
         if (mainPageFrag == null) {
 //            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
@@ -271,6 +307,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void personCenterClick() {
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
+            isPerson=true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -283,7 +320,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }/*else {
             personalCenterFrag.initData();
         }*/
-
+//        if (personalCenterFrag.personalcenterPresenter!=null){
+//            personalCenterFrag.personalcenterPresenter.getApiData();
+//        }
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(personalCenterFrag);
         pageIndex = 4;
@@ -291,8 +330,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void chageTabItem(int pageIndex) {
-        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
-        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
+//        miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_n));
+//        tv_tab_main.setTextColor(getResources().getColor(R.color.tab_text_n));
 
         miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_n));
         tv_tab_sort.setTextColor(getResources().getColor(R.color.tab_text_n));
@@ -306,10 +345,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         miv_person_center.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_5_n));
         tv_person_center.setTextColor(getResources().getColor(R.color.tab_text_n));
 
+        miv_first.setVisibility(View.GONE);
+        miv_tab_main.setVisibility(View.VISIBLE);
+        tv_tab_main.setVisibility(View.VISIBLE);
+
         switch (pageIndex) {
             case 0:
-                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
-                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
+                miv_first.setVisibility(View.VISIBLE);
+                miv_tab_main.setVisibility(View.GONE);
+                tv_tab_main.setVisibility(View.GONE);
+//                miv_tab_main.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_1_h));
+//                tv_tab_main.setTextColor(getResources().getColor(R.color.pink_color));
                 break;
             case 1:
                 miv_tab_sort.setBackgroundDrawable(getResources().getDrawable(R.mipmap.tab_2_h));
