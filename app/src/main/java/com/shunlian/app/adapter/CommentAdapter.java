@@ -187,7 +187,15 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             GlideUtils.getInstance().loadImage(context,mHolder.civ_head,data.avatar);
             Bitmap bitmap = TransformUtil.convertVIP(context, data.level);
             mHolder.miv_vip.setImageBitmap(bitmap);
-//            GlideUtils.getInstance().loadImage(context,mHolder.miv_medal,data.member_role);
+            if ("1".equals(data.member_role)){//精英
+                visible(mHolder.miv_medal);
+                mHolder.miv_medal.setImageResource(R.mipmap.img_jingyingdaoshi);
+            }else if ("2".equals(data.member_role)){//导师
+                visible(mHolder.miv_medal);
+                mHolder.miv_medal.setImageResource(R.mipmap.img_chuangkejingying);
+            }else {
+                gone(mHolder.miv_medal);
+            }
             mHolder.mtv_nickname.setText(data.nickname);
             mHolder.mtv_time.setText(data.add_time);
             mHolder.mtv_attribute.setText(data.goods_option);
@@ -200,9 +208,9 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
                 mHolder.mtv_zan_count.setTextColor(getColor(R.color.line_btn));
             }
-            if (!isEmpty(data.reply)){
+            if (!isEmpty(data.append)){
                 mHolder.mtv_content1.setVisibility(View.VISIBLE);
-                mHolder.mtv_content1.setText(data.reply);
+                mHolder.mtv_content1.setText(data.append);
             }else {
                 mHolder.mtv_content1.setVisibility(View.GONE);
             }

@@ -3,6 +3,7 @@ package com.shunlian.app.ui.setting;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.text.Editable;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
@@ -66,6 +67,20 @@ public class NickNameAct extends BaseActivity {
                     background.setColor(getColorResouce(R.color.color_value_6c));
                 }
             }
+            String nickname = "";
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                boolean nicknameLegitimate = Common.isNicknameLegitimate(s.toString());
+                if (nicknameLegitimate){
+                    mbtn_save.setEnabled(true);
+                    nickname = s.toString();
+                }else {
+                    mbtn_save.setEnabled(false);
+                    met_nickname.setText(nickname);
+                    met_nickname.setSelection(nickname.length());
+                }
+            }
         });
     }
 
@@ -95,6 +110,7 @@ public class NickNameAct extends BaseActivity {
             Common.staticToast("请设置昵称");
             return;
         }
+        Common.hideKeyboard(met_nickname);
         Intent intent = new Intent();
         intent.putExtra("nickname",s);
         setResult(Activity.RESULT_OK,intent);

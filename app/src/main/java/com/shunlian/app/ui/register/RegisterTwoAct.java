@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,19 +17,16 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 import com.shunlian.mylibrary.KeyboardPatch;
-
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 
@@ -197,28 +193,14 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                int charLength = 0;
-                String[] split = s.toString().split("");
-                for (int i = 0; i < split.length; i++) {
-                    if (i == 0){
-                        continue;
-                    }
-                    if (Pattern.matches(Reg,split[i])){
-                        charLength += 2;
-                    }else {
-                        charLength++;
-                    }
-                }
-                if (charLength > 24){
-                    Common.staticToast(getString(R.string.RegisterTwoAct_ncszgc));
+                boolean nicknameLegitimate = Common.isNicknameLegitimate(s.toString());
+                if (nicknameLegitimate){
+                    nickname = s.toString();
+                }else {
                     et_nickname.setText(nickname);
                     et_nickname.setSelection(nickname.length());
-                }else {
-                    nickname = s.toString();
                 }
             }
-            String Reg="^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
-
         });
     }
 
