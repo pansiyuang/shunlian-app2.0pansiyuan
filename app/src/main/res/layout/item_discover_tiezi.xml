@@ -20,11 +20,23 @@
         android:id="@+id/mtv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:textColor="@color/new_text"
         android:layout_toRightOf="@id/miv_avar"
         android:layout_marginLeft="7dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="14dp"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/value_88"
+        android:layout_toRightOf="@id/miv_avar"
+        android:layout_marginLeft="7dp"
+        android:layout_below="@id/mtv_name"
+        android:layout_marginTop="3dp"
         android:singleLine="true"
         android:ellipsize="end"/>
     <com.shunlian.app.widget.MyTextView

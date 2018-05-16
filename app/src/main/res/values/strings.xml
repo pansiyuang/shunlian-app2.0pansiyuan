@@ -588,8 +588,8 @@
     <string name="punish">处罚</string>
 
     <!--帮助-->
-    <string name="help_zaixiankefu">在线客服(00:00-24:00)</string>
-    <string name="help_bodadianhua">拨打电话(00:00-24:00)</string>
+    <string name="help_zaixiankefu">在线客服(08:30-22:30)</string>
+    <string name="help_bodadianhua">电话客服</string>
     <string name="help_bangzhuzhongxin">帮助中心</string>
     <string name="help_changjianwenti">常见问题：</string>
     <string name="help_shifoujiejue">这条帮助是否解决了您的问题？</string>

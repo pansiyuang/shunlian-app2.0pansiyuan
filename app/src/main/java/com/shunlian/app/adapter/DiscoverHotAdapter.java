@@ -46,6 +46,7 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
         final DiscoveryTieziEntity.Mdata.Hot hot = lists.get(position);
         viewHolder.mtv_title.setText(hot.content);
         viewHolder.mtv_name.setText(hot.nickname);
+        viewHolder.mtv_time.setText(hot.create_time);
         viewHolder.mtv_pinlun.setText(hot.comments);
         viewHolder.mtv_like.setText(hot.likes);
         if ("1".equals(hot.is_likes)) {
@@ -116,6 +117,9 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
 
         @BindView(R.id.mtv_like)
         MyTextView mtv_like;
+
+        @BindView(R.id.mtv_time)
+        MyTextView mtv_time;
 
         @BindView(R.id.miv_avar)
         MyImageView miv_avar;
