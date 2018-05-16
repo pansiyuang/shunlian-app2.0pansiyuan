@@ -1,9 +1,12 @@
 package com.shunlian.app.ui.core;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -12,6 +15,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PingListAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CorePingEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PPingList;
@@ -28,6 +32,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemListener;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,6 +79,9 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
 
+    @BindView(R.id.miv_share)
+    MyImageView miv_share;
+
     @BindView(R.id.downTime_firsts)
     DayRedBlackDownTimerView downTime_firsts;
 
@@ -94,6 +105,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     private PPingList pPingList;
     private PingListAdapter pingListAdapter;
     private boolean isMore=false;
+    private ShareInfoParam mShareInfoParam=new ShareInfoParam();
+    private CorePingEntity.Share share;
 
 
     @OnClick(R.id.rl_more)
@@ -168,9 +181,55 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                     miv_arrow.setImageResource(R.mipmap.icon_common_arrowups);
                 }
                 break;
+            case R.id.miv_share:
+                mShareInfoParam.title=share.title;
+                mShareInfoParam.desc=share.content;
+                mShareInfoParam.img=share.logo;
+                mShareInfoParam.shareLink=share.share_url;
+                shareStyle2Dialog();
+                break;
         }
     }
+    private void copyText() {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
+            sb.append(mShareInfoParam.desc);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
+            sb.append(mShareInfoParam.shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        Common.staticToasts(this, "复制链接成功", R.mipmap.icon_common_duihao);
+    }
 
+    /**
+     * 分享微信和复制链接
+     */
+    public void shareStyle2Dialog(){
+        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity(this)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                WXEntryActivity.startAct(PingpaiListAct.this,
+                                        "shareFriend", mShareInfoParam);
+                                break;
+                            case 1:
+                                copyText();
+                                break;
+                        }
+                    }
+                }).build();
+        if (!mPopMenu.isShowing()) {
+            mPopMenu.show();
+        }
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.act_ping_list;
@@ -180,6 +239,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     protected void initListener() {
         super.initListener();
         miv_arrow.setOnClickListener(this);
+        miv_share.setOnClickListener(this);
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -195,8 +255,10 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                     view_bg.setAlpha(alpha);
                     mtv_title.setAlpha(alpha);
                     miv_close.setImageResource(R.mipmap.icon_common_back_black);
+                    miv_share.setImageResource(R.mipmap.icon_home_share);
                     miv_dot.setImageResource(R.mipmap.icon_common_more_black);
                     miv_close.setAlpha(alpha);
+                    miv_share.setAlpha(alpha);
                     miv_dot.setAlpha(alpha);
                     ImmersionBar.with(PingpaiListAct.this)
                             .statusBarDarkFont(true, 0.2f)
@@ -206,9 +268,11 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                             .statusBarDarkFont(true, 0.0f)
                             .init();
                     mtv_title.setTextColor(getColorResouce(R.color.white));
+                    miv_share.setImageResource(R.mipmap.icon_home_share_b);
                     view_bg.setAlpha(0);
                     mtv_title.setAlpha(1);
                     miv_close.setAlpha(1 - alpha);
+                    miv_share.setAlpha(1 - alpha);
                     miv_dot.setAlpha(1 - alpha);
                     miv_close.setImageResource(R.mipmap.icon_common_back_white);
                     miv_dot.setImageResource(R.mipmap.icon_common_more_white);
@@ -242,6 +306,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void setApiData(CorePingEntity corePingEntity, List<CorePingEntity.MData> mDatas) {
+        share=corePingEntity.share;
         if (isEmpty(mDatas)) {
             visible(nei_empty);
             gone(rv_list);

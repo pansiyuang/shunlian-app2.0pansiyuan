@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/rounded_rectangle_12px"
+                android:background="@drawable/rounded_corner_pink_100"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:textColor="@color/white"

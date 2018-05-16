@@ -114,6 +114,24 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
                 super.onSuccess(entity);
                 iView.setContent(entity.data);
             }
+
+            @Override
+            public void onErrorData(BaseEntity<GetDataEntity> getDataEntityBaseEntity) {
+                super.onErrorData(getDataEntityBaseEntity);
+                iView.setContent(null);
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.setContent(null);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.setContent(null);
+            }
         });
     }
 

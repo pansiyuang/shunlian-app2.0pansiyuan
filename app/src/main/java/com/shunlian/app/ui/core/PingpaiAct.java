@@ -216,7 +216,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
         }
         rv_list.setNestedScrollingEnabled(false);
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        pinpaiAdapter = new PinpaiAdapter(getBaseContext(), true, corePingEntity.brand_list);
+        pinpaiAdapter = new PinpaiAdapter(this, true, corePingEntity.brand_list);
         rv_list.setAdapter(pinpaiAdapter);
         pinpaiAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override

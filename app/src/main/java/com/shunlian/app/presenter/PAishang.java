@@ -9,6 +9,7 @@ import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IAishang;
 
 import java.util.ArrayList;

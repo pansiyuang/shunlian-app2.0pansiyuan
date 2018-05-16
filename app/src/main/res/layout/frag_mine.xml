@@ -1085,13 +1085,13 @@
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="56dp"
         android:background="@color/pink_color" />
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="54dp">
+        android:layout_height="56dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_shezhi"
@@ -1099,6 +1099,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:layout_marginTop="2dp"
             android:src="@mipmap/icon_personalcenter_shezhi" />
 
         <com.shunlian.app.widget.MyRelativeLayout
@@ -1111,18 +1112,20 @@
             <com.shunlian.app.widget.MyImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="9.5dp"
                 android:src="@mipmap/icon_personalcenter_xiaoxi" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/tv_msg_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/rounded_rectangle_12px"
+                android:background="@drawable/rounded_corner_white_100"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:textColor="@color/white"
+                android:textColor="@color/pink_color"
                 android:textSize="8.5sp"
                 android:visibility="gone" />
         </com.shunlian.app.widget.MyRelativeLayout>
