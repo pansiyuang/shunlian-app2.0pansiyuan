@@ -62,18 +62,21 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         return rootView;
     }
 
+    public void refresh(){
+        mDatasss.clear();
+        pFirstPage.getContentData(channel_id);
+        if (firstPageAdapter != null) {
+            firstPageAdapter.showPosition = -1;
+            firstPageAdapter.isShow = false;
+        }
+    }
     @Override
     protected void initListener() {
         super.initListener();
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
-                mDatasss.clear();
-                pFirstPage.getContentData(channel_id);
-                if (firstPageAdapter != null) {
-                    firstPageAdapter.showPosition = -1;
-                    firstPageAdapter.isShow = false;
-                }
+               refresh();
             }
         });
 
@@ -134,11 +137,15 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
         lay_refresh.setRefreshing(false);
+        int size=0;
         mDatass.clear();
-        mDatass.addAll(getDataEntity.datas);
+        if (getDataEntity!=null){
+            size=getDataEntity.datas.size();
+            mDatass.addAll(getDataEntity.datas);
+        }
 //        if (firstPageAdapter==null){
         isShowfoot = false;
-        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, getDataEntity.datas.size());
+        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this,size);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
