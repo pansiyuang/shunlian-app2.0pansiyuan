@@ -72,10 +72,6 @@ public class EasyWebsocketClient extends WebSocketClient {
     private static List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
     private static MessageCountManager messageCountManager;
     private MemberStatus currentMemberStatus = MemberStatus.Member;
-    //    private GoodsItemEntity.Data.Item goodsItem;
-//    private ShopHomeEntity.Data.ShopInfo shopInfo;
-//    private OrderItemEntity.Data orderItemEntity;
-
 
     /**
      * 单例模式获取实例
@@ -104,7 +100,7 @@ public class EasyWebsocketClient extends WebSocketClient {
         return mSingleton;
     }
 
-    private EasyWebsocketClient(URI serverUri, Draft draft) {
+    public EasyWebsocketClient(URI serverUri, Draft draft) {
         super(serverUri, draft);
     }
 
@@ -217,7 +213,6 @@ public class EasyWebsocketClient extends WebSocketClient {
                             listener.receiveMessage(message);
                         }
                     }
-
                     MessageEntity messageEntity = objectMapper.readValue(message, MessageEntity.class);
                     MsgInfo msgInfo = messageEntity.msg_info;
                     String msg = msgInfo.message;
@@ -750,24 +745,21 @@ public class EasyWebsocketClient extends WebSocketClient {
         mHandler.postDelayed(mReconnectTask, 1000);
     }
 
-    private Runnable mReconnectTask = new Runnable() {
-        @Override
-        public void run() {
-            LogUtil.httpLogW("尝试重连服务器...." + mStatus);
+    private Runnable mReconnectTask = () -> {
+        LogUtil.httpLogW("尝试重连服务器...." + mStatus);
 
-            if (mStatus != Status.CONNECTING) {//不是正在重连状态
-                reconnectCount++;
-                mStatus = Status.CONNECTING;
-            }
-//            try {
-//                mSingleton = null;
-//                mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
-//                mSingleton.setTimeOut(timeout);
-//                mSingleton.connect();
-//            } catch (URISyntaxException e) {
-//                e.printStackTrace();
-//                LogUtil.httpLogW("链接服务器失败....");
-//            }
+        if (mStatus != Status.CONNECTING) {//不是正在重连状态
+            reconnectCount++;
+            mStatus = Status.CONNECTING;
+        }
+        try {
+            mSingleton = null;
+            mSingleton = new EasyWebsocketClient(new URI("ws://123.207.107.21:8086"), new Draft_17());
+            mSingleton.setTimeOut(timeout);
+            mSingleton.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            LogUtil.httpLogW("链接服务器失败....");
         }
     };
 

@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,21 +16,26 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.DisabledGoodsAdapter;
+import com.shunlian.app.adapter.ProbabyLikeGoodsAdapter;
 import com.shunlian.app.adapter.ShopCarStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IShoppingCarView;
-import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.mylibrary.ImmersionBar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,27 +101,34 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private HashMap<String, Boolean> editMap; //用来记录店铺分组编辑状态
     private View rootView;
     private View footView;
+    private View probabyView;
+    private View probabyTitleView;
     private ShopCarPresenter shopCarPresenter;
     private ShopCarStoreAdapter shopCarStoreAdapter;
+    private ProbabyLikeGoodsAdapter goodsAdapter;
     private ShoppingCarEntity mCarEntity;
     private Unbinder mUnbinder;
     private FooterHolderView footerHolderView;
+    private ProbabyFooterHolderView probabyHolderView;
     private String isCheckAll; //用来记录是否全选了
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
     private String disGoodsIds;//失效订单的id
     private RecyclerDialog recyclerDialog;
+    private List<ProbabyLikeGoodsEntity.Goods> probabyGoods;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_shoppingcar, container, false);
         footView = inflater.inflate(R.layout.foot_shoppingcar_disable, container, false);
+        probabyTitleView = inflater.inflate(R.layout.item_probayby_title, container, false);
+        probabyView = inflater.inflate(R.layout.frag_list, container, false);
         return rootView;
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             ImmersionBar.with(this).fitsSystemWindows(true)
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
@@ -130,9 +143,24 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         tv_title_right.setVisibility(View.VISIBLE);
         tv_title.setText(baseContext.getResources().getText(R.string.shopping_car));
         tv_title_right.setText(baseContext.getResources().getText(R.string.edit));
+
         footerHolderView = new FooterHolderView(footView);
+        probabyHolderView = new ProbabyFooterHolderView(probabyView);
+
+        probabyGoods = new ArrayList<>();
+        GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+        goodsAdapter = new ProbabyLikeGoodsAdapter(getActivity(), probabyGoods);
+        probabyHolderView.recycler_list.setNestedScrollingEnabled(false);
+        probabyHolderView.recycler_list.setLayoutManager(manager);
+        probabyHolderView.recycler_list.setAdapter(goodsAdapter);
+
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
+        probabyTitleView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
+        probabyView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
         expand_shoppingcar.addFooterView(footView);
+        expand_shoppingcar.addFooterView(probabyTitleView);
+        expand_shoppingcar.addFooterView(probabyView);
+
         recyclerDialog = new RecyclerDialog(baseContext);
     }
 
@@ -197,12 +225,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
 
         //屏蔽父布局点击事件
-        expand_shoppingcar.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
-                return true;
-            }
-        });
+        expand_shoppingcar.setOnGroupClickListener((expandableListView, view, i, l) -> true);
 
         if (!isEmpty(mCarEntity.disabled)) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -399,6 +422,14 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
     }
 
+    @Override
+    public void OnGetProbabyGoods(List<ProbabyLikeGoodsEntity.Goods> goodsList) {
+        if (!isEmpty(goodsList)) {
+            probabyGoods.addAll(goodsList);
+            goodsAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void getOrderIds(List<String> orderList) {
         orderGoodsIds.setLength(0);
         if (orderList != null && orderList.size() != 0) {
@@ -459,6 +490,15 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             }
         }
     }
+
+    public class ProbabyFooterHolderView {
+        RecyclerView recycler_list;
+
+        public ProbabyFooterHolderView(View view) {
+            recycler_list = (RecyclerView) view.findViewById(R.id.recycler_list);
+        }
+    }
+
 
     public String getCheckAll() {
         if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {

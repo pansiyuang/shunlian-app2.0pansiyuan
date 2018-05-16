@@ -77,11 +77,12 @@ public class MegerPresenter extends BasePresenter<IMegerView> {
         });
     }
 
-    public void addCart(String goods_id, String sku_id, String qty) {
+    public void addCart(String goods_id, String sku_id, String qty,String promId) {
         Map<String, String> map = new HashMap<>();
         map.put("goods_id", goods_id);
         map.put("sku_id", sku_id);
         map.put("qty", qty);
+        map.put("prom_id", promId);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
         Call<BaseEntity<CateEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);

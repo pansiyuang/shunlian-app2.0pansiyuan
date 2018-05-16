@@ -2,6 +2,7 @@ package com.shunlian.app.ui.help;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,9 +14,13 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpQCateAdapter;
 import com.shunlian.app.bean.HelpClassEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
 import com.shunlian.app.widget.MarqueeTextView;
@@ -57,6 +62,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     private LinearLayoutManager linearLayoutManager;
     private String twoId = "", oneId = "", title = "";
     private boolean twoFlag = false;
+    private PromptDialog promptDialog;
     private HelpQCateAdapter helpQCateAdapter;
 
     public static void startAct(Context context, String id, String title) {
@@ -85,10 +91,14 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
                 }
                 break;
             case R.id.mllayout_dianhua:
-
+                if (promptDialog == null) {
+                    initDialog();
+                } else {
+                    promptDialog.show();
+                }
                 break;
             case R.id.mllayout_kefu:
-
+                pHelpTwo.getUserId();
                 break;
             case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
@@ -132,6 +142,16 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             oneId = getIntent().getStringExtra("id");
         pHelpTwo.getCateOne(oneId);
     }
+
+    public void initDialog() {
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
+    }
+
 
     private void setTitle(String title) {
         if (!TextUtils.isEmpty(title) && title.length() > 8) {
@@ -196,6 +216,15 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     @Override
     public void setClass(HelpClassEntity helpClassEntity, List<HelpClassEntity.Article> articles) {
 
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "在线客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
     }
 
     @Override

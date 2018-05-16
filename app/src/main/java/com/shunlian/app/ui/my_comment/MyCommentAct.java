@@ -11,6 +11,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.MyCommentAdapter;
 import com.shunlian.app.adapter.WaitAppendCommentAdapter;
 import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.eventbus_bean.CommentEvent;
 import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.GlideUtils;
@@ -21,6 +22,10 @@ import com.shunlian.app.view.IMyCommentListView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +77,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     private String avatar;
 
     public static void startAct(Context context) {
-        context.startActivity(new Intent(context, MyCommentAct.class));
+        Intent intent = new Intent(context, MyCommentAct.class);
+        context.startActivity(intent);
     }
 
     /**
@@ -114,6 +120,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
         setStatusBarFontDark();
         pink_color = getResources().getColor(R.color.pink_color);
         new_text = getResources().getColor(R.color.new_text);
+        EventBus.getDefault().register(this);
 
         presenter = new MyCommentListPresenter(this, this);
 
@@ -282,6 +289,14 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(CommentEvent event) {
+        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS || event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
+            presenter.myCommentListAll();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
@@ -290,5 +305,6 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
         if (presenter != null) {
             presenter.detachView();
         }
+        EventBus.getDefault().unregister(this);
     }
 }

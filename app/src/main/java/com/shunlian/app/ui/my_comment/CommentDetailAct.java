@@ -14,6 +14,8 @@ import com.shunlian.app.adapter.PicAdapter;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.eventbus_bean.CommentEvent;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
@@ -25,6 +27,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,6 +144,8 @@ public class CommentDetailAct extends BaseActivity {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        EventBus.getDefault().register(this);
 
         Intent intent = getIntent();
         data = (CommentListEntity.Data) intent.getSerializableExtra("data");
@@ -290,11 +298,23 @@ public class CommentDetailAct extends BaseActivity {
         CreatCommentActivity.startAct(this,entity,CreatCommentActivity.CHANGE_COMMENT);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(CommentEvent event) {
+        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS) {
+            data.is_change = "0";
+            mtv_good_comment.setVisibility(View.GONE);
+        } else if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS) {
+            data.is_append = "0";
+            mtv_append.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

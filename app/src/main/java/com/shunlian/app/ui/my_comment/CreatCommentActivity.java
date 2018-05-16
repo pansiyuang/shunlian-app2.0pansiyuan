@@ -18,6 +18,7 @@ import com.shunlian.app.adapter.CreatCommentAdapter;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.eventbus_bean.CommentEvent;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.photopick.PhotoPickerIntent;
@@ -29,6 +30,8 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ICommentView;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.Serializable;
@@ -71,7 +74,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentType;
     private CommentPresenter commentPresenter;
     private int currentPosition;
-    private String currentOrderId;
+    private String currentOrderSn;
     private List<ImageEntity> paths = new ArrayList<>();
     private int currentLogisticsStar = 0;
     private int currentAttitudeStar = 0;
@@ -266,11 +269,10 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                         return;
                     }
                     String goodsString = getGoodsString();
-                    LogUtil.httpLogW("goodsString:" + goodsString);
-                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderId)) {
+                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderSn)) {
                         return;
                     }
-                    commentPresenter.creatComment(currentOrderId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
+                    commentPresenter.creatComment(currentOrderSn, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
                 }
                 break;
             case R.id.miv_close:
@@ -284,7 +286,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public String getGoodsString() {
         String result = null;
 
-        if (commentList == null || commentList.size() == 0) {
+        if (isEmpty(commentList)) {
             return null;
         }
         List<Map> array = new ArrayList<>();
@@ -302,8 +304,17 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 }
 
                 if (!isEmpty(releaseCommentEntity.order)) {
-                    currentOrderId = releaseCommentEntity.order;
-                    map.put("ordersn", releaseCommentEntity.order);
+                    currentOrderSn = releaseCommentEntity.order;
+                    if (currentType == APPEND_COMMENT) {
+                        map.put("ordersn", currentOrderSn);
+                    }
+                }
+
+                if (!isEmpty(releaseCommentEntity.order_sn)) {
+                    currentOrderSn = releaseCommentEntity.order_sn;
+                    if (currentType == APPEND_COMMENT) {
+                        map.put("ordersn", currentOrderSn);
+                    }
                 }
 
                 if (!isEmpty(releaseCommentEntity.starLevel) && currentType == CREAT_COMMENT) {
@@ -316,7 +327,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     map.put("content", "");
                 }
 
-                if (releaseCommentEntity.imgs != null && releaseCommentEntity.imgs.size() != 0) {
+                if (!isEmpty(releaseCommentEntity.imgs)) {
                     StringBuffer stringBuffer;
                     if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
                         stringBuffer = new StringBuffer("");
@@ -325,7 +336,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                         stringBuffer.append(",");
                     }
                     for (int j = 0; j < releaseCommentEntity.imgs.size(); j++) {
-                        stringBuffer.append(releaseCommentEntity.imgs.get(j));
+                        stringBuffer.append(releaseCommentEntity.imgs.get(j).imgUrl);
                         if (j != releaseCommentEntity.imgs.size() - 1) {
                             stringBuffer.append(",");
                         }
@@ -378,9 +389,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 break;
             case CHANGE_COMMENT:
                 Common.staticToast("修改评价成功");
+                EventBus.getDefault().post(new CommentEvent(CommentEvent.SUCCESS_CHANGE_STATUS));
                 break;
             case APPEND_COMMENT:
                 Common.staticToast("追加评价成功");
+                EventBus.getDefault().post(new CommentEvent(CommentEvent.SUCCESS_APPEND_STATUS));
                 CommentSuccessAct.startAct(this);
                 break;
         }
@@ -403,6 +416,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     break;
                 case 1:
                     List<String> picStr = (List<String>) msg.obj;
+                    for (int i = 0; i < paths.size(); i++) {
+                        if (!isEmpty(picStr.get(i))) {
+                            paths.get(i).imgUrl = picStr.get(i);
+                        }
+                    }
                     creatCommentAdapter.addImages(paths, currentPosition);
                     break;
             }

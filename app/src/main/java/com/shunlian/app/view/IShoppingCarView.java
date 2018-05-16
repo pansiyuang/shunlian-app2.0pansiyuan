@@ -1,7 +1,10 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/18.
@@ -15,4 +18,5 @@ public interface IShoppingCarView extends IView {
 
     void OnGetVoucher(GoodsDeatilEntity.Voucher voucher);
 
+    void OnGetProbabyGoods(List<ProbabyLikeGoodsEntity.Goods> goodsList);
 }

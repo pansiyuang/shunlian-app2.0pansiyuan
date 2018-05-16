@@ -10,7 +10,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProbabyLikeGoodsEntity {
-    public Match matched;
+    public List<Match> matched;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Match {
@@ -27,5 +27,7 @@ public class ProbabyLikeGoodsEntity {
         public String thumb;
         public String price;
         public String market_price;
+        public int index;
+        public boolean isParent;
     }
 }

@@ -2,8 +2,10 @@ package com.shunlian.app.newchat.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -31,6 +33,9 @@ import com.shunlian.app.utils.CenterAlignImageSpan;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,12 +94,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private int spaceWidthDot;//点之间的间距
     private int startLeftPosi;//最左侧点的距离
     private int inputMethodHeight = -1;
+    private final AssetManager am;
 
     public ChatInput(Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.chat_input, this);
         ButterKnife.bind(this, view);
         initView();
+        am = context.getAssets();
     }
 
     private void initView() {
@@ -389,16 +396,37 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         updateView(mode, isAdd);
     }
 
+    public Bitmap getEmojiBitmap(int picName) {
+        InputStream is = null;
+        Bitmap resizedBitmap = null;
+
+        try {
+            is = am.open(String.format("emojis/%d.png", picName));
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+            Matrix matrix = new Matrix();
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            // 缩放图片的尺寸
+            int i = TransformUtil.dip2px(getContext(), 28);
+            float scaleWidth = (float) i / width;
+            float scaleHeight = (float) i / height;
+            matrix.postScale(scaleWidth, scaleHeight);
+            resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return resizedBitmap;
+    }
+
     @Override
     public void OnEmojiClick(int emojiIndex, String emojiStr) {
-        String content = String.valueOf(EmojisUtils.emojisName(emojiIndex));
-        SpannableString str = new SpannableString(content);
-        Bitmap emojiBitmap = EmojisUtils.getEmojiBitmap(getContext(), emojiIndex);
-        int size = (int) editText.getTextSize() * 13 / 10;
-        Bitmap scaleBitmap = Bitmap.createScaledBitmap(emojiBitmap, size, size, true);
+        SpannableString str = new SpannableString(emojiStr);
+        Bitmap emojiBitmap =  getEmojiBitmap(emojiIndex);
+
         if (emojiBitmap != null) {
-            ImageSpan span = new ImageSpan(getContext(), scaleBitmap);
-            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ImageSpan span = new ImageSpan(getContext(), emojiBitmap);
+            str.setSpan(span, 0, emojiStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             editText.setGravity(Gravity.CENTER_VERTICAL);
             editText.append(str);
         }

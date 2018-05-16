@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.HelpMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.TransferMessage;
+import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -94,16 +97,19 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public static final int ORDER_MSG = 9;
     public static final int CHECK_ORDER = 10;
     public static final int SYS_MSG = 11;
-    public static final int SELLER_HELP = 12;
-    public static final int ADMIN_HELP = 13;
-    public static final int TRANSFER_MSG = 14;
-    public static final int SYS_TEXT = 15;
+    public static final int SELLER_HELP_LEFT = 12;
+    public static final int ADMIN_HELP_LEFT = 13;
+    public static final int SELLER_HELP_RIGHT = 14;
+    public static final int ADMIN_HELP_RIGHT = 15;
+    public static final int TRANSFER_MSG = 16;
+    public static final int SYS_TEXT = 17;
 
     private final ObjectMapper objectMapper;
     private RecyclerView recycler;
     private AssetManager am;
     private Pattern patternEmotion;
     private String currentUserId;
+    private UserInfoEntity.Info.User mUser;
 
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
@@ -112,7 +118,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         am = context.getAssets();
 
         patternEmotion = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]");
-        currentUserId = SharedPrefUtil.getSharedPrfString("user_id", "");
+    }
+
+    public void setUser(UserInfoEntity.Info.User user) {
+        this.mUser = user;
+        currentUserId = mUser.user_id;
     }
 
     public int getSendType(String fromUserId) {
@@ -121,6 +131,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
 
         if (fromUserId.equals(currentUserId)) {
+            return BaseMessage.VALUE_RIGHT;
+        }
+
+        if (mUser != null && mUser.pid.equals(fromUserId)) {
             return BaseMessage.VALUE_RIGHT;
         }
 
@@ -185,7 +199,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     @Override
     public int getItemViewType(int position) {
-        String message = lists.get(position).message;
+        MsgInfo msgInfo = lists.get(position);
+        String message = msgInfo.message;
         BaseMessage baseMessage = str2Msg(message);
         int sendType = getSendType(baseMessage.from_user_id);
         if (sendType == BaseMessage.VALUE_LEFT) { //左边消息
@@ -201,9 +216,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 case "evaluate":
                     return EVALUATE_MSG;
                 case "seller_help":
-                    return SELLER_HELP;
+                    return SELLER_HELP_LEFT;
                 case "admin_help":
-                    return ADMIN_HELP;
+                    return ADMIN_HELP_LEFT;
                 case "sys_text":
                     return SYS_TEXT;
                 case "order":
@@ -227,6 +242,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     return EVALUATE_MSG;
                 case "sys_text":
                     return SYS_TEXT;
+                case "seller_help":
+                    return SELLER_HELP_RIGHT;
+                case "admin_help":
+                    return ADMIN_HELP_RIGHT;
             }
         } else if (sendType == BaseMessage.VALUE_SYSTEM) { //系统消息
             switch (baseMessage.msg_type) {
@@ -262,11 +281,16 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 return new LinkViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_link, parent, false));
             case SYS_MSG:
                 return new SysMsgViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_system, parent, false));
-            case SELLER_HELP:
-            case ADMIN_HELP:
+            case SELLER_HELP_LEFT:
+            case ADMIN_HELP_LEFT:
                 return new HelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_left_seller_help, parent, false));
+            case SELLER_HELP_RIGHT:
+            case ADMIN_HELP_RIGHT:
+                return new HelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_right_seller_help, parent, false));
             case TRANSFER_MSG:
                 return new TransferViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_transfer, parent, false));
+            case CHECK_ORDER:
+                return new CheckOrderViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_check_order, parent, false));
             case SYS_TEXT:
                 return new SysTextHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_sys_text, parent, false));
         }
@@ -320,11 +344,17 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             case SYS_MSG:
                 handSysMsg(holder, baseMessage);
                 break;
-            case SELLER_HELP:
-                handHelp(holder, baseMessage, true);
+            case SELLER_HELP_LEFT:
+                handHelp(holder, baseMessage, true, false);
                 break;
-            case ADMIN_HELP:
-                handHelp(holder, baseMessage, false);
+            case SELLER_HELP_RIGHT:
+                handHelp(holder, baseMessage, true, true);
+                break;
+            case ADMIN_HELP_LEFT:
+                handHelp(holder, baseMessage, false, false);
+                break;
+            case ADMIN_HELP_RIGHT:
+                handHelp(holder, baseMessage, false, true);
                 break;
             case TRANSFER_MSG:
                 handTransfer(holder, baseMessage);
@@ -540,18 +570,17 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 orderViewHolder.tv_seller.setText(order.store_name);
                 orderViewHolder.tv_seller_id.setText(order.store_id);
                 if (!isEmpty(order.orderGoods)) {
-                    MyOrderEntity.OrderGoodsBean orderGoodsBean = order.orderGoods.get(0);
+                    OrderMessage.OrderGoods orderGoodsBean = order.orderGoods.get(0);
                     if (!isScrolling) {
-                        GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.thumb);
+                        GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.goodsImage);
                     } else {
                         orderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
                     }
                     orderViewHolder.tv_title.setText(orderGoodsBean.title);
                     orderViewHolder.tv_price.setText(orderGoodsBean.price);
-                    orderViewHolder.tv_order_number.setText(orderGoodsBean.order_sn);
                 }
                 orderViewHolder.tv_date.setText(order.create_time);
-
+                orderViewHolder.tv_order_number.setText(order.ordersn);
                 orderViewHolder.tv_search_express.setOnClickListener(v -> {
                     //查快递
                     if (!isEmpty(order.express_sn)) {
@@ -578,13 +607,13 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             checkOrderViewHolder.tv_phone_num.setText(String.format(getString(R.string.phone_num), order.phone));
             checkOrderViewHolder.tv_receiver.setText(String.format(getString(R.string.receiver), order.realname));
             checkOrderViewHolder.tv_address_detail.setText(String.format(getString(R.string.address_detail), order.address));
-            checkOrderViewHolder.tv_price.setText(order.price);
             if (!isEmpty(order.orderGoods)) {
-                List<MyOrderEntity.OrderGoodsBean> orderGoodsBeanList = order.orderGoods;
-                MyOrderEntity.OrderGoodsBean orderGoodsBean = orderGoodsBeanList.get(0);
+                List<OrderMessage.OrderGoods> orderGoodsBeanList = order.orderGoods;
+                OrderMessage.OrderGoods orderGoodsBean = orderGoodsBeanList.get(0);
+                checkOrderViewHolder.tv_price.setText("共" + orderGoodsBeanList.size() + "件商品，共计¥" + order.price);
                 checkOrderViewHolder.tv_title.setText(orderGoodsBean.title);
                 if (!isScrolling) {
-                    GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.thumb);
+                    GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.goodsImage);
                 } else {
                     checkOrderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
                 }
@@ -647,12 +676,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         sysMsgViewHolder.tv_systemMessage.setText(getNewChatTime(currentTime));
     }
 
-    public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller) {
-        HelpHolder HelpHolder = (HelpHolder) holder;
+    public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller, boolean isSelf) {
+        HelpHolder helpHolder = (HelpHolder) holder;
         HelpMessage helpMessage = (HelpMessage) baseMessage;
         if (helpMessage.msg_body != null) {
             HelpMessage.HelpBody msgBody = helpMessage.msg_body;
-            HelpHolder.tv_content.setText(msgBody.help_item);
+            helpHolder.tv_content.setText(msgBody.help_item);
             if (!isEmpty(msgBody.help_list)) {
                 List<HelpMessage.HelpEntity> helpEntityList = msgBody.help_list;
                 SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<HelpMessage.HelpEntity>(context, R.layout.item_seller_help, helpEntityList) {
@@ -660,6 +689,17 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     public void convert(SimpleViewHolder holder, HelpMessage.HelpEntity helpEntity, int position) {
                         TextView textView = holder.getView(R.id.tv_seller_help);
                         textView.setText(helpEntity.item);
+                        if (isSelf) {
+                            textView.setTextColor(getColor(R.color.white));
+                        } else {
+                            textView.setTextColor(getColor(R.color.value_40A5FF));
+                        }
+                        
+                        if (isSelf) {
+                            textView.setEnabled(false);
+                        } else {
+                            textView.setEnabled(true);
+                        }
                         textView.setOnClickListener(v -> {
                             if (isSeller) {
                                 ((ChatActivity) context).getHelpContent(helpEntity.id, helpMessage.sid);
@@ -669,14 +709,14 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                         });
                     }
                 };
-                HelpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
-                HelpHolder.recycler_help.setNestedScrollingEnabled(false);
+                helpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
+                helpHolder.recycler_help.setNestedScrollingEnabled(false);
             }
         }
         if (!isScrolling) {
-            GlideUtils.getInstance().loadCornerImage(context, HelpHolder.miv_icon, helpMessage.from_headurl, 3);
+            GlideUtils.getInstance().loadCornerImage(context, helpHolder.miv_icon, helpMessage.from_headurl, 3);
         } else {
-            HelpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
+            helpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
         }
     }
 
@@ -1005,6 +1045,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 case "admin_help":
                     message = objectMapper.readValue(msg, HelpMessage.class);
                     break;
+                case "order_confirm":
+                    message = objectMapper.readValue(msg, OrderMessage.class);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1152,17 +1195,26 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 }
             }
             // 匹配字符串的开始位置
+
             int start = matcherEmotion.start();
             // 利用表情名字获取到对应的图片
             InputStream is = null;
             try {
                 is = am.open(String.format("emojis/%d.png", position));
-                // 压缩表情图片
-                int size = (int) tv.getTextSize() * 13 / 10;
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
-                Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+                is.close();
+                // 压缩表情图片
+                Matrix matrix = new Matrix();
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                // 缩放图片的尺寸
+                int i = TransformUtil.dip2px(context, 28);
+                float scaleWidth = (float) i / width;
+                float scaleHeight = (float) i / height;
+                matrix.postScale(scaleWidth, scaleHeight);
+                Bitmap scaleBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
                 int end = start + value.length();
-                ImageSpan span = new ImageSpan(context, scaleBitmap);
+                CenterAlignImageSpan span = new CenterAlignImageSpan(context, scaleBitmap);
                 spannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception e) {
                 e.printStackTrace();

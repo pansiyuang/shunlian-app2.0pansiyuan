@@ -615,6 +615,7 @@
         <activity
             android:name=".newchat.ui.CustomerListActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".newchat.ui.SwitchOtherActivity"

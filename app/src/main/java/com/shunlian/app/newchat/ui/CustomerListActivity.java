@@ -81,7 +81,6 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         chatMemberList = new ArrayList<>();
         mPresenter = new CustomerPresenter(this, this);
 
-        LogUtil.httpLogW("member23232:"+mClient.getMemberStatus());
         if (mClient.getUser() != null) {
             mUser = mClient.getUser();
             mPresenter.getReception(mUser.user_id);

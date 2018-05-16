@@ -16,15 +16,16 @@
             android:id="@+id/miv_close"
             android:layout_width="wrap_content"
             android:layout_height="33dp"
+            android:layout_centerVertical="true"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:layout_centerVertical="true"
             android:src="@mipmap/icon_common_back_black" />
 
         <TextView
             android:id="@+id/tv_search"
             android:layout_width="match_parent"
             android:layout_height="33dp"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/rl_more"
             android:layout_toRightOf="@+id/miv_close"
             android:background="@drawable/rounded_corner_search"
@@ -32,7 +33,6 @@
             android:drawablePadding="6.5dp"
             android:gravity="center_vertical"
             android:hint="@string/search_promotion_goods"
-            android:layout_centerVertical="true"
             android:paddingLeft="10dp"
             android:textColor="@color/share_text"
             android:textSize="14dp" />
@@ -41,23 +41,23 @@
             android:id="@+id/rl_more"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
                 android:src="@mipmap/icon_common_more_black" />
 
             <TextView
                 android:id="@+id/tv_number"
                 android:layout_width="wrap_content"
                 android:layout_height="12dp"
+                android:layout_above="@+id/miv_more"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="2dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/rounded_corner_pink_12px"
                 android:gravity="center"
@@ -74,9 +74,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/rl_title"
-        app:tabMode="scrollable"
         app:tabBackground="@android:color/transparent"
         app:tabIndicatorColor="@color/transparent"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/pink_color"
         app:tabTextColor="@color/new_text"></android.support.design.widget.TabLayout>
 
@@ -93,8 +93,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/line"
-        android:overScrollMode="never"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:overScrollMode="never" />
 
     <RelativeLayout
         android:id="@+id/rl_bottom"
@@ -148,8 +148,8 @@
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

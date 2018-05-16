@@ -255,6 +255,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             } else {
                 mCurrentUser = mClient.getUser();
                 initUser(mCurrentUser);
+                mAdapter.setUser(mCurrentUser);
             }
         }
 
@@ -335,10 +336,16 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     public void switch2Jump() {
         switch (mClient.getMemberStatus()) {
             case Admin: //
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id);
+                if (isEmpty(currentChatMember.sid)) {
+                    return;
+                }
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id,currentChatMember.sid);
                 break;
             case Seller:
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id);
+                if (isEmpty(currentChatMember.sid)) {
+                    return;
+                }
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id,currentChatMember.sid);
                 break;
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
@@ -643,9 +650,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         evaluateMessage.tag_id = currentTagId;
         evaluateMessage.type = "send_message";
 
-        // TODO: 2018/4/13
-        currentChatMember.sid = "12"; //这行代码到时候注释掉
-
         if (isEmpty(currentChatMember.sid)) {
             return;
         }
@@ -714,8 +718,20 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         OrderMessage.OrderMessageBody orderMessageBody = new OrderMessage.OrderMessageBody();
         OrderMessage.Order order = new OrderMessage.Order();
+        order.orderId = orders.id;
         order.ordersn = orders.order_sn;
-        order.orderGoods = orders.order_goods;
+
+        List<OrderMessage.OrderGoods> goodsList = new ArrayList<>();
+        for (int i = 0; i < orders.order_goods.size(); i++) {
+            MyOrderEntity.OrderGoodsBean orderGoodsBean = orders.order_goods.get(i);
+            OrderMessage.OrderGoods goods = new OrderMessage.OrderGoods();
+            goods.goodsId = orderGoodsBean.goods_id;
+            goods.goodsImage = orderGoodsBean.thumb;
+            goods.price = orderGoodsBean.price;
+            goods.title = orderGoodsBean.title;
+            goodsList.add(goods);
+        }
+        order.orderGoods = goodsList;
         order.store_id = orders.store_id;
         order.store_name = orders.store_name;
         order.create_time = orders.create_time;
@@ -993,13 +1009,17 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {
-                    //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
-                    if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
-                        mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
-                        baseMessage.setStatus(MessageStatus.SendSucc);
-                        msgInfo.message = mAdapter.msg2Str(baseMessage);
+                    if (baseMessage.msg_type.equals("evaluate") && mClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
+                        finish();
                     } else {
-                        mAdapter.addMsgInfo(msgInfo);
+                        //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
+                        if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
+                            mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
+                            baseMessage.setStatus(MessageStatus.SendSucc);
+                            msgInfo.message = mAdapter.msg2Str(baseMessage);
+                        } else {
+                            mAdapter.addMsgInfo(msgInfo);
+                        }
                     }
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_SYSTEM) {

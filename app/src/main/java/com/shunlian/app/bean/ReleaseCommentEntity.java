@@ -13,6 +13,7 @@ public class ReleaseCommentEntity implements Serializable{
     public String order;
     public String pic;
     public String title;
+    public String order_sn;
     public String price;
     public String goodsId;
     public String comment_id;

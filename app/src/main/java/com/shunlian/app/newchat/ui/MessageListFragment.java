@@ -250,7 +250,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void evaluateMessage(String msg) {
-        updateFriendList(msg);
+//        updateFriendList(msg);
     }
 
     @Override
