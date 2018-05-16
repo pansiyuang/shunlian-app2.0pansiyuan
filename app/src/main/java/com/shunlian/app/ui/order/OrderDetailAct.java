@@ -25,6 +25,7 @@ import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
@@ -147,7 +148,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     MyTextView mtv_contact;
 
     private OrderDetailPresenter orderDetailPresenter;
-    private String storeId, orderId = "54";
+    private String storeId, orderId="";
 
     private int pink_color;
     private int new_gray;

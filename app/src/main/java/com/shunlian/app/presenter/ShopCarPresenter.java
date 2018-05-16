@@ -41,11 +41,10 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
     }
 
     public void initShopData() {
-        initApi();
+        getApiData();
     }
 
-    @Override
-    protected void initApi() {
+    public void getApiData(){
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         try {
@@ -70,6 +69,10 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    protected void initApi() {
+
     }
 
     public void editCar(String carId, String qty, String skuId, String promId, String isCheck) {
