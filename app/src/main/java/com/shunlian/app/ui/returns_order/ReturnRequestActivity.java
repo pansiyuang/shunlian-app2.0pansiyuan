@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -107,8 +108,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private List<ImageEntity> imageEntityList = new ArrayList<>();
     private List<ImageEntity> upLoadList = new ArrayList<>();
     private SingleImgAdapter singleImgAdapter;
-    private String currentServiceType;  //1 仅退款、 3 退货换货 4 换货
-    private int goodsCount;
+    private String currentServiceType;  //1 仅退款、 3 退货退款 4 换货
+    private int goodsCount;//要退的商品数
+    private int maxGoodsCount;//最大可退商品数
     private float freightPrice;
     private int isLast;  //是否改订单最后一件没有退的商品  1是  0 否
     private ReturnGoodsDialog goodsDialog;
@@ -117,6 +119,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private ReturnRequestPresenter presenter;
     private boolean isEdit; //是否是编辑
     private int index;
+    private float totalPrice;
     private MessageCountManager messageCountManager;
 
     @Override
@@ -144,7 +147,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         currentInfoEntity = (RefundDetailEntity.RefundDetail.Edit) getIntent().getSerializableExtra("infoEntity");
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         currentRefundId = getIntent().getStringExtra("refundId");
+        //第一次退 默认退商品最大数量
         goodsCount = Integer.valueOf(currentInfoEntity.qty);
+        maxGoodsCount = Integer.valueOf(currentInfoEntity.qty);
         freightPrice = Float.valueOf(currentInfoEntity.shipping_fee);
         isLast = Integer.valueOf(currentInfoEntity.is_last);
 
@@ -195,7 +200,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 LogUtil.httpLogW("当前的数量为;" + customer_goods.getCurrentCount());
                 setMaxPrice(goodsCount);
                 break;
-            case "3": //退货换货
+            case "3": //退货退款
                 mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
                 customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
@@ -221,12 +226,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             }
             tv_return_reason.setText(currentInfoEntity.buyer_message);
             tv_return_reason.setTextColor(getColorResouce(R.color.new_text));
-            if (rl_return_money.getVisibility() == View.VISIBLE) {
-                edt_return_money.setText(currentInfoEntity.refund_amount);
-            }
+            edt_return_money.setText(currentInfoEntity.refund_amount);
         }
 
-        GlideUtils.getInstance().loadImage(this, customer_goods.getGoodsIcon(), currentInfoEntity.thumb);
+        GlideUtils.getInstance().loadOverrideImage(this,
+                customer_goods.getGoodsIcon(), currentInfoEntity.thumb,160,160);
         customer_goods.setGoodsTitle(currentInfoEntity.title).selectCount(Integer.valueOf(currentInfoEntity.qty))
                 .setEdittextGoodsCount(goodsCount)
                 .setGoodsParams(currentInfoEntity.sku_desc)
@@ -243,9 +247,20 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         tv_request_complete.setOnClickListener(this);
 
         edt_return_money.addTextChangedListener(new TextWatcher() {
+            String rel = "(\\d*)(\\.\\d{0,2})?";
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().contains(".")) {
+                if (!Pattern.matches(rel,s)){
+                    s = s.subSequence(0, s.toString().indexOf(".") + 3);
+                    edt_return_money.setText(s);
+                    edt_return_money.setSelection(s.length());
+                }
+                if (s.toString().startsWith(".")){
+                    s = "0" + s;
+                    edt_return_money.setText(s);
+                    edt_return_money.setSelection(s.length());
+                }
+                /*if (s.toString().contains(".")) {
                     if (s.length() - 1 - s.toString().indexOf(".") > 2) {
                         s = s.toString().subSequence(0, s.toString().indexOf(".") + 3);
                         edt_return_money.setText(s);
@@ -265,11 +280,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                         edt_return_money.setSelection(1);
                         return;
                     }
-                }
+                }*/
                 if (!isEmpty(s.toString())) {
-                    if (Float.valueOf(s.toString()) > Float.valueOf(currentInfoEntity.real_amount)) {
-                        edt_return_money.setText(currentInfoEntity.real_amount);
-                        edt_return_money.setSelection(currentInfoEntity.real_amount.length());
+                    if (Float.valueOf(s.toString()) > totalPrice) {
+                        edt_return_money.setText(totalPrice+"");
+                        edt_return_money.setSelection((totalPrice+"").length());
                     }
                 }
             }
@@ -327,11 +342,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @Override
     public void onChangeCount(int count) {
+        goodsCount = count;
         setMaxPrice(count);
     }
 
     public void setMaxPrice(int count) {
-        float totalPrice;
         if (isLast == 1) { //是最后一件
             String freePrice = ",含邮费 ¥ ";
             if (freightPrice > 0){
@@ -340,13 +355,14 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 freePrice = "";
             }
 
-            if (count == goodsCount) {
+            if (count == maxGoodsCount) {
                 totalPrice = (Float.valueOf(currentInfoEntity.real_amount));
                 tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice) + freePrice);
             } else {
                 totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
                 tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
             }
+
         } else {
             totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
             tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
