@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.PaySuccessPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -66,7 +68,11 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
 
     @OnClick(R.id.mtv_order)
     public void seeOrderDetail(){
-        OrderDetailAct.startAct(this,orderId);
+        if (TextUtils.isEmpty(orderId)){
+            MyOrderAct.startAct(this,0);
+        }else {
+            OrderDetailAct.startAct(this,orderId);
+        }
     }
 
     @OnClick(R.id.mtv_firstPage)
