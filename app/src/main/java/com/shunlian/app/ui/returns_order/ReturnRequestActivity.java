@@ -229,7 +229,8 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             edt_return_money.setText(currentInfoEntity.refund_amount);
         }
 
-        GlideUtils.getInstance().loadImage(this, customer_goods.getGoodsIcon(), currentInfoEntity.thumb);
+        GlideUtils.getInstance().loadOverrideImage(this,
+                customer_goods.getGoodsIcon(), currentInfoEntity.thumb,160,160);
         customer_goods.setGoodsTitle(currentInfoEntity.title).selectCount(Integer.valueOf(currentInfoEntity.qty))
                 .setEdittextGoodsCount(goodsCount)
                 .setGoodsParams(currentInfoEntity.sku_desc)
