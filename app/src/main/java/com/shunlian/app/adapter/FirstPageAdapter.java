@@ -42,6 +42,8 @@ import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
+import com.shunlian.mylibrary.BarHide;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -635,7 +637,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
      * 分享微信和复制链接
      */
     public void shareStyle2Dialog(){
-        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context.getApplicationContext())
+        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
                 .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
                 .setOnItemClickListener(new PopMenuItemListener() {
@@ -650,6 +652,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 copyText();
                                 break;
                         }
+                    }
+
+                    @Override
+                    public void onHideCallback() {
+                        ImmersionBar.with((Activity) context).statusBarDarkFont(true, 0).init();
                     }
                 }).build();
         if (!mPopMenu.isShowing()) {

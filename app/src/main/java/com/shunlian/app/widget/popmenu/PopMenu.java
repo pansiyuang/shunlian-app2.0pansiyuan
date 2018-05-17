@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +19,10 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringChain;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.mylibrary.BarHide;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +78,7 @@ public class PopMenu {
     private int mScreenHeight;
 
     private boolean isShowing = false;
+    private Handler mHander;
 
     private PopMenu(Builder builder) {
         this.mActivity = builder.activity;
@@ -90,6 +95,7 @@ public class PopMenu {
 
         mScreenWidth = mActivity.getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = mActivity.getResources().getDisplayMetrics().heightPixels;
+
     }
 
     /**
@@ -111,6 +117,7 @@ public class PopMenu {
         showSubMenus(mGridLayout);
 
         isShowing = true;
+        ImmersionBar.with(mActivity).statusBarDarkFont(true, 0.8f).init();
     }
 
     /**
@@ -128,7 +135,17 @@ public class PopMenu {
                 }
             });
             isShowing = false;
+            if (mHander==null)
+                mHander=new Handler();
+            mHander.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ImmersionBar.with(mActivity).statusBarDarkFont(true, 0.2f).init();
+                    mPopMenuItemListener.onHideCallback();
+                }
+            },300);
         }
+
     }
 
     public boolean isShowing() {
@@ -140,7 +157,7 @@ public class PopMenu {
      */
     private void buildAnimateGridLayout() {
         mAnimateLayout = new FrameLayout(mActivity);
-        mAnimateLayout.setBackgroundColor(Common.getResources().getColor(R.color.bg_toast));
+        mAnimateLayout.setBackgroundColor(Common.getResources().getColor(R.color.dim20));
         mAnimateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

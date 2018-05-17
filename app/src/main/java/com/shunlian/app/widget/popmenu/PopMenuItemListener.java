@@ -19,4 +19,9 @@ public interface PopMenuItemListener {
      * @param view
      */
     default void onClickClose(View view){}
+
+    /**
+     * 隐藏回调
+     */
+    default void onHideCallback(){}
 }

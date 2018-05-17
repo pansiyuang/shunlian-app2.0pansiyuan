@@ -14,6 +14,8 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
@@ -69,6 +71,7 @@ public class StartAct extends MBaseActivity implements IMain {
         }, 3 * 1000);
         pMain=new PMain(this,this);
         pMain.getSplashAD();
+
     }
 
     /**

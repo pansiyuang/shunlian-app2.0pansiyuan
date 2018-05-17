@@ -17,6 +17,7 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.core.PingpaiListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
@@ -124,6 +125,15 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     .statusBarDarkFont(true, 0.2f)
                     .init();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ImmersionBar.with(this)
+                .statusBarDarkFont(true, 0.0f)
+                .init();
+//        ImmersionBar.with(this).titleBar(rLayout_title, false).init();
     }
 
     @Override
