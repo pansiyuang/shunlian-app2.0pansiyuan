@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -34,8 +33,6 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import static com.shunlian.app.utils.BitmapUtil.SAVE_PIC_PATH;
-
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,WXEntryView {
 
 
@@ -46,8 +43,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     private String currentDesc;
     private String currTitle;
     private String shareLink;
-    private String currentType;
-    private String currentGoodsId;
     private WXEntryPresenter wxEntryPresenter;
 
 
@@ -65,8 +60,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
+        setHideStatusAndNavigation();
         deviceId = SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
@@ -98,10 +92,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             flag = getIntent().getExtras().getString("flag");
             //tv_nick.setText("");
             SharedPrefUtil.saveSharedPrfString("flag", flag);
-
-            currentType = getIntent().getStringExtra("type");
-            currentGoodsId = getIntent().getStringExtra("goodsId");
-
 
             if (getIntent().getSerializableExtra("shareInfoParam")!=null){
                 ShareInfoParam shareInfoParam= (ShareInfoParam) getIntent().getSerializableExtra("shareInfoParam");
@@ -253,7 +243,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     public void onReq(BaseReq baseReq) {
-
     }
 
     @Override
@@ -262,6 +251,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (wxEntryPresenter == null) {
             wxEntryPresenter = new WXEntryPresenter(this, this);
         }
+
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
                 flag = SharedPrefUtil.getSharedPrfString("flag", "");
@@ -315,10 +305,14 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                  BindingPhoneAct.startAct(this,0,unique_sign);
             }else if ("1".equals(status)){
                  Common.staticToast("登录成功");
-                SharedPrefUtil.saveSharedPrfString("token",wxLoginEntity.token);
+                 SharedPrefUtil.saveSharedPrfString("token",wxLoginEntity.token);
+                 SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
+                 SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
             }else {
                  BindingPhoneAct.startAct(this,1,unique_sign);
             }
+            finish();
+        }else {
             finish();
         }
         finish();
