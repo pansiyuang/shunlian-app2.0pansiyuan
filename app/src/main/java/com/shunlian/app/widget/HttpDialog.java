@@ -50,7 +50,7 @@ public class HttpDialog extends Dialog {
         setCanceledOnTouchOutside(false);
         setContentView(view);
         mProgressBar = (ProgressView) view.findViewById(R.id.loading_progress);
-
+        setCancelable(false);
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
         p.height = TransformUtil.dip2px(context, 77.5f); // 高度设置为屏幕的0.6

@@ -41,6 +41,8 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!--jpush-->
 
+    <!--bugly-->
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <!--<meta-data
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
         android:value="GlideModule" />-->
@@ -201,6 +203,14 @@
             android:name="JPUSH_APPKEY"
             android:value="4a85a233f140802d8ff97cff" />
         <!--jpush-->
+        <!-- 多渠道打包时改成360，因为360市场要上传原apk -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="ShunLianPower" />
+        <!-- 配置Bugly调试模式（true或者false） -->
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="true" />
 
         <activity
             android:name=".ui.start.StartAct"
