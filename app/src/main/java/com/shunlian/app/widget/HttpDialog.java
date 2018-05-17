@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,8 +21,8 @@ public class HttpDialog extends Dialog {
     private static Context mContext;
     private ProgressView mProgressBar;
     private long startTime;
-    private static final long min_show_time = 500;//最少显示时间(毫秒)
-    private static final long quest_time = 500;//请求网络时间少于quest_time(毫秒)不显示动画
+    private static final long min_show_time = 400;//最少显示时间(毫秒)
+//    private static final long quest_time = 500;//请求网络时间少于quest_time(毫秒)不显示动画
     private boolean isRealShow = false;//真正显示动画
     private boolean isRunDismiss = false;//是否执行dismiss
     public Handler mHandler = new Handler() {
@@ -65,7 +67,7 @@ public class HttpDialog extends Dialog {
     @Override
     public void dismiss() {
         /***********少于quest_time毫秒 不执行动画*****************/
-        isRunDismiss = true;
+        /*isRunDismiss = true;
         try {
             if (isShowing())
                 super.dismiss();
@@ -74,10 +76,10 @@ public class HttpDialog extends Dialog {
             }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }
+        }*/
 
         /***********至少执行min_show_time毫秒*****************/
-        /*long dt = System.currentTimeMillis() - startTime;
+        long dt = System.currentTimeMillis() - startTime;
         if (dt >= min_show_time) {
             try {
                 if (isShowing())
@@ -90,13 +92,13 @@ public class HttpDialog extends Dialog {
             }
         } else {
             mHandler.sendEmptyMessageDelayed(0, min_show_time - dt);
-        }*/
+        }
     }
 
     @Override
     public void show() {
         /***********少于quest_time毫秒 不执行动画*****************/
-        if (isRealShow) {
+        /*if (isRealShow) {
             try {
                 super.show();
                 if (mProgressBar != null && !mProgressBar.isRunning()) {
@@ -110,10 +112,10 @@ public class HttpDialog extends Dialog {
             isRealShow = false;
         }else {
             mHandler.sendEmptyMessageDelayed(100, quest_time);
-        }
+        }*/
 
         /***********至少执行min_show_time毫秒*****************/
-        /*startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         try {
             super.show();
             if (mProgressBar != null && !mProgressBar.isRunning()) {
@@ -123,6 +125,14 @@ public class HttpDialog extends Dialog {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }*/
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

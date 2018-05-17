@@ -1,7 +1,7 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 
@@ -34,18 +34,6 @@ public interface IGoodsDetailView extends IView {
     void footprintList(FootprintEntity footprintEntity);
 
     /**
-     * 评价列表数据
-     * @param entity
-     */
-    void commentListData(CommentListEntity entity);
-
-    /**
-     * 评价总数量
-     * @param praiseTotal
-     */
-    void praiseTotal(String praiseTotal);
-
-    /**
      * 刷新优惠券状态
      * @param voucher
      */
@@ -76,4 +64,10 @@ public interface IGoodsDetailView extends IView {
     void setAdapter(BaseRecyclerAdapter adapter);
 
     void getUserId(String userId);
+
+    /**
+     * 设置评价adapter
+     * @param adapter
+     */
+    default void setCommentAdapter(CommentAdapter adapter){}
 }

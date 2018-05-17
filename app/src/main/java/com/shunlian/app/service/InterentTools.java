@@ -91,7 +91,7 @@ public final class InterentTools {
          * @return
          */
         public Builder connectTimeout() {
-            okHttpBuilder.connectTimeout(30, TimeUnit.SECONDS);
+            okHttpBuilder.connectTimeout(10, TimeUnit.SECONDS);
             return this;
         }
 
