@@ -70,7 +70,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        wxEntryPresenter = new WXEntryPresenter(this,this);
         int wxSdkVersion = api.getWXAppSupportAPI();
         if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION) {
             initGet();

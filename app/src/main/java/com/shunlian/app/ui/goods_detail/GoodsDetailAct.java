@@ -180,7 +180,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private String favId;
     public int bottomListHeight;
     private int num;
-    private int currentQuickAction;//当前快速点击位置
+    private int currentQuickAction = -1;//当前快速点击位置
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -1100,6 +1100,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }
                 break;
         }
+        currentQuickAction = -1;
     }
 
     @Override

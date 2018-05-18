@@ -604,7 +604,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * 可能想买的商品
      */
     public void mayBeBuyGoods() {
-        if (!isEmpty(mayBeBuyGoodsId))
-            Common.goGoGo(context,"goods",mayBeBuyGoodsId);
+        if (!isEmpty(mayBeBuyGoodsId)) {
+            Common.goGoGo(context, "goods", mayBeBuyGoodsId);
+            mayBeBuyGoodsId = null;
+        }
     }
 }
