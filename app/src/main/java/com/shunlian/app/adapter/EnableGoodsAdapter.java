@@ -103,16 +103,15 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
         enableViewHolder.tv_prefer.setText(mPromotion.title_label);
         enableViewHolder.tv_discount.setText(mPromotion.prom_title);
-        if ("1".equals(goods.every_day_ing)) {
+
+        if (everyDay != null) {
             enableViewHolder.tv_active.setText(everyDay.remind + " " + everyDay.left_time);
             enableViewHolder.tv_active.setVisibility(View.VISIBLE);
-
             enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);
             enableViewHolder.tv_edit_promo.setVisibility(View.GONE);
             enableViewHolder.rl_prefer.setEnabled(false);
         } else {
             enableViewHolder.tv_active.setVisibility(View.GONE);
-
             if (isEmpty(goods.all_prom)) {
                 enableViewHolder.rl_prefer.setVisibility(View.GONE);
                 enableViewHolder.rl_prefer.setEnabled(false);
@@ -123,36 +122,30 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             }
         }
 
-        enableViewHolder.tv_goods_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFastClick()) {
-                    return;
-                }
-                int count = Integer.valueOf(goods.qty) + 1;
-                if (count > stock) {
-                    Common.staticToast("不能超出库存数量");
-                    return;
-                }
-                enableViewHolder.edt_goods_count.setText(String.valueOf(count));
-                onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
+        enableViewHolder.tv_goods_add.setOnClickListener(v -> {
+            if (isFastClick()) {
+                return;
             }
+            int count = Integer.valueOf(goods.qty) + 1;
+            if (count > stock) {
+                Common.staticToast("不能超出库存数量");
+                return;
+            }
+            enableViewHolder.edt_goods_count.setText(String.valueOf(count));
+            onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
         });
 
-        enableViewHolder.tv_goods_min.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFastClick()) {
-                    return;
-                }
-                int count = Integer.valueOf(goods.qty) - 1;
-                if (count <= 0) {
-                    return;
-                }
-                enableViewHolder.edt_goods_count.setText(String.valueOf(count));
-                if (onGoodsChangeListener != null) {
-                    onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
-                }
+        enableViewHolder.tv_goods_min.setOnClickListener(v -> {
+            if (isFastClick()) {
+                return;
+            }
+            int count = Integer.valueOf(goods.qty) - 1;
+            if (count <= 0) {
+                return;
+            }
+            enableViewHolder.edt_goods_count.setText(String.valueOf(count));
+            if (onGoodsChangeListener != null) {
+                onGoodsChangeListener.OnChangeCount(goods.cart_id, count);
             }
         });
 
@@ -178,34 +171,28 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             }
         });
 
-        enableViewHolder.edt_goods_count.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (onGoodsChangeListener != null) {
-                        String s = enableViewHolder.edt_goods_count.getText().toString();
-                        if (isEmpty(s)) {
-                            s = goods.qty;
-                        }
-                        onGoodsChangeListener.OnChangeCount(goods.cart_id, Integer.valueOf(s));
+        enableViewHolder.edt_goods_count.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (onGoodsChangeListener != null) {
+                    String s = enableViewHolder.edt_goods_count.getText().toString();
+                    if (isEmpty(s)) {
+                        s = goods.qty;
                     }
-                    return true;
+                    onGoodsChangeListener.OnChangeCount(goods.cart_id, Integer.valueOf(s));
                 }
-                return false;
+                return true;
             }
+            return false;
         });
 
-        enableViewHolder.miv_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("1".equals(goods.is_check)) {
-                    goods.is_check = "0";
-                } else {
-                    goods.is_check = "1";
-                }
-                if (onGoodsChangeListener != null) {
-                    onGoodsChangeListener.OnChangeCheck(goods.cart_id, goods.is_check);
-                }
+        enableViewHolder.miv_select.setOnClickListener(v -> {
+            if ("1".equals(goods.is_check)) {
+                goods.is_check = "0";
+            } else {
+                goods.is_check = "1";
+            }
+            if (onGoodsChangeListener != null) {
+                onGoodsChangeListener.OnChangeCheck(goods.cart_id, goods.is_check);
             }
         });
 
@@ -225,7 +212,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 enableViewHolder.tv_edit_param.setVisibility(View.GONE);
                 if (!isEmpty(goods.sku)) {
                     enableViewHolder.rl_goods_attribute.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     enableViewHolder.rl_goods_attribute.setVisibility(View.GONE);
                 }
             } else {
@@ -234,48 +221,33 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             }
         }
 
-        enableViewHolder.rl_goods_attribute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (paramDialog == null) {
-                    paramDialog = new ParamDialog(mContext, goods);
-                }
-                paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
-                    @Override
-                    public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-                        if (onGoodsChangeListener != null) {
-                            onGoodsChangeListener.OnChangeSku(goods.cart_id, sku.id);
-                        }
-                    }
-                });
-                paramDialog.show();
+        enableViewHolder.rl_goods_attribute.setOnClickListener(view -> {
+            if (paramDialog == null) {
+                paramDialog = new ParamDialog(mContext, goods);
             }
+            paramDialog.setOnSelectCallBack((sku, count) -> {
+                if (onGoodsChangeListener != null) {
+                    onGoodsChangeListener.OnChangeSku(goods.cart_id, sku.id);
+                }
+            });
+            paramDialog.show();
         });
 
-        enableViewHolder.rl_prefer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (preferDialog == null) {
-                    preferDialog = new ChangePreferDialog(mContext, goods.all_prom);
-                }
-                preferDialog.selectItem(goods.prom_id);
-                preferDialog.setOnPreferSelectCallBack(new ChangePreferDialog.OnPreferSelectCallBack() {
-                    @Override
-                    public void onSelect(GoodsDeatilEntity.AllProm allProm) {
-                        if (onGoodsChangeListener != null) {
-                            onGoodsChangeListener.OnChangePromotion(goods.cart_id, allProm.prom_id);
-                        }
-                    }
-                });
-                preferDialog.show();
+        enableViewHolder.rl_prefer.setOnClickListener(v -> {
+            if (preferDialog == null) {
+                preferDialog = new ChangePreferDialog(mContext, goods.all_prom);
             }
-        });
-        enableViewHolder.tv_edit_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            preferDialog.selectItem(goods.prom_id);
+            preferDialog.setOnPreferSelectCallBack(allProm -> {
                 if (onGoodsChangeListener != null) {
-                    onGoodsChangeListener.OnGoodsDel(goods.cart_id);
+                    onGoodsChangeListener.OnChangePromotion(goods.cart_id, allProm.prom_id);
                 }
+            });
+            preferDialog.show();
+        });
+        enableViewHolder.tv_edit_del.setOnClickListener(v -> {
+            if (onGoodsChangeListener != null) {
+                onGoodsChangeListener.OnGoodsDel(goods.cart_id);
             }
         });
     }

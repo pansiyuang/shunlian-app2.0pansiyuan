@@ -2,17 +2,19 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.adapter.TransferMemberAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.entity.TransferMessage;
 import com.shunlian.app.newchat.entity.TransferOtherEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.TransferDialog;
@@ -88,11 +90,7 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         tv_title_right.setText(getString(R.string.next_step));
         tv_title_right.setVisibility(View.VISIBLE);
 
-        if (EasyWebsocketClient.getClient() != null) {
-            mClient = EasyWebsocketClient.getClient();
-        } else {
-            mClient = EasyWebsocketClient.initWebsocketClient(this);
-        }
+        mClient = EasyWebsocketClient.getInstance(this);
         mClient.addOnMessageReceiveListener(this);
 
         mPresenter = new SwitchOtherPresenter(this, this);
@@ -183,7 +181,7 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", "zhuanjie_service");
             jsonObject.put("sid", currentServiceId);//服务编号
-            jsonObject.put("kidz", currentUserId); //转接者聊天用户编号
+            jsonObject.put("kidz", mUser.user_id); //转接者聊天用户编号
             jsonObject.put("kidj", currentChatMember.user_id);//接受转接客服的聊天用户编号
             jsonObject.put("user_id", chatUserId);//被转接的用户的用户编号
             jsonObject.put("item", reason);//转接备注
@@ -210,21 +208,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
 
     @Override
     public void receiveMessage(String msg) {
-        try {
-            TransferOtherEntity transferMessage = objectMapper.readValue(msg, TransferOtherEntity.class);
-            LogUtil.httpLogW("transferMessage:" + transferMessage.status);
-            switch (transferMessage.status) {
-                case 0://成功
-                    Common.staticToast(transferMessage.msg);
-                    CustomerListActivity.startAct(SwitchOtherActivity.this);
-                    break;
-                default:
-                    Common.staticToast(transferMessage.msg);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -234,6 +217,32 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
 
     @Override
     public void roleSwitchMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMessage(String msg) {
+        try {
+            TransferOtherEntity transferMessage = objectMapper.readValue(msg, TransferOtherEntity.class);
+            switch (transferMessage.status) {
+                case 0://成功
+                    CustomerListActivity.startAct(SwitchOtherActivity.this);
+                    break;
+            }
+            new Thread() {
+                public void run() {
+                    Looper.prepare();
+                    Toast.makeText(SwitchOtherActivity.this, transferMessage.msg, Toast.LENGTH_SHORT).show();
+                    Looper.loop();// 进入loop中的循环，查看消息队列
+                }
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
 
     }
 

@@ -2,10 +2,12 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
@@ -15,9 +17,13 @@ import com.shunlian.app.newchat.entity.BaseMessage;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.SwitchStatusEntity;
+import com.shunlian.app.newchat.entity.TransferMemberEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
+import com.shunlian.app.newchat.websocket.MemberStatus;
+import com.shunlian.app.newchat.websocket.Status;
 import com.shunlian.app.presenter.CustomerPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.LogUtil;
@@ -73,11 +79,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         tv_title.setText(getStringResouce(R.string.customer_list));
         mObjectMapper = new ObjectMapper();
 
-        if (EasyWebsocketClient.getClient() == null) {
-            mClient = EasyWebsocketClient.initWebsocketClient(this);
-        } else {
-            mClient = EasyWebsocketClient.getClient();
-        }
+        mClient = EasyWebsocketClient.getInstance(this);
         chatMemberList = new ArrayList<>();
         mPresenter = new CustomerPresenter(this, this);
 
@@ -97,6 +99,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
     @Override
     protected void initListener() {
         miv_distribution.setOnClickListener(this);
+        tv_change.setOnClickListener(this);
         super.initListener();
     }
 
@@ -114,6 +117,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
                     mPresenter.setReception(mUser.user_id, 1);
                 } else {
                     mPresenter.setReception(mUser.user_id, 0);
+                }
+                break;
+            case R.id.tv_change:
+                if (mClient.getStatus() == Status.CONNECTED) {
+                    mClient.switchStatus(MemberStatus.Member);
                 }
                 break;
         }
@@ -163,10 +171,10 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
     public void setReceptionStatus(int reception) {
         switch (reception) {
             case 0:
-                miv_distribution.setImageDrawable(getDrawableResouce(R.mipmap.icon_chat_userlist_h));
+                miv_distribution.setImageDrawable(getDrawableResouce(R.mipmap.icon_chat_userlist_n));
                 break;
             case 1:
-                miv_distribution.setImageDrawable(getDrawableResouce(R.mipmap.icon_chat_userlist_n));
+                miv_distribution.setImageDrawable(getDrawableResouce(R.mipmap.icon_chat_userlist_h));
                 break;
         }
     }
@@ -193,12 +201,67 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
 
     @Override
     public void evaluateMessage(String msg) {
-        updateFriendList(msg);
+//        updateFriendList(msg);
     }
 
     @Override
     public void roleSwitchMessage(String msg) {
+        try {
+            SwitchStatusEntity switchStatusEntity = mObjectMapper.readValue(msg, SwitchStatusEntity.class);
+            if (switchStatusEntity.status.equals("0")) {
+                new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        Toast.makeText(CustomerListActivity.this, switchStatusEntity.msg, Toast.LENGTH_SHORT).show();
+                        finish();
+                        Looper.loop();// 进入loop中的循环，查看消息队列
+                    }
+                }.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void transferMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
+        LogUtil.httpLogW("收到转接用户刷新界面啦");
+        try {
+            TransferMemberEntity memberEntity = mObjectMapper.readValue(msg, TransferMemberEntity.class);
+            ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+
+            chatMember.user_id = memberEntity.user_id;
+            chatMember.headurl = memberEntity.headurl;
+            chatMember.nickname = memberEntity.nickname;
+            chatMember.update_time = memberEntity.re_time;
+            chatMember.sid = memberEntity.sid;
+            chatMember.update_time = memberEntity.q_time;
+            chatMember.line_status = memberEntity.line_status;
+            chatMember.type = "0";
+
+            if (chatMemberList.size() != 0) {
+                for (int i = 0; i < chatMemberList.size(); i++) {
+                    ChatMemberEntity.ChatMember member = chatMemberList.get(i);
+                    if (member.user_id.equals(memberEntity.user_id)) { //
+                        chatMemberList.remove(member);
+                        break;
+                    }
+                }
+                chatMemberList.add(0, chatMember);
+                LogUtil.httpLogW("列表不为空");
+            } else {
+                chatMemberList.add(chatMember);
+                LogUtil.httpLogW("列表为空");
+            }
+            runOnUiThread(() -> mAdapter.notifyDataSetChanged());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -213,9 +276,10 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
 
     public void updateFriendList(String message) {
         BaseMessage baseMessage = null;
+        MsgInfo msgInfo = null;
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
-            MsgInfo msgInfo = messageEntity.msg_info;
+            msgInfo = messageEntity.msg_info;
             String message1 = msgInfo.message;
             baseMessage = mObjectMapper.readValue(message1, BaseMessage.class);
         } catch (Exception e) {
@@ -229,7 +293,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
                     unReadNum = chatMemberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     chatMemberList.get(i).unread_count = unReadNum;
-                    chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(baseMessage.sendTime / 1000);
+                    chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
                     break;
                 }
             }

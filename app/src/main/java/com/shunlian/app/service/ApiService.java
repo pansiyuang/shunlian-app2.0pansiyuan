@@ -614,6 +614,15 @@ public interface ApiService {
     Call<BaseEntity<EmptyEntity>> changeComment(@Body RequestBody body);
 
     /**
+     * 打开评价页面
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/getorderinfo")
+    Call<BaseEntity<CreatCommentEntity>> getOrderInfo(@Body RequestBody body);
+
+    /**
      * 订单物流详情
      *
      * @return

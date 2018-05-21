@@ -39,6 +39,7 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.websocket.Client;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
@@ -102,7 +103,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private Uri tempTakeUri;
 
     //websocket客户端
-    private EasyWebsocketClient mClient;
+    private EasyWebsocketClient mWebsocketClient;
     private ObjectMapper objectMapper;
     private String from_id, from_type, from_nickname, from_headurl;
     private List<MsgInfo> messages = new ArrayList<>();
@@ -244,22 +245,17 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         } else {
             chatRoleType = getIntent().getStringExtra("role_type");
         }
-
-        if (EasyWebsocketClient.getClient() == null) {
-            mClient = EasyWebsocketClient.initWebsocketClient(this);
+        mWebsocketClient = EasyWebsocketClient.getInstance(this);
+        if (mWebsocketClient.getUserInfoEntity() == null) {
+            Common.staticToast("初始化聊天失败");
+            return;
         } else {
-            mClient = EasyWebsocketClient.getClient();
-            if (mClient.getUserInfoEntity() == null) {
-                Common.staticToast("初始化聊天失败");
-                return;
-            } else {
-                mCurrentUser = mClient.getUser();
-                initUser(mCurrentUser);
-                mAdapter.setUser(mCurrentUser);
-            }
+            mCurrentUser = mWebsocketClient.getUser();
+            initUser(mCurrentUser);
+            mAdapter.setUser(mCurrentUser);
+            mAdapter.setCurrentStatus(mWebsocketClient.getMemberStatus());
         }
-
-        mClient.addOnMessageReceiveListener(this);
+        mWebsocketClient.addOnMessageReceiveListener(this);
 
         //获取历史消息
         if (NetworkUtils.isNetworkOpen(this)) {
@@ -270,7 +266,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     private void initRightTxt() {
-        switch (mClient.getMemberStatus()) {
+        switch (mWebsocketClient.getMemberStatus()) {
             case Admin: //
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showCommentBtn();
@@ -290,8 +286,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 } else {
                     tv_title_right.setText(getStringResouce(R.string.to_shop));
                     tv_title_right.setVisibility(View.VISIBLE);
+                    et_input.showGoodsBtn();
                 }
-                et_input.showGoodsBtn();
                 break;
         }
     }
@@ -299,9 +295,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     public void getChatHistory(boolean b) {
         switch (chatRoleType) {
             case "0":
-                if (mClient.getMemberStatus() == MemberStatus.Seller) {
+                if (mWebsocketClient.getMemberStatus() == MemberStatus.Seller) {
                     mPresenter.shopChatUserHistoryData(b, chat_m_user_Id, mCurrentUser.user_id, lastMessageSendTime);
-                } else if (mClient.getMemberStatus() == MemberStatus.Admin) {
+                } else if (mWebsocketClient.getMemberStatus() == MemberStatus.Admin) {
                     mPresenter.platformChatUserHistoryData(b, chat_m_user_Id, mCurrentUser.user_id, lastMessageSendTime);
                 }
                 break;
@@ -318,8 +314,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected void onResume() {
-        if (mClient.getStatus() == Status.CONNECTED) {
-            mClient.setChating(true);
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
+            mWebsocketClient.setChating(true);
         }
         super.onResume();
     }
@@ -334,18 +330,18 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     public void switch2Jump() {
-        switch (mClient.getMemberStatus()) {
+        switch (mWebsocketClient.getMemberStatus()) {
             case Admin: //
                 if (isEmpty(currentChatMember.sid)) {
                     return;
                 }
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id,currentChatMember.sid);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentChatMember.sid);
                 break;
             case Seller:
                 if (isEmpty(currentChatMember.sid)) {
                     return;
                 }
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id,currentChatMember.sid);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentChatMember.sid);
                 break;
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
@@ -406,7 +402,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void sendGoods() {
-        if (mClient.getMemberStatus() == MemberStatus.Member) {
+        if (mWebsocketClient.getMemberStatus() == MemberStatus.Member) {
             SelectGoodsActivity.startActForResult(this, chatShopId, SELECT_GOODS);
         } else {
             SelectStoreGoodsActivity.startActForResult(this, mCurrentUser.shop_id, SELECT_STORE_GOODS);
@@ -451,9 +447,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         textMessageBody.text = msg;
         textMessage.msg_body = textMessageBody;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的文字消息:" + mAdapter.msg2Str(textMessage));
-            mClient.send(mAdapter.msg2Str(textMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(textMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             textMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(textMessage);
@@ -502,7 +498,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         msgInfo.send_time = System.currentTimeMillis() / 1000;
         LogUtil.httpLogW("发送图片消息:" + mAdapter.msg2Str(imageMessage));
         msgInfo.message = mAdapter.msg2Str(imageMessage);
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             mAdapter.addMsgInfo(msgInfo);
             mAdapter.itemSendComplete(currentTagId, MessageStatus.Sending);
             compressImgs(imgPath, imageMessage.tag_id, imageMessage);
@@ -513,8 +509,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
      * 发送图片消息
      */
     private void sendImgMessage(ImageMessage imageMessage) {
-        if (mClient.getStatus() == Status.CONNECTED) {
-            mClient.send(mAdapter.msg2Str(imageMessage));
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
+            mWebsocketClient.send(mAdapter.msg2Str(imageMessage));
         }
     }
 
@@ -548,9 +544,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         goodsBody.goods = good;
         goodsMessage.msg_body = goodsBody;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
-            mClient.send(mAdapter.msg2Str(goodsMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(goodsMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             goodsMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(goodsMessage);
@@ -580,16 +576,16 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         GoodsMessage.Goods good = new GoodsMessage.Goods();
         GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();
-        good.goodsImage = mData.thumb;
+        good.goodsImage = mData.whole_thumb;
         good.title = mData.title;
         good.goodsId = mData.id;
         good.price = mData.price;
         goodsBody.goods = good;
         goodsMessage.msg_body = goodsBody;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
-            mClient.send(mAdapter.msg2Str(goodsMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(goodsMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             goodsMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(goodsMessage);
@@ -619,9 +615,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         goodsMessage.msg_body = body;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的商品消息:" + mAdapter.msg2Str(goodsMessage));
-            mClient.send(mAdapter.msg2Str(goodsMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(goodsMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             goodsMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(goodsMessage);
@@ -659,9 +655,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         evaluateMessageBody.evaluate = evaluate;
         evaluateMessage.msg_body = evaluateMessageBody;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的评价消息:" + mAdapter.msg2Str(evaluateMessage));
-            mClient.send(mAdapter.msg2Str(evaluateMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(evaluateMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             evaluateMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(evaluateMessage);
@@ -687,9 +683,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (mClient.getStatus() == Status.CONNECTED) {
+                if (mWebsocketClient.getStatus() == Status.CONNECTED) {
                     LogUtil.httpLogW("发送的评价消息:" + jsonObject.toString());
-                    mClient.send(jsonObject.toString());
+                    mWebsocketClient.send(jsonObject.toString());
                 }
             }
         }
@@ -738,9 +734,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         orderMessageBody.order = order;
         orderMessage.msg_body = orderMessageBody;
 
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
             LogUtil.httpLogW("发送的订单消息:" + mAdapter.msg2Str(orderMessage));
-            mClient.send(mAdapter.msg2Str(orderMessage));
+            mWebsocketClient.send(mAdapter.msg2Str(orderMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
             orderMessage.setStatus(MessageStatus.Sending);
             msgInfo.message = mAdapter.msg2Str(orderMessage);
@@ -760,9 +756,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mClient.getStatus() == Status.CONNECTED) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
             LogUtil.httpLogW("发送的订单消息:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
+            mWebsocketClient.send(jsonObject.toString());
         }
     }
 
@@ -800,8 +796,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mClient.getStatus() == Status.CONNECTED) {
-            mClient.send(jsonObject.toString());
+        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
+            mWebsocketClient.send(jsonObject.toString());
             LogUtil.httpLogW("消息已读上报:" + jsonObject.toString());
             int unreadCount = currentChatMember.unread_count;
             EventBus.getDefault().post(new NewMessageEvent(-unreadCount)); //消息已读,减去消息数量
@@ -872,8 +868,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     protected void onPause() {
         //用户离开聊天页面
-        if (mClient != null && mClient.getStatus() == Status.CONNECTED) {
-            mClient.setChating(false);
+        if (mWebsocketClient != null && mWebsocketClient.getStatus() == Status.CONNECTED) {
+            mWebsocketClient.setChating(false);
         }
         super.onPause();
     }
@@ -990,7 +986,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void initMessage() {
-        mCurrentUser = mClient.getUser();
+        mCurrentUser = mWebsocketClient.getUser();
         initUser(mCurrentUser);
     }
 
@@ -1009,7 +1005,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {
-                    if (baseMessage.msg_type.equals("evaluate") && mClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
+                    if (baseMessage.msg_type.equals("evaluate") && mWebsocketClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
                         finish();
                     } else {
                         //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
@@ -1049,6 +1045,16 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     @Override
+    public void transferMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
+
+    }
+
+    @Override
     public void onLine() {
 
     }
@@ -1060,7 +1066,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void onDestroy() {
-        mClient.removeOnMessageReceiveListener(this);
+        mWebsocketClient.removeOnMessageReceiveListener(this);
         super.onDestroy();
     }
 }

@@ -44,7 +44,7 @@ public class ChatGoodsPresenter extends BasePresenter<IChatGoodsView> {
         this.mStoreId = storeId;
         Map<String, String> map = new HashMap<>();
         map.put("type", mType);
-        map.put("store_id", mStoreId);
+//        map.put("store_id", mStoreId);
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);

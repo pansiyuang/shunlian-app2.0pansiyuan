@@ -134,8 +134,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
         mainPageClick();
 
         if (Common.isAlreadyLogin()) {
-            EasyWebsocketClient.initWebsocketClient(this); //初始化聊天
-
+            EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
             messageCountManager = MessageCountManager.getInstance(this);
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);

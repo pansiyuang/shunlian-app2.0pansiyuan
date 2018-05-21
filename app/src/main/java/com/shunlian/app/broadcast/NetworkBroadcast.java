@@ -23,7 +23,6 @@ public class NetworkBroadcast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {
@@ -42,13 +41,10 @@ public class NetworkBroadcast extends BroadcastReceiver {
                     Common.staticToast("已切换到4G/3G/2G");
                     break;
             }
-            LogUtil.httpLogW("网络发生了改变");
-            if (EasyWebsocketClient.getClient() == null) {
-                EasyWebsocketClient.initWebsocketClient(context);
-            } else {
-                EasyWebsocketClient client = EasyWebsocketClient.getClient();
-                if (client.getStatus() == Status.DISCONNECTED) {
-                    LogUtil.httpLogW("member111:" + client.getMemberStatus());
+            EasyWebsocketClient client = EasyWebsocketClient.getInstance(context);
+            if (client.getClient() != null) {
+                LogUtil.httpLogW("网络发生了改变,Websocket是否断开：" + client.getClient().isClosed() + " 状态为：" + client.getStatus());
+                if (client.getClient().isClosed()) {
                     client.resetSocket();
                 }
             }

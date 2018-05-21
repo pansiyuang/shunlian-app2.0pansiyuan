@@ -138,11 +138,13 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         if (specs == null || specs.size() == 0) {
             recycler_param.setVisibility(View.INVISIBLE);
+            tv_param.setVisibility(View.INVISIBLE);
         } else {
             paramItemAdapter = new ParamItemAdapter(specs);
             linearLayoutManager = new LinearLayoutManager(mContext);
             recycler_param.setLayoutManager(linearLayoutManager);
             recycler_param.setAdapter(paramItemAdapter);
+            tv_param.setVisibility(View.VISIBLE);
         }
     }
 

@@ -48,6 +48,7 @@ import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.TransferMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpTwoAct;
@@ -110,6 +111,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private Pattern patternEmotion;
     private String currentUserId;
     private UserInfoEntity.Info.User mUser;
+    private MemberStatus memberStatus;
 
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
@@ -123,6 +125,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public void setUser(UserInfoEntity.Info.User user) {
         this.mUser = user;
         currentUserId = mUser.user_id;
+    }
+
+    public void setCurrentStatus(MemberStatus status) {
+        memberStatus = status;
     }
 
     public int getSendType(String fromUserId) {
@@ -146,6 +152,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
             if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
+                if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
+                    return;
+                }
                 addTimeMessage(msgInfo.send_time, getLastMessageTime(false));
             }
         } catch (Exception e) {
@@ -163,6 +172,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
             if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
+                if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
+                    return;
+                }
                 addTimeMessage(true, msgInfo.send_time, getLastMessageTime(true));
             }
         } catch (Exception e) {
@@ -246,6 +258,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     return SELLER_HELP_RIGHT;
                 case "admin_help":
                     return ADMIN_HELP_RIGHT;
+                case "zhuanjie":
+                    return TRANSFER_MSG;
             }
         } else if (sendType == BaseMessage.VALUE_SYSTEM) { //系统消息
             switch (baseMessage.msg_type) {
@@ -412,10 +426,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             }
 
             leftImgViewHolder.miv_img.setOnClickListener(v -> {
-                if (isEmpty(image.img_original)) {
+                if (isEmpty(image.img_small)) {
                     return;
                 }
-                imgs.add(image.img_host + image.img_original);
+                imgs.clear();
+                imgs.add(image.img_host + image.img_small);
                 //查看大图
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) imgs;
@@ -651,7 +666,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TransferMessage transferMessage = (TransferMessage) baseMessage;
         if (transferMessage.msg_body != null) {
             TransferMessage.TransferMessageBody transferMessageBody = transferMessage.msg_body;
-            String content = transferMessageBody.j_nickname + "将该用户转给" + transferMessageBody.z_nickname;
+            String content = transferMessageBody.z_nickname + "将该用户转给" + transferMessageBody.j_nickname;
             int jnameLength = transferMessageBody.j_nickname.length();
             int znameLength = transferMessageBody.z_nickname.length();
             SpannableString styledText = new SpannableString(content);
@@ -664,7 +679,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 //                    transferMessageBody.j_nickname.length() + 6 + transferMessageBody.z_nickname.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             transferViewHolder.tv_content.setText(styledText + "处理");
-            transferViewHolder.tv_reason.setText("备注:" + transferMessageBody.item);
+            transferViewHolder.tv_reason.setText("备注：" + transferMessageBody.item);
+            if (!isEmpty(transferMessageBody.create_time)) {
+                Long time = Long.valueOf(transferMessageBody.create_time) * 1000;
+                transferViewHolder.tv_date.setText(TimeUtil.getTime(time, "yyyy/MM/dd HH:mm"));
+            }
         }
     }
 
@@ -694,7 +713,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                         } else {
                             textView.setTextColor(getColor(R.color.value_40A5FF));
                         }
-                        
+
                         if (isSelf) {
                             textView.setEnabled(false);
                         } else {
@@ -986,6 +1005,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     public class TransferViewHolder extends BaseRecyclerViewHolder {
 
+        @BindView(R.id.ll_rootView)
+        LinearLayout ll_rootView;
+
         @BindView(R.id.tv_date)
         TextView tv_date;
 
@@ -997,6 +1019,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         public TransferViewHolder(View itemView) {
             super(itemView);
+            if (memberStatus == MemberStatus.Member) {
+                ll_rootView.setVisibility(View.GONE);
+            } else {
+                ll_rootView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -1081,6 +1108,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         if (!isPre && sendTime - lastmsgTime <= 30 && lastmsgTime != 0) {
             return;
         }
+
         MsgInfo info = new MsgInfo();
         TextMessage textMessage = new TextMessage();
         TextMessage.TextMessageBody textMessageBody = new TextMessage.TextMessageBody();

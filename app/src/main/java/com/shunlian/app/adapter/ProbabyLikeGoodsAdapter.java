@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -105,6 +106,8 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
         } else { //右边
             layoutParams.setMargins(0, margin, 0, 0);
         }
+
+        childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));
     }
 
     public void handleParent(RecyclerView.ViewHolder holder, int position) {
@@ -117,6 +120,9 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.ll_rootView)
+        LinearLayout ll_rootView;
 
         public ParentViewHolder(View itemView) {
             super(itemView);

@@ -103,5 +103,4 @@ public class SelectGoodsActivity extends BaseActivity {
     public void updateSelectCount() {
         tv_select_count.setText(mSelectGoods.size() + "/");
     }
-
 }

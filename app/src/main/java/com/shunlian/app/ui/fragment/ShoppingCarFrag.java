@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DisabledGoodsAdapter;
 import com.shunlian.app.adapter.ProbabyLikeGoodsAdapter;
 import com.shunlian.app.adapter.ShopCarStoreAdapter;
@@ -26,6 +27,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -402,8 +404,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         disGoodsIds = mCarEntity.disabled_ids;
 
         if (mCarEntity.disabled == null || mCarEntity.disabled.size() == 0) {
+            footView.setPadding(0, -footView.getHeight(), 0, 0);
             footerHolderView.foot_disable.setVisibility(View.GONE);
         } else {
+            footView.setPadding(0, 0, 0, 0);
             footerHolderView.foot_disable.setVisibility(View.VISIBLE);
         }
 
@@ -425,6 +429,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnGetProbabyGoods(List<ProbabyLikeGoodsEntity.Goods> goodsList) {
         if (!isEmpty(goodsList)) {
+            probabyGoods.clear();
             probabyGoods.addAll(goodsList);
             goodsAdapter.notifyDataSetChanged();
         }

@@ -22,6 +22,7 @@ public class ProbabyLikeGoodsEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Goods {
+        public String id;
         public String goods_id;
         public String title;
         public String thumb;

@@ -164,7 +164,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     }
 
     @Subscribe(sticky = true)
-    public void eventBus(DispachJump jump){
+    public void eventBus(DispachJump jump) {
         jumpType = jump.jumpType;
         EventBus.getDefault().unregister(this);
         EventBus.getDefault().postSticky(jump);
@@ -181,13 +181,13 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
-        EasyWebsocketClient.initWebsocketClient(getActivity()); //初始化聊天
+        EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
         }
         JpushUtil.setJPushAlias();
-        if (!isEmpty(jumpType)){
-            Common.goGoGo(baseActivity,jumpType);
+        if (!isEmpty(jumpType)) {
+            Common.goGoGo(baseActivity, jumpType);
         }
         baseActivity.finish();
     }

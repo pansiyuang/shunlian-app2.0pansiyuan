@@ -116,30 +116,36 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
         commentPresenter = new CommentPresenter(this, this);
         commentList = new ArrayList<>();
-
         currentType = getIntent().getIntExtra("type", -1);
 
         if (getIntent().getSerializableExtra("commentList") != null) {
             List<ReleaseCommentEntity> list = (List<ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList");
-            if (currentType == APPEND_COMMENT) {
-                for (ReleaseCommentEntity entity : list) {
-                    if (!"0".equals(entity.is_append)) {
-                        commentList.add(entity);
-                    }
+            for (ReleaseCommentEntity entity : list) {
+                if (!isEmpty(entity.order)) {
+                    currentOrderSn = entity.order;
                 }
-            } else {
-                commentList.addAll(list);
+                if (!isEmpty(entity.order_sn)) {
+                    currentOrderSn = entity.order_sn;
+                }
             }
+            commentList.addAll(list);
         } else if (getIntent().getSerializableExtra("comment") != null) {
-            commentList.add((ReleaseCommentEntity) getIntent().getSerializableExtra("comment"));
+            ReleaseCommentEntity releaseCommentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
+            if (!isEmpty(releaseCommentEntity.order)) {
+                currentOrderSn = releaseCommentEntity.order;
+            }
+            if (!isEmpty(releaseCommentEntity.order_sn)) {
+                currentOrderSn = releaseCommentEntity.order_sn;
+            }
+            commentList.add(releaseCommentEntity);
         }
 
-        creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
-        recycler_creat_comment.setAdapter(creatCommentAdapter);
-        creatCommentAdapter.setOnCommentChangeCallBack(this);
-
         if (currentType == CREAT_COMMENT) {
-            recycler_creat_comment.addFooterView(footView);
+            commentPresenter.getOrderInfo(currentOrderSn);
+        } else {
+            creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
+            recycler_creat_comment.setAdapter(creatCommentAdapter);
+            creatCommentAdapter.setOnCommentChangeCallBack(this);
         }
     }
 
@@ -255,17 +261,17 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     }
                 } else if (currentType == CREAT_COMMENT) {
                     if (currentLogisticsStar == 0) {
-                        Common.staticToast("请评价物流服务");
+                        Common.staticToast("请对物流服务进行评分");
                         return;
                     }
 
                     if (currentAttitudeStar == 0) {
-                        Common.staticToast("请评价服务态度");
+                        Common.staticToast("请对服务态度进行评分");
                         return;
                     }
 
                     if (currentConsistentStar == 0) {
-                        Common.staticToast("请评价描述相符");
+                        Common.staticToast("请对描述相符进行评分");
                         return;
                     }
                     String goodsString = getGoodsString();
@@ -299,22 +305,15 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 if (!isEmpty(releaseCommentEntity.comment_id)) {
                     map.put("comment_id", releaseCommentEntity.comment_id);
                 }
+
                 if (!isEmpty(releaseCommentEntity.goodsId)) {
                     map.put("goods_id", releaseCommentEntity.goodsId);
+                } else if (!isEmpty(releaseCommentEntity.goods_id)) {
+                    map.put("goods_id", releaseCommentEntity.goods_id);
                 }
 
-                if (!isEmpty(releaseCommentEntity.order)) {
-                    currentOrderSn = releaseCommentEntity.order;
-                    if (currentType == APPEND_COMMENT) {
-                        map.put("ordersn", currentOrderSn);
-                    }
-                }
-
-                if (!isEmpty(releaseCommentEntity.order_sn)) {
-                    currentOrderSn = releaseCommentEntity.order_sn;
-                    if (currentType == APPEND_COMMENT) {
-                        map.put("ordersn", currentOrderSn);
-                    }
+                if (!isEmpty(currentOrderSn) && currentType == APPEND_COMMENT) {
+                    map.put("ordersn", currentOrderSn);
                 }
 
                 if (!isEmpty(releaseCommentEntity.starLevel) && currentType == CREAT_COMMENT) {
@@ -403,6 +402,21 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @Override
     public void CommentFail(String error) {
         Common.staticToast(error);
+    }
+
+    @Override
+    public void getCreatCommentList(List<ReleaseCommentEntity> entityList) {
+        if (!isEmpty(entityList)) {
+            commentList.clear();
+            commentList.addAll(entityList);
+            creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
+            recycler_creat_comment.setAdapter(creatCommentAdapter);
+            creatCommentAdapter.setOnCommentChangeCallBack(this);
+
+            if (currentType == CREAT_COMMENT) {
+                recycler_creat_comment.addFooterView(footView);
+            }
+        }
     }
 
     private Handler mHandler = new Handler() {

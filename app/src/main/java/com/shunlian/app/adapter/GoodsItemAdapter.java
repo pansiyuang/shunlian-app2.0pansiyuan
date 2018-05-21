@@ -59,7 +59,7 @@ public class GoodsItemAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
         if (holder instanceof GoodsViewHolder) {
             StoreGoodsListEntity.MData mData = lists.get(position);
             GoodsViewHolder viewHolder = (GoodsViewHolder) holder;
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, mData.thumb);
+            GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, mData.whole_thumb);
             viewHolder.tv_title.setText(mData.title);
             viewHolder.tv_price.setText(mData.price);
 

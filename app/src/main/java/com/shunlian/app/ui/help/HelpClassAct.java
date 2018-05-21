@@ -167,7 +167,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void getUserId(String userId) {
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
-        chatMember.nickname = "在线客服";
+        chatMember.nickname = "官方客服";
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
