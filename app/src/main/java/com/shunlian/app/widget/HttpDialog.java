@@ -130,9 +130,9 @@ public class HttpDialog extends Dialog {
 
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+        /*if (keyCode == KeyEvent.KEYCODE_BACK){
             return true;
-        }
+        }*/
         return super.onKeyDown(keyCode, event);
     }
 }
