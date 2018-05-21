@@ -397,7 +397,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void confirmReceive() {
-
+        exchangeDetailPresenter.initApiData();
     }
 
     @Override

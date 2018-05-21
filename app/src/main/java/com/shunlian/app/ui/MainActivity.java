@@ -24,6 +24,7 @@ import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
@@ -88,7 +89,6 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
-    private boolean isDoubleBack = false;
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
@@ -96,8 +96,10 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson=false;
+    private boolean isPerson=false,isFirst=false;
     private Handler handler;
+    public  int position=0;
+    private CateGoryFrag cateGoryFrag;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -225,6 +227,10 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
+                        if (isFirst){
+                            cateGoryFrag= (CateGoryFrag) mainPageFrag.fragments.get(position);
+                            cateGoryFrag.rv_view.scrollToPosition(0);
+                        }
                         mainPageClick();
                         break;
                     case R.id.ll_tab_sort:
@@ -244,6 +250,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
         },300);
     }
     public void mainPageClick() {
+        isFirst=true;
         if (mainPageFrag == null) {
 //            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
             mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
@@ -259,6 +266,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void sortClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (sortFrag == null) {
             sortFrag = (SortFrag) fragmentMap.get(flags[1]);
@@ -274,6 +282,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void discoverClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
             discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
@@ -288,6 +297,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void shoppingCarClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (shoppingCarFrag == null) {
             shoppingCarFrag = (ShoppingCarFrag) fragmentMap.get(flags[3]);
@@ -296,6 +306,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
         }else {
+            shoppingCarFrag.isclick=true;
             shoppingCarFrag.getShoppingCarData();
         }
 
@@ -306,6 +317,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void personCenterClick() {
+        isFirst=false;
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
             isPerson=true;
@@ -319,6 +331,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         }else {
+            personalCenterFrag.isclick=true;
             personalCenterFrag.getPersonalcenterData();
         }
 
@@ -385,7 +398,6 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 Common.staticToast("再按一次退出顺联动力");
                 mExitTime = System.currentTimeMillis();
             } else {
-                isDoubleBack = true;
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addCategory(Intent.CATEGORY_HOME);

@@ -33,13 +33,13 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
     @BindView(R.id.rv_view)
-    RecyclerView rv_view;
+    public RecyclerView rv_view;
     //    @BindView(R.id.mtv_empty)
 //    MyTextView mtv_empty;
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
-    private boolean isFirst = false, isShowfoot = false;
+    private boolean isFirst = false;
 
 
     public static BaseFragment getInstance(String channel_id) {
@@ -144,7 +144,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
             mDatass.addAll(getDataEntity.datas);
         }
 //        if (firstPageAdapter==null){
-        isShowfoot = false;
         firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this,size);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
         rv_view.setLayoutManager(gridLayoutManager);
@@ -165,7 +164,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
         if (rv_view.getScrollState() == 0) {
-            isShowfoot=true;
             firstPageAdapter.setPageLoading(page, allPage);
             for (int i = 0; i < mDatas.size(); i++) {
                 GetDataEntity.MData mData = new GetDataEntity.MData();
