@@ -71,7 +71,7 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             layoutParams.setMargins(marginsw,marginsh,marginsw,0);
             layoutParams.width = width;
             mtv_title.setLayoutParams(layoutParams);
-            miv_shop_head.setWHProportion(198,196);
+            miv_shop_head.setWHProportion(198,198);
             miv_shop_head.setScaleType(ImageView.ScaleType.CENTER_CROP);
             itemView.setOnClickListener(this);
         }

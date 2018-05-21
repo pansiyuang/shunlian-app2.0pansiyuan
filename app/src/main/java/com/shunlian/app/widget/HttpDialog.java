@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,7 +50,7 @@ public class HttpDialog extends Dialog {
         setCanceledOnTouchOutside(false);
         setContentView(view);
         mProgressBar = (ProgressView) view.findViewById(R.id.loading_progress);
-        setCancelable(false);
+        //setCancelable(false);
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
         p.height = TransformUtil.dip2px(context, 77.5f); // 高度设置为屏幕的0.6
@@ -126,13 +124,5 @@ public class HttpDialog extends Dialog {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-        /*if (keyCode == KeyEvent.KEYCODE_BACK){
-            return true;
-        }*/
-        return super.onKeyDown(keyCode, event);
     }
 }
