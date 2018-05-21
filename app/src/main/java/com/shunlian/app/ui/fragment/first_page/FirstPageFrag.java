@@ -17,11 +17,13 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.core.PingpaiListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -73,6 +75,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
     private MessageCountManager messageCountManager;
+    public ArrayList<Fragment> fragments;
+    private MainActivity mainActivity;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -167,6 +171,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onPageSelected(int arg0) {
                 mAppbar.setExpanded(true);
+                mainActivity.position=arg0;
+                LogUtil.augusLogW("uuu----"+arg0);
             }
 
             @Override
@@ -189,6 +195,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .init();
         pFirstPage = new PFirstPage(getContext(), this, null);
         pFirstPage.getMenuData();
+        mainActivity= (MainActivity) getActivity();
     }
 
     @OnClick(R.id.mllayout_scan)
@@ -223,7 +230,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         logoType=getMenuEntiy.logo.type;
         logoId=getMenuEntiy.logo.item_id;
         GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
-        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
             if (i >= getMenuEntiy.datas.size() - 1) {

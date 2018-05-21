@@ -24,6 +24,7 @@ import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
+import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
@@ -88,7 +89,6 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
     private long mExitTime;
-    private boolean isDoubleBack = false;
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
@@ -98,6 +98,8 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private UpdateDialog updateDialogV;//判断是否需要跟新
     private boolean isPerson=false,isFirst=false;
     private Handler handler;
+    public  int position=0;
+    private CateGoryFrag cateGoryFrag;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -226,7 +228,8 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
                         if (isFirst){
-
+                            cateGoryFrag= (CateGoryFrag) mainPageFrag.fragments.get(position);
+                            cateGoryFrag.rv_view.scrollToPosition(0);
                         }
                         mainPageClick();
                         break;
@@ -395,7 +398,6 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 Common.staticToast("再按一次退出顺联动力");
                 mExitTime = System.currentTimeMillis();
             } else {
-                isDoubleBack = true;
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addCategory(Intent.CATEGORY_HOME);
