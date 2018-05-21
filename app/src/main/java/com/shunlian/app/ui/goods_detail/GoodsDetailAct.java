@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
-import com.shunlian.app.bean.CommentListEntity;
+import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
@@ -180,7 +180,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private String favId;
     public int bottomListHeight;
     private int num;
-    private int currentQuickAction;//当前快速点击位置
+    private int currentQuickAction = -1;//当前快速点击位置
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -291,8 +291,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         switchContent(commentFrag);
         commentFrag.setPresenter(goodsDetailPresenter,id);
         goodsDetailPresenter.commentList(GoodsDetailPresenter.COMMENT_EMPTY_CODE,
-                GoodsDetailPresenter.COMMENT_FAILURE_CODE,true,goodsId,
-                "ALL","1",String.valueOf(CommentFrag.pageSize),id);
+                GoodsDetailPresenter.COMMENT_FAILURE_CODE,true,goodsId,"ALL","1",id);
     }
 
     public void setBgColor(int position, int totalDy) {
@@ -392,12 +391,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
 
     @Override
-    public void showFailureView(int rquest_code) {
-        if (rquest_code == GoodsDetailPresenter.COMMENT_FAILURE_CODE){
-            if (commentFrag!= null)
-                commentFrag.loadFailure();
-        }
-    }
+    public void showFailureView(int rquest_code) {}
 
     @Override
     public void showDataEmptyView(int rquest_code) {
@@ -502,32 +496,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
-     * 评价列表数据
-     *
-     * @param entity
-     */
-    @Override
-    public void commentListData(CommentListEntity entity) {
-        if ("1".equals(entity.list.page)) {
-            commentFrag.setCommentList(entity);
-        }else {
-            commentFrag.setCommentMoreList(entity);
-        }
-    }
-
-    /**
-     * 评价总数量
-     *
-     * @param praiseTotal
-     */
-    @Override
-    public void praiseTotal(String praiseTotal) {
-        if (commentFrag != null) {
-            commentFrag.praiseTotal(praiseTotal);
-        }
-    }
-
-    /**
      * 刷新优惠券状态
      *
      * @param voucher
@@ -605,9 +573,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         recy_view.setAdapter(adapter);
     }
 
+    @Override
+    public void setCommentAdapter(CommentAdapter adapter) {
+        if (commentFrag != null) {
+            commentFrag.setCommentAdapter(adapter);
+        }
+    }
+
     /*
-   显示足迹列表
-    */
+       显示足迹列表
+        */
     public void showFootprintList() {
         if (mFootprintEntity == null) {
             goodsDetailPresenter.footprint();
@@ -1125,12 +1100,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 }
                 break;
         }
+        currentQuickAction = -1;
     }
 
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        if (goodsDetailPresenter != null){
+            goodsDetailPresenter.detachView();
+        }
         super.onDestroy();
+
     }
 }

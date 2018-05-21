@@ -22,7 +22,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
@@ -100,6 +99,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private boolean isStartDownTime = false;
     private int voucherPosition;//点击优惠券位置
     private long day = 0l;
+    private final int mDeviceWidth;
 
     public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
         super(context, isShowFooter, lists);
@@ -108,6 +108,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         recyclerDialog = new RecyclerDialog(context);
         paramDialog = new ParamDialog(context,mGoodsEntity);
         paramDialog.setOnSelectCallBack(this);
+        mDeviceWidth = DeviceInfoUtil.getDeviceWidth(context);
     }
 
     @Override
@@ -297,16 +298,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof StoreGoodsHolder){
             StoreGoodsHolder mHolder = (StoreGoodsHolder) holder;
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
-            GlideUtils.getInstance().loadImage(context,mHolder.miv_shop_head,store_info.store_icon);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHolder.miv_shop_head,store_info.store_icon,100,100);
             mHolder.mtv_store_name.setText(store_info.decoration_name);
             mHolder.mtv_goods_count.setText(store_info.goods_count);
             mHolder.mtv_attention_count.setText(store_info.attention_count);
             mHolder.mtv_description_consistency.setText(store_info.description_consistency);
             mHolder.mtv_quality_satisfy.setText(store_info.quality_satisfy);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_starBar,store_info.star);
-//            mHolder.ratingBar1.setEnabled(false);
-//            mHolder.ratingBar1.setNumberOfStars(Integer.valueOf(store_info.star));
-//            mHolder.ratingBar1.setRating(Integer.valueOf(store_info.star));
             if ("1".equals(store_info.is_attention)){
                 mHolder.setCollectionState(1);
                 isAttentionShop = true;
@@ -323,10 +322,16 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.mtv_quality_goods.setVisibility(View.GONE);
             }
 
-            if (isEmpty(store_info.push)){
-                mHolder.mll_self_push.setVisibility(View.GONE);
+            if (isEmpty(store_info.hot)){
+                gone(mHolder.mll_self_hot);
             }else {
-                mHolder.mll_self_push.setVisibility(View.VISIBLE);
+                visible(mHolder.mll_self_hot);
+            }
+
+            if (isEmpty(store_info.push)){
+                gone(mHolder.mll_self_push);
+            }else {
+                visible(mHolder.mll_self_push);
             }
 
             setStoreOtherGoods(mHolder.recy_view,store_info.hot);
@@ -906,7 +911,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 s = lists.get(position - ITEM_DIFFERENT);
             }
 
-            LogUtil.zhLogW("====s: "+s);
+//            LogUtil.zhLogW("====s: "+s);
 
             if (Pattern.matches(".*(w=\\d+&h=\\d+).*",s)){
                 Matcher m =p.matcher(s);
@@ -918,12 +923,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if (m.find()){
                     h = Integer.parseInt(m.group(2));
                 }
-                LogUtil.zhLogW("===w="+w+"  h="+h);
-                int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
-                int i = deviceWidth * h / w;
+//                LogUtil.zhLogW("===w="+w+"  h="+h);
+                int i = mDeviceWidth * h / w;
                 GlideUtils.getInstance()
-                        .loadOverrideImage(context,mHolder.miv_pic,s,
-                                DeviceInfoUtil.getDeviceWidth(context),i);
+                        .loadOverrideImage(context,mHolder.miv_pic,s,mDeviceWidth,i);
+            }else {
+                int i = mDeviceWidth * 330 / 720;
+                GlideUtils.getInstance()
+                        .loadOverrideImage(context,mHolder.miv_pic,s,mDeviceWidth,i);
             }
         }
     }
@@ -1132,6 +1139,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public BannerHolder(View itemView) {
             super(itemView);
+            setIsRecyclable(false);
         }
     }
 
@@ -1163,6 +1171,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public ActivityCouponHolder(View itemView) {
             super(itemView);
+            setIsRecyclable(false);
             mtv_combo.setOnClickListener(this);
             mll_ling_Coupon.setOnClickListener(this);
             mrl_activity.setOnClickListener(this);
@@ -1248,6 +1257,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public ParamAttrsHolder(View itemView) {
             super(itemView);
+            setIsRecyclable(false);
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             mtv_params.setOnClickListener(this);
@@ -1326,6 +1336,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         View view_line2;
         public CommntHolder(View itemView) {
             super(itemView);
+            setIsRecyclable(false);
             mtv_comment_num.setOnClickListener(this);
             miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
@@ -1401,6 +1412,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_starBar;
         public StoreGoodsHolder(View itemView) {
             super(itemView);
+//            setIsRecyclable(false);
             mtv_collection.setOnClickListener(this);
             mll_self_hot.setOnClickListener(this);
             mll_self_push.setOnClickListener(this);
@@ -1489,6 +1501,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public CouponHolder(View itemView) {
             super(itemView);
+            setIsRecyclable(false);
             RecyclerView recy_view_coupon = (RecyclerView) itemView;
             LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_view_coupon.setLayoutManager(manager);

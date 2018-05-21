@@ -25,21 +25,23 @@
             android:id="@+id/mtv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="120"
+            android:text="400"
+            android:layout_toRightOf="@+id/mtv_rmb"
             android:textColor="@color/white"
             android:textSize="27sp" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_rmb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rmb"
             android:textColor="@color/white"
             android:textSize="10sp"
             app:tv_control_adapter="true"
-            app:tv_margin_left="11"
+            app:tv_margin_left="8"
             app:tv_margin_top="55" />
 
     </com.shunlian.app.widget.MyRelativeLayout>

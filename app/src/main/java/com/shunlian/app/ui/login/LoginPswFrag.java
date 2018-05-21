@@ -147,6 +147,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.tv_wx_login:
                 WXEntryActivity.startAct(baseActivity, "login", null);
+                baseActivity.finish();
                 break;
         }
     }

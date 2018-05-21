@@ -47,11 +47,6 @@
         android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
         android:value="GlideModule" />-->
 
-    <!--配置glide缓存-->
-    <meta-data
-        android:name="com.shunlian.app.utils.GlideCacheUtil"
-        android:value="GlideModule" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -59,6 +54,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--配置glide缓存-->
+        <meta-data
+            android:name="com.shunlian.app.utils.GlideCacheUtil"
+            android:value="GlideModule" />
 
         <!--jpush-->
         <!-- Required SDK 核心功能-->
