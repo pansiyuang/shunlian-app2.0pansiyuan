@@ -29,6 +29,7 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
@@ -205,7 +206,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             return;
         }*/
         if (isLoading) {
-            httpDialog = new HttpDialog(context);
+            httpDialog = App.getInstance();
+            if (!httpDialog.isShowing())
             httpDialog.show();
         }
         tCall.enqueue(new Callback<BaseEntity<T>>() {
