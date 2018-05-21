@@ -648,6 +648,7 @@
     <string name="balance_tixianjieguo">提现结果</string>
     <string name="balance_tixianshengqing">提现申请成功</string>
     <string name="balance_zhaohuimima">找回密码</string>
+    <string name="balance_wangjimima">忘记密码</string>
     <string name="balance_chongxinshuru">重新输入</string>
     <string name="balance_zhifumima">支付密码</string>
     <string name="balance_xiuigaizhifumima">修改支付密码</string>

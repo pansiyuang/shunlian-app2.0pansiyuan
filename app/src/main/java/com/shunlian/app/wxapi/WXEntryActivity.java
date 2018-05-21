@@ -37,8 +37,6 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import static com.shunlian.app.utils.BitmapUtil.SAVE_PIC_PATH;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,WXEntryView {
-
-
     private String deviceId;
     private IWXAPI api;
     private String flag;
@@ -55,6 +53,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         Intent intent = new Intent(context,WXEntryActivity.class);
         intent.putExtra("flag",flag);
         intent.putExtra("shareInfoParam", shareInfoParam);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

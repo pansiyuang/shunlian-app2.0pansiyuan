@@ -295,10 +295,10 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 shoppingCarFrag = new ShoppingCarFrag();
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
-        } else {
-            LogUtil.httpLogW("shoppingCarClick() ");
+        }else {
             shoppingCarFrag.getShoppingCarData();
         }
+
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(shoppingCarFrag);
         pageIndex = 3;
@@ -318,9 +318,11 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 personalCenterFrag = new PersonalCenterFrag();
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
-        }/*else {
-            personalCenterFrag.initData();
-        }*/
+        }else {
+            personalCenterFrag.getPersonalcenterData();
+        }
+
+
 //        if (personalCenterFrag.personalcenterPresenter!=null){
 //            personalCenterFrag.personalcenterPresenter.getApiData();
 //        }

@@ -69,6 +69,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private CateGoryFrag cateGoryFrag;
     private ShareInfoParam mShareInfoParam=new ShareInfoParam();
     private int second = (int) (System.currentTimeMillis() / 1000);
+    private int hotPosition=-1;
 
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
@@ -442,6 +443,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE5:
                 if (holder instanceof FiveHolder) {
                     FiveHolder fiveHolder = (FiveHolder) holder;
+                    if (hotPosition==-1&&isFirst)
+                        hotPosition=position;
+                    if (position==hotPosition){
+                        fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                    }else {
+                        fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                    }
                     GetDataEntity.MData data = lists.get(position);
                     GlideUtils.getInstance().loadImage(context, fiveHolder.miv_photo, data.pic);
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
@@ -491,6 +499,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE6:
                 if (holder instanceof SixHolder) {
                     SixHolder sixHolder = (SixHolder) holder;
+                    if (hotPosition==-1&&isFirst)
+                        hotPosition=position;
+                    if (position==hotPosition){
+                        sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                    }else {
+                        sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                    }
                     GetDataEntity.MData data = lists.get(position);
                     GlideUtils.getInstance().loadImage(context, sixHolder.miv_photo, data.pic);
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
@@ -865,6 +880,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         View view_line;
         @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
+        @BindView(R.id.mllayout_pingzhi)
+        MyLinearLayout mllayout_pingzhi;
 
         FiveHolder(View itemView) {
             super(itemView);
@@ -876,6 +893,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         MyImageView miv_photo;
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
+        @BindView(R.id.mllayout_pingzhi)
+        MyLinearLayout mllayout_pingzhi;
         private FirstHorizonAdapter firstHorizonAdapter;
 
         SixHolder(View itemView) {

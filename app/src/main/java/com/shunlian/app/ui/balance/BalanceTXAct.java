@@ -143,32 +143,35 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
         if (data != null) {
             BalanceResultAct.startAct(this, data.amount, data.account, accountType);
         } else {
-            String right;
+            String right,left;
             if (code == PASSWORDLOCK) {
                 right = getStringResouce(R.string.errcode_cancel);
+                left = getStringResouce(R.string.balance_zhaohuimima);
             } else {
                 right = getStringResouce(R.string.balance_chongxinshuru);
+                left = getStringResouce(R.string.balance_wangjimima);
             }
-            initHintDialog(message, right);
+            initHintDialog(message, left,right);
         }
     }
 
-    public void initHintDialog(String title, String right) {
+    public void initHintDialog(String title, String left,String right) {
         if (promptDialog == null) {
             promptDialog = new PromptDialog(this);
         }
-        promptDialog.setSureAndCancleListener(title, getStringResouce(R.string.balance_zhaohuimima), new View.OnClickListener() {
+        promptDialog.setSureAndCancleListener(title, right, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-            }
-        }, right, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                promptDialog.dismiss();
-                if (!right.equals(getStringResouce(R.string.balance_chongxinshuru))) {
+                if (right.equals(getStringResouce(R.string.balance_chongxinshuru))) {
                     initDialog();
                 }
+            }
+        }, left, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+
             }
         }).show();
     }

@@ -2,8 +2,10 @@ package com.shunlian.app.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -50,12 +52,12 @@ public class HttpDialog extends Dialog {
         setCanceledOnTouchOutside(false);
         setContentView(view);
         mProgressBar = (ProgressView) view.findViewById(R.id.loading_progress);
-        setCancelable(false);
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
         p.height = TransformUtil.dip2px(context, 77.5f); // 高度设置为屏幕的0.6
         p.width = TransformUtil.dip2px(context, 77.5f);// 宽度设置为屏幕的0.65
         dialogWindow.setAttributes(p);
+        setCancelable(false);
     }
 
     public HttpDialog(Context context, int themeResId) {

@@ -27,7 +27,6 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
 
     public PersonalcenterPresenter(Context context, IPersonalView iView) {
         super(context, iView);
-        getApiData();
     }
 
     @Override

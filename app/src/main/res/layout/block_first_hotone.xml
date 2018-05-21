@@ -7,6 +7,37 @@
     android:background="@color/white"
     android:paddingBottom="5dp">
 
+    <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/mllayout_pingzhi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/value_F7F7F7"/>
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_home_retuititle" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="@string/first_pingzhi"
+                android:textColor="@color/new_text"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyLinearLayout>
+
     <View
         android:id="@+id/view_line"
         android:layout_width="match_parent"
