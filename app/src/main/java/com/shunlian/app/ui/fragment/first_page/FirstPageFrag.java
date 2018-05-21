@@ -23,6 +23,7 @@ import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IFirstPage;
+import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -125,15 +126,6 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     .statusBarDarkFont(true, 0.2f)
                     .init();
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ImmersionBar.with(this)
-                .statusBarDarkFont(true, 0.0f)
-                .init();
-//        ImmersionBar.with(this).titleBar(rLayout_title, false).init();
     }
 
     @Override

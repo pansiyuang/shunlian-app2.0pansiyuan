@@ -18,14 +18,13 @@ import com.shunlian.app.adapter.DisabledGoodsAdapter;
 import com.shunlian.app.adapter.ShopCarStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
-import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IShoppingCarView;
-import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -116,7 +115,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             ImmersionBar.with(this).fitsSystemWindows(true)
                     .statusBarColor(R.color.white)
                     .statusBarDarkFont(true, 0.2f)
@@ -144,6 +143,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         editMap = new HashMap<>();
+        shopCarPresenter = new ShopCarPresenter(baseContext, this);
     }
 
     @Override
@@ -157,8 +157,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void getShoppingCarData() {
-        if (shopCarPresenter != null) {
-            shopCarPresenter.initShopData();
+        if (shopCarPresenter != null&& !MyOnClickListener.isFastClick()) {
+            shopCarPresenter.getApiData();
         }
     }
 
@@ -232,12 +232,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()) {
-            if (shopCarPresenter == null) {
-                shopCarPresenter = new ShopCarPresenter(baseContext, this);
-            } else {
-                shopCarPresenter.getApiData();
-            }
+        if (!isHidden()){
+            getShoppingCarData();
         }
         super.onResume();
     }
@@ -441,6 +437,26 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
     }
 
+    public String getCheckAll() {
+        if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {
+            return "0";
+        }
+        for (int i = 0; i < mCarEntity.enabled.size(); i++) {
+            if ("0".equals(mCarEntity.enabled.get(i).all_check)) {
+                return "0";
+            }
+        }
+        return "1";
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+        super.onDestroyView();
+    }
+
     public class FooterHolderView implements View.OnClickListener {
         @BindView(R.id.tv_clear_disable)
         TextView tv_clear_disable;
@@ -468,26 +484,5 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                     break;
             }
         }
-    }
-
-    public String getCheckAll() {
-        if (mCarEntity == null || mCarEntity.enabled == null || mCarEntity.enabled.size() == 0) {
-            return "0";
-        }
-        for (int i = 0; i < mCarEntity.enabled.size(); i++) {
-            if ("0".equals(mCarEntity.enabled.get(i).all_check)) {
-                return "0";
-            }
-        }
-        return "1";
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        if (mUnbinder != null) {
-            mUnbinder.unbind();
-        }
-        super.onDestroyView();
     }
 }

@@ -34,8 +34,6 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,WXEntryView {
-
-
     private String deviceId;
     private IWXAPI api;
     private String flag;
@@ -50,6 +48,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         Intent intent = new Intent(context,WXEntryActivity.class);
         intent.putExtra("flag",flag);
         intent.putExtra("shareInfoParam", shareInfoParam);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

@@ -40,9 +40,6 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
 
     }
 
-    public void initShopData() {
-        getApiData();
-    }
 
     public void getApiData(){
         Map<String, String> map = new HashMap<>();
