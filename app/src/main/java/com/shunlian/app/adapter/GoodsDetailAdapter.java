@@ -1139,7 +1139,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public BannerHolder(View itemView) {
             super(itemView);
-            setIsRecyclable(false);
+            
         }
     }
 
@@ -1171,7 +1171,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public ActivityCouponHolder(View itemView) {
             super(itemView);
-            setIsRecyclable(false);
+            
             mtv_combo.setOnClickListener(this);
             mll_ling_Coupon.setOnClickListener(this);
             mrl_activity.setOnClickListener(this);
@@ -1257,7 +1257,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public ParamAttrsHolder(View itemView) {
             super(itemView);
-            setIsRecyclable(false);
+            
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
             mtv_params.setOnClickListener(this);
@@ -1336,7 +1336,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         View view_line2;
         public CommntHolder(View itemView) {
             super(itemView);
-            setIsRecyclable(false);
+            
             mtv_comment_num.setOnClickListener(this);
             miv_empty.setOnClickListener(this);
             mtv_haopinglv.setOnClickListener(this);
@@ -1412,7 +1412,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_starBar;
         public StoreGoodsHolder(View itemView) {
             super(itemView);
-//            setIsRecyclable(false);
+//            
             mtv_collection.setOnClickListener(this);
             mll_self_hot.setOnClickListener(this);
             mll_self_push.setOnClickListener(this);
@@ -1501,7 +1501,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public CouponHolder(View itemView) {
             super(itemView);
-            setIsRecyclable(false);
+            
             RecyclerView recy_view_coupon = (RecyclerView) itemView;
             LinearLayoutManager manager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
             recy_view_coupon.setLayoutManager(manager);

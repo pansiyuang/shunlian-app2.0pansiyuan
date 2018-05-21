@@ -210,8 +210,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             layoutParams.topMargin = topMargin;
         else
             layoutParams.topMargin = px;
-        layoutParams.rightMargin = rightMargin;
 
+        layoutParams.rightMargin = rightMargin;
         requestLayout();
     }
 

@@ -226,12 +226,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 - offset - ImmersionBar.getStatusBarHeight(this);
         //底部按钮高
         mll_bottom.post(()-> bottomListHeight = mll_bottom.getMeasuredHeight());
+        RelativeLayout.LayoutParams shareLayoutParams = (RelativeLayout.LayoutParams)
+                mll_share.getLayoutParams();
+        shareLayoutParams.topMargin = ImmersionBar.getStatusBarHeight(this);
 
         //猜你喜欢列表初始化
         GridLayoutManager manager = new GridLayoutManager(this,2);
         recy_view.setLayoutManager(manager);
         recy_view.addItemDecoration(new GridSpacingItemDecoration
                 (TransformUtil.dip2px(this, 5), false));
+        ViewGroup.LayoutParams recyLayoutParams = recy_view.getLayoutParams();
+        recyLayoutParams.height = TransformUtil.countRealHeight(this,678);
+
     }
 
     private void carNum() {

@@ -6,17 +6,11 @@
     android:layout_height="match_parent"
     android:layout_alignParentRight="true"
     android:background="@mipmap/bg_more"
+    android:gravity="center_vertical"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
-
-    <com.shunlian.app.widget.MyTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tv_control_adapter="true"
-        app:tv_control_width="1"
-        app:tv_control_height="40" />
 
     <!--消息-->
     <com.shunlian.app.widget.MyRelativeLayout
