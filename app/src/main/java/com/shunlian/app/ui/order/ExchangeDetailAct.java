@@ -378,7 +378,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         if (TextUtils.isEmpty(refundDetail.goods_num)){
             mtv_amount.setVisibility(View.GONE);
         }else {
-            mtv_amount.setText(key+"数量：" + refundDetail.goods_num);
+            mtv_amount.setText("退货数量：" + refundDetail.goods_num);
             mtv_amount.setVisibility(View.VISIBLE);
         }
         if (TextUtils.isEmpty(refundDetail.add_time)){
