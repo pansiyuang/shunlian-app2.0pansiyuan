@@ -218,7 +218,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         mtv_toolbar_title.setText("销售数据");
         gone(mrlayout_toolbar_more);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
-        if (deviceWidth > Constant.DRAWING_WIDTH) {
+        if (deviceWidth >= Constant.DRAWING_WIDTH) {
             ViewGroup.LayoutParams layoutParams = chart_view.getLayoutParams();
             int[] ints = TransformUtil.countRealWH(this, 720, 320);
             layoutParams.width = ints[0];

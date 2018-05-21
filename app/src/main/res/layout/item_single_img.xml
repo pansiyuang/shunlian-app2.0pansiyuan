@@ -9,7 +9,19 @@
         android:id="@+id/miv_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:src="@mipmap/img_tupian"
         android:scaleType="centerCrop" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(最多5张)"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/my_gray_one"
+        android:textSize="10sp"
+        android:layout_marginBottom="5dp"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_img_del"

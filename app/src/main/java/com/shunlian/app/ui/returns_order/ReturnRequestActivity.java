@@ -405,7 +405,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 break;
             case R.id.tv_request_complete:
                 if (isEmpty(currentReasonId)) {
-                    Common.staticToast("请选择原因");
+                    Common.staticToast("请选择退款原因");
                     return;
                 }
                 if ("3".equals(currentServiceType) || "1".equals(currentServiceType)) {

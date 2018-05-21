@@ -2,7 +2,6 @@ package com.shunlian.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +17,11 @@ import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
-import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -111,8 +109,10 @@ public class SingleImgAdapter extends BaseAdapter {
                     LookBigImgAct.startAct(mContext, bigImgEntity);
                 }
             });
+            viewHolder.mtv_max.setVisibility(View.GONE);
         } else {
             GlideUtils.getInstance().loadLocalImageWithView(mContext, R.mipmap.img_tupian, viewHolder.miv_img);
+            viewHolder.mtv_max.setVisibility(View.VISIBLE);
             viewHolder.miv_del.setVisibility(View.GONE);
             viewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,11 +155,13 @@ public class SingleImgAdapter extends BaseAdapter {
         MyImageView miv_img;
         MyImageView miv_del;
         RelativeLayout rl_img;
+        MyTextView mtv_max;
 
         public ViewHolder(View view) {
             miv_img = (MyImageView) view.findViewById(R.id.miv_img);
             miv_del = (MyImageView) view.findViewById(R.id.miv_img_del);
             rl_img = (RelativeLayout) view.findViewById(R.id.layout_img);
+            mtv_max = (MyTextView) view.findViewById(R.id.mtv_max);
 
             AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.width = (screenWidth - TransformUtil.dip2px(mContext, 20 + (4 * 4))) / 5;
