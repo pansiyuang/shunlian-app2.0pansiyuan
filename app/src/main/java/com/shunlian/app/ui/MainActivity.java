@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson=false;
+    private boolean isPerson=false,isFirst=false;
     private Handler handler;
 
     public static void startAct(Context context, String flag) {
@@ -225,6 +225,9 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
+                        if (isFirst){
+
+                        }
                         mainPageClick();
                         break;
                     case R.id.ll_tab_sort:
@@ -244,6 +247,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
         },300);
     }
     public void mainPageClick() {
+        isFirst=true;
         if (mainPageFrag == null) {
 //            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
             mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
@@ -259,6 +263,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void sortClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (sortFrag == null) {
             sortFrag = (SortFrag) fragmentMap.get(flags[1]);
@@ -274,6 +279,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void discoverClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
             discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
@@ -288,6 +294,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void shoppingCarClick() {
+        isFirst=false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (shoppingCarFrag == null) {
             shoppingCarFrag = (ShoppingCarFrag) fragmentMap.get(flags[3]);
@@ -296,6 +303,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
         }else {
+            shoppingCarFrag.isclick=true;
             shoppingCarFrag.getShoppingCarData();
         }
 
@@ -306,6 +314,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void personCenterClick() {
+        isFirst=false;
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
             isPerson=true;
@@ -319,6 +328,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         }else {
+            personalCenterFrag.isclick=true;
             personalCenterFrag.getPersonalcenterData();
         }
 

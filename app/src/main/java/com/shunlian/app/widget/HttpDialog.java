@@ -57,7 +57,7 @@ public class HttpDialog extends Dialog {
         p.height = TransformUtil.dip2px(context, 77.5f); // 高度设置为屏幕的0.6
         p.width = TransformUtil.dip2px(context, 77.5f);// 宽度设置为屏幕的0.65
         dialogWindow.setAttributes(p);
-        setCancelable(false);
+//        setCancelable(false);
     }
 
     public HttpDialog(Context context, int themeResId) {

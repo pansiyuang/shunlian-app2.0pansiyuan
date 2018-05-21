@@ -23,6 +23,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IShoppingCarView;
 import com.shunlian.app.widget.MyImageView;
@@ -104,6 +105,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private StringBuffer orderGoodsIds = new StringBuffer();//提交订单的id
     private String disGoodsIds;//失效订单的id
     private RecyclerDialog recyclerDialog;
+    public boolean isclick=false;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -157,7 +159,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void getShoppingCarData() {
-        if (shopCarPresenter != null&& !MyOnClickListener.isFastClick()) {
+        if (shopCarPresenter != null) {
             shopCarPresenter.getApiData();
         }
     }
@@ -232,7 +234,8 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()){
+        if (!isHidden()&&!isclick){
+            isclick=false;
             getShoppingCarData();
         }
         super.onResume();
