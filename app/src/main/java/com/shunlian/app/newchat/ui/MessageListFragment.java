@@ -15,6 +15,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
@@ -105,21 +106,29 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     @Override
-    public void getSysMessageList(List<MessageListEntity.Msg> msgList) {
-        if (!isEmpty(msgList)) {
-            msgs.clear();
-            msgs.addAll(msgList);
-
-            if (mClient.isBindAdmin()) { //平台客服
-                MessageListEntity.Msg msg = new MessageListEntity.Msg();
-                msg.type = "1";
-                msgs.add(msg);
-            }
-            if (mClient.isBindSeller()) { //商家客服
-                MessageListEntity.Msg msg = new MessageListEntity.Msg();
-                msg.type = "2";
-                msgs.add(msg);
-            }
+    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
+        msgs.clear();
+        if (systemMessageEntity.sysMsg != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "4";
+            msg.title = systemMessageEntity.sysMsg.title;
+            msgs.add(msg);
+        }
+        if (systemMessageEntity.discovery != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "5";
+            msg.title = systemMessageEntity.discovery.title;
+            msgs.add(msg);
+        }
+        if (mClient.isBindAdmin()) { //平台客服
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "1";
+            msgs.add(msg);
+        }
+        if (mClient.isBindSeller()) { //商家客服
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "2";
+            msgs.add(msg);
         }
     }
 

@@ -50,6 +50,7 @@ import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
@@ -201,6 +202,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 String evaluateId = evaluateMessage.msg_body.evaluate.id;
                 if (evaluateEntity.evaluat_id.equals(evaluateId)) {
                     evaluateMessage.msg_body.evaluate.score = evaluateEntity.score;
+                    evaluateMessage.msg_body.evaluate.selectScore = 0;
                     info.message = msg2Str(evaluateMessage);
                     break;
                 }
@@ -344,7 +346,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 handRightGoods(holder, baseMessage);
                 break;
             case EVALUATE_MSG:
-                handEvaluate(holder, baseMessage);
+                handEvaluate(holder, baseMessage, item);
                 break;
             case CHECK_ORDER:
                 handCheckOrder(holder, baseMessage);
@@ -553,7 +555,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
+    public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage, final MsgInfo msgInfo) {
         EvaluateMessage evaluateMessage = (EvaluateMessage) baseMessage;
         EvaluateViewHolder evaluateViewHolder = (EvaluateViewHolder) holder;
         EvaluateMessage.EvaluateMessageBody evaluateMessageBody;
@@ -561,11 +563,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             evaluateMessageBody = evaluateMessage.msg_body;
             if (evaluateMessageBody.evaluate != null) {
                 EvaluateMessage.Evaluate evaluate = evaluateMessageBody.evaluate;
-                initEvaluteStatus(evaluate.score, evaluateViewHolder);
-
+                LogUtil.httpLogW("id:" + evaluate.id + " score:" + evaluate.score + " selectScore:" + evaluate.selectScore);
+                initEvaluteStatus(evaluate.score, evaluate.selectScore, evaluateViewHolder);
                 evaluateViewHolder.ratingBar.setOnRatingChangeListener(ratingCount -> {
                     evaluate.score = (int) ratingCount;
-                    updateEvaluteStatus(evaluate.score, evaluateViewHolder);
+                    setEvaluateMsgSelectScore((int) ratingCount, msgInfo);
+                    updateEvaluteStatus((int) ratingCount, evaluateViewHolder);
                 });
                 evaluateViewHolder.tv_comment_status.setOnClickListener(v -> {
                     ((ChatActivity) context).createEvalute(evaluateMessage);
@@ -592,18 +595,19 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                         orderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
                     }
                     orderViewHolder.tv_title.setText(orderGoodsBean.title);
-                    orderViewHolder.tv_price.setText(orderGoodsBean.price);
+                    orderViewHolder.tv_price.setText("共" + order.orderGoods.size() + "件商品，共计¥" + orderGoodsBean.price);
                 }
                 orderViewHolder.tv_date.setText(order.create_time);
                 orderViewHolder.tv_order_number.setText(order.ordersn);
+                orderViewHolder.tv_express_number.setText(order.express_sn);
                 orderViewHolder.tv_search_express.setOnClickListener(v -> {
                     //查快递
-                    if (!isEmpty(order.express_sn)) {
-
+                    if (!isEmpty(order.orderId)) {
+                        OrderLogisticsActivity.startAct(context, order.orderId);
                     }
                 });
             }
-
+//
             if ("1".equals(orderMessage.from_type) || "2".equals(orderMessage.from_type)) {
                 //平台发给用户的
                 orderViewHolder.ll_detail.setVisibility(View.VISIBLE);
@@ -1313,8 +1317,24 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    public void initEvaluteStatus(int score, EvaluateViewHolder evaluateViewHolder) {
+    public void setEvaluateMsgSelectScore(int score, MsgInfo msgInfo) {
+        BaseMessage baseMsg = str2Msg(msgInfo.message);
+        EvaluateMessage evaluateMessage;
+        evaluateMessage = (EvaluateMessage) baseMsg;
+        evaluateMessage.msg_body.evaluate.selectScore = score;
+        msgInfo.message = msg2Str(evaluateMessage);
+    }
+
+
+    public void initEvaluteStatus(int score, int selectScore, EvaluateViewHolder evaluateViewHolder) {
         if (score == 0) {
+            if (selectScore == 0) {
+                updateEvaluteStatus(0, evaluateViewHolder);
+                evaluateViewHolder.ratingBar.setStar(0);
+            } else {
+                updateEvaluteStatus(selectScore, evaluateViewHolder);
+                evaluateViewHolder.ratingBar.setStar(selectScore);
+            }
             evaluateViewHolder.tv_comment_status.setText(getString(R.string.submit));
             evaluateViewHolder.tv_comment_status.setEnabled(true);
             evaluateViewHolder.ratingBar.setClickable(true);
@@ -1327,29 +1347,36 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             evaluateViewHolder.tv_comment_status.setTextColor(getColor(R.color.new_gray));
             evaluateViewHolder.tv_comment_status.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_solid_f7_60px));
             updateEvaluteStatus(score, evaluateViewHolder);
+            evaluateViewHolder.ratingBar.setStar(score);
         }
-        evaluateViewHolder.ratingBar.setStar(score);
     }
 
     public void updateEvaluteStatus(int score, EvaluateViewHolder evaluateViewHolder) {
         switch (score) {
             case 1:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.very_unsatisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.unsatisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.commonly));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 4:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.satisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 5:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.very_satisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
+                break;
+            default:
+                evaluateViewHolder.tv_rating.setVisibility(View.GONE);
                 break;
         }
-        evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
     }
 
     private void setImg(ImageView iv, ImageMessage.Image image) {

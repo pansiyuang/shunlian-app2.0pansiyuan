@@ -20,6 +20,7 @@ public class EvaluateMessage extends BaseMessage {
         public String id;
         public String sid;
         public int score;
+        public int selectScore;
         public String creat_time;
         public String evaluation_time;
     }

@@ -28,7 +28,9 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -1430,7 +1432,7 @@ public interface ApiService {
      * @return
      */
     @GET("message/sys")
-    Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<SystemMessageEntity>> getSystemMessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取小店消息
@@ -1438,7 +1440,7 @@ public interface ApiService {
      * @return
      */
     @GET("message/store")
-    Call<BaseEntity<MessageListEntity>> getStoremMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<StoreMessageEntity>> getStoremMessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取店铺会员消息列表

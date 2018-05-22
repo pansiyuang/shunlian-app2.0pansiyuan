@@ -11,6 +11,7 @@ import com.shunlian.app.adapter.MessageAdapter;
 import com.shunlian.app.newchat.adapter.TopMessageAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.presenter.StoreMsgPresenter;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
@@ -61,10 +62,19 @@ public class LittleStoreFragment extends BaseLazyFragment implements IStoreMsgVi
     }
 
     @Override
-    public void getStoreMsgList(List<MessageListEntity.Msg> list) {
+    public void getStoreMsg(StoreMessageEntity storeMessageEntity) {
         msgList.clear();
-        if (!isEmpty(list)) {
-            msgList.addAll(list);
+        if (storeMessageEntity.memberAdd != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "6";
+            msg.title = storeMessageEntity.memberAdd.title;
+            msgList.add(msg);
+        }
+        if (storeMessageEntity.shopping != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "7";
+            msg.title = storeMessageEntity.shopping.title;
+            msgList.add(msg);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -101,11 +111,12 @@ public class LittleStoreFragment extends BaseLazyFragment implements IStoreMsgVi
 
     @Override
     public void OnOrderMsgClick() {
-        StoreMsgActivity.startAct(getActivity(),false);
+        StoreMsgActivity.startAct(getActivity(), false);
     }
 
     @Override
     public void OnStoreMsgClick() {
-        StoreMsgActivity.startAct(getActivity(),true);
+        StoreMsgActivity.startAct(getActivity(), true);
     }
+
 }

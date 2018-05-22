@@ -233,9 +233,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             footerHolderView.recycle_disable.setNestedScrollingEnabled(false);
             footerHolderView.recycle_disable.setLayoutManager(linearLayoutManager);
             footerHolderView.recycle_disable.setAdapter(new DisabledGoodsAdapter(baseContext, false, mCarEntity.disabled));
-            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
+            footerHolderView.ll_rootView.setVisibility(View.VISIBLE);
         } else {
-            footerHolderView.foot_disable.setVisibility(View.GONE);
+            footerHolderView.ll_rootView.setVisibility(View.GONE);
         }
 
         isCheckAll = getCheckAll();
@@ -414,11 +414,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         disGoodsIds = mCarEntity.disabled_ids;
 
         if (mCarEntity.disabled == null || mCarEntity.disabled.size() == 0) {
-            footView.setPadding(0, -footView.getHeight(), 0, 0);
-            footerHolderView.foot_disable.setVisibility(View.GONE);
+            footerHolderView.ll_rootView.setVisibility(View.GONE);
         } else {
-            footView.setPadding(0, 0, 0, 0);
-            footerHolderView.foot_disable.setVisibility(View.VISIBLE);
+            footerHolderView.ll_rootView.setVisibility(View.VISIBLE);
         }
 
         if (isEmpty(mCarEntity.enabled) && isEmpty(mCarEntity.disabled)) {
@@ -486,6 +484,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
         @BindView(R.id.foot_disable)
         LinearLayout foot_disable;
+
+        @BindView(R.id.ll_rootView)
+        LinearLayout ll_rootView;
 
 
         public FooterHolderView(View view) {

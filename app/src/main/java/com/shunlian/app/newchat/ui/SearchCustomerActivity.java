@@ -19,6 +19,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
@@ -129,7 +130,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
-    public void getSysMessageList(List<MessageListEntity.Msg> msgList) {
+    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
 
     }
 

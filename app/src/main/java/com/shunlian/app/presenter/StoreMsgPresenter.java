@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IStoreMsgView;
 
@@ -28,14 +29,13 @@ public class StoreMsgPresenter extends BasePresenter<IStoreMsgView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<MessageListEntity>> baseEntityCall = getAddCookieApiService().getStoremMessage(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MessageListEntity>>() {
+        Call<BaseEntity<StoreMessageEntity>> baseEntityCall = getAddCookieApiService().getStoremMessage(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<StoreMessageEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<MessageListEntity> entity) {
+            public void onSuccess(BaseEntity<StoreMessageEntity> entity) {
                 super.onSuccess(entity);
-                MessageListEntity messageListEntity = entity.data;
-                List<MessageListEntity.Msg> msgList = messageListEntity.list;
-                iView.getStoreMsgList(msgList);
+                StoreMessageEntity storeMessageEntity = entity.data;
+                iView.getStoreMsg(storeMessageEntity);
             }
 
             @Override

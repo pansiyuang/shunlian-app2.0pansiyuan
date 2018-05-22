@@ -39,7 +39,6 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
-import com.shunlian.app.newchat.websocket.Client;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
@@ -674,11 +673,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             if (evaluateMessageBody.evaluate != null) {
                 EvaluateMessage.Evaluate evaluate = evaluateMessageBody.evaluate;
                 JSONObject jsonObject = new JSONObject();
-                LogUtil.httpLogW("msg_id:" + evaluateMessage.id);
                 try {
                     jsonObject.put("type", "pingjia");
                     jsonObject.put("msg_id", evaluateMessage.id);
-                    jsonObject.put("score", evaluate.score);
+                    if (evaluate.selectScore != 0) {
+                        jsonObject.put("score", evaluate.selectScore);
+                    } else if (evaluate.score != 0) {
+                        jsonObject.put("score", evaluate.score);
+                    }
                     jsonObject.put("evaluat_id", evaluate.id);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -731,10 +733,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         order.store_id = orders.store_id;
         order.store_name = orders.store_name;
         order.create_time = orders.create_time;
+        order.express_sn = orders.express_sn;
         orderMessageBody.order = order;
         orderMessage.msg_body = orderMessageBody;
 
-        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的订单消息:" + mAdapter.msg2Str(orderMessage));
             mWebsocketClient.send(mAdapter.msg2Str(orderMessage));
             msgInfo.send_time = System.currentTimeMillis() / 1000;
@@ -756,7 +759,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             LogUtil.httpLogW("发送的订单消息:" + jsonObject.toString());
             mWebsocketClient.send(jsonObject.toString());
         }
@@ -796,7 +799,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mWebsocketClient.getStatus() == Status.CONNECTED ) {
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
             mWebsocketClient.send(jsonObject.toString());
             LogUtil.httpLogW("消息已读上报:" + jsonObject.toString());
             int unreadCount = currentChatMember.unread_count;
