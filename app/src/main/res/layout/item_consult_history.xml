@@ -71,11 +71,12 @@
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_label"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/civ_head"
             android:text="平台已经同意了申请"
             android:textColor="@color/new_text"
+            android:layout_toLeftOf="@+id/mtv_time"
             android:textSize="14sp"
             android:textStyle="bold"
             app:tv_control_adapter="true"
@@ -90,6 +91,7 @@
             android:text="2017-09-26 08:24:23"
             android:textColor="@color/new_gray"
             android:textSize="14sp"
+            android:maxLines="1"
             app:tv_control_adapter="true"
             app:tv_margin_top="30" />
 
