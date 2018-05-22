@@ -209,7 +209,7 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
         options.inJustDecodeBounds = true;
 
         BitmapFactory.decodeFile(photoPath, options); //filePath代表图片路径
-        if (options.mCancel || options.outWidth < 0 || options.outHeight < 0) {
+        if (options.mCancel || options.outWidth == -1 || options.outHeight == -1) {
             //说明图片已经损坏
             Common.staticToast("图片已经损坏,请换一张图片");
             return false;
@@ -393,113 +393,69 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> mLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
-
-        private final String[] IMAGE_PROJECTION = {
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DISPLAY_NAME,
-                MediaStore.Images.Media.DATE_ADDED,
-                MediaStore.Images.Media._ID};
+        private final String[] IMAGE_PROJECTION = {     //查询图片需要的数据列
+                MediaStore.Images.Media.DISPLAY_NAME,   //图片的显示名称  aaa.jpg
+                MediaStore.Images.Media.DATA,           //图片的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg
+                MediaStore.Images.Media.SIZE,           //图片的大小，long型  132492
+                MediaStore.Images.Media.WIDTH,          //图片的宽度，int型  1920
+                MediaStore.Images.Media.HEIGHT,         //图片的高度，int型  1080
+                MediaStore.Images.Media.MIME_TYPE,      //图片的类型     image/jpeg
+                MediaStore.Images.Media.DATE_ADDED};    //图片被添加的时间，long型  1450518608
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader cursorLoader = null;
+            //扫描所有图片
+            if (id == LOADER_ALL)
+                cursorLoader = new CursorLoader(getApplicationContext(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[6] + " DESC");
+            //扫描某个图片文件夹
+            if (id == LOADER_CATEGORY)
+                cursorLoader = new CursorLoader(getApplicationContext(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[1] + " like '%" + args.getString("path") + "%'", null, IMAGE_PROJECTION[6] + " DESC");
 
-            // 根据图片设置参数新增验证条件
-            StringBuilder selectionArgs = new StringBuilder();
-
-            if (imageConfig != null) {
-                if (imageConfig.minWidth != 0) {
-                    selectionArgs.append(MediaStore.Images.Media.WIDTH + " >= " + imageConfig.minWidth);
-                }
-
-                if (imageConfig.minHeight != 0) {
-                    selectionArgs.append("".equals(selectionArgs.toString()) ? "" : " and ");
-                    selectionArgs.append(MediaStore.Images.Media.HEIGHT + " >= " + imageConfig.minHeight);
-                }
-
-                if (imageConfig.minSize != 0f) {
-                    selectionArgs.append("".equals(selectionArgs.toString()) ? "" : " and ");
-                    selectionArgs.append(MediaStore.Images.Media.SIZE + " >= " + imageConfig.minSize);
-                }
-
-                if (imageConfig.mimeType != null) {
-                    selectionArgs.append(" and (");
-                    for (int i = 0, len = imageConfig.mimeType.length; i < len; i++) {
-                        if (i != 0) {
-                            selectionArgs.append(" or ");
-                        }
-                        selectionArgs.append(MediaStore.Images.Media.MIME_TYPE + " = '" + imageConfig.mimeType[i] + "'");
-                    }
-                    selectionArgs.append(")");
-                }
-            }
-
-            if (id == LOADER_ALL) {
-                CursorLoader cursorLoader = new CursorLoader(mCxt,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        selectionArgs.toString(), null, IMAGE_PROJECTION[2] + " DESC");
-                return cursorLoader;
-            } else if (id == LOADER_CATEGORY) {
-                String selectionStr = selectionArgs.toString();
-                if (!"".equals(selectionStr)) {
-                    selectionStr += " and" + selectionStr;
-                }
-                CursorLoader cursorLoader = new CursorLoader(mCxt,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        IMAGE_PROJECTION[0] + " like '%" + args.getString("path") + "%'" + selectionStr, null,
-                        IMAGE_PROJECTION[2] + " DESC");
-                return cursorLoader;
-            }
-
-            return null;
+            return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mResultFolder.clear();
             if (data != null) {
-                List<Image> images = new ArrayList<>();
-                int count = data.getCount();
-                if (count > 0) {
-                    data.moveToFirst();
-                    do {
-                        String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
-                        String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                        long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                ArrayList<Image> allImages = new ArrayList<>();   //所有图片的集合,不分文件夹
+                while (data.moveToNext()) {
+                    //查询数据
+                    String imageName = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
+                    String imagePath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
 
-                        Image image = new Image(path, name, dateTime);
-                        images.add(image);
-                        if (!hasFolderGened) {
-                            // 获取文件夹名称
-                            File imageFile = new File(path);
-                            File folderFile = imageFile.getParentFile();
-                            Folder folder = new Folder();
-                            folder.name = folderFile.getName();
-                            folder.path = folderFile.getAbsolutePath();
-                            folder.cover = image;
-                            if (!mResultFolder.contains(folder)) {
-                                List<Image> imageList = new ArrayList<>();
-                                imageList.add(image);
-                                mResultFolder.add(folder);
-                                folder.images = imageList;
-                            } else {
-                                // 更新
-                                Folder f = mResultFolder.get(mResultFolder.indexOf(folder));
-                                f.images.add(image);
-                            }
-                        }
-
-                    } while (data.moveToNext());
-
-                    mImageAdapter.setData(images);
-
-                    // 设定默认选择
-                    if (resultList != null && resultList.size() > 0) {
-                        mImageAdapter.setDefaultSelected(resultList);
+                    File file = new File(imagePath);
+                    if (!file.exists() || file.length() <= 0) {
+                        continue;
                     }
+                    long imageAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]));
+                    //封装实体
+                    Image imageItem = new Image(imagePath, imageName, imageAddTime);
+                    allImages.add(imageItem);
+                    //根据父路径分类存放图片
+                    File imageFile = new File(imagePath);
+                    File imageParentFile = imageFile.getParentFile();
+                    Folder folder = new Folder();
+                    folder.name = imageParentFile.getName();
+                    folder.path = imageParentFile.getAbsolutePath();
 
-                    mFolderAdapter.setData(mResultFolder);
-                    hasFolderGened = true;
-
+                    if (!mResultFolder.contains(folder)) {
+                        ArrayList<Image> images = new ArrayList<>();
+                        images.add(imageItem);
+                        folder.cover = imageItem;
+                        folder.images = images;
+                        mResultFolder.add(folder);
+                    } else {
+                        mResultFolder.get(mResultFolder.indexOf(folder)).images.add(imageItem);
+                    }
                 }
+                mImageAdapter.setData(allImages);
+                // 设定默认选择
+                if (resultList != null && resultList.size() > 0) {
+                    mImageAdapter.setDefaultSelected(resultList);
+                }
+                mFolderAdapter.setData(mResultFolder);
             }
         }
 

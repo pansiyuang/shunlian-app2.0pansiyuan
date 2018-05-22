@@ -75,6 +75,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     @BindView(R.id.tv_return_reason)
     TextView tv_return_reason;
 
+    @BindView(R.id.tv_left)
+    TextView tv_left;
+
     @BindView(R.id.view_money)
     View view_money;
 
@@ -194,18 +197,22 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         switch (type) {
             case "1": //仅退款
                 mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
-                customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
+                customer_goods.setLabelName(getStringResouce(R.string.return_money_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
 
-                LogUtil.httpLogW("当前的数量为;" + customer_goods.getCurrentCount());
+                goodsDialog.setDialogTitle(getStringResouce(R.string.return_order));
                 setMaxPrice(goodsCount);
                 break;
             case "3": //退货退款
-                mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
+                mtv_toolbar_title.setText(getStringResouce(R.string.return_goods_and_money));
                 customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
+                tv_left.setText(getStringResouce(R.string.return_goods_money));
+                tv_return_type.setText(getStringResouce(R.string.return_goods_reason));
+                tv_request.setText(getStringResouce(R.string.refunds_goods));
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
+                goodsDialog.setDialogTitle(getStringResouce(R.string.return_goods_reason));
 
                 setMaxPrice(goodsCount);
                 break;
@@ -233,7 +240,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         }
 
         GlideUtils.getInstance().loadOverrideImage(this,
-                customer_goods.getGoodsIcon(), currentInfoEntity.thumb,160,160);
+                customer_goods.getGoodsIcon(), currentInfoEntity.thumb, 160, 160);
         customer_goods.setGoodsTitle(currentInfoEntity.title).selectCount(Integer.valueOf(currentInfoEntity.qty))
                 .setEdittextGoodsCount(goodsCount)
                 .setGoodsParams(currentInfoEntity.sku_desc)
@@ -249,21 +256,22 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         rl_return_reason.setOnClickListener(this);
         tv_request_complete.setOnClickListener(this);
 
-        edt_return_money.setOnTouchListener((v, event) ->{
-            setEdittextFocusable(true,edt_return_money);
+        edt_return_money.setOnTouchListener((v, event) -> {
+            setEdittextFocusable(true, edt_return_money);
             return false;
         });
 
         edt_return_money.addTextChangedListener(new TextWatcher() {
             String rel = "(\\d*)(\\.\\d{0,2})?";
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!Pattern.matches(rel,s)){
+                if (!Pattern.matches(rel, s)) {
                     s = s.subSequence(0, s.toString().indexOf(".") + 3);
                     edt_return_money.setText(s);
                     edt_return_money.setSelection(s.length());
                 }
-                if (s.toString().startsWith(".")){
+                if (s.toString().startsWith(".")) {
                     s = "0" + s;
                     edt_return_money.setText(s);
                     edt_return_money.setSelection(s.length());
@@ -291,8 +299,8 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 }*/
                 if (!isEmpty(s.toString())) {
                     if (Float.valueOf(s.toString()) > totalPrice) {
-                        edt_return_money.setText(totalPrice+"");
-                        edt_return_money.setSelection((totalPrice+"").length());
+                        edt_return_money.setText(totalPrice + "");
+                        edt_return_money.setSelection((totalPrice + "").length());
                     }
                 }
             }
@@ -357,9 +365,9 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     public void setMaxPrice(int count) {
         if (isLast == 1) { //是最后一件
             String freePrice = ",含邮费 ¥ ";
-            if (freightPrice > 0){
+            if (freightPrice > 0) {
                 freePrice += Common.formatFloat(freightPrice);
-            }else {
+            } else {
                 freePrice = "";
             }
 
