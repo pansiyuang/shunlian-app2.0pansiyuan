@@ -17,6 +17,8 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
+import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
 import java.util.List;
 
@@ -250,12 +252,26 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
     }
 
     public class FootViewHolder extends BaseRecyclerViewHolder {
+        @BindView(R.id.recycler_footmark)
+        SlRefreshView refreshview;
 
         @BindView(R.id.recycler_footmark)
         RecyclerView recycler_footmark;
 
         public FootViewHolder(View itemView) {
             super(itemView);
+            refreshview.setCanRefresh(true);
+            refreshview.setCanLoad(false);
+            refreshview.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                }
+
+                @Override
+                public void onLoadMore() {
+
+                }
+            });
         }
     }
 }

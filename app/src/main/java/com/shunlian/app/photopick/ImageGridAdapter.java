@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -254,6 +255,7 @@ public class ImageGridAdapter extends BaseAdapter {
             } else {
                 indicator.setVisibility(View.GONE);
             }
+            LogUtil.httpLogW("data.path:" + data.path);
             File imageFile = new File(data.path);
 
             if (mItemSize > 0) {
