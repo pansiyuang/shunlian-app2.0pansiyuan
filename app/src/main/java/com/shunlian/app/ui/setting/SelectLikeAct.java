@@ -41,7 +41,7 @@ public class SelectLikeAct extends BaseActivity implements ISelectLikeView{
     MyButton mbtn_sure;
 
     public static final int REQUEST_CODE = 300;
-    private final int maxCount = 5;//最多可选标签
+    private final int maxCount = 100000;//最多可选标签
     private final String format = "%d/%d";
     private SelectLikePresenter presenter;
 

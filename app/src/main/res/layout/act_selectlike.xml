@@ -46,6 +46,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="4/5"
+            android:visibility="gone"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 

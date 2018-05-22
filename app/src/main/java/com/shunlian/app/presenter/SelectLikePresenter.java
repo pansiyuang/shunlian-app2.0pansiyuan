@@ -28,7 +28,7 @@ import retrofit2.Call;
 
 public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
 
-    private final int maxCount = 5;//最多可选标签
+    private final int maxCount = 100000000;//最多可选标签
     private int topMargin;
     public int currentCount = 0;//当前选择数量
     private ArrayList<PersonalDataEntity.TagList> mTagLists;

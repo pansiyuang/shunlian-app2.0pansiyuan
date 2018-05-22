@@ -2,6 +2,9 @@ package com.shunlian.app.ui.setting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,9 +20,11 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalDataView;
 import com.shunlian.app.widget.AvatarDialog;
+import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.BottonDialog;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -96,6 +101,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     private SelectDateDialog dateDialog;
     private ImageCaptureManager captureManager;
     private AvatarDialog avatarDialog;
+    private String mInterestTag;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,PersonalDataAct.class));
@@ -165,7 +171,10 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 }
                 break;
             case R.id.llayout_interest:
-                SelectLikeAct.startAct(this,mtv_interest.getText().toString());
+                if (isEmpty(mInterestTag)){
+                    mInterestTag = "请选择";
+                }
+                SelectLikeAct.startAct(this,mInterestTag);
                 break;
             case R.id.llayout_avatar:
                 if (avatarDialog == null) {
@@ -181,20 +190,42 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 avatarDialog.show();
                 break;
             case R.id.llayout_birthday:
+                if (!"设置后不可更改".equals(mtv_birthday.getText())){
+                    return;//只能选择一次生日
+                }
                 if (dateDialog == null) {
 
                     dateDialog = new SelectDateDialog(this);
-                    dateDialog.setOnClickListener((date)->{
-                        if (presenter != null){
-                            String s = TransformUtil.date2TimeStamp(date, "yyyy-MM-dd");
-                            presenter.setInfo("birth",s);
-                        }
-                        mtv_birthday.setText(date);
-                    });
+                    dateDialog.setOnClickListener((date)->showDialog(date));
                 }
                 dateDialog.show();
                 break;
         }
+    }
+
+    private void showDialog(String date) {
+        if (isEmpty(date)){
+            return;
+        }
+        String src = "您的生日是%s，设置后将无法修改(生日仅自己可见)，确定要设置吗？";
+        src = String.format(src,date);
+        SpannableStringBuilder ssb = new SpannableStringBuilder(src);
+        BoldTextSpan boldTextSpan = new BoldTextSpan();
+        ssb.setSpan(boldTextSpan,5,5+date.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        AbsoluteSizeSpan sizeSpan = new AbsoluteSizeSpan(12,true);
+        ssb.setSpan(sizeSpan,src.indexOf("("),src.indexOf(")")+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        final PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
+                .setSureAndCancleListener(ssb,getString(R.string.SelectRecommendAct_sure), (v) -> {
+                            if (presenter != null){
+                                String s = TransformUtil.date2TimeStamp(date, "yyyy-MM-dd");
+                                presenter.setInfo("birth",s);
+                            }
+                            mtv_birthday.setText(date);
+                            mtv_birthday.setCompoundDrawables(null,null,null,null);
+                            promptDialog.dismiss();
+                        }, getString(R.string.errcode_cancel), (v) -> promptDialog.dismiss()
+                ).show();
     }
 
     /**
@@ -294,6 +325,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     public void setBirth(String birth) {
         if (!isEmpty(birth)){
             mtv_birthday.setText(birth);
+            mtv_birthday.setCompoundDrawables(null,null,null,null);
         }
     }
 
@@ -305,7 +337,8 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     @Override
     public void setTag(String tag) {
         if (!isEmpty(tag)){
-            mtv_interest.setText(tag);
+            mInterestTag = tag;
+            mtv_interest.setText(formInterest(tag));
         }
     }
 
@@ -345,7 +378,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
             String name = data.getStringExtra("name");
 
             if (!isEmpty(id) && !isEmpty(name) && presenter != null){
-                mtv_interest.setText(name);
+                mtv_interest.setText(formInterest(name));
                 presenter.setInfo("tag",id);
             }
         }else if (resultCode == RESULT_OK //相册
@@ -391,6 +424,13 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 Common.staticToast("上传图片失败");
             }
         }).launch();
+    }
+
+    private String formInterest(String src){
+       if (!isEmpty(src) && src.length() > 15){
+           src = src.substring(0,15)+"...";
+       }
+       return src;
     }
 
     @Override
