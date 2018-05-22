@@ -169,7 +169,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 gone(mHolder.mll_item);
                 visible(mHolder.nei_empty);
                 mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
-                        .setText("该商品还没有评价").setButtonText("");
+                        .setText("目前还没有相关评价").setButtonText("");
                 return;
             }else {
                 visible(mHolder.mll_item);
