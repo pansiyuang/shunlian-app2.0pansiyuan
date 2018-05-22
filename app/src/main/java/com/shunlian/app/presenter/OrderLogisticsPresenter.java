@@ -43,8 +43,6 @@ public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
     public void orderLogistics(String orderStr) {
         Map<String, String> map = new HashMap<>();
         map.put("order_id", String.valueOf(orderStr));
-        map.put("page", String.valueOf(orderStr));
-        map.put("page_size", String.valueOf(orderStr));
         sortAndMD5(map);
         Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getApiService().orderLogistics(map);
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderLogisticsEntity>>() {
