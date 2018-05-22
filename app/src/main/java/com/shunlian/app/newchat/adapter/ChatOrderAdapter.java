@@ -66,7 +66,7 @@ public class ChatOrderAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
             GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, goodsBean.thumb);
             orderViewHolder.tv_order_title.setText(goodsBean.title);
             orderViewHolder.tv_order_param.setText(goodsBean.sku_desc);
-            orderViewHolder.tv_order_price.setText(goodsBean.price);
+            orderViewHolder.tv_order_price.setText(getString(R.string.common_yuan) + " " + goodsBean.price);
             orderViewHolder.tv_order_status.setText(order.status_text);
             orderViewHolder.tv_order_count.setText("x" + goodsBean.qty);
         }

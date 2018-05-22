@@ -15,4 +15,5 @@ import java.util.List;
 public interface StoreIntroduceView extends IView {
     void introduceInfo(StoreIntroduceEntity storeIntroduceEntity);
     void storeFocus();
+    void getUserId(String userId);
 }

@@ -33,6 +33,14 @@ public class OrderMessage extends BaseMessage {
         public String express_com;
         public String express_sn;
         public String express_code;
-        public List<MyOrderEntity.OrderGoodsBean> orderGoods;
+        public List<OrderGoods> orderGoods;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class OrderGoods {
+        public String goodsImage;
+        public String title;
+        public String price;
+        public String goodsId;
     }
 }

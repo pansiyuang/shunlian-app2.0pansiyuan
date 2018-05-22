@@ -65,7 +65,7 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     @BindView(R.id.line_title)
     View line_title;
 
-    private static List<BaseFragment> mFrags = new ArrayList<>();
+    private List<BaseFragment> mFrags = new ArrayList<>();
     private CommonLazyPagerAdapter mPagerAdapter;
     private int sysCount, storeCount;
     private MessageCountManager messageCountManager;

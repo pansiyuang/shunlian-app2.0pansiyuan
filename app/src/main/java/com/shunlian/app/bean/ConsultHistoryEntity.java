@@ -11,6 +11,8 @@ import java.util.List;
 public class ConsultHistoryEntity {
 
     public List<HistoryList> history_list;
+    public String store_id;
+    public String store_name;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class HistoryList{
 

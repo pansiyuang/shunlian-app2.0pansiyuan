@@ -13,6 +13,8 @@ import com.shunlian.app.adapter.StoreEvaluateAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -37,6 +39,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.miv_star)
     MyImageView miv_star;
+
+    @BindView(R.id.miv_chat)
+    MyImageView miv_chat;
 
     @BindView(R.id.mtv_number)
     TextView mtv_number;
@@ -79,6 +84,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     private boolean isFocus;
     private String storeId,seller_id,storeScore;
     private StoreIntroducePresenter storeIntroducePresenter;
+
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -155,6 +161,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
             case R.id.mrlayout_yingye:
                 StoreLicenseAct.startAct(this,seller_id);
                 break;
+            case R.id.miv_chat:
+                storeIntroducePresenter.getUserId(storeId);
+                break;
         }
     }
 
@@ -163,6 +172,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         super.initListener();
         mtv_attention.setOnClickListener(this);
         mrlayout_yingye.setOnClickListener(this);
+        miv_chat.setOnClickListener(this);
     }
 
     @Override
@@ -229,5 +239,20 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
         }
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.shop_id = storeId;
+        chatMember.m_user_id = userId;
+        chatMember.type = "3";
+        chatMember.nickname = mtv_storeName.getText().toString();
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
     }
 }

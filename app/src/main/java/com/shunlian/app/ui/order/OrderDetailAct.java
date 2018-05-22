@@ -457,6 +457,10 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
         chatMember.nickname = orderdetailEntity.store_name;
         chatMember.type = "3";
@@ -555,11 +559,11 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         CharSequence text = null;
         switch (view.getId()) {
             case R.id.mtv_more:
-               if (mtv_contact.getVisibility()==View.VISIBLE){
-                   mtv_contact.setVisibility(View.GONE);
-               }else {
-                   mtv_contact.setVisibility(View.VISIBLE);
-               }
+                if (mtv_contact.getVisibility() == View.VISIBLE) {
+                    mtv_contact.setVisibility(View.GONE);
+                } else {
+                    mtv_contact.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.mtv_contact:
                 mtv_contact.setVisibility(View.GONE);
@@ -588,7 +592,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     cancleOrder();
                 } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
                     orderDetailPresenter.remindseller(orderId);
-                }else if (getString(R.string.order_wuliu).equals(text)) {//物流
+                } else if (getString(R.string.order_wuliu).equals(text)) {//物流
                     //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                     OrderLogisticsActivity.startAct(this, orderId);
                 }
@@ -607,8 +611,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
                     for (int i = 0; i < order_goods.size(); i++) {
                         OrderdetailEntity.Good bean = order_goods.get(i);
-                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId,
-                                bean.thumb, bean.title, bean.price, bean.goods_id);
+                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId, bean.thumb, bean.title, bean.price, bean.goods_id);
+                        entity.order_sn = orderdetailEntity.order_sn;
                         entities.add(entity);
                     }
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.CREAT_COMMENT);
@@ -620,8 +624,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
                     for (int i = 0; i < order_goods.size(); i++) {
                         OrderdetailEntity.Good bean = order_goods.get(i);
-                        ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb,
-                                bean.title, bean.price, bean.comment_id);
+                        ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb, bean.title, bean.price, bean.comment_id);
+                        entity.order_sn = orderdetailEntity.order_sn;
                         entities.add(entity);
                     }
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.APPEND_COMMENT);

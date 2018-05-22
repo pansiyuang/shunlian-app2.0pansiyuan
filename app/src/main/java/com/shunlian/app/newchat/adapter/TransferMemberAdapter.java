@@ -41,9 +41,9 @@ public class TransferMemberAdapter extends BaseRecyclerAdapter<ChatMemberEntity.
         transferViewHolder.tv_status.setText(chatMember.status_msg);
 
         if ("休息中".equals(chatMember.status_msg)) {
-            transferViewHolder.miv_status.setImageResource(R.mipmap.img_chat_xiuxizhong);
-        } else if ("接待中".equals(chatMember.status_msg)) {
             transferViewHolder.miv_status.setImageResource(R.mipmap.img_chat_jiedaizhong);
+        } else if ("接待中".equals(chatMember.status_msg)) {
+            transferViewHolder.miv_status.setImageResource(R.mipmap.img_chat_xiuxizhong);
         }
 
         if (chatMember.isSelect) {

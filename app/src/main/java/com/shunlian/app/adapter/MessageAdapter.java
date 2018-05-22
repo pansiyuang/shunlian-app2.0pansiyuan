@@ -16,11 +16,15 @@ import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.SwipeMenuLayout;
+import com.shunlian.app.utils.TimeUtil;
 import com.shunlian.app.widget.MyImageView;
 
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.newchat.util.TimeUtil.getNewChatTime;
+import static com.shunlian.app.newchat.util.TimeUtil.getTime;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -30,6 +34,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
     public static final int ITEM_TOP = 100005;
     private List<MessageListEntity.Msg> msgList;
     private OnStatusClickListener mListener;
+    private boolean canDelItem;
 
     public MessageAdapter(Context context, List<MessageListEntity.Msg> msgs, List<ChatMemberEntity.ChatMember> memberList) {
         super(context, false, memberList);
@@ -51,9 +56,13 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         }
     }
 
+    public void setDelMode(boolean isCanDel) {
+        canDelItem = isCanDel;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if (msgList != null) {
+        if (!isEmpty(msgList)) {
             if (position == 0) {
                 return ITEM_TOP;
             }
@@ -100,7 +109,17 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         messageViewHolder.tv_name.setText(chatMember.nickname);
 //        messageViewHolder.tv_content.setText(chatMember.);
-        messageViewHolder.tv_date.setText(chatMember.update_time);
+        try {
+            long time = Long.valueOf(chatMember.update_time);
+            if (time > 0) {
+                messageViewHolder.tv_date.setText(getTime(time, "YYYY-MM-dd HH:mm:ss"));
+            }
+        } catch (Exception e) {
+            if (!isEmpty(chatMember.update_time)) {
+                messageViewHolder.tv_date.setText(chatMember.update_time);
+            }
+            e.printStackTrace();
+        }
         GlideUtils.getInstance().loadCornerImage(context, messageViewHolder.miv_icon, chatMember.headurl, 5);
         if (chatMember.unread_count > 0) {
             messageViewHolder.tv_count.setVisibility(View.VISIBLE);
@@ -113,6 +132,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
                 mListener.OnMessageDel(chatMember.m_user_id);
             }
         });
+        messageViewHolder.swipe_layout.setSwipeEnable(canDelItem);
     }
 
 

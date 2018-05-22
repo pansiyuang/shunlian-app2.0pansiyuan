@@ -19,6 +19,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
@@ -83,11 +84,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
         chatMemberList = new ArrayList<>();
         mPresenter = new MessagePresenter(this, this);
 
-        if (EasyWebsocketClient.getClient() == null) {
-            mClient = EasyWebsocketClient.initWebsocketClient(this);
-        } else {
-            mClient = EasyWebsocketClient.getClient();
-        }
+        mClient = EasyWebsocketClient.getInstance(this);
 
         if (mClient != null) {
             mClient.addOnMessageReceiveListener(this);
@@ -133,7 +130,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
-    public void getSysMessageList(List<MessageListEntity.Msg> msgList) {
+    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
 
     }
 
@@ -170,9 +167,10 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
 
     public void updateFriendList(String message) {
         BaseMessage baseMessage = null;
+        MsgInfo msgInfo = null;
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
-            MsgInfo msgInfo = messageEntity.msg_info;
+            msgInfo = messageEntity.msg_info;
             String message1 = msgInfo.message;
             baseMessage = mObjectMapper.readValue(message1, BaseMessage.class);
         } catch (Exception e) {
@@ -186,7 +184,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
                     unReadNum = chatMemberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     chatMemberList.get(i).unread_count = unReadNum;
-                    chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(baseMessage.sendTime / 1000);
+                    chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
                     break;
                 }
             }
@@ -206,11 +204,21 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
 
     @Override
     public void evaluateMessage(String msg) {
-        updateFriendList(msg);
+//        updateFriendList(msg);
     }
 
     @Override
     public void roleSwitchMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
 
     }
 

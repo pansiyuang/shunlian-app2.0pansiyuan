@@ -3,8 +3,10 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IConsultHistoryView;
 
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import retrofit2.Call;
 public class ConsultHistoryPresenter extends BasePresenter<IConsultHistoryView> {
 
     private String mRefund_id;
+    private Call<BaseEntity<CommonEntity>> mChatIdCall;
 
     public ConsultHistoryPresenter(Context context, IConsultHistoryView iView, String refund_id) {
         super(context, iView);
@@ -40,7 +43,9 @@ public class ConsultHistoryPresenter extends BasePresenter<IConsultHistoryView> 
      */
     @Override
     public void detachView() {
-
+        if (mChatIdCall != null && mChatIdCall.isExecuted()) {
+            mChatIdCall.cancel();
+        }
     }
 
     /**
@@ -51,13 +56,13 @@ public class ConsultHistoryPresenter extends BasePresenter<IConsultHistoryView> 
         refundHistory(mRefund_id);
     }
 
-    private void refundHistory(String refund_id){
-        Map<String,String> map = new HashMap<>();
-        map.put("refund_id",refund_id);
+    private void refundHistory(String refund_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("refund_id", refund_id);
         sortAndMD5(map);
 
         Call<BaseEntity<ConsultHistoryEntity>> baseEntityCall = getApiService().refundHistory(map);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<ConsultHistoryEntity>>(){
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<ConsultHistoryEntity>>() {
             @Override
             public void onSuccess(BaseEntity<ConsultHistoryEntity> entity) {
                 super.onSuccess(entity);
@@ -66,4 +71,32 @@ public class ConsultHistoryPresenter extends BasePresenter<IConsultHistoryView> 
         });
 
     }
+
+    /**
+     * 获取商家聊天id
+     *
+     * @param shopId
+     */
+    public void getUserId(String shopId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_id", shopId);
+        sortAndMD5(map);
+
+        mChatIdCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, mChatIdCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getUserId(commonEntity.user_id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
+
 }

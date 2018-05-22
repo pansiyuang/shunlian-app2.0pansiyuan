@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +46,11 @@ import com.shunlian.app.newchat.entity.OrderMessage;
 import com.shunlian.app.newchat.entity.HelpMessage;
 import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.TransferMessage;
+import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
@@ -94,16 +99,20 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public static final int ORDER_MSG = 9;
     public static final int CHECK_ORDER = 10;
     public static final int SYS_MSG = 11;
-    public static final int SELLER_HELP = 12;
-    public static final int ADMIN_HELP = 13;
-    public static final int TRANSFER_MSG = 14;
-    public static final int SYS_TEXT = 15;
+    public static final int SELLER_HELP_LEFT = 12;
+    public static final int ADMIN_HELP_LEFT = 13;
+    public static final int SELLER_HELP_RIGHT = 14;
+    public static final int ADMIN_HELP_RIGHT = 15;
+    public static final int TRANSFER_MSG = 16;
+    public static final int SYS_TEXT = 17;
 
     private final ObjectMapper objectMapper;
     private RecyclerView recycler;
     private AssetManager am;
     private Pattern patternEmotion;
     private String currentUserId;
+    private UserInfoEntity.Info.User mUser;
+    private MemberStatus memberStatus;
 
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
@@ -112,7 +121,15 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         am = context.getAssets();
 
         patternEmotion = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]");
-        currentUserId = SharedPrefUtil.getSharedPrfString("user_id", "");
+    }
+
+    public void setUser(UserInfoEntity.Info.User user) {
+        this.mUser = user;
+        currentUserId = mUser.user_id;
+    }
+
+    public void setCurrentStatus(MemberStatus status) {
+        memberStatus = status;
     }
 
     public int getSendType(String fromUserId) {
@@ -124,6 +141,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             return BaseMessage.VALUE_RIGHT;
         }
 
+        if (mUser != null && mUser.pid.equals(fromUserId)) {
+            return BaseMessage.VALUE_RIGHT;
+        }
+
         return BaseMessage.VALUE_LEFT;
     }
 
@@ -132,6 +153,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
             if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
+                if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
+                    return;
+                }
                 addTimeMessage(msgInfo.send_time, getLastMessageTime(false));
             }
         } catch (Exception e) {
@@ -149,6 +173,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         try {
             message = objectMapper.readValue(msgInfo.message, BaseMessage.class);
             if (getSendType(message.from_user_id) != BaseMessage.VALUE_SYSTEM) {
+                if (memberStatus == MemberStatus.Member && "zhuanjie".equals(message.msg_type)) { //判断当前用户身份是用户身份并且当前消息是转接消息，则不显示时间
+                    return;
+                }
                 addTimeMessage(true, msgInfo.send_time, getLastMessageTime(true));
             }
         } catch (Exception e) {
@@ -175,6 +202,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 String evaluateId = evaluateMessage.msg_body.evaluate.id;
                 if (evaluateEntity.evaluat_id.equals(evaluateId)) {
                     evaluateMessage.msg_body.evaluate.score = evaluateEntity.score;
+                    evaluateMessage.msg_body.evaluate.selectScore = 0;
                     info.message = msg2Str(evaluateMessage);
                     break;
                 }
@@ -185,7 +213,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     @Override
     public int getItemViewType(int position) {
-        String message = lists.get(position).message;
+        MsgInfo msgInfo = lists.get(position);
+        String message = msgInfo.message;
         BaseMessage baseMessage = str2Msg(message);
         int sendType = getSendType(baseMessage.from_user_id);
         if (sendType == BaseMessage.VALUE_LEFT) { //左边消息
@@ -201,9 +230,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 case "evaluate":
                     return EVALUATE_MSG;
                 case "seller_help":
-                    return SELLER_HELP;
+                    return SELLER_HELP_LEFT;
                 case "admin_help":
-                    return ADMIN_HELP;
+                    return ADMIN_HELP_LEFT;
                 case "sys_text":
                     return SYS_TEXT;
                 case "order":
@@ -227,6 +256,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     return EVALUATE_MSG;
                 case "sys_text":
                     return SYS_TEXT;
+                case "seller_help":
+                    return SELLER_HELP_RIGHT;
+                case "admin_help":
+                    return ADMIN_HELP_RIGHT;
+                case "zhuanjie":
+                    return TRANSFER_MSG;
             }
         } else if (sendType == BaseMessage.VALUE_SYSTEM) { //系统消息
             switch (baseMessage.msg_type) {
@@ -262,11 +297,16 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 return new LinkViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_link, parent, false));
             case SYS_MSG:
                 return new SysMsgViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_system, parent, false));
-            case SELLER_HELP:
-            case ADMIN_HELP:
+            case SELLER_HELP_LEFT:
+            case ADMIN_HELP_LEFT:
                 return new HelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_left_seller_help, parent, false));
+            case SELLER_HELP_RIGHT:
+            case ADMIN_HELP_RIGHT:
+                return new HelpHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_right_seller_help, parent, false));
             case TRANSFER_MSG:
                 return new TransferViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_transfer, parent, false));
+            case CHECK_ORDER:
+                return new CheckOrderViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_check_order, parent, false));
             case SYS_TEXT:
                 return new SysTextHolder(LayoutInflater.from(context).inflate(R.layout.item_chat_msg_sys_text, parent, false));
         }
@@ -306,7 +346,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 handRightGoods(holder, baseMessage);
                 break;
             case EVALUATE_MSG:
-                handEvaluate(holder, baseMessage);
+                handEvaluate(holder, baseMessage, item);
                 break;
             case CHECK_ORDER:
                 handCheckOrder(holder, baseMessage);
@@ -320,11 +360,17 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             case SYS_MSG:
                 handSysMsg(holder, baseMessage);
                 break;
-            case SELLER_HELP:
-                handHelp(holder, baseMessage, true);
+            case SELLER_HELP_LEFT:
+                handHelp(holder, baseMessage, true, false);
                 break;
-            case ADMIN_HELP:
-                handHelp(holder, baseMessage, false);
+            case SELLER_HELP_RIGHT:
+                handHelp(holder, baseMessage, true, true);
+                break;
+            case ADMIN_HELP_LEFT:
+                handHelp(holder, baseMessage, false, false);
+                break;
+            case ADMIN_HELP_RIGHT:
+                handHelp(holder, baseMessage, false, true);
                 break;
             case TRANSFER_MSG:
                 handTransfer(holder, baseMessage);
@@ -382,10 +428,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             }
 
             leftImgViewHolder.miv_img.setOnClickListener(v -> {
-                if (isEmpty(image.img_original)) {
+                if (isEmpty(image.img_small)) {
                     return;
                 }
-                imgs.add(image.img_host + image.img_original);
+                imgs.clear();
+                imgs.add(image.img_host + image.img_small);
                 //查看大图
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) imgs;
@@ -508,7 +555,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
+    public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage, final MsgInfo msgInfo) {
         EvaluateMessage evaluateMessage = (EvaluateMessage) baseMessage;
         EvaluateViewHolder evaluateViewHolder = (EvaluateViewHolder) holder;
         EvaluateMessage.EvaluateMessageBody evaluateMessageBody;
@@ -516,11 +563,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             evaluateMessageBody = evaluateMessage.msg_body;
             if (evaluateMessageBody.evaluate != null) {
                 EvaluateMessage.Evaluate evaluate = evaluateMessageBody.evaluate;
-                initEvaluteStatus(evaluate.score, evaluateViewHolder);
-
+                LogUtil.httpLogW("id:" + evaluate.id + " score:" + evaluate.score + " selectScore:" + evaluate.selectScore);
+                initEvaluteStatus(evaluate.score, evaluate.selectScore, evaluateViewHolder);
                 evaluateViewHolder.ratingBar.setOnRatingChangeListener(ratingCount -> {
                     evaluate.score = (int) ratingCount;
-                    updateEvaluteStatus(evaluate.score, evaluateViewHolder);
+                    setEvaluateMsgSelectScore((int) ratingCount, msgInfo);
+                    updateEvaluteStatus((int) ratingCount, evaluateViewHolder);
                 });
                 evaluateViewHolder.tv_comment_status.setOnClickListener(v -> {
                     ((ChatActivity) context).createEvalute(evaluateMessage);
@@ -540,26 +588,26 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 orderViewHolder.tv_seller.setText(order.store_name);
                 orderViewHolder.tv_seller_id.setText(order.store_id);
                 if (!isEmpty(order.orderGoods)) {
-                    MyOrderEntity.OrderGoodsBean orderGoodsBean = order.orderGoods.get(0);
+                    OrderMessage.OrderGoods orderGoodsBean = order.orderGoods.get(0);
                     if (!isScrolling) {
-                        GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.thumb);
+                        GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.goodsImage);
                     } else {
                         orderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
                     }
                     orderViewHolder.tv_title.setText(orderGoodsBean.title);
-                    orderViewHolder.tv_price.setText(orderGoodsBean.price);
-                    orderViewHolder.tv_order_number.setText(orderGoodsBean.order_sn);
+                    orderViewHolder.tv_price.setText("共" + order.orderGoods.size() + "件商品，共计¥" + orderGoodsBean.price);
                 }
                 orderViewHolder.tv_date.setText(order.create_time);
-
+                orderViewHolder.tv_order_number.setText(order.ordersn);
+                orderViewHolder.tv_express_number.setText(order.express_sn);
                 orderViewHolder.tv_search_express.setOnClickListener(v -> {
                     //查快递
-                    if (!isEmpty(order.express_sn)) {
-
+                    if (!isEmpty(order.orderId)) {
+                        OrderLogisticsActivity.startAct(context, order.orderId);
                     }
                 });
             }
-
+//
             if ("1".equals(orderMessage.from_type) || "2".equals(orderMessage.from_type)) {
                 //平台发给用户的
                 orderViewHolder.ll_detail.setVisibility(View.VISIBLE);
@@ -578,13 +626,13 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             checkOrderViewHolder.tv_phone_num.setText(String.format(getString(R.string.phone_num), order.phone));
             checkOrderViewHolder.tv_receiver.setText(String.format(getString(R.string.receiver), order.realname));
             checkOrderViewHolder.tv_address_detail.setText(String.format(getString(R.string.address_detail), order.address));
-            checkOrderViewHolder.tv_price.setText(order.price);
             if (!isEmpty(order.orderGoods)) {
-                List<MyOrderEntity.OrderGoodsBean> orderGoodsBeanList = order.orderGoods;
-                MyOrderEntity.OrderGoodsBean orderGoodsBean = orderGoodsBeanList.get(0);
+                List<OrderMessage.OrderGoods> orderGoodsBeanList = order.orderGoods;
+                OrderMessage.OrderGoods orderGoodsBean = orderGoodsBeanList.get(0);
+                checkOrderViewHolder.tv_price.setText("共" + orderGoodsBeanList.size() + "件商品，共计¥" + order.price);
                 checkOrderViewHolder.tv_title.setText(orderGoodsBean.title);
                 if (!isScrolling) {
-                    GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.thumb);
+                    GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.goodsImage);
                 } else {
                     checkOrderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
                 }
@@ -622,7 +670,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TransferMessage transferMessage = (TransferMessage) baseMessage;
         if (transferMessage.msg_body != null) {
             TransferMessage.TransferMessageBody transferMessageBody = transferMessage.msg_body;
-            String content = transferMessageBody.j_nickname + "将该用户转给" + transferMessageBody.z_nickname;
+            String content = transferMessageBody.z_nickname + "将该用户转给" + transferMessageBody.j_nickname;
             int jnameLength = transferMessageBody.j_nickname.length();
             int znameLength = transferMessageBody.z_nickname.length();
             SpannableString styledText = new SpannableString(content);
@@ -635,7 +683,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 //                    transferMessageBody.j_nickname.length() + 6 + transferMessageBody.z_nickname.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             transferViewHolder.tv_content.setText(styledText + "处理");
-            transferViewHolder.tv_reason.setText("备注:" + transferMessageBody.item);
+            transferViewHolder.tv_reason.setText("备注：" + transferMessageBody.item);
+            if (!isEmpty(transferMessageBody.create_time)) {
+                Long time = Long.valueOf(transferMessageBody.create_time) * 1000;
+                transferViewHolder.tv_date.setText(TimeUtil.getTime(time, "yyyy/MM/dd HH:mm"));
+            }
         }
     }
 
@@ -647,12 +699,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         sysMsgViewHolder.tv_systemMessage.setText(getNewChatTime(currentTime));
     }
 
-    public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller) {
-        HelpHolder HelpHolder = (HelpHolder) holder;
+    public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller, boolean isSelf) {
+        HelpHolder helpHolder = (HelpHolder) holder;
         HelpMessage helpMessage = (HelpMessage) baseMessage;
         if (helpMessage.msg_body != null) {
             HelpMessage.HelpBody msgBody = helpMessage.msg_body;
-            HelpHolder.tv_content.setText(msgBody.help_item);
+            helpHolder.tv_content.setText(msgBody.help_item);
             if (!isEmpty(msgBody.help_list)) {
                 List<HelpMessage.HelpEntity> helpEntityList = msgBody.help_list;
                 SimpleRecyclerAdapter simpleRecyclerAdapter = new SimpleRecyclerAdapter<HelpMessage.HelpEntity>(context, R.layout.item_seller_help, helpEntityList) {
@@ -660,6 +712,17 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                     public void convert(SimpleViewHolder holder, HelpMessage.HelpEntity helpEntity, int position) {
                         TextView textView = holder.getView(R.id.tv_seller_help);
                         textView.setText(helpEntity.item);
+                        if (isSelf) {
+                            textView.setTextColor(getColor(R.color.white));
+                        } else {
+                            textView.setTextColor(getColor(R.color.value_40A5FF));
+                        }
+
+                        if (isSelf) {
+                            textView.setEnabled(false);
+                        } else {
+                            textView.setEnabled(true);
+                        }
                         textView.setOnClickListener(v -> {
                             if (isSeller) {
                                 ((ChatActivity) context).getHelpContent(helpEntity.id, helpMessage.sid);
@@ -669,14 +732,14 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                         });
                     }
                 };
-                HelpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
-                HelpHolder.recycler_help.setNestedScrollingEnabled(false);
+                helpHolder.recycler_help.setAdapter(simpleRecyclerAdapter);
+                helpHolder.recycler_help.setNestedScrollingEnabled(false);
             }
         }
         if (!isScrolling) {
-            GlideUtils.getInstance().loadCornerImage(context, HelpHolder.miv_icon, helpMessage.from_headurl, 3);
+            GlideUtils.getInstance().loadCornerImage(context, helpHolder.miv_icon, helpMessage.from_headurl, 3);
         } else {
-            HelpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
+            helpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
         }
     }
 
@@ -946,6 +1009,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     public class TransferViewHolder extends BaseRecyclerViewHolder {
 
+        @BindView(R.id.ll_rootView)
+        LinearLayout ll_rootView;
+
         @BindView(R.id.tv_date)
         TextView tv_date;
 
@@ -957,6 +1023,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
         public TransferViewHolder(View itemView) {
             super(itemView);
+            if (memberStatus == MemberStatus.Member) {
+                ll_rootView.setVisibility(View.GONE);
+            } else {
+                ll_rootView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -1005,6 +1076,9 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 case "admin_help":
                     message = objectMapper.readValue(msg, HelpMessage.class);
                     break;
+                case "order_confirm":
+                    message = objectMapper.readValue(msg, OrderMessage.class);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1038,6 +1112,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         if (!isPre && sendTime - lastmsgTime <= 30 && lastmsgTime != 0) {
             return;
         }
+
         MsgInfo info = new MsgInfo();
         TextMessage textMessage = new TextMessage();
         TextMessage.TextMessageBody textMessageBody = new TextMessage.TextMessageBody();
@@ -1152,17 +1227,26 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 }
             }
             // 匹配字符串的开始位置
+
             int start = matcherEmotion.start();
             // 利用表情名字获取到对应的图片
             InputStream is = null;
             try {
                 is = am.open(String.format("emojis/%d.png", position));
-                // 压缩表情图片
-                int size = (int) tv.getTextSize() * 13 / 10;
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
-                Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+                is.close();
+                // 压缩表情图片
+                Matrix matrix = new Matrix();
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                // 缩放图片的尺寸
+                int i = TransformUtil.dip2px(context, 28);
+                float scaleWidth = (float) i / width;
+                float scaleHeight = (float) i / height;
+                matrix.postScale(scaleWidth, scaleHeight);
+                Bitmap scaleBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
                 int end = start + value.length();
-                ImageSpan span = new ImageSpan(context, scaleBitmap);
+                CenterAlignImageSpan span = new CenterAlignImageSpan(context, scaleBitmap);
                 spannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1233,8 +1317,24 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         }
     }
 
-    public void initEvaluteStatus(int score, EvaluateViewHolder evaluateViewHolder) {
+    public void setEvaluateMsgSelectScore(int score, MsgInfo msgInfo) {
+        BaseMessage baseMsg = str2Msg(msgInfo.message);
+        EvaluateMessage evaluateMessage;
+        evaluateMessage = (EvaluateMessage) baseMsg;
+        evaluateMessage.msg_body.evaluate.selectScore = score;
+        msgInfo.message = msg2Str(evaluateMessage);
+    }
+
+
+    public void initEvaluteStatus(int score, int selectScore, EvaluateViewHolder evaluateViewHolder) {
         if (score == 0) {
+            if (selectScore == 0) {
+                updateEvaluteStatus(0, evaluateViewHolder);
+                evaluateViewHolder.ratingBar.setStar(0);
+            } else {
+                updateEvaluteStatus(selectScore, evaluateViewHolder);
+                evaluateViewHolder.ratingBar.setStar(selectScore);
+            }
             evaluateViewHolder.tv_comment_status.setText(getString(R.string.submit));
             evaluateViewHolder.tv_comment_status.setEnabled(true);
             evaluateViewHolder.ratingBar.setClickable(true);
@@ -1247,29 +1347,36 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             evaluateViewHolder.tv_comment_status.setTextColor(getColor(R.color.new_gray));
             evaluateViewHolder.tv_comment_status.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_solid_f7_60px));
             updateEvaluteStatus(score, evaluateViewHolder);
+            evaluateViewHolder.ratingBar.setStar(score);
         }
-        evaluateViewHolder.ratingBar.setStar(score);
     }
 
     public void updateEvaluteStatus(int score, EvaluateViewHolder evaluateViewHolder) {
         switch (score) {
             case 1:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.very_unsatisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.unsatisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.commonly));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 4:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.satisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
                 break;
             case 5:
                 evaluateViewHolder.tv_rating.setText(getString(R.string.very_satisfy));
+                evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
+                break;
+            default:
+                evaluateViewHolder.tv_rating.setVisibility(View.GONE);
                 break;
         }
-        evaluateViewHolder.tv_rating.setVisibility(View.VISIBLE);
     }
 
     private void setImg(ImageView iv, ImageMessage.Image image) {

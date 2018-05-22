@@ -33,11 +33,7 @@ public class ChatManager {
     }
 
     public ChatManager init() {
-        if (EasyWebsocketClient.getClient() != null) {
-            mClient = EasyWebsocketClient.getClient();
-        } else {
-            mClient = EasyWebsocketClient.initWebsocketClient(mContext);
-        }
+        mClient = EasyWebsocketClient.getInstance(mContext);
 
         statusDialog = new SwitchStatusDialog(mContext).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override

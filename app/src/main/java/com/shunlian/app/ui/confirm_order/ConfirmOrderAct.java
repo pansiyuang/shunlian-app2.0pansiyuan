@@ -181,18 +181,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     false, enabled, disabled,address,isOrderBuy);
             recy_view.setAdapter(df);
 
-            df.setSelectVoucherListener(new ConfirmOrderAdapter.ISelectVoucherListener() {
-                @Override
-                public void onSelectVoucher(int position) {
-                    float currentPrice = 0;
-                    for (int i = 0; i < enabled.size(); i++) {
-                        String post_discount_price = enabled.get(i).post_discount_price;
-                        currentPrice += Float.parseFloat(isEmpty(post_discount_price)
-                                ? "0" : post_discount_price);
-                    }
-                    mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                            .getString(R.string.rmb).concat(Common.formatFloat(currentPrice)),11));
+            df.setSelectVoucherListener(position -> {
+                float currentPrice = 0;
+                for (int i = 0; i < enabled.size(); i++) {
+                    String post_discount_price = enabled.get(i).post_discount_price;
+                    currentPrice += Float.parseFloat(isEmpty(post_discount_price)
+                            ? "0" : post_discount_price);
                 }
+                mtv_total_price.setText(Common.dotAfterSmall(getResources()
+                        .getString(R.string.rmb).concat(Common.formatFloat(currentPrice)),11));
             });
         }
     }

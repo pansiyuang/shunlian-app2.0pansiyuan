@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.shunlian.app.ui.my_comment.CreatCommentActivity.APPEND_COMMENT;
+import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CHANGE_COMMENT;
+import static com.shunlian.app.ui.my_comment.CreatCommentActivity.CREAT_COMMENT;
 
 /**
  * Created by Administrator on 2017/12/12.
@@ -37,7 +39,6 @@ public class CreatCommentAdapter extends BaseAdapter {
     private OnCommentChangeCallBack mCallBack;
     private HashMap<Integer, SingleImgAdapter> mAdapters;
     private Context mContext;
-
 //    public void updateProgress(int p1, String tag, int progress) {
 //        if (mAdapters.size() != 0) {
 //            SingleImgAdapter imgAdapter = mAdapters.get(p1);
@@ -130,7 +131,11 @@ public class CreatCommentAdapter extends BaseAdapter {
 
         if (commentType == APPEND_COMMENT) {
             ll_comment_score.setVisibility(View.GONE);
-        } else {
+        } else if (commentType == CREAT_COMMENT) {
+            ll_comment_score.setVisibility(View.VISIBLE);
+        } else if (commentType == CHANGE_COMMENT) {
+            ll_comment_middle.setEnabled(false);
+            ll_comment_low.setEnabled(false);
             ll_comment_score.setVisibility(View.VISIBLE);
         }
 
@@ -174,39 +179,30 @@ public class CreatCommentAdapter extends BaseAdapter {
                 miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_h));
                 break;
         }
-        ll_comment_high.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_h));
-                miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
-                miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
-                if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("5", position);
-                }
+        ll_comment_high.setOnClickListener(v -> {
+            miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_h));
+            miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
+            miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
+            if (mCallBack != null) {
+                mCallBack.OnCommentLevel("5", position);
             }
         });
 
-        ll_comment_middle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_n));
-                miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_h));
-                miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
-                if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("3", position);
-                }
+        ll_comment_middle.setOnClickListener(v -> {
+            miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_n));
+            miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_h));
+            miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_n));
+            if (mCallBack != null) {
+                mCallBack.OnCommentLevel("3", position);
             }
         });
 
-        ll_comment_low.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_n));
-                miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
-                miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_h));
-                if (mCallBack != null) {
-                    mCallBack.OnCommentLevel("1", position);
-                }
+        ll_comment_low.setOnClickListener(v -> {
+            miv_comment_high.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_haoping_n));
+            miv_comment_middle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_zhongping_n));
+            miv_comment_low.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_chaping_h));
+            if (mCallBack != null) {
+                mCallBack.OnCommentLevel("1", position);
             }
         });
 

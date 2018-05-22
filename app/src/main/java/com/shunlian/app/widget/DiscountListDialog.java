@@ -112,7 +112,7 @@ public class DiscountListDialog extends Dialog {
         mtv_title.setText(mContext.getResources().getString(R.string.goods_voucher));
         currentPosition = enabled.selectVoucherId;
         ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
-        if (!"no_0".equals(voucher1.voucher_id)){
+        if (!"".equals(voucher1.voucher_id)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
             voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
             voucher.voucher_hint = mContext.getResources().getString(R.string.not_use_voucher);

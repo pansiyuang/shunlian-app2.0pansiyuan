@@ -8,13 +8,18 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IShoppingCarView;
+import com.shunlian.app.view.IView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -40,6 +45,10 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
 
     }
 
+    public void initShopData() {
+        getApiData();
+        getProbablyLikeList();
+    }
 
     public void getApiData(){
         Map<String, String> map = new HashMap<>();
@@ -255,10 +264,29 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         try {
-            Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getProbablyLikeList(map);
-            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            Call<BaseEntity<ProbabyLikeGoodsEntity>> baseEntityCall = getApiService().getProbablyLikeList(map);
+            getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<ProbabyLikeGoodsEntity>>() {
                 @Override
-                public void onSuccess(BaseEntity<CommonEntity> entity) {
+                public void onSuccess(BaseEntity<ProbabyLikeGoodsEntity> entity) {
+                    ProbabyLikeGoodsEntity probabyLikeGoodsEntity = entity.data;
+                    List<ProbabyLikeGoodsEntity.Match> matchList = probabyLikeGoodsEntity.matched;
+                    List<ProbabyLikeGoodsEntity.Goods> goodsList = new ArrayList<>();
+
+                    for (int i = 0; i < matchList.size(); i++) {
+                        List<ProbabyLikeGoodsEntity.Goods> mGoods = matchList.get(i).goods;
+                        ProbabyLikeGoodsEntity.Goods goods = new ProbabyLikeGoodsEntity.Goods();
+                        goods.goods_id = matchList.get(i).goods_id;
+                        goods.thumb = matchList.get(i).thumb;
+                        goods.title = matchList.get(i).hint;
+                        goods.isParent = true;
+                        goodsList.add(goods);
+                        for (int j = 0; j < mGoods.size(); j++) {
+                            ProbabyLikeGoodsEntity.Goods good = mGoods.get(j);
+                            good.index = j;
+                            goodsList.add(good);
+                        }
+                    }
+                    iView.OnGetProbabyGoods(goodsList);
                     super.onSuccess(entity);
                 }
 

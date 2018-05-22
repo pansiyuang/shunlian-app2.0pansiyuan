@@ -2,15 +2,20 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.newchat.adapter.TransferMemberAdapter;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.entity.TransferOtherEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.TransferDialog;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -33,7 +38,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/4/20.
  */
 
-public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherView, BaseRecyclerAdapter.OnItemClickListener, TransferDialog.OnReasonPutListener {
+public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherView, BaseRecyclerAdapter.OnItemClickListener, TransferDialog.OnReasonPutListener, EasyWebsocketClient.OnMessageReceiveListener {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
@@ -51,14 +56,17 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     private String chatUserId;
     private String currentUserId;
     private String currentServiceNum;
+    private String currentServiceId;
     private TransferMemberAdapter mAdapter;
     private ChatMemberEntity.ChatMember currentChatMember;
     private TransferDialog transferDialog;
+    private ObjectMapper objectMapper;
 
-    public static void startAct(Context context, String mUserId, String chatUserId) {
+    public static void startAct(Context context, String mUserId, String chatUserId, String serviceId) {
         Intent intent = new Intent(context, SwitchOtherActivity.class);
         intent.putExtra("chat_user_id", chatUserId);
         intent.putExtra("user_id", mUserId);
+        intent.putExtra("service_id", serviceId);
         context.startActivity(intent);
     }
 
@@ -75,14 +83,15 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         tv_title.setText(getStringResouce(R.string.choose_customer_list));
         chatUserId = getIntent().getStringExtra("chat_user_id");
         currentUserId = getIntent().getStringExtra("user_id");
+        currentServiceId = getIntent().getStringExtra("service_id");
+
+        objectMapper = new ObjectMapper();
+
         tv_title_right.setText(getString(R.string.next_step));
         tv_title_right.setVisibility(View.VISIBLE);
 
-        if (EasyWebsocketClient.getClient() != null) {
-            mClient = EasyWebsocketClient.getClient();
-        } else {
-            mClient = EasyWebsocketClient.initWebsocketClient(this);
-        }
+        mClient = EasyWebsocketClient.getInstance(this);
+        mClient.addOnMessageReceiveListener(this);
 
         mPresenter = new SwitchOtherPresenter(this, this);
         if (mClient.getUser() != null) {
@@ -120,7 +129,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         if (!isEmpty(memberList)) {
             chatMemberList.addAll(memberList);
         }
-
         currentServiceNum = serviceNum;
 
         if (mAdapter == null) {
@@ -172,8 +180,8 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", "zhuanjie_service");
-            jsonObject.put("sid", currentServiceNum);//服务编号
-            jsonObject.put("kidz", currentUserId); //转接者聊天用户编号
+            jsonObject.put("sid", currentServiceId);//服务编号
+            jsonObject.put("kidz", mUser.user_id); //转接者聊天用户编号
             jsonObject.put("kidj", currentChatMember.user_id);//接受转接客服的聊天用户编号
             jsonObject.put("user_id", chatUserId);//被转接的用户的用户编号
             jsonObject.put("item", reason);//转接备注
@@ -185,5 +193,66 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mClient.removeOnMessageReceiveListener(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void initMessage() {
+
+    }
+
+    @Override
+    public void receiveMessage(String msg) {
+    }
+
+    @Override
+    public void evaluateMessage(String msg) {
+
+    }
+
+    @Override
+    public void roleSwitchMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMessage(String msg) {
+        try {
+            TransferOtherEntity transferMessage = objectMapper.readValue(msg, TransferOtherEntity.class);
+            switch (transferMessage.status) {
+                case 0://成功
+                    CustomerListActivity.startAct(SwitchOtherActivity.this);
+                    break;
+            }
+            new Thread() {
+                public void run() {
+                    Looper.prepare();
+                    Toast.makeText(SwitchOtherActivity.this, transferMessage.msg, Toast.LENGTH_SHORT).show();
+                    Looper.loop();// 进入loop中的循环，查看消息队列
+                }
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
+
+    }
+
+    @Override
+    public void onLine() {
+
+    }
+
+    @Override
+    public void logout() {
+
     }
 }

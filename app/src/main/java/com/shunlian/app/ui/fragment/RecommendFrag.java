@@ -35,6 +35,7 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
     private String mJoinSign;
     private List<GoodsDeatilEntity.Goods> goodsList;
     private RecommmendAdapter adapter;
+    private String mPromId;
 
     public static BaseFragment getInstance(String joinSign, String cateId) {
         RecommendFrag fragment = new RecommendFrag();
@@ -89,6 +90,7 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
             tv_meger_tag.setText(joinGoodsEntity.label);
         }
         tv_meger_pro.setText(joinGoodsEntity.title);
+        mPromId = joinGoodsEntity.prom_id;
     }
 
     @Override
@@ -121,7 +123,7 @@ public class RecommendFrag extends BaseLazyFragment implements View.OnClickListe
     public void OnItemBuy(GoodsDeatilEntity.Goods goods) {
         if (baseContext instanceof MegerOrderActivity) {
             MegerOrderActivity megerOrderActivity = (MegerOrderActivity) baseContext;
-            megerOrderActivity.getGoodsInfo(goods);
+            megerOrderActivity.getGoodsInfo(goods,mPromId);
         }
     }
 }

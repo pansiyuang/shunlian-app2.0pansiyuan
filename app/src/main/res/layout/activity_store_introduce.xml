@@ -206,6 +206,7 @@
                     android:textSize="14sp" />
 
                 <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_chat"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_alignParentRight="true"

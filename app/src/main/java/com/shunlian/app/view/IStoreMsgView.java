@@ -1,6 +1,8 @@
 package com.shunlian.app.view;
 
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
+import com.shunlian.app.newchat.entity.StoreMsgEntity;
 
 import java.util.List;
 
@@ -10,5 +12,5 @@ import java.util.List;
 
 public interface IStoreMsgView extends IView {
 
-    void getStoreMsgList(List<MessageListEntity.Msg> msgList);
+    void getStoreMsg(StoreMessageEntity storeMessageEntity);
 }

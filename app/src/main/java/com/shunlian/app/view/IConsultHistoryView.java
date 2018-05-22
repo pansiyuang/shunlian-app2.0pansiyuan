@@ -9,4 +9,6 @@ import com.shunlian.app.bean.ConsultHistoryEntity;
 public interface IConsultHistoryView extends IView {
 
     void consultHistory(ConsultHistoryEntity entity);
+
+    void getUserId(String userId);
 }
