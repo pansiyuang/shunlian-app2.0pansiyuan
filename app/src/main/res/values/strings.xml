@@ -404,6 +404,7 @@
     <string name="upload_voucher">上传凭证</string>
     <string name="subimt_request">提交申请</string>
     <string name="return_goods">退货商品</string>
+    <string name="return_money_goods">退款商品</string>
     <string name="change_goods">换货商品</string>
     <string name="return_money_hint">请输入退款金额</string>
 

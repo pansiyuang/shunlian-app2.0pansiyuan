@@ -28,7 +28,6 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -204,7 +203,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        if (!(this instanceof PayListActivity)){
+        if (!(this instanceof PayListActivity) || !(this instanceof ConfirmOrderAct)){
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             networkBroadcast = new NetworkBroadcast();
@@ -456,7 +455,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        if (networkBroadcast != null && !(this instanceof PayListActivity)){
+        if (networkBroadcast != null && (!(this instanceof PayListActivity)
+                || !(this instanceof ConfirmOrderAct))){
             unregisterReceiver(networkBroadcast);
             networkBroadcast = null;
         }
