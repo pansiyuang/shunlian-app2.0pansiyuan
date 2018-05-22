@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
@@ -145,6 +146,9 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
 
         public SingleViewHolder(View itemView) {
             super(itemView);
+            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,20)) / 2;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
+            miv_photo.setLayoutParams(params);
             itemView.setOnClickListener(this);
         }
 
