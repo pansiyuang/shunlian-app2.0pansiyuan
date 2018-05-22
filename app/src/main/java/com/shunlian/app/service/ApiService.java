@@ -28,7 +28,9 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
+import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -354,10 +356,10 @@ public interface ApiService {
     Call<BaseEntity<ShoppingCarEntity>> storeList(@Body RequestBody body);
 
     /**
-     * 你可能还想买
+     * 您可能还想买
      */
     @GET("cart/getMemberProbablyLike")
-    Call<BaseEntity<CommonEntity>> getProbablyLikeList(@QueryMap Map<String, String> map);
+    Call<BaseEntity<ProbabyLikeGoodsEntity>> getProbablyLikeList(@QueryMap Map<String, String> map);
 
     /**
      * 商品详情页足迹
@@ -612,6 +614,15 @@ public interface ApiService {
      */
     @POST("/member/comment/change")
     Call<BaseEntity<EmptyEntity>> changeComment(@Body RequestBody body);
+
+    /**
+     * 打开评价页面
+     *
+     * @param body
+     * @return
+     */
+    @POST("/member/comment/getorderinfo")
+    Call<BaseEntity<CreatCommentEntity>> getOrderInfo(@Body RequestBody body);
 
     /**
      * 订单物流详情
@@ -1421,7 +1432,7 @@ public interface ApiService {
      * @return
      */
     @GET("message/sys")
-    Call<BaseEntity<MessageListEntity>> getSystemMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<SystemMessageEntity>> getSystemMessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取小店消息
@@ -1429,7 +1440,7 @@ public interface ApiService {
      * @return
      */
     @GET("message/store")
-    Call<BaseEntity<MessageListEntity>> getStoremMessage(@QueryMap Map<String, String> map);
+    Call<BaseEntity<StoreMessageEntity>> getStoremMessage(@QueryMap Map<String, String> map);
 
     /**
      * 获取店铺会员消息列表

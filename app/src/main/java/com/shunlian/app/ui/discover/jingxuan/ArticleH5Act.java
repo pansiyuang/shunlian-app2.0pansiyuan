@@ -14,6 +14,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,14 +66,39 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         messageCountManager.setOnGetMessageListener(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
     @Override
     protected void onResume() {
-        if (messageCountManager.isLoad()) {
-            String s = messageCountManager.setTextCount(tv_msg_count);
-            if (quick_actions != null)
-                quick_actions.setMessageCount(s);
-        } else {
-            messageCountManager.initData();
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            if (messageCountManager.isLoad()) {
+                messageCountManager.setTextCount(tv_msg_count);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
         }
         super.onResume();
     }
@@ -155,29 +181,4 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         miv_favorite.setImageResource(R.mipmap.icon_found_souchang_n);
     }
 
-
-    @Override
-    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null) {
-            quick_actions.setMessageCount(s);
-        }
-    }
-
-    @Override
-    public void OnLoadFail() {
-
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
-        if (quick_actions != null)
-            quick_actions.setMessageCount(s);
-    }
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 }

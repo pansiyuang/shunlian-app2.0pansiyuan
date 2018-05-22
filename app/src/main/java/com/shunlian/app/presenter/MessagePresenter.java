@@ -8,6 +8,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMessageView;
 
@@ -46,14 +47,13 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<MessageListEntity>> baseEntityCall = getAddCookieApiService().getSystemMessage(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<MessageListEntity>>() {
+        Call<BaseEntity<SystemMessageEntity>> baseEntityCall = getAddCookieApiService().getSystemMessage(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<SystemMessageEntity>>() {
             @Override
-            public void onSuccess(BaseEntity<MessageListEntity> entity) {
+            public void onSuccess(BaseEntity<SystemMessageEntity> entity) {
                 super.onSuccess(entity);
-                MessageListEntity messageListEntity = entity.data;
-                List<MessageListEntity.Msg> msgList = messageListEntity.list;
-                iView.getSysMessageList(msgList);
+                SystemMessageEntity systemMessageEntity = entity.data;
+                iView.getSysMessage(systemMessageEntity);
             }
 
             @Override

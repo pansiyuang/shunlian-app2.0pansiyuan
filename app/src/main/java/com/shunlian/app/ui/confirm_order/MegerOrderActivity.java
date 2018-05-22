@@ -77,6 +77,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     private ParamDialog paramDialog;
     private String[] titles;
     private static List<BaseFragment> mFrags;
+    private String currentPromId;
 
     public static void startAct(Context context, String needId) {
         Intent intent = new Intent(context, MegerOrderActivity.class);
@@ -149,12 +150,9 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         vp_meger.setAdapter(new CommonLazyPagerAdapter(getSupportFragmentManager(), mFrags, titles));
         tab_layout.setupWithViewPager(vp_meger);
         vp_meger.setOffscreenPageLimit(mFrags.size());
-        tab_layout.post(new Runnable() {
-            @Override
-            public void run() {
-                setTabPadding();
-                tab_layout.setBackgroundColor(getColorResouce(R.color.white));
-            }
+        tab_layout.post(() -> {
+            setTabPadding();
+            tab_layout.setBackgroundColor(getColorResouce(R.color.white));
         });
 
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
@@ -199,17 +197,21 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         }
     }
 
-    public void getGoodsInfo(GoodsDeatilEntity.Goods goods) {
+    public void getGoodsInfo(GoodsDeatilEntity.Goods goods, String promId) {
         currentGoods = goods;
         megerPresenter.getGoodsSku(goods.goods_id);
+        currentPromId = promId;
     }
 
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+        if (isEmpty(currentPromId)) {
+            return;
+        }
         if (sku == null) {
-            megerPresenter.addCart(currentGoods.goods_id, null, String.valueOf(count));
+            megerPresenter.addCart(currentGoods.goods_id, null, String.valueOf(count),currentPromId);
         } else {
-            megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count));
+            megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count),currentPromId);
         }
     }
 

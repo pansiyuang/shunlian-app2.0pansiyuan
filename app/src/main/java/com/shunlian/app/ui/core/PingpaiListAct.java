@@ -326,7 +326,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
             downTime_firsts.startDownTimer();
             mtv_title.setText(corePingEntity.brand.title);
             mtv_desc.setText(corePingEntity.brand.content);
-            GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,corePingEntity.brand.img);
+            GlideUtils.getInstance().loadImage(getBaseContext(),miv_photo,corePingEntity.brand.bg_img);
             GlideUtils.getInstance().loadImage(getBaseContext(),miv_avar,corePingEntity.brand.logo);
             pingListAdapter=new PingListAdapter(getBaseContext(),mDatas);
             rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));

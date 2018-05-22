@@ -4,55 +4,44 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="@drawable/rounded_corner_white_8px"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:scaleType="centerCrop" />
 
-        <LinearLayout
-            android:id="@+id/llGoodInfo"
+        <TextView
+            android:id="@+id/tv_goods_title"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/img1_right"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:weightSum="3">
+            android:layout_toRightOf="@+id/miv_icon"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/new_text"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_goods_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@color/new_text"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_goods_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="bottom"
-                android:textColor="@color/pink_color"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_goods_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/miv_icon"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:includeFontPadding="false"
+            android:textColor="@color/pink_color"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_send_goods"
@@ -65,7 +54,7 @@
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="发送宝贝链接"
+        android:text="发送商品链接"
         android:textColor="@color/pink_color"
         android:textSize="14sp" />
 </LinearLayout>

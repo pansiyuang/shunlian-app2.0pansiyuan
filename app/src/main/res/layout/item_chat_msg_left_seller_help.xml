@@ -19,17 +19,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/bg_chat_other"
-            android:clickable="true"
-            android:gravity="center"
-            android:longClickable="true">
+            android:background="@drawable/bg_chat_other">
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:gravity="center"
                 android:maxWidth="260dp"
                 android:textColor="@color/new_text"
                 android:textSize="14dp" />

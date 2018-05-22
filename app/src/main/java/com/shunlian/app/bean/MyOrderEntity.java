@@ -31,6 +31,7 @@ public class MyOrderEntity {
         public String status;
         public String create_time;
         public String is_edit_praise;
+        public String express_sn;
         public String is_postpone; //是否申请过延长收货    1 申请过    0未申请
         public String qty;
         public List<OrderGoodsBean> order_goods;
@@ -66,9 +67,9 @@ public class MyOrderEntity {
         public String offered;
         public String comment_id;
         public String is_append;
+        public String goodsimage;
         public String is_edit_praise;
         public String og_id;//订单商品表id
         public String is_refund;//售后状态
-
     }
 }

@@ -213,8 +213,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
                     .get(refreshPosition).order_goods;
             for (int i = 0; i < order_goods.size(); i++) {
                 MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
-                ReleaseCommentEntity entity = new ReleaseCommentEntity(id,
-                        bean.thumb, bean.title, bean.price, bean.goods_id);
+                ReleaseCommentEntity entity = new ReleaseCommentEntity(id, bean.thumb, bean.title, bean.price, bean.goods_id);
+                entity.order_sn = bean.order_sn;
                 entities.add(entity);
             }
             SuccessfulTradeAct.startAct(baseActivity,entities,id);

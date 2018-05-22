@@ -14,4 +14,5 @@ public class EvaluateEntity {
     public String evaluat_id;
     public String msg_id;
     public int score;
+    public int selectScore;
 }

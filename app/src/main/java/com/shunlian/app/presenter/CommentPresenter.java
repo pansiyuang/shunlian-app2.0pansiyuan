@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.CreatCommentEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.UploadPicEntity;
@@ -96,7 +98,7 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
             getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
-                        iView.CommentSuccess();
+                    iView.CommentSuccess();
                     super.onSuccess(entity);
                 }
 
@@ -153,6 +155,33 @@ public class CommentPresenter extends BasePresenter<ICommentView> {
                 @Override
                 public void onSuccess(BaseEntity<EmptyEntity> entity) {
                     iView.CommentSuccess();
+                    super.onSuccess(entity);
+                }
+
+                @Override
+                public void onErrorCode(int code, String message) {
+                    iView.CommentFail(message);
+                    super.onErrorCode(code, message);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getOrderInfo(String orderSn) {
+        Map<String, String> map = new HashMap<>();
+        map.put("order_sn", orderSn);
+        sortAndMD5(map);
+        try {
+            String s = new ObjectMapper().writeValueAsString(map);
+            RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), s);
+            Call<BaseEntity<CreatCommentEntity>> baseEntityCall = getApiService().getOrderInfo(requestBody);
+            getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CreatCommentEntity>>() {
+                @Override
+                public void onSuccess(BaseEntity<CreatCommentEntity> entity) {
+                    CreatCommentEntity creatCommentEntity = entity.data;
+                    iView.getCreatCommentList(creatCommentEntity.order_goods);
                     super.onSuccess(entity);
                 }
 

@@ -56,7 +56,7 @@ public class BalancePaySetAct extends BaseActivity implements View.OnClickListen
                 BalanceVerifyPhoneAct.startAct(this,false,false);
                 break;
             case R.id.mrlayout_mimashezhi:
-                BalancePaySetOneAct.startAct(this);
+                BalancePaySetOneAct.startAct(this,false);
                 break;
 
         }

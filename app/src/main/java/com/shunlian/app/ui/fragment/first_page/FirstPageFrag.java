@@ -21,6 +21,7 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
@@ -224,9 +225,13 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (getMenuEntiy == null){
             return;
         }
-//        logoType=getMenuEntiy.logo.type;
-//        logoId=getMenuEntiy.logo.item_id;
-//        GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
+        if (getMenuEntiy.logo!=null){
+            logoType=getMenuEntiy.logo.type;
+            logoId=getMenuEntiy.logo.item_id;
+            GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
+        }else {
+            miv_photo.setVisibility(View.GONE);
+        }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));

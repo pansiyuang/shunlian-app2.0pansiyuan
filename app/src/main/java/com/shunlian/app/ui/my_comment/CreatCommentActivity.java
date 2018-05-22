@@ -18,6 +18,7 @@ import com.shunlian.app.adapter.CreatCommentAdapter;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.eventbus_bean.CommentEvent;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.photopick.SelectModel;
 import com.shunlian.app.photopick.PhotoPickerIntent;
@@ -29,6 +30,8 @@ import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ICommentView;
 import com.shunlian.app.widget.FiveStarBar;
 import com.shunlian.app.widget.MyImageView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.Serializable;
@@ -71,7 +74,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     private int currentType;
     private CommentPresenter commentPresenter;
     private int currentPosition;
-    private String currentOrderId;
+    private String currentOrderSn;
     private List<ImageEntity> paths = new ArrayList<>();
     private int currentLogisticsStar = 0;
     private int currentAttitudeStar = 0;
@@ -113,30 +116,36 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
 
         commentPresenter = new CommentPresenter(this, this);
         commentList = new ArrayList<>();
-
         currentType = getIntent().getIntExtra("type", -1);
 
         if (getIntent().getSerializableExtra("commentList") != null) {
             List<ReleaseCommentEntity> list = (List<ReleaseCommentEntity>) getIntent().getSerializableExtra("commentList");
-            if (currentType == APPEND_COMMENT) {
-                for (ReleaseCommentEntity entity : list) {
-                    if (!"0".equals(entity.is_append)) {
-                        commentList.add(entity);
-                    }
+            for (ReleaseCommentEntity entity : list) {
+                if (!isEmpty(entity.order)) {
+                    currentOrderSn = entity.order;
                 }
-            } else {
-                commentList.addAll(list);
+                if (!isEmpty(entity.order_sn)) {
+                    currentOrderSn = entity.order_sn;
+                }
             }
+            commentList.addAll(list);
         } else if (getIntent().getSerializableExtra("comment") != null) {
-            commentList.add((ReleaseCommentEntity) getIntent().getSerializableExtra("comment"));
+            ReleaseCommentEntity releaseCommentEntity = (ReleaseCommentEntity) getIntent().getSerializableExtra("comment");
+            if (!isEmpty(releaseCommentEntity.order)) {
+                currentOrderSn = releaseCommentEntity.order;
+            }
+            if (!isEmpty(releaseCommentEntity.order_sn)) {
+                currentOrderSn = releaseCommentEntity.order_sn;
+            }
+            commentList.add(releaseCommentEntity);
         }
 
-        creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
-        recycler_creat_comment.setAdapter(creatCommentAdapter);
-        creatCommentAdapter.setOnCommentChangeCallBack(this);
-
         if (currentType == CREAT_COMMENT) {
-            recycler_creat_comment.addFooterView(footView);
+            commentPresenter.getOrderInfo(currentOrderSn);
+        } else {
+            creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
+            recycler_creat_comment.setAdapter(creatCommentAdapter);
+            creatCommentAdapter.setOnCommentChangeCallBack(this);
         }
     }
 
@@ -252,25 +261,24 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     }
                 } else if (currentType == CREAT_COMMENT) {
                     if (currentLogisticsStar == 0) {
-                        Common.staticToast("请评价物流服务");
+                        Common.staticToast("请对物流服务进行评分");
                         return;
                     }
 
                     if (currentAttitudeStar == 0) {
-                        Common.staticToast("请评价服务态度");
+                        Common.staticToast("请对服务态度进行评分");
                         return;
                     }
 
                     if (currentConsistentStar == 0) {
-                        Common.staticToast("请评价描述相符");
+                        Common.staticToast("请对描述相符进行评分");
                         return;
                     }
                     String goodsString = getGoodsString();
-                    LogUtil.httpLogW("goodsString:" + goodsString);
-                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderId)) {
+                    if (TextUtils.isEmpty(goodsString) || TextUtils.isEmpty(currentOrderSn)) {
                         return;
                     }
-                    commentPresenter.creatComment(currentOrderId, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
+                    commentPresenter.creatComment(currentOrderSn, String.valueOf(currentLogisticsStar), String.valueOf(currentAttitudeStar), String.valueOf(currentConsistentStar), goodsString);
                 }
                 break;
             case R.id.miv_close:
@@ -284,7 +292,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     public String getGoodsString() {
         String result = null;
 
-        if (commentList == null || commentList.size() == 0) {
+        if (isEmpty(commentList)) {
             return null;
         }
         List<Map> array = new ArrayList<>();
@@ -297,13 +305,15 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 if (!isEmpty(releaseCommentEntity.comment_id)) {
                     map.put("comment_id", releaseCommentEntity.comment_id);
                 }
+
                 if (!isEmpty(releaseCommentEntity.goodsId)) {
                     map.put("goods_id", releaseCommentEntity.goodsId);
+                } else if (!isEmpty(releaseCommentEntity.goods_id)) {
+                    map.put("goods_id", releaseCommentEntity.goods_id);
                 }
 
-                if (!isEmpty(releaseCommentEntity.order)) {
-                    currentOrderId = releaseCommentEntity.order;
-                    map.put("ordersn", releaseCommentEntity.order);
+                if (!isEmpty(currentOrderSn) && currentType == APPEND_COMMENT) {
+                    map.put("ordersn", currentOrderSn);
                 }
 
                 if (!isEmpty(releaseCommentEntity.starLevel) && currentType == CREAT_COMMENT) {
@@ -316,7 +326,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     map.put("content", "");
                 }
 
-                if (releaseCommentEntity.imgs != null && releaseCommentEntity.imgs.size() != 0) {
+                if (!isEmpty(releaseCommentEntity.imgs)) {
                     StringBuffer stringBuffer;
                     if (TextUtils.isEmpty(releaseCommentEntity.picString)) {
                         stringBuffer = new StringBuffer("");
@@ -325,7 +335,7 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                         stringBuffer.append(",");
                     }
                     for (int j = 0; j < releaseCommentEntity.imgs.size(); j++) {
-                        stringBuffer.append(releaseCommentEntity.imgs.get(j));
+                        stringBuffer.append(releaseCommentEntity.imgs.get(j).imgUrl);
                         if (j != releaseCommentEntity.imgs.size() - 1) {
                             stringBuffer.append(",");
                         }
@@ -378,9 +388,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                 break;
             case CHANGE_COMMENT:
                 Common.staticToast("修改评价成功");
+                EventBus.getDefault().post(new CommentEvent(CommentEvent.SUCCESS_CHANGE_STATUS));
                 break;
             case APPEND_COMMENT:
                 Common.staticToast("追加评价成功");
+                EventBus.getDefault().post(new CommentEvent(CommentEvent.SUCCESS_APPEND_STATUS));
                 CommentSuccessAct.startAct(this);
                 break;
         }
@@ -390,6 +402,21 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
     @Override
     public void CommentFail(String error) {
         Common.staticToast(error);
+    }
+
+    @Override
+    public void getCreatCommentList(List<ReleaseCommentEntity> entityList) {
+        if (!isEmpty(entityList)) {
+            commentList.clear();
+            commentList.addAll(entityList);
+            creatCommentAdapter = new CreatCommentAdapter(this, commentList, currentType);
+            recycler_creat_comment.setAdapter(creatCommentAdapter);
+            creatCommentAdapter.setOnCommentChangeCallBack(this);
+
+            if (currentType == CREAT_COMMENT) {
+                recycler_creat_comment.addFooterView(footView);
+            }
+        }
     }
 
     private Handler mHandler = new Handler() {
@@ -403,6 +430,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
                     break;
                 case 1:
                     List<String> picStr = (List<String>) msg.obj;
+                    for (int i = 0; i < paths.size(); i++) {
+                        if (!isEmpty(picStr.get(i))) {
+                            paths.get(i).imgUrl = picStr.get(i);
+                        }
+                    }
                     creatCommentAdapter.addImages(paths, currentPosition);
                     break;
             }

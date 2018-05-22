@@ -171,7 +171,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-
+                
             }
         }).show();
     }

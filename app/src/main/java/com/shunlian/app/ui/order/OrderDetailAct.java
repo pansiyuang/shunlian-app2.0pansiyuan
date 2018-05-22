@@ -30,6 +30,8 @@ import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.timer.HourNoWhiteDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.OrderdetailView;
 import com.shunlian.app.widget.DiscountListDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -147,6 +149,12 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_contact)
     MyTextView mtv_contact;
 
+    @BindView(R.id.downTime_order)
+    HourNoWhiteDownTimerView downTime_order;
+
+    @BindView(R.id.mllayout_time)
+    MyLinearLayout mllayout_time;
+
     private OrderDetailPresenter orderDetailPresenter;
     private String storeId, orderId="";
 
@@ -155,6 +163,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     private int strokeWidth;
     private OrderdetailEntity orderdetailEntity;
     private MessageCountManager messageCountManager;
+    private boolean isTimerCount=false;
+
 
     public static void startAct(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailAct.class);
@@ -217,8 +227,26 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @Override
     public void setOrder(OrderdetailEntity orderdetailEntity) {
         this.orderdetailEntity = orderdetailEntity;
+        int time =0;
+        if (!TextUtils.isEmpty(orderdetailEntity.notice_status.surplus_time))
+            time=Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
+        if (time>0){
+            downTime_order.setDownTime(time);
+            downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    downTime_order.cancelDownTimer();
+                    orderDetailPresenter.initApiData();
+                }
+
+            });
+            downTime_order.startDownTimer();
+            isTimerCount=true;
+        }else {
+            isTimerCount=false;
+            mtv_time.setText(orderdetailEntity.notice_status.status_small);
+        }
         mtv_state.setText(orderdetailEntity.notice_status.status_text);
-        mtv_time.setText(orderdetailEntity.notice_status.status_small);
         mtv_number.setText("订单号：" + orderdetailEntity.order_sn);
         mtv_phone.setText(orderdetailEntity.receipt_address.mobile);
         mtv_name.setText("收件人：" + orderdetailEntity.receipt_address.realname);
@@ -287,10 +315,15 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         GradientDrawable t2Dackground;
         GradientDrawable t3Dackground;
         mtv_time.setVisibility(View.GONE);
+        mllayout_time.setVisibility(View.GONE);
         mtv_more.setVisibility(View.GONE);
         switch (orderdetailEntity.status) {
             case "-1":
-                mtv_time.setVisibility(View.VISIBLE);
+                if (isTimerCount){
+                    mllayout_time.setVisibility(View.VISIBLE);
+                }else {
+                    mtv_time.setVisibility(View.VISIBLE);
+                }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_close);
                 mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mtv_title1.getBackground();
@@ -302,7 +335,11 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 mtv_title3.setVisibility(View.GONE);
                 break;
             case "0":
-                mtv_time.setVisibility(View.VISIBLE);
+                if (isTimerCount){
+                    mllayout_time.setVisibility(View.VISIBLE);
+                }else {
+                    mtv_time.setVisibility(View.VISIBLE);
+                }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daifukuan);
                 mtv_title1.setVisibility(View.VISIBLE);
                 t1Dackground = (GradientDrawable) mtv_title1.getBackground();
@@ -341,7 +378,11 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 break;
             case "2":
                 mtv_more.setVisibility(View.VISIBLE);
-                mtv_time.setVisibility(View.VISIBLE);
+                if (isTimerCount){
+                    mllayout_time.setVisibility(View.VISIBLE);
+                }else {
+                    mtv_time.setVisibility(View.VISIBLE);
+                }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daishouhuo);
                 if ("1".equals(orderdetailEntity.is_postpone)) {
                     mtv_title1.setVisibility(View.GONE);
@@ -416,6 +457,10 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
         chatMember.nickname = orderdetailEntity.store_name;
         chatMember.type = "3";
@@ -514,11 +559,11 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         CharSequence text = null;
         switch (view.getId()) {
             case R.id.mtv_more:
-               if (mtv_contact.getVisibility()==View.VISIBLE){
-                   mtv_contact.setVisibility(View.GONE);
-               }else {
-                   mtv_contact.setVisibility(View.VISIBLE);
-               }
+                if (mtv_contact.getVisibility() == View.VISIBLE) {
+                    mtv_contact.setVisibility(View.GONE);
+                } else {
+                    mtv_contact.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.mtv_contact:
                 mtv_contact.setVisibility(View.GONE);
@@ -547,7 +592,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     cancleOrder();
                 } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
                     orderDetailPresenter.remindseller(orderId);
-                }else if (getString(R.string.order_wuliu).equals(text)) {//物流
+                } else if (getString(R.string.order_wuliu).equals(text)) {//物流
                     //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
                     OrderLogisticsActivity.startAct(this, orderId);
                 }
@@ -566,8 +611,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
                     for (int i = 0; i < order_goods.size(); i++) {
                         OrderdetailEntity.Good bean = order_goods.get(i);
-                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId,
-                                bean.thumb, bean.title, bean.price, bean.goods_id);
+                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId, bean.thumb, bean.title, bean.price, bean.goods_id);
+                        entity.order_sn = orderdetailEntity.order_sn;
                         entities.add(entity);
                     }
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.CREAT_COMMENT);
@@ -579,8 +624,8 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
                     for (int i = 0; i < order_goods.size(); i++) {
                         OrderdetailEntity.Good bean = order_goods.get(i);
-                        ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb,
-                                bean.title, bean.price, bean.comment_id);
+                        ReleaseCommentEntity entity = new ReleaseCommentEntity(bean.thumb, bean.title, bean.price, bean.comment_id);
+                        entity.order_sn = orderdetailEntity.order_sn;
                         entities.add(entity);
                     }
                     CreatCommentActivity.startAct(this, entities, CreatCommentActivity.APPEND_COMMENT);

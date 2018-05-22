@@ -47,8 +47,8 @@
             app:srb_pressedFillColor="#F5C149"
             app:srb_starBackgroundColor="#DDDDDD"
             app:srb_starBorderWidth="1"
-            app:srb_starSize="16.5dp"
-            app:srb_starsSeparation="16dp"
+            app:srb_starSize="17dp"
+            app:srb_starsSeparation="17dp"
             app:srb_stepSize="1" />
     </LinearLayout>
 
@@ -79,8 +79,8 @@
             app:srb_pressedFillColor="#F5C149"
             app:srb_starBackgroundColor="#DDDDDD"
             app:srb_starBorderWidth="1"
-            app:srb_starSize="16.5dp"
-            app:srb_starsSeparation="16dp"
+            app:srb_starSize="17dp"
+            app:srb_starsSeparation="17dp"
             app:srb_stepSize="1" />
     </LinearLayout>
 
@@ -111,8 +111,8 @@
             app:srb_pressedFillColor="#F5C149"
             app:srb_starBackgroundColor="#DDDDDD"
             app:srb_starBorderWidth="1"
-            app:srb_starSize="16.5dp"
-            app:srb_starsSeparation="16dp"
+            app:srb_starSize="17dp"
+            app:srb_starsSeparation="17dp"
             app:srb_stepSize="1" />
     </LinearLayout>
 </LinearLayout>

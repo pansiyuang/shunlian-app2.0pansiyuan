@@ -152,6 +152,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="14dp"
+        android:hint="您的评价，能帮助到更多的用户哦"
+        android:textColorHint="@color/my_gray_one"
         android:textColor="@color/new_text"
         android:textSize="14.5dp" />
 

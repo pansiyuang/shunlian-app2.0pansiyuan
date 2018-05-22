@@ -129,12 +129,7 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
         }
         parentViewHolder.tv_store.setText(enabled.store_name);
-        parentViewHolder.tv_store.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StoreAct.startAct(mContext, mStores.get(i).store_id);
-            }
-        });
+        parentViewHolder.tv_store.setOnClickListener(v -> StoreAct.startAct(mContext, mStores.get(i).store_id));
 
         if (mMap != null && mMap.size() != 0 && mMap.containsKey(enabled.store_id)) {
             enabled.isEditGood = mMap.get(enabled.store_id);
@@ -151,35 +146,29 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.RegisterTwoAct_finish));
         }
 
-        parentViewHolder.tv_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!enabled.isEditGood) { //完成
-                    parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.RegisterTwoAct_finish));
-                    enabled.isEditGood = true;
-                } else { //编辑
-                    parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.edit));
-                    enabled.isEditGood = false;
-                }
-                if (mListener != null) {
-                    mListener.OnChangeEdit(enabled.store_id, enabled.isEditGood);
-                }
+        parentViewHolder.tv_edit.setOnClickListener(view1 -> {
+            if (!enabled.isEditGood) { //完成
+                parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.RegisterTwoAct_finish));
+                enabled.isEditGood = true;
+            } else { //编辑
+                parentViewHolder.tv_edit.setText(mContext.getResources().getString(R.string.edit));
+                enabled.isEditGood = false;
+            }
+            if (mListener != null) {
+                mListener.OnChangeEdit(enabled.store_id, enabled.isEditGood);
             }
         });
 
-        parentViewHolder.miv_store_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("1".equals(enabled.all_check)) {
-                    enabled.all_check = "0";
-                    parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
-                } else {
-                    enabled.all_check = "1";
-                    parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
-                }
-                if (mListener != null) {
-                    mListener.OnStoreCheck(enabled.store_id, enabled.all_check);
-                }
+        parentViewHolder.miv_store_select.setOnClickListener(v -> {
+            if ("1".equals(enabled.all_check)) {
+                enabled.all_check = "0";
+                parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_n));
+            } else {
+                enabled.all_check = "1";
+                parentViewHolder.miv_store_select.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.img_shoppingcar_selected_h));
+            }
+            if (mListener != null) {
+                mListener.OnStoreCheck(enabled.store_id, enabled.all_check);
             }
         });
         if (enabled.store_voucher == null || enabled.store_voucher.size() == 0) {
@@ -188,12 +177,9 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
             parentViewHolder.tv_get_voucher.setVisibility(View.VISIBLE);
         }
 
-        parentViewHolder.tv_get_voucher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (carFrag != null) {
-                    carFrag.showVouchersDialog(i);
-                }
+        parentViewHolder.tv_get_voucher.setOnClickListener(v -> {
+            if (carFrag != null) {
+                carFrag.showVouchersDialog(i);
             }
         });
         return view;
@@ -221,17 +207,20 @@ public class ShopCarStoreAdapter extends BaseExpandableListAdapter {
         }
         childViewHolder.tv_content.setText(promotion.hint);
 
-        goodsAdapter = new EnableGoodsAdapter(mContext,carFrag, false, promotion.goods, promotion);
+        goodsAdapter = new EnableGoodsAdapter(mContext, carFrag, false, promotion.goods, promotion);
         linearLayoutManager = new LinearLayoutManager(mContext);
         childViewHolder.recycler_goods.setLayoutManager(linearLayoutManager);
         childViewHolder.recycler_goods.setNestedScrollingEnabled(false);
         childViewHolder.recycler_goods.setAdapter(goodsAdapter);
-        childViewHolder.tv_meger_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.OnMegerOrder(promotion.need_more);
-                }
+
+        if (TextUtils.isEmpty(promotion.need_more)) {
+            childViewHolder.tv_meger_order.setVisibility(View.GONE);
+        } else {
+            childViewHolder.tv_meger_order.setVisibility(View.VISIBLE);
+        }
+        childViewHolder.tv_meger_order.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.OnMegerOrder(promotion.need_more);
             }
         });
         goodsAdapter.setOnGoodsChangeListener(new EnableGoodsAdapter.OnGoodsChangeListener() {

@@ -159,7 +159,7 @@
 
                 <com.shunlian.app.widget.MyLinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -167,7 +167,7 @@
                     <com.shunlian.app.widget.MyImageView
                         android:id="@+id/miv_photo"
                         android:layout_width="57dp"
-                        android:layout_height="32dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:scaleType="fitXY" />
 

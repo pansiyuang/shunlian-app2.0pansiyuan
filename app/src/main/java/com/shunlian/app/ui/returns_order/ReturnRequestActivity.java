@@ -229,6 +229,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             tv_return_reason.setText(currentInfoEntity.buyer_message);
             tv_return_reason.setTextColor(getColorResouce(R.color.new_text));
             edt_return_money.setText(currentInfoEntity.refund_amount);
+            edt_return_money.setFocusable(false);
         }
 
         GlideUtils.getInstance().loadOverrideImage(this,

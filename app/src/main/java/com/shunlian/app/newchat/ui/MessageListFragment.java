@@ -15,6 +15,7 @@ import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
+import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
@@ -23,6 +24,7 @@ import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.presenter.MessagePresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
 import com.shunlian.app.ui.message.SystemMsgAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageView;
 
@@ -40,7 +42,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
-    private static MessagePresenter mPresenter;
+    private MessagePresenter mPresenter;
     private List<MessageListEntity.Msg> msgs;
     private List<ChatMemberEntity.ChatMember> memberList;
     private MessageAdapter mAdapter;
@@ -49,6 +51,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     private EasyWebsocketClient mClient;
     private MemberStatus mStatus;
     private ObjectMapper mObjectMapper;
+    private String currentUserId;
 
     public static MessageListFragment getInstance() {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -72,17 +75,13 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
         manager = new LinearLayoutManager(getActivity());
         mAdapter = new MessageAdapter(getActivity(), msgs, memberList);
+        mAdapter.setDelMode(true);
         recycler_list.setLayoutManager(manager);
         recycler_list.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnStatusClickListener(this);
 
-        if (EasyWebsocketClient.getClient() == null) {
-            mClient = EasyWebsocketClient.initWebsocketClient(getActivity());
-        } else {
-            mClient = EasyWebsocketClient.getClient();
-        }
-
+        mClient = EasyWebsocketClient.getInstance(getActivity());
         if (mClient != null) {
             mClient.addOnMessageReceiveListener(this);
         }
@@ -107,21 +106,29 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     @Override
-    public void getSysMessageList(List<MessageListEntity.Msg> msgList) {
-        if (!isEmpty(msgList)) {
-            msgs.clear();
-            msgs.addAll(msgList);
-
-            if (mClient.isBindAdmin()) { //平台客服
-                MessageListEntity.Msg msg = new MessageListEntity.Msg();
-                msg.type = "1";
-                msgs.add(msg);
-            }
-            if (mClient.isBindSeller()) { //商家客服
-                MessageListEntity.Msg msg = new MessageListEntity.Msg();
-                msg.type = "2";
-                msgs.add(msg);
-            }
+    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
+        msgs.clear();
+        if (systemMessageEntity.sysMsg != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "4";
+            msg.title = systemMessageEntity.sysMsg.title;
+            msgs.add(msg);
+        }
+        if (systemMessageEntity.discovery != null) {
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "5";
+            msg.title = systemMessageEntity.discovery.title;
+            msgs.add(msg);
+        }
+        if (mClient.isBindAdmin()) { //平台客服
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "1";
+            msgs.add(msg);
+        }
+        if (mClient.isBindSeller()) { //商家客服
+            MessageListEntity.Msg msg = new MessageListEntity.Msg();
+            msg.type = "2";
+            msgs.add(msg);
         }
     }
 
@@ -136,15 +143,22 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void delSuccess(String msg) {
-
+        for (int i = 0; i < memberList.size(); i++) {
+            ChatMemberEntity.ChatMember chatMember = memberList.get(i);
+            if (currentUserId.equals(chatMember.m_user_id)) {
+                memberList.remove(chatMember);
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     public void updateFriendList(String message) {
-        LogUtil.httpLogW("message:" + message);
         BaseMessage baseMessage = null;
+        MsgInfo msgInfo = null;
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
-            MsgInfo msgInfo = messageEntity.msg_info;
+            msgInfo = messageEntity.msg_info;
             String message1 = msgInfo.message;
             baseMessage = mObjectMapper.readValue(message1, BaseMessage.class);
         } catch (Exception e) {
@@ -158,7 +172,8 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
                     unReadNum = memberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     memberList.get(i).unread_count = unReadNum;
-                    memberList.get(i).update_time = TimeUtil.getNewChatTime(baseMessage.sendTime / 1000);
+                    LogUtil.httpLogW("msgInfo.sendTime:" + msgInfo.send_time);
+                    memberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
                     break;
                 }
             }
@@ -225,6 +240,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void OnMessageDel(String userId) {
+        currentUserId = userId;
         mPresenter.deleteMessage(userId);
     }
 
@@ -250,11 +266,21 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void evaluateMessage(String msg) {
-        updateFriendList(msg);
+//        updateFriendList(msg);
     }
 
     @Override
     public void roleSwitchMessage(String msg) {
+    }
+
+    @Override
+    public void transferMessage(String msg) {
+
+    }
+
+    @Override
+    public void transferMemberAdd(String msg) {
+
     }
 
     @Override

@@ -361,6 +361,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                             MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
                             ReleaseCommentEntity entity = new ReleaseCommentEntity(orders.order_sn,
                                     bean.thumb, bean.title, bean.price, bean.goods_id);
+                            entity.order_sn = bean.order_sn;
                             entities.add(entity);
                         }
                         CreatCommentActivity.startAct(context, entities, CreatCommentActivity.CREAT_COMMENT);

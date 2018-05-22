@@ -11,10 +11,13 @@ import com.shunlian.app.adapter.ConsultHistoryAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ConsultHistoryEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ConsultHistoryPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IConsultHistoryView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -45,6 +48,7 @@ public class ConsultHistoryAct extends BaseActivity implements IConsultHistoryVi
     @BindView(R.id.mllayout_call_business)
     MyLinearLayout mllayout_call_business;
 
+    private ConsultHistoryEntity mConsultHistoryEntity;
     private ConsultHistoryPresenter presenter;
     private MessageCountManager messageCountManager;
 
@@ -92,7 +96,9 @@ public class ConsultHistoryAct extends BaseActivity implements IConsultHistoryVi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mllayout_call_business:
-                MessageActivity.startAct(this);
+                if (!isEmpty(mConsultHistoryEntity.store_id)) {
+                    presenter.getUserId(mConsultHistoryEntity.store_id);
+                }
                 break;
         }
         super.onClick(view);
@@ -141,6 +147,23 @@ public class ConsultHistoryAct extends BaseActivity implements IConsultHistoryVi
         ConsultHistoryAdapter adapter = new ConsultHistoryAdapter(this,
                 false, entity.history_list);
         recy_view.setAdapter(adapter);
+
+        mConsultHistoryEntity = entity;
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.shop_id = mConsultHistoryEntity.store_id;
+        chatMember.nickname = mConsultHistoryEntity.store_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+
+        ChatManager.getInstance(this).init().MemberChatToStore(chatMember);
     }
 
     @Override

@@ -732,6 +732,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     @Override
     public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
         ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
         chatMember.shop_id = storeId;
         chatMember.m_user_id = userId;

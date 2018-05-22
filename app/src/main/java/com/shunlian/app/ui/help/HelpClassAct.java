@@ -2,6 +2,7 @@ package com.shunlian.app.ui.help;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,10 +13,14 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpClasAdapter;
 import com.shunlian.app.bean.HelpClassEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -49,6 +54,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     private HelpClasAdapter helpClasAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String cate_id="";
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context,String cate_id) {
         Intent intent = new Intent(context, HelpClassAct.class);
@@ -66,14 +72,18 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mllayout_dianhua:
-
+                if (promptDialog == null) {
+                    initDialog();
+                } else {
+                    promptDialog.show();
+                }
                 break;
             case R.id.rl_more:
                 quick_actions.setVisibility(View.VISIBLE);
                 quick_actions.help();
                 break;
             case R.id.mllayout_kefu:
-
+                pHelpTwo.getUserId();
                 break;
         }
     }
@@ -113,6 +123,15 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         mtv_title.setText(getStringResouce(R.string.help_xinshouketang));
     }
 
+    public void initDialog() {
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
+    }
+
     @Override
     public void showFailureView(int rquest_code) {
 
@@ -128,15 +147,12 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         if (helpClasAdapter == null) {
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             helpClasAdapter = new HelpClasAdapter(this, false, articles);
-            helpClasAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
+            helpClasAdapter.setOnItemClickListener((view, position) -> {
 //                    H5Act.startAct(getBaseContext(),articles.get(position).h5_link,H5Act.MODE_SONIC);
-                    ClassDetailAct.startAct(getBaseContext(),
-                            articles.get(position).h5_link,
-                            articles.get(position).id,
-                            H5Act.MODE_SONIC);
-                }
+                ClassDetailAct.startAct(getBaseContext(),
+                        articles.get(position).h5_link,
+                        articles.get(position).id,
+                        H5Act.MODE_SONIC);
             });
             rv_qCate.setLayoutManager(linearLayoutManager);
             rv_qCate.addItemDecoration(new MVerticalItemDecoration(this, 1, 0, 0, getColorResouce(R.color.value_EFEEEE)));
@@ -146,6 +162,15 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         } else {
             helpClasAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "官方客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
     }
 
     @Override
