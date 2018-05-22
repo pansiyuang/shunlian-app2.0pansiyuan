@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.io.File;
@@ -208,7 +209,7 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
         options.inJustDecodeBounds = true;
 
         BitmapFactory.decodeFile(photoPath, options); //filePath代表图片路径
-        if (options.mCancel || options.outWidth == -1 || options.outHeight == -1) {
+        if (options.mCancel || options.outWidth < 0 || options.outHeight < 0) {
             //说明图片已经损坏
             Common.staticToast("图片已经损坏,请换一张图片");
             return false;
@@ -477,8 +478,8 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                             if (!mResultFolder.contains(folder)) {
                                 List<Image> imageList = new ArrayList<>();
                                 imageList.add(image);
-                                folder.images = imageList;
                                 mResultFolder.add(folder);
+                                folder.images = imageList;
                             } else {
                                 // 更新
                                 Folder f = mResultFolder.get(mResultFolder.indexOf(folder));

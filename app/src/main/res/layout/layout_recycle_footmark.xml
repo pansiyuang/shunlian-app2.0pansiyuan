@@ -38,16 +38,10 @@
             android:background="@color/bg_gray_two" />
     </RelativeLayout>
 
-    <com.shunlian.app.widget.refresh.turkey.SlRefreshView
-        android:id="@+id/refreshview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_footmark"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_footmark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-    </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 </LinearLayout>
