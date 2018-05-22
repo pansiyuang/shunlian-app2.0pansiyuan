@@ -141,6 +141,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             isOrderBuy = true;
             confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
         }
+        manager = new LinearLayoutManager(this);
+        recy_view.setLayoutManager(manager);
+        int space = TransformUtil.dip2px(this, 10);
+        recy_view.addItemDecoration(new VerticalItemDecoration(space,
+                0, 0, getResources().getColor(R.color.white_ash)));
     }
 
     @Override
@@ -172,11 +177,6 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }
         if (enabled != null && enabled.size() > 0) {
             this.enabled = enabled;
-            manager = new LinearLayoutManager(this);
-            recy_view.setLayoutManager(manager);
-            int space = TransformUtil.dip2px(this, 10);
-            recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                    0, 0, getResources().getColor(R.color.white_ash)));
             ConfirmOrderAdapter df = new ConfirmOrderAdapter(this,
                     false, enabled, disabled,address,isOrderBuy);
             recy_view.setAdapter(df);
