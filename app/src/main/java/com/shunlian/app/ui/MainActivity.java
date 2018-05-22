@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson=false,isFirst=false;
+    private boolean isPerson=false,isCart=false,isFirst=false;
     private Handler handler;
     public  int position=0;
     private CateGoryFrag cateGoryFrag;
@@ -157,9 +157,14 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
 
     @Override
     protected void onResume() {
-        if (isPerson&&Common.isAlreadyLogin()){
-            personCenterClick();
-            isPerson=false;
+        if (Common.isAlreadyLogin()){
+            if (isPerson){
+                personCenterClick();
+                isPerson=false;
+            }else if (isCart){
+                shoppingCarClick();
+                isCart=false;
+            }
         }
         super.onResume();
     }
@@ -297,6 +302,11 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
 
     public void shoppingCarClick() {
         isFirst=false;
+        if (!Common.isAlreadyLogin()) {
+            LoginAct.startAct(this);
+            isCart=true;
+            return;
+        }
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (shoppingCarFrag == null) {
             shoppingCarFrag = (ShoppingCarFrag) fragmentMap.get(flags[3]);

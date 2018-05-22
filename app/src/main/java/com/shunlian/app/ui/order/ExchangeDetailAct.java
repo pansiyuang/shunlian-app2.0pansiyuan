@@ -18,6 +18,7 @@ import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -157,10 +158,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     HourNoWhiteDownTimerView downTime_order;
 
     private ExchangeDetailPresenter exchangeDetailPresenter;
-    private String refund_id = "53";
+    private String refund_id = "53",orderId="";
     private MessageCountManager messageCountManager;
     private RefundDetailEntity.RefundDetail refundDetail;
-    private boolean isFirst=true;
 
     public static void startAct(Context context, String refund_id) {
         Intent intent = new Intent(context, ExchangeDetailAct.class);
@@ -172,7 +172,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (exchangeDetailPresenter!=null){
+        if (exchangeDetailPresenter != null) {
             exchangeDetailPresenter.initApiData();
         }
     }
@@ -209,7 +209,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     }
 
     @OnClick(R.id.rl_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.afterSale();
     }
@@ -230,6 +230,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     protected void initListener() {
         super.initListener();
         mtv_contact.setOnClickListener(this);
+        mtv_wuliu.setOnClickListener(this);
     }
 
     @Override
@@ -241,16 +242,20 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             case R.id.mtv_contact:
                 exchangeDetailPresenter.getUserId(refundDetail.store_id);
                 break;
+            case R.id.mtv_wuliu:
+                OrderLogisticsActivity.startAct(this,orderId);
+                break;
 
         }
     }
 
     /**
      * 换货确认收货
+     *
      * @param refund_id
      */
-    public void confirmreceipt(String refund_id){
-        if (exchangeDetailPresenter != null){
+    public void confirmreceipt(String refund_id) {
+        if (exchangeDetailPresenter != null) {
             exchangeDetailPresenter.confirmReceive(refund_id);
         }
     }
@@ -258,8 +263,12 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     public void setData(RefundDetailEntity refundDetailEntity) {
         refundDetail = refundDetailEntity.refund_detail;
-        int time=Integer.parseInt(refundDetail.rest_second);
-        if (!TextUtils.isEmpty(refundDetail.rest_second)&&time>0){
+        orderId=refundDetail.order_id;
+        int time = 0;
+        if (!TextUtils.isEmpty(refundDetail.rest_second))
+            time = Integer.parseInt(refundDetail.rest_second);
+        if (time > 0) {
+            downTime_order.cancelDownTimer();
             downTime_order.setDownTime(time);
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
@@ -272,7 +281,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             downTime_order.startDownTimer();
             mtv_time.setVisibility(View.GONE);
             mllayout_time.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mtv_time.setVisibility(View.VISIBLE);
             mllayout_time.setVisibility(View.GONE);
             mtv_time.setText(refundDetail.time_desc);
@@ -292,11 +301,11 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         rv_opt.setLayoutManager(managerH);
         rv_opt.setNestedScrollingEnabled(false);
         refundDetail.edit.store_name = refundDetail.store_name;
-        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list,refundDetail.refund_id,refundDetail.edit));
+        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list, refundDetail.refund_id, refundDetail.edit));
 
         mtv_state.setText(refundDetail.status_desc);
         if (refundDetail.return_address != null
-                &&!TextUtils.isEmpty(refundDetail.return_address.address)) {
+                && !TextUtils.isEmpty(refundDetail.return_address.address)) {
             mtv_tuihuo.setVisibility(View.VISIBLE);
             view_tuihuo.setVisibility(View.VISIBLE);
             view_tuihuos.setVisibility(View.VISIBLE);
@@ -311,7 +320,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mrlayout_tuihuo.setVisibility(View.GONE);
         }
         if (refundDetail.member_address != null
-                &&!TextUtils.isEmpty(refundDetail.member_address.address)) {
+                && !TextUtils.isEmpty(refundDetail.member_address.address)) {
             mtv_shouhuo.setVisibility(View.VISIBLE);
             view_shouhuo.setVisibility(View.VISIBLE);
             view_shouhuos.setVisibility(View.VISIBLE);
@@ -348,50 +357,50 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mtv_wulius.setText(refundDetail.express);
         }
 
-        if (refundDetail.gift!=null&&!TextUtils.isEmpty(refundDetail.gift.thumb)){
+        if (refundDetail.gift != null && !TextUtils.isEmpty(refundDetail.gift.thumb)) {
             mlLayout_gift.setVisibility(View.VISIBLE);
-            GlideUtils.getInstance().loadImage(this,miv_gift,refundDetail.gift.thumb);
+            GlideUtils.getInstance().loadImage(this, miv_gift, refundDetail.gift.thumb);
             mtv_gift.setText(refundDetail.gift.title);
-        }else {
+        } else {
             mlLayout_gift.setVisibility(View.GONE);
         }
 //        web_desc.loadData("测试", "text/html; charset=UTF-8", null);//解决加载html代码乱码
         String key;
         if ("4".equals(refundDetail.refund_type)) {
             mtv_title.setText("换货详情");
-            key="换货";
+            key = "换货";
         } else {
             mtv_title.setText("退款详情");
-            key="退款";
+            key = "退款";
         }
-        if (TextUtils.isEmpty(refundDetail.buyer_message)){
+        if (TextUtils.isEmpty(refundDetail.buyer_message)) {
             mtv_reason.setVisibility(View.GONE);
-        }else {
-            mtv_reason.setText(key+"原因：" + refundDetail.buyer_message);
+        } else {
+            mtv_reason.setText(key + "原因：" + refundDetail.buyer_message);
             mtv_reason.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(refundDetail.refund_amount)){
+        if (TextUtils.isEmpty(refundDetail.refund_amount)) {
             mtv_money.setVisibility(View.GONE);
-        }else {
-            mtv_money.setText("退款金额：" +getStringResouce(R.string.common_yuan)+ refundDetail.refund_amount);
+        } else {
+            mtv_money.setText("退款金额：" + getStringResouce(R.string.common_yuan) + refundDetail.refund_amount);
             mtv_money.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(refundDetail.goods_num)){
+        if (TextUtils.isEmpty(refundDetail.goods_num)) {
             mtv_amount.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_amount.setText("退货数量：" + refundDetail.goods_num);
             mtv_amount.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(refundDetail.add_time)){
+        if (TextUtils.isEmpty(refundDetail.add_time)) {
             mtv_applyTime.setVisibility(View.GONE);
-        }else {
+        } else {
             mtv_applyTime.setText("申请时间：" + refundDetail.add_time);
             mtv_applyTime.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(refundDetail.refund_sn)){
+        if (TextUtils.isEmpty(refundDetail.refund_sn)) {
             mtv_order.setVisibility(View.GONE);
-        }else {
-            mtv_order.setText(key+"编号：" + refundDetail.refund_sn);
+        } else {
+            mtv_order.setText(key + "编号：" + refundDetail.refund_sn);
             mtv_order.setVisibility(View.VISIBLE);
         }
     }
@@ -417,9 +426,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onDestroy() {
-        if (downTime_order!=null){
+        if (downTime_order != null) {
             downTime_order.cancelDownTimer();
-            downTime_order=null;
+            downTime_order = null;
         }
         if (quick_actions != null)
             quick_actions.destoryQuickActions();

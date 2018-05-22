@@ -40,8 +40,9 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
     private GradientDrawable background;
     private String code;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,boolean isForget) {
         Intent intent = new Intent(context, BalancePaySetOneAct.class);
+        intent.putExtra("isForget", isForget);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -112,7 +113,11 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
 
     @Override
     public void nextCall(String key) {
-        BalancePaySetTwoAct.startAct(this,"","set",key,false,false);
+        if (getIntent().getBooleanExtra("isForget",false)){
+
+        }else {
+            BalancePaySetTwoAct.startAct(this,"","set",key,false,false);
+        }
     }
 
     @Override

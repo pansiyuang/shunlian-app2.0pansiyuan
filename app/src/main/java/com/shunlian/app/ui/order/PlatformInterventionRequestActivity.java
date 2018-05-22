@@ -155,7 +155,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
                 break;
             case R.id.tv_request_complete:
                 if (TextUtils.isEmpty(currentStatusId)) {
-                    Common.staticToast("请选择到货状态");
+                    Common.staticToast("请选择货物状态");
                     return;
                 }
                 String remark = edt_remark.getText().toString();
