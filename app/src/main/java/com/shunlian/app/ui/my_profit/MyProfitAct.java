@@ -258,7 +258,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         visible(miv_toolbar_help);
 
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
-        if (deviceWidth > Constant.DRAWING_WIDTH) {
+        if (deviceWidth >= Constant.DRAWING_WIDTH) {
             ViewGroup.LayoutParams layoutParams = chart_view.getLayoutParams();
             int[] ints = TransformUtil.countRealWH(this, 720, 320);
             layoutParams.width = ints[0];
