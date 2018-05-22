@@ -197,11 +197,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         switch (type) {
             case "1": //仅退款
                 mtv_toolbar_title.setText(getStringResouce(R.string.return_request));
-                customer_goods.setLabelName(getStringResouce(R.string.return_goods), false);
+                customer_goods.setLabelName(getStringResouce(R.string.return_money_goods), false);
                 rl_return_money.setVisibility(View.VISIBLE);
                 view_money.setVisibility(View.VISIBLE);
 
-                goodsDialog.setDialogTitle(getStringResouce(R.string.return_goods_reason));
+                goodsDialog.setDialogTitle(getStringResouce(R.string.return_order));
                 setMaxPrice(goodsCount);
                 break;
             case "3": //退货退款
