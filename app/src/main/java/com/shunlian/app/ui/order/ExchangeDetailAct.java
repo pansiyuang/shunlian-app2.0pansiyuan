@@ -268,6 +268,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         if (!TextUtils.isEmpty(refundDetail.rest_second))
             time = Integer.parseInt(refundDetail.rest_second);
         if (time > 0) {
+            downTime_order.cancelDownTimer();
             downTime_order.setDownTime(time);
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override

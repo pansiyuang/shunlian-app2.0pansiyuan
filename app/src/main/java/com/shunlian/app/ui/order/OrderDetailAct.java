@@ -231,6 +231,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         if (!TextUtils.isEmpty(orderdetailEntity.notice_status.surplus_time))
             time=Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
         if (time>0){
+            downTime_order.cancelDownTimer();
             downTime_order.setDownTime(time);
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
