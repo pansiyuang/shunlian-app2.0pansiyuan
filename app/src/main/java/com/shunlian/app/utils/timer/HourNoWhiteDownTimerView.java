@@ -45,7 +45,7 @@ public class HourNoWhiteDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected int getTextSize() {
-        return 12;
+        return 10;
     }
 
     @Override
@@ -89,6 +89,6 @@ public class HourNoWhiteDownTimerView extends ItemCountDownTimerView {
 
     @Override
     protected boolean getIsShowDay() {
-        return false;
+        return true;
     }
 }
