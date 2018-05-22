@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
@@ -165,31 +164,22 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (mPresenter != null) {
-                        mPresenter.onRefresh();
-                    }
+            adapter.setOnReloadListener(() -> {
+                if (mPresenter != null) {
+                    mPresenter.onRefresh();
                 }
             });
 
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    MyOrderEntity.Orders orders1 = ordersLists.get(position);
-                    OrderDetailAct.startAct(baseActivity, orders1.id);
-                    LogUtil.zhLogW("=onItemClick============="+position);
-                    refreshPosition = position;
-                }
+            adapter.setOnItemClickListener((view, position) -> {
+                MyOrderEntity.Orders orders1 = ordersLists.get(position);
+                OrderDetailAct.startAct(baseActivity, orders1.id);
+                LogUtil.zhLogW("=onItemClick============="+position);
+                refreshPosition = position;
             });
 
-            adapter.setRefreshOrderListener(new OrderListAdapter.RefreshOrderListener() {
-                @Override
-                public void onRefreshOrder(int position) {
-                    refreshPosition = position;
-                    LogUtil.zhLogW("=onRefreshOrder============="+position);
-                }
+            adapter.setRefreshOrderListener(position -> {
+                refreshPosition = position;
+                LogUtil.zhLogW("=onRefreshOrder============="+position);
             });
         } else {
             adapter.setPageLoading(page, allPage);
