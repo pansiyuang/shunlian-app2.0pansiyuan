@@ -252,7 +252,7 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
     }
 
     public class FootViewHolder extends BaseRecyclerViewHolder {
-        @BindView(R.id.recycler_footmark)
+        @BindView(R.id.refreshview)
         SlRefreshView refreshview;
 
         @BindView(R.id.recycler_footmark)
