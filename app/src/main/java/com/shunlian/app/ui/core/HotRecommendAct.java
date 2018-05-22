@@ -16,6 +16,7 @@ import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
@@ -84,11 +85,13 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
     private HotPushAdapter hotPushAdapter;
     private String hotId;
     private boolean isMore=false;
+    private ShareInfoParam shareInfoParam;
 
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.channel();
+        quick_actions.special();
+        quick_actions.shareInfo(shareInfoParam);
     }
 
     @Override
@@ -199,6 +202,11 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void setPushData(List<HotRdEntity.MData> mData, HotRdEntity data) {
+        shareInfoParam=new ShareInfoParam();
+        shareInfoParam.desc=data.share.content;
+        shareInfoParam.title=data.share.title;
+        shareInfoParam.img=data.share.logo;
+        shareInfoParam.shareLink=data.share.share_url;
         if (mData==null||mData.size()<=0){
             visible(nei_empty);
             gone(rv_list);

@@ -135,7 +135,7 @@
                 android:layout_height="4dp"
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/icon_common_more_black" />
+                android:src="@mipmap/icon_common_more_white" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_msg_count"
@@ -151,13 +151,21 @@
                 android:textSize="9sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
 
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/miv_share"
+            android:layout_toLeftOf="@id/rl_more"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/icon_home_share_b"/>
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/miv_share"
             android:layout_toRightOf="@id/miv_close"
             android:ellipsize="end"

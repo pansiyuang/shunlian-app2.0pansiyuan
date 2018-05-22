@@ -2,7 +2,8 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mllayout_root"
     android:layout_width="match_parent"
-    android:layout_height="140dp">
+    android:layout_height="140dp"
+    android:background="@color/white">
 
     <View
         android:layout_width="match_parent"

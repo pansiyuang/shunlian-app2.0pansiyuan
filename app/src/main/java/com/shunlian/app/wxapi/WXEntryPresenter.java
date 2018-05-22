@@ -50,6 +50,12 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
                 super.onSuccess(entity);
                 iView.onWXCallback(entity.data);
             }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                iView.onWXCallback(null);
+            }
         });
     }
 

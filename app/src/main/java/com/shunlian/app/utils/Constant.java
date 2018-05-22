@@ -28,6 +28,7 @@ import android.os.Environment;
 import com.shunlian.app.bean.GetListFilterEntity;
 import com.shunlian.app.bean.GoodsSearchParam;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -58,10 +59,13 @@ public final class Constant {
     //    public static final String WX_APP_ID = "wx4453de455c6da56a";// 微信Demo开放平台申请到的app_id
     //    public static final String WX_APP_ID ="wxaea5641b2b1fdb77";// 微信公众号的app_id
     public static final String QQ_APP_ID = "1105343909";// QQ开放平台申请到的app_id
-    public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
-            "/Android/data/com.shunlian.app/ShunLian/Cache/";
+//    public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
+//            "/Android/data/com.shunlian.app/ShunLian/Cache/";
     public static final String DOWNLOAD_PATH_EXTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() +
             "/Android/data/com.shunlian.app/ShunLian/DownLoad/";
+
+    public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + File.separator + "shunlian"+File.separator+"cache";
     public static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
     public static final String IM_XIAOMI_APPID = "2882303761517495137"; //小米推送APPID
     public static final String IM_XIAOMI_APPKEY = "5161749566137";      //小米推送KEY
@@ -78,6 +82,9 @@ public final class Constant {
     public static List<String> JPUSH;//推送
 
     public static String MOBILE;//手机号
+
+
+    public static String BUGLY_ID = "1400008795";//正式
 
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

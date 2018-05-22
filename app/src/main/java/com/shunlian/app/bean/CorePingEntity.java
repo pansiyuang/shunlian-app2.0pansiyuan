@@ -18,6 +18,7 @@ public class CorePingEntity {
     public List<MData> banner;
     public MData brand;
     public List<MData> goods_list;
+    public Share share;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {
@@ -39,5 +40,15 @@ public class CorePingEntity {
         public String promotion_type;
         public String promotion_id;
         public String count_down;
+        public Share share;
+
+    }
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Share {
+        public String share_url;
+        public String title;
+        public String content;
+        public String logo;
+
     }
 }

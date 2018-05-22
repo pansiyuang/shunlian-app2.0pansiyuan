@@ -38,6 +38,7 @@ public class GetDataEntity {
         public String total;
         public String sort_type;
         public Url url;
+        public Share share;
         @JsonProperty(value = "data")//关键字重名
         public List<MMData> datass;
         public List<Cate> cates;
@@ -47,6 +48,14 @@ public class GetDataEntity {
             public String id;
             public String name;
             public String level;
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Share {
+            public String share_url;
+            public String title;
+            public String content;
+            public String logo;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,5 +1,7 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.KouBeiAct;
@@ -35,6 +38,12 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemListener;
+import com.shunlian.app.wxapi.WXEntryActivity;
+import com.shunlian.mylibrary.BarHide;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +67,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     public boolean isFirst = false, isShow = false;
     public int mergePosition = 0, showPosition = -1;
     private CateGoryFrag cateGoryFrag;
+    private ShareInfoParam mShareInfoParam=new ShareInfoParam();
     private int second = (int) (System.currentTimeMillis() / 1000);
 
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
@@ -376,6 +386,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     int seconds = (int) (System.currentTimeMillis() / 1000) - second;
                     fourHolder.downTime_first.cancelDownTimer();
                     fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
+//                    fourHolder.downTime_first.setDownTime(10);
                     fourHolder.downTime_first.startDownTimer();
                     if (Common.isColor(data.ttth.t_color)) {
                         fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
@@ -459,7 +470,16 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     } else {
                         fiveHolder.mtv_price.setVisibility(View.GONE);
                     }
-
+                    fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mShareInfoParam.title=data.share.title;
+                            mShareInfoParam.desc=data.share.content;
+                            mShareInfoParam.img=data.share.logo;
+                            mShareInfoParam.shareLink=data.share.share_url;
+                            shareStyle2Dialog();
+                        }
+                    });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -594,6 +614,53 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
                 }
                 break;
+        }
+    }
+
+    private void copyText() {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
+            sb.append(mShareInfoParam.desc);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
+            sb.append(mShareInfoParam.shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) context
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        Common.staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
+    }
+
+    /**
+     * 分享微信和复制链接
+     */
+    public void shareStyle2Dialog(){
+        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
+                .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                WXEntryActivity.startAct(context,
+                                        "shareFriend", mShareInfoParam);
+                                break;
+                            case 1:
+                                copyText();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onHideCallback() {
+                        ImmersionBar.with((Activity) context).statusBarDarkFont(true, 0).init();
+                    }
+                }).build();
+        if (!mPopMenu.isShowing()) {
+            mPopMenu.show();
         }
     }
 
@@ -774,6 +841,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 public void onFinish() {
                     if (downTime_first != null)
                         downTime_first.cancelDownTimer();
+                    cateGoryFrag.refresh();
                 }
 
             });
@@ -783,6 +851,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     class FiveHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
+        @BindView(R.id.miv_share)
+        MyImageView miv_share;
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
         @BindView(R.id.mtv_desc)

@@ -16,16 +16,23 @@ import java.io.File;
 import java.io.InputStream;
 
 public class GlideCacheUtil implements GlideModule{
-    private static GlideCacheUtil inst;
+    //private static GlideCacheUtil inst;
     private final String cachePath = Constant.CACHE_PATH_EXTERNAL
             + File.separator+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
 
-    public static GlideCacheUtil getInstance() {
+    public GlideCacheUtil(){
+        File file = new File(cachePath);
+        if (!file.exists()){
+            file.mkdirs();
+        }
+    }
+
+    /*public static GlideCacheUtil getInstance() {
         if (inst == null) {
             inst = new GlideCacheUtil();
         }
         return inst;
-    }
+    }*/
 
     /**
      * 清除图片磁盘缓存
@@ -142,13 +149,24 @@ public class GlideCacheUtil implements GlideModule{
 
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
-        File file = new File(cachePath);
-        if (!file.exists()){
-            file.mkdirs();
-        }
-        int cacheSize = 50*1000*1000;
+        int cacheSize = 100*1000*1000;
         DiskLruCacheFactory dcf = new DiskLruCacheFactory(cachePath,cacheSize);
         builder.setDiskCache(dcf);
+        /*long size = Runtime.getRuntime().maxMemory() / 4000;
+        MemoryCache cache = new LruResourceCache((int) size);
+        builder.setMemoryCache(cache);
+        BitmapPool bitmapPool = new LruBitmapPool((int) size/2);
+        builder.setBitmapPool(bitmapPool);*/
+
+        /*ActivityManager manager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null){
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            manager.getMemoryInfo(memoryInfo);
+            builder.setDecodeFormat(memoryInfo.lowMemory?DecodeFormat.PREFER_RGB_565
+                    :DecodeFormat.PREFER_ARGB_8888);
+        }*/
+
     }
 
     @Override

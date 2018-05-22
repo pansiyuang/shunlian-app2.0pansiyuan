@@ -24,6 +24,7 @@ import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IAishang;
@@ -174,6 +175,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
 
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
         nei_empty.setButtonText(null);
+
     }
 
 

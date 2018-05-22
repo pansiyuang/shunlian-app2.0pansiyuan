@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.adapter.ProbablyLikeAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CateEntity;
@@ -21,7 +22,9 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -35,19 +38,30 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
 
     private String goods_id;
-    private int page = 1;//当前页
     public static final int COMMENT_FAILURE_CODE = 400;//评论网络请求失败码
     public static final int COMMENT_EMPTY_CODE = 420;//评论数据为空码
-    public static final int pageSize = 20;//评价每页数量
-    private boolean isLoading = false;
+    public static final String pageSize = "20";//评价每页数量
     private String type = "ALL";
-    private int allPage;//总页数
     private String act_id;
     private String shareLink;
     private String goodsTitle;
     private ShareInfoParam shareInfoParam;
     private String mayBeBuyGoodsId;
     private final GoodsDetailAct mDetailAct;
+    private Call<BaseEntity<GoodsDeatilEntity>> mGoodsDataCall;
+    private Call<BaseEntity<ProbablyLikeEntity>> mMayBeBuyCall;
+    private Call<BaseEntity<CateEntity>> mAddCarCall;
+    private Call<BaseEntity<FootprintEntity>> mFootprintCall;
+    private Call<BaseEntity<CommonEntity>> mGoodsFavCall;
+    private Call<BaseEntity<CommonEntity>> mGoodsFavRemoveCall;
+    private Call<BaseEntity<CommentListEntity>> mCommentCall;
+    private Call<BaseEntity<CommonEntity>> mChatIdCall;
+
+    /*************评价相关************************/
+    private List<CommentListEntity.Data> mCommentLists = new ArrayList<>();
+    private CommentAdapter mCommentAdapter;
+    private boolean isClickHead = false;//是否点击头部
+    private int praisePosition;//点赞位置
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -63,8 +77,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("goods_id", goods_id);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<GoodsDeatilEntity>> baseEntityCall = getSaveCookieApiService().goodsDetail(requestBody);
-        getNetData(0,0,true,baseEntityCall,
+        mGoodsDataCall = getSaveCookieApiService().goodsDetail(requestBody);
+        getNetData(0,0,true, mGoodsDataCall,
                 new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity> entity) {
@@ -177,6 +191,12 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         });
     }
 
+    /**
+     * 添加购物车
+     * @param goods_id
+     * @param sku_id
+     * @param qty
+     */
     public void addCart(String goods_id,String sku_id,String qty){
         if (Common.loginPrompt()){
             return;
@@ -187,8 +207,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("qty",qty);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<CateEntity>> baseEntityCall = getAddCookieApiService().addCart(requestBody);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CateEntity>>(){
+        mAddCarCall = getAddCookieApiService().addCart(requestBody);
+        getNetData(true, mAddCarCall,new SimpleNetDataCallback<BaseEntity<CateEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CateEntity> entity) {
                 super.onSuccess(entity);
@@ -198,12 +218,15 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
     }
 
+    /**
+     * 足迹
+     */
     public void footprint(){
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<FootprintEntity>> baseEntityCall = getAddCookieApiService().footPrint(requestBody);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<FootprintEntity>>(){
+        mFootprintCall = getAddCookieApiService().footPrint(requestBody);
+        getNetData(mFootprintCall,new SimpleNetDataCallback<BaseEntity<FootprintEntity>>(){
             @Override
             public void onSuccess(BaseEntity<FootprintEntity> entity) {
                 super.onSuccess(entity);
@@ -225,8 +248,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("goods_id",goods_id);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavorite(requestBody);
-        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        mGoodsFavCall = getAddCookieApiService().goodsfavorite(requestBody);
+        getNetData(mGoodsFavCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -248,8 +271,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         map.put("ids",ids);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavoriteRemove(requestBody);
-        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        mGoodsFavRemoveCall = getAddCookieApiService().goodsfavoriteRemove(requestBody);
+        getNetData(mGoodsFavRemoveCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -264,11 +287,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param goods_id
      * @param type
      * @param page
-     * @param pageSize
      * @param id
      */
-    public void commentList(int emptyCode, int failureCode, final boolean isLoading,
-                            String goods_id, String type, final String page, String pageSize, String id){
+    public void commentList(int emptyCode, int failureCode, final boolean isShow,
+                            String goods_id, String type, final String page,String id){
         Map<String,String> map = new HashMap<>();
         map.put("goods_id",goods_id);
         map.put("type",type);
@@ -278,30 +300,79 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             map.put("id", id);
         }
         sortAndMD5(map);
-        Call<BaseEntity<CommentListEntity>> baseEntityCall = getApiService().commentList(map);
-        getNetData(emptyCode,failureCode,isLoading,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommentListEntity>>(){
+        mCommentCall = getApiService().commentList(map);
+        getNetData(emptyCode,failureCode,isShow, mCommentCall,new
+                SimpleNetDataCallback<BaseEntity<CommentListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommentListEntity> entity) {
                 super.onSuccess(entity);
-                GoodsDetailPresenter.this.isLoading = false;
+                isLoading = false;
                 CommentListEntity.ListData list = entity.data.list;
-                GoodsDetailPresenter.this.page = Integer.parseInt(list.page)+1;
-                GoodsDetailPresenter.this.allPage = Integer.parseInt(list.allPage);
-                iView.commentListData(entity.data);
+                currentPage = Integer.parseInt(list.page);
+                allPage = Integer.parseInt(list.allPage);
+                handleCommentData(entity.data);
+                currentPage++;
             }
 
             @Override
             public void onFailure() {
                 super.onFailure();
-                GoodsDetailPresenter.this.isLoading = false;
+                isLoading = false;
+                if (mCommentAdapter != null){
+                    mCommentAdapter.loadFailure();
+                }
             }
 
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
-                GoodsDetailPresenter.this.isLoading = false;
+                isLoading = false;
             }
         });
+    }
+
+    /**
+     * 处理评价数据
+     * @param data
+     */
+    private void handleCommentData(CommentListEntity data) {
+        CommentListEntity.ListData list = data.list;
+        if (currentPage == 1){
+            mCommentLists.clear();
+        }
+        int size = mCommentLists.size();
+        mCommentLists.addAll(list.data);
+        if (mCommentAdapter == null){
+            mCommentAdapter = new CommentAdapter(context,!isEmpty(list.data),mCommentLists);
+            iView.setCommentAdapter(mCommentAdapter);
+            //上拉加载
+            mCommentAdapter.setOnReloadListener(() -> onRefresh());
+            //加载分类数据
+            mCommentAdapter.setCommentTypeListener(requestType -> {
+                isClickHead = true;
+                type = requestType;
+                commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
+                        goods_id,type,"1",null);
+            });
+
+            mCommentAdapter.setCommentPraiseListener((comment_id, position) -> {
+                setCommentPraise(comment_id);
+                praisePosition = position;
+            });
+        }
+        boolean isClear = false;
+        if (!isClickHead){
+            isClear = true;
+        }else {
+            isClear = false;
+        }
+        mCommentAdapter.setLabel(data.label,isClear);
+        mCommentAdapter.setPageLoading(currentPage,allPage);
+        if (!isEmpty(list.data) && list.data.size() > 10){
+            mCommentAdapter.notifyItemRangeChanged(size,Integer.parseInt(pageSize));
+        }else {
+            mCommentAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -309,9 +380,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (page <= allPage){
+            if (currentPage <= allPage){
                 commentList(COMMENT_EMPTY_CODE,COMMENT_FAILURE_CODE,false,
-                        goods_id,type,String.valueOf(page),String.valueOf(pageSize),null);
+                        goods_id,type,String.valueOf(currentPage),null);
             }
         }
     }
@@ -323,11 +394,40 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
     @Override
     public void detachView() {
+        if (mGoodsDataCall != null && mGoodsDataCall.isExecuted()){
+            mGoodsDataCall.cancel();
+        }
+        if (mMayBeBuyCall != null && mMayBeBuyCall.isExecuted()){
+            mMayBeBuyCall.cancel();
+        }
+        if (mAddCarCall != null && mAddCarCall.isExecuted()){
+            mAddCarCall.cancel();
+        }
+        if (mFootprintCall != null && mFootprintCall.isExecuted()){
+            mFootprintCall.cancel();
+        }
+        if (mGoodsFavCall != null && mGoodsFavCall.isExecuted()){
+            mGoodsFavCall.cancel();
+        }
+        if (mGoodsFavRemoveCall != null && mGoodsFavRemoveCall.isExecuted()){
+            mGoodsFavRemoveCall.cancel();
+        }
+        if (mCommentCall != null && mCommentCall.isExecuted()){
+            mCommentCall.cancel();
+        }
+        if (mChatIdCall != null && mChatIdCall.isExecuted()){
+            mChatIdCall.cancel();
+        }
 
-    }
+        if (mCommentLists != null){
+            mCommentLists.clear();
+            mCommentLists = null;
+        }
 
-    public void setType(String type) {
-        this.type = type;
+        if (mCommentAdapter != null){
+            mCommentAdapter.unbind();
+            mCommentAdapter = null;
+        }
     }
 
     /**
@@ -342,7 +442,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                iView.praiseTotal(entity.data.praise_total);
+                if (mCommentAdapter != null)
+                    mCommentAdapter.setPraiseTotal(entity.data.praise_total,praisePosition);
             }
         });
     }
@@ -414,14 +515,16 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         });
     }
 
+    /**
+     * 可能还想买
+     */
     public void mayBeBuy(){
         Map<String,String> map = new HashMap<>();
         map.put("from","goods");
         map.put("ref_id",goods_id);
         sortAndMD5(map);
-        Call<BaseEntity<ProbablyLikeEntity>> baseEntityCall = getApiService()
-                .mayBeBuy(getRequestBody(map));
-        getNetData(false,baseEntityCall,new
+        mMayBeBuyCall = getApiService().mayBeBuy(getRequestBody(map));
+        getNetData(false, mMayBeBuyCall,new
                 SimpleNetDataCallback<BaseEntity<ProbablyLikeEntity>>(){
                     @Override
                     public void onSuccess(BaseEntity<ProbablyLikeEntity> entity) {
@@ -471,13 +574,17 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
         return shareInfoParam;
     }
 
+    /**
+     * 获取商家聊天id
+     * @param shopId
+     */
     public void getUserId(String shopId) {
         Map<String, String> map = new HashMap<>();
         map.put("shop_id", shopId);
         sortAndMD5(map);
 
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        mChatIdCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, mChatIdCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -497,7 +604,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * 可能想买的商品
      */
     public void mayBeBuyGoods() {
-        if (!isEmpty(mayBeBuyGoodsId))
-            Common.goGoGo(context,"goods",mayBeBuyGoodsId);
+        if (!isEmpty(mayBeBuyGoodsId)) {
+            Common.goGoGo(context, "goods", mayBeBuyGoodsId);
+            mayBeBuyGoodsId = null;
+        }
     }
 }

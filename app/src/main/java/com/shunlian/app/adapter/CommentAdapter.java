@@ -200,7 +200,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             mHolder.mtv_time.setText(data.add_time);
             mHolder.mtv_attribute.setText(data.goods_option);
             mHolder.mtv_zan_count.setText(data.praise_total);
-            mHolder.mtv_buy_time.setText(data.buy_time);
+            mHolder.mtv_buy_time.setText("购买日期:"+data.buy_time);
             if (data.is_praise){
                 mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
                 mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));

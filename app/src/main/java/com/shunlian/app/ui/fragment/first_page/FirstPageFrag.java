@@ -8,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.core.PingpaiListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
@@ -24,6 +28,10 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +45,7 @@ import butterknife.OnClick;
  * 首页页面
  */
 
-public class FirstPageFrag extends BaseFragment implements View.OnClickListener, IFirstPage {
+public class FirstPageFrag extends BaseFragment implements View.OnClickListener, IFirstPage, MessageCountManager.OnGetMessageListener {
     public static String firstId = "";
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
@@ -61,11 +69,51 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     MyLinearLayout mllayout_title;
     private PFirstPage pFirstPage;
     private String logoType,logoId;
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+    private MessageCountManager messageCountManager;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        messageCountManager.setTextCount(tv_msg_count);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        messageCountManager.setTextCount(tv_msg_count);
+
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(baseContext);
+            if (messageCountManager.isLoad()) {
+                messageCountManager.setTextCount(tv_msg_count);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
     }
 
     @Override
@@ -77,6 +125,15 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     .statusBarDarkFont(true, 0.2f)
                     .init();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ImmersionBar.with(this)
+                .statusBarDarkFont(true, 0.0f)
+                .init();
+//        ImmersionBar.with(this).titleBar(rLayout_title, false).init();
     }
 
     @Override
@@ -95,6 +152,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
                     miv_scan.setImageResource(R.mipmap.icon_home_saoyisao_w);
                     miv_news.setImageResource(R.mipmap.icon_home_message_w);
+                    tv_msg_count.setTextColor(getColorResouce(R.color.pink_color));
+                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_white_100);
                     mtv_scan.setTextColor(getColorResouce(R.color.white));
                     mtv_news.setTextColor(getColorResouce(R.color.white));
                 } else {
@@ -105,6 +164,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     mllayout_title.setBackgroundColor(getColorResouce(R.color.white));
                     miv_scan.setImageResource(R.mipmap.icon_home_saoyisao);
                     miv_news.setImageResource(R.mipmap.icon_home_message);
+                    tv_msg_count.setTextColor(getColorResouce(R.color.white));
+                    tv_msg_count.setBackgroundResource(R.drawable.rounded_corner_pink_100);
                     mtv_scan.setTextColor(getColorResouce(R.color.new_text));
                     mtv_news.setTextColor(getColorResouce(R.color.new_text));
                 }
@@ -129,6 +190,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         ImmersionBar.with(this).fitsSystemWindows(true)
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)

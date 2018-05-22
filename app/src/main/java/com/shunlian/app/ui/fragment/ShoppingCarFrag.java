@@ -22,6 +22,7 @@ import com.shunlian.app.adapter.ShopCarStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
+import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
@@ -173,8 +174,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         editMap = new HashMap<>();
-        shopCarPresenter = new ShopCarPresenter(baseContext, this);
-        shopCarPresenter.initShopData();
     }
 
     @Override
@@ -256,6 +255,17 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         }
     }
 
+    @Override
+    public void onResume() {
+        if (!isHidden()) {
+            if (shopCarPresenter == null) {
+                shopCarPresenter = new ShopCarPresenter(baseContext, this);
+            } else {
+                shopCarPresenter.getApiData();
+            }
+        }
+        super.onResume();
+    }
 
     @Override
     public void onClick(View view) {

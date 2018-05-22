@@ -16,3 +16,5 @@
 #   public *;
 #}
 -keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

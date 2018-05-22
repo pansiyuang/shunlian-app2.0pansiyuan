@@ -21,6 +21,16 @@ public class HotRdEntity {
     public String name;
     public String count_down;
     public String content;
+    public Share share;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Share {
+        public String share_url;
+        public String title;
+        public String content;
+        public String logo;
+
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MData {

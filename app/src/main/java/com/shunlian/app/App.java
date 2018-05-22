@@ -2,12 +2,16 @@ package com.shunlian.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
 
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 
@@ -73,8 +77,28 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mApp = this;
-
         context = getApplicationContext();
+
+        //初始化bugly,建议在测试阶段建议设置成true，发布时设置为false。
+        if (BuildConfig.DEBUG) {
+            Constant.BUGLY_ID="9f3fcbbba0";//测试
+        }
+        // 这里实现SDK初始化，appId替换成你的在Bugly平台申请的appId
+        // 调试时，将第三个参数改为true
+        Bugly.init(this, Constant.BUGLY_ID, BuildConfig.DEBUG);
+        CrashReport.initCrashReport(getApplicationContext(), Constant.BUGLY_ID, BuildConfig.DEBUG);
+        //bugly动态设置会被manifest中的设置所覆盖
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+        PackageManager packageManager = getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+//            strategy.setAppChannel("myChannel");  //设置渠道
+            strategy.setAppVersion(packageInfo.versionName);      //App的版本
+//            strategy.setAppPackageName("com.tencent.xx");  //App的包名
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         //注册侧滑返回生命周期回调
         mActivityHelper = new ActivityHelper();
         registerActivityLifecycleCallbacks(mActivityHelper);

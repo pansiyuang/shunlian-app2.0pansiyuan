@@ -29,6 +29,7 @@ public class WXLoginEntity {
     public String time;
     public String token_expires_in;
     public String token;
+    public String refresh_token;
 
     @Override
     public String toString() {
