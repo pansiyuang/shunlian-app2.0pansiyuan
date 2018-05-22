@@ -111,6 +111,8 @@
                 android:background="@null"
                 android:ellipsize="end"
                 android:hint="请输入手机号码"
+                android:maxEms="11"
+                android:inputType="phone"
                 android:singleLine="true"
                 android:textColor="@color/new_text"
                 android:textColorHint="@color/my_gray_one"
