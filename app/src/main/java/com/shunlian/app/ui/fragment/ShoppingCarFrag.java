@@ -22,12 +22,13 @@ import com.shunlian.app.adapter.ShopCarStoreAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.bean.ShoppingCarEntity;
-import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.presenter.ShopCarPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.LogUtil;
@@ -118,6 +119,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private String disGoodsIds;//失效订单的id
     private RecyclerDialog recyclerDialog;
     private List<ProbabyLikeGoodsEntity.Goods> probabyGoods;
+    public boolean isclick=false;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -174,6 +176,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         editMap = new HashMap<>();
+        shopCarPresenter = new ShopCarPresenter(baseContext, this);
     }
 
     @Override
@@ -188,7 +191,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     public void getShoppingCarData() {
         if (shopCarPresenter != null) {
-            shopCarPresenter.initShopData();
+            shopCarPresenter.getApiData();
         }
     }
 
@@ -257,12 +260,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()) {
-            if (shopCarPresenter == null) {
-                shopCarPresenter = new ShopCarPresenter(baseContext, this);
-            } else {
-                shopCarPresenter.getApiData();
-            }
+        if (!isHidden()&&!isclick){
+            isclick=false;
+            getShoppingCarData();
         }
         super.onResume();
     }

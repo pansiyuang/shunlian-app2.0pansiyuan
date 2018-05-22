@@ -35,7 +35,9 @@ import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -198,6 +200,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private MessageCountManager messageCountManager;
     private HelpArticleAdapter helpArticleAdapter;
     private String managerUrl, orderUrl;
+    public boolean isclick=false;
 
     //    private Timer outTimer;
     @Override
@@ -219,12 +222,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()) {
-            if (personalcenterPresenter == null) {
-                personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
-            } else {
-                personalcenterPresenter.getApiData();
-            }
+        if (!isHidden()&&!isclick){
+            isclick=false;
+            getPersonalcenterData();
         }
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseContext);
@@ -261,6 +261,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         refreshview.setCanRefresh(true);
         refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
+        personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
 
     @Override
@@ -323,6 +324,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         });
     }
 
+    public void getPersonalcenterData() {
+        if (personalcenterPresenter != null) {
+            personalcenterPresenter.getApiData();
+        }
+    }
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         managerUrl = personalcenterEntity.son_manage_url;

@@ -32,6 +32,8 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMyProfitView;
@@ -254,6 +256,15 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         mtv_toolbar_title.setText("我的收益");
         gone(mrlayout_toolbar_more);
         visible(miv_toolbar_help);
+
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
+        if (deviceWidth >= Constant.DRAWING_WIDTH) {
+            ViewGroup.LayoutParams layoutParams = chart_view.getLayoutParams();
+            int[] ints = TransformUtil.countRealWH(this, 720, 320);
+            layoutParams.width = ints[0];
+            layoutParams.height = ints[1];
+            chart_view.setLayoutParams(layoutParams);
+        }
 
         GradientDrawable cash_background = (GradientDrawable) mtv_immediate_cash.getBackground();
         int i = TransformUtil.dip2px(this, 0.5f);

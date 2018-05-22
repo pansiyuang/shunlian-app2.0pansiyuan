@@ -249,7 +249,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             visible(rv_category);
         }
         if (aiMoreAdapter == null) {
-            aiMoreAdapter = new AiMoreAdapter(getBaseContext(), mData);
+            aiMoreAdapter = new AiMoreAdapter(this, mData);
             gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
             rv_category.setLayoutManager(gridLayoutManager);
             rv_category.setAdapter(aiMoreAdapter);

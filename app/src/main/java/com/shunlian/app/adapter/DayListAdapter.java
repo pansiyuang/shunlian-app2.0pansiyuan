@@ -69,13 +69,13 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.view_title.setVisibility(View.VISIBLE);
                 oneHolder.mtv_titles.setText(title);
                 oneHolder.mtv_content.setText(content);
-                if ("1".equals(isStart)) {//1：活动进行中   0：活动未开始
-                    oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
-                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
-                } else {
-                    oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
-                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
-                }
+//                if ("1".equals(isStart)) {//1：活动进行中   0：活动未开始
+//                    oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
+//                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
+//                } else {
+//                    oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.value_2096F2));
+//                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
+//                }
 
                 if (!oneHolder.isStartDownTime) {
                     String times = isEmpty(time) ? "0" : time;
@@ -102,6 +102,16 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.view_title.setVisibility(View.GONE);
             }
             GradientDrawable copyBackground = (GradientDrawable) oneHolder.mllayout_remind.getBackground();
+            if ("1".equals(data.remind_status)) {
+                oneHolder.isRemind = true;
+                oneHolder.miv_clock.setVisibility(View.GONE);
+                oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
+                copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
+            } else {
+                oneHolder.isRemind = false;
+                oneHolder.miv_clock.setVisibility(View.VISIBLE);
+                oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
+            }
             if ("1".equals(isStart)) {
                 //设置圆角背景
                 oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
@@ -124,16 +134,6 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.seekbar_grow.setVisibility(View.GONE);
                 oneHolder.mtv_number.setVisibility(View.VISIBLE);
                 oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
-            }
-            if ("1".equals(data.remind_status)) {
-                oneHolder.isRemind = true;
-                oneHolder.miv_clock.setVisibility(View.GONE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
-                copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
-            } else {
-                oneHolder.isRemind = false;
-                oneHolder.miv_clock.setVisibility(View.VISIBLE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
             }
             GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
         }

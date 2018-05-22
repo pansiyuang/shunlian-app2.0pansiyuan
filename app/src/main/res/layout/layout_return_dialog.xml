@@ -17,6 +17,15 @@
             android:text="@string/return_order"
             android:textColor="@color/new_text"
             android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/iv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/icon_login_delet" />
     </RelativeLayout>
 
     <View

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.utils.GlideUtils;
 
 
@@ -35,7 +34,7 @@ public class MyKanner extends BaseBanner<String, MyKanner> {
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 //        HomeAllEntity.Data.Banner banner = list.get(position);
-        GlideUtils.getInstance().loadImage(getContext(),iv,list.get(position));
+        GlideUtils.getInstance().communityBanner(getContext(),iv,list.get(position));
 
 //        iv.setTag(R.id.tag_typeId, banner.getType());
 //        iv.setTag(R.id.tag_itemId, banner.getItemId());

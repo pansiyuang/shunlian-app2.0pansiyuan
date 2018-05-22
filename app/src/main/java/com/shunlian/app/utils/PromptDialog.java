@@ -37,6 +37,7 @@ public class PromptDialog {
 
     private void initView(Dialog logoutDialog) {
         tvSure = (TextView) logoutDialog.findViewById(R.id.tv_sure);
+
         tvCancle = (TextView) logoutDialog.findViewById(R.id.tv_cancel);
         tvMessage = (TextView) logoutDialog.findViewById(R.id.tv_message);
         tv_messages = (TextView) logoutDialog.findViewById(R.id.tv_messages);

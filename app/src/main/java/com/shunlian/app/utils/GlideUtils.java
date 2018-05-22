@@ -70,7 +70,7 @@ public class GlideUtils {
             Glide.with(context)
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
-                    .placeholder(R.mipmap.img_guige_moren)
+                    .placeholder(R.mipmap.img_default_common)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
@@ -82,7 +82,7 @@ public class GlideUtils {
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
                     .dontAnimate()
-                    .placeholder(R.mipmap.img_guige_moren)
+                    .placeholder(R.mipmap.img_default_common)
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
                     //source:缓存源资源   result：缓存转换后的资源
@@ -122,8 +122,8 @@ public class GlideUtils {
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
         Glide.with(context)
                 .load(imgUrl)
-//                .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
+//                .error(R.mipmap.img_default_common)
+                .placeholder(R.mipmap.img_default_common)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
@@ -384,4 +384,61 @@ public class GlideUtils {
         });
     }
 
+    /**
+     * 发现关注列表
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void findFollowList(Context context,ImageView imageView,String imgUrl){
+        Glide.with(context)
+                .load(imgUrl)
+                //.error(R.mipmap.error)
+                .placeholder(R.mipmap.img_default_find_followlist)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
+
+    /**
+     * 圈子的轮播
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void communityBanner(Context context,ImageView imageView,String imgUrl){
+        Glide.with(context)
+                .load(imgUrl)
+                //.error(R.mipmap.error)
+                .placeholder(R.mipmap.img_default_find_circlebanner)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
+
+    /**
+     * 圈子顶部图
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void communityTopPic(Context context,ImageView imageView,String imgUrl,int radius){
+        Glide.with(context)
+                .load(imgUrl)
+                //.error(R.mipmap.error)
+                .placeholder(R.mipmap.img_default_find_circletopic)
+                .crossFade()
+                .placeholder(R.mipmap.img_guige_moren)
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new CenterCrop(context),
+                        new GlideRoundTransform(context, radius))
+                .into(imageView);
+    }
 }

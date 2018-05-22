@@ -16,7 +16,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.RefundDetailEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
@@ -40,6 +39,9 @@ public class ReturnGoodsDialog extends Dialog {
 
     @BindView(R.id.tv_close)
     TextView tv_close;
+
+    @BindView(R.id.iv_cancel)
+    MyImageView iv_cancel;
 
     private Context mContext;
     private int recycleHeight;
@@ -78,9 +80,11 @@ public class ReturnGoodsDialog extends Dialog {
         tv_close.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onSelect(currentPosition);
-                dismiss();
             }
+            dismiss();
         });
+
+        iv_cancel.setOnClickListener(v->dismiss());
     }
 
     public void setRefundReason(List<RefundDetailEntity.RefundDetail.Edit.Reason> reasonList, String chooseId) {
@@ -112,6 +116,10 @@ public class ReturnGoodsDialog extends Dialog {
             if (listener != null) {
                 currentPosition = position;
                 recyclerAdapter.notifyDataSetChanged();
+                if (listener != null) {
+                    listener.onSelect(currentPosition);
+                    dismiss();
+                }
             }
         });
     }

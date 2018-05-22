@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.newchat.ui.CustomerListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 
@@ -271,7 +270,7 @@ public class CustomerGoodsView extends LinearLayout implements View.OnClickListe
         switch (v.getId()) {
             case R.id.mtv_count_add:
                 if (i >= maxCount) {
-                    Common.staticToast("最多选择只能选" + maxCount + "件喔！");
+                    Common.staticToast("最多只能选" + maxCount + "件");
                     return;
                 }
                 i++;

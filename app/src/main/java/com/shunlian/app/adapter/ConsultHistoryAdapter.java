@@ -69,7 +69,7 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
 
             GlideUtils.getInstance().loadImage(context,mHolder.civ_head,historyList.user_thumb);
             mHolder.mtv_name.setText(historyList.username);
-            mHolder.mtv_label.setText(historyList.progress);
+            mHolder.mtv_label.setText(historyList.status_msg);
             mHolder.mtv_time.setText(historyList.time);
 
             List<ConsultHistoryEntity.Content> content = historyList.content;

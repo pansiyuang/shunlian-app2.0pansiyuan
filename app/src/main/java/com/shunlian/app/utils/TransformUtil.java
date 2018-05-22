@@ -279,10 +279,12 @@ public class TransformUtil {
      * @return realWH[0] 宽    realWH[1] 高
      */
     public static int[] countRealWH(Context context,int width,int height){
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
+        int deviceHeight = DeviceInfoUtil.getDeviceHeight(context);
         int[] realWH = new int[2];
         float wp = width / Constant.DRAWING_WIDTH;
-        float real_w = wp * DeviceInfoUtil.getDeviceWidth(context);
-        float real_h = real_w * height / width;
+        float real_w = wp * deviceWidth;
+        float real_h = height * deviceHeight / Constant.DRAWING_HEIGHT;
         realWH[0] = (int) (real_w + 0.5f);
         if (width == height){
             realWH[1] = (int) (real_w + 0.5f);

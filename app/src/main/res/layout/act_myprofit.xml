@@ -571,7 +571,7 @@
 
                     <com.shunlian.app.ui.sale_data.SplineChart06View
                         android:id="@+id/chart_view"
-                        android:layout_width="360dp"
+                        android:layout_width="match_parent"
                         android:layout_height="160dp" />
                 </LinearLayout>
             </HorizontalScrollView>

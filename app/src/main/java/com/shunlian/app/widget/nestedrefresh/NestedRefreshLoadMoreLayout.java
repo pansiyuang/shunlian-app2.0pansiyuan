@@ -30,7 +30,7 @@ import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
  * Description:
  */
 
-public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScrollingParent, NestedScrollingChild {
+public class NestedRefreshLoadMoreLayout extends ViewGroup implements NestedScrollingParent, NestedScrollingChild {
 
 
     private static final String LOG_TAG = "NestedRefreshLoad";
@@ -45,7 +45,18 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     private static final int DEFAULT_LOAD_MORE_COMPLETE_DELAY_DURATION = 300;
     private static final int DEFAULT_LOAD_MORE_COMPLETE_TO_DEFAULT_SCROLLING_DURATION = 300;
     private static final int DEFAULT_DEFAULT_TO_LOADING_MORE_SCROLLING_DURATION = 300;
-
+    //滑动系数
+    private static final float DRAG_RATIO = 2;
+    private final int[] mParentScrollConsumed = new int[2];
+    private final int[] mParentOffsetInWindow = new int[2];
+    boolean mRefreshEnabled = true;
+    boolean mLoadMoreEnabled = true;
+    int mHeaderOffset = 0;
+    int mTargetOffset = 0;
+    int mFooterOffset = 0;
+    //嵌套滑动
+    boolean mNestedScrollInProgress = false;
+    boolean mIsBeingDragged = false;
     private int mSwipingToRefreshToDefaultScrollingDuration = DEFAULT_SWIPING_TO_REFRESH_TO_DEFAULT_SCROLLING_DURATION;
     private int mReleaseToRefreshToRefreshingScrollingDuration = DEFAULT_RELEASE_TO_REFRESHING_SCROLLING_DURATION;
     private int mRefreshCompleteDelayDuration = DEFAULT_REFRESH_COMPLETE_DELAY_DURATION;
@@ -56,8 +67,6 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     private int mLoadMoreCompleteToDefaultScrollingDuration = DEFAULT_LOAD_MORE_COMPLETE_TO_DEFAULT_SCROLLING_DURATION;
     private int mSwipingToLoadMoreToDefaultScrollingDuration = DEFAULT_SWIPING_TO_LOAD_MORE_TO_DEFAULT_SCROLLING_DURATION;
     private int mDefaultToLoadingMoreScrollingDuration = DEFAULT_DEFAULT_TO_LOADING_MORE_SCROLLING_DURATION;
-
-
     private View mTargetView;
     private View mHeaderView;
     private View mFooterView;
@@ -69,45 +78,18 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     private int mLoadMoreFooterHeight = 0;
     private boolean mHasHeaderView;
     private boolean mHasFooterView;
-    boolean mRefreshEnabled = true;
-    boolean mLoadMoreEnabled = true;
-    int mHeaderOffset = 0;
-    int mTargetOffset = 0;
-    int mFooterOffset = 0;
-
-
-    //重叠和跟随 模式
-    public enum Mode {
-        FOLLOW(0) ,OVERLAP(1);
-        int value;
-        Mode(int val){
-            this.value = val;
-        }
-    }
     //当前模式
     private Mode mCurrentMode = Mode.FOLLOW;
     //当前状态
     private int mStatus = STATUS.STATUS_DEFAULT;
-
-    //滑动系数
-    private static final float DRAG_RATIO = 2;
-    //嵌套滑动
-    boolean mNestedScrollInProgress = false;
     //最大下拉
     private int mRefreshMaxDragOffset = 0;
     private int mLoadMoreMaxDragOffset = 0;
     private AutoScroller mAutoScroller;
     private LayoutInflater mLayoutInflater;
-
-
-
     private int mTouchSlop;
     private NestedScrollingParentHelper mNestedScrollingParentHelper;
     private NestedScrollingChildHelper mNestedScrollingChildHelper;
-    private final int[] mParentScrollConsumed = new int[2];
-    private final int[] mParentOffsetInWindow = new int[2];
-
-    boolean mIsBeingDragged = false;
     /**
      * 处理多点触控的情况，准确地计算Y坐标和移动距离dy
      * 同时兼容单点触控的情况
@@ -119,17 +101,172 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     //记录单次滚动x,y轴偏移量
     private float Overdy;
     private float Overdx;
-
-
     private onLoadMoreListener mLoadMoreListener;
+    onLoadMoreCallback mLoadMoreCallback = new onLoadMoreCallback() {
+
+        @Override
+        public void onPrepare() {
+            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
+                mFooterView.setVisibility(VISIBLE);
+                ((DragListener) mFooterView).onPrepare();
+            }
+        }
+
+        @Override
+        public void onDrag(int y, int offset) {
+            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isLoadMoreStatus(mStatus)) {
+                if (mFooterView.getVisibility() != VISIBLE) {
+                    mFooterView.setVisibility(VISIBLE);
+                }
+                ((DragListener) mFooterView).onDrag(y, offset);
+            }
+        }
+
+        @Override
+        public void onRelease() {
+            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isReleaseToLoadMore(mStatus)) {
+                ((DragListener) mFooterView).onRelease();
+            }
+        }
+
+        @Override
+        public void onLoadMore() {
+            if (mFooterView != null && STATUS.isLoadingMore(mStatus)) {
+                if (mFooterView instanceof onLoadMoreListener) {
+                    ((onLoadMoreListener) mFooterView).onLoadMore();
+                }
+                if (mLoadMoreListener != null) {
+                    mLoadMoreListener.onLoadMore();
+                }
+            }
+        }
+
+        @Override
+        public void onComplete() {
+            if (mFooterView != null && mFooterView instanceof DragListener) {
+                ((DragListener) mFooterView).onComplete();
+            }
+        }
+
+        @Override
+        public void onReset() {
+            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
+                ((DragListener) mFooterView).onReset();
+                mFooterView.setVisibility(GONE);
+            }
+        }
+
+
+        @Override
+        public int getDragMaxOffset(View rootView, View target, int targetHeight) {
+            if (mFooterView != null && mFooterView instanceof DragListener) {
+                return ((DragListener) mFooterView).getDragMaxOffset(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+
+        @Override
+        public int getDragTriggerOffset(View rootView, View target, int targetHeight) {
+            if (mFooterView != null && mFooterView instanceof DragListener) {
+                return ((DragListener) mFooterView).getDragTriggerOffset(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+
+        @Override
+        public int getRefreshOrLoadMoreHeight(View rootView, View target, int targetHeight) {
+            if (mFooterView != null && mFooterView instanceof DragListener) {
+                return ((DragListener) mFooterView).getRefreshOrLoadMoreHeight(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+    };
     private onRefreshListener mRefreshListener;
+    onRefreshCallback mRefreshCallback = new onRefreshCallback() {
+        @Override
+        public void onPrepare() {
+            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
+                mHeaderView.setVisibility(VISIBLE);
+                ((DragListener) mHeaderView).onPrepare();
+            }
+        }
+
+        @Override
+        public void onDrag(int y, int offset) {
+            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isRefreshStatus(mStatus)) {
+                if (mHeaderView.getVisibility() != VISIBLE) {
+                    mHeaderView.setVisibility(VISIBLE);
+                }
+                ((DragListener) mHeaderView).onDrag(y, offset);
+            }
+        }
+
+        @Override
+        public void onRelease() {
+            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isReleaseToRefresh(mStatus)) {
+                ((DragListener) mHeaderView).onRelease();
+            }
+        }
+
+        @Override
+        public void onRefresh() {
+            if (mHeaderView != null && STATUS.isRefreshing(mStatus)) {
+                if (mHeaderView instanceof onRefreshListener) {
+                    ((onRefreshListener) mHeaderView).onRefresh();
+                }
+                if (mRefreshListener != null) {
+                    mRefreshListener.onRefresh();
+                }
+            }
+        }
+
+        @Override
+        public void onComplete() {
+            if (mHeaderView != null && mHeaderView instanceof DragListener) {
+                ((DragListener) mHeaderView).onComplete();
+            }
+        }
+
+        @Override
+        public void onReset() {
+            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
+                ((DragListener) mHeaderView).onReset();
+                mHeaderView.setVisibility(GONE);
+            }
+        }
+
+        @Override
+        public int getDragMaxOffset(View rootView, View target, int targetHeight) {
+            if (mHeaderView != null && mHeaderView instanceof DragListener) {
+                return ((DragListener) mHeaderView).getDragMaxOffset(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+
+        @Override
+        public int getDragTriggerOffset(View rootView, View target, int targetHeight) {
+            if (mHeaderView != null && mHeaderView instanceof DragListener) {
+                return ((DragListener) mHeaderView).getDragTriggerOffset(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+
+        @Override
+        public int getRefreshOrLoadMoreHeight(View rootView, View target, int targetHeight) {
+            if (mHeaderView != null && mHeaderView instanceof DragListener) {
+                return ((DragListener) mHeaderView).getRefreshOrLoadMoreHeight(rootView, target, targetHeight);
+            }
+            return 0;
+        }
+
+    };
 
     public NestedRefreshLoadMoreLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public NestedRefreshLoadMoreLayout(Context context, AttributeSet attrs) {
-        this(context, attrs,-1);
+        this(context, attrs, -1);
     }
 
     public NestedRefreshLoadMoreLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -147,7 +284,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
         //获取自定义属性
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NestedRefreshLoadMoreLayout);
-        if(typedArray != null) {
+        if (typedArray != null) {
 
             mRefreshEnabled = typedArray.getBoolean(R.styleable.NestedRefreshLoadMoreLayout_refreshenabled, true);
             mLoadMoreEnabled = typedArray.getBoolean(R.styleable.NestedRefreshLoadMoreLayout_loadMoreEnabled, true);
@@ -158,13 +295,13 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             }
 
             int headerResourceId = typedArray.getResourceId(R.styleable.NestedRefreshLoadMoreLayout_header, -1);
-            if(headerResourceId > 0){
+            if (headerResourceId > 0) {
                 View headerView = mLayoutInflater.inflate(headerResourceId, null);
                 setRefreshHeaderView(headerView);
             }
 
             int footerResourceId = typedArray.getResourceId(R.styleable.NestedRefreshLoadMoreLayout_footer, -1);
-            if(footerResourceId > 0){
+            if (footerResourceId > 0) {
                 View footerView = mLayoutInflater.inflate(footerResourceId, null);
                 setLoadMoreFooterView(footerView);
             }
@@ -182,17 +319,17 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             MarginLayoutParams lp = ((MarginLayoutParams) headerView.getLayoutParams());
             mHeaderHeight = headerView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
 
-            mRefreshTriggerOffset = ((DragListener) mHeaderView).getDragTriggerOffset(this,mHeaderView,mHeaderHeight);
-            mRefreshMaxDragOffset = ((DragListener) mHeaderView).getDragMaxOffset(this,mHeaderView,mHeaderHeight);
-            mRefreshHeaderHeight  = ((DragListener) mHeaderView).getRefreshOrLoadMoreHeight(this,mHeaderView,mHeaderHeight);
+            mRefreshTriggerOffset = ((DragListener) mHeaderView).getDragTriggerOffset(this, mHeaderView, mHeaderHeight);
+            mRefreshMaxDragOffset = ((DragListener) mHeaderView).getDragMaxOffset(this, mHeaderView, mHeaderHeight);
+            mRefreshHeaderHeight = ((DragListener) mHeaderView).getRefreshOrLoadMoreHeight(this, mHeaderView, mHeaderHeight);
 
-            if(mRefreshHeaderHeight <=0){
+            if (mRefreshHeaderHeight <= 0) {
                 mRefreshHeaderHeight = mHeaderHeight;
             }
             if (mRefreshTriggerOffset <= 0) {
                 mRefreshTriggerOffset = mRefreshHeaderHeight;
             }
-            if(mRefreshMaxDragOffset < mHeaderHeight){
+            if (mRefreshMaxDragOffset < mHeaderHeight) {
                 mRefreshMaxDragOffset = mHeaderHeight * 2;
             }
         }
@@ -208,11 +345,11 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             MarginLayoutParams lp = ((MarginLayoutParams) footerView.getLayoutParams());
             mFooterHeight = footerView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
 
-            mLoadMoreTriggerOffset = ((DragListener) mFooterView).getDragTriggerOffset(this,mFooterView,mFooterHeight);
-            mLoadMoreMaxDragOffset = ((DragListener) mFooterView).getDragMaxOffset(this,mFooterView,mFooterHeight);
-            mLoadMoreFooterHeight  = ((DragListener) mFooterView).getRefreshOrLoadMoreHeight(this,mFooterView,mFooterHeight);
+            mLoadMoreTriggerOffset = ((DragListener) mFooterView).getDragTriggerOffset(this, mFooterView, mFooterHeight);
+            mLoadMoreMaxDragOffset = ((DragListener) mFooterView).getDragMaxOffset(this, mFooterView, mFooterHeight);
+            mLoadMoreFooterHeight = ((DragListener) mFooterView).getRefreshOrLoadMoreHeight(this, mFooterView, mFooterHeight);
 
-            if(mLoadMoreFooterHeight <=0){
+            if (mLoadMoreFooterHeight <= 0) {
                 mLoadMoreFooterHeight = mFooterHeight;
             }
 
@@ -220,7 +357,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
                 mLoadMoreTriggerOffset = mLoadMoreFooterHeight;
             }
 
-            if(mLoadMoreMaxDragOffset < mFooterHeight){
+            if (mLoadMoreMaxDragOffset < mFooterHeight) {
                 mLoadMoreMaxDragOffset = mFooterHeight * 2;
             }
         }
@@ -232,7 +369,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
         layoutChildren();
 
         mHasHeaderView = (mHeaderView != null);
-        mHasFooterView =  (mFooterView != null);
+        mHasFooterView = (mFooterView != null);
 
     }
 
@@ -258,12 +395,12 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             final int headerRight;
             final int headerBottom;
 
-            if(mCurrentMode == Mode.FOLLOW){
+            if (mCurrentMode == Mode.FOLLOW) {
                 headerTop = paddingTop + lp.topMargin - mHeaderHeight + mHeaderOffset;
                 headerRight = headerLeft + headerView.getMeasuredWidth();
                 headerBottom = headerTop + headerView.getMeasuredHeight();
                 headerView.layout(headerLeft, headerTop, headerRight, headerBottom);
-            }else if(mCurrentMode == Mode.OVERLAP){
+            } else if (mCurrentMode == Mode.OVERLAP) {
                 headerTop = paddingTop + lp.topMargin;
                 headerRight = headerLeft + headerView.getMeasuredWidth();
                 headerBottom = headerTop + headerView.getMeasuredHeight();
@@ -288,30 +425,30 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             final View footerView = mFooterView;
             MarginLayoutParams lp = (MarginLayoutParams) footerView.getLayoutParams();
             final int footerLeft = paddingLeft + lp.leftMargin;
-            final int footerBottom ;
-            final int footerTop  ;
-            final int footerRight ;
-            if(mCurrentMode == Mode.FOLLOW){
+            final int footerBottom;
+            final int footerTop;
+            final int footerRight;
+            if (mCurrentMode == Mode.FOLLOW) {
                 footerBottom = height - paddingBottom - lp.bottomMargin + mFooterHeight + mFooterOffset;
                 footerTop = footerBottom - footerView.getMeasuredHeight();
                 footerRight = footerLeft + footerView.getMeasuredWidth();
                 footerView.layout(footerLeft, footerTop, footerRight, footerBottom);
-            }else if(mCurrentMode == Mode.OVERLAP){
-                footerBottom = height - paddingBottom - lp.bottomMargin ;
+            } else if (mCurrentMode == Mode.OVERLAP) {
+                footerBottom = height - paddingBottom - lp.bottomMargin;
                 footerTop = footerBottom - footerView.getMeasuredHeight();
                 footerRight = footerLeft + footerView.getMeasuredWidth();
                 footerView.layout(footerLeft, footerTop, footerRight, footerBottom);
             }
         }
 
-        if(mCurrentMode == Mode.FOLLOW){
+        if (mCurrentMode == Mode.FOLLOW) {
             if (mHeaderView != null) {
                 mHeaderView.bringToFront();
             }
             if (mFooterView != null) {
                 mFooterView.bringToFront();
             }
-        }else if(mCurrentMode == Mode.OVERLAP){
+        } else if (mCurrentMode == Mode.OVERLAP) {
             mTargetView.bringToFront();
         }
     }
@@ -319,43 +456,21 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if(mTargetView == null) {
+        if (mTargetView == null) {
             ensureTarget();
         }
-        if(mTargetView == null){
+        if (mTargetView == null) {
             return;
         }
-        if(mHeaderView != null){
+        if (mHeaderView != null) {
             mHeaderView.setVisibility(View.GONE);
         }
 
-        if(mFooterView != null){
+        if (mFooterView != null) {
             mFooterView.setVisibility(View.GONE);
         }
     }
 
-    /**
-     *
-     * LayoutParams of RefreshLoadMoreLayout
-     */
-    public static class LayoutParams extends MarginLayoutParams {
-
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-        }
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(MarginLayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams source) {
-            super(source);
-        }
-    }
     /**
      *
      */
@@ -363,6 +478,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         return new NestedRefreshLoadMoreLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
+
     /**
      *
      */
@@ -370,6 +486,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
         return new NestedRefreshLoadMoreLayout.LayoutParams(p);
     }
+
     /**
      *
      */
@@ -383,7 +500,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
         ensureTarget();
-        if(STATUS.isRefreshing(mStatus) ||  STATUS.isLoadingMore(mStatus) || mNestedScrollInProgress){
+        if (STATUS.isRefreshing(mStatus) || STATUS.isLoadingMore(mStatus) || mNestedScrollInProgress) {
             return false;
         }
         dealMulTouchEvent(ev);
@@ -398,7 +515,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             case MotionEvent.ACTION_MOVE:
 
                 mIsBeingDragged = isMyControlScroll();
-                if(!mIsBeingDragged){
+                if (!mIsBeingDragged) {
                     fixCurrentStatusLayout();
                 }
                 break;
@@ -423,7 +540,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     public boolean onTouchEvent(MotionEvent ev) {
 
         ensureTarget();
-        if(STATUS.isRefreshing(mStatus) ||  STATUS.isLoadingMore(mStatus) || mNestedScrollInProgress){
+        if (STATUS.isRefreshing(mStatus) || STATUS.isLoadingMore(mStatus) || mNestedScrollInProgress) {
             return false;
         }
         dealMulTouchEvent(ev);
@@ -440,8 +557,8 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
                 mIsBeingDragged = isMyControlScroll();
                 if (mIsBeingDragged) {
                     fingerScroll(-Overdy);
-                }else {
-                    if(Overdy != 0) {
+                } else {
+                    if (Overdy != 0) {
                         fixCurrentStatusLayout();
 //                    //把滚动事件交给内部控件处理
                         ev.setAction(MotionEvent.ACTION_DOWN);
@@ -475,16 +592,17 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 判断当前控件是否被拖拉
+     *
      * @return
      */
-    private boolean  isMyControlScroll(){
-        if(Math.abs(Overdy) < Math.abs(Overdx) || Math.abs(Overdy) < mTouchSlop){
+    private boolean isMyControlScroll() {
+        if (Math.abs(Overdy) < Math.abs(Overdx) || Math.abs(Overdy) < mTouchSlop) {
             return mIsBeingDragged;
         }
-        if((-Overdy > mTouchSlop && onCheckCanRefresh()) || (onCheckCanRefresh() && mTargetOffset-Overdy > 0)){
+        if ((-Overdy > mTouchSlop && onCheckCanRefresh()) || (onCheckCanRefresh() && mTargetOffset - Overdy > 0)) {
             return true;
 
-        }else if((-Overdy < -mTouchSlop && onCheckCanLoadMore()) || (onCheckCanLoadMore() && mTargetOffset-Overdy < 0)){
+        } else if ((-Overdy < -mTouchSlop && onCheckCanLoadMore()) || (onCheckCanLoadMore() && mTargetOffset - Overdy < 0)) {
             return true;
         }
 
@@ -493,62 +611,66 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 处理多点触控的帮助类
+     *
      * @param ev
      */
     public void dealMulTouchEvent(MotionEvent ev) {
-        final int action = MotionEventCompat.getActionMasked(ev);
-        switch (action) {
-            case MotionEvent.ACTION_DOWN: {
-                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                final float x = MotionEventCompat.getX(ev, pointerIndex);
-                final float y = MotionEventCompat.getY(ev, pointerIndex);
-                mLastX = x;
-                mLastY = y;
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
-                break;
-            }
-            case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-                final float x = MotionEventCompat.getX(ev, pointerIndex);
-                final float y = MotionEventCompat.getY(ev, pointerIndex);
-                Overdx = mLastX -x ;
-                Overdy = mLastY - y;
-                mLastY = y;
-                mLastX = x;
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                mActivePointerId = MotionEvent.INVALID_POINTER_ID;
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN: {
-                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
-                if (pointerId != mActivePointerId) {
-                    mLastX = MotionEventCompat.getX(ev, pointerIndex);
-                    mLastY = MotionEventCompat.getY(ev, pointerIndex);
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+        try {
+            final int action = MotionEventCompat.getActionMasked(ev);
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
+                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                    final float x = MotionEventCompat.getX(ev, pointerIndex);
+                    final float y = MotionEventCompat.getY(ev, pointerIndex);
+                    mLastX = x;
+                    mLastY = y;
+                    mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                    break;
                 }
-                break;
-            }
-            case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mLastX = MotionEventCompat.getX(ev, newPointerIndex);
-                    mLastY = MotionEventCompat.getY(ev, newPointerIndex);
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                case MotionEvent.ACTION_MOVE: {
+                    final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                    final float x = MotionEventCompat.getX(ev, pointerIndex);
+                    final float y = MotionEventCompat.getY(ev, pointerIndex);
+                    Overdx = mLastX - x;
+                    Overdy = mLastY - y;
+                    mLastY = y;
+                    mLastX = x;
+                    break;
                 }
-                break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    mActivePointerId = MotionEvent.INVALID_POINTER_ID;
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN: {
+                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                    final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+                    if (pointerId != mActivePointerId) {
+                        mLastX = MotionEventCompat.getX(ev, pointerIndex);
+                        mLastY = MotionEventCompat.getY(ev, pointerIndex);
+                        mActivePointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+                    }
+                    break;
+                }
+                case MotionEvent.ACTION_POINTER_UP: {
+                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                    final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+                    if (pointerId == mActivePointerId) {
+                        final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                        mLastX = MotionEventCompat.getX(ev, newPointerIndex);
+                        mLastY = MotionEventCompat.getY(ev, newPointerIndex);
+                        mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                    }
+                    break;
+                }
             }
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
         }
     }
 
 
-
-    public void setMode(Mode mode){
-        if(mCurrentMode == mode){
+    public void setMode(Mode mode) {
+        if (mCurrentMode == mode) {
             return;
         }
         mCurrentMode = mode;
@@ -558,6 +680,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 设置当前状态
+     *
      * @param status
      */
     public void setStatus(int status) {
@@ -598,6 +721,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 设置刷新状态
+     *
      * @param refreshing
      */
     public void setRefreshing(boolean refreshing) {
@@ -651,6 +775,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 设置刷新布局
+     *
      * @param view
      */
     public void setRefreshHeaderView(View view) {
@@ -668,7 +793,6 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     }
 
     /**
-     *
      * 设置加载更多布局
      *
      * @param view
@@ -690,6 +814,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 是否可以加载更多
+     *
      * @return
      */
     private boolean onCheckCanLoadMore() {
@@ -698,6 +823,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * 是否可以刷新
+     *
      * @return
      */
     private boolean onCheckCanRefresh() {
@@ -768,7 +894,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        return isEnabled() && !STATUS.isRefreshing(mStatus) &&  !STATUS.isLoadingMore(mStatus)
+        return isEnabled() && !STATUS.isRefreshing(mStatus) && !STATUS.isLoadingMore(mStatus)
                 && (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
     }
 
@@ -785,18 +911,18 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
         //dy > 0  手指向上滑动
-        if(dy > 0 && mTargetOffset > 0){
-            if(dy > mTargetOffset){
-                consumed[1] =  mTargetOffset;
-            }else {
+        if (dy > 0 && mTargetOffset > 0) {
+            if (dy > mTargetOffset) {
+                consumed[1] = mTargetOffset;
+            } else {
                 consumed[1] = dy;
             }
             fingerScroll(-consumed[1]);
-        }else if(dy < 0 &&  mTargetOffset < 0){
+        } else if (dy < 0 && mTargetOffset < 0) {
             //dy < 0  手指向下滑动
-            if(dy < mTargetOffset){
-                consumed[1] =  mTargetOffset;
-            }else {
+            if (dy < mTargetOffset) {
+                consumed[1] = mTargetOffset;
+            } else {
                 consumed[1] = dy;
             }
             fingerScroll(-consumed[1]);
@@ -817,7 +943,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     public void onStopNestedScroll(View target) {
         mNestedScrollingParentHelper.onStopNestedScroll(target);
         mNestedScrollInProgress = false;
-        if(mTargetOffset != 0) {
+        if (mTargetOffset != 0) {
             finishSpinner();
         }
         // Finish the spinner for nested scrolling if we ever consumed any
@@ -834,9 +960,9 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
         final int dy = dyUnconsumed + mParentOffsetInWindow[1];
 
-        if(dy < 0 && onCheckCanRefresh()) {
+        if (dy < 0 && onCheckCanRefresh()) {
             fingerScroll(-dy);
-        }else if(dy > 0 && onCheckCanLoadMore()){
+        } else if (dy > 0 && onCheckCanLoadMore()) {
             fingerScroll(-dy);
         }
     }
@@ -858,13 +984,13 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     // NestedScrollingChild
 
     @Override
-    public void setNestedScrollingEnabled(boolean enabled) {
-        mNestedScrollingChildHelper.setNestedScrollingEnabled(enabled);
+    public boolean isNestedScrollingEnabled() {
+        return mNestedScrollingChildHelper.isNestedScrollingEnabled();
     }
 
     @Override
-    public boolean isNestedScrollingEnabled() {
-        return mNestedScrollingChildHelper.isNestedScrollingEnabled();
+    public void setNestedScrollingEnabled(boolean enabled) {
+        mNestedScrollingChildHelper.setNestedScrollingEnabled(enabled);
     }
 
     @Override
@@ -922,209 +1048,37 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
         return mNestedScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY);
     }
 
-
-    /**
-     * 刷新帮助类
-     */
-    abstract   class onRefreshCallback implements DragListener,onRefreshListener {
-    }
-    /**
-     * 加载更多帮助类
-     */
-    abstract   class onLoadMoreCallback implements DragListener,onLoadMoreListener {
-    }
-
-    onRefreshCallback mRefreshCallback = new onRefreshCallback() {
-        @Override
-        public void onPrepare() {
-            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
-                mHeaderView.setVisibility(VISIBLE);
-                ((DragListener) mHeaderView).onPrepare();
-            }
-        }
-
-        @Override
-        public void onDrag(int y,int offset) {
-            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isRefreshStatus(mStatus)) {
-                if (mHeaderView.getVisibility() != VISIBLE) {
-                    mHeaderView.setVisibility(VISIBLE);
-                }
-                ((DragListener) mHeaderView).onDrag(y,offset);
-            }
-        }
-
-        @Override
-        public void onRelease() {
-            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isReleaseToRefresh(mStatus)) {
-                ((DragListener) mHeaderView).onRelease();
-            }
-        }
-
-        @Override
-        public void onRefresh() {
-            if (mHeaderView != null && STATUS.isRefreshing(mStatus)) {
-                if(mHeaderView instanceof onRefreshListener){
-                    ((onRefreshListener)mHeaderView).onRefresh();
-                }
-                if (mRefreshListener != null) {
-                    mRefreshListener.onRefresh();
-                }
-            }
-        }
-
-        @Override
-        public void onComplete() {
-            if (mHeaderView != null && mHeaderView instanceof DragListener) {
-                ((DragListener) mHeaderView).onComplete();
-            }
-        }
-
-        @Override
-        public void onReset() {
-            if (mHeaderView != null && mHeaderView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
-                ((DragListener) mHeaderView).onReset();
-                mHeaderView.setVisibility(GONE);
-            }
-        }
-
-        @Override
-        public int getDragMaxOffset(View rootView,View target,int targetHeight) {
-            if (mHeaderView != null && mHeaderView instanceof DragListener ) {
-                return ((DragListener) mHeaderView).getDragMaxOffset(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-
-        @Override
-        public int getDragTriggerOffset(View rootView,View target,int targetHeight) {
-            if (mHeaderView != null && mHeaderView instanceof DragListener ) {
-                return ((DragListener) mHeaderView).getDragTriggerOffset(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-
-        @Override
-        public int getRefreshOrLoadMoreHeight(View rootView, View target, int targetHeight) {
-            if (mHeaderView != null && mHeaderView instanceof DragListener ) {
-                return ((DragListener) mHeaderView).getRefreshOrLoadMoreHeight(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-
-    };
-
-    onLoadMoreCallback mLoadMoreCallback = new onLoadMoreCallback() {
-
-        @Override
-        public void onPrepare() {
-            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
-                mFooterView.setVisibility(VISIBLE);
-                ((DragListener) mFooterView).onPrepare();
-            }
-        }
-
-        @Override
-        public void onDrag(int y,int offset) {
-            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isLoadMoreStatus(mStatus)) {
-                if (mFooterView.getVisibility() != VISIBLE) {
-                    mFooterView.setVisibility(VISIBLE);
-                }
-                ((DragListener) mFooterView).onDrag(y,offset);
-            }
-        }
-
-        @Override
-        public void onRelease() {
-            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isReleaseToLoadMore(mStatus)) {
-                ((DragListener) mFooterView).onRelease();
-            }
-        }
-
-        @Override
-        public void onLoadMore() {
-            if (mFooterView != null && STATUS.isLoadingMore(mStatus)) {
-                if(mFooterView instanceof onLoadMoreListener){
-                    ((onLoadMoreListener)mFooterView).onLoadMore();
-                }
-                if (mLoadMoreListener != null) {
-                    mLoadMoreListener.onLoadMore();
-                }
-            }
-        }
-
-        @Override
-        public void onComplete() {
-            if (mFooterView != null && mFooterView instanceof DragListener) {
-                ((DragListener) mFooterView).onComplete();
-            }
-        }
-
-        @Override
-        public void  onReset(){
-            if (mFooterView != null && mFooterView instanceof DragListener && STATUS.isStatusDefault(mStatus)) {
-                ((DragListener) mFooterView).onReset();
-                mFooterView.setVisibility(GONE);
-            }
-        }
-
-
-        @Override
-        public int getDragMaxOffset(View rootView, View target, int targetHeight) {
-            if (mFooterView != null && mFooterView instanceof DragListener) {
-                return  ((DragListener) mFooterView).getDragMaxOffset(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-
-        @Override
-        public int getDragTriggerOffset(View rootView, View target, int targetHeight) {
-            if (mFooterView != null && mFooterView instanceof DragListener) {
-                return  ((DragListener) mFooterView).getDragTriggerOffset(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-
-        @Override
-        public int getRefreshOrLoadMoreHeight(View rootView, View target, int targetHeight) {
-            if (mFooterView != null && mFooterView instanceof DragListener) {
-                return  ((DragListener) mFooterView).getRefreshOrLoadMoreHeight(rootView,target,targetHeight);
-            }
-            return 0;
-        }
-    };
-
     /**
      * 设置 加载更多监听
+     *
      * @param listener
      */
-    public void setOnLoadMoreListener(onLoadMoreListener listener){
+    public void setOnLoadMoreListener(onLoadMoreListener listener) {
         this.mLoadMoreListener = listener;
     }
 
-
     /**
      * 设置 刷新监听
+     *
      * @param listener
      */
-    public void setOnRefreshListener(onRefreshListener listener){
+    public void setOnRefreshListener(onRefreshListener listener) {
         this.mRefreshListener = listener;
     }
-
-
 
     /**
      * 更新滑动状态
      */
     private void updateScrollStatus() {
-        if(mTargetOffset >mTouchSlop && onCheckCanRefresh()){
+        if (mTargetOffset > mTouchSlop && onCheckCanRefresh()) {
             //下拉
             if (mTargetOffset >= mRefreshTriggerOffset) {
                 setStatus(STATUS.STATUS_RELEASE_TO_REFRESH);
-            }else {
+            } else {
                 setStatus(STATUS.STATUS_SWIPING_TO_REFRESH);
             }
             mRefreshCallback.onPrepare();
-        }else if(mTargetOffset < -mTouchSlop && onCheckCanLoadMore()){
+        } else if (mTargetOffset < -mTouchSlop && onCheckCanLoadMore()) {
             //上拉
             if (-mTargetOffset >= mLoadMoreTriggerOffset) {
                 setStatus(STATUS.STATUS_RELEASE_TO_LOAD_MORE);
@@ -1132,7 +1086,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
                 setStatus(STATUS.STATUS_SWIPING_TO_LOAD_MORE);
             }
             mLoadMoreCallback.onPrepare();
-        } else if(Math.abs(mTargetOffset) < mTouchSlop){
+        } else if (Math.abs(mTargetOffset) < mTouchSlop) {
             setStatus(STATUS.STATUS_DEFAULT);
 //            mRefreshCallback.onReset();
 //            mLoadMoreCallback.onReset();
@@ -1142,6 +1096,7 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
 
     /**
      * finger Scroll 滑动
+     *
      * @param yDiff
      */
     private void fingerScroll(final float yDiff) {
@@ -1160,12 +1115,13 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             yScrolled = -mLoadMoreMaxDragOffset - mTargetOffset;
         }
         if (STATUS.isRefreshStatus(mStatus)) {
-            mRefreshCallback.onDrag(mTargetOffset,mRefreshTriggerOffset);
+            mRefreshCallback.onDrag(mTargetOffset, mRefreshTriggerOffset);
         } else if (STATUS.isLoadMoreStatus(mStatus)) {
-            mLoadMoreCallback.onDrag(mTargetOffset,mLoadMoreTriggerOffset);
+            mLoadMoreCallback.onDrag(mTargetOffset, mLoadMoreTriggerOffset);
         }
         updateScroll(yScrolled);
     }
+
     /**
      * on active finger up 结束
      */
@@ -1183,11 +1139,10 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
         } else if (STATUS.isReleaseToLoadMore(mStatus)) {
             mLoadMoreCallback.onRelease();
             scrollReleaseToLoadMoreToLoadingMore();
-        }else {
+        } else {
             scrollToDefault();
         }
     }
-
 
     private void scrollDefaultToRefreshing() {
         mAutoScroller.autoScroll((int) (mRefreshTriggerOffset + 0.5f), mDefaultToRefreshingScrollingDuration);
@@ -1220,8 +1175,194 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
     private void scrollLoadingMoreToDefault() {
         mAutoScroller.autoScroll(-mFooterOffset, mLoadMoreCompleteToDefaultScrollingDuration);
     }
+
     private void scrollToDefault() {
         mAutoScroller.autoScroll(-mTargetOffset, mLoadMoreCompleteToDefaultScrollingDuration);
+    }
+
+    /**
+     * 自动滚动
+     *
+     * @param yScrolled
+     */
+    private void autoScroll(final float yScrolled) {
+        if (STATUS.isRefreshStatus(mStatus)) {
+            mRefreshCallback.onDrag(mTargetOffset, mRefreshTriggerOffset);
+        } else if (STATUS.isLoadMoreStatus(mStatus)) {
+            mLoadMoreCallback.onDrag(mTargetOffset, mLoadMoreTriggerOffset);
+        }
+        updateScroll(yScrolled);
+    }
+
+    /**
+     * @param yScrolled
+     */
+    private void updateScroll(final float yScrolled) {
+        if (yScrolled == 0) {
+            return;
+        }
+        mTargetOffset += yScrolled;
+
+        if (STATUS.isRefreshStatus(mStatus)) {
+            mHeaderOffset = mTargetOffset;
+            mFooterOffset = 0;
+        } else if (STATUS.isLoadMoreStatus(mStatus)) {
+            mFooterOffset = mTargetOffset;
+            mHeaderOffset = 0;
+        }
+        layoutChildren();
+        invalidate();
+    }
+
+    /**
+     * 滑动结束调用
+     */
+    private void autoScrollFinished() {
+
+        if (STATUS.isReleaseToRefresh(mStatus)) {
+            setStatus(STATUS.STATUS_REFRESHING);
+            mRefreshCallback.onRefresh();
+
+        } else if (STATUS.isRefreshing(mStatus)) {
+            setStatus(STATUS.STATUS_DEFAULT);
+            mRefreshCallback.onReset();
+
+        } else if (STATUS.isStatusDefault(mStatus)) {
+            mRefreshCallback.onReset();
+
+        } else if (STATUS.isLoadingMore(mStatus)) {
+            setStatus(STATUS.STATUS_DEFAULT);
+            mLoadMoreCallback.onReset();
+        } else if (STATUS.isReleaseToLoadMore(mStatus)) {
+            setStatus(STATUS.STATUS_LOADING_MORE);
+            mLoadMoreCallback.onLoadMore();
+        } else {
+            setStatus(STATUS.STATUS_DEFAULT);
+            mLoadMoreCallback.onReset();
+            mRefreshCallback.onReset();
+        }
+        fixCurrentStatusLayout();
+    }
+
+    /**
+     * 修正当前状态位置
+     */
+    private void fixCurrentStatusLayout() {
+        if (STATUS.isRefreshing(mStatus)) {
+            mTargetOffset = (int) (mRefreshTriggerOffset + 0.5f);
+            mHeaderOffset = mTargetOffset;
+            mFooterOffset = 0;
+            layoutChildren();
+            invalidate();
+        } else if (STATUS.isStatusDefault(mStatus)) {
+            mTargetOffset = 0;
+            mHeaderOffset = 0;
+            mFooterOffset = 0;
+            layoutChildren();
+            invalidate();
+        } else if (STATUS.isLoadingMore(mStatus)) {
+            mTargetOffset = -(int) (mLoadMoreTriggerOffset + 0.5f);
+            mHeaderOffset = 0;
+            mFooterOffset = mTargetOffset;
+            layoutChildren();
+            invalidate();
+        }
+    }
+
+    //重叠和跟随 模式
+    public enum Mode {
+        FOLLOW(0), OVERLAP(1);
+        int value;
+
+        Mode(int val) {
+            this.value = val;
+        }
+    }
+
+    /**
+     * LayoutParams of RefreshLoadMoreLayout
+     */
+    public static class LayoutParams extends MarginLayoutParams {
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(MarginLayoutParams source) {
+            super(source);
+        }
+
+        public LayoutParams(ViewGroup.LayoutParams source) {
+            super(source);
+        }
+    }
+
+    /**
+     * 状态类帮助类
+     */
+    private final static class STATUS {
+        private static final int STATUS_REFRESH_RETURNING = -4;
+        private static final int STATUS_REFRESHING = -3;
+        private static final int STATUS_RELEASE_TO_REFRESH = -2;
+        private static final int STATUS_SWIPING_TO_REFRESH = -1;
+        private static final int STATUS_DEFAULT = 0;
+        private static final int STATUS_SWIPING_TO_LOAD_MORE = 1;
+        private static final int STATUS_RELEASE_TO_LOAD_MORE = 2;
+        private static final int STATUS_LOADING_MORE = 3;
+        private static final int STATUS_LOAD_MORE_RETURNING = 4;
+
+        private static boolean isRefreshing(final int status) {
+            return status == STATUS.STATUS_REFRESHING;
+        }
+
+        private static boolean isLoadingMore(final int status) {
+            return status == STATUS.STATUS_LOADING_MORE;
+        }
+
+        private static boolean isStatusDefault(final int status) {
+            return status == STATUS.STATUS_DEFAULT;
+        }
+
+        private static boolean isReleaseToRefresh(final int status) {
+            return status == STATUS.STATUS_RELEASE_TO_REFRESH;
+        }
+
+        private static boolean isReleaseToLoadMore(final int status) {
+            return status == STATUS.STATUS_RELEASE_TO_LOAD_MORE;
+        }
+
+        private static boolean isSwipingToRefresh(final int status) {
+            return status == STATUS.STATUS_SWIPING_TO_REFRESH;
+        }
+
+        private static boolean isSwipingToLoadMore(final int status) {
+            return status == STATUS.STATUS_SWIPING_TO_LOAD_MORE;
+        }
+
+        private static boolean isRefreshStatus(final int status) {
+            return status < STATUS.STATUS_DEFAULT;
+        }
+
+        public static boolean isLoadMoreStatus(final int status) {
+            return status > STATUS.STATUS_DEFAULT;
+        }
+
+    }
+
+    /**
+     * 刷新帮助类
+     */
+    abstract class onRefreshCallback implements DragListener, onRefreshListener {
+    }
+
+    /**
+     * 加载更多帮助类
+     */
+    abstract class onLoadMoreCallback implements DragListener, onLoadMoreListener {
     }
 
     /**
@@ -1300,149 +1441,5 @@ public class NestedRefreshLoadMoreLayout  extends ViewGroup implements NestedScr
             post(this);
             mRunning = true;
         }
-    }
-
-
-
-
-    /**
-     * 自动滚动
-     * @param yScrolled
-     */
-    private void autoScroll(final float yScrolled) {
-        if (STATUS.isRefreshStatus(mStatus)) {
-            mRefreshCallback.onDrag(mTargetOffset,mRefreshTriggerOffset);
-        } else if (STATUS.isLoadMoreStatus(mStatus)) {
-            mLoadMoreCallback.onDrag(mTargetOffset,mLoadMoreTriggerOffset);
-        }
-        updateScroll(yScrolled);
-    }
-
-    /**
-     *
-     * @param yScrolled
-     */
-    private void updateScroll(final float yScrolled) {
-        if (yScrolled == 0) {
-            return;
-        }
-        mTargetOffset += yScrolled;
-
-        if (STATUS.isRefreshStatus(mStatus)) {
-            mHeaderOffset = mTargetOffset;
-            mFooterOffset = 0;
-        } else if (STATUS.isLoadMoreStatus(mStatus)) {
-            mFooterOffset = mTargetOffset;
-            mHeaderOffset = 0;
-        }
-        layoutChildren();
-        invalidate();
-    }
-
-    /**
-     * 滑动结束调用
-     */
-    private void autoScrollFinished() {
-
-        if (STATUS.isReleaseToRefresh(mStatus)) {
-            setStatus(STATUS.STATUS_REFRESHING);
-            mRefreshCallback.onRefresh();
-
-        } else if (STATUS.isRefreshing(mStatus)) {
-            setStatus(STATUS.STATUS_DEFAULT);
-            mRefreshCallback.onReset();
-
-        } else if (STATUS.isStatusDefault(mStatus)) {
-            mRefreshCallback.onReset();
-
-        } else if (STATUS.isLoadingMore(mStatus)) {
-            setStatus(STATUS.STATUS_DEFAULT);
-            mLoadMoreCallback.onReset();
-        } else if (STATUS.isReleaseToLoadMore(mStatus)) {
-            setStatus(STATUS.STATUS_LOADING_MORE);
-            mLoadMoreCallback.onLoadMore();
-        } else {
-            setStatus(STATUS.STATUS_DEFAULT);
-            mLoadMoreCallback.onReset();
-            mRefreshCallback.onReset();
-        }
-        fixCurrentStatusLayout();
-    }
-
-    /**
-     * 修正当前状态位置
-     */
-    private void fixCurrentStatusLayout() {
-        if (STATUS.isRefreshing(mStatus)) {
-            mTargetOffset = (int) (mRefreshTriggerOffset + 0.5f);
-            mHeaderOffset = mTargetOffset;
-            mFooterOffset = 0;
-            layoutChildren();
-            invalidate();
-        } else if (STATUS.isStatusDefault(mStatus)) {
-            mTargetOffset = 0;
-            mHeaderOffset = 0;
-            mFooterOffset = 0;
-            layoutChildren();
-            invalidate();
-        } else if (STATUS.isLoadingMore(mStatus)) {
-            mTargetOffset = -(int) (mLoadMoreTriggerOffset + 0.5f);
-            mHeaderOffset = 0;
-            mFooterOffset = mTargetOffset;
-            layoutChildren();
-            invalidate();
-        }
-    }
-
-
-    /**
-     * 状态类帮助类
-     */
-    private final static class STATUS {
-        private static final int STATUS_REFRESH_RETURNING = -4;
-        private static final int STATUS_REFRESHING = -3;
-        private static final int STATUS_RELEASE_TO_REFRESH = -2;
-        private static final int STATUS_SWIPING_TO_REFRESH = -1;
-        private static final int STATUS_DEFAULT = 0;
-        private static final int STATUS_SWIPING_TO_LOAD_MORE = 1;
-        private static final int STATUS_RELEASE_TO_LOAD_MORE = 2;
-        private static final int STATUS_LOADING_MORE = 3;
-        private static final int STATUS_LOAD_MORE_RETURNING = 4;
-        private static boolean isRefreshing(final int status) {
-            return status == STATUS.STATUS_REFRESHING;
-        }
-
-        private static boolean isLoadingMore(final int status) {
-            return status == STATUS.STATUS_LOADING_MORE;
-        }
-
-        private static boolean isStatusDefault(final int status) {
-            return status == STATUS.STATUS_DEFAULT;
-        }
-
-        private static boolean isReleaseToRefresh(final int status) {
-            return status == STATUS.STATUS_RELEASE_TO_REFRESH;
-        }
-
-        private static boolean isReleaseToLoadMore(final int status) {
-            return status == STATUS.STATUS_RELEASE_TO_LOAD_MORE;
-        }
-
-        private static boolean isSwipingToRefresh(final int status) {
-            return status == STATUS.STATUS_SWIPING_TO_REFRESH;
-        }
-
-        private static boolean isSwipingToLoadMore(final int status) {
-            return status == STATUS.STATUS_SWIPING_TO_LOAD_MORE;
-        }
-
-        private static boolean isRefreshStatus(final int status) {
-            return status < STATUS.STATUS_DEFAULT;
-        }
-
-        public static boolean isLoadMoreStatus(final int status) {
-            return status > STATUS.STATUS_DEFAULT;
-        }
-
     }
 }

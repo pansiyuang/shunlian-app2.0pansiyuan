@@ -69,7 +69,7 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
         sortAndMD5(map);
 
         Call<BaseEntity<SearchGoodsEntity>> searchGoodsCallback = getAddCookieApiService().getSearchGoods(getRequestBody(map));
-        getNetData(true, searchGoodsCallback, new SimpleNetDataCallback<BaseEntity<SearchGoodsEntity>>() {
+        getNetData(false, searchGoodsCallback, new SimpleNetDataCallback<BaseEntity<SearchGoodsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<SearchGoodsEntity> entity) {
                 super.onSuccess(entity);

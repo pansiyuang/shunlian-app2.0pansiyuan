@@ -31,6 +31,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IReturnRequestView;
 import com.shunlian.app.widget.CustomerGoodsView;
+import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
 
@@ -63,7 +64,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     RelativeLayout rl_return_reason;
 
     @BindView(R.id.edt_return_money)
-    EditText edt_return_money;
+    MyEditText edt_return_money;
 
     @BindView(R.id.tv_freight)
     TextView tv_freight;
@@ -220,6 +221,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
         if (isEdit) {
             edt_refunds.setText(currentInfoEntity.refund_remark_seller);
+            edt_refunds.setSelection(edt_refunds.getText().length());
             List<ImageEntity> list = getImageEntityList();
             if (list != null && list.size() != 0) {
                 imageEntityList.addAll(list);
@@ -246,6 +248,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         customer_goods.setIChangeCountListener(this);
         rl_return_reason.setOnClickListener(this);
         tv_request_complete.setOnClickListener(this);
+
+        edt_return_money.setOnTouchListener((v, event) ->{
+            setEdittextFocusable(true,edt_return_money);
+            return false;
+        });
 
         edt_return_money.addTextChangedListener(new TextWatcher() {
             String rel = "(\\d*)(\\.\\d{0,2})?";
@@ -406,7 +413,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                 break;
             case R.id.tv_request_complete:
                 if (isEmpty(currentReasonId)) {
-                    Common.staticToast("请选择原因");
+                    Common.staticToast("请选择退款原因");
                     return;
                 }
                 if ("3".equals(currentServiceType) || "1".equals(currentServiceType)) {
@@ -416,7 +423,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                     }
                 }
                 if (isEmpty(edt_refunds.getText().toString())) {
-                    Common.staticToast("请输入退款说明");
+                    Common.staticToast("请填写退款说明");
                     return;
                 }
                 String imageStr = getImageString();

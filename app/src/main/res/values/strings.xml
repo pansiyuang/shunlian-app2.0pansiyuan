@@ -260,7 +260,7 @@
     <string name="confirmation_total">合计：</string>
     <string name="go_pay">去支付</string>
     <string name="send_to">送至：%s</string>
-    <string name="add_address">请添加您的收货地址</string>
+    <string name="add_address">请填写收货地址</string>
     <string name="address">收货地址：%s</string>
     <string name="x">x %s</string>
     <string name="express">快递￥%s</string>
@@ -648,6 +648,7 @@
     <string name="balance_tixianjieguo">提现结果</string>
     <string name="balance_tixianshengqing">提现申请成功</string>
     <string name="balance_zhaohuimima">找回密码</string>
+    <string name="balance_wangjimima">忘记密码</string>
     <string name="balance_chongxinshuru">重新输入</string>
     <string name="balance_zhifumima">支付密码</string>
     <string name="balance_xiuigaizhifumima">修改支付密码</string>

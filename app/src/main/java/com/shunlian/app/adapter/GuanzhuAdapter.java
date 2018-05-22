@@ -70,7 +70,7 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 visible(mHolder.miv_pic, mHolder.mtv_title, mHolder.ll_Statistics);
                 gone(mHolder.recy_view, mHolder.mtv_babyNum);
                 mHolder.mtv_title.setText(dy.title);
-                GlideUtils.getInstance().loadImage(context, mHolder.miv_pic, dy.thumb);
+                GlideUtils.getInstance().findFollowList(context, mHolder.miv_pic, dy.thumb);
                 full_title = dy.full_title;
                 mHolder.mtv_fx_count.setText(dy.forwards);
                 mHolder.mtv_pl_count.setText(dy.comments);

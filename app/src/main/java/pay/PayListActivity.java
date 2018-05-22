@@ -72,6 +72,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String addressId;
     private String currentPayType;//当前支付方式
     private String pay_sn;
+    public static final int FINISH_ACT_WHAT = 100;//finish act
 
     public static void startAct(Activity activity, String shop_goods, String addressId,String order_id,String price){
         PayListActivity.activity = activity;
@@ -89,7 +90,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         @SuppressWarnings("unused")
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case SDK_PAY_FLAG: {
+                case SDK_PAY_FLAG:
                     @SuppressWarnings("unchecked")
                     PayResult payResult = new PayResult((String) msg.obj);
                     LogUtil.zhLogW("msg.obj==========="+ msg.obj);
@@ -108,7 +109,12 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                         payFail();
                     }
                     break;
-                }
+                case FINISH_ACT_WHAT:
+                    if (activity instanceof ConfirmOrderAct){
+                        activity.finish();
+                    }
+                    finish();
+                    break;
             }
         };
     };
@@ -118,26 +124,20 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void payFail() {
         Common.staticToast(getStringResouce(R.string.pay_fail));
-        if (activity instanceof ConfirmOrderAct){
-            activity.finish();
-        }
-        finish();
         if (isEmpty(order_id)){
             MyOrderAct.startAct(PayListActivity.this, 2);
         }else {
             OrderDetailAct.startAct(PayListActivity.this, order_id);
         }
+        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
     }
     /*
     支付成功
      */
     private void paySuccess(){
-        finish();
-        if (activity instanceof ConfirmOrderAct){
-            activity.finish();
-        }
         Common.staticToast(getStringResouce(R.string.pay_success));
         PaySuccessAct.startAct(this, order_id,price,pay_sn);
+        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
     }
 
     /**

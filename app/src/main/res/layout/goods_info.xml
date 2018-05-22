@@ -83,7 +83,7 @@
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/mtv_count_reduce"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:src="@mipmap/img_aftersalesservice_jian"/>
 
@@ -96,7 +96,7 @@
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_count"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.4"
             android:gravity="center"
             android:text="1"
@@ -111,7 +111,7 @@
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/mtv_count_add"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:src="@mipmap/img_aftersalesservice_jia"/>
 
