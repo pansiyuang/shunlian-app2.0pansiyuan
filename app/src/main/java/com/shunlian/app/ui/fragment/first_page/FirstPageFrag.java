@@ -227,9 +227,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (getMenuEntiy == null){
             return;
         }
-        logoType=getMenuEntiy.logo.type;
-        logoId=getMenuEntiy.logo.item_id;
-        GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
+//        logoType=getMenuEntiy.logo.type;
+//        logoId=getMenuEntiy.logo.item_id;
+//        GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
