@@ -38,6 +38,7 @@ public class CenterAlignImageSpan extends ImageSpan {
 
     @Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+
         Drawable drawable = getDrawable(); //调用imageSpan中的方法获取drawable对象
         canvas.save();
         Paint.FontMetricsInt fm = paint.getFontMetricsInt();
@@ -79,6 +80,9 @@ public class CenterAlignImageSpan extends ImageSpan {
 
     @Override
     public Drawable getDrawable() {
+        if (mBitmap == null) {
+            return super.getDrawable();
+        }
         Drawable drawable = new BitmapDrawable(mContext.getResources(), mBitmap);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         return drawable;
