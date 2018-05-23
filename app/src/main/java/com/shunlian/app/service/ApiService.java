@@ -1657,6 +1657,7 @@ public interface ApiService {
     @POST("balance/setPayPassword")
     Call<BaseEntity<EmptyEntity>> balanceSetPayPassword(@Body RequestBody body);
 
+
     /**
      * 修改支付密码
      *

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -42,7 +43,6 @@ import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
-import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
@@ -67,9 +67,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     public boolean isFirst = false, isShow = false;
     public int mergePosition = 0, showPosition = -1;
     private CateGoryFrag cateGoryFrag;
-    private ShareInfoParam mShareInfoParam=new ShareInfoParam();
+    private ShareInfoParam mShareInfoParam = new ShareInfoParam();
     private int second = (int) (System.currentTimeMillis() / 1000);
-    private int hotPosition=-1;
+    private int hotPosition = -1;
 
     public FirstPageAdapter(Context context, boolean isShowFooter, List<GetDataEntity.MData> datas, boolean isFirst, CateGoryFrag cateGoryFrag, int mergePosition) {
         super(context, isShowFooter, datas);
@@ -126,7 +126,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
     @Override
     public int getItemViewType(int position) {
-        if (position>lists.size()-1)
+        if (position > lists.size() - 1)
             return super.getItemViewType(position);
         switch (lists.get(position).module) {
             case "banner":
@@ -248,6 +248,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_four.setVisibility(View.GONE);
                             threeHolder.mllayout_five.setVisibility(View.GONE);
                             GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb);
+                            if (!isEmpty(data.datass.get(0).width)){
+                                int picWidth = Common.getScreenWidth((Activity) context);
+                                int height=picWidth*Integer.parseInt(data.datass.get(0).height)/Integer.parseInt(data.datass.get(0).width);
+                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth, height);
+                                threeHolder.miv_one.setLayoutParams(params);
+                            }
                             threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -397,7 +403,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (Common.isColor(data.pptm.t_color))
                         fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.t_color));
                     if (Common.isColor(data.pptm.c_color))
-                        fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.c_color));
+                        fourHolder.mtv_two2.setTextColor(Color.parseColor(data.pptm.c_color));
                     if (Common.isColor(data.asxp.t_color))
                         fourHolder.mtv_three1.setTextColor(Color.parseColor(data.asxp.t_color));
                     if (Common.isColor(data.asxp.c_color))
@@ -443,11 +449,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE5:
                 if (holder instanceof FiveHolder) {
                     FiveHolder fiveHolder = (FiveHolder) holder;
-                    if (hotPosition==-1&&isFirst)
-                        hotPosition=position;
-                    if (position==hotPosition){
+                    if (hotPosition == -1 && isFirst)
+                        hotPosition = position;
+                    if (position == hotPosition) {
                         fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     }
                     GetDataEntity.MData data = lists.get(position);
@@ -481,10 +487,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            mShareInfoParam.title=data.share.title;
-                            mShareInfoParam.desc=data.share.content;
-                            mShareInfoParam.img=data.share.logo;
-                            mShareInfoParam.shareLink=data.share.share_url;
+                            mShareInfoParam.title = data.share.title;
+                            mShareInfoParam.desc = data.share.content;
+                            mShareInfoParam.img = data.share.logo;
+                            mShareInfoParam.shareLink = data.share.share_url;
                             shareStyle2Dialog();
                         }
                     });
@@ -499,11 +505,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE6:
                 if (holder instanceof SixHolder) {
                     SixHolder sixHolder = (SixHolder) holder;
-                    if (hotPosition==-1&&isFirst)
-                        hotPosition=position;
-                    if (position==hotPosition){
+                    if (hotPosition == -1 && isFirst)
+                        hotPosition = position;
+                    if (position == hotPosition) {
                         sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     }
                     GetDataEntity.MData data = lists.get(position);
@@ -651,7 +657,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     /**
      * 分享微信和复制链接
      */
-    public void shareStyle2Dialog(){
+    public void shareStyle2Dialog() {
         PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
                 .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
@@ -816,6 +822,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         ThreeHolder(View itemView) {
             super(itemView);
+//            int picWidth = (Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context,18) - TransformUtil.dip2px(context,38)) / 3;
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, picWidth);
+//            miv_pic.setLayoutParams(params);
         }
     }
 

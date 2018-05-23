@@ -60,6 +60,7 @@ public class PBalancePaySetTwo extends BasePresenter<IBalancePaySetTwo> {
 
         });
     }
+
     public void setPayPassword(String password,String key){
         Map<String, String> map = new HashMap<>();
         map.put("password", password);

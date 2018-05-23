@@ -144,14 +144,17 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
             BalanceResultAct.startAct(this, data.amount, data.account, accountType);
         } else {
             String right,left;
+            gpv_customUi.clearPassword();
+            dialog_pay.dismiss();
             if (code == PASSWORDLOCK) {
                 right = getStringResouce(R.string.errcode_cancel);
                 left = getStringResouce(R.string.balance_zhaohuimima);
-            } else {
+                initHintDialog(message, left,right);
+            } else if (code==PASSWORDERROR){
                 right = getStringResouce(R.string.balance_chongxinshuru);
                 left = getStringResouce(R.string.balance_wangjimima);
+                initHintDialog(message, left,right);
             }
-            initHintDialog(message, left,right);
         }
     }
 
@@ -171,7 +174,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                
+                BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,true);
             }
         }).show();
     }

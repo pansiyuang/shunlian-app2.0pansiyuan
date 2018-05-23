@@ -49,6 +49,11 @@ public class DayNoBlackDownTimerView extends ItemCountDownTimerView {
     }
 
     @Override
+    protected boolean isTextBold() {
+        return false;
+    }
+
+    @Override
     protected int getStrokeWidth() {
         return 0;
     }

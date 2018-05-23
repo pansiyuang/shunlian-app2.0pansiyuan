@@ -13,15 +13,13 @@ import android.widget.EditText;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalancePaySetOne;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 
-public class BalancePaySetOneAct extends BaseActivity implements View.OnClickListener,IBalancePaySetOne, TextWatcher {
+public class BalancePaySetOneAct extends BaseActivity implements View.OnClickListener, IBalancePaySetOne, TextWatcher {
 
     @BindView(R.id.mtv_phone)
     MyTextView mtv_phone;
@@ -40,9 +38,9 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
     private GradientDrawable background;
     private String code;
 
-    public static void startAct(Context context,boolean isForget) {
+
+    public static void startAct(Context context) {
         Intent intent = new Intent(context, BalancePaySetOneAct.class);
-        intent.putExtra("isForget", isForget);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -87,17 +85,17 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         background = (GradientDrawable) mtv_next.getBackground();
-        mtv_phone.setText(String.format(getStringResouce(R.string.balance_qingshurushoujihao), Constant.HELP_PHONE));
-        pBalancePaySetOne=new PBalancePaySetOne(this,this);
+        mtv_phone.setText(String.format(getStringResouce(R.string.balance_qingshurushoujihao), Constant.MOBILE));
+        pBalancePaySetOne = new PBalancePaySetOne(this, this);
     }
 
     @Override
     public void getCodeCall() {
-        if (countDownTimer==null){
+        if (countDownTimer == null) {
             countDownTimer = new CountDownTimer(60 * 1000, 1000) {
                 @Override
                 public void onTick(long l) {
-                    mtv_timer.setText("("+(int) Math.floor(l / 1000) + "s)");
+                    mtv_timer.setText("(" + (int) Math.floor(l / 1000) + "s)");
                     mtv_timer.setEnabled(false);
                 }
 
@@ -113,11 +111,7 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
 
     @Override
     public void nextCall(String key) {
-        if (getIntent().getBooleanExtra("isForget",false)){
-
-        }else {
-            BalancePaySetTwoAct.startAct(this,"","set",key,false,false);
-        }
+        BalancePaySetTwoAct.startAct(this, "", "set", key, false, false);
     }
 
     @Override
@@ -147,11 +141,11 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
 
     @Override
     public void afterTextChanged(Editable editable) {
-        code=editable.toString();
-        if (TextUtils.isEmpty(code)){
+        code = editable.toString();
+        if (TextUtils.isEmpty(code)) {
             mtv_next.setClickable(false);
             background.setColor(getColorResouce(R.color.color_value_6c));
-        }else {
+        } else {
             mtv_next.setClickable(true);
             background.setColor(getColorResouce(R.color.pink_color));
         }

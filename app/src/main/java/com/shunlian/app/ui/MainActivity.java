@@ -474,16 +474,14 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
             dialog_ad.setContentView(R.layout.dialog_ad);
             MyImageView miv_close = (MyImageView) dialog_ad.findViewById(R.id.miv_close);
             MyImageView miv_photo = (MyImageView) dialog_ad.findViewById(R.id.miv_photo);
-            MyImageView miv_button = (MyImageView) dialog_ad.findViewById(R.id.miv_button);
             GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.list.ad_img);
-            GlideUtils.getInstance().loadImage(getBaseContext(), miv_button, data.list.button);
             miv_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     dialog_ad.dismiss();
                 }
             });
-            miv_button.setOnClickListener(new View.OnClickListener() {
+            miv_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Common.goGoGo(getBaseContext(), data.list.link.type, data.list.link.item_id);

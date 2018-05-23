@@ -91,7 +91,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
                 if (balanceInfoEntity.is_set_password){
                     BalancePaySetTwoAct.startAct(getBaseContext(), "", "bindPay", "",true,false);
                 }else {
-                    BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false);
+                    BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,false);
                 }
                 promptDialog.dismiss();
             }
