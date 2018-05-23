@@ -810,6 +810,10 @@
             android:name=".ui.help.ClassDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.plus.GifBagListAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
