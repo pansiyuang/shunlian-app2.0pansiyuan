@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.balance;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -14,6 +15,9 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.gridpasswordview.GridPasswordView;
 
 import butterknife.BindView;
+
+import static com.shunlian.app.ui.balance.BalanceVerifyPhoneAct.FORGETCODE;
+import static com.shunlian.app.ui.balance.BalanceVerifyPhoneAct.FORGETCODES;
 
 public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetTwo {
 
@@ -43,6 +47,16 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+    public static void startActForResult(Activity activity, String before, String tag, String key, boolean isPaySet, boolean isAli, boolean isForget) {
+        Intent intent = new Intent(activity, BalancePaySetTwoAct.class);
+        intent.putExtra("before", before);
+        intent.putExtra("tag", tag);
+        intent.putExtra("key", key);
+        intent.putExtra("isPaySet", isPaySet);
+        intent.putExtra("isAli", isAli);
+        intent.putExtra("isForget", isForget);
+        activity.startActivityForResult(intent, FORGETCODE);
+    }
 
     @Override
     protected void onRestart() {
@@ -55,7 +69,13 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
         return R.layout.act_balance_pay_set_two;
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==FORGETCODE&&resultCode==FORGETCODES) {
+            setResult(FORGETCODES);
+            finish();
+        }
+    }
     @Override
     protected void initListener() {
         super.initListener();
@@ -143,8 +163,13 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
 
     @Override
     public void changePasswordCall() {
-        Common.staticToasts(this, getStringResouce(R.string.balance_xiugaichenggong), R.mipmap.icon_common_duihao);
-        BalancePaySetAct.startAct(this, true, true);
+        Common.staticToasts(this, getStringResouce(R.string.balance_shezhichenggong), R.mipmap.icon_common_duihao);
+        if (getIntent().getBooleanExtra("isForget",false)){
+            setResult(FORGETCODES);
+            finish();
+        }else{
+            BalancePaySetAct.startAct(this, true, true);
+        }
     }
 
     @Override
@@ -172,7 +197,11 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void checkRuleValidCall(boolean isOk) {
         if (isOk) {
-            BalancePaySetTwoAct.startAct(this, mpsw, tag, key,false,false);
+            if (getIntent().getBooleanExtra("isForget",false)){
+                BalancePaySetTwoAct.startActForResult(this, mpsw, tag, key,false,false,true);
+            }else {
+                BalancePaySetTwoAct.startAct(this, mpsw, tag, key,false,false);
+            }
         } else {
             gpv_customUi.clearPassword();
         }

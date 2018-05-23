@@ -15,12 +15,7 @@
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_photo"
         android:layout_width="match_parent"
-        android:layout_height="345dp"
-        android:scaleType="fitXY"/>
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
 
-    <com.shunlian.app.widget.MyImageView
-        android:id="@+id/miv_button"
-        android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:scaleType="fitXY" />
 </com.shunlian.app.widget.MyLinearLayout>

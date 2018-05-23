@@ -25,7 +25,6 @@ import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
@@ -143,11 +142,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
 
-    @BindView(R.id.mtv_more)
-    MyTextView mtv_more;
+//    @BindView(R.id.mtv_more)
+//    MyTextView mtv_more;
 
-    @BindView(R.id.mtv_contact)
-    MyTextView mtv_contact;
+    @BindView(R.id.mtv_title4)
+    MyTextView mtv_title4;
+
+//    @BindView(R.id.mtv_contact)
+//    MyTextView mtv_contact;
 
     @BindView(R.id.downTime_order)
     HourNoWhiteDownTimerView downTime_order;
@@ -156,14 +158,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     MyLinearLayout mllayout_time;
 
     private OrderDetailPresenter orderDetailPresenter;
-    private String storeId, orderId="";
+    private String storeId, orderId = "";
 
     private int pink_color;
     private int new_gray;
     private int strokeWidth;
     private OrderdetailEntity orderdetailEntity;
     private MessageCountManager messageCountManager;
-    private boolean isTimerCount=false;
+    private boolean isTimerCount = false;
 
 
     public static void startAct(Context context, String orderId) {
@@ -227,10 +229,10 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
     @Override
     public void setOrder(OrderdetailEntity orderdetailEntity) {
         this.orderdetailEntity = orderdetailEntity;
-        int time =0;
+        int time = 0;
         if (!TextUtils.isEmpty(orderdetailEntity.notice_status.surplus_time))
-            time=Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
-        if (time>0){
+            time = Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
+        if (time > 0) {
             downTime_order.cancelDownTimer();
             downTime_order.setDownTime(time);
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
@@ -242,9 +244,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
             });
             downTime_order.startDownTimer();
-            isTimerCount=true;
-        }else {
-            isTimerCount=false;
+            isTimerCount = true;
+        } else {
+            isTimerCount = false;
             mtv_time.setText(orderdetailEntity.notice_status.status_small);
         }
         mtv_state.setText(orderdetailEntity.notice_status.status_text);
@@ -315,14 +317,17 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         GradientDrawable t1Dackground;
         GradientDrawable t2Dackground;
         GradientDrawable t3Dackground;
+        GradientDrawable t4Dackground;
         mtv_time.setVisibility(View.GONE);
         mllayout_time.setVisibility(View.GONE);
-        mtv_more.setVisibility(View.GONE);
+
+//        mtv_more.setVisibility(View.GONE);
+        mtv_title4.setVisibility(View.GONE);
         switch (orderdetailEntity.status) {
             case "-1":
-                if (isTimerCount){
+                if (isTimerCount) {
                     mllayout_time.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mtv_time.setVisibility(View.VISIBLE);
                 }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_close);
@@ -336,9 +341,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 mtv_title3.setVisibility(View.GONE);
                 break;
             case "0":
-                if (isTimerCount){
+                if (isTimerCount) {
                     mllayout_time.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mtv_time.setVisibility(View.VISIBLE);
                 }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daifukuan);
@@ -378,10 +383,16 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 mtv_title3.setVisibility(View.GONE);
                 break;
             case "2":
-                mtv_more.setVisibility(View.VISIBLE);
-                if (isTimerCount){
+//                mtv_more.setVisibility(View.VISIBLE);
+                mtv_title4.setVisibility(View.VISIBLE);
+                t4Dackground = (GradientDrawable) mtv_title4.getBackground();
+                t4Dackground.setStroke(strokeWidth, new_gray);
+                mtv_title4.setTextColor(new_gray);
+                mtv_title4.setText(getString(R.string.contact_seller));
+
+                if (isTimerCount) {
                     mllayout_time.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mtv_time.setVisibility(View.VISIBLE);
                 }
                 miv_logo.setImageResource(R.mipmap.img_orderdetails_daishouhuo);
@@ -489,8 +500,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         mtv_title1.setOnClickListener(this);
         mtv_title2.setOnClickListener(this);
         mtv_title3.setOnClickListener(this);
-        mtv_more.setOnClickListener(this);
-        mtv_contact.setOnClickListener(this);
+//        mtv_more.setOnClickListener(this);
+//        mtv_contact.setOnClickListener(this);
+        mtv_title4.setOnClickListener(this);
     }
 
     /**
@@ -559,15 +571,18 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
         }
         CharSequence text = null;
         switch (view.getId()) {
-            case R.id.mtv_more:
-                if (mtv_contact.getVisibility() == View.VISIBLE) {
-                    mtv_contact.setVisibility(View.GONE);
-                } else {
-                    mtv_contact.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.mtv_contact:
-                mtv_contact.setVisibility(View.GONE);
+//            case R.id.mtv_more:
+//                if (mtv_contact.getVisibility() == View.VISIBLE) {
+//                    mtv_contact.setVisibility(View.GONE);
+//                } else {
+//                    mtv_contact.setVisibility(View.VISIBLE);
+//                }
+//                break;
+//            case R.id.mtv_contact:
+//                mtv_contact.setVisibility(View.GONE);
+//                orderDetailPresenter.getUserId(storeId);
+//                break;
+            case R.id.mtv_title4:
                 orderDetailPresenter.getUserId(storeId);
                 break;
             case R.id.mtv_copy:

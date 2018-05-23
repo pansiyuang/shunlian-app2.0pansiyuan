@@ -2,12 +2,9 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 
-import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
-import com.shunlian.app.ui.balance.BalanceTXAct;
-import com.shunlian.app.view.IBalanceMain;
 import com.shunlian.app.view.IBalanceTX;
 
 import java.util.HashMap;
@@ -42,7 +39,7 @@ public class PBalanceTX extends BasePresenter<IBalanceTX> {
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getWithdrawAccount(map);
-        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -54,29 +51,26 @@ public class PBalanceTX extends BasePresenter<IBalanceTX> {
         });
     }
 
-    public void tiXian(String password,String amount,String account_number){
+    public void tiXian(String password, String amount, String account_number) {
         Map<String, String> map = new HashMap<>();
         map.put("password", password);
         map.put("amount", amount);
-        map.put("account_number",account_number);
+        map.put("account_number", account_number);
         sortAndMD5(map);
 
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().balanceWithdraw(getRequestBody(map));
-        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
-                CommonEntity data=entity.data;
-                iView.tiXianCallback(data,-1,"");
+                CommonEntity data = entity.data;
+                iView.tiXianCallback(data, -1, "");
             }
 
             @Override
             public void onErrorCode(int code, String message) {
-                if (code== BalanceTXAct.PASSWORDERROR||code==BalanceTXAct.PASSWORDLOCK){
-                    iView.tiXianCallback(null,code,message);
-                }else {
-                    super.onErrorCode(code, message);
-                }
+                iView.tiXianCallback(null, code, message);
+                super.onErrorCode(code, message);
             }
         });
 

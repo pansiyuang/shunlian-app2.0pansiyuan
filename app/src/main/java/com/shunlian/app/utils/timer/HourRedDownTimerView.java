@@ -49,6 +49,11 @@ public class HourRedDownTimerView extends ItemCountDownTimerView {
     }
 
     @Override
+    protected boolean isTextBold() {
+        return true;
+    }
+
+    @Override
     protected int getStrokeWidth() {
         return 0;
     }

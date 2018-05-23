@@ -72,6 +72,8 @@ public class GetDataEntity {
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class MMData {
             public String thumb;
+            public String height;
+            public String width;
             public String price;
             public String description;
             public String is_show;
