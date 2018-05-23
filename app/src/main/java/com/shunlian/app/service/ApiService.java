@@ -26,7 +26,6 @@ import com.shunlian.app.bean.*;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
-import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
@@ -2112,4 +2111,12 @@ public interface ApiService {
      */
     @GET("helpcenter/classesshare")
     Call<BaseEntity<CommonEntity>> classesshare(@QueryMap Map<String, String> map);
+
+    /**
+     * 改变消息已读状态
+     * @param body
+     * @return
+     */
+    @POST("message/read")
+    Call<BaseEntity<EmptyEntity>> messageRead(@Body RequestBody body);
 }

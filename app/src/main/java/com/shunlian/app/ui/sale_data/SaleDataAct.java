@@ -14,10 +14,10 @@ import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISaleDataView;
 import com.shunlian.app.widget.MyImageView;
@@ -26,6 +26,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2018/4/12.
@@ -186,12 +187,21 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.mtv_gStore_total_sum)
     MyTextView mtv_gStore_total_sum;
 
-    @BindView(R.id.miv_plus_role_code)
-    MyImageView miv_plus_role_code;
+    @BindView(R.id.miv_isShow_data)
+    MyImageView miv_isShow_data;
 
 
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
+    private boolean isShowData = true;
+    public final static String ASTERISK = "****";
+    public final static String KEY = "sale_isShow";
+    private String mThisMonth;
+    private String mTodayVip;
+    private String mTodayOrder;
+    private String mXiaodian;
+    private String mFendian;
+    private String mXiaofei;
 
 
     public static void startAct(Context context) {
@@ -331,10 +341,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setplusrole(String plus_role_code) {
-        int role_code = Common.plusRoleCode(plus_role_code);
-        if (role_code != 0){
-            miv_plus_role_code.setImageResource(role_code);
-        }
+
     }
 
     /**
@@ -346,21 +353,27 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setMonthVip_Order(String this_month, String today_vip, String today_order) {
-        mtv_sale_sum.setText(this_month);
-        mtv_today_vip.setText(today_vip);
-        mtv_today_order.setText(today_order);
+        mThisMonth = this_month;
+        mTodayVip = today_vip;
+        mTodayOrder = today_order;
+
+        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY,true);
+        changeState();
     }
 
     /**
-     * @param xiaodao 小店销售额
-     * @param fendiao 分店销售额
+     * @param xiaodian 小店销售额
+     * @param fendian 分店销售额
      * @param xiaofei 消费金额
      */
     @Override
-    public void setSaleData(String xiaodao, String fendiao, String xiaofei) {
-        mtv_child_store.setText(xiaodao);
-        mtv_grand_child_store.setText(fendiao);
-        mtv_total_consume.setText(xiaofei);
+    public void setSaleData(String xiaodian, String fendian, String xiaofei) {
+        mXiaodian = xiaodian;
+        mFendian = fendian;
+        mXiaofei = xiaofei;
+
+        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY,true);
+        changeState();
 
         GradientDrawable child_store_background = (GradientDrawable) view_child_store.getBackground();
         child_store_background.setColor(getColorResouce(R.color.pink_color));
@@ -508,10 +521,28 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 break;
             case 3:
                 mtv_mark1.setText(chart_view.key_line1 = "小店会员");
-                mtv_mark2.setText(chart_view.key_line2 = "分店会员");
+                mtv_mark2.setText(chart_view.key_line2 = "PLUS会员");
                 visible(rlayout_vip);
                 gone(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
         }
+    }
+
+    @OnClick(R.id.miv_isShow_data)
+    public void isShowData(){
+        isShowData = !isShowData;
+        changeState();
+        SharedPrefUtil.saveSharedPrfBoolean(KEY,isShowData);
+    }
+
+    private void changeState() {
+        miv_isShow_data.setImageResource(!isShowData?R.mipmap.img_plus_guanbi_n:R.mipmap.img_guanbi_h);
+        mtv_sale_sum.setText(!isShowData?ASTERISK:mThisMonth);
+        mtv_today_vip.setText(!isShowData?ASTERISK:mTodayVip);
+        mtv_today_order.setText(!isShowData?ASTERISK:mTodayOrder);
+
+        mtv_child_store.setText(!isShowData?ASTERISK:mXiaodian);
+        mtv_grand_child_store.setText(!isShowData?ASTERISK:mFendian);
+        mtv_total_consume.setText(!isShowData?ASTERISK:mXiaofei);
     }
 }

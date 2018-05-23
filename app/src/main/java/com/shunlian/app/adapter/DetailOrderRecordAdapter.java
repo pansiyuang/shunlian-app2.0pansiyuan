@@ -1,6 +1,8 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -65,6 +67,12 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         mHolder.mtv_order_state.setText(item.status_desc);
         mHolder.mtv_order_time.setText("下单日期："+item.order_time);
         mHolder.recy_view.setAdapter(new GoodsItemAdapter(context, item.order_goods));
+
+        GradientDrawable background = (GradientDrawable) mHolder.mtv_buy.getBackground();
+        background.setColor(Color.parseColor("#FB0036"));
+        background.setColor(Color.parseColor("#FB9A00"));
+        background.setStroke(0,getColor(R.color.white));
+        mHolder.mtv_buy.setText("买");
     }
 
     public class DetailOrderRecordHolder extends BaseRecyclerViewHolder {
@@ -81,6 +89,8 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         @BindView(R.id.recy_view)
         RecyclerView recy_view;
 
+        @BindView(R.id.mtv_buy)
+        MyTextView mtv_buy;
 
         public DetailOrderRecordHolder(View itemView) {
             super(itemView);
@@ -153,6 +163,7 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
 
             @BindView(R.id.miv_goods_pic)
             MyImageView miv_goods_pic;
+
             public GoodsItemHolder(View itemView) {
                 super(itemView);
                 itemView.setOnClickListener(this);

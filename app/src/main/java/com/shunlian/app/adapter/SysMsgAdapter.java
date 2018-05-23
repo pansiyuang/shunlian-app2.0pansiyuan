@@ -63,34 +63,32 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         SysMsgHolder mHolder = (SysMsgHolder) holder;
         SystemMsgEntity.MsgType msgType = lists.get(position);
-        LogUtil.zhLogW("==系统消息=========="+msgType.type);
+        LogUtil.zhLogW("==系统消息==========" + msgType.type);
         switch (msgType.type) {
-            case "1":
+            case "100":
                 couponType(mHolder, msgType);
                 break;
-            case "2":
+            case "101":
+            case "102":
+            case "103":
+            case "104":
                 goodsTemple(mHolder, msgType);
                 break;
-            case "3":
+            case "105":
                 activityNotify(mHolder, msgType);
                 break;
-            case "4":
-                punishNotify(mHolder, msgType);
-                break;
-            case "5":
-                relievePunishNotify(mHolder, msgType);
-                break;
-            case "6":
-                articleNotify(mHolder, msgType);
-                break;
-            case "7":
-                goodsPushNotify(mHolder, msgType);
-                break;
-            case "8":
+            case "106":
                 specailNotify(mHolder, msgType);
                 break;
-            case "9":
-                preActNotify(mHolder, msgType);
+            case "107":
+                punishNotify(mHolder, msgType);
+                break;
+            case "108":
+            case "109":
+                articleNotify(mHolder, msgType);
+                break;
+            case "110":
+                platformNotify(mHolder, msgType);
                 break;
 
         }
@@ -102,16 +100,17 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
     优惠券类型
      */
     private void couponType(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_article,
-                mHolder.rlayout_goods,mHolder.rlayout_goods_notify,mHolder.rlayout_punish);
+        gone(mHolder.rlayout_special, mHolder.rlayout_activity, mHolder.rlayout_article,
+                mHolder.rlayout_goods, mHolder.rlayout_goods_notify, mHolder.rlayout_punish);
         visible(mHolder.rlayout_coupon);
-        SystemMsgEntity.ContentBean content = msgType.content;
-        mHolder.mtv_coupon_time.setText(content.create_time);
-        mHolder.mtv_desc.setText(content.title);
+        SystemMsgEntity.ContentBean content = msgType.body;
+        mHolder.mtv_coupon_title.setText(content.title);
+        mHolder.mtv_coupon_time.setText(msgType.create_time);
+        mHolder.mtv_desc.setText(content.content);
         String concat = getString(R.string.rmb).concat(content.money);
         mHolder.mtv_coupon_den.setText(concat);
-        mHolder.mtv_full_cut.setText("满"+content.condition+"可用");
-        mHolder.mtv_vail_time.setText("有效期："+content.expire);
+        mHolder.mtv_full_cut.setText("满" + content.condition + "可用");
+        mHolder.mtv_vail_time.setText("有效期：" + content.expire);
         mHolder.mtv_remark.setText(content.remark);
     }
 
@@ -119,112 +118,135 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
    商品模板
     */
     private void goodsTemple(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_article,
-                mHolder.rlayout_coupon,mHolder.rlayout_goods_notify,mHolder.rlayout_punish);
+        gone(mHolder.rlayout_special, mHolder.rlayout_activity, mHolder.rlayout_article,
+                mHolder.rlayout_coupon, mHolder.rlayout_goods_notify, mHolder.rlayout_punish);
         visible(mHolder.rlayout_goods);
 
-        SystemMsgEntity.ContentBean content = msgType.content;
-        mHolder.mtv_goods_time.setText(content.create_time);
+        SystemMsgEntity.ContentBean content = msgType.body;
+        mHolder.mtv_goods_time.setText(msgType.create_time);
         mHolder.mtv_goods_title.setText(content.title);
         mHolder.mtv_goods_desc.setText(content.content);
         mHolder.mtv_source.setText(content.remark);
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_icon,content.thumb);
+        GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, content.thumb);
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_goods);
+        }else {
+            visible(mHolder.red_dot_goods);
+        }
     }
 
     /*
     活动通知
      */
     private void activityNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_coupon,mHolder.rlayout_special,mHolder.rlayout_article,
-                mHolder.rlayout_goods,mHolder.rlayout_goods_notify,mHolder.rlayout_punish);
+        gone(mHolder.rlayout_coupon, mHolder.rlayout_special, mHolder.rlayout_article,
+                mHolder.rlayout_goods, mHolder.rlayout_goods_notify, mHolder.rlayout_punish);
         visible(mHolder.rlayout_activity);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
         mHolder.mtv_act_title.setText(content.title);
         mHolder.mtv_act_desc.setText(content.content);
-        mHolder.mtv_act_time.setText(content.expire);
-        mHolder.mtv_act_msg_time.setText(content.create_time);
+        mHolder.mtv_act_time.setText(content.remark);
+        mHolder.mtv_act_msg_time.setText(msgType.create_time);
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_act);
+        }else {
+            visible(mHolder.red_dot_act);
+        }
     }
 
     /*
     处罚通知
      */
     private void punishNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_article,
-                mHolder.rlayout_coupon,mHolder.rlayout_goods_notify,mHolder.rlayout_goods);
-        visible(mHolder.rlayout_punish,mHolder.mtv_punish_time);
-        SystemMsgEntity.ContentBean content = msgType.content;
-        mHolder.mtv_punish.setText(content.title);
-        mHolder.mtv_punish.setTextColor(getColor(R.color.pink_color));
-        mHolder.mtv_punish_msg_time.setText(content.create_time);
-        mHolder.mtv_punish_time.setText(content.explain);
-        mHolder.mtv_punish_due.setText(content.content);
-    }
+        gone(mHolder.rlayout_special, mHolder.rlayout_activity, mHolder.rlayout_article,
+                mHolder.rlayout_coupon, mHolder.rlayout_goods_notify, mHolder.rlayout_goods);
 
-    /*
-    解除处罚通知
-     */
-    private void relievePunishNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_article,
-                mHolder.rlayout_coupon,mHolder.rlayout_goods_notify,mHolder.rlayout_goods
-                ,mHolder.mtv_punish_time);
-        visible(mHolder.rlayout_punish);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
+
         mHolder.mtv_punish.setText(content.title);
-        mHolder.mtv_punish.setTextColor(getColor(R.color.value_03C780));
-        mHolder.mtv_punish_msg_time.setText(content.create_time);
-        mHolder.mtv_punish_due.setText(content.content);
+        mHolder.mtv_punish_msg_time.setText(msgType.create_time);
+        if ("1072".equals(content.opt)){
+            visible(mHolder.rlayout_punish, mHolder.mtv_punish_time);
+            mHolder.mtv_punish.setTextColor(getColor(R.color.pink_color));
+            mHolder.mtv_punish_time.setText(content.content);
+            mHolder.mtv_punish_due.setText(content.remark);
+        }else {
+            visible(mHolder.rlayout_punish);
+            gone(mHolder.mtv_punish_time);
+            mHolder.mtv_punish.setTextColor(getColor(R.color.value_03C780));
+            mHolder.mtv_punish_due.setText(content.content);
+        }
+
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_punish);
+        }else {
+            visible(mHolder.red_dot_punish);
+        }
     }
 
     /*
    文章审核通知
     */
     private void articleNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_goods_notify,
-                mHolder.rlayout_coupon,mHolder.rlayout_punish,mHolder.rlayout_goods);
+        gone(mHolder.rlayout_special, mHolder.rlayout_activity, mHolder.rlayout_goods_notify,
+                mHolder.rlayout_coupon, mHolder.rlayout_punish, mHolder.rlayout_goods);
         visible(mHolder.rlayout_article);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
         mHolder.mtv_Article_title.setText(content.title);
         mHolder.mtv_Article_desc.setText(content.content);
-        mHolder.mtv_article_time.setText(content.create_time);
-
+        mHolder.mtv_article_time.setText(msgType.create_time);
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_article);
+        }else {
+            visible(mHolder.red_dot_article);
+        }
     }
 
     /*
     商品推送通知
      */
     private void goodsPushNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_special,mHolder.rlayout_activity,mHolder.rlayout_article,
-                mHolder.rlayout_coupon,mHolder.rlayout_punish,mHolder.rlayout_goods);
+        gone(mHolder.rlayout_special, mHolder.rlayout_activity, mHolder.rlayout_article,
+                mHolder.rlayout_coupon, mHolder.rlayout_punish, mHolder.rlayout_goods);
         visible(mHolder.rlayout_goods_notify);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
         mHolder.mtv_goods_notify.setText(content.title);
-        mHolder.mtv_goods_notify_time.setText(content.create_time);
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_notif,content.thumb);
+        mHolder.mtv_goods_notify_time.setText(msgType.create_time);
+        GlideUtils.getInstance().loadImage(context, mHolder.miv_goods_notif, content.thumb);
     }
 
     /*
     专题通知
      */
     private void specailNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_activity,mHolder.rlayout_article,mHolder.rlayout_goods_notify,
-                mHolder.rlayout_coupon,mHolder.rlayout_punish,mHolder.rlayout_goods);
+        gone(mHolder.rlayout_activity, mHolder.rlayout_article, mHolder.rlayout_goods_notify,
+                mHolder.rlayout_coupon, mHolder.rlayout_punish, mHolder.rlayout_goods);
         visible(mHolder.rlayout_special);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
         mHolder.mtv_special_title.setText(content.title);
-        mHolder.mtv_special_time.setText(content.expire);
-
+        mHolder.mtv_special_time.setText(msgType.create_time);
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_special);
+        }else {
+            visible(mHolder.red_dot_special);
+        }
     }
 
     /*
-   活动前通知
+   平台通知
     */
-    private void preActNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
-        gone(mHolder.rlayout_activity,mHolder.rlayout_article,mHolder.rlayout_goods_notify,
-                mHolder.rlayout_coupon,mHolder.rlayout_punish,mHolder.rlayout_goods);
+    private void platformNotify(SysMsgHolder mHolder, SystemMsgEntity.MsgType msgType) {
+        gone(mHolder.rlayout_activity, mHolder.rlayout_article, mHolder.rlayout_goods_notify,
+                mHolder.rlayout_coupon, mHolder.rlayout_punish, mHolder.rlayout_goods);
         visible(mHolder.rlayout_special);
-        SystemMsgEntity.ContentBean content = msgType.content;
+        SystemMsgEntity.ContentBean content = msgType.body;
         mHolder.mtv_special_title.setText(content.title);
-        mHolder.mtv_special_time.setText(content.create_time);
+        mHolder.mtv_special_time.setText(content.time);
+        if ("1".equals(msgType.is_read)){
+            gone(mHolder.red_dot_special);
+        }else {
+            visible(mHolder.red_dot_special);
+        }
     }
 
 
@@ -235,6 +257,9 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
 
         @BindView(R.id.mtv_coupon_time)
         MyTextView mtv_coupon_time;
+
+        @BindView(R.id.mtv_coupon_title)
+        MyTextView mtv_coupon_title;
 
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;
@@ -273,6 +298,9 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
         @BindView(R.id.mtv_source)
         MyTextView mtv_source;
 
+        @BindView(R.id.red_dot_goods)
+        View red_dot_goods;
+
         /****************促销活动********************/
         @BindView(R.id.rlayout_activity)
         RelativeLayout rlayout_activity;
@@ -288,6 +316,9 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
 
         @BindView(R.id.mtv_act_msg_time)
         MyTextView mtv_act_msg_time;
+
+        @BindView(R.id.red_dot_act)
+        View red_dot_act;
         /*****************处罚通知***********************/
         @BindView(R.id.rlayout_punish)
         RelativeLayout rlayout_punish;
@@ -304,6 +335,9 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
         @BindView(R.id.mtv_punish_due)
         MyTextView mtv_punish_due;
 
+        @BindView(R.id.red_dot_punish)
+        View red_dot_punish;
+
         /*******************文章审核通知***********************/
         @BindView(R.id.rlayout_article)
         RelativeLayout rlayout_article;
@@ -316,6 +350,9 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
 
         @BindView(R.id.mtv_article_time)
         MyTextView mtv_article_time;
+
+        @BindView(R.id.red_dot_article)
+        View red_dot_article;
 
         /****************商品推送模板********************/
         @BindView(R.id.rlayout_goods_notify)
@@ -339,6 +376,8 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
         @BindView(R.id.mtv_special_time)
         MyTextView mtv_special_time;
 
+        @BindView(R.id.red_dot_special)
+        View red_dot_special;
 
         public SysMsgHolder(View itemView) {
             super(itemView);
@@ -346,14 +385,14 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
             d.setShape(GradientDrawable.RECTANGLE);
             d.setColor(getColor(R.color.pink_color));
             int i = TransformUtil.dip2px(context, 5);
-            float[] f = {i,i,i,i,0,0,0,0};
+            float[] f = {i, i, i, i, 0, 0, 0, 0};
             d.setCornerRadii(f);
             d.mutate();
             llayout_coupon_title.setBackgroundDrawable(d);
 
             itemView.setOnClickListener(v -> {
-                if (listener != null){
-                    listener.onItemClick(v,getAdapterPosition());
+                if (listener != null) {
+                    listener.onItemClick(v, getAdapterPosition());
                 }
             });
         }

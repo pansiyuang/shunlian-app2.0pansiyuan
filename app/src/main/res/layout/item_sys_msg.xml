@@ -24,6 +24,7 @@
             android:padding="7.5dp">
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_coupon_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="您有一张优惠券等待领取"
@@ -110,7 +111,7 @@
         android:id="@+id/rlayout_goods"
         style="@style/TV_SystemMsg3"
         android:background="@drawable/rounded_rectangle_10px"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
 
@@ -125,7 +126,7 @@
             android:orientation="horizontal">
 
             <View
-                android:id="@+id/red_dot"
+                android:id="@+id/red_dot_goods"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:background="@drawable/red_dot" />
@@ -184,21 +185,38 @@
         android:background="@drawable/rounded_rectangle_10px"
         android:visibility="gone">
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_act_title"
+        <LinearLayout
+            android:id="@+id/llayout_act_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="24dp"
             android:layout_marginTop="22dp"
             android:layout_toLeftOf="@+id/mtv_act_msg_time"
-            android:textColor="@color/new_text"
-            android:textSize="16sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/red_dot_act"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/red_dot" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_act_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/new_text"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_act_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mtv_act_title"
+            android:layout_below="@+id/llayout_act_title"
             android:layout_marginTop="17dp"
             android:textColor="@color/new_text"
             android:textSize="14dp" />
@@ -214,7 +232,7 @@
             android:id="@+id/mtv_act_msg_time"
             style="@style/TV_SystemMsg2"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/mtv_act_title"/>
+            android:layout_alignTop="@+id/llayout_act_title"/>
     </RelativeLayout>
 
     <!--处罚通知-->
@@ -222,7 +240,7 @@
         android:id="@+id/rlayout_punish"
         style="@style/TV_SystemMsg3"
         android:background="@drawable/rounded_rectangle_10px"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/llayout_punish"
@@ -233,12 +251,18 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <View
+                android:id="@+id/red_dot_punish"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/red_dot" />
+
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_punish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="处罚通知，您的账号已被封禁"
                 android:textColor="@color/pink_color"
                 android:textSize="16sp" />
 
@@ -272,19 +296,36 @@
         android:paddingTop="22dp"
         android:visibility="gone">
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_Article_title"
+        <LinearLayout
+            android:id="@+id/llayout_Article_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginRight="24dp"
             android:layout_toLeftOf="@+id/mtv_article_time"
-            android:textColor="@color/new_text"
-            android:textSize="16dp" />
+            android:gravity="center_vertical">
+
+            <View
+                android:id="@+id/red_dot_article"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/red_dot" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_Article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/new_text"
+                android:textSize="16dp" />
+
+
+        </LinearLayout>
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_Article_desc"
             style="@style/TV_SystemMsg1"
-            android:layout_below="@+id/mtv_Article_title"
+            android:layout_below="@+id/llayout_Article_title"
             android:layout_marginTop="17dp"/>
 
         <com.shunlian.app.widget.MyTextView
@@ -336,14 +377,30 @@
         android:paddingTop="23dp"
         android:visibility="gone">
 
-        <com.shunlian.app.widget.MyTextView
-            android:id="@+id/mtv_special_title"
-            style="@style/TV_SystemMsg1"/>
+        <LinearLayout
+            android:id="@+id/llayout_special_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <View
+                android:id="@+id/red_dot_special"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/red_dot" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_special_title"
+                style="@style/TV_SystemMsg1"/>
+        </LinearLayout>
+
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_special_time"
             style="@style/TV_SystemMsg2"
-            android:layout_below="@+id/mtv_special_title"
+            android:layout_below="@+id/llayout_special_title"
             android:layout_marginTop="13dp"/>
 
 

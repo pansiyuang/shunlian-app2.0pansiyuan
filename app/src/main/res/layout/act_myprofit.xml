@@ -29,16 +29,33 @@
                 android:layout_marginTop="14dp"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
-            <!--邀请码-->
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_request_code"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="14dp"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:layout_marginTop="13dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_isShow_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/img_guanbi_h" />
+
+                <!--邀请码-->
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_request_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
             <!--头像-->
             <com.shunlian.app.widget.circle.CircleImageView
                 android:id="@+id/civ_head"
@@ -46,35 +63,52 @@
                 android:layout_height="58dp"
                 android:layout_below="@+id/mtv_growth_value"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp" />
-            <!--昵称-->
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/civ_head"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-            <!--等级-->
+                android:layout_marginTop="15dp" />
+
             <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_plus_role_code"
+                android:id="@+id/miv_PhotoFrame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mtv_nickname"
+                android:src="@mipmap/img_plus_shouyi_zhuguan"
+                android:layout_below="@+id/mtv_growth_value"
+                android:layout_centerHorizontal="true"/>
+            <!--昵称和等级-->
+            <LinearLayout
+                android:id="@+id/llayout_nickname"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/miv_PhotoFrame"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"/>
+                android:gravity="center"
+                android:layout_marginTop="11dp"
+                android:layout_height="wrap_content">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/img_plus_xiaoshouzhuguan"/>
+
+                <!--昵称-->
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
             <!--提现-->
             <LinearLayout
                 android:id="@+id/llayout_extract"
                 android:layout_width="match_parent"
                 android:layout_height="114dp"
-                android:layout_below="@+id/mtv_nickname"
+                android:layout_below="@+id/llayout_nickname"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_rectangle_10px"
                 android:orientation="horizontal">
                 <!--已提现-->
@@ -119,7 +153,7 @@
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="已提现"
+                        android:text="可提现"
                         android:drawableLeft="@mipmap/img_shouyi_wenti"
                         android:drawablePadding="3dp"
                         android:textColor="@color/new_text"
@@ -174,7 +208,7 @@
                         android:id="@+id/miv_week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/zhoujiangli_h"
+                        android:src="@mipmap/zhoubutie"
                         app:iv_control_adapter="true"
                         app:iv_control_height="123"
                         app:iv_control_width="123"
@@ -202,7 +236,7 @@
                         android:id="@+id/miv_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/yuejiangli_h"
+                        android:src="@mipmap/tuiguangbutie"
                         app:iv_control_adapter="true"
                         app:iv_control_height="123"
                         app:iv_control_width="123"
@@ -230,7 +264,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/img_shouyi_mingxi"/>
 
-            <!--预估收益  今日收益-->
+            <!--预估收益  今日收益 本月收益-->
             <LinearLayout
                 android:id="@+id/llayout_profit"
                 android:layout_width="match_parent"
@@ -239,6 +273,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:orientation="horizontal"
+                android:paddingBottom="30dp"
                 android:paddingTop="30dp">
 
 
@@ -298,11 +333,41 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="58dp"
+                    android:background="@color/light_gray_three" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_month_profit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textColor="@color/new_text"
+                        android:textSize="18sp" />
+
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="本月收益"
+                        android:textColor="#FF7646"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
             <!--本月收益  精英专享-->
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/llayout_profit1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -369,14 +434,14 @@
                 </LinearLayout>
 
 
-            </LinearLayout>
+            </LinearLayout>-->
 
             <!--7 30 60天-->
             <LinearLayout
                 android:id="@+id/llayout_day"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/llayout_profit1"
+                android:layout_below="@+id/llayout_profit"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
@@ -468,7 +533,7 @@
             <!--点击折线图显示指定数据-->
             <LinearLayout
                 android:id="@+id/llayout_appoint_sale"
-                android:layout_below="@+id/llayout_profit1"
+                android:layout_below="@+id/llayout_profit"
                 android:layout_width="match_parent"
                 android:background="@color/white"
                 android:orientation="vertical"
