@@ -1,11 +1,21 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.adapter.SysMsgAdapter;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.ui.activity.DayDayAct;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.coupon.CouponListAct;
+import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
+import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.ISystemMsgView;
 
 import java.util.ArrayList;
@@ -71,7 +81,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
                         isLoading = false;
                         SystemMsgEntity data = entity.data;
                         currentPage = Integer.parseInt(data.page);
-                        allPage = Integer.parseInt(data.total);
+                        allPage = Integer.parseInt(data.total_page);
                         msgTypes.addAll(data.list);
                         showData();
                         currentPage++;
@@ -96,7 +106,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
             adapter = new SysMsgAdapter(context, msgTypes);
             iView.setAdapter(adapter);
 
-            adapter.setOnItemClickListener((v,position)->{
+            adapter.setOnItemClickListener((v, position) -> {
                 SystemMsgEntity.MsgType msgType = msgTypes.get(position);
                 handlerType(msgType);
             });
@@ -107,23 +117,52 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
     }
 
     private void handlerType(SystemMsgEntity.MsgType msgType) {
-        switch (msgType.type){
+        SystemMsgEntity.ContentBean body = msgType.body;
+        switch (isEmpty(msgType.jump) ? "0" : msgType.jump) {
             case "1":
-
+                CouponListAct.startAct(context);
                 break;
             case "2":
-//                Common.goGoGo(context,"goods",msgType.);
-                break;
-
-            case "3":
+                OrderDetailAct.startAct(context, body.id);
                 break;
             case "4":
-//                PunishAct
+                OrderLogisticsActivity.startAct(context, body.id);
+                break;
+            case "5":
+                ExchangeDetailAct.startAct(context, body.id);
+                break;
+            case "6":
+                break;
+            case "7":
+                ExperienceDetailAct.startAct(context, body.id);
+                break;
+            case "8":
+                CommentListAct.startAct((Activity) context, body.id);
+                break;
+            case "9":
+//                Common.goGoGo();
+                break;
+            case "10":
+                Common.goGoGo(context, body.target, body.targetId);
+                break;
+            case "11":
+                DayDayAct.startAct(context);
                 break;
         }
+        if ("0".equals(msgType.is_read))
+            msgRead(msgType.type,msgType.id);
     }
 
 
+    private void msgRead(String type,String msg_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("type",type);
+        map.put("msg_id",msg_id);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
+                .messageRead(getRequestBody(map));
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback<>());
+    }
     @Override
     public void onRefresh() {
         super.onRefresh();

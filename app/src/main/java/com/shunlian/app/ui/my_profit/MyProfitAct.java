@@ -35,6 +35,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMyProfitView;
 import com.shunlian.app.widget.MyImageView;
@@ -43,6 +44,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2018/4/16.
@@ -86,8 +88,8 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.mtv_month_profit)
     MyTextView mtv_month_profit;
 
-    @BindView(R.id.mtv_meritocrat_profit)
-    MyTextView mtv_meritocrat_profit;
+//    @BindView(R.id.mtv_meritocrat_profit)
+//    MyTextView mtv_meritocrat_profit;
 
     @BindView(R.id.chart_view)
     SplineChart06View chart_view;
@@ -100,9 +102,6 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
 
     @BindView(R.id.miv_balance)
     MyImageView miv_balance;
-
-    @BindView(R.id.miv_plus_role_code)
-    MyImageView miv_plus_role_code;
 
     @BindView(R.id.llayout_assertionProfit)
     LinearLayout llayout_assertionProfit;
@@ -170,7 +169,14 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.mtv_profitTip)
     MyTextView mtv_profitTip;
 
-    private String available_profit;//可提现金额
+    @BindView(R.id.miv_isShow_data)
+    MyImageView miv_isShow_data;
+
+    @BindView(R.id.llayout_reward)
+    LinearLayout llayout_reward;
+
+
+
     private MyProfitPresenter presenter;
     private String profit_help_url;
     private float monthReward;//月奖励收益
@@ -178,6 +184,10 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     private boolean isWeekAnimRuning = false;
     private boolean isMonthAnimRuning = false;
     private float availableProfit;//可提现金额
+    private boolean isShowData = true;
+    public final static String ASTERISK = "****";
+    public final static String KEY = "profit_isShow";
+    private MyProfitEntity.ProfitInfo mProfitInfo;
 
 
     public static void startAct(Context context) {
@@ -308,10 +318,6 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         mtv_request_code.setText("邀请码：" + userInfo.invite_code);
         GlideUtils.getInstance().loadImage(this, civ_head, userInfo.avatar);
         mtv_nickname.setText(userInfo.nickname);
-        int role_code = Common.plusRoleCode(userInfo.plus_role_code);
-        if (role_code != 0){
-            miv_plus_role_code.setImageResource(role_code);
-        }
     }
 
     /**
@@ -321,31 +327,24 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
      */
     @Override
     public void setProfitInfo(MyProfitEntity.ProfitInfo profitInfo) {
-        available_profit = profitInfo.available_profit;
-        mtv_surplus_extract_m.setText(profitInfo.available_profit);
-        mtv_already_extract_m.setText(profitInfo.withdrawed_profit);
-        mtv_week_reward.setText(profitInfo.week_reward);
-        mtv_month_reward.setText(profitInfo.month_reward);
-
-        mtv_estimate_profit.setText(profitInfo.estimate_profit);
-        mtv_today_profit.setText(profitInfo.today_profit);
-        mtv_month_profit.setText(profitInfo.month_profit);
-        mtv_meritocrat_profit.setText(profitInfo.meritocrat_profit);
+        mProfitInfo = profitInfo;
+        isShowData = SharedPrefUtil.getSharedPrfBoolean(KEY, true);
+        changeState();
         profit_help_url = profitInfo.profit_help_url;
 
         weekReward = Float.parseFloat(profitInfo.week_reward);
         monthReward = Float.parseFloat(profitInfo.month_reward);
         availableProfit = Float.parseFloat(profitInfo.available_profit);
         if (weekReward > 0){
-            miv_week.setImageResource(R.mipmap.zhoujiangli_n);
+            miv_week.setImageResource(R.mipmap.zhoubutie);
         }else {
-            miv_week.setImageResource(R.mipmap.zhoujiangli_h);
+            visible(llayout_week_reward);
         }
 
         if (monthReward > 0){
-            miv_month.setImageResource(R.mipmap.yuejiangli_n);
+            miv_month.setImageResource(R.mipmap.tuiguangbutie);
         }else {
-            miv_month.setImageResource(R.mipmap.yuejiangli_h);
+            visible(llayout_month_reward);
         }
     }
 
@@ -362,7 +361,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     /**
      * 领取月/周奖励
      *
-     * @param type 1周奖励 2月奖励
+     * @param type 1周补贴 2推广补贴
      */
     @Override
     public void receiveReward(String type) {
@@ -535,6 +534,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                     isWeekAnimRuning = false;
                     availableProfit +=weekReward;
                     mtv_surplus_extract_m.setText(""+availableProfit);
+
                 }else if (view == miv_month){
                     isMonthAnimRuning = false;
                     availableProfit +=monthReward;
@@ -559,6 +559,24 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             }
         });
         va.start();
+    }
+
+    @OnClick(R.id.miv_isShow_data)
+    public void isShowData(){
+        isShowData = !isShowData;
+        changeState();
+        SharedPrefUtil.saveSharedPrfBoolean(KEY,isShowData);
+    }
+
+    private void changeState(){
+        miv_isShow_data.setImageResource(!isShowData?R.mipmap.img_plus_guanbi_n:R.mipmap.img_guanbi_h);
+        mtv_surplus_extract_m.setText(!isShowData?ASTERISK:mProfitInfo.available_profit);
+        mtv_already_extract_m.setText(!isShowData?ASTERISK:mProfitInfo.withdrawed_profit);
+        mtv_week_reward.setText(!isShowData?ASTERISK:mProfitInfo.week_reward);
+        mtv_month_reward.setText(!isShowData?ASTERISK:mProfitInfo.month_reward);
+        mtv_estimate_profit.setText(!isShowData?ASTERISK:mProfitInfo.estimate_profit);
+        mtv_today_profit.setText(!isShowData?ASTERISK:mProfitInfo.today_profit);
+        mtv_month_profit.setText(!isShowData?ASTERISK:mProfitInfo.month_profit);
     }
 
     @Override
