@@ -190,6 +190,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.miv_isShow_data)
     MyImageView miv_isShow_data;
 
+    @BindView(R.id.miv_PhotoFrame)
+    MyImageView miv_PhotoFrame;
+
+    @BindView(R.id.miv_grade)
+    MyImageView miv_grade;
+
 
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
@@ -341,7 +347,19 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setplusrole(String plus_role_code) {
-
+        if ("1".equals(plus_role_code)){//店主 1=plus店主，2=销售主管，3=销售经理
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
+        }else if ("3".equals(plus_role_code)){//经理
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
+        }else if ("2".equals(plus_role_code)){//主管
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
+        }else {
+            gone(miv_grade);
+            miv_PhotoFrame.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**

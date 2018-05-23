@@ -175,6 +175,11 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.llayout_reward)
     LinearLayout llayout_reward;
 
+    @BindView(R.id.miv_PhotoFrame)
+    MyImageView miv_PhotoFrame;
+
+    @BindView(R.id.miv_grade)
+    MyImageView miv_grade;
 
 
     private MyProfitPresenter presenter;
@@ -316,6 +321,20 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     public void setUserInfo(MyProfitEntity.UserInfo userInfo) {
         mtv_growth_value.setText("成长值：" + userInfo.grow_num);
         mtv_request_code.setText("邀请码：" + userInfo.invite_code);
+        String plus_role_code = userInfo.plus_role_code;
+        if ("1".equals(plus_role_code)){//店主 1=plus店主，2=销售主管，3=销售经理
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
+        }else if ("3".equals(plus_role_code)){//经理
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
+        }else if ("2".equals(plus_role_code)){//主管
+            visible(miv_PhotoFrame,miv_grade);
+            miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
+        }else {
+            gone(miv_grade);
+            miv_PhotoFrame.setVisibility(View.INVISIBLE);
+        }
         GlideUtils.getInstance().loadImage(this, civ_head, userInfo.avatar);
         mtv_nickname.setText(userInfo.nickname);
     }
@@ -338,13 +357,17 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         if (weekReward > 0){
             miv_week.setImageResource(R.mipmap.zhoubutie);
         }else {
-            visible(llayout_week_reward);
+            gone(llayout_week_reward);
         }
 
         if (monthReward > 0){
             miv_month.setImageResource(R.mipmap.tuiguangbutie);
         }else {
-            visible(llayout_month_reward);
+            gone(llayout_month_reward);
+        }
+        if (llayout_week_reward.getVisibility() == View.GONE &&
+                llayout_month_reward.getVisibility() == View.GONE){
+            gone(llayout_reward);
         }
     }
 
@@ -534,11 +557,16 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                     isWeekAnimRuning = false;
                     availableProfit +=weekReward;
                     mtv_surplus_extract_m.setText(""+availableProfit);
-
+                    gone(llayout_week_reward);
                 }else if (view == miv_month){
                     isMonthAnimRuning = false;
                     availableProfit +=monthReward;
                     mtv_surplus_extract_m.setText(""+availableProfit);
+                    gone(llayout_month_reward);
+                }
+                if (llayout_week_reward.getVisibility() == View.GONE &&
+                        llayout_month_reward.getVisibility() == View.GONE){
+                    gone(llayout_reward);
                 }
             }
         });

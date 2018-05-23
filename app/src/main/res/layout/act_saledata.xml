@@ -69,6 +69,7 @@
                 android:id="@+id/miv_PhotoFrame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:src="@mipmap/img_plus_shouyi_zhuguan"
                 android:layout_below="@+id/mtv_growth_value"
                 android:layout_centerHorizontal="true"/>
@@ -89,6 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:visibility="gone"
                     android:src="@mipmap/img_plus_xiaoshouzhuguan"/>
 
                 <!--昵称-->
