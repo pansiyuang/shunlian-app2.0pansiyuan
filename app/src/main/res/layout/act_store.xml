@@ -316,8 +316,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_firstVouch"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_height="wrap_content"
                     android:background="@color/white" />
 
                 <android.support.v7.widget.RecyclerView
