@@ -2111,4 +2111,12 @@ public interface ApiService {
      */
     @GET("helpcenter/classesshare")
     Call<BaseEntity<CommonEntity>> classesshare(@QueryMap Map<String, String> map);
+
+    /**
+     * 优品列表
+     *
+     * @return
+     */
+    @GET("superiorspecial/getdata")
+    Call<BaseEntity<SuperProductEntity>> superProductsList(@QueryMap Map<String, String> map);
 }

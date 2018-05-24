@@ -718,4 +718,15 @@
     <string name="first_shaohougengxin">稍后更新</string>
     <string name="first_xialashuaxin">暂时没有数据，下拉刷新试试</string>
 
+    <!-- plus -->
+    <string name="share_store_big_gif">分享开店大礼包</string>
+    <string name="plus_vip_year_performance">%d年会员绩效</string>
+    <string name="plus_vip_month_performance">当月绩效</string>
+    <string name="plus_vip_detail_performance">%d年%d月会员绩效</string>
+    <string name="plus_vip_period_performance">往期绩效</string>
+    <string name="plus_group_money">%d年社群销售额</string>
+    <string name="plus_group_count">当前社群Plus数</string>
+    <string name="plus_group_month_money">本月社群销售额</string>
+    <string name="plus_group_month_count">本月社群销新增Plus数</string>
+    <string name="super_product">优品</string>
 </resources>

@@ -814,6 +814,14 @@
             android:name=".ui.plus.GifBagListAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.plus.ShareBigGifAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.plus.SuperProductsAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
