@@ -322,15 +322,19 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         mtv_growth_value.setText("成长值：" + userInfo.grow_num);
         mtv_request_code.setText("邀请码：" + userInfo.invite_code);
         String plus_role_code = userInfo.plus_role_code;
+        //plus_role_code = "3";
         if ("1".equals(plus_role_code)){//店主 1=plus店主，2=销售主管，3=销售经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
+            miv_grade.setImageResource(R.mipmap.img_plus_dianzhude);
         }else if ("3".equals(plus_role_code)){//经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
         }else if ("2".equals(plus_role_code)){//主管
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
         }else {
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);
@@ -390,12 +394,12 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     public void receiveReward(String type) {
         if ("1".equals(type)){
             isWeekAnimRuning = true;
-            miv_week.setImageResource(R.mipmap.zhoujiangli_h);
+            miv_week.setImageResource(R.mipmap.zhoubutie);
             energySphereClick(miv_week, Color.parseColor("#FFBCCA"));
             mtv_week_reward.setText("0.00");
         }else {
             isMonthAnimRuning = true;
-            miv_month.setImageResource(R.mipmap.yuejiangli_h);
+            miv_month.setImageResource(R.mipmap.tuiguangbutie);
             energySphereClick(miv_month, Color.parseColor("#FEE8DD"));
             mtv_month_reward.setText("0.00");
         }

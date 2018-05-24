@@ -7,8 +7,12 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.engine.cache.LruResourceCache;
+import com.bumptech.glide.load.engine.cache.MemoryCache;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.GlideModule;
 
@@ -152,11 +156,11 @@ public class GlideCacheUtil implements GlideModule{
         int cacheSize = 100*1000*1000;
         DiskLruCacheFactory dcf = new DiskLruCacheFactory(cachePath,cacheSize);
         builder.setDiskCache(dcf);
-        /*long size = Runtime.getRuntime().maxMemory() / 4000;
+        long size = Runtime.getRuntime().maxMemory() / 4000;
         MemoryCache cache = new LruResourceCache((int) size);
         builder.setMemoryCache(cache);
         BitmapPool bitmapPool = new LruBitmapPool((int) size/2);
-        builder.setBitmapPool(bitmapPool);*/
+        builder.setBitmapPool(bitmapPool);
 
         /*ActivityManager manager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);

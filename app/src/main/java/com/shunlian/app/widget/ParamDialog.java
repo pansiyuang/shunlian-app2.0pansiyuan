@@ -3,7 +3,6 @@ package com.shunlian.app.widget;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -86,6 +85,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     private String hasOption = "0";//是否有参数
     private int currentCount = 1;
     private LinkedHashMap<String, GoodsDeatilEntity.Values> linkedHashMap;
+    public boolean isSelectCount = true;//默认可以选择数量
 
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
@@ -355,6 +355,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {
         this.selectCallBack = callBack;
+        if (btn_add != null && btn_minus != null) {
+            if (!isSelectCount) {
+                btn_minus.setEnabled(false);
+                btn_add.setEnabled(false);
+            } else {
+                btn_minus.setEnabled(true);
+                btn_add.setEnabled(true);
+            }
+        }
     }
 
 

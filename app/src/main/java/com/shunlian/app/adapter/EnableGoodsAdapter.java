@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,6 +223,7 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         enableViewHolder.rl_goods_attribute.setOnClickListener(view -> {
             if (paramDialog == null) {
                 paramDialog = new ParamDialog(mContext, goods);
+                paramDialog.isSelectCount = false;
             }
             paramDialog.setOnSelectCallBack((sku, count) -> {
                 if (onGoodsChangeListener != null) {

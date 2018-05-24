@@ -66,6 +66,7 @@ public class GlideUtils {
      */
 
     public void loadImage(Context context, ImageView imageView, String imgUrl, boolean isFade) {
+        if (imageView == null)return;
         if (isFade) {
             Glide.with(context)
                     .load(imgUrl)
@@ -120,6 +121,7 @@ public class GlideUtils {
      * @param heightSize
      */
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.img_default_common)
@@ -158,6 +160,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCircleImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -219,6 +222,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCornerImage(Context context, ImageView imageView, String imgUrl,int radius) {
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -332,6 +336,7 @@ public class GlideUtils {
      */
 
     public void loadLocalImageWithView(Context context, @DrawableRes int resourceId, ImageView view) {
+        if (view == null)return;
         Glide.with(context).
                 load(resourceId).
                 asBitmap().
@@ -391,6 +396,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void findFollowList(Context context,ImageView imageView,String imgUrl){
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -410,6 +416,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void communityBanner(Context context,ImageView imageView,String imgUrl){
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -429,6 +436,7 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void communityTopPic(Context context,ImageView imageView,String imgUrl,int radius){
+        if (imageView == null)return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)

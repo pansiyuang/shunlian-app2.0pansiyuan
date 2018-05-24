@@ -28,8 +28,8 @@ public class ComboAdapter extends BaseRecyclerAdapter {
     private Context context;
     private List<GoodsDeatilEntity.Combo> combos;
 
-    public ComboAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Combo> lists) {
-        super(context, isShowFooter, lists);
+    public ComboAdapter(Context context,List<GoodsDeatilEntity.Combo> lists) {
+        super(context, false, lists);
         this.context = context;
         this.combos = lists;
     }
@@ -58,7 +58,7 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,
                 LinearLayoutManager.HORIZONTAL, false);
         viewHolder.recycler_combo.setLayoutManager(linearLayoutManager);
-        ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, false, combo.goods);
+        ComboPicAdapter comboPicAdapter = new ComboPicAdapter(context, combo.goods);
         viewHolder.recycler_combo.setAdapter(comboPicAdapter);
         comboPicAdapter.setOnItemClickListener((v,p)->{
             if (listener != null){
@@ -100,8 +100,8 @@ public class ComboAdapter extends BaseRecyclerAdapter {
     public static class ComboPicAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods> {
         private List<GoodsDeatilEntity.Goods> goods;
 
-        public ComboPicAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists) {
-            super(context, isShowFooter, lists);
+        public ComboPicAdapter(Context context,List<GoodsDeatilEntity.Goods> lists) {
+            super(context, false, lists);
             this.goods = lists;
         }
 

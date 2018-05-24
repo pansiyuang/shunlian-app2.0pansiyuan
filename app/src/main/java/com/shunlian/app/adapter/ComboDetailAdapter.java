@@ -46,9 +46,10 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     private ISelectParamsListener mParamsListener;
     private Map<String,String> priceMap = new HashMap<>();//价格
     private Map<String,String> marketPriceMap = new HashMap<>();//原价
+    private ParamDialog mParamDialog;
 
-    public ComboDetailAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Goods> lists, ComboDetailEntity entity) {
-        super(context, isShowFooter, lists);
+    public ComboDetailAdapter(Context context,List<GoodsDeatilEntity.Goods> lists, ComboDetailEntity entity) {
+        super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         mEntity = entity;
     }
@@ -119,8 +120,7 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                     .concat(othersCombo.old_combo_price).concat("-")
                     .concat(othersCombo.max_old_combo_price));
 
-            ComboAdapter.ComboPicAdapter adapter = new ComboAdapter.
-                    ComboPicAdapter(context,false,othersCombo.goods);
+            ComboAdapter.ComboPicAdapter adapter = new ComboAdapter.ComboPicAdapter(context,othersCombo.goods);
             mHolder.recycler_combo.setAdapter(adapter);
             if (position + 1 == getItemCount()){
                 mHolder.view_line.setVisibility(View.INVISIBLE);
@@ -227,6 +227,12 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             GoodsDeatilEntity.Goods goods = lists.get(position - 2);
             GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,goods.thumb);
             mHolder.mtv_goods_info.setText(goods.title);
+            String has_option = goods.goods_info.has_option;
+            if ("0".equals(has_option)){
+                gone(mHolder.mtv_select);
+            }else {
+                visible(mHolder.mtv_select);
+            }
             if (position == lists.size() + 1){
                 mHolder.view_line.setVisibility(View.INVISIBLE);
             }else {
@@ -323,23 +329,20 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @OnClick(R.id.mtv_select)
         public void tvSelect(){
             final GoodsDeatilEntity.Goods goods = lists.get(getAdapterPosition() - 2);
-            ParamDialog paramDialog = new ParamDialog(context,goods);
-            paramDialog.show();
-            paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
-                @Override
-                public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-                    String name = "";
-                    if (sku != null && sku.name != null) {
-                        name = sku.name ;
-                        priceMap.put(String.valueOf(getAdapterPosition() -2),sku.price);
-                        marketPriceMap.put(String.valueOf(getAdapterPosition() -2),sku.market_price);
-                        notifyItemChanged(1);
-                    }
-                    mtv_select.setText("已选择:".concat(name).concat("  ")
-                            .concat(String.valueOf(count)).concat("件"));
-                    if (mParamsListener != null){
-                        mParamsListener.selectParam(goods.goods_id,sku==null?"":sku.id);
-                    }
+            mParamDialog = new ParamDialog(context,goods);
+            mParamDialog.isSelectCount = false;
+            mParamDialog.show();
+            mParamDialog.setOnSelectCallBack((sku, count) -> {
+                String name = "";
+                if (sku != null && sku.name != null) {
+                    name = sku.name ;
+                    priceMap.put(String.valueOf(getAdapterPosition() -2),sku.price);
+                    marketPriceMap.put(String.valueOf(getAdapterPosition() -2),sku.market_price);
+                    notifyItemChanged(1);
+                }
+                mtv_select.setText("已选择:".concat(name));
+                if (mParamsListener != null){
+                    mParamsListener.selectParam(goods.goods_id,sku==null?"":sku.id);
                 }
             });
         }

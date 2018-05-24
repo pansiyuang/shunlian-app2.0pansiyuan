@@ -347,15 +347,19 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setplusrole(String plus_role_code) {
+        //plus_role_code = "2";
         if ("1".equals(plus_role_code)){//店主 1=plus店主，2=销售主管，3=销售经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
+            miv_grade.setImageResource(R.mipmap.img_plus_dianzhude);
         }else if ("3".equals(plus_role_code)){//经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
         }else if ("2".equals(plus_role_code)){//主管
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
         }else {
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);

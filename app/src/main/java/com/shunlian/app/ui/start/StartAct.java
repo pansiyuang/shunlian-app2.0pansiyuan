@@ -3,10 +3,12 @@ package com.shunlian.app.ui.start;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
@@ -14,12 +16,12 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
+
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2016/4/12 0012.
@@ -32,6 +34,11 @@ public class StartAct extends MBaseActivity implements IMain {
     private boolean isAD=false,isHave=false;
     private PMain pMain;
 
+    @BindView(R.id.miv_bg1)
+    MyImageView miv_bg1;
+
+    @BindView(R.id.miv_bg2)
+    MyImageView miv_bg2;
 
     @Override
     protected int getLayoutId() {
@@ -198,11 +205,26 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     protected void onDestroy() {
+        releaseImageViewResouce(miv_bg1);
+        releaseImageViewResouce(miv_bg2);
         super.onDestroy();
         tryRecycleAnimationDrawable(flashAnimation);
     }
 
-    private static void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
+    public void releaseImageViewResouce(ImageView imageView) {
+        if (imageView == null) return;
+        Drawable drawable = imageView.getDrawable();
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+                bitmap = null;
+            }
+        }
+    }
+
+    private void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
         if (animationDrawable != null) {
             animationDrawable.stop();
             for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
@@ -216,5 +238,6 @@ public class StartAct extends MBaseActivity implements IMain {
             animationDrawable = null;
             System.gc();
         }
+
     }
 }
