@@ -75,13 +75,14 @@ public class CouponListAdapter extends BaseRecyclerAdapter<CouponListEntity.Vouc
         mHolder.mtv_coupon_class.setText(voucherList.voucher_type);
         mHolder.mtv_coupon_time.setText("有效期："+voucherList.valid_time);
 
-        String where_used = voucherList.where_used;
-        if ("1".equals(where_used)){
-            where_used = "全场使用";
+        /*String goods_scope = voucherList.goods_scope;
+        if ("1".equals(goods_scope)){
+            goods_scope = "全场使用";
         }else {
-            where_used = "APP使用";
+            goods_scope = "APP使用";
         }
-        mHolder.mtv_limit.setText(where_used);
+        mHolder.mtv_limit.setText(goods_scope);*/
+        gone(mHolder.mtv_limit);
         mHolder.mtv_overdue.setText(voucherList.expire_after);
 
     }

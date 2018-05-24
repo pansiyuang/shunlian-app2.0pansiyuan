@@ -87,14 +87,9 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
     public void comboDetailData(ComboDetailEntity entity) {
         GoodsDeatilEntity.Combo current_combo = entity.current_combo;
         combo_size = current_combo.goods.size();
-        ComboDetailAdapter adapter = new ComboDetailAdapter(this,false,current_combo.goods,entity);
+        ComboDetailAdapter adapter = new ComboDetailAdapter(this,current_combo.goods,entity);
         recy_view.setAdapter(adapter);
-        adapter.setSelectParamsListener(new ComboDetailAdapter.ISelectParamsListener() {
-            @Override
-            public void selectParam(String goods_id, String sku) {
-                goods_sku.put(goods_id,sku);
-            }
-        });
+        adapter.setSelectParamsListener((goods_id, sku) -> goods_sku.put(goods_id,sku));
     }
 
     @OnClick(R.id.mtv_buy)
@@ -114,7 +109,6 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
         ComboEntity comboEntity = new ComboEntity(combo_id,goods_sku);
         try {
             String s = new ObjectMapper().writeValueAsString(comboEntity);
-//            System.out.println("========="+s);
             ConfirmOrderAct.startAct(this, s,ConfirmOrderAct.TYPE_COMBO);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

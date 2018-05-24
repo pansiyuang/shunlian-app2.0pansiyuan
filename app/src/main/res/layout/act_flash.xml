@@ -6,6 +6,7 @@
     android:background="@color/value_DB1211">
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_bg1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
@@ -17,6 +18,7 @@
         android:layout_height="wrap_content" />
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_bg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/img_shunlian"

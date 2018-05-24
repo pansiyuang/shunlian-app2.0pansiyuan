@@ -64,6 +64,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public Act activity;
     //分享信息
     public UserInfo user_info;
+    public String self_buy_earn;//自购赚多少，该字段有返回时才前台显示（该字段有可能不返回）
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UserInfo implements Parcelable {

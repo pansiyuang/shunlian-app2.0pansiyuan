@@ -103,7 +103,7 @@ public class RecyclerDialog extends Dialog{
     public void setCombos(List<GoodsDeatilEntity.Combo> combos, final String goods_id) {
         this.mCombos = combos;
         if (comboAdapter == null) {
-            comboAdapter = new ComboAdapter(mContext, false, mCombos);
+            comboAdapter = new ComboAdapter(mContext, mCombos);
         } else {
             comboAdapter.setData(mCombos);
         }

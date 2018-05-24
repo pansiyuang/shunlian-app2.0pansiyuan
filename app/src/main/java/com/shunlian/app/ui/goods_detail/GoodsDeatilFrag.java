@@ -150,7 +150,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             pics = new ArrayList<>();
         }
 
-        goodsDetailAdapter = new GoodsDetailAdapter(baseActivity, false, goodsDeatilEntity, pics);
+        goodsDetailAdapter = new GoodsDetailAdapter(baseActivity,goodsDeatilEntity,pics,pool);
         recy_view_root.setAdapter(goodsDetailAdapter);
 
     }
@@ -190,5 +190,14 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         if (goodsDetailAdapter != null){
             goodsDetailAdapter.refreshVoucherState(voucher);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (goodsDetailAdapter != null){
+            goodsDetailAdapter.onDetachedFromRecyclerView(recy_view_root);
+            goodsDetailAdapter = null;
+        }
+        super.onDestroyView();
     }
 }
