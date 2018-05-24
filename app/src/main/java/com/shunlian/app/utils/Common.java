@@ -66,6 +66,7 @@ import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
@@ -193,7 +194,8 @@ public class Common {
                 break;
             case "special":
                 String url = InterentTools.H5_HOST + "special/" + params[0];
-                H5Act.startAct(context, url, H5Act.MODE_SONIC);
+//                String url = InterentTools.H5_HOST + "special/127";
+                H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
                 break;
             default://首页
                 LogUtil.augusLogW("wheremain");

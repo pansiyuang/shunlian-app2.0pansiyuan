@@ -178,6 +178,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
                     twoHolder.mtv_price.setText(data.ldata.price);
                     LinearLayoutManager firstManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                     twoHolder.rv_type.setLayoutManager(firstManager);
+                    twoHolder.rv_type.setNestedScrollingEnabled(false);
                     twoHolder.rv_type.setAdapter(new StoreTypeAdapter(context, false, data.ldata.label));
                     GlideUtils.getInstance().loadImage(context,twoHolder.miv_two,data.ldata.whole_thumb);
                 }

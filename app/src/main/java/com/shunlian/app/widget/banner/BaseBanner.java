@@ -29,6 +29,7 @@ import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -84,6 +85,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
      */
     protected LinearLayout ll_indicator_container;
 
+    protected float scale;
 
     private MyTextView titleOne, titleTwo;
 
@@ -157,7 +159,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
         //get custom attr
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BaseBanner);
-        float scale = ta.getFloat(R.styleable.BaseBanner_bb_scale, -1);
+        scale = ta.getFloat(R.styleable.BaseBanner_bb_scale, -1);
 
         boolean isLoopEnable = ta.getBoolean(R.styleable.BaseBanner_bb_isLoopEnable, true);
         delay = ta.getInt(R.styleable.BaseBanner_bb_delay, 5);
@@ -210,6 +212,8 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
 
 
         lp_vp = new LayoutParams(itemWidth, itemHeight);
+        LogUtil.augusLogW("yxf33---"+itemWidth);
+        LogUtil.augusLogW("yxf44---"+itemHeight);
         addView(vp, lp_vp);
 
         //top parent of indicators

@@ -2095,6 +2095,14 @@ public interface ApiService {
     @GET("adpush/popup")
     Call<BaseEntity<AdEntity>> popup(@QueryMap Map<String, String> map);
 
+    /**
+     * 专题页数据
+     *
+     * @return
+     */
+    @GET("special/getdata")
+    Call<BaseEntity<ShareEntity>> specialGetdata(@QueryMap Map<String, String> map);
+
 
     /**
      * 弹窗广告

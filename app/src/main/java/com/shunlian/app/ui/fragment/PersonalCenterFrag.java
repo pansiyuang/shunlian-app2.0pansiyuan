@@ -38,6 +38,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MyOnClickListener;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -53,6 +54,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -149,6 +151,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyLinearLayout mllayout_zuji;
     @BindView(R.id.miv_levels)
     MyImageView miv_levels;
+    @BindView(R.id.miv_isShow_data)
+    MyImageView miv_isShow_data;
     @BindView(R.id.miv_shezhi)
     MyImageView miv_shezhi;
     @BindView(R.id.rl_more)
@@ -201,6 +205,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private HelpArticleAdapter helpArticleAdapter;
     private String managerUrl, orderUrl;
     public boolean isclick=false;
+    private boolean isShowData = true;
+    public final static String ASTERISK = "****";
+    public final static String KEY = "person_isShow";
+    private PersonalcenterEntity personalcenterEntity;
 
     //    private Timer outTimer;
     @Override
@@ -218,6 +226,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
         messageCountManager.setTextCount(tv_msg_count);
 
+    }
+
+    @OnClick(R.id.miv_isShow_data)
+    public void isShowData(){
+        isShowData = !isShowData;
+        changeState();
+        SharedPrefUtil.saveCacheSharedPrfBoolean(KEY,isShowData);
     }
 
     @Override
@@ -263,7 +278,15 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         view_bg.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
-
+    private void changeState(){
+        miv_isShow_data.setImageResource(!isShowData?R.mipmap.img_plus_guanbi_n:R.mipmap.img_guanbi_h);
+        if (personalcenterEntity!=null){
+            mtv_yue.setText(!isShowData?ASTERISK:personalcenterEntity.balance);
+            mtv_youhuiquan.setText(!isShowData?ASTERISK:personalcenterEntity.coupon_num);
+            mtv_donglizhishu.setText(!isShowData?ASTERISK:personalcenterEntity.all_sl_income);
+            mtv_xiaoshou.setText(!isShowData?ASTERISK:personalcenterEntity.team_sales);
+        }
+    }
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -331,6 +354,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        this.personalcenterEntity=personalcenterEntity;
+        isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
+        changeState();
         managerUrl = personalcenterEntity.son_manage_url;
         orderUrl = personalcenterEntity.son_order_url;
         refreshview.stopRefresh(true);
@@ -449,10 +475,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
         }
         GlideUtils.getInstance().loadCircleImage(baseContext, miv_avar, personalcenterEntity.avatar);
-        mtv_yue.setText(personalcenterEntity.balance);
-        mtv_youhuiquan.setText(personalcenterEntity.coupon_num);
-        mtv_donglizhishu.setText(personalcenterEntity.all_sl_income);
-        mtv_xiaoshou.setText(personalcenterEntity.team_sales);
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
         mtv_dianpu.setText(personalcenterEntity.store_fav_num);
         mtv_neirong.setText(personalcenterEntity.article_fav_num);
@@ -464,6 +486,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         miv_equals.setVisibility(View.INVISIBLE);
         mtv_equals.setVisibility(View.INVISIBLE);
         mtv_mids.setTextColor(getColorResouce(R.color.new_text));
+
+
         mrlayout_paihang.setVisibility(View.VISIBLE);
         mllayout_paihang.setVisibility(View.VISIBLE);
         mlLayout_member.setVisibility(View.GONE);

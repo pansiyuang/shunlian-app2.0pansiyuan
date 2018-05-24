@@ -167,7 +167,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:src="@mipmap/icon_more_gengduo" />
 
         <com.shunlian.app.widget.MyTextView

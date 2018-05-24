@@ -34,7 +34,14 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.H5CallEntity;
+import com.shunlian.app.bean.ShareEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.presenter.PH5;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -43,6 +50,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.view.IH5View;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
@@ -58,6 +66,10 @@ import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -148,7 +160,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected void jsCallback(H5CallEntity h5CallEntity) {
 
     }
-
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -255,22 +266,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     protected void loadUrl() {
         LogUtil.zhLogW("h5Url=====" + h5Url);
-        if (!isEmpty(h5Url)) {
-            if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
-                visible(rl_title_more);
-                rl_title_more.setOnClickListener(v -> {
-                    quick_actions.setVisibility(View.VISIBLE);
-                    quick_actions.special();
-                });
-            } else if (h5Url.startsWith(InterentTools.H5_HOST + "activity")) {
-                visible(rl_title_more);
-                rl_title_more.setOnClickListener(v -> {
-                    quick_actions.setVisibility(View.VISIBLE);
-                    quick_actions.activity();
-                });
-            }
-        }
-
         // webview is ready now, just tell session client to bind
         if (sonicSessionClient != null) {
             sonicSessionClient.bindWebView(mwv_h5);
@@ -426,7 +421,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                     return;
                 }
                 //如果进度条隐藏则让它显示
-                if (View.INVISIBLE == mProgressbar.getVisibility() && isContinue == false) {
+                if (mProgressbar!=null&&View.INVISIBLE == mProgressbar.getVisibility() && isContinue == false) {
                     mProgressbar.setVisibility(View.VISIBLE);
                 }
                 //大于80的进度的时候,放慢速度加载,否则交给自己加载

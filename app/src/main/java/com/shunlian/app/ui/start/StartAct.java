@@ -16,10 +16,13 @@ import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
+
+import java.util.HashSet;
 
 /**
  * Created by Administrator on 2016/4/12 0012.
@@ -169,9 +172,15 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     public void setAD(AdEntity data) {
-        if (isHave&&"1".equals(data.show)){
-            isAD=true;
-            this.data=data;
+        if (isHave){
+            if ("1".equals(data.show)){
+                isAD=true;
+                this.data=data;
+            }
+            if ("1".equals(data.is_tag)&&data.tag != null&&data.tag.size()>0){
+                SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(data.tag));
+                JpushUtil.setJPushAlias();
+            }
         }
     }
 

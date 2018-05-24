@@ -3,6 +3,7 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -11,12 +12,14 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdEntity implements Serializable{
     public String show;
+    public String is_tag;
+    public List<String> tag;
     public AD list;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AD implements Serializable{
         public String id;
         public String ad_img;
-        public String button;
+        public String ad_sn;
         public Link link;
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Link implements Serializable{

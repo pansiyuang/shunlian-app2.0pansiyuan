@@ -677,7 +677,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
                     @Override
                     public void onHideCallback() {
-                        ImmersionBar.with((Activity) context).statusBarDarkFont(true, 0).init();
+                        ImmersionBar.with((Activity) context).fitsSystemWindows(true)
+                                .statusBarColor(R.color.pink_color)
+                                .statusBarDarkFont(false, 0)
+                                .init();
                     }
                 }).build();
         if (!mPopMenu.isShowing()) {
@@ -779,6 +782,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         TwoHolder(View itemView) {
             super(itemView);
+            int picWidth = Common.getScreenWidth((Activity) context);
+            int height=picWidth*192/720;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+            mllayout_nav.setLayoutParams(params);
         }
     }
 
