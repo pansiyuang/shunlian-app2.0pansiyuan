@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingTop="14dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyTextView
@@ -22,6 +22,19 @@
             android:textSize="12sp" />
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:layout_marginLeft="7.5dp"
+            android:background="@drawable/rounded_corner_gray_3px"
+            android:textColor="@color/white"/>
+
+        <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_order_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,12 +43,26 @@
             android:textSize="12sp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/light_gray_three"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:overScrollMode="never" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/light_gray_three"/>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_order_time"
@@ -44,5 +71,7 @@
         android:textColor="@color/new_text"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="12sp" />
 </LinearLayout>

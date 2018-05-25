@@ -1,6 +1,7 @@
 package com.shunlian.app.utils.timer;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -100,6 +101,13 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
      * @return
      */
     protected abstract int getTextSize();
+
+    /**
+     * 标签文字是否加粗
+     *
+     * @return
+     */
+    protected abstract boolean isTextBold();
 
     /**
      * 设置边框宽
@@ -215,6 +223,11 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
                 .setTextWH(getLabelWidthHeight())
                 .build();
         textView.setPadding(dip2px(left), dip2px(top), dip2px(right), dip2px(bottom));
+        if (isTextBold()){
+            textView .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        }else {
+            textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        }
         return textView;
     }
 

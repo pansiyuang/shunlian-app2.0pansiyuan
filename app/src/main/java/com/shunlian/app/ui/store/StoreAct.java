@@ -557,6 +557,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rv_first.setLayoutManager(firstManager);
             rv_first.setAdapter(storeFirstAdapter);
+            rv_first.setNestedScrollingEnabled(false);
         } else {
             storeFirstAdapter.notifyDataSetChanged();
         }
@@ -676,6 +677,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
                 rv_firstVouch.setLayoutManager(firstManager);
                 rv_firstVouch.setAdapter(storeVoucherAdapter);
+                rv_firstVouch.setNestedScrollingEnabled(false);
 
                 storeVoucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                     @Override

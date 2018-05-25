@@ -19,7 +19,6 @@
         android:gravity="center"
         android:paddingBottom="14dp"
         android:paddingTop="14dp"
-        android:text="送积分啦"
         android:textColor="@color/new_text"
         android:textSize="13sp" />
 
@@ -51,7 +50,7 @@
             android:id="@+id/tv_combo_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
+            android:layout_marginLeft="5dp"
             android:padding="3dp"
             android:textColor="@color/my_orange_red"
             android:textSize="19sp" />

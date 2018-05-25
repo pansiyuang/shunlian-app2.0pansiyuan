@@ -586,6 +586,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void onClick(View view) {
+        LogUtil.augusLogW("--"+view.getId());
         switch (view.getId()) {
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);

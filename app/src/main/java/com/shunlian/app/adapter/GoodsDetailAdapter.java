@@ -91,6 +91,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
     private static final int ITEM_DIFFERENT = 9;//不同条目数
     public ParamDialog paramDialog;
+    private RecyclerView.RecycledViewPool mPool;
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
     private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
@@ -101,12 +102,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private long day = 0l;
     private final int mDeviceWidth;
 
-    public GoodsDetailAdapter(Context context, boolean isShowFooter, GoodsDeatilEntity entity, List<String> lists) {
-        super(context, isShowFooter, lists);
+    public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists,
+                              RecyclerView.RecycledViewPool pool) {
+        super(context, false, lists);
         mInflater = LayoutInflater.from(context);
         mGoodsEntity = entity;
         recyclerDialog = new RecyclerDialog(context);
         paramDialog = new ParamDialog(context,mGoodsEntity);
+        mPool = pool;
         paramDialog.setOnSelectCallBack(this);
         mDeviceWidth = DeviceInfoUtil.getDeviceWidth(context);
     }
@@ -911,7 +914,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 s = lists.get(position - ITEM_DIFFERENT);
             }
 
-//            LogUtil.zhLogW("====s: "+s);
+            //LogUtil.zhLogW("====s: "+s);
 
             if (Pattern.matches(".*(w=\\d+&h=\\d+).*",s)){
                 Matcher m =p.matcher(s);
@@ -923,7 +926,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 if (m.find()){
                     h = Integer.parseInt(m.group(2));
                 }
-//                LogUtil.zhLogW("===w="+w+"  h="+h);
+                //LogUtil.zhLogW("===w="+w+"  h="+h);
                 int i = mDeviceWidth * h / w;
                 GlideUtils.getInstance()
                         .loadOverrideImage(context,mHolder.miv_pic,s,mDeviceWidth,i);
@@ -1116,6 +1119,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mtv_special_title)
         MyTextView mtv_special_title;
 
+        @BindView(R.id.llayout_plus)
+        LinearLayout llayout_plus;
+
+        @BindView(R.id.mtv_plus_prefPrice)
+        MyTextView mtv_plus_prefPrice;
+
         public TitleHolder(View itemView) {
             super(itemView);
         }
@@ -1124,6 +1133,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.Act activity = mGoodsEntity.activity;
             if (activity.url != null){
                 Common.goGoGo(context,activity.url.type,activity.url.item_id);
+            }
+
+            if (isEmpty(mGoodsEntity.self_buy_earn)){
+                gone(llayout_plus);
+            }else {
+                visible(llayout_plus);
+                mtv_plus_prefPrice.setText(getString(R.string.rmb)+mGoodsEntity.self_buy_earn);
             }
         }
 
@@ -1344,6 +1360,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     (context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
+            recy_cardview.setRecycledViewPool(mPool);
         }
 
         /**
@@ -1412,7 +1429,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         MyImageView miv_starBar;
         public StoreGoodsHolder(View itemView) {
             super(itemView);
-//            
             mtv_collection.setOnClickListener(this);
             mll_self_hot.setOnClickListener(this);
             mll_self_push.setOnClickListener(this);
@@ -1420,6 +1436,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_store_name.setOnClickListener(this);
             mtv_quality_goods.setOnClickListener(this);
             miv_starBar.setOnClickListener(this);
+            recy_view.setRecycledViewPool(mPool);
         }
 
         public void setCollectionState(int state){

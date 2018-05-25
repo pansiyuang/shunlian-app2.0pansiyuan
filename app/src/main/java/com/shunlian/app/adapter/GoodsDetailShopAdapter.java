@@ -41,14 +41,16 @@ public class GoodsDetailShopAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        GoodsDetailShopHolder mHoler = (GoodsDetailShopHolder) holder;
-        GoodsDeatilEntity.StoreInfo.Item item = lists.get(position);
-        GlideUtils.getInstance().loadOverrideImage(context,
-                mHoler.miv_shop_head,item.thumb,198,198);
-        mHoler.mtv_title.setText(item.title);
-        SpannableStringBuilder spannableStringBuilder = Common.
-                changeTextSize(getString(R.string.rmb).concat(item.price), getString(R.string.rmb), 12);
-        mHoler.mtv_price.setText(spannableStringBuilder);
+        if (holder instanceof GoodsDetailShopHolder) {
+            GoodsDetailShopHolder mHoler = (GoodsDetailShopHolder) holder;
+            GoodsDeatilEntity.StoreInfo.Item item = lists.get(position);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHoler.miv_shop_head, item.thumb, 198, 198);
+            mHoler.mtv_title.setText(item.title);
+            SpannableStringBuilder spannableStringBuilder = Common.
+                    changeTextSize(getString(R.string.rmb).concat(item.price), getString(R.string.rmb), 12);
+            mHoler.mtv_price.setText(spannableStringBuilder);
+        }
     }
 
     public class GoodsDetailShopHolder extends BaseRecyclerViewHolder implements View.OnClickListener {

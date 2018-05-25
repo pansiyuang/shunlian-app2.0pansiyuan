@@ -110,6 +110,7 @@ public class ADAct extends MBaseActivity {
                 Constant.JPUSH = new ArrayList<>();
                 Constant.JPUSH.add(adEntity.list.link.type);
                 Constant.JPUSH.add(adEntity.list.link.item_id);
+                Constant.JPUSH.add("");
                 Common.goGoGo(getBaseContext(), adEntity.list.link.type, adEntity.list.link.item_id);
                 finish();
                 break;

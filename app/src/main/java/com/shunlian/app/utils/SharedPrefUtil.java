@@ -107,6 +107,26 @@ public class SharedPrefUtil {
     }
 
     /**
+     * 将boolean保存到sp中
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean saveSharedPrfBoolean(String key, boolean value){
+        return getsharedPreferences().edit().putBoolean(key,value).commit();
+    }
+
+    /**
+     * 从sp中获取long
+     * @param key
+     * @param def
+     * @return
+     */
+    public static boolean getSharedPrfBoolean(String key, boolean def){
+        return getsharedPreferences().getBoolean(key,def);
+    }
+
+    /**
      * 将Set<String>保存到sp中
      * @param key
      * @param strings

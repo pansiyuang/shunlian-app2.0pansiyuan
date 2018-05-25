@@ -66,16 +66,16 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="8dp"
                             android:layout_marginLeft="10dp"
-                            android:scaleType="fitXY"
-                            android:layout_toRightOf="@id/miv_storeLogo" />
+                            android:layout_toRightOf="@id/miv_storeLogo"
+                            android:scaleType="fitXY" />
 
                         <com.shunlian.app.widget.MyTextView
                             android:id="@+id/mtv_storeName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_above="@id/ratingBar1"
-                            android:layout_marginTop="8dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="8dp"
                             android:layout_toRightOf="@id/miv_storeLogo"
                             android:text="美特斯邦威"
                             android:textColor="@color/white"
@@ -302,25 +302,31 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <com.shunlian.app.widget.MyLinearLayout
-            android:id="@+id/mllayout_first"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_firstVouch"
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_first"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_first"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.shunlian.app.widget.MyLinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_firstVouch"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/white" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_baby"
@@ -464,9 +470,9 @@
             android:src="@mipmap/icon_common_back_white" />
 
         <com.shunlian.app.widget.MyLinearLayout
+            android:id="@+id/mllayout_search"
             android:layout_width="217dp"
             android:layout_height="match_parent"
-            android:id="@+id/mllayout_search"
             android:layout_marginLeft="20dp"
             android:background="@drawable/shape_store_title_bg"
             android:gravity="center_vertical"
@@ -629,8 +635,8 @@
 
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

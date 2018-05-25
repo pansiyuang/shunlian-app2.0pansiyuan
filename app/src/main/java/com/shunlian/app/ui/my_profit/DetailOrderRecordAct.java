@@ -111,7 +111,7 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
             gone(recy_view);
             visible(nei_empty);
             nei_empty.setText("没人下单，是不是你太懒了？")
-                    .setImageResource(R.mipmap.img_empty_dingdan)
+                    .setImageResource(R.mipmap.img_plus_dingdan)
                     .setButtonText(null);
         }else {
             gone(nei_empty);

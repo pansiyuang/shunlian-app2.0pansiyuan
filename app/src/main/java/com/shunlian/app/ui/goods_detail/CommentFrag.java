@@ -86,4 +86,14 @@ public class CommentFrag extends BaseFragment {
             recy_view.setAdapter(adapter);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        RecyclerView.Adapter adapter = recy_view.getAdapter();
+        if (adapter != null){
+            adapter.onDetachedFromRecyclerView(recy_view);
+            adapter = null;
+        }
+        super.onDestroyView();
+    }
 }

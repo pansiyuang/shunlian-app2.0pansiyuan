@@ -37,12 +37,15 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
     private PBalancePaySetOne pBalancePaySetOne;
     private GradientDrawable background;
     private String code;
+    public static final int FORGETCODE=66;
+    public static final int FORGETCODES=88;
 
-    public static void startAct(Context context,boolean isPaySet,boolean isAli) {
+    public static void startAct(Context context,boolean isPaySet,boolean isAli,boolean isForget) {
         Intent intent = new Intent(context, BalanceVerifyPhoneAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("isPaySet",isPaySet);
         intent.putExtra("isAli",isAli);
+        intent.putExtra("isForget", isForget);
         context.startActivity(intent);
     }
 
@@ -51,6 +54,12 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
         return R.layout.act_balance_verify_phone;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==FORGETCODE&&resultCode==FORGETCODES) {
+            finish();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -111,9 +120,14 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
 
     @Override
     public void nextCall(String key) {
-        BalancePaySetTwoAct.startAct(this,"","set",key
-        ,getIntent().getBooleanExtra("isPaySet",false),getIntent().getBooleanExtra("isAli",false));
-    }
+        if (getIntent().getBooleanExtra("isForget",false)){
+            BalancePaySetTwoAct.startActForResult(this,"","sets",key
+                    ,getIntent().getBooleanExtra("isPaySet",false),getIntent().getBooleanExtra("isAli",false),true);
+        }else {
+            BalancePaySetTwoAct.startAct(this,"","sets",key
+                    ,getIntent().getBooleanExtra("isPaySet",false),getIntent().getBooleanExtra("isAli",false));
+        }
+   }
 
     @Override
     public void bindAlipayCall(String account_number) {

@@ -346,6 +346,7 @@
     <string name="order_shifu">实付金额</string>
     <string name="order_lianxishangjia">联系商家</string>
     <string name="order_haisheng">还剩</string>
+    <string name="order_zidongqueren">自动确认</string>
     <string name="order_quxiaodingdan">取消订单</string>
     <string name="order_fukuan">付款</string>
     <string name="order_wuliu">查看物流</string>

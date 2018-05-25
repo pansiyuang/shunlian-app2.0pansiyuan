@@ -1121,6 +1121,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             goodsDetailPresenter.detachView();
         }
         super.onDestroy();
-
+        goodsDetailPresenter = null;
     }
 }
