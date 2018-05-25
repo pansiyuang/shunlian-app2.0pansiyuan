@@ -131,5 +131,6 @@
         android:id="@+id/quick_actions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_below="@+id/view_line"/>
 </RelativeLayout>

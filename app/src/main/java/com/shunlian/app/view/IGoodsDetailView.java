@@ -70,4 +70,9 @@ public interface IGoodsDetailView extends IView {
      * @param adapter
      */
     default void setCommentAdapter(CommentAdapter adapter){}
+
+    /**
+     * 优品
+     */
+    default void superiorProduct(){}
 }

@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverHotAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PDiscoverTiezi;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IDiscoverTiezi;
@@ -19,11 +24,16 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class DiscoverTieziAct extends BaseActivity implements View.OnClickListener, IDiscoverTiezi {
+public class DiscoverTieziAct extends BaseActivity implements View.OnClickListener, IDiscoverTiezi, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.miv_more)
     MyImageView miv_more;
 
@@ -57,10 +67,61 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
     private PDiscoverTiezi pDiscoverTiezi;
     private LinearLayoutManager linearLayoutManager;
     private DiscoverHotAdapter newAdapter;
     private String circle_id;
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.findDetail();
+        if (pDiscoverTiezi != null)
+            quick_actions.shareInfo(pDiscoverTiezi.getShareInfoParam());
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
 
     public static void startAct(Context context, String circle_id) {
         Intent intent = new Intent(context, DiscoverTieziAct.class);
@@ -80,12 +141,6 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             case R.id.mtv_attend:
                 DiscoverPublishPhotoAct.startAct(DiscoverTieziAct.this, circle_id);
                 break;
-            case R.id.miv_more:
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.findDetail();
-                if (pDiscoverTiezi != null)
-                    quick_actions.shareInfo(pDiscoverTiezi.getShareInfoParam());
-                break;
         }
     }
 
@@ -93,7 +148,6 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     protected void initListener() {
         super.initListener();
         mtv_attend.setOnClickListener(this);
-        miv_more.setOnClickListener(this);
         rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -136,6 +190,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         circle_id = getIntent().getStringExtra("circle_id");
         pDiscoverTiezi = new PDiscoverTiezi(this, this, circle_id);
         view_bg.setAlpha(0);
@@ -194,6 +249,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

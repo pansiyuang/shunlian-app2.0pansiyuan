@@ -95,6 +95,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private int px;
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
+//    private String tag="";
 
 
     public QuickActions(@NonNull Context context) {
@@ -390,6 +391,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 专题页
      */
     public void special(){
+//        tag="special";
         setShowItem(1,2,3,6,7,8);
         shareStyle1Dialog();
     }
@@ -486,9 +488,21 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         mllayout_content.setVisibility(VISIBLE);
                         hide();
                     }
+
+//                    @Override
+//                    public void onHideCallback() {
+//                        dealHideBack();
+//                    }
                 }).build();
     }
 
+//    public void dealHideBack(){
+//        switch (tag){
+//            case "special":
+//
+//                break;
+//        }
+//    }
     /**
      * 分享微信和复制链接，图文分享
      */

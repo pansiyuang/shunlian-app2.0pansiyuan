@@ -2,7 +2,6 @@ package com.shunlian.app.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -90,23 +89,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     public ParamDialog(Context context, GoodsDeatilEntity goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
-        this.goodsDeatilEntity = goods;
-        this.specs = goods.specs;
-        this.mSku = goods.sku;
-        this.hasOption = goods.has_option;
-        mCurrentValues = new ArrayList<>();
-        initMap();
+        init();
+        setParam(goods);
     }
 
     public ParamDialog(Context context, GoodsDeatilEntity.Goods goods) {
         this(context, R.style.MyDialogStyleBottom);
         this.mContext = context;
-        this.mGoods = goods;
-        this.specs = goods.goods_info.specs;
-        this.mSku = goods.goods_info.sku;
-        this.hasOption = goods.goods_info.has_option;
-        mCurrentValues = new ArrayList<>();
-        initMap();
+        init();
+        setParamGoods(goods);
     }
 
 
@@ -114,13 +105,11 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         super(context, themeResId);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select, null, false);
+    private void init(){
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select,
+                null, false);
         setContentView(view);
         ButterKnife.bind(this, view);
-        initViews();
         initListeners();
         setCanceledOnTouchOutside(false);
 
@@ -132,20 +121,29 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         lp.gravity = Gravity.BOTTOM;
         win.setAttributes(lp);
 
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT, recycleHeight);
         recycler_param.setLayoutParams(params);
+    }
 
-        if (specs == null || specs.size() == 0) {
-            recycler_param.setVisibility(View.INVISIBLE);
-            tv_param.setVisibility(View.INVISIBLE);
-        } else {
-            paramItemAdapter = new ParamItemAdapter(specs);
-            linearLayoutManager = new LinearLayoutManager(mContext);
-            recycler_param.setLayoutManager(linearLayoutManager);
-            recycler_param.setAdapter(paramItemAdapter);
-            tv_param.setVisibility(View.VISIBLE);
-        }
+    public void setParam(GoodsDeatilEntity goods){
+        this.goodsDeatilEntity = goods;
+        this.specs = goods.specs;
+        this.mSku = goods.sku;
+        this.hasOption = goods.has_option;
+        mCurrentValues = new ArrayList<>();
+        initMap();
+        initViews();
+    }
+
+    public void setParamGoods(GoodsDeatilEntity.Goods goods){
+        this.mGoods = goods;
+        this.specs = goods.goods_info.specs;
+        this.mSku = goods.goods_info.sku;
+        this.hasOption = goods.goods_info.has_option;
+        mCurrentValues = new ArrayList<>();
+        initMap();
+        initViews();
     }
 
     public void initViews() {
@@ -169,6 +167,17 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), mGoods.stock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
         }
+
+        if (specs == null || specs.size() == 0) {
+            recycler_param.setVisibility(View.INVISIBLE);
+            tv_param.setVisibility(View.INVISIBLE);
+        } else {
+            paramItemAdapter = new ParamItemAdapter(specs);
+            linearLayoutManager = new LinearLayoutManager(mContext);
+            recycler_param.setLayoutManager(linearLayoutManager);
+            recycler_param.setAdapter(paramItemAdapter);
+            tv_param.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -180,10 +189,17 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     }
 
     public void initMap() {
+        tv_param.setText(mContext.getResources().getString(R.string.goods_pleaseselectparam));
         if (specs != null && specs.size() != 0) {
             linkedHashMap = new LinkedHashMap<>();
             for (int i = 0; i < specs.size(); i++) {
                 linkedHashMap.put(specs.get(i).name, null);
+                List<GoodsDeatilEntity.Values> values = specs.get(i).values;
+                if (values != null && values.size() > 0){
+                    for(GoodsDeatilEntity.Values value : values){
+                        value.isSelect = false;
+                    }
+                }
             }
         }
     }
@@ -236,7 +252,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_param_select, parent, false));
+            ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_param_select, parent, false));
             return viewHolder;
         }
 
@@ -250,7 +267,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 @Override
                 public View getView(FlowLayout parent, int position, Object o) {
                     GoodsDeatilEntity.Values values = mValues.get(position);
-                    View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tag, parent, false);
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tag,
+                            parent, false);
                     TextView tv = (TextView) view.findViewById(R.id.tv_tag);
                     tv.setText(values.name);
 
@@ -279,7 +297,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                                 GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, s.thumb);
                                 dia_tv_price.setText("¥" + s.price);
                                 totalStock = Integer.valueOf(s.stock);
-                                tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), s.stock));
+                                tv_count.setText(String.format(mContext.getResources()
+                                        .getString(R.string.goods_stock), s.stock));
                                 tv_param.setText(s.name);
                             }
                         }
@@ -331,7 +350,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             mCurrentValues.add((GoodsDeatilEntity.Values) e.getValue());
         }
         // 按升序排序
-        Collections.sort(mCurrentValues, (values, t1) -> Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id)));
+        Collections.sort(mCurrentValues, (values, t1) ->
+                Integer.valueOf(values.id).compareTo(Integer.valueOf(t1.id)));
 
         //拼接id字符 按下划线拼接
         StringBuffer result = new StringBuffer();

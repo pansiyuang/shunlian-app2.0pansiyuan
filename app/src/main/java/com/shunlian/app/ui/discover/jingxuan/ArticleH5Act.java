@@ -68,20 +68,16 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        messageCountManager.setTextCount(tv_msg_count);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        messageCountManager.setTextCount(tv_msg_count);
-
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
     }
 
     @Override
@@ -90,17 +86,26 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(this);
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
             if (messageCountManager.isLoad()) {
-                messageCountManager.setTextCount(tv_msg_count);
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
             } else {
                 messageCountManager.initData();
             }
             messageCountManager.setOnGetMessageListener(this);
         }
         super.onResume();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override

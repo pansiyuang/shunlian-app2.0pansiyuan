@@ -6,5 +6,5 @@
     android:layout_height="wrap_content"
     app:bb_delay="5"
     app:bb_period="3"
-    app:bb_scale="0.5" />
+    app:bb_scale="0.5333" />
 
