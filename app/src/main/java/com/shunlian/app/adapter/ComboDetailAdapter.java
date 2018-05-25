@@ -329,8 +329,12 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         @OnClick(R.id.mtv_select)
         public void tvSelect(){
             final GoodsDeatilEntity.Goods goods = lists.get(getAdapterPosition() - 2);
-            mParamDialog = new ParamDialog(context,goods);
-            mParamDialog.isSelectCount = false;
+            if (mParamDialog == null) {
+                mParamDialog = new ParamDialog(context, goods);
+                mParamDialog.isSelectCount = false;
+            }else {
+                mParamDialog.setParamGoods(goods);
+            }
             mParamDialog.show();
             mParamDialog.setOnSelectCallBack((sku, count) -> {
                 String name = "";

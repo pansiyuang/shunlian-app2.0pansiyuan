@@ -115,7 +115,8 @@ public class ComboAdapter extends BaseRecyclerAdapter {
         @Override
         public void handleList(RecyclerView.ViewHolder holder, int position) {
             PicViewHolder mHoler = (PicViewHolder) holder;
-            GlideUtils.getInstance().loadImage(context, mHoler.miv_combo, goods.get(position).thumb);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHoler.miv_combo, goods.get(position).thumb,160,160);
         }
 
         public class PicViewHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
