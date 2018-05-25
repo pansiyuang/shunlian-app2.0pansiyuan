@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/title_layout"
+        layout="@layout/title_common_layout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_buy"
+        android:layout_below="@+id/title_layout"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_buy"
+        android:layout_width="match_parent"
+        android:layout_height="42.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/pink_color"
+        android:gravity="center"
+        android:text="@string/to_buy"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 </RelativeLayout>

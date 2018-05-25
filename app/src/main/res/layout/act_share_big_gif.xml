@@ -106,15 +106,19 @@
 
                             <SeekBar
                                 android:id="@+id/seekbar_plus"
-                                style="@style/plus_seekbar"
                                 android:layout_width="206dp"
                                 android:layout_height="wrap_content"
                                 android:max="100"
+                                android:maxHeight="10dp"
+                                android:minHeight="10dp"
                                 android:paddingBottom="0dp"
                                 android:paddingEnd="0dp"
                                 android:paddingStart="0dp"
                                 android:paddingTop="0dp"
-                                android:splitTrack="false" />
+                                android:progressDrawable="@drawable/bg_plus_seekbar"
+                                android:splitTrack="false"
+                                android:thumb="@drawable/point_plus_seekbar"
+                                android:thumbOffset="0dp" />
 
                             <TextView
                                 android:id="@+id/tv_msg_count"

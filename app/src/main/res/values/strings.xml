@@ -730,4 +730,7 @@
     <string name="plus_group_month_money">本月社群销售额</string>
     <string name="plus_group_month_count">本月社群销新增Plus数</string>
     <string name="super_product">优品</string>
+    <string name="gif_bag_list">礼包列表</string>
+    <string name="to_buy">立即购买</string>
+    <string name="plus_product_detail">PLUS礼包详情</string>
 </resources>

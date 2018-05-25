@@ -3,6 +3,7 @@ package com.shunlian.app.ui.plus;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -24,6 +25,9 @@ public class ShareBigGifAct extends BaseActivity {
 
     public final int Mode_Month = 1001;
     public final int Mode_Year = 1002;
+
+    @BindView(R.id.seekbar_plus)
+    SeekBar seekbar_plus;
 
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
@@ -69,6 +73,9 @@ public class ShareBigGifAct extends BaseActivity {
 
     @BindView(R.id.tv_group_count)
     TextView tv_group_count;
+
+    @BindView(R.id.miv_invite)
+    MyImageView miv_invite;
 
     private int screenWidth;
     private int tabOneWidth, tabTwoWidth;
@@ -116,6 +123,7 @@ public class ShareBigGifAct extends BaseActivity {
         tv_store_gif.setOnClickListener(this);
         tv_invitations.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
+        miv_invite.setOnClickListener(this);
     }
 
     private void initTabsWidth() {
@@ -150,6 +158,9 @@ public class ShareBigGifAct extends BaseActivity {
                 break;
             case R.id.tv_title_right:
                 SuperProductsAct.startAct(this);
+                break;
+            case R.id.miv_invite:
+                GifBagListAct.startAct(this);
                 break;
         }
         super.onClick(view);

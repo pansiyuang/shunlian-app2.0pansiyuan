@@ -2126,4 +2126,20 @@ public interface ApiService {
      */
     @GET("superiorspecial/getdata")
     Call<BaseEntity<SuperProductEntity>> superProductsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包列表
+     *
+     * @return
+     */
+    @GET("product/productlist")
+    Call<BaseEntity<GifProductEntity>> getProductList(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包详情
+     *
+     * @return
+     */
+    @GET("product/productdetail")
+    Call<BaseEntity<ProductDetailEntity>> getProductDetail(@QueryMap Map<String, String> map);
 }
