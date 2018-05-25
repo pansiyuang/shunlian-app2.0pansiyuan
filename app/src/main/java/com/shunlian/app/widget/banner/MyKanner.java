@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 
 
@@ -29,13 +30,18 @@ public class MyKanner extends BaseBanner<String, MyKanner> {
     @Override
     public View onCreateItemView(int position) {
 
-        RelativeLayout container = new RelativeLayout(context);
+//        RelativeLayout container = new RelativeLayout(context);
+//        ImageView iv = new ImageView(context);
+//        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+//
+////        HomeAllEntity.Data.Banner banner = list.get(position);
+//        GlideUtils.getInstance().communityBanner(getContext(),iv,list.get(position));
+
+        LinearLayout container = new LinearLayout(context);
         ImageView iv = new ImageView(context);
-        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-//        HomeAllEntity.Data.Banner banner = list.get(position);
-        GlideUtils.getInstance().communityBanner(getContext(),iv,list.get(position));
-
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(context);
+        GlideUtils.getInstance().loadOverrideImage(getContext(),iv,list.get(position),deviceWidth,(int)(deviceWidth*scale));
 //        iv.setTag(R.id.tag_typeId, banner.getType());
 //        iv.setTag(R.id.tag_itemId, banner.getItemId());
 //

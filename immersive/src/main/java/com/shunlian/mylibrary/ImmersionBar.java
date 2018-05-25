@@ -917,6 +917,18 @@ public class ImmersionBar {
     }
 
     /**
+     * 分享专用
+     *
+     * @param statusAlpha the status alpha
+     * @return the immersion bar
+     */
+    public ImmersionBar shareSever(@FloatRange(from = 0f, to = 1f) float statusAlpha) {
+        mBarParams.statusBarAlpha = statusAlpha;
+        mBarParams.darkFont = true;
+        return this;
+    }
+
+    /**
      * 导航栏透明度
      *
      * @param navigationAlpha the navigation alpha

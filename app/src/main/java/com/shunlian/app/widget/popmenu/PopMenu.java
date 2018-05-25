@@ -19,9 +19,7 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringChain;
 import com.shunlian.app.R;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import java.util.ArrayList;
@@ -117,7 +115,7 @@ public class PopMenu {
         showSubMenus(mGridLayout);
 
         isShowing = true;
-        ImmersionBar.with(mActivity).statusBarDarkFont(true, 0.8f).init();
+        ImmersionBar.with(mActivity).shareSever(0.8f).init();
     }
 
     /**
@@ -140,7 +138,8 @@ public class PopMenu {
             mHander.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ImmersionBar.with(mActivity).statusBarDarkFont(true, 0.2f).init();
+                    ImmersionBar.with(mActivity).statusBarColor(R.color.white).
+                    statusBarDarkFont(true, 0.2f).init();
                     mPopMenuItemListener.onHideCallback();
                 }
             },300);

@@ -163,7 +163,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        if (rv_view.getScrollState() == 0) {
+        if (rv_view!=null&&rv_view.getScrollState() == 0) {
             firstPageAdapter.setPageLoading(page, allPage);
             for (int i = 0; i < mDatas.size(); i++) {
                 GetDataEntity.MData mData = new GetDataEntity.MData();

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.shunlian.app.widget.MyLinearLayout
+    <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mllayout_title"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -20,72 +20,14 @@
             android:layout_height="16dp"
             android:layout_marginLeft="20dp"
             android:scaleType="fitXY"
+            android:layout_centerVertical="true"
             android:src="@mipmap/icon_common_back_black" />
-        <EditText
-            android:id="@+id/edt_goods_search"
-            android:layout_width="217dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_toLeftOf="@+id/tv_search_cancel"
-            android:background="@drawable/rounded_corner_solid_gray_8px"
-            android:drawableLeft="@mipmap/icon_common_search_gray"
-            android:drawablePadding="6.5dp"
-            android:gravity="center_vertical"
-            android:hint="@string/search_goods"
-            android:imeOptions="actionSearch"
-            android:paddingLeft="10dp"
-            android:singleLine="true"
-            android:textColor="@color/new_text"
-            android:textColorHint="@color/share_text"
-            android:textSize="14sp"
-            android:visibility="gone"/>
-        <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/mrlayout_search"
-            android:layout_width="217dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/rounded_corner_solid_gray_8px"
-            android:gravity="center_vertical"
-            android:padding="4dp">
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_key"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_corner_solid_pinc_8px"
-                android:gravity="center"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </com.shunlian.app.widget.MyRelativeLayout>
-
-        <com.shunlian.app.widget.MyRelativeLayout
-            android:id="@+id/mrlayout_sort"
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="17dp"
-            android:orientation="vertical">
-
-            <com.shunlian.app.widget.MyImageView
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/icon_shop_fenlei_b" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="@string/store_sort"
-                android:textColor="@color/share_text"
-                android:textSize="10sp" />
-        </com.shunlian.app.widget.MyRelativeLayout>
-
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/rl_more"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp">
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_dot"
@@ -108,7 +50,75 @@
                 android:textSize="9sp"
                 android:visibility="gone" />
         </com.shunlian.app.widget.MyRelativeLayout>
-    </com.shunlian.app.widget.MyLinearLayout>
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@id/rl_more">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/icon_shop_fenlei_b" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="@string/store_sort"
+                android:textColor="@color/share_text"
+                android:textSize="10sp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+        <EditText
+            android:id="@+id/edt_goods_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="17dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/miv_close"
+            android:layout_toLeftOf="@id/mrlayout_sort"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
+            android:drawableLeft="@mipmap/icon_common_search_gray"
+            android:drawablePadding="6.5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/search_goods"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="@color/new_text"
+            android:textColorHint="@color/share_text"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_search"
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_toLeftOf="@id/mrlayout_sort"
+            android:layout_marginRight="17dp"
+            android:background="@drawable/rounded_corner_solid_gray_8px"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:layout_toRightOf="@id/miv_close">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_key"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_corner_solid_pinc_8px"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.shunlian.app.widget.MyRelativeLayout>
+
+    </com.shunlian.app.widget.MyRelativeLayout>
 
 
     <com.shunlian.app.widget.MyLinearLayout

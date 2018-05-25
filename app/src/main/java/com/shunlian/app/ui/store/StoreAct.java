@@ -648,6 +648,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             LinearLayoutManager newManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             rv_discountMenu.setLayoutManager(newManager);
             rv_discountMenu.setAdapter(storeDiscountMenuAdapter);
+            rv_discountMenu.setNestedScrollingEnabled(false);
             storeDiscountMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {

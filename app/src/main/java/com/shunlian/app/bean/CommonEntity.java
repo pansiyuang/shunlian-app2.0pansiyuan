@@ -49,4 +49,5 @@ public class CommonEntity {
     public String image;
     public String share_url;
     public String desc;
+
 }

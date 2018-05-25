@@ -418,6 +418,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".ui.h5.H5SpecialAct"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
             android:name=".photopick.PhotoPickerActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

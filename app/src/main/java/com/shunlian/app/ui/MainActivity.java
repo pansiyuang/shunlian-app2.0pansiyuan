@@ -33,6 +33,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
@@ -495,8 +496,9 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
 
     @Override
     public void setAD(AdEntity data) {
-        if ("1".equals(data.show)){
+        if ("1".equals(data.show)&&!SharedPrefUtil.getCacheSharedPrf("ad_id","").equals(data.list.ad_sn)){
             initDialog(data);
+            SharedPrefUtil.saveCacheSharedPrf("ad_id",data.list.ad_sn);
         }
     }
 
