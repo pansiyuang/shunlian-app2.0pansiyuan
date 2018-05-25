@@ -31,7 +31,7 @@ public class SecondStepView extends View{
 	private void init(){
 		//拿到帧动画第三章图片，我们的FirstStepView的宽高也是根据这张图片来测量的，所以我们就能
 		//保证两个View的宽高一致了
-		endBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.turkey_release);
+		endBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.turkey_18);
 	}
 
 	/**

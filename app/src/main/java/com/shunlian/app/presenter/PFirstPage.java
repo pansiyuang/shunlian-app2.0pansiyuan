@@ -103,12 +103,12 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
 
     }
 
-    public void getContentData(String id){
+    public void getContentData(String id,boolean isShow){
         Map<String, String> map = new HashMap<>();
         map.put("id",id);
         sortAndMD5(map);
         Call<BaseEntity<GetDataEntity>> baseEntityCall = getApiService().channelGetData(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetDataEntity>>() {
+        getNetData(isShow, baseEntityCall, new SimpleNetDataCallback<BaseEntity<GetDataEntity>>() {
             @Override
             public void onSuccess(BaseEntity<GetDataEntity> entity) {
                 super.onSuccess(entity);

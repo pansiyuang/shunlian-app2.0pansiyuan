@@ -128,6 +128,7 @@ public class FirstSetpView extends View{
 //		canvas.drawBitmap(scaledLetter, measuredWidth-scaledLetter.getWidth(), measuredHeight/2-scaledLetter.getHeight()/2, mPaint);
 		canvas.drawBitmap(scaledLetter, measuredWidth-scaledLetter.getWidth(), measuredHeight/2-scaledLetter.getHeight()/2, mPaint);
 		canvas.restore();
+
 		canvas.save();
 		canvas.scale(mCurrentProgress, mCurrentProgress , scaledTurkey.getWidth()/2, measuredHeight/2);
 		mPaint.setAlpha(mCurrentAlpha);
