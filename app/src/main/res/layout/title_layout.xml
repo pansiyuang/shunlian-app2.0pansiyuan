@@ -323,6 +323,41 @@
             app:tv_control_adapter="true"
             app:tv_margin_left="10" />
 
+        <!--plus 赚-->
+        <LinearLayout
+            android:id="@+id/llayout_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:background="@drawable/rounded_corner_1c1b20_2px"
+            android:gravity="center">
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F3C262"
+                android:gravity="center"
+                android:text="赚"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:textColor="@color/new_text"
+                android:textSize="11sp" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_plus_prefPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_new_goods"
             android:layout_width="wrap_content"
@@ -375,40 +410,6 @@
             app:tv_margin_left="12"
             android:padding="3dp"
             android:gravity="center"/>
-        <!--plus 赚-->
-        <LinearLayout
-            android:id="@+id/llayout_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:background="@drawable/rounded_corner_1c1b20_2px"
-            android:gravity="center">
-
-            <com.shunlian.app.widget.MyTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F3C262"
-                android:gravity="center"
-                android:text="赚"
-                android:paddingRight="2dp"
-                android:paddingLeft="2dp"
-                android:textColor="@color/new_text"
-                android:textSize="11sp" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_plus_prefPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:textColor="@color/white"
-                android:textSize="11sp" />
-
-        </LinearLayout>
 
     </com.shunlian.app.widget.MyLinearLayout>
     <!--专题活动显示市场价和活动价-->

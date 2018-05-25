@@ -34,6 +34,7 @@ public class GoodsDeatilEntity implements Parcelable {
     public String send_time;
     public String quality_guarantee;
     public String credit;
+    public String type;// 普通商品0，优品1
 
     public String is_preferential;//店铺优惠  没有值的时候为空字符串
     public String member_cart_count;//详情页用户购物车角标数字
