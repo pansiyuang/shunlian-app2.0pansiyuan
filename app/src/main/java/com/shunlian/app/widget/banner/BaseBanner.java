@@ -7,11 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,8 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.DiscoveryCircleEntity;
-import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -40,8 +36,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import butterknife.OnPageChange;
 
 public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends RelativeLayout {
     protected static final String TAG = BaseBanner.class.getSimpleName();
@@ -288,7 +282,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
     /**
      * set data source list
      */
-    public void setBanner(List<E> list) {
+    public void setBanner(List<E> list,int... params) {
         this.list = list;
         if (list != null && list.size() == 1) {
             removeAllViews();
@@ -296,14 +290,22 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             myImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             GlideUtils.getInstance().loadImage(getContext(), myImageView, (String) list.get(0));
             addView(myImageView, 0, lp_vp);
-            myImageView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickL != null) {
-                        onItemClickL.onItemClick(0);
-                    }
+            myImageView.setOnClickListener(v -> {
+                if (onItemClickL != null) {
+                    onItemClickL.onItemClick(0);
                 }
             });
+        }
+        if (params.length > 0 && params[0] == 1) {
+            ImageView imageView = new ImageView(getContext());
+            addView(imageView, 1);
+            RelativeLayout.LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
+            int i = dp2px(50);
+            layoutParams.width = i;
+            layoutParams.height = i;
+            layoutParams.topMargin = dp2px(70);
+            layoutParams.leftMargin = i / 5;
+            imageView.setImageResource(R.mipmap.img_plus_youping_xiao);
         }
         startScroll();
     }

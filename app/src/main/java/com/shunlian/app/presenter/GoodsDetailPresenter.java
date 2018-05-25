@@ -122,6 +122,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         shareInfoParam.start_time = data.common_activity.start_time;
                         shareInfoParam.act_label = data.is_preferential;
                     }
+
+                    if ("1".equals(data.type)){
+                        iView.superiorProduct();
+                    }
                 }
             }
         });

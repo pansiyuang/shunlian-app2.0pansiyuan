@@ -1113,6 +1113,19 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         currentQuickAction = -1;
     }
 
+    /**
+     * 优品
+     */
+    @Override
+    public void superiorProduct() {
+        if (mtv_buy_immediately != null) {
+            mtv_buy_immediately.setTextColor(Color.parseColor("#111111"));
+            mtv_buy_immediately.setBackgroundColor(Color.parseColor("#F3C262"));
+        }
+        if (mtv_add_car != null)
+            mtv_add_car.setBackgroundColor(Color.parseColor("#111111"));
+    }
+
     @Override
     protected void onDestroy() {
         if (quick_actions != null)

@@ -387,7 +387,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.recy_cardview.setVisibility(View.VISIBLE);
                 mHolder.miv_empty.setVisibility(View.GONE);
                 mHolder.view_line2.setVisibility(View.GONE);
-                CommentCardViewAdapter commentCardViewAdapter = new CommentCardViewAdapter(context, false, comments);
+                CommentCardViewAdapter commentCardViewAdapter = new
+                        CommentCardViewAdapter(context, false, comments);
                 mHolder.recy_cardview.setAdapter(commentCardViewAdapter);
                 commentCardViewAdapter.setOnItemClickListener((view,pos)-> {
                     if (pos >= comments.size()) {
@@ -867,7 +868,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         if (holder instanceof BannerHolder){
             BannerHolder mHolder = (BannerHolder) holder;
             if (mGoodsEntity.pics != null) {
-                mHolder.kanner.setBanner(mGoodsEntity.pics);
+                String type = mGoodsEntity.type;
+                if ("1".equals(type)){
+                    mHolder.kanner.setBanner(mGoodsEntity.pics,1);
+                }else {
+                    mHolder.kanner.setBanner(mGoodsEntity.pics);
+                }
                 mHolder.kanner.setOnItemClickL(pos-> {
                     BigImgEntity entity = new BigImgEntity();
                     entity.itemList = mGoodsEntity.pics;
