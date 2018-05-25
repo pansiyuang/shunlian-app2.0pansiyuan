@@ -2127,4 +2127,11 @@ public interface ApiService {
      */
     @POST("message/read")
     Call<BaseEntity<EmptyEntity>> messageRead(@Body RequestBody body);
+
+    /**
+     * 处罚
+     * @return
+     */
+    @POST("message/punish")
+    Call<BaseEntity<PunishEntity>> punish(@QueryMap Map<String, String> map);
 }

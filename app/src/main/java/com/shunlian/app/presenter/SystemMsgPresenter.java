@@ -13,6 +13,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
+import com.shunlian.app.ui.message.PunishAct;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
@@ -132,6 +133,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
                 ExchangeDetailAct.startAct(context, body.id);
                 break;
             case "6":
+                PunishAct.startAct(context,body.id,body.opt);
                 break;
             case "7":
                 ExperienceDetailAct.startAct(context, body.id);
@@ -158,6 +160,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         Map<String,String> map = new HashMap<>();
         map.put("type",type);
         map.put("msg_id",msg_id);
+        sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService()
                 .messageRead(getRequestBody(map));

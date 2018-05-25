@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,9 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.ComboDetailPresenter;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IComboDetailView;
+import com.shunlian.app.widget.MyTextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +34,13 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
+
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
     private Map<String, String> goods_sku;
     private int combo_size;
     private String combo_id;
@@ -51,6 +61,8 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        mtv_toolbar_title.setText(getStringResouce(R.string.package_details));
         combo_id = getIntent().getStringExtra("combo_id");
         String goods_id = getIntent().getStringExtra("goods_id");
         ComboDetailPresenter presenter = new ComboDetailPresenter(this,this);
@@ -58,9 +70,14 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
-
         goods_sku = new HashMap<>();
 
+    }
+
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.order();
     }
 
     /**
@@ -94,18 +111,6 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
 
     @OnClick(R.id.mtv_buy)
     public void buyCombo(){
-//        if (goods_sku.size() != combo_size){
-//            Common.staticToast("请选择商品属性");
-//        }else {
-//            ComboEntity comboEntity = new ComboEntity(combo_id,goods_sku);
-//            try {
-//                String s = new ObjectMapper().writeValueAsString(comboEntity);
-//                System.out.println("========="+s);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         ComboEntity comboEntity = new ComboEntity(combo_id,goods_sku);
         try {
             String s = new ObjectMapper().writeValueAsString(comboEntity);
@@ -113,5 +118,12 @@ public class ComboDetailAct extends SideslipBaseActivity implements IComboDetail
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }
