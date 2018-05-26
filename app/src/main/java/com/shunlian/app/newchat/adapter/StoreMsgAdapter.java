@@ -56,18 +56,17 @@ public class StoreMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         VipViewholder vipViewholder = (VipViewholder) holder;
         StoreMsgEntity.StoreMsg storeMsg = lists.get(position);
-        StoreMsgEntity.Content content = storeMsg.content;
-        vipViewholder.tv_title.setText(content.title);
-        GlideUtils.getInstance().loadImage(context, vipViewholder.miv_icon, storeMsg.url);
-        vipViewholder.tv_name.setText(content.username);
-        vipViewholder.tv_id_number.setText(content.sl_id);
-        vipViewholder.tv_attention_date.setText(content.create_time);
+        StoreMsgEntity.Body body = storeMsg.body;
+        vipViewholder.tv_title.setText(body.title);
+        GlideUtils.getInstance().loadImage(context, vipViewholder.miv_icon, body.avatar);
+        vipViewholder.tv_name.setText(body.nickname);
+        vipViewholder.tv_attention_date.setText(storeMsg.create_time);
         if (isVip) {
-            vipViewholder.tv_id_number.setText(content.sl_id);
-            vipViewholder.tv_attention_date.setText("关注时间:" + content.create_time);
+            vipViewholder.tv_id_number.setText("会员ID:" + body.member_id);
+            vipViewholder.tv_attention_date.setText("关注时间:" + storeMsg.create_time);
         } else {
-            vipViewholder.tv_id_number.setText(content.create_time);
-            vipViewholder.tv_attention_date.setText("预计收益:" + getString(R.string.common_yuan) + content.money);
+            vipViewholder.tv_id_number.setText(storeMsg.create_time);
+            vipViewholder.tv_attention_date.setText("预计收益:" + getString(R.string.common_yuan) + body.money);
         }
         vipViewholder.tv_msg_del.setOnClickListener(v -> {
             if (mListener != null) {

@@ -117,13 +117,13 @@ public class TopicFragment extends BaseFragment implements IFoundTopicView, Base
     @Override
     public void onItemClick(View view, int position) {
         StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
-        LogUtil.httpLogW("position：" + position + "  expire:" + storeMsg.expire);
-        if ("1".equals(storeMsg.expire)) {
-            Common.staticToast("该文章已过期");
-        } else {
+        StoreMsgEntity.Body body = storeMsg.body;
+        if (1 == body.expire) {
             storeMsg.is_read = 1;
             mAdapter.notifyItemChanged(position);
-            ArticleH5Act.startAct(getActivity(), storeMsg.article_id, ArticleH5Act.MODE_SONIC);
+            ArticleH5Act.startAct(getActivity(), storeMsg.id, ArticleH5Act.MODE_SONIC);
+        } else {
+            Common.staticToast("该文章已过期");
         }
     }
 }

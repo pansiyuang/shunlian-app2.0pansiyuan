@@ -228,6 +228,18 @@
     <!--闪屏页-->
     <color name="value_DB1211">#DB1211</color>
     <color name="value_979FA3">#979FA3</color>
+
+    <!--plus-->
+    <color name="value_FEE6A6">#FEE6A6</color>
+    <color name="value_FBF6E2">#FBF6E2</color>
+    <color name="value_7C1212">#7C1212</color>
+    <color name="value_FF3D46">#FF3D46</color>
+    <color name="value_FAB0AF">#FAB0AF</color>
+    <color name="value_E72223">#E72223</color>
+    <color name="value_601921">#601921</color>
+    <color name="value_E60F18">#E60F18</color>
+    <color name="value_F3C262">#F3C262</color>
+    <color name="value_FF3B48">#FF3B48</color>
 </resources>
 
 

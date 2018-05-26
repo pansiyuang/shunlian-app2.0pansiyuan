@@ -150,7 +150,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
     @Override
     public void delSuccess(String msgId) {
         for (int i = 0; i < storeMsgList.size(); i++) {
-            if (msgId.equals(storeMsgList.get(i).msg_id)) {
+            if (msgId.equals(storeMsgList.get(i).id)) {
                 storeMsgList.remove(i);
                 break;
             }
@@ -161,6 +161,6 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
     @Override
     public void onDel(int position) {
         StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
-        vipMsgPresenter.deleteMessage(String.valueOf(currentDelType), storeMsg.msg_id);
+        vipMsgPresenter.deleteMessage(String.valueOf(currentDelType), storeMsg.id);
     }
 }

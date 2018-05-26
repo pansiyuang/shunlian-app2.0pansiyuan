@@ -1657,7 +1657,6 @@ public interface ApiService {
     @POST("balance/setPayPassword")
     Call<BaseEntity<EmptyEntity>> balanceSetPayPassword(@Body RequestBody body);
 
-
     /**
      * 修改支付密码
      *
@@ -2127,6 +2126,30 @@ public interface ApiService {
      */
     @POST("message/read")
     Call<BaseEntity<EmptyEntity>> messageRead(@Body RequestBody body);
+
+    /**
+     * 优品列表
+     *
+     * @return
+     */
+    @GET("superiorspecial/getdata")
+    Call<BaseEntity<SuperProductEntity>> superProductsList(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包列表
+     *
+     * @return
+     */
+    @GET("product/productlist")
+    Call<BaseEntity<GifProductEntity>> getProductList(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包详情
+     *
+     * @return
+     */
+    @GET("product/productdetail")
+    Call<BaseEntity<ProductDetailEntity>> getProductDetail(@QueryMap Map<String, String> map);
 
     /**
      * 处罚
