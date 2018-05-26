@@ -71,6 +71,11 @@ public class ProductDetailAdapter extends BaseRecyclerAdapter<String> {
     }
 
     @Override
+    public int getItemCount() {
+        return super.getItemCount() + 2;
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case BANNER:
@@ -104,7 +109,7 @@ public class ProductDetailAdapter extends BaseRecyclerAdapter<String> {
 
     public void handleImage(RecyclerView.ViewHolder holder, int position) {
         ImgViewHolder imgViewHolder = (ImgViewHolder) holder;
-        String s = lists.get(position);
+        String s = lists.get(position - 2);
         if (Pattern.matches(".*(w=\\d+&h=\\d+).*", s)) {
             Matcher m = p.matcher(s);
             int w = 0;
