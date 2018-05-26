@@ -37,16 +37,16 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPersonalView;
+import com.shunlian.app.widget.CompileScrollView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
-import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.refresh.ring.RingRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedRingHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -187,12 +187,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //    SeekBar seekbar_grow;
     @BindView(R.id.mtv_payNum)
     MyTextView mtv_payNum;
-    @BindView(R.id.refreshview)
-    RingRefreshView refreshview;
+//    @BindView(R.id.refreshview)
+//    RingRefreshView refreshview;
     @BindView(R.id.view_bg)
     View view_bg;
-    @BindView(R.id.msv_out)
-    MyScrollView msv_out;
+    @BindView(R.id.csv_out)
+    CompileScrollView csv_out;
     @BindView(R.id.rv_article)
     RecyclerView rv_article;
     @BindView(R.id.rLayout_title)
@@ -209,6 +209,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public final static String ASTERISK = "****";
     public final static String KEY = "person_isShow";
     private PersonalcenterEntity personalcenterEntity;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
+
 
     //    private Timer outTimer;
     @Override
@@ -271,10 +274,14 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                .statusBarColor(R.color.white)
 //                .statusBarDarkFont(true, 0.2f)
 //                .init();
+        //新增下拉刷新
+        NestedRingHeader header = new NestedRingHeader(getContext());
+        lay_refresh.setRefreshHeaderView(header);
+
         EventBus.getDefault().register(this);
         ImmersionBar.with(this).titleBar(rLayout_title, false).init();
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
+//        refreshview.setCanRefresh(true);
+//        refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
@@ -322,9 +329,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         rl_more.setOnClickListener(this);
         mllayout_shouhuo.setOnClickListener(this);
         view_bg.setOnClickListener(this);
-        msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
+        csv_out.setOnScrollListener(new CompileScrollView.OnScrollListener() {
             @Override
-            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+//            public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
+            public void scrollCallBack(int y, int oldy) {
                 if (y > 30) {
                     view_bg.setAlpha(1);
                 } else if (y > 0) {
@@ -332,17 +340,24 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     view_bg.setAlpha(alpha);
                 } else {
                     view_bg.setAlpha(0);
+                    csv_out.setFocusable(false);
                 }
             }
         });
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
+//        refreshview.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                personalcenterPresenter.getApiData();
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//            }
+//        });
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
                 personalcenterPresenter.getApiData();
-            }
-
-            @Override
-            public void onLoadMore() {
             }
         });
     }
@@ -359,7 +374,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         changeState();
         managerUrl = personalcenterEntity.son_manage_url;
         orderUrl = personalcenterEntity.son_order_url;
-        refreshview.stopRefresh(true);
+//        refreshview.stopRefresh(true);
+        lay_refresh.setRefreshing(false);
+
 //        refreshview.stopLoadMore(true);
         mtv_name.setText(personalcenterEntity.nickname);
 //        int percent = Integer.parseInt(personalcenterEntity.next_level_percent);
@@ -563,6 +580,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             rv_article.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             rv_article.addItemDecoration(new MHorItemDecoration(getContext(), 5, 10, 10));
             rv_article.setAdapter(helpArticleAdapter);
+            rv_article.setNestedScrollingEnabled(false);
             helpArticleAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
@@ -691,7 +709,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void showFailureView(int request_code) {
-        refreshview.stopRefresh(true);
+//        refreshview.stopRefresh(true);
+        lay_refresh.setRefreshing(false);
     }
 
     @Override
