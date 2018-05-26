@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.fragment.first_page;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
-    private boolean isFirst = false;
+    private boolean isFirst = false,isShow=true;
 
 
     public static BaseFragment getInstance(String channel_id) {
@@ -64,7 +65,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     public void refresh(){
         mDatasss.clear();
-        pFirstPage.getContentData(channel_id);
+        pFirstPage.getContentData(channel_id,isShow);
+        isShow=true;
         if (firstPageAdapter != null) {
             firstPageAdapter.showPosition = -1;
             firstPageAdapter.isShow = false;
@@ -76,6 +78,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
+                isShow=false;
                refresh();
             }
         });
@@ -110,7 +113,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         }
 //        channel_id = "15";
         pFirstPage = new PFirstPage(baseActivity, this, this);
-        pFirstPage.getContentData(channel_id);
+        pFirstPage.getContentData(channel_id,isShow);
     }
 
 
@@ -136,7 +139,14 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
-        lay_refresh.setRefreshing(false);
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lay_refresh.setRefreshing(false);
+            }
+        },3000);
+
         int size=0;
         mDatass.clear();
         if (getDataEntity!=null){

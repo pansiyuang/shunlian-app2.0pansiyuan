@@ -34,7 +34,6 @@ import butterknife.BindView;
 public class StartAct extends MBaseActivity implements IMain {
     private AnimationDrawable flashAnimation;
     private String localVersion;
-    private String channel_id;
     private AdEntity data;
     private boolean isAD=false,isHave=false;
     private PMain pMain;

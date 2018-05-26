@@ -10,6 +10,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.nestedrefresh.base.BaseHeader;
 import com.shunlian.app.widget.refresh.ring.RingProgressBar;
 
@@ -24,6 +25,7 @@ public class NestedRingHeader extends BaseHeader {
     private TextView ring_refresh_status;
     private RingProgressBar progress_bar;
     private View headerView;
+    private boolean isRelease=false;
 
     public NestedRingHeader(Context context) {
         super(context);
@@ -38,11 +40,6 @@ public class NestedRingHeader extends BaseHeader {
         progress_bar.setProgress(90);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-    }
 
     @Override
     public void onRefresh() {
@@ -51,14 +48,9 @@ public class NestedRingHeader extends BaseHeader {
     }
 
     @Override
-    public void onPrepare() {
-        Log.d("TwitterRefreshHeader", "onPrepare()");
-    }
-
-    @Override
     public void onDrag(int y, int offset) {
-        if (y > 0) {
-            if (y > offset) {
+        if (y > 0&&!isRelease) {
+            if (y >offset) {
                 ring_refresh_status.setText("松开刷新");
                 progress_bar.setIsShowIcon(false);
             } else {
@@ -68,24 +60,25 @@ public class NestedRingHeader extends BaseHeader {
                 progress_bar.setIsShowIcon(true);
             }
         }
-
-
     }
 
     @Override
     public void onRelease() {
-        Log.d("TwitterRefreshHeader", "onRelease()");
+        isRelease=true;
     }
 
     @Override
     public void onComplete() {
         ring_refresh_status.setText("刷新完成");
         progress_bar.clearAnimation();
+        progress_bar.setIsShowIcon(true);
+        progress_bar.setProgress(100);
     }
 
     @Override
     public void onReset() {
-        ring_refresh_status.setText("刷新取消");
+        isRelease=false;
+        ring_refresh_status.setText("下拉刷新");
         progress_bar.clearAnimation();
     }
 }

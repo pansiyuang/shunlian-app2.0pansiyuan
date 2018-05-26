@@ -331,13 +331,15 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 LogUtil.zhLogW("=onPageFinished=======" + url);
-                title = view.getTitle();
-                setTitle();
+                if (!isFinishing()){
+                    title = view.getTitle();
+                    setTitle();
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
 //                }
-                if (sonicSession != null) {
-                    sonicSession.getSessionClient().pageFinish(url);
+                    if (sonicSession != null) {
+                        sonicSession.getSessionClient().pageFinish(url);
+                    }
                 }
             }
 

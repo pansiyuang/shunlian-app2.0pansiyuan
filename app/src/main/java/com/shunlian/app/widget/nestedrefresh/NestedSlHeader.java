@@ -158,7 +158,6 @@ public class NestedSlHeader extends BaseHeader {
                 secondAnimation.stop();
                 break;
             case PULL_TO_REFRESH:
-                state = DONE;
                 firstSetpView.setVisibility(View.VISIBLE);
                 secondAnimation.stop();
                 secondStepView.setVisibility(View.GONE);

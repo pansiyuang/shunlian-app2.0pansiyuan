@@ -7,11 +7,10 @@
     <com.shunlian.app.widget.refresh.turkey.FirstSetpView
         android:id="@+id/first_step_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
     <com.shunlian.app.widget.refresh.turkey.SecondStepView
         android:id="@+id/second_step_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         />
