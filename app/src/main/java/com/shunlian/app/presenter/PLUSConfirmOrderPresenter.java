@@ -3,12 +3,15 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.shunlian.app.adapter.PLUSConfirmAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.PLUSConfirmEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IPLUSConfirmView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -61,6 +64,17 @@ public class PLUSConfirmOrderPresenter extends BasePresenter<IPLUSConfirmView> {
             @Override
             public void onSuccess(BaseEntity<PLUSConfirmEntity> entity) {
                 super.onSuccess(entity);
+                PLUSConfirmEntity data = entity.data;
+                String addressId = null;
+                if (data.address != null){
+                    addressId = data.address.id;
+                }
+                iView.goodsTotalPrice(data.total_amount,addressId);
+                List<PLUSConfirmEntity.ProductBean> products = new ArrayList<>();
+                products.add(data.product);
+
+                PLUSConfirmAdapter adapter = new PLUSConfirmAdapter(context,products,data.address);
+                iView.setAdapter(adapter);
             }
         });
     }

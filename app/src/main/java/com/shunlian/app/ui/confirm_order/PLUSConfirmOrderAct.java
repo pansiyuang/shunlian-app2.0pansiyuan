@@ -8,17 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.PLUSConfirmAdapter;
-import com.shunlian.app.bean.ConfirmOrderEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.SubmitGoodsEntity;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.PLUSConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -26,11 +20,7 @@ import com.shunlian.app.view.IPLUSConfirmView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
-import pay.PayListActivity;
 
 /**
  * Created by Administrator on 2017/11/25.
@@ -61,10 +51,7 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
     private String addressId;
     private String product_id;
     private String sku_id;
-    private PLUSConfirmOrderPresenter confirmOrderPresenter;
-    public static final String TYPE_CART = "cart";//购物车
-    public static final String TYPE_COMBO = "combo";//套餐
-    private List<ConfirmOrderEntity.Enabled> enabled;
+    private PLUSConfirmOrderPresenter mPLUSPresenter;
 
 
     public static void startAct(Context context,String product_id,String sku_id){
@@ -111,8 +98,8 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
         Intent intent = getIntent();
         product_id = intent.getStringExtra("product_id");
         sku_id = intent.getStringExtra("sku_id");
-        confirmOrderPresenter = new PLUSConfirmOrderPresenter(this,this);
-
+        mPLUSPresenter = new PLUSConfirmOrderPresenter(this,this);
+        mPLUSPresenter.orderBuy(product_id,sku_id,null);
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
         int space = TransformUtil.dip2px(this, 10);
@@ -131,48 +118,19 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
     }
 
     /**
-     * 订单页所有商品
-     *
-     * @param enabled
-     * @param disabled
-     */
-    public void confirmOrderAllGoods(final List<ConfirmOrderEntity.Enabled> enabled,
-                                     List<GoodsDeatilEntity.Goods> disabled,
-                                     ConfirmOrderEntity.Address address) {
-        if (address != null){
-            addressId = address.id;
-            detail_address = address.detail_address;
-            mtv_address.setText(String.format(getResources().getString(R.string.send_to),detail_address));
-        }else {
-            mtv_address.setText(getResources().getString(R.string.add_address));
-        }
-        if (enabled != null && enabled.size() > 0) {
-            this.enabled = enabled;
-            PLUSConfirmAdapter df = new PLUSConfirmAdapter(this,
-                    false, enabled, disabled,address,true);
-            recy_view.setAdapter(df);
-
-            df.setSelectVoucherListener(position -> {
-                float currentPrice = 0;
-                for (int i = 0; i < enabled.size(); i++) {
-                    String post_discount_price = enabled.get(i).post_discount_price;
-                    currentPrice += Float.parseFloat(isEmpty(post_discount_price)
-                            ? "0" : post_discount_price);
-                }
-                mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                        .getString(R.string.rmb).concat(Common.formatFloat(currentPrice)),11));
-            });
-        }
-    }
-
-    /**
      * 商品总价和总数量
      */
     @Override
-    public void goodsTotalPrice(String price) {
+    public void goodsTotalPrice(String price,String addressId) {
         mTotalPrice = price;
+        this.addressId = addressId;
         mtv_total_price.setText(Common.dotAfterSmall(getResources()
                 .getString(R.string.rmb).concat(price),11));
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
     }
 
     @Override
@@ -180,7 +138,7 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && Activity.RESULT_OK == resultCode){
             addressId = data.getStringExtra("addressId");
-            confirmOrderPresenter.orderBuy(product_id,sku_id,addressId);
+            mPLUSPresenter.orderBuy(product_id,sku_id,addressId);
         }
     }
 
@@ -198,16 +156,16 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
                     recy_view.scrollToPosition(0);
                     return;
                 }
-                String shop_goods = null;
+                /*String shop_goods = null;
                 try {
                     shop_goods = new ObjectMapper().writeValueAsString(mosaicParams());
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-                LogUtil.zhLogW("go_pay=============="+shop_goods);
-                String price = mtv_total_price.getText().toString();
-                PayListActivity.startAct(this,shop_goods,addressId,null,
-                        price.substring(1,price.length()));
+                LogUtil.zhLogW("go_pay=============="+shop_goods);*/
+//                String price = mtv_total_price.getText().toString();
+//                PayListActivity.startAct(this,shop_goods,addressId,null,
+//                        price.substring(1,price.length()));
                 break;
             case R.id.miv_close:
                 backSelect();
@@ -240,47 +198,5 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
                 finish();
             }
         }).show();
-    }
-
-    /**
-     * 拼接参数
-     */
-    private List<SubmitGoodsEntity> mosaicParams() {
-        List<SubmitGoodsEntity> goodsEntityList = new ArrayList<>();
-        if (enabled != null){
-            for (int i = 0; i < enabled.size(); i++) {
-                ConfirmOrderEntity.Enabled enabled = this.enabled.get(i);
-                SubmitGoodsEntity goodsEntity = new SubmitGoodsEntity();
-                goodsEntity.store_id = enabled.store_id;
-                goodsEntity.goods_items = new ArrayList<>();
-                for (int j = 0; j < enabled.goods.size(); j++) {
-                    GoodsDeatilEntity.Goods goods = enabled.goods.get(j);
-                    SubmitGoodsEntity.GoodsItems goodsItems =new  SubmitGoodsEntity.GoodsItems();
-                    goodsItems.goods_id = goods.goods_id;
-                    goodsItems.qty = goods.qty;
-                    goodsItems.sku_id = goods.sku_id;
-                    goodsItems.prom_id = goods.prom_id;
-                    goodsEntity.goods_items.add(goodsItems);
-                }
-                int selectVoucherId = enabled.selectVoucherId;
-                List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
-                if (!isEmpty(voucher)){
-                    goodsEntity.voucher_id = voucher.get(selectVoucherId).voucher_id;
-                }
-
-                if (true){
-                    int selectPromotionId = enabled.selectPromotionId;
-                    List<ConfirmOrderEntity.PromotionInfo> promotion_info = enabled.promotion_info;
-                    if (!isEmpty(promotion_info) && selectPromotionId != -1){
-                        //不选择促销会崩
-                        goodsEntity.goods_items.get(0).prom_id = promotion_info.
-                                get(selectPromotionId).prom_id;
-                    }
-                }
-                goodsEntity.remark = enabled.remark;
-                goodsEntityList.add(goodsEntity);
-            }
-        }
-        return goodsEntityList;
     }
 }

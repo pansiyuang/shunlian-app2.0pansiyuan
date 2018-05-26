@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.GifProductAdapter;
 import com.shunlian.app.bean.GifProductEntity;
 import com.shunlian.app.presenter.GifBagPresenter;
@@ -16,7 +14,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGifBagView;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 
 import java.util.List;
 
