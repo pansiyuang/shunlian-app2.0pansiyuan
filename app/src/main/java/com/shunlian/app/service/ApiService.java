@@ -2134,4 +2134,7 @@ public interface ApiService {
      */
     @POST("message/punish")
     Call<BaseEntity<PunishEntity>> punish(@QueryMap Map<String, String> map);
+
+    @POST("productorder/confirm")
+    Call<BaseEntity<PLUSConfirmEntity>> plusConfirm(@Body RequestBody body);
 }
