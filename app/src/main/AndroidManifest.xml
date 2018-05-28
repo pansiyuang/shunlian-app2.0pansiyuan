@@ -820,6 +820,13 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.message.PunishAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.confirm_order.PLUSConfirmOrderAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.plus.ShareBigGifAct"
             android:exported="false"
             android:screenOrientation="portrait" />
