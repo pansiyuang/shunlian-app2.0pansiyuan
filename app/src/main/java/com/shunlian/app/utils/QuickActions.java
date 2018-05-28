@@ -563,9 +563,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(getContext(),
-                miv_user_head,mShareInfoParam.userAvatar);
+        //MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        //GlideUtils.getInstance().loadCircleImage(getContext(),
+        //        miv_user_head,mShareInfoParam.userAvatar);
+        //MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        //mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         int i = TransformUtil.countRealWidth(getContext(), 400);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
@@ -589,8 +591,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     }
                 });
 
-        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         MyTextView mtv_shop_name = (MyTextView) inflate.findViewById(R.id.mtv_shop_name);
         mtv_shop_name.setText(mShareInfoParam.shop_name);
@@ -634,17 +634,17 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(getContext(),
-                miv_user_head,mShareInfoParam.userAvatar);
+        //MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        //GlideUtils.getInstance().loadCircleImage(getContext(),
+        //        miv_user_head,mShareInfoParam.userAvatar);
+        //MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        //mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
         int i = TransformUtil.countRealWidth(getContext(), 185);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
         miv_code.setImageBitmap(qrImage);
 
-        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
 
         MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
@@ -723,16 +723,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(mContext,miv_user_head,mShareInfoParam.userAvatar);
+        //MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
+        //GlideUtils.getInstance().loadCircleImage(mContext,miv_user_head,mShareInfoParam.userAvatar);
+        //MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
+        //mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         int i = TransformUtil.countRealWidth(getContext(), 320);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
         miv_code.setImageBitmap(qrImage);
 
-        MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         MyTextView mtv_title = (MyTextView) inflate.findViewById(R.id.mtv_title);
         mtv_title.setText(mShareInfoParam.title);

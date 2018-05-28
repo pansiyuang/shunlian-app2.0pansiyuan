@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:visibility="invisible"
         app:ll_control_adapter="true"
         app:ll_control_height="100">
 
@@ -37,6 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:visibility="gone"
         android:background="@color/light_gray_three" />
 
     <com.shunlian.app.widget.MyTextView

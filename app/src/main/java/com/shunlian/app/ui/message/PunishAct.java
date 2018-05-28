@@ -120,7 +120,7 @@ public class PunishAct extends BaseActivity implements IPunishView{
 
         if (!isEmpty(entity.pic_url)){
             visible(miv_pic);
-            GlideUtils.getInstance().loadImage(this,miv_pic,entity.pic_url);
+            GlideUtils.getInstance().loadImage(this,miv_pic,entity.pic_url.get(0));
         }else {
             gone(miv_pic);
         }
