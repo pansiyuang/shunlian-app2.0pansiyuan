@@ -12,10 +12,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
@@ -70,11 +72,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
     @BindView(R.id.iv_cancel)
     MyImageView iv_cancel;
 
+    @BindView(R.id.rLayout_count)
+    RelativeLayout rLayout_count;
+
     private List<GoodsDeatilEntity.Specs> specs;
     private List<GoodsDeatilEntity.Sku> mSku;
     private GoodsDeatilEntity goodsDeatilEntity;
     private Context mContext;
     private GoodsDeatilEntity.Goods mGoods;
+    private ProductDetailEntity productDetailEntity;
     private LinearLayoutManager linearLayoutManager;
     private ParamItemAdapter paramItemAdapter;
     private List<GoodsDeatilEntity.Values> mCurrentValues;
@@ -100,12 +106,18 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         setParamGoods(goods);
     }
 
+    public ParamDialog(Context context, ProductDetailEntity productDetailEntity) {
+        this(context, R.style.MyDialogStyleBottom);
+        this.mContext = context;
+        init();
+        setParamGoods(productDetailEntity);
+    }
 
     public ParamDialog(Context context, int themeResId) {
         super(context, themeResId);
     }
 
-    private void init(){
+    private void init() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_goods_select,
                 null, false);
         setContentView(view);
@@ -126,7 +138,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         recycler_param.setLayoutParams(params);
     }
 
-    public void setParam(GoodsDeatilEntity goods){
+    public void setParam(GoodsDeatilEntity goods) {
         this.goodsDeatilEntity = goods;
         this.specs = goods.specs;
         this.mSku = goods.sku;
@@ -136,11 +148,21 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
         initViews();
     }
 
-    public void setParamGoods(GoodsDeatilEntity.Goods goods){
+    public void setParamGoods(GoodsDeatilEntity.Goods goods) {
         this.mGoods = goods;
         this.specs = goods.goods_info.specs;
         this.mSku = goods.goods_info.sku;
         this.hasOption = goods.goods_info.has_option;
+        mCurrentValues = new ArrayList<>();
+        initMap();
+        initViews();
+    }
+
+    public void setParamGoods(ProductDetailEntity entity) {
+        this.productDetailEntity = entity;
+        this.specs = productDetailEntity.specs;
+        this.mSku = productDetailEntity.sku;
+        this.hasOption = productDetailEntity.has_option;
         mCurrentValues = new ArrayList<>();
         initMap();
         initViews();
@@ -166,6 +188,13 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             totalStock = Integer.valueOf(mGoods.stock);
             tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), mGoods.stock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
+        }
+
+        if (productDetailEntity != null) {
+            dia_tv_price.setText("¥" + productDetailEntity.price);
+            totalStock = Integer.valueOf(productDetailEntity.stock);
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), productDetailEntity.stock));
+            GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
         }
 
         if (specs == null || specs.size() == 0) {
@@ -195,8 +224,8 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             for (int i = 0; i < specs.size(); i++) {
                 linkedHashMap.put(specs.get(i).name, null);
                 List<GoodsDeatilEntity.Values> values = specs.get(i).values;
-                if (values != null && values.size() > 0){
-                    for(GoodsDeatilEntity.Values value : values){
+                if (values != null && values.size() > 0) {
+                    for (GoodsDeatilEntity.Values value : values) {
                         value.isSelect = false;
                     }
                 }
@@ -375,14 +404,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
 
     public void setOnSelectCallBack(OnSelectCallBack callBack) {
         this.selectCallBack = callBack;
-        if (btn_add != null && btn_minus != null) {
-            if (!isSelectCount) {
-                btn_minus.setEnabled(false);
-                btn_add.setEnabled(false);
-            } else {
-                btn_minus.setEnabled(true);
-                btn_add.setEnabled(true);
-            }
+        if (!isSelectCount) {
+            rLayout_count.setVisibility(View.GONE);
+        } else {
+            rLayout_count.setVisibility(View.VISIBLE);
         }
     }
 

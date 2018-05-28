@@ -1,7 +1,11 @@
 package com.shunlian.app.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +51,15 @@ public class CommentMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreM
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         CommentMsgViewHolder viewHolder = (CommentMsgViewHolder) holder;
         StoreMsgEntity.StoreMsg storeMsg = lists.get(position);
-        GlideUtils.getInstance().loadCircleImage(context, viewHolder.miv_icon, storeMsg.url);
+        StoreMsgEntity.Body body = storeMsg.body;
+        GlideUtils.getInstance().loadCircleImage(context, viewHolder.miv_icon, body.avatar);
+        String name = body.nickname + " ";
+        String content = name + body.content;
+        SpannableString ss = new SpannableString(content);
+        ss.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        viewHolder.tv_content.setText(ss);
+
+        viewHolder.tv_date.setText(storeMsg.create_time);
     }
 
     public class CommentMsgViewHolder extends BaseRecyclerViewHolder {

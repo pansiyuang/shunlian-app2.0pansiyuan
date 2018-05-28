@@ -50,7 +50,7 @@ public class TopicMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         TopicMsgViewHolder topicMsgViewHolder = (TopicMsgViewHolder) holder;
         StoreMsgEntity.StoreMsg storeMsg = lists.get(position);
-        StoreMsgEntity.Content content = storeMsg.content;
+        StoreMsgEntity.Body body = storeMsg.body;
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) topicMsgViewHolder.tv_date.getLayoutParams();
         if (storeMsg.is_read == 1) { //已读
             topicMsgViewHolder.miv_point.setVisibility(View.GONE);
@@ -60,12 +60,12 @@ public class TopicMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
             layoutParams.setMargins(TransformUtil.dip2px(context, 12), TransformUtil.dip2px(context, 6), 0, 0);
         }
         topicMsgViewHolder.tv_date.setLayoutParams(layoutParams);
-        topicMsgViewHolder.tv_title.setText(content.title);
-        GlideUtils.getInstance().loadImage(context, topicMsgViewHolder.miv_img, content.thumb);
-        topicMsgViewHolder.tv_date.setText(content.create_time);
-        topicMsgViewHolder.tv_content.setText(content.content);
+        topicMsgViewHolder.tv_title.setText(body.title);
+        GlideUtils.getInstance().loadImage(context, topicMsgViewHolder.miv_img, body.thumb);
+        topicMsgViewHolder.tv_date.setText(storeMsg.create_time);
+        topicMsgViewHolder.tv_content.setText(body.content);
 
-        if ("1".equals(storeMsg.expire)) {//已过期
+        if ("1".equals(body.expire)) {//已过期
             topicMsgViewHolder.tv_title.setTextColor(getColor(R.color.new_gray));
             topicMsgViewHolder.tv_content.setTextColor(getColor(R.color.new_gray));
             topicMsgViewHolder.tv_bg.setVisibility(View.VISIBLE);

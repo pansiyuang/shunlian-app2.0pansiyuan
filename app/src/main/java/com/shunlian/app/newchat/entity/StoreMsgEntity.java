@@ -14,32 +14,35 @@ public class StoreMsgEntity {
     public int page;
     public int page_size;
     public int total;
-    public int max_page;
     public List<StoreMsg> list;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class StoreMsg {
         public int type;
-        public String url;
-        public String msg_id;
-        public String expire;
+        public String member_id;
+        public Body body;
+        public String jump;
         public int is_read;//是否已读 0 未读  1 已读
-        public String article_id;
-        public Content content;
         public int is_del;  //是否可删除 0 否 1可以
+        public String create_time;
+        public String id;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Content {
+    public static class Body {
+        public String id;
         public String title;
         public String thumb;
-        public String username;
-        public String sl_id;
-        public String create_time;
-        public String money;
-        public String is_hide;
-        public String is_child;
         public String content;
-        public String time;
+        public int expire;
+        public String comment_uid;
+        public String member_id;
+        public int role;
+        public String target;
+        public String target_id;
+        public String comment_time;
+        public String nickname;
+        public String avatar;
+        public String money;
     }
 }
