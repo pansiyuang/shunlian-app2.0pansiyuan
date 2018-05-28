@@ -2150,4 +2150,12 @@ public interface ApiService {
      */
     @GET("product/productdetail")
     Call<BaseEntity<ProductDetailEntity>> getProductDetail(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包订单列表
+     *
+     * @return
+     */
+    @GET("productorder/plusorderlist")
+    Call<BaseEntity<PlusOrderEntity>> getPlusOrderList(@QueryMap Map<String, String> map);
 }

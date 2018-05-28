@@ -157,7 +157,7 @@ public class ShareBigGifAct extends BaseActivity {
                 showTabTwoButton(3);
                 break;
             case R.id.tv_title_right:
-                SuperProductsAct.startAct(this);
+                PlusOrderAct.startAct(this);
                 break;
             case R.id.miv_invite:
                 GifBagListAct.startAct(this);

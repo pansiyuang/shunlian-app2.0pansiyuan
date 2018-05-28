@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="101dp"
+        android:background="@color/value_FA">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="101dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="16.5dp"
+            android:layout_toRightOf="@+id/miv_icon"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="浙江温州皮革厂哈哈哈哈好哒互道金卡戴珊我回复奥斯广佛"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_title"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16.5dp"
+            android:text="¥ 398"
+            android:textColor="@color/pink_color"
+            android:textSize="15.5dp" />
+
+        <TextView
+            android:id="@+id/tv_param"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16.5dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/tv_count"
+            android:text="黑色/XL"
+            android:textColor="@color/new_gray"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/tv_title"
+            android:layout_marginBottom="16.5dp"
+            android:text="x1"
+            android:textColor="@color/new_gray"
+            android:textSize="10dp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_status"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_plus_yifahuo"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_total_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/tv_total_price"
+            android:text="共一件商品"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="合计:￥398(包邮)"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+    </RelativeLayout>
+</LinearLayout>
