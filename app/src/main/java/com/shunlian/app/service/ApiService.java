@@ -2165,4 +2165,12 @@ public interface ApiService {
      */
     @POST("productorder/confirm")
     Call<BaseEntity<PLUSConfirmEntity>> plusConfirm(@Body RequestBody body);
+
+    /**
+     * 支付plus订单
+     * @param body
+     * @return
+     */
+    @POST("productorder/checkout")
+    Call<BaseEntity<PayOrderEntity>> submitPLUSOrder(@Body RequestBody body);
 }

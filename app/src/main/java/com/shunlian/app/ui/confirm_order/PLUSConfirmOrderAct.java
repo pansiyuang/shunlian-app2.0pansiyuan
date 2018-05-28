@@ -21,6 +21,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 /**
  * Created by Administrator on 2017/11/25.
@@ -47,7 +48,6 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
 
     private LinearLayoutManager manager;
     private String mTotalPrice;
-    private String detail_address;
     private String addressId;
     private String product_id;
     private String sku_id;
@@ -156,16 +156,8 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
                     recy_view.scrollToPosition(0);
                     return;
                 }
-                /*String shop_goods = null;
-                try {
-                    shop_goods = new ObjectMapper().writeValueAsString(mosaicParams());
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                LogUtil.zhLogW("go_pay=============="+shop_goods);*/
-//                String price = mtv_total_price.getText().toString();
-//                PayListActivity.startAct(this,shop_goods,addressId,null,
-//                        price.substring(1,price.length()));
+
+                PayListActivity.startAct(this,product_id,sku_id,addressId,mTotalPrice,"");
                 break;
             case R.id.miv_close:
                 backSelect();
@@ -186,17 +178,10 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
                 .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods),
-                        getStringResouce(R.string.i_think), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-            }
-        }, getStringResouce(R.string.to_resolve), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-                finish();
-            }
+                        getStringResouce(R.string.i_think), v -> promptDialog.dismiss(),
+                        getStringResouce(R.string.to_resolve), v -> {
+            promptDialog.dismiss();
+            finish();
         }).show();
     }
 }
