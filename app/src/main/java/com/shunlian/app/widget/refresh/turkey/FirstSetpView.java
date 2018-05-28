@@ -99,9 +99,9 @@ public class FirstSetpView extends View{
 		measuredHeight = h;
 		//根据测量后的宽高来对火鸡做一个缩放
 		try {
-			scaledTurkey = Bitmap.createScaledBitmap(left, measuredWidth * 222/ 453, measuredHeight, true);
+			scaledTurkey = Bitmap.createScaledBitmap(left, peopleWithGoods.getWidth() * 216/ 453, peopleWithGoods.getHeight(), true);
 			//根据测量后的宽高来对文字做一个缩放
-			scaledLetter = Bitmap.createScaledBitmap(right, measuredWidth * 231 / 453, measuredHeight, true);
+			scaledLetter = Bitmap.createScaledBitmap(right, peopleWithGoods.getWidth() * 237 / 453, peopleWithGoods.getHeight(), true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -122,13 +122,9 @@ public class FirstSetpView extends View{
 		//画火鸡
 		//restore
 		canvas.save();
-//		canvas.scale(mCurrentProgress, mCurrentProgress ,  measuredWidth-scaledLetter.getWidth()/2 , measuredHeight/2);
-//		canvas.scale(mCurrentProgress, mCurrentProgress ,  measuredWidth/2+scaledLetter.getWidth()/2, measuredHeight/2);
-		canvas.scale(mCurrentProgress, mCurrentProgress ,  measuredWidth-scaledLetter.getWidth()/2, measuredHeight/2);
+		canvas.scale(mCurrentProgress, mCurrentProgress ,  peopleWithGoods.getWidth()-peopleWithGoods.getWidth() * 237 / 453/2, measuredHeight/2);
 		mPaint.setAlpha(mCurrentAlpha);
-//		canvas.drawBitmap(scaledLetter, measuredWidth-scaledLetter.getWidth(), measuredHeight/2-scaledLetter.getHeight()/2, mPaint);
-//		canvas.drawBitmap(scaledLetter, measuredWidth-scaledLetter.getWidth(), measuredHeight/2-scaledLetter.getHeight()/2, mPaint);
-		canvas.drawBitmap(scaledLetter, measuredWidth-scaledTurkey.getWidth(), 0, mPaint);
+		canvas.drawBitmap(scaledLetter, peopleWithGoods.getWidth() * 216/ 453, 0, mPaint);
 		canvas.restore();
 
 		canvas.save();
