@@ -40,6 +40,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
@@ -146,7 +147,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyImageView miv_storeLogo;
 
     @BindView(R.id.mtv_attention)
-    MyTextView mtv_attention;
+    public MyTextView mtv_attention;
 
     @BindView(R.id.mtv_storeName)
     MyTextView mtv_storeName;
@@ -155,7 +156,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyImageView miv_star;
 
     @BindView(R.id.mtv_number)
-    MyTextView mtv_number;
+    public MyTextView mtv_number;
 
     @BindView(R.id.mtv_babyNum)
     MyTextView mtv_babyNum;
@@ -221,8 +222,9 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private StoreDiscountMenuAdapter storeDiscountMenuAdapter;
     private StoreVoucherAdapter storeVoucherAdapter;
     private GridLayoutManager babyManager, discountManager;
-    private boolean isFocus;
+    public boolean isFocus;
     private ShareInfoParam shareInfoParam;
+    public int focusNum=0;
 
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
@@ -519,6 +521,18 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtil.augusLogW("fffff2222");
+        LogUtil.augusLogW("fffffrequestCode---"+requestCode);
+        LogUtil.augusLogW("fffffresultCode---"+resultCode);
+        if (requestCode==0&&resultCode==1){
+            LogUtil.augusLogW("fffff1111");
+            isFocus(data.getBooleanExtra("isFocus",false),data.getIntExtra("focusNum",0));
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         storeMenu(v);
         if (rv_baby.getScrollState() == 0) {
@@ -526,7 +540,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startAct(this, storeId, star, isFocus);
+                StoreIntroduceAct.startActForResult(this, storeId, star, isFocus);
                 break;
             case R.id.mllayout_search:
                 StoreSearchAct.startAct(this,storeId,"","","");
@@ -610,24 +624,44 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
+    public void isFocus(boolean isFocus,int focusNum){
+        if (!isFocus) {
+            mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setText(getStringResouce(R.string.discover_follow));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+            this.isFocus = false;
+        } else {
+            mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_attention.setText(getStringResouce(R.string.discover_alear_follow));
+            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+            this.isFocus = true;
+        }
+        this.focusNum=focusNum;
+        mtv_number.setText(focusNum + "人");
+    }
     @Override
     public void storeHeader(StoreIndexEntity.Head head) {
         GlideUtils.getInstance().loadImage(this, miv_storeLogo, head.decoration_logo);
         GlideUtils.getInstance().loadBgImage(this, mrlayout_bg, head.decoration_banner);
         if ("false".equals(head.is_mark)) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setText(getStringResouce(R.string.discover_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
             isFocus = false;
         } else {
             mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_attention.setText(getStringResouce(R.string.discover_alear_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             isFocus = true;
         }
         star = head.star;
         mtv_storeName.setText(head.decoration_name);
         GlideUtils.getInstance().loadImage(this, miv_star, star);
-
-        mtv_number.setText(head.mark_count + "人");
+        if ("false".equals(head.is_mark)){
+            isFocus(false,!isEmpty(head.mark_count)?Integer.parseInt(head.mark_count):0);
+        }else {
+            isFocus(true,!isEmpty(head.mark_count)?Integer.parseInt(head.mark_count):0);
+        }
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
         mtv_newNum.setText(head.new_count);
@@ -701,13 +735,18 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     public void storeFocus() {
         if (isFocus) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setText(getStringResouce(R.string.discover_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+            focusNum--;
             isFocus = false;
         } else {
+            mtv_attention.setText(getStringResouce(R.string.discover_alear_follow));
             mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+            focusNum++;
             isFocus = true;
         }
+        mtv_number.setText(focusNum+ "人");
     }
 
     @Override

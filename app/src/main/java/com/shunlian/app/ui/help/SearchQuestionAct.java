@@ -19,6 +19,7 @@ import com.shunlian.app.presenter.PSearchQuestion;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.view.ISearchQView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -117,29 +118,29 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
 
 
     @Override
-    public void setApiData(final List<HelpSearchEntity.Content> contents) {
+    public void setApiData(List<HelpSearchEntity.Content> contents) {
         if (contents == null || contents.size() <= 0) {
             mllayout_wu.setVisibility(View.VISIBLE);
         } else {
             mllayout_wu.setVisibility(View.GONE);
-        }
-        if (searchQAdapter == null) {
-            contentList = new ArrayList<>();
-            contentList.addAll(contents);
-            searchQAdapter = new SearchQAdapter(this, keyWord, false, contentList);
-            recycler_search.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            recycler_search.setAdapter(searchQAdapter);
-            recycler_search.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.background_gray2)));
+            if (searchQAdapter == null) {
+                contentList = new ArrayList<>();
+                contentList.addAll(contents);
+                searchQAdapter = new SearchQAdapter(this, keyWord, false, contentList);
+                recycler_search.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                recycler_search.setAdapter(searchQAdapter);
+                recycler_search.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.background_gray2)));
+            } else {
+                contentList.clear();
+                contentList.addAll(contents);
+                searchQAdapter.notifyDataSetChanged();
+            }
             searchQAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     HelpSolutionAct.startAct(getBaseContext(), contents.get(position).id);
                 }
             });
-        } else {
-            contentList.clear();
-            contentList.addAll(contents);
-            searchQAdapter.notifyDataSetChanged();
         }
     }
 }

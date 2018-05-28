@@ -198,7 +198,6 @@ public class Common {
                 H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
                 break;
             default://首页
-                LogUtil.augusLogW("wheremain");
                 MainActivity.startAct(context, "");
                 break;
         }

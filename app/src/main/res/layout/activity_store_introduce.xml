@@ -120,9 +120,8 @@
                     android:layout_height="23.5dp"
                     android:layout_alignParentRight="true"
                     android:background="@mipmap/bg_shop_attention_n"
-                    android:gravity="right|center_vertical"
-                    android:paddingRight="14dp"
-                    android:text="关注"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
