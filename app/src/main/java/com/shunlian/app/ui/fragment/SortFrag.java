@@ -1,10 +1,10 @@
 package com.shunlian.app.ui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -17,7 +17,7 @@ import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.SortFragPresenter;
-import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.category.CategoryAct;
 import com.shunlian.app.ui.category.RankingListAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
@@ -37,7 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SortFrag extends BaseFragment implements ISortFragView, MessageCountManager.OnGetMessageListener {
+public class SortFrag extends BaseActivity implements ISortFragView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.listView)
     ListView listView;
@@ -60,28 +60,18 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
     private SortFragPresenter presenter;
     private MessageCountManager messageCountManager;
 
+    public static void startAct(Context context){
+        context.startActivity(new Intent(context,SortFrag.class));
+    }
+
     /**
-     * 设置布局id
+     * 布局id
      *
-     * @param inflater
-     * @param container
      * @return
      */
     @Override
-    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.frag_sort, container, false);
-        return view;
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            ImmersionBar.with(this).fitsSystemWindows(true)
-                    .statusBarColor(R.color.white)
-                    .statusBarDarkFont(true, 0.2f)
-                    .init();
-        }
+    protected int getLayoutId() {
+        return R.layout.frag_sort;
     }
 
     /**
@@ -96,16 +86,16 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
-        presenter = new SortFragPresenter(baseActivity, this);
+        presenter = new SortFragPresenter(this, this);
 
-        GridLayoutManager manager = new GridLayoutManager(baseActivity, 3);
+        GridLayoutManager manager = new GridLayoutManager(this, 3);
         recycler_sort.setLayoutManager(manager);
     }
 
     @Override
     public void onResume() {
         if (Common.isAlreadyLogin()) {
-            messageCountManager = MessageCountManager.getInstance(baseContext);
+            messageCountManager = MessageCountManager.getInstance(this);
             if (messageCountManager.isLoad()) {
                 String s = messageCountManager.setTextCount(tv_msg_count);
                 if (quick_actions != null)
@@ -118,6 +108,8 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         super.onResume();
     }
 
+
+
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
@@ -127,7 +119,7 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
     @OnClick(R.id.mtv_search)
     public void onClickSearch() {
         CharSequence text = mtv_search.getText();
-        SearchGoodsActivity.startAct(baseActivity, text.toString(), "sortFrag");
+        SearchGoodsActivity.startAct(this, text.toString(), "sortFrag");
     }
 
     /**
@@ -169,14 +161,14 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         }
 
 
-        final SortCategoryAdapter adapter = new SortCategoryAdapter(baseActivity, itemLists, toplist);
+        final SortCategoryAdapter adapter = new SortCategoryAdapter(this, itemLists, toplist);
 
         recycler_sort.setAdapter(adapter);
 
         adapter.setOnItemClickListener((view, position) -> {
             if (adapter.counts.contains(position)) {
                 SortFragEntity.SubList subList = adapter.titleData.get(position);
-                RankingListAct.startAct(baseActivity, subList.id, toplist.name, subList.name);
+                RankingListAct.startAct(this, subList.id, toplist.name, subList.name);
             } else {
                 int i = adapter.computeCount(position);
                 SortFragEntity.ItemList itemList = itemLists.get(position - i);
@@ -184,7 +176,7 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
                 param.cid = itemList.g_cid;
                 param.attr_data = itemList.attrs;
                 param.keyword = itemList.name;
-                CategoryAct.startAct(baseActivity, param);
+                CategoryAct.startAct(this, param);
             }
         });
     }
@@ -203,7 +195,7 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         SortFragEntity.Toplist toplist = categoryList.get(0);
         subRightList(toplist);
 
-        final SortFragAdapter adapter = new SortFragAdapter(baseActivity, categoryList);
+        final SortFragAdapter adapter = new SortFragAdapter(this, categoryList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -225,11 +217,11 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
     }
 
     @Override
-    public void onDestroyView() {
+    protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
-        super.onDestroyView();
+        super.onDestroy();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -23,7 +23,6 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
-import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Act;
@@ -86,7 +85,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     TextView tv_person_center;
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
-    private SortFrag sortFrag;
+//    private SortFrag sortFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
@@ -283,7 +282,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     }
 
     public void sortClick() {
-        isFirst = false;
+        /*isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (sortFrag == null) {
             sortFrag = (SortFrag) fragmentMap.get(flags[1]);
@@ -295,7 +294,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(sortFrag);
         pageIndex = 1;
-        chageTabItem(pageIndex);
+        chageTabItem(pageIndex);*/
     }
 
     public void discoverClick() {
