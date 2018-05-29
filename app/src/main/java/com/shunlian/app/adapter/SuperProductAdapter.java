@@ -139,6 +139,9 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         if (1 == superProduct.is_recommend) {
             goodsViewHolder.ll_tags.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), goodsViewHolder));
         }
+        goodsViewHolder.miv_share.setOnClickListener(v -> {
+            //分享
+        });
     }
 
 
