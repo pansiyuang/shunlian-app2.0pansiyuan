@@ -198,6 +198,18 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                 viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
             }
 
+            if (goods.type == 1) { //是优品
+                viewHolder.miv_product.setVisibility(View.VISIBLE);
+                if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局
+                    viewHolder.ll_earn.setVisibility(View.VISIBLE);
+                    viewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + goods.self_buy_earn);
+                } else {
+                    viewHolder.ll_earn.setVisibility(View.GONE);
+                }
+            } else {
+                viewHolder.miv_product.setVisibility(View.GONE);
+            }
+
             viewHolder.tv_comment.setText(String.format(getString(R.string.sort_comment), goods.comment_num, goods.comment_rate));
             viewHolder.tv_address.setText(goods.send_area);
         }
@@ -304,6 +316,9 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
+        @BindView(R.id.miv_product)
+        MyImageView miv_product;
+
         @BindView(R.id.tv_title)
         TextView tv_title;
 
@@ -321,6 +336,13 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         @BindView(R.id.tv_address)
         TextView tv_address;
+
+        @BindView(R.id.ll_earn)
+        LinearLayout ll_earn;
+
+        @BindView(R.id.tv_earn_money)
+        TextView tv_earn_money;
+
 
         public DoubleViewHolder(View itemView) {
             super(itemView);
