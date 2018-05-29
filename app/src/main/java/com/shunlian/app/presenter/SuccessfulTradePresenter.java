@@ -62,7 +62,7 @@ public class SuccessfulTradePresenter extends BasePresenter<ISuccessfulTradeView
                         super.onSuccess(entity);
                         if (!isEmpty(entity.data.may_be_buy_list)){
                             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
-                                    (context,entity.data.may_be_buy_list);
+                                    (context,entity.data.may_be_buy_list,false);
                             iView.setAdapter(adapter);
                             adapter.setOnItemClickListener((v,p)->{
                                 ProbablyLikeEntity.MayBuyList mayBuyList = entity.

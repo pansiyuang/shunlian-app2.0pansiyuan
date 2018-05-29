@@ -155,6 +155,7 @@
     <string name="pay_chakandingdan">查看订单</string>
     <string name="pay_dianpushouye">返回首页</string>
     <string name="pay_nikeneng">你可能还想买</string>
+    <string name="pay_plusdianzhu">PLUS店主都在买</string>
 
     <!--商品详情-->
     <string name="rmb">￥</string>

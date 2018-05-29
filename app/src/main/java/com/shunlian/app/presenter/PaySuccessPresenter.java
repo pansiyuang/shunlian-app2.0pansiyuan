@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.PUT;
 
 /**
  * Created by Administrator on 2018/4/28.
@@ -21,10 +22,12 @@ import retrofit2.Call;
 public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
 
     private String mPay_sn;
+    private boolean isPlus=false;
 
-    public PaySuccessPresenter(Context context, IPaySuccessView iView, String pay_sn) {
+    public PaySuccessPresenter(Context context, IPaySuccessView iView, String pay_sn,boolean isPlus) {
         super(context, iView);
         mPay_sn = pay_sn;
+        this.isPlus=isPlus;
         initApi();
     }
 
@@ -52,7 +55,12 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
         Map<String,String> map = new HashMap<>();
         map.put("pay_sn",mPay_sn);
         sortAndMD5(map);
-        Call<BaseEntity<ProbablyLikeEntity>> baseEntityCall = getApiService().probablyLike(map);
+        Call<BaseEntity<ProbablyLikeEntity>> baseEntityCall;
+        if (isPlus){
+            baseEntityCall= getApiService().productorderPayresult(map);
+        }else {
+            baseEntityCall = getApiService().probablyLike(map);
+        }
         getNetData(true,baseEntityCall,new
                 SimpleNetDataCallback<BaseEntity<ProbablyLikeEntity>>(){
                     @Override
@@ -60,7 +68,7 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
                         super.onSuccess(entity);
                         if (!isEmpty(entity.data.may_be_buy_list)){
                             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
-                                    (context,entity.data.may_be_buy_list);
+                                    (context,entity.data.may_be_buy_list,isPlus);
 
                             iView.setAdapter(adapter);
                             adapter.setOnItemClickListener((v,p)->{

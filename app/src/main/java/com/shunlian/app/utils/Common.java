@@ -70,6 +70,7 @@ import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
@@ -143,6 +144,9 @@ public class Common {
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "goToPayPlus":
+                GifBagListAct.startAct(context);
                 break;
             case "login":
                 LoginAct.startAct(context);

@@ -664,6 +664,15 @@ public interface ApiService {
     @GET("personalcenter/orderlist")
     Call<BaseEntity<MyOrderEntity>> orderList(@QueryMap Map<String, String> map);
 
+    /**
+     * 礼包订单详情
+     *
+     * @param map
+     * @return
+     */
+    @GET("productorder/plusorderdetail")
+    Call<BaseEntity<OrderdetailEntity>> plusorderdetail(@QueryMap Map<String, String> map);
+
 
     /**
      * 订单详情
@@ -2075,6 +2084,14 @@ public interface ApiService {
      */
     @GET("order/payresult")
     Call<BaseEntity<ProbablyLikeEntity>> probablyLike(@QueryMap Map<String, String> map);
+
+    /**
+     * 礼包支付成功提示
+     *
+     * @return
+     */
+    @GET("productorder/payresult")
+    Call<BaseEntity<ProbablyLikeEntity>> productorderPayresult(@QueryMap Map<String, String> map);
 
     /**
      * 猜你喜欢
