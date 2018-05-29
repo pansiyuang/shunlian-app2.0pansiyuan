@@ -396,6 +396,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.plus.PlusOrderDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.confirm_order.PaySuccessAct"
             android:exported="false"
             android:screenOrientation="portrait" />

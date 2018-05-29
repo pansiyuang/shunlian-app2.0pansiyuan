@@ -62,5 +62,45 @@
             android:text="9999"
             android:textColor="@color/share_text"
             android:textSize="11sp" />
+
+        <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_plus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginLeft="9dp">
+            <LinearLayout
+                android:id="@+id/llayout_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corner_1c1b20_2px"
+                android:gravity="center">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F3C262"
+                    android:gravity="center"
+                    android:text="赚"
+                    android:paddingRight="2dp"
+                    android:paddingLeft="2dp"
+                    android:textColor="@color/new_text"
+                    android:textSize="11sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_plus_prefPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+        </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyLinearLayout>
 </LinearLayout>

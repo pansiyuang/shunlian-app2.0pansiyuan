@@ -31,17 +31,22 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.mtv_price)
     MyTextView mtv_price;
 
+    @BindView(R.id.mtv_name)
+    MyTextView mtv_name;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
     private String orderId;
     private String pay_sn;
+    private boolean isPlus;
 
-    public static void startAct(Context context, String orderId, String price, String pay_sn) {
+    public static void startAct(Context context, String orderId, String price, String pay_sn,boolean isPlus) {
         Intent intent = new Intent(context, PaySuccessAct.class);
         intent.putExtra("orderId", orderId);
         intent.putExtra("price", price);
         intent.putExtra("pay_sn", pay_sn);
+        intent.putExtra("isPlus", isPlus);
         context.startActivity(intent);
     }
 
@@ -57,21 +62,26 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
         orderId = intent.getStringExtra("orderId");
         pay_sn = intent.getStringExtra("pay_sn");
         String price = intent.getStringExtra("price");
+        isPlus=intent.getBooleanExtra("isPlus",false);
         mtv_price.setText(price);
 
         GridLayoutManager manager = new GridLayoutManager(this,2);
         rv_goods.setLayoutManager(manager);
         rv_goods.addItemDecoration(new GridSpacingItemDecoration
                 (TransformUtil.dip2px(this, 5), false));
-        PaySuccessPresenter presenter = new PaySuccessPresenter(this,this,pay_sn);
+        PaySuccessPresenter presenter = new PaySuccessPresenter(this,this,pay_sn,isPlus);
     }
 
     @OnClick(R.id.mtv_order)
     public void seeOrderDetail(){
-        if (TextUtils.isEmpty(orderId)){
-            MyOrderAct.startAct(this,0);
+        if (isPlus){
+
         }else {
-            OrderDetailAct.startAct(this,orderId);
+            if (TextUtils.isEmpty(orderId)){
+                MyOrderAct.startAct(this,0);
+            }else {
+                OrderDetailAct.startAct(this,orderId);
+            }
         }
     }
 
@@ -105,6 +115,11 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
+        if (isPlus){
+            mtv_name.setText(getStringResouce(R.string.pay_plusdianzhu));
+        }else {
+            mtv_name.setText(getStringResouce(R.string.pay_nikeneng));
+        }
         rv_goods.setAdapter(adapter);
     }
 
