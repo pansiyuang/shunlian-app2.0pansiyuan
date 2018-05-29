@@ -26,6 +26,7 @@ public class SuperProductEntity {
         public int is_hot;
         public int is_recommend;
         public Url url;
+        public Share share;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -38,5 +39,13 @@ public class SuperProductEntity {
     public static class Url {
         public String type;
         public String item_id;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Share {
+        public String title;
+        public String content;
+        public String pic;
+        public String share_url;
     }
 }

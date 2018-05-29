@@ -32,6 +32,8 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     private static final int TYPE_BANNER = 10001;
     private static final int TYPE_GOODS = 10002;
 
+    private OnShareClickListener mShareLinstener;
+
     public SuperProductAdapter(Context context, List<SuperProductEntity.SuperProduct> lists) {
         super(context, false, lists);
     }
@@ -141,6 +143,9 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         }
         goodsViewHolder.miv_share.setOnClickListener(v -> {
             //分享
+            if (mShareLinstener != null) {
+                mShareLinstener.onShare(superProduct.share);
+            }
         });
     }
 
@@ -203,5 +208,13 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         }
         textView.setLayoutParams(params);
         return textView;
+    }
+
+    public void setOnShareClickListener(OnShareClickListener listener) {
+        this.mShareLinstener = listener;
+    }
+
+    public interface OnShareClickListener {
+        void onShare(SuperProductEntity.Share share);
     }
 }
