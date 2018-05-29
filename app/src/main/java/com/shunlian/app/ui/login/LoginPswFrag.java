@@ -175,6 +175,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     public void login(LoginFinishEntity content) {
         //登陆成功啦
         SharedPrefUtil.saveSharedPrfString("token", content.token);
+        SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag != null)

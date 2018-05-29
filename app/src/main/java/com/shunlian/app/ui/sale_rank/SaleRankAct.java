@@ -14,6 +14,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.IWeekSale;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
@@ -26,8 +27,8 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
-    @BindView(R.id.mtv_time)
-    MyTextView mtv_time;
+    @BindView(R.id.ntv_time)
+    NewTextView ntv_time;
 
     @BindView(R.id.mtv_times)
     MyTextView mtv_times;
@@ -64,10 +65,10 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        nei_empty.setImageResource(R.mipmap.img_empty_youhuiquan).setText(getString(R.string.first_dianpuyouhui));
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.plus_xiaoshoupaihang));
         nei_empty.setButtonText(null);
         rl_more.setVisibility(View.GONE);
-        mtv_title.setText(getStringResouce(R.string.personal_benzhouxiaoshou));
+        mtv_title.setText(getStringResouce(R.string.personal_youpingbenyue));
         pWeekSale = new PWeekSale(this, this);
     }
 
@@ -86,16 +87,16 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
 
     @Override
     public void setApiData(WeekSaleTopEntity weekSaleTopEntity) {
-        if (weekSaleTopEntity.top_list==null||weekSaleTopEntity.top_list.size()<=0){
+        if (weekSaleTopEntity.list==null||weekSaleTopEntity.list.size()<=0){
             visible(nei_empty);
             gone(rv_list);
         }else {
             gone(nei_empty);
             visible(rv_list);
         }
-        mtv_time.setText(weekSaleTopEntity.top_date);
-        mtv_times.setText(weekSaleTopEntity.last_update_time);
-        rv_list.setAdapter(new SaleRankAdapter(getBaseContext(),weekSaleTopEntity.top_list));
+        ntv_time.setText(weekSaleTopEntity.month_banner);
+        mtv_times.setText(weekSaleTopEntity.update_time);
+        rv_list.setAdapter(new SaleRankAdapter(getBaseContext(),weekSaleTopEntity.list));
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
     }
 }

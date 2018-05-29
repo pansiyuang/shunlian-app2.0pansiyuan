@@ -20,7 +20,6 @@ import com.shunlian.app.ui.register.BindingPhoneAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.tencent.mm.sdk.modelbase.BaseReq;

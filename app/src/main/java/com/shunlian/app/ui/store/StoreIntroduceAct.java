@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.store;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.shunlian.app.presenter.StoreIntroducePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.StoreIntroduceView;
 import com.shunlian.app.widget.MyImageView;
@@ -42,6 +44,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.miv_chat)
     MyImageView miv_chat;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     @BindView(R.id.mtv_number)
     TextView mtv_number;
@@ -84,7 +89,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     private boolean isFocus;
     private String storeId,seller_id,storeScore;
     private StoreIntroducePresenter storeIntroducePresenter;
-
+    private int focusNum=0;
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -127,6 +132,20 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 
     }
 
+    public void mFinish(){
+        Intent intent = new Intent();
+        intent.putExtra("isFocus", isFocus);
+        intent.putExtra("focusNum", focusNum);
+        setResult(1,intent);
+        LogUtil.augusLogW("fffff3333");
+        finish();
+    }
+    @Override
+    public void onBackPressed() {
+        mFinish();
+        super.onBackPressed();
+    }
+
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
@@ -135,12 +154,12 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    public static void startAct(Context context, String storeId,String storeScore,boolean isFocus) {
-        Intent intent = new Intent(context, StoreIntroduceAct.class);
+    public static void startActForResult(Activity activity, String storeId, String storeScore, boolean isFocus) {
+        Intent intent = new Intent(activity, StoreIntroduceAct.class);
         intent.putExtra("storeId", storeId);//店铺id
-        intent.putExtra("storeScore", storeScore);//店铺id
-        intent.putExtra("isFocus", isFocus);//店铺id
-        context.startActivity(intent);
+        intent.putExtra("storeScore", storeScore);
+        intent.putExtra("isFocus", isFocus);
+        activity.startActivityForResult(intent,0);
     }
 
     @Override
@@ -161,6 +180,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
             case R.id.mrlayout_yingye:
                 StoreLicenseAct.startAct(this,seller_id);
                 break;
+            case R.id.miv_close:
+                mFinish();
+                break;
             case R.id.miv_chat:
                 storeIntroducePresenter.getUserId(storeId);
                 break;
@@ -173,6 +195,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         mtv_attention.setOnClickListener(this);
         mrlayout_yingye.setOnClickListener(this);
         miv_chat.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
     }
 
     @Override
@@ -185,9 +208,11 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         isFocus = getIntent().getBooleanExtra("isFocus",false);
         if (!isFocus) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setText(getStringResouce(R.string.discover_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
         } else {
             mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
+            mtv_attention.setText(getStringResouce(R.string.discover_alear_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
         }
         storeIntroducePresenter = new StoreIntroducePresenter(this, this, storeId);
@@ -217,6 +242,8 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         seller_id=storeIntroduceEntity.seller_id;
         mtv_storeName.setText(storeIntroduceEntity.store_name);
         GlideUtils.getInstance().loadImage(this, miv_star, storeScore);
+        if (!isEmpty(storeIntroduceEntity.store_collect))
+            focusNum=Integer.parseInt(storeIntroduceEntity.store_collect);
         mtv_number.setText(storeIntroduceEntity.store_collect + "人");
         mtv_haopinglv.setText(storeIntroduceEntity.evaluate.praise_rate);
         mtv_dianhua.setText(storeIntroduceEntity.store_phone);
@@ -232,14 +259,20 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     public void storeFocus() {
         if (isFocus) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
+            mtv_attention.setText(getStringResouce(R.string.discover_follow));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_n);
+            focusNum--;
             isFocus = false;
         } else {
             mtv_attention.setTextColor(getResources().getColor(R.color.pink_color));
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
+            mtv_attention.setText(getStringResouce(R.string.discover_alear_follow));
+            focusNum++;
             isFocus = true;
         }
+        mtv_number.setText(focusNum+ "人");
     }
+
 
     @Override
     public void getUserId(String userId) {

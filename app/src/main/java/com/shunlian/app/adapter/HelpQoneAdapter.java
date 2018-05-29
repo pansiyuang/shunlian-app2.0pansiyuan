@@ -11,6 +11,7 @@ import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 
 import java.util.List;
 
@@ -43,8 +44,8 @@ public class HelpQoneAdapter extends BaseRecyclerAdapter<HelpcenterIndexEntity.Q
                 viewHolder.view_line.setVisibility(View.GONE);
             }
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, category.icon);
-            viewHolder.mtv_name.setText(category.name);
-            viewHolder.mtv_key.setText(category.keyword);
+            viewHolder.ntv_name.setText(category.name);
+            viewHolder.ntv_key.setText(category.keyword);
         }
     }
 
@@ -52,14 +53,14 @@ public class HelpQoneAdapter extends BaseRecyclerAdapter<HelpcenterIndexEntity.Q
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
-        @BindView(R.id.mtv_name)
-        MyTextView mtv_name;
+        @BindView(R.id.ntv_name)
+        NewTextView ntv_name;
 
         @BindView(R.id.view_line)
         View view_line;
 
-        @BindView(R.id.mtv_key)
-        MyTextView mtv_key;
+        @BindView(R.id.ntv_key)
+        NewTextView ntv_key;
 
         public HolderView(View itemView) {
             super(itemView);

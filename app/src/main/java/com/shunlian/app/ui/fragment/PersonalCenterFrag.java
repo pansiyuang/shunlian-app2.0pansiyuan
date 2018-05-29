@@ -18,7 +18,9 @@ import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceMainAct;
+import com.shunlian.app.ui.balance.BalanceVerifyPhoneAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.h5.H5Act;
@@ -27,6 +29,7 @@ import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.plus.ShareBigGifAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
@@ -37,6 +40,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPersonalView;
 import com.shunlian.app.widget.CompileScrollView;
@@ -211,7 +215,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private PersonalcenterEntity personalcenterEntity;
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
-
+    private PromptDialog promptDialog;
+    private MainActivity mainActivity;
 
     //    private Timer outTimer;
     @Override
@@ -275,6 +280,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                .statusBarDarkFont(true, 0.2f)
 //                .init();
         //新增下拉刷新
+        mainActivity= (MainActivity) getActivity();
         NestedRingHeader header = new NestedRingHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
 
@@ -362,6 +368,24 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         });
     }
 
+    public void initHintDialog() {
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(baseActivity);
+        }
+        promptDialog.setSureAndCancleListener(getStringResouce(R.string.personal_ninhaibushi), getStringResouce(R.string.personal_goumai), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+                ShareBigGifAct.startAct(baseActivity);
+            }
+        }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+            }
+        }).show();
+    }
+
     public void getPersonalcenterData() {
         if (personalcenterPresenter != null) {
             personalcenterPresenter.getApiData();
@@ -369,6 +393,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
+        SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity=personalcenterEntity;
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
@@ -702,6 +727,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
+                if (mainActivity.isPlus()){
+                    ShareBigGifAct.startAct(baseActivity);
+                }else {
+                    initHintDialog();
+                }
                 //点击查看特权
                 break;
         }

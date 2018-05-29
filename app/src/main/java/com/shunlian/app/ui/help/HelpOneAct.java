@@ -7,17 +7,22 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.HelpArticleAdapter;
 import com.shunlian.app.adapter.HelpQoneAdapter;
 import com.shunlian.app.adapter.HelpQtwoAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpOne;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MVerticalItemDecoration;
@@ -29,9 +34,14 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import butterknife.BindView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class HelpOneAct extends BaseActivity implements View.OnClickListener, IHelpOneView {
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class HelpOneAct extends BaseActivity implements View.OnClickListener, IHelpOneView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
@@ -53,14 +63,80 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
 
+    private PHelpOne pHelpOne;
+    private PromptDialog promptDialog;
+
     @BindView(R.id.rl_more)
-    MyRelativeLayout rl_more;
+    RelativeLayout rl_more;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    private PHelpOne pHelpOne;
-    private PromptDialog promptDialog;
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.help();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void initData() {
+        EventBus.getDefault().register(this);
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
+//        storeId = getIntent().getStringExtra("storeId");
+        pHelpOne = new PHelpOne(this, this);
+        pHelpOne.getHelpPhone();
+        miv_search.setVisibility(View.VISIBLE);
+        mtv_title.setText(getStringResouce(R.string.help_bangzhuzhongxin));
+    }
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, HelpOneAct.class);
@@ -86,10 +162,6 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
                     promptDialog.show();
                 }
                 break;
-            case R.id.rl_more:
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.help();
-                break;
             case R.id.miv_search:
                 SearchQuestionAct.startAct(this);
                 break;
@@ -111,19 +183,8 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
         miv_search.setOnClickListener(this);
-        rl_more.setOnClickListener(this);
     }
 
-    @Override
-    protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-//        storeId = getIntent().getStringExtra("storeId");
-        pHelpOne = new PHelpOne(this, this);
-        pHelpOne.getHelpPhone();
-        miv_search.setVisibility(View.VISIBLE);
-        mtv_title.setText(getStringResouce(R.string.help_bangzhuzhongxin));
-    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -177,12 +238,5 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        super.onDestroy();
     }
 }

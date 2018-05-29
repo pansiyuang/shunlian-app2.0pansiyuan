@@ -41,7 +41,7 @@ public class PWeekSale extends BasePresenter<IWeekSale> {
     protected void initApi() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<WeekSaleTopEntity>> baseEntityCall = getApiService().weekSaleTop(map);
+        Call<BaseEntity<WeekSaleTopEntity>> baseEntityCall = getApiService().salesRanking(map);
         getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<WeekSaleTopEntity>>() {
             @Override
             public void onSuccess(BaseEntity<WeekSaleTopEntity> entity) {

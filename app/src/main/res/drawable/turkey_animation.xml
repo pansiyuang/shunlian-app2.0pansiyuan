@@ -19,5 +19,6 @@
    <item android:drawable="@mipmap/turkey_16" android:duration="70"/>
    <item android:drawable="@mipmap/turkey_17" android:duration="70"/>
    <item android:drawable="@mipmap/turkey_18" android:duration="70"/>
+   <item android:drawable="@mipmap/turkey_19" android:duration="70"/>
 
 </animation-list>

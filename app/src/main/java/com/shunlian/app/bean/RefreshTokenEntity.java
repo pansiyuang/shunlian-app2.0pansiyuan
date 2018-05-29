@@ -14,4 +14,5 @@ public class RefreshTokenEntity {
     public String token_expires_in;
     public String expires_in;
     public String update_time;
+    public String plus_role;
 }

@@ -11,6 +11,7 @@ import com.shunlian.app.bean.WeekSaleTopEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             WeekSaleTopEntity.Cate goods = lists.get(position);
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_avar, goods.avatar);
-            viewHolder.mtv_name.setText(goods.nickname);
+            viewHolder.ntv_name.setText(goods.nickname);
             viewHolder.miv_level.setVisibility(View.GONE);
             viewHolder.mtv_level.setVisibility(View.GONE);
             switch (position) {
@@ -62,31 +63,22 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
                     break;
                 default:
                     viewHolder.mtv_level.setVisibility(View.VISIBLE);
-                    viewHolder.mtv_level.setText(""+(position+1));
+                    viewHolder.mtv_level.setText("" + (position + 1));
                     viewHolder.mtv_desc.setTextColor(getColor(R.color.my_dark_grey));
                     break;
             }
-            viewHolder.miv_icon.setVisibility(View.GONE);
-            switch (goods.plus_role) {
-                case "0":
-                    viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_putongs);
-                    break;
-                case "1":
-                    viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_jinpais);
-                    break;
-                case "2":
-                    viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_zuanshis);
-                    break;
-                case "3":
-                    viewHolder.miv_icon.setVisibility(View.VISIBLE);
-                    viewHolder.miv_icon.setImageResource(R.mipmap.img_huangguans);
-                    break;
+            if (!isEmpty(goods.role)) {
+                int level = Integer.parseInt(goods.role);
+                if (level < 2) {
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                } else if (level == 2) {
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                } else {
+                    viewHolder.miv_icon.setImageResource(R.mipmap.img_plus_phb_jingli);
+                }
             }
-            viewHolder.mtv_desc.setText(goods.sale);
-            viewHolder.mtv_name.setText(goods.nickname);
+            viewHolder.mtv_desc.setText(goods.sales);
+            viewHolder.ntv_name.setText(goods.nickname);
         }
     }
 
@@ -104,8 +96,8 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
-        @BindView(R.id.mtv_name)
-        MyTextView mtv_name;
+        @BindView(R.id.ntv_name)
+        NewTextView ntv_name;
 
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;
