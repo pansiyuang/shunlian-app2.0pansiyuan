@@ -330,11 +330,11 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         }else if ("3".equals(plus_role_code)){//经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
-            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
         }else if ("2".equals(plus_role_code)){//主管
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
-            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
+            miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
         }else {
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);
