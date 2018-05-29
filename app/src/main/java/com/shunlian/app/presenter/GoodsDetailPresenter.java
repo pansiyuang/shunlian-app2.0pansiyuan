@@ -535,7 +535,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         super.onSuccess(entity);
                         if (!isEmpty(entity.data.may_be_buy_list)){
                             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
-                                    (context,entity.data.may_be_buy_list);
+                                    (context,entity.data.may_be_buy_list,false);
                             iView.setAdapter(adapter);
                             adapter.setOnItemClickListener((v,p)->{
                                 mDetailAct.moreHideAnim();

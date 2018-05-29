@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -21,9 +22,11 @@ import butterknife.BindView;
  */
 
 public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.MayBuyList> {
+    private boolean isPlus = false;
 
-    public ProbablyLikeAdapter(Context context,List<ProbablyLikeEntity.MayBuyList> lists) {
+    public ProbablyLikeAdapter(Context context, List<ProbablyLikeEntity.MayBuyList> lists, boolean isPlus) {
         super(context, false, lists);
+        this.isPlus = isPlus;
     }
 
     @Override
@@ -39,8 +42,18 @@ public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.
         GlideUtils.getInstance().loadImage(context, mHolder.miv_onel, mayBuyList.thumb);
         mHolder.mtv_descl.setText(mayBuyList.title);
         mHolder.mtv_pricel.setText(mayBuyList.price);
-        mHolder.mtv_pricer.setStrikethrough()//市场价
-                .setText(getString(R.string.rmb)+mayBuyList.market_price);
+        mHolder.mrlayout_plus.setVisibility(View.GONE);
+        mHolder.mtv_pricer.setVisibility(View.GONE);
+        if (!isPlus) {
+            mHolder.mtv_pricer.setStrikethrough()//市场价
+                    .setText(getString(R.string.rmb) + mayBuyList.market_price);
+            mHolder.mtv_pricer.setVisibility(View.VISIBLE);
+
+        } else if (!isEmpty(mayBuyList.self_buy_earn)) {
+            mHolder.mtv_plus_prefPrice.setText(getString(R.string.common_yuan) + mayBuyList.self_buy_earn);
+            mHolder.mrlayout_plus.setVisibility(View.VISIBLE);
+        }
+
     }
 
     public class ProbablyLikeHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
@@ -56,6 +69,12 @@ public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.
         @BindView(R.id.mtv_pricer)
         MyTextView mtv_pricer;
 
+        @BindView(R.id.mrlayout_plus)
+        MyRelativeLayout mrlayout_plus;
+
+        @BindView(R.id.mtv_plus_prefPrice)
+        MyTextView mtv_plus_prefPrice;
+
 
         public ProbablyLikeHolder(View itemView) {
             super(itemView);
@@ -64,8 +83,8 @@ public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

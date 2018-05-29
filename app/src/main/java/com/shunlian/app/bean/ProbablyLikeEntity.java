@@ -11,6 +11,7 @@ import java.util.List;
 public class ProbablyLikeEntity {
 
     public String total_amount;
+    public String order_id;
 
     public List<MayBuyList> may_be_buy_list;
 
@@ -21,6 +22,7 @@ public class ProbablyLikeEntity {
         public String price;
         public String thumb;
         public String market_price;
+        public String self_buy_earn;
     }
 
 }

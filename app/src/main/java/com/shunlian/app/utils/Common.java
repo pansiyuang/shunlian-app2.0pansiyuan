@@ -59,8 +59,15 @@ import com.shunlian.app.R;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.core.AishangAct;
+import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
+import com.shunlian.app.ui.core.KouBeiAct;
+import com.shunlian.app.ui.core.PingpaiAct;
+import com.shunlian.app.ui.core.PingpaiListAct;
+import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -69,9 +76,13 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_profit.MyProfitAct;
+import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
+import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -118,6 +129,21 @@ public class Common {
         switch (toPage) {
             case "goods":
                 return "GoodsDetailAct";
+            case "goToPayPlus":
+                return "GifBagListAct";
+            case "search":
+                return "SearchGoodsActivity";
+            case "checkin":
+                return "SignInAct";
+            case "myshop":
+                return "MyLittleStoreActivity";
+            case "find":
+            case "my":
+            case "cart":
+            case "home":
+                return "MainActivity";
+            case "voucherlist":
+                return "CouponListAct";
             case "login":
                 return "LoginAct";
             case "article":
@@ -129,9 +155,21 @@ public class Common {
             case "hotpush":
                 return "HotRecommendAct";
             case "special":
-                return "H5Act";
+                return "H5SpecialAct";
             case "slyoupin":
                 return "SuperProductsAct";
+            case "benefit":
+                return "DayDayAct";
+            case "sale":
+                return "PingpaiAct";
+            case "loveyoupin":
+                return "AishangAct";
+            case "praise":
+                return "KouBeiAct";
+            case "commission":
+                return "MyProfitAct";
+            case "coupon":
+                return "GetCouponAct";
             default:
                 return "";
         }
@@ -146,6 +184,91 @@ public class Common {
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "categories":
+                //todo
+                Common.staticToast("更多分类");
+                break;
+            case "coupon":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    GetCouponAct.startAct(context);
+                }
+                break;
+            case "voucher":
+                //todo
+                Common.staticToast("优惠券");
+                break;
+            case "gift":
+                //todo
+                Common.staticToast("买赠");
+                break;
+            case "discount":
+                //todo
+                Common.staticToast("满额");
+                break;
+            case "combo":
+                //todo
+                Common.staticToast("套餐");
+                break;
+            case "pingtuan":
+                //todo
+                Common.staticToast("优惠拼单");
+                break;
+            case "praise":
+                KouBeiAct.startAct(context);
+                break;
+            case "loveyoupin":
+                AishangAct.startAct(context);
+                break;
+            case "sale":
+                PingpaiAct.startAct(context);
+                break;
+            case "benefit":
+                DayDayAct.startAct(context);
+                break;
+            case "myshop":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    MyLittleStoreActivity.startAct(context);
+                }
+                break;
+            case "checkin":
+                SignInAct.startAct(context);
+                break;
+            case "home":
+                MainActivity.startAct(context, "");
+                break;
+            case "fanslist":
+                //todo
+                Common.staticToast("粉丝列表");
+                break;
+            case "popshare":
+                //todo
+                Common.staticToast("弹出分享");
+                break;
+            case "commission":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    MyProfitAct.startAct(context);
+                }
+                break;
+            case "myvoucherlist":
+                //todo
+                Common.staticToast("我的优惠券");
+                break;
+            case "voucherlist":
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+                    CouponListAct.startAct(context);
+                }
+                break;
+            case "goToPayPlus":
+                GifBagListAct.startAct(context);
                 break;
             case "login":
                 LoginAct.startAct(context);
@@ -191,6 +314,9 @@ public class Common {
                 break;
             case "collection"://收藏
                 MyCollectionAct.startAct(context, null);
+                break;
+            case "find"://收藏
+                MainActivity.startAct(context, "discover");
                 break;
             case "footprint"://足迹
                 MyCollectionAct.startAct(context, MyCollectionAct.FOOTPRINT_FLAG);

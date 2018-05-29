@@ -71,6 +71,7 @@ public class OrderdetailEntity {
         public String title;
         public String thumb;
         public String comment_id;
+        public String product_id;
         public String sku_desc;
         public String qty;
         public String market_price;
