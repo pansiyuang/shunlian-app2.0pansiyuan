@@ -47,7 +47,7 @@ public class PlusOrderPresenter extends BasePresenter<IPlusOrderView> {
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
-        Call<BaseEntity<PlusOrderEntity>> orderList = getApiService().getPlusOrderList(map);
+        Call<BaseEntity<PlusOrderEntity>> orderList = getApiService().getPlusOrderList(getRequestBody(map));
 
         getNetData(isFirst, orderList, new SimpleNetDataCallback<BaseEntity<PlusOrderEntity>>() {
             @Override

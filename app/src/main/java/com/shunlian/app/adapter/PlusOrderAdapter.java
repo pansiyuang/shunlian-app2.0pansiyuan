@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusOrderEntity;
+import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
@@ -43,7 +45,7 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
         orderViewHolder.tv_price.setText(price);
         Common.changeTextSize(price, getString(R.string.common_yuan), 19);
         orderViewHolder.tv_param.setText(plusOrder.sku_desc);
-        orderViewHolder.tv_count.setText(String.valueOf(plusOrder.qty));
+        orderViewHolder.tv_count.setText("x" + plusOrder.qty);
         orderViewHolder.tv_total_count.setText("共计" + plusOrder.qty + "件商品");
         try {
             double shippingFee = Double.valueOf(plusOrder.shipping_fee);
@@ -56,18 +58,25 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
             e.printStackTrace();
         }
         switch (plusOrder.status) {
-            case 1: //已发货
-                orderViewHolder.miv_status.setImageDrawable(getDrawable(R.mipmap.img_plus_yifahuo));
-                orderViewHolder.miv_status.setVisibility(View.VISIBLE);
-                break;
-            case 2: //待收货
+            case 1: //待发货
                 orderViewHolder.miv_status.setImageDrawable(getDrawable(R.mipmap.img_plus_yifukuan));
                 orderViewHolder.miv_status.setVisibility(View.VISIBLE);
+                orderViewHolder.rl_logistics.setVisibility(View.GONE);
+                break;
+            case 2: //已发货
+                orderViewHolder.miv_status.setImageDrawable(getDrawable(R.mipmap.img_plus_yifahuo));
+                orderViewHolder.miv_status.setVisibility(View.VISIBLE);
+                orderViewHolder.rl_logistics.setVisibility(View.VISIBLE);
                 break;
             default:
                 orderViewHolder.miv_status.setVisibility(View.GONE);
+                orderViewHolder.rl_logistics.setVisibility(View.GONE);
                 break;
         }
+        orderViewHolder.tv_logistics.setOnClickListener(v -> {
+            //查看物流信息
+            PlusLogisticsDetailAct.startAct(context, plusOrder.product_id);
+        });
     }
 
     public class OrderViewHolder extends BaseRecyclerViewHolder {
@@ -94,6 +103,12 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
 
         @BindView(R.id.tv_total_price)
         TextView tv_total_price;
+
+        @BindView(R.id.rl_logistics)
+        RelativeLayout rl_logistics;
+
+        @BindView(R.id.tv_logistics)
+        TextView tv_logistics;
 
         public OrderViewHolder(View itemView) {
             super(itemView);

@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="19dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="购买以下任一商品即重新可获得plus店主权益"
+            android:textColor="@color/value_7C1212"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@color/value_E71B1E" />
+
+        <TextView
+            android:id="@+id/tv_more_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="更多礼包"
+            android:textColor="@color/value_E71B1E"
+            android:textSize="12sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

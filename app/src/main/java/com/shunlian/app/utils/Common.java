@@ -70,6 +70,7 @@ import com.shunlian.app.ui.h5.H5SpecialAct;
 import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
@@ -129,6 +130,8 @@ public class Common {
                 return "HotRecommendAct";
             case "special":
                 return "H5Act";
+            case "slyoupin":
+                return "SuperProductsAct";
             default:
                 return "";
         }
@@ -196,6 +199,9 @@ public class Common {
                 String url = InterentTools.H5_HOST + "special/" + params[0];
 //                String url = InterentTools.H5_HOST + "special/127";
                 H5SpecialAct.startAct(context, url, H5Act.MODE_SONIC);
+                break;
+            case "slyoupin"://顺联优品
+                SuperProductsAct.startAct(context);
                 break;
             default://首页
                 LogUtil.augusLogW("wheremain");

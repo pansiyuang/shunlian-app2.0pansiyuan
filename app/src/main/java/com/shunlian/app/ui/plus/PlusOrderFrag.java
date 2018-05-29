@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.PlusOrderAdapter;
 import com.shunlian.app.bean.PlusOrderEntity;
 import com.shunlian.app.presenter.PlusOrderPresenter;
 import com.shunlian.app.ui.BaseLazyFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IPlusOrderView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
@@ -58,6 +59,7 @@ public class PlusOrderFrag extends BaseLazyFragment implements IPlusOrderView {
     protected void onFragmentFirstVisible() {
 
         fromType = getArguments().getString("from_type");
+        LogUtil.httpLogW("fromType:" + fromType);
 
         mPresenter = new PlusOrderPresenter(getActivity(), this);
         mPresenter.getOrderList(fromType, true);

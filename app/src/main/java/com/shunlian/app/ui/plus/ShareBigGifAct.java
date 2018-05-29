@@ -2,18 +2,33 @@ package com.shunlian.app.ui.plus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IShareBifGifView;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -21,7 +36,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/5/23.
  */
 
-public class ShareBigGifAct extends BaseActivity {
+public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
 
     public final int Mode_Month = 1001;
     public final int Mode_Year = 1002;
@@ -74,15 +89,37 @@ public class ShareBigGifAct extends BaseActivity {
     @BindView(R.id.tv_group_count)
     TextView tv_group_count;
 
+    @BindView(R.id.tv_sales_type)
+    TextView tv_sales_type;
+
+    @BindView(R.id.tv_sales_date)
+    TextView tv_sales_date;
+
+    @BindView(R.id.tv_earn_money)
+    TextView tv_earn_money;
+
+    @BindView(R.id.tv_member_count)
+    TextView tv_member_count;
+
     @BindView(R.id.miv_invite)
     MyImageView miv_invite;
+
+    @BindView(R.id.flayout_content)
+    FrameLayout flayout_content;
 
     private int screenWidth;
     private int tabOneWidth, tabTwoWidth;
     private int tabOneMode = Mode_Year;
     private int space;
     private int currentYear, currentMonth;
-
+    private ShareBigGifPresenter mPresenter;
+    private FragmentManager fragmentManager;
+    private Map<String, BaseFragment> fragmentMap = new HashMap<>();
+    private final String[] flags = {"record", "gif", "invitations"};
+    private InvitationRecordFrag invitationRecordFrag;
+    private StoreGifFrag storeGifFrag;
+    private InvitationsFrag invitationsFrag;
+    private String invitationsUrl;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, ShareBigGifAct.class));
@@ -110,9 +147,10 @@ public class ShareBigGifAct extends BaseActivity {
         currentMonth = calendar.get(Calendar.MONTH) + 1;
 
         showTabOneButton(Mode_Year);
-
-        GlideUtils.getInstance().loadCircleImage(this, miv_icon, "");
         initTabsWidth();
+        initFragments();
+        mPresenter = new ShareBigGifPresenter(this, this);
+        mPresenter.getPlusData();
     }
 
     @Override
@@ -135,6 +173,68 @@ public class ShareBigGifAct extends BaseActivity {
         tv_tab2_left.setWidth(tabTwoWidth + space);
         tv_tab2_middle.setWidth(tabTwoWidth + (2 * space));
         tv_tab2_right.setWidth(tabTwoWidth + space);
+    }
+
+    public void initFragments() {
+        fragmentManager = getSupportFragmentManager();
+        recordClick();
+    }
+
+    public void switchContent(Fragment show) {
+        if (show != null) {
+            if (!show.isAdded()) {
+                fragmentManager.beginTransaction().remove(show).commitAllowingStateLoss();
+                fragmentManager.beginTransaction().add(R.id.flayout_content, show).commitAllowingStateLoss();
+            } else {
+                fragmentManager.beginTransaction().show(show).commitAllowingStateLoss();
+            }
+            if (fragmentMap != null && fragmentMap.size() > 0) {
+                Set<String> keySet = fragmentMap.keySet();
+                Iterator<String> iterator = keySet.iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    BaseFragment baseFragment = fragmentMap.get(key);
+                    if (show != baseFragment) {
+                        if (baseFragment != null && baseFragment.isVisible()) {
+                            fragmentManager.beginTransaction().hide(baseFragment).commitAllowingStateLoss();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void recordClick() {
+        if (invitationRecordFrag == null) {
+            invitationRecordFrag = (InvitationRecordFrag) fragmentMap.get(flags[0]);
+            if (invitationRecordFrag == null) {
+                invitationRecordFrag = new InvitationRecordFrag();
+                fragmentMap.put(flags[0], invitationRecordFrag);
+            }
+        }
+        switchContent(invitationRecordFrag);
+    }
+
+    public void gifClick() {
+        if (storeGifFrag == null) {
+            storeGifFrag = (StoreGifFrag) fragmentMap.get(flags[1]);
+            if (storeGifFrag == null) {
+                storeGifFrag = new StoreGifFrag();
+                fragmentMap.put(flags[1], storeGifFrag);
+            }
+        }
+        switchContent(storeGifFrag);
+    }
+
+    public void invitationsClick() {
+        if (invitationsFrag == null) {
+            invitationsFrag = (InvitationsFrag) fragmentMap.get(flags[2]);
+            if (invitationsFrag == null) {
+                invitationsFrag = InvitationsFrag.getInstance(invitationsUrl);
+                fragmentMap.put(flags[2], invitationsFrag);
+            }
+        }
+        switchContent(invitationsFrag);
     }
 
     @Override
@@ -191,14 +291,45 @@ public class ShareBigGifAct extends BaseActivity {
         tv_tab2_right.setVisibility(View.GONE);
         switch (position) {
             case 1:
+                recordClick();
                 tv_tab2_left.setVisibility(View.VISIBLE);
                 break;
             case 2:
+                gifClick();
                 tv_tab2_middle.setVisibility(View.VISIBLE);
                 break;
             case 3:
+                invitationsClick();
                 tv_tab2_right.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    @Override
+    public void getPlusData(PlusDataEntity plusDataEntity) {   //小店级别：0=普通会员，1=plus店主，2=销售主管，3=销售经理
+        PlusDataEntity.BaseInfo baseInfo = plusDataEntity.base_info;
+        GlideUtils.getInstance().loadCircleImage(this, miv_icon, baseInfo.avatar);
+        tv_sales_type.setText(baseInfo.role_desc);
+        tv_sales_date.setText("有效期:" + baseInfo.expire_time);
+        seekbar_plus.setProgress(12);
+        tv_earn_money.setText("赚" + baseInfo.invite_reward + "奖励");
+
+        invitationsUrl = baseInfo.invite_strategy;
+
+        if (baseInfo.role >= 3) {
+            tv_member_count.setVisibility(View.VISIBLE);
+        } else {
+            tv_member_count.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

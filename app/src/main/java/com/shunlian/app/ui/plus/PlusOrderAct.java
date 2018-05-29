@@ -34,7 +34,7 @@ public class PlusOrderAct extends BaseActivity {
 
     private String[] titles = {"全部", "待发货", "已发货"};
     private String[] fromList = {"all", "1", "2"};
-    private static List<BaseFragment> orderFrags;
+    private List<BaseFragment> orderFrags;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, PlusOrderAct.class);
