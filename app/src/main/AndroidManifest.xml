@@ -832,7 +832,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.plus.ShareBigGifAct"
+            android:name=".ui.plus.MyPlusAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

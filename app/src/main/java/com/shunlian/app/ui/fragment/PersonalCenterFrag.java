@@ -20,7 +20,6 @@ import com.shunlian.app.presenter.PersonalcenterPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.balance.BalanceMainAct;
-import com.shunlian.app.ui.balance.BalanceVerifyPhoneAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.h5.H5Act;
@@ -29,7 +28,7 @@ import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
-import com.shunlian.app.ui.plus.ShareBigGifAct;
+import com.shunlian.app.ui.plus.MyPlusAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
@@ -376,7 +375,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                ShareBigGifAct.startAct(baseActivity);
+                MyPlusAct.startAct(baseActivity);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -728,7 +727,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_chakan:
                 if (mainActivity.isPlus()){
-                    ShareBigGifAct.startAct(baseActivity);
+                    MyPlusAct.startAct(baseActivity);
                 }else {
                     initHintDialog();
                 }

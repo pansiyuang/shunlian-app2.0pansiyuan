@@ -27,6 +27,8 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.plus.MyPlusAct;
+import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
@@ -46,7 +48,7 @@ import java.util.Set;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
-    private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
+    private static final String[] flags = {"mainPage", "myPlus", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     public int position = 0;
     @BindView(R.id.fl_main)
@@ -86,6 +88,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
 //    private SortFrag sortFrag;
+    private MyPlusFrag myPlusFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
@@ -239,7 +242,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         break;
                     case R.id.ll_tab_sort:
                         if (isPlus()) {
-                            sortClick();
+                            myPlusClick();
                         } else {
                             H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
                         }
@@ -281,20 +284,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         chageTabItem(pageIndex);
     }
 
-    public void sortClick() {
-        /*isFirst = false;
+    public void myPlusClick() {
+        isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
-        if (sortFrag == null) {
-            sortFrag = (SortFrag) fragmentMap.get(flags[1]);
-            if (sortFrag == null) {
-                sortFrag = new SortFrag();
-                fragmentMap.put(flags[1], sortFrag);
+        if (myPlusFrag == null) {
+            myPlusFrag = (MyPlusFrag) fragmentMap.get(flags[1]);
+            if (myPlusFrag == null) {
+                myPlusFrag = new MyPlusFrag();
+                fragmentMap.put(flags[1], myPlusFrag);
             }
         }
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
-        switchContent(sortFrag);
+        switchContent(myPlusFrag);
         pageIndex = 1;
-        chageTabItem(pageIndex);*/
+        chageTabItem(pageIndex);
     }
 
     public void discoverClick() {
@@ -441,7 +444,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 break;
             case "sort":
                 if (isPlus()){
-                    sortClick();
+                    myPlusClick();
                 }else {
                     H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
                 }
