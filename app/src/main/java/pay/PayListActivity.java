@@ -25,9 +25,11 @@ import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.presenter.PayListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
+import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PaySuccessAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -73,6 +75,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String currentPayType;//当前支付方式
     private String pay_sn;
     public static final int FINISH_ACT_WHAT = 100;//finish act
+    private String mProductId;
+    private String mSkuId;
 
     public static void startAct(Activity activity, String shop_goods, String addressId,String order_id,String price){
         PayListActivity.activity = activity;
@@ -80,6 +84,17 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         intent.putExtra("shop_goods",shop_goods);
         intent.putExtra("addressId",addressId);
         intent.putExtra("order_id",order_id);
+        intent.putExtra("price",price);
+        activity.startActivity(intent);
+    }
+
+    public static void startAct(Activity activity,String product_id,String sku_id,String addressId,
+                                String price,String plus){
+        PayListActivity.activity = activity;
+        Intent intent = new Intent(activity, PayListActivity.class);
+        intent.putExtra("product_id",product_id);
+        intent.putExtra("addressId",addressId);
+        intent.putExtra("sku_id",sku_id);
         intent.putExtra("price",price);
         activity.startActivity(intent);
     }
@@ -110,7 +125,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     }
                     break;
                 case FINISH_ACT_WHAT:
-                    if (activity instanceof ConfirmOrderAct){
+                    if (activity instanceof ConfirmOrderAct ||
+                            activity instanceof PLUSConfirmOrderAct){
                         activity.finish();
                     }
                     finish();
@@ -124,7 +140,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void payFail() {
         Common.staticToast(getStringResouce(R.string.pay_fail));
-        if (isEmpty(order_id)){
+        if (!isEmpty(mProductId)){
+            PlusGifDetailAct.startAct(this,mProductId);
+        }else if (isEmpty(order_id)){
             MyOrderAct.startAct(PayListActivity.this, 2);
         }else {
             OrderDetailAct.startAct(PayListActivity.this, order_id);
@@ -162,15 +180,21 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void initData() {
         setStatusBarColor(R.color.transparent);
-
+        //正常支付
         shop_goods = getIntent().getStringExtra("shop_goods");
         addressId = getIntent().getStringExtra("addressId");
         orderId = getIntent().getStringExtra("order_id");
         price = getIntent().getStringExtra("price");
 
+        //plus支付
+        mProductId = getIntent().getStringExtra("product_id");
+        mSkuId = getIntent().getStringExtra("sku_id");
+        boolean isPLUS = false;
+        if (!isEmpty(mProductId)) isPLUS = true;
+        payListPresenter = new PayListPresenter(this,this,isPLUS);
+
         wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
-        payListPresenter = new PayListPresenter(this,this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recy_pay.setLayoutManager(manager);
     }
@@ -336,6 +360,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
                 }else if (!isEmpty(orderId)){
                     payListPresenter.fromOrderListGoPay(orderId,pay_types.code);
+                }else if (!isEmpty(mProductId)){
+                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
                 }
                 break;
             case "wechat":
@@ -378,6 +404,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 PayTask alipay = new PayTask(PayListActivity.this);
                 // 调用支付接口，获取支付结果
                 String result = alipay.pay(alipayRequest, true);
+                LogUtil.zhLogW("result============:"+result);
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
                 msg.obj = result;

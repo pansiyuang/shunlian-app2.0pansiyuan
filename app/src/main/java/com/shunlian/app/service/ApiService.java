@@ -2152,6 +2152,29 @@ public interface ApiService {
     Call<BaseEntity<ProductDetailEntity>> getProductDetail(@QueryMap Map<String, String> map);
 
     /**
+     * 处罚
+     * @return
+     */
+    @POST("message/punish")
+    Call<BaseEntity<PunishEntity>> punish(@QueryMap Map<String, String> map);
+
+    /**
+     * plus确认订单
+     * @param body
+     * @return
+     */
+    @POST("productorder/confirm")
+    Call<BaseEntity<PLUSConfirmEntity>> plusConfirm(@Body RequestBody body);
+
+    /**
+     * 支付plus订单
+     * @param body
+     * @return
+     */
+    @POST("productorder/checkout")
+    Call<BaseEntity<PayOrderEntity>> submitPLUSOrder(@Body RequestBody body);
+
+    /**
      * 礼包订单列表
      *
      * @return
