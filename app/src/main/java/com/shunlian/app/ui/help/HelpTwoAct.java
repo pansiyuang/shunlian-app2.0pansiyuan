@@ -8,16 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpQCateAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpClassEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpTwo;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
@@ -29,11 +34,16 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IHelpTwoView {
+public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IHelpTwoView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
@@ -52,18 +62,87 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
-    @BindView(R.id.rl_more)
-    MyRelativeLayout rl_more;
-
     private PHelpTwo pHelpTwo;
     private LinearLayoutManager linearLayoutManager;
     private String twoId = "", oneId = "", title = "";
     private boolean twoFlag = false;
     private PromptDialog promptDialog;
     private HelpQCateAdapter helpQCateAdapter;
+
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.help();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void initData() {
+        EventBus.getDefault().register(this);
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
+//        storeId = getIntent().getStringExtra("storeId");
+        pHelpTwo = new PHelpTwo(this, this);
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("title")))
+            title = getIntent().getStringExtra("title");
+        setTitle(title);
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("id")))
+            oneId = getIntent().getStringExtra("id");
+        pHelpTwo.getCateOne(oneId);
+    }
 
     public static void startAct(Context context, String id, String title) {
         Intent intent = new Intent(context, HelpTwoAct.class);
@@ -100,10 +179,6 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
             case R.id.mllayout_kefu:
                 pHelpTwo.getUserId();
                 break;
-            case R.id.rl_more:
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.help();
-                break;
         }
     }
 
@@ -112,7 +187,6 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         super.initListener();
         mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
-        rl_more.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -127,20 +201,6 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
                 }
             }
         });
-    }
-
-    @Override
-    protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-//        storeId = getIntent().getStringExtra("storeId");
-        pHelpTwo = new PHelpTwo(this, this);
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("title")))
-            title = getIntent().getStringExtra("title");
-        setTitle(title);
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("id")))
-            oneId = getIntent().getStringExtra("id");
-        pHelpTwo.getCateOne(oneId);
     }
 
     public void initDialog() {
@@ -238,10 +298,4 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        super.onDestroy();
-    }
 }

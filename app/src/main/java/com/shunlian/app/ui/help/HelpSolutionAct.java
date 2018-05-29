@@ -9,12 +9,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpSolutionAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterSolutionEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -26,9 +30,14 @@ import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
-import butterknife.BindView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class HelpSolutionAct extends BaseActivity implements View.OnClickListener, IHelpSolutionView {
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class HelpSolutionAct extends BaseActivity implements View.OnClickListener, IHelpSolutionView, MessageCountManager.OnGetMessageListener {
     private static final int TEXT_TOTAL = 140;//文字总数
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
@@ -51,16 +60,82 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
 
-    @BindView(R.id.quick_actions)
-    QuickActions quick_actions;
-
-    @BindView(R.id.rl_more)
-    MyRelativeLayout rl_more;
-
     private PHelpSolution pHelpSolution;
     private Dialog dialog_feedback;
     private boolean isChosen=false;
     private ShareInfoParam shareInfoParam;
+
+    @BindView(R.id.rl_more)
+    RelativeLayout rl_more;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
+    private MessageCountManager messageCountManager;
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(this);
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.shareHelp();
+        quick_actions.shareInfo(shareInfoParam);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void initData() {
+            EventBus.getDefault().register(this);
+            setStatusBarColor(R.color.white);
+            setStatusBarFontDark();
+            mtv_title.setText(getStringResouce(R.string.help_jiejuefangan));
+//        storeId = getIntent().getStringExtra("storeId");
+            pHelpSolution = new PHelpSolution(this, getIntent().getStringExtra("id"), this);
+    }
 
     public static void startAct(Context context, String id) {
         Intent intent = new Intent(context, HelpSolutionAct.class);
@@ -93,11 +168,6 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                 if (!isChosen)
                 pHelpSolution.isSolved("1");
                 break;
-            case R.id.rl_more:
-                quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.shareHelp();
-                quick_actions.shareInfo(shareInfoParam);
-                break;
         }
     }
 
@@ -110,17 +180,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         miv_shi.setOnClickListener(this);
         miv_fou.setOnClickListener(this);
         mtv_shi.setOnClickListener(this);
-        rl_more.setOnClickListener(this);
     }
 
-    @Override
-    protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        mtv_title.setText(getStringResouce(R.string.help_jiejuefangan));
-//        storeId = getIntent().getStringExtra("storeId");
-        pHelpSolution = new PHelpSolution(this, getIntent().getStringExtra("id"), this);
-    }
 
     @Override
     public void showFailureView(int rquest_code) {
@@ -234,10 +295,4 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         Common.staticToasts(getBaseContext(), getStringResouce(R.string.help_xiexiefankui), R.mipmap.icon_common_duihao);
     }
 
-    @Override
-    protected void onDestroy() {
-        if (quick_actions != null)
-            quick_actions.destoryQuickActions();
-        super.onDestroy();
-    }
 }

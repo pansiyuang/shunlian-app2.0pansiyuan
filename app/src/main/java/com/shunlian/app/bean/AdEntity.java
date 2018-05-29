@@ -13,6 +13,7 @@ import java.util.List;
 public class AdEntity implements Serializable{
     public String show;
     public String is_tag;
+    public String plus_role;
     public List<String> tag;
     public AD list;
     @JsonIgnoreProperties(ignoreUnknown = true)

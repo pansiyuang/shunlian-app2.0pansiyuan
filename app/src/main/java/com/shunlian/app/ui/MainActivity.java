@@ -26,11 +26,11 @@ import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -46,9 +46,10 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements  MessageCountManager.OnGetMessageListener, IMain {
+public class MainActivity extends BaseActivity implements MessageCountManager.OnGetMessageListener, IMain {
     private static final String[] flags = {"mainPage", "sort", "discover", "shoppingcar", "personCenter"};
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
+    public int position = 0;
     @BindView(R.id.fl_main)
     MyFrameLayout fl_main;
     @BindView(R.id.ll_tab_main_page)
@@ -97,15 +98,14 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
-    private boolean isPerson=false,isCart=false,isFirst=false;
+    private boolean isPerson = false, isCart = false, isFirst = false;
     private Handler handler;
-    public  int position=0;
     private CateGoryFrag cateGoryFrag;
 
     public static void startAct(Context context, String flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("flag", flag);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -124,16 +124,16 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
      */
     @Override
     protected void initData() {
-        if (updateDialogV==null)
+        if (updateDialogV == null)
             updateDialogV = new UpdateDialog(this) {
-            @Override
-            public void initDialogFinish() {
-                if (updateDialogV.updateDialog==null){
-                    pMain=new PMain(MainActivity.this,MainActivity.this);
-                    pMain.getPopAD();
+                @Override
+                public void initDialogFinish() {
+                    if (updateDialogV.updateDialog == null) {
+                        pMain = new PMain(MainActivity.this, MainActivity.this);
+                        pMain.getPopAD();
+                    }
                 }
-            }
-        };
+            };
         fragmentManager = getSupportFragmentManager();
         mainPageClick();
 
@@ -158,13 +158,13 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
 
     @Override
     protected void onResume() {
-        if (Common.isAlreadyLogin()){
-            if (isPerson){
+        if (Common.isAlreadyLogin()) {
+            if (isPerson) {
                 personCenterClick();
-                isPerson=false;
-            }else if (isCart){
+                isPerson = false;
+            } else if (isCart) {
                 shoppingCarClick();
-                isCart=false;
+                isCart = false;
             }
         }
         super.onResume();
@@ -212,34 +212,38 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
         if (MyOnClickListener.isFastClick()) {
             return;
         }
-        if (view.getId()==R.id.ll_tab_main_page){
+        if (view.getId() == R.id.ll_tab_main_page) {
             miv_first.setVisibility(View.VISIBLE);
             miv_tab_main.setVisibility(View.GONE);
             tv_tab_main.setVisibility(View.GONE);
             miv_first.animate().rotation(0).setDuration(0).start();
             miv_first.animate().rotation(360).setDuration(300).start();
-        }else {
+        } else {
             miv_first.setVisibility(View.GONE);
             miv_tab_main.setVisibility(View.VISIBLE);
             tv_tab_main.setVisibility(View.VISIBLE);
             view.animate().scaleX(0.2f).scaleY(0.2f).setDuration(0).start();
             view.animate().scaleX(1).scaleY(1).setDuration(300).start();
         }
-        if (handler==null)
-            handler=new Handler();
+        if (handler == null)
+            handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
-                        if (isFirst){
-                            cateGoryFrag= (CateGoryFrag) mainPageFrag.fragments.get(position);
+                        if (isFirst) {
+                            cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
                             cateGoryFrag.rv_view.scrollToPosition(0);
                         }
                         mainPageClick();
                         break;
                     case R.id.ll_tab_sort:
-                        sortClick();
+                        if (isPlus()) {
+                            sortClick();
+                        } else {
+                            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+                        }
                         break;
                     case R.id.ll_tab_discover:
                         discoverClick();
@@ -252,10 +256,18 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                         break;
                 }
             }
-        },300);
+        }, 300);
     }
+
+    public boolean isPlus() {
+        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+        if (!isEmpty(plus) && Integer.parseInt(plus) > 0)
+            return true;
+        return false;
+    }
+
     public void mainPageClick() {
-        isFirst=true;
+        isFirst = true;
         if (mainPageFrag == null) {
 //            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
             mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
@@ -271,7 +283,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void sortClick() {
-        isFirst=false;
+        isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (sortFrag == null) {
             sortFrag = (SortFrag) fragmentMap.get(flags[1]);
@@ -287,7 +299,7 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void discoverClick() {
-        isFirst=false;
+        isFirst = false;
         //先判断此碎片是否第一次点击，是的话初始化碎片
         if (discoverFrag == null) {
             discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
@@ -302,10 +314,10 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void shoppingCarClick() {
-        isFirst=false;
+        isFirst = false;
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
-            isCart=true;
+            isCart = true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -315,8 +327,8 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 shoppingCarFrag = new ShoppingCarFrag();
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
-        }else {
-            shoppingCarFrag.isclick=true;
+        } else {
+            shoppingCarFrag.isclick = true;
             shoppingCarFrag.getShoppingCarData();
         }
 
@@ -327,10 +339,10 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
     }
 
     public void personCenterClick() {
-        isFirst=false;
+        isFirst = false;
         if (!Common.isAlreadyLogin()) {
             LoginAct.startAct(this);
-            isPerson=true;
+            isPerson = true;
             return;
         }
         //先判断此碎片是否第一次点击，是的话初始化碎片
@@ -340,8 +352,8 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 personalCenterFrag = new PersonalCenterFrag();
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
-        }else {
-            personalCenterFrag.isclick=true;
+        } else {
+            personalCenterFrag.isclick = true;
             personalCenterFrag.getPersonalcenterData();
         }
 
@@ -429,7 +441,11 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
                 mainPageClick();
                 break;
             case "sort":
-                sortClick();
+                if (isPlus()){
+                    sortClick();
+                }else {
+                    H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+                }
                 break;
             case "discover":
                 discoverClick();
@@ -496,9 +512,9 @@ public class MainActivity extends BaseActivity implements  MessageCountManager.O
 
     @Override
     public void setAD(AdEntity data) {
-        if ("1".equals(data.show)&&!SharedPrefUtil.getCacheSharedPrf("ad_id","").equals(data.list.ad_sn)){
+        if ("1".equals(data.show) && !SharedPrefUtil.getCacheSharedPrf("ad_id", "").equals(data.list.ad_sn)) {
             initDialog(data);
-            SharedPrefUtil.saveCacheSharedPrf("ad_id",data.list.ad_sn);
+            SharedPrefUtil.saveCacheSharedPrf("ad_id", data.list.ad_sn);
         }
     }
 

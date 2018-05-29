@@ -204,7 +204,6 @@ public class Common {
                 SuperProductsAct.startAct(context);
                 break;
             default://首页
-                LogUtil.augusLogW("wheremain");
                 MainActivity.startAct(context, "");
                 break;
         }

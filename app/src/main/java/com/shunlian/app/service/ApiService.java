@@ -885,6 +885,14 @@ public interface ApiService {
     Call<BaseEntity<RankingListEntity>> rankingList(@QueryMap Map<String, String> map);
 
     /**
+     * 优品销量排行榜
+     *
+     * @return
+     */
+    @GET("plus/index/salesRanking")
+    Call<BaseEntity<WeekSaleTopEntity>> salesRanking(@QueryMap Map<String, String> map);
+
+    /**
      * 申请平台介入
      *
      * @param body

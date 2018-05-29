@@ -24,5 +24,6 @@ public class LoginFinishEntity {
     public String refresh_expires_in;
     public String token;
     public String expires_in;
+    public String plus_role;
     public List<String> tag;
 }

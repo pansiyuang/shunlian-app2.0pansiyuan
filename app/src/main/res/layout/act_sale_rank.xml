@@ -27,13 +27,14 @@
                     android:scaleType="fitXY"
                     android:src="@mipmap/img_paihang_banner" />
 
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_time"
+                <com.shunlian.app.widget.NewTextView
+                    android:id="@+id/ntv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/value_FFDED0"
                     android:textSize="14sp"
                     android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="32dp"/>
             </com.shunlian.app.widget.MyRelativeLayout>

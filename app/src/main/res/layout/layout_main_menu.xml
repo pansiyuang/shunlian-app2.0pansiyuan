@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="@string/sort"
+                android:text="@string/main_shengjiplus"
                 android:layout_marginBottom="4dp"
                 android:textColor="@color/tab_text_n"
                 android:textSize="9sp" />
