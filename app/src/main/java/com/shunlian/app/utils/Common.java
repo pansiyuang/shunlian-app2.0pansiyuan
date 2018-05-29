@@ -80,6 +80,7 @@ import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
+import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
@@ -170,6 +171,8 @@ public class Common {
                 return "MyProfitAct";
             case "coupon":
                 return "GetCouponAct";
+            case "plusdetail":
+                return "PlusGifDetailAct";
             default:
                 return "";
         }
@@ -269,6 +272,9 @@ public class Common {
                 break;
             case "goToPayPlus":
                 GifBagListAct.startAct(context);
+                break;
+            case "plusdetail":
+                PlusGifDetailAct.startAct(context,params[0]);
                 break;
             case "login":
                 LoginAct.startAct(context);

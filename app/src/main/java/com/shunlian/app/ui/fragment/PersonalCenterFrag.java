@@ -29,6 +29,7 @@ import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.ShareBigGifAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
@@ -376,7 +377,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                ShareBigGifAct.startAct(baseActivity);
+                GifBagListAct.startAct(baseContext);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override

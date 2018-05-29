@@ -13,6 +13,7 @@ import com.shunlian.app.presenter.PaySuccessPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.ui.plus.PlusOrderDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -37,9 +38,10 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    private String orderId;
+    private String orderId,plus_order_id="";
     private String pay_sn;
     private boolean isPlus;
+    private PaySuccessPresenter presenter;
 
     public static void startAct(Context context, String orderId, String price, String pay_sn,boolean isPlus) {
         Intent intent = new Intent(context, PaySuccessAct.class);
@@ -69,13 +71,13 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
         rv_goods.setLayoutManager(manager);
         rv_goods.addItemDecoration(new GridSpacingItemDecoration
                 (TransformUtil.dip2px(this, 5), false));
-        PaySuccessPresenter presenter = new PaySuccessPresenter(this,this,pay_sn,isPlus);
+        presenter = new PaySuccessPresenter(this,this,pay_sn,isPlus);
     }
 
     @OnClick(R.id.mtv_order)
     public void seeOrderDetail(){
         if (isPlus){
-
+            PlusOrderDetailAct.startAct(this,plus_order_id);
         }else {
             if (TextUtils.isEmpty(orderId)){
                 MyOrderAct.startAct(this,0);
@@ -116,6 +118,7 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
         if (isPlus){
+            plus_order_id=presenter.plus_order_id;
             mtv_name.setText(getStringResouce(R.string.pay_plusdianzhu));
         }else {
             mtv_name.setText(getStringResouce(R.string.pay_nikeneng));

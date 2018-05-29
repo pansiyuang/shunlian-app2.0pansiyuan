@@ -61,6 +61,7 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         mHolder.mtv_title.setText(orderGoodsBean.title);
         mHolder.mtv_attribute.setText(orderGoodsBean.sku_desc);
         mHolder.mtv_price.setText(getString(R.string.rmb)+orderGoodsBean.price);
+        if (!isEmpty(orderGoodsBean.market_price))
         mHolder.mtv_market_price.setStrikethrough().setText(getString(R.string.rmb)+orderGoodsBean.market_price);
         mHolder.mtv_count.setText(String.format(getString(R.string.x),orderGoodsBean.qty));
         mHolder.mrlayout_root.setOnClickListener(new View.OnClickListener() {

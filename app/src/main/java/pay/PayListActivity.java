@@ -157,7 +157,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         if (isEmpty(mProductId)){
             PaySuccessAct.startAct(this, order_id,price,pay_sn,false);
         }else {
-            PaySuccessAct.startAct(this, order_id,price,pay_sn,false);
+            PaySuccessAct.startAct(this, order_id,price,pay_sn,true);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
     }

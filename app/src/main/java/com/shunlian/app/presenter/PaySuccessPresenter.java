@@ -23,6 +23,7 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
 
     private String mPay_sn;
     private boolean isPlus=false;
+    public String plus_order_id="";
 
     public PaySuccessPresenter(Context context, IPaySuccessView iView, String pay_sn,boolean isPlus) {
         super(context, iView);
@@ -67,9 +68,10 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
                     public void onSuccess(BaseEntity<ProbablyLikeEntity> entity) {
                         super.onSuccess(entity);
                         if (!isEmpty(entity.data.may_be_buy_list)){
+
                             ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
                                     (context,entity.data.may_be_buy_list,isPlus);
-
+                            plus_order_id=entity.data.order_id;
                             iView.setAdapter(adapter);
                             adapter.setOnItemClickListener((v,p)->{
                                 ProbablyLikeEntity.MayBuyList mayBuyList = entity.

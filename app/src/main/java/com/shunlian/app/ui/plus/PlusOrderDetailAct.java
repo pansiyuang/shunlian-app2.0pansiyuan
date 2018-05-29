@@ -169,9 +169,9 @@ public class PlusOrderDetailAct extends BaseActivity implements View.OnClickList
 //    private int pink_color;
     private int new_gray;
     private int strokeWidth;
-    private OrderdetailEntity orderdetailEntity;
+//    private OrderdetailEntity orderdetailEntity;
     private MessageCountManager messageCountManager;
-    private boolean isTimerCount = false;
+//    private boolean isTimerCount = false;
 
 
     public static void startAct(Context context, String plus_order_id) {
@@ -234,7 +234,7 @@ public class PlusOrderDetailAct extends BaseActivity implements View.OnClickList
 
     @Override
     public void setOrder(OrderdetailEntity orderdetailEntity) {
-        this.orderdetailEntity = orderdetailEntity;
+//        this.orderdetailEntity = orderdetailEntity;
 //        int time = 0;
 //        if (!TextUtils.isEmpty(orderdetailEntity.notice_status.surplus_time))
 //            time = Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
