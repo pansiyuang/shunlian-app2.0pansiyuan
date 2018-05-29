@@ -2146,6 +2146,7 @@ public interface ApiService {
 
     /**
      * 改变消息已读状态
+     *
      * @param body
      * @return
      */
@@ -2178,6 +2179,7 @@ public interface ApiService {
 
     /**
      * 处罚
+     *
      * @return
      */
     @POST("message/punish")
@@ -2185,6 +2187,7 @@ public interface ApiService {
 
     /**
      * plus确认订单
+     *
      * @param body
      * @return
      */
@@ -2193,9 +2196,42 @@ public interface ApiService {
 
     /**
      * 支付plus订单
+     *
      * @param body
      * @return
      */
     @POST("productorder/checkout")
     Call<BaseEntity<PayOrderEntity>> submitPLUSOrder(@Body RequestBody body);
+
+    /**
+     * 礼包订单列表
+     *
+     * @return
+     */
+    @POST("productorder/plusorderlist")
+    Call<BaseEntity<PlusOrderEntity>> getPlusOrderList(@Body RequestBody body);
+
+    /**
+     * plus信息
+     *
+     * @return
+     */
+    @GET("member/pluscenter/plusAchievement")
+    Call<BaseEntity<PlusDataEntity>> getPlusData(@QueryMap Map<String, String> map);
+
+    /**
+     * 查看物流信息
+     *
+     * @return
+     */
+    @POST("personalcenter/getOppositeTraces")
+    Call<BaseEntity<OrderLogisticsEntity>> getOppositeTraces(@QueryMap Map<String, String> map);
+
+    /**
+     * 邀请记录
+     *
+     * @return
+     */
+    @POST("member/pluscenter/invitehistory")
+    Call<BaseEntity<InvitationEntity>> inviteHistory(@Body RequestBody body);
 }
