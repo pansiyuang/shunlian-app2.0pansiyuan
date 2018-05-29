@@ -37,7 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SortFrag extends BaseActivity implements ISortFragView, MessageCountManager.OnGetMessageListener {
+public class SortAct extends BaseActivity implements ISortFragView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.listView)
     ListView listView;
@@ -61,7 +61,7 @@ public class SortFrag extends BaseActivity implements ISortFragView, MessageCoun
     private MessageCountManager messageCountManager;
 
     public static void startAct(Context context){
-        context.startActivity(new Intent(context,SortFrag.class));
+        context.startActivity(new Intent(context,SortAct.class));
     }
 
     /**

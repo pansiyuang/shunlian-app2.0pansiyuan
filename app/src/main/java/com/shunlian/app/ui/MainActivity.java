@@ -27,7 +27,6 @@ import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.plus.MyPlusAct;
 import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -87,7 +86,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     TextView tv_person_center;
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
-//    private SortFrag sortFrag;
     private MyPlusFrag myPlusFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
@@ -442,7 +440,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             case "mainPage":
                 mainPageClick();
                 break;
-            case "sort":
+            case "myplus":
                 if (isPlus()){
                     myPlusClick();
                 }else {

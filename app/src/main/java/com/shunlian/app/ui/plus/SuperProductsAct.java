@@ -8,9 +8,11 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SuperProductAdapter;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.presenter.SuperproductPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISuperProductView;
 
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
 
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     public List<SuperProductEntity.SuperProduct> mData;
     private SuperproductPresenter mPresenter;
@@ -88,7 +93,11 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
     }
 
     @Override
-    public void onShare(SuperProductEntity.Share share) {
-        
+    public void onShare(ShareInfoParam infoParam) {
+        if (quick_actions != null) {
+            visible(quick_actions);
+            quick_actions.shareInfo(infoParam);
+            quick_actions.shareStyle2Dialog(true, 3);
+        }
     }
 }

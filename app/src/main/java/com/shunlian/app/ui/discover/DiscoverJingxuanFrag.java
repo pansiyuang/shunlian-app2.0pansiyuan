@@ -174,7 +174,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             if (quick_actions != null){
                 visible(quick_actions);
                 quick_actions.shareInfo(shareInfoParam);
-                quick_actions.shareStyle2Dialog(true,false);
+                quick_actions.shareStyle2Dialog(true,2);
             }
         }
 

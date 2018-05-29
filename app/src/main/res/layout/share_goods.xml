@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:iv_control_adapter="true"
-        app:iv_margin_top="30"
+        android:scaleType="fitXY"
         app:iv_control_height="720"
         app:iv_control_width="720" />
 
