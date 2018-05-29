@@ -304,6 +304,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             }else if ("1".equals(status)){
                  Common.staticToast("登录成功");
                  SharedPrefUtil.saveSharedPrfString("token",wxLoginEntity.token);
+                 SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
                  SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
                  SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
             }else {

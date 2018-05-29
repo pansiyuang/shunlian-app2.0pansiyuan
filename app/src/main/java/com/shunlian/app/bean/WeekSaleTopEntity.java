@@ -9,16 +9,16 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeekSaleTopEntity {
-    public List<Cate> top_list;
-    public String rule_url_for_app;
-    public String top_date;
-    public String last_update_time;
+    public List<Cate> list;
+    public String month_banner;
+    public String update_time;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Cate {
+        public String sales;
         public String nickname;
         public String avatar;
-        public String sale;
-        public String plus_role;
+        public String role;
+        public String plus_name;
     }
 }

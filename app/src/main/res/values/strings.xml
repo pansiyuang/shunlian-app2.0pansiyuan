@@ -55,6 +55,7 @@
     <!--主页tab-->
     <string name="main_page">首页</string>
     <string name="sort">分类</string>
+    <string name="main_shengjiplus">升级PLUS</string>
     <string name="discover_center">发现中心</string>
     <string name="shopping_car">购物车</string>
     <string name="person_center">个人中心</string>
@@ -485,6 +486,9 @@
 
     <!--个人中心-->
     <string name="personal_yue">余额</string>
+    <string name="personal_goumai">购买Plus礼包</string>
+    <string name="personal_ninhaibushi">您还不是Plus店主，请成为Plus店主
+后再进行自定义我的店</string>
     <string name="personal_gengxin">更新时间</string>
     <string name="personal_youhuiquan">优惠券</string>
     <string name="personal_donglizhishu">收益</string>
@@ -512,7 +516,8 @@
     <string name="personal_xiaodianhuiyuan">小店会员</string>
     <string name="personal_xiaodiandingdan">小店订单</string>
     <string name="personal_jianghupaiming">江湖排名</string>
-    <string name="personal_benzhouxiaoshou">本周销售排行榜</string>
+    <string name="personal_benzhouxiaoshou">PLUS专享本月销售排行榜</string>
+    <string name="personal_youpingbenyue">【优品】本月销售排行榜</string>
     <string name="personal_faxianhuiyuan">发现会员</string>
     <string name="personal_yaoqingpengyou">邀请朋友创业</string>
     <string name="personal_mashangyaoqing">马上邀请</string>
@@ -733,4 +738,5 @@
     <string name="gif_bag_list">礼包列表</string>
     <string name="to_buy">立即购买</string>
     <string name="plus_product_detail">PLUS礼包详情</string>
+    <string name="plus_xiaoshoupaihang">销售排行榜等待揭晓</string>
 </resources>

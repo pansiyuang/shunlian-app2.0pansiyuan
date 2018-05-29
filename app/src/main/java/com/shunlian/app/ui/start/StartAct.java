@@ -189,6 +189,7 @@ public class StartAct extends MBaseActivity implements IMain {
                 SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(data.tag));
                 JpushUtil.setJPushAlias();
             }
+            SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
         }
     }
 
