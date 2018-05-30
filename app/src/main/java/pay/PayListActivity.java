@@ -34,6 +34,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
@@ -157,6 +158,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         if (isEmpty(mProductId)){
             PaySuccessAct.startAct(this, order_id,price,pay_sn,false);
         }else {
+            String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+            if (isEmpty(plus) ||Integer.parseInt(plus) <= 1)
+                SharedPrefUtil.saveSharedPrfString("plus_role", "1");
             PaySuccessAct.startAct(this, order_id,price,pay_sn,true);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
