@@ -228,7 +228,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     }
 
     public void initFragments() {
-        fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager = getChildFragmentManager();
         recordClick();
     }
 
