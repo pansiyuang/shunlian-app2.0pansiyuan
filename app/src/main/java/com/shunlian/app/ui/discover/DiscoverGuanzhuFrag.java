@@ -183,7 +183,7 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
         if (quick_actions != null){
             visible(quick_actions);
             quick_actions.shareInfo(shareInfoParam);
-            quick_actions.shareStyle2Dialog(true,false);
+            quick_actions.shareStyle2Dialog(true,2);
         }
     }
 

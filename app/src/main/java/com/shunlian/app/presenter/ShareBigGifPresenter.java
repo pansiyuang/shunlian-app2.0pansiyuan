@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.bean.PlusMemberEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IShareBifGifView;
 
@@ -47,6 +48,20 @@ public class ShareBigGifPresenter extends BasePresenter<IShareBifGifView> {
             public void onSuccess(BaseEntity<PlusDataEntity> entity) {
                 super.onSuccess(entity);
                 iView.getPlusData(entity.data);
+            }
+        });
+    }
+
+    public void getPlusMember() {
+        Map<String, String> map = new HashMap<>();
+        sortAndMD5(map);
+
+        Call<BaseEntity<PlusMemberEntity>> baseEntityCall = getAddCookieApiService().getPlusMember(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PlusMemberEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<PlusMemberEntity> entity) {
+                super.onSuccess(entity);
+                iView.getPlusMember(entity.data.list);
             }
         });
     }

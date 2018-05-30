@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PlusOrderAdapter;
 import com.shunlian.app.bean.PlusOrderEntity;
 import com.shunlian.app.presenter.PlusOrderPresenter;
@@ -113,6 +114,10 @@ public class PlusOrderFrag extends BaseLazyFragment implements IPlusOrderView {
 
         if (mAdapter == null) {
             mAdapter = new PlusOrderAdapter(getActivity(), orderList);
+            mAdapter.setOnItemClickListener((view, position) -> {
+                PlusOrderEntity.PlusOrder plusOrder = orderList.get(position);
+                PlusOrderDetailAct.startAct(getActivity(), plusOrder.product_order_id);
+            });
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();

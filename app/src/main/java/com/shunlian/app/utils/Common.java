@@ -48,7 +48,6 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -66,10 +65,10 @@ import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
 import com.shunlian.app.ui.core.KouBeiAct;
 import com.shunlian.app.ui.core.PingpaiAct;
-import com.shunlian.app.ui.core.PingpaiListAct;
 import com.shunlian.app.ui.coupon.CouponListAct;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.CommentListAct;
+import com.shunlian.app.ui.fragment.SortAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.h5.H5Act;
@@ -190,8 +189,7 @@ public class Common {
                 GoodsDetailAct.startAct(context, params[0]);
                 break;
             case "categories":
-                //todo
-                Common.staticToast("更多分类");
+                SortAct.startAct(context);
                 break;
             case "coupon":
                 if (TextUtils.isEmpty(token)) {

@@ -29,7 +29,6 @@ import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PaySuccessAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
-import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -142,7 +141,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private void payFail() {
         Common.staticToast(getStringResouce(R.string.pay_fail));
         if (!isEmpty(mProductId)){
-            PlusGifDetailAct.startAct(this,mProductId);
+            //支付失败不做任何操作
         }else if (isEmpty(order_id)){
             MyOrderAct.startAct(PayListActivity.this, 2);
         }else {

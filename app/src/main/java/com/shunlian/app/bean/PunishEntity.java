@@ -2,6 +2,8 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/5/25.
  */
@@ -13,7 +15,7 @@ public class PunishEntity {
     public String desc;
     public String remark;
     public String complaints;
-    public String pic_url;
+    public List<String> pic_url;
     public String member_id;
     public String nickname;
 }

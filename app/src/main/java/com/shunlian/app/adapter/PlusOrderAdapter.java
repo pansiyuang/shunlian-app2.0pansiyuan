@@ -112,6 +112,11 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
 
         public OrderViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onItemClick(v, getAdapterPosition());
+                }
+            });
         }
     }
 }

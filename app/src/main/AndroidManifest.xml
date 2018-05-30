@@ -851,6 +851,9 @@
             android:name=".ui.plus.PlusLogisticsDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.fragment.SortAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

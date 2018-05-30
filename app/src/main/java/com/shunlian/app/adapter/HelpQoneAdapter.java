@@ -10,7 +10,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.NewTextView;
 
 import java.util.List;

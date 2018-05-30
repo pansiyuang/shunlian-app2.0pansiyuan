@@ -44,7 +44,7 @@ public class PlusLogisticsPresenter extends BasePresenter<IPlusLogisticsView> {
         map.put("type", "4");
         map.put("query_id", queryId);
         sortAndMD5(map);
-        Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getAddCookieApiService().getOppositeTraces(map);
+        Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getAddCookieApiService().getOppositeTraces(getRequestBody(map));
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderLogisticsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<OrderLogisticsEntity> entity) {

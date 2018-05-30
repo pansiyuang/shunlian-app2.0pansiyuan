@@ -46,6 +46,8 @@ public class SuperProductEntity {
         public String title;
         public String content;
         public String pic;
+        public String nick_name;
+        public String portrait;
         public String share_url;
     }
 }

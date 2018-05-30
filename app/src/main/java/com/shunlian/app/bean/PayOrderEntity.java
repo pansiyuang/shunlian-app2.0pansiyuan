@@ -16,6 +16,7 @@ public class PayOrderEntity {
 
     public XiaoXiaopay xiaoxiaopay;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class XiaoXiaopay{
         public String signValue;
         public String nonceStr;
