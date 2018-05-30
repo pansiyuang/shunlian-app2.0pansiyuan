@@ -17,12 +17,14 @@ public class PlusDataEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BaseInfo {
         public String avatar;
+        public String nickname;
         public int role;
         public String role_desc;
         public String expire_time;
         public int upgrade_process;
         public String invite_reward;
         public String invite_strategy;
+        public ShareInfo share_info;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -36,5 +38,13 @@ public class PlusDataEntity {
         public String date;
         public String total_sales;
         public String plus_num;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class ShareInfo{
+        public String title;
+        public String content;
+        public String pic;
+        public String invite_middle_page;
     }
 }

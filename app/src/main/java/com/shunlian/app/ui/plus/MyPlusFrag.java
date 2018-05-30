@@ -16,11 +16,13 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusDataEntity;
 import com.shunlian.app.bean.PlusMemberEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IShareBifGifView;
 import com.shunlian.app.widget.MyImageView;
@@ -123,6 +125,8 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.tv_info)
     TextView tv_info;
 
+    QuickActions quick_actions;
+
     private Unbinder bind;
     private int screenWidth;
     private int tabOneWidth, tabTwoWidth;
@@ -144,6 +148,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isStop, isCrash;
     private int size, position;
     private boolean isPause = true;
+    private ShareInfoParam mShareInfoParam = new ShareInfoParam();
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyPlusAct.class));
@@ -175,6 +180,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         initFragments();
         mPresenter = new ShareBigGifPresenter(getActivity(), this);
         mPresenter.getPlusData();
+
+        //分享
+        quick_actions = new QuickActions(baseActivity);
+        ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
+        decorView.addView(quick_actions);
+        quick_actions.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -217,7 +228,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     }
 
     public void initFragments() {
-        fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager = getChildFragmentManager();
         recordClick();
     }
 
@@ -301,7 +312,9 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
                 PlusOrderAct.startAct(getActivity());
                 break;
             case R.id.miv_invite:
-                GifBagListAct.startAct(getActivity());
+                visible(quick_actions);
+                quick_actions.shareInfo(mShareInfoParam);
+                quick_actions.shareStyle2Dialog(true,4);
                 break;
         }
     }
@@ -361,6 +374,14 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         } else {
             tv_member_count.setVisibility(View.GONE);
         }
+
+        //分享
+        mShareInfoParam.userAvatar = baseInfo.avatar;
+        mShareInfoParam.userName = baseInfo.nickname;
+        mShareInfoParam.title = baseInfo.share_info.title;
+        mShareInfoParam.desc = baseInfo.share_info.content;
+        mShareInfoParam.shareLink = baseInfo.share_info.invite_middle_page;
+        mShareInfoParam.img = baseInfo.share_info.pic;
     }
 
     @Override

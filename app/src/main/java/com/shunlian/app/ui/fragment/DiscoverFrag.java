@@ -12,9 +12,6 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
-import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
-import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
-import com.shunlian.app.ui.discover.other.SearchArticleActivity;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
 import com.shunlian.app.ui.BaseFragment;
@@ -24,7 +21,9 @@ import com.shunlian.app.ui.discover.DiscoverQuanZiFrag;
 import com.shunlian.app.ui.discover.DiscoverSucaikuFrag;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.discover.DiscoversFrag;
-import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
+import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
+import com.shunlian.app.ui.discover.other.SearchArticleActivity;
 import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -275,7 +274,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
      */
     public void switchContent(Fragment show) {
         if (show != null) {
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             if (!show.isAdded()) {
                 ft.add(R.id.flayout_content, show);
             } else {
