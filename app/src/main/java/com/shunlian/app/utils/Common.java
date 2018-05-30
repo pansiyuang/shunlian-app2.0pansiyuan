@@ -1010,7 +1010,9 @@ public class Common {
      */
     public static void parseClipboard(Context context){
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        Common.urlToPage(context,cm.getText().toString());
-        cm.setText("");
+        if (!TextUtils.isEmpty(cm.getText()) && cm.getText().toString().contains("slmall://")) {
+            Common.urlToPage(context, cm.getText().toString());
+            cm.setText("");
+        }
     }
 }
