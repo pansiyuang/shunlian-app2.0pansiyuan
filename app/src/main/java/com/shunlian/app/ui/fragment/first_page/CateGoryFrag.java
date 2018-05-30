@@ -143,6 +143,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (lay_refresh!=null)
                 lay_refresh.setRefreshing(false);
             }
         },3000);

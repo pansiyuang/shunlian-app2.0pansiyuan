@@ -728,7 +728,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_chakan:
                 if (mainActivity.isPlus()){
-                    MyPlusAct.startAct(baseActivity);
+                    mainActivity.myPlusClick();
                 }else {
                     initHintDialog();
                 }
