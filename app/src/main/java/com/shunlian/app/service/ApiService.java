@@ -2225,7 +2225,7 @@ public interface ApiService {
      * @return
      */
     @POST("personalcenter/getOppositeTraces")
-    Call<BaseEntity<OrderLogisticsEntity>> getOppositeTraces(@QueryMap Map<String, String> map);
+    Call<BaseEntity<OrderLogisticsEntity>> getOppositeTraces(@Body RequestBody body);
 
     /**
      * 邀请记录
@@ -2234,4 +2234,12 @@ public interface ApiService {
      */
     @POST("member/pluscenter/invitehistory")
     Call<BaseEntity<InvitationEntity>> inviteHistory(@Body RequestBody body);
+
+    /**
+     * 加入plus的人
+     *
+     * @return
+     */
+    @GET("product/getjoinlist")
+    Call<BaseEntity<PlusMemberEntity>> getPlusMember(@QueryMap Map<String, String> map);
 }

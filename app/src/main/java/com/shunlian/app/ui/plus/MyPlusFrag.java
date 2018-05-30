@@ -2,20 +2,25 @@ package com.shunlian.app.ui.plus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.bean.PlusMemberEntity;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IShareBifGifView;
 import com.shunlian.app.widget.MyImageView;
@@ -24,8 +29,11 @@ import com.shunlian.mylibrary.ImmersionBar;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,6 +114,15 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.miv_invite)
     MyImageView miv_invite;
 
+    @BindView(R.id.lLayout_toast)
+    LinearLayout lLayout_toast;
+
+    @BindView(R.id.miv_toast_icon)
+    MyImageView miv_toast_icon;
+
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+
     private Unbinder bind;
     private int screenWidth;
     private int tabOneWidth, tabTwoWidth;
@@ -120,6 +137,13 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private StoreGifFrag storeGifFrag;
     private InvitationsFrag invitationsFrag;
     private String invitationsUrl;
+
+    private Timer outTimer;
+    private Handler handler;
+    private Runnable runnableA, runnableB, runnableC;
+    private boolean isStop, isCrash;
+    private int size, position;
+    private boolean isPause = true;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyPlusAct.class));
@@ -162,6 +186,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         tv_invitations.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
         miv_invite.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        beginToast();
+        super.onResume();
     }
 
     @Override
@@ -334,6 +364,15 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     }
 
     @Override
+    public void getPlusMember(List<PlusMemberEntity.PlusMember> plusMembers) {
+        size = 2;
+        if (!isEmpty(plusMembers)) {
+            startToast(plusMembers);
+            startTimer();
+        }
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
@@ -341,6 +380,101 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    public void startTimer() {
+        if (handler == null) {
+            handler = new Handler();
+        }
+        runnableA = () -> {
+            if (!isStop) {
+                mPresenter.getPlusMember();
+            }
+        };
+        handler.postDelayed(runnableA, (7 * size + 1) * 1000);
+    }
+
+    public void startToast(final List<PlusMemberEntity.PlusMember> datas) {
+        if (outTimer != null) {
+            outTimer.cancel();
+        }
+        outTimer = new Timer();
+        outTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (position < datas.size()) {
+                    runnableB = () -> {
+                        if (position < datas.size()) {
+                            lLayout_toast.setVisibility(View.VISIBLE);
+                            GlideUtils.getInstance().loadCircleImage(getActivity(), miv_toast_icon, datas.get(position).avatar);
+                            tv_info.setText(datas.get(position).sentence);
+                            lLayout_toast.setOnClickListener(v -> {
+                                //
+                            });
+                        }
+                    };
+                    if (handler == null) {
+                        if (!isCrash) {
+                            isCrash = true;
+                            Handler mHandler = new Handler(Looper.getMainLooper());
+                            mHandler.postDelayed(() -> isCrash = false, (7 * size + 2) * 1000);
+                        }
+                    } else {
+                        handler.post(runnableB);
+                        runnableC = () -> {
+                            if (!isStop) {
+                                lLayout_toast.setVisibility(View.GONE);
+                                position++;
+                            }
+                        };
+                        handler.postDelayed(runnableC, 5 * 1000);
+                    }
+                }
+            }
+        }, 0, 7 * 1000);
+    }
+
+    public void beginToast() {
+        if (isPause) {
+            position = 0;
+            isStop = false;
+            mPresenter.getPlusMember();
+            isPause = false;
+        }
+    }
+
+    public void stopToast() {
+        if (!isCrash) {
+            isPause = true;
+            isStop = true;
+            if (lLayout_toast != null) {
+                LogUtil.augusLogW("position:gone");
+                lLayout_toast.setVisibility(View.GONE);
+            }
+            if (outTimer != null) {
+                LogUtil.augusLogW("position:cancel");
+                outTimer.cancel();
+            }
+            if (handler != null) {
+                LogUtil.augusLogW("position:remove");
+                if (runnableA != null) {
+                    handler.removeCallbacks(runnableA);
+                }
+                if (runnableB != null) {
+                    handler.removeCallbacks(runnableB);
+                }
+                if (runnableC != null) {
+                    handler.removeCallbacks(runnableC);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopToast();
     }
 
     @Override

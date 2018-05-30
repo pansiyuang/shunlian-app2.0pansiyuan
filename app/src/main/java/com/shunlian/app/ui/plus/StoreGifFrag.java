@@ -10,12 +10,15 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
+import com.shunlian.app.bean.GifProductEntity;
 import com.shunlian.app.bean.SuperProductEntity;
+import com.shunlian.app.presenter.GifBagPresenter;
 import com.shunlian.app.presenter.SuperproductPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IGifBagView;
 import com.shunlian.app.view.ISuperProductView;
 import com.shunlian.app.widget.MyImageView;
 
@@ -25,12 +28,12 @@ import java.util.List;
  * Created by Administrator on 2018/5/28.
  */
 
-public class StoreGifFrag extends BaseFragment implements ISuperProductView, View.OnClickListener {
+public class StoreGifFrag extends BaseFragment implements View.OnClickListener, IGifBagView {
 
     private RecyclerView recyclerView;
     private TextView tv_more_product;
 
-    private SuperproductPresenter mPresenter;
+    private GifBagPresenter mPresenter;
 
     public static StoreGifFrag getInstance() {
         StoreGifFrag storeGifFrag = new StoreGifFrag();
@@ -47,8 +50,8 @@ public class StoreGifFrag extends BaseFragment implements ISuperProductView, Vie
 
     @Override
     protected void initData() {
-        mPresenter = new SuperproductPresenter(getActivity(), this);
-        mPresenter.getProductList();
+        mPresenter = new GifBagPresenter(getActivity(), this);
+        mPresenter.getGifList();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(getActivity(), 5), false));
         recyclerView.setLayoutManager(manager);
@@ -58,25 +61,6 @@ public class StoreGifFrag extends BaseFragment implements ISuperProductView, Vie
     protected void initListener() {
         tv_more_product.setOnClickListener(this);
         super.initListener();
-    }
-
-    @Override
-    public void getProductList(List<SuperProductEntity.SuperProduct> list) {
-        recyclerView.setAdapter(new SimpleRecyclerAdapter<SuperProductEntity.SuperProduct>(getActivity(), R.layout.item_product_img, list) {
-            @Override
-            public void convert(SimpleViewHolder holder, SuperProductEntity.SuperProduct superProduct, int position) {
-                MyImageView myImageView = holder.getView(R.id.miv_img);
-                GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, superProduct.thumb, 5);
-            }
-
-            @Override
-            public int getItemCount() {
-                if (list.size() >= 4) {
-                    return 4;
-                }
-                return super.getItemCount();
-            }
-        });
     }
 
     @Override
@@ -91,6 +75,25 @@ public class StoreGifFrag extends BaseFragment implements ISuperProductView, Vie
 
     @Override
     public void onClick(View v) {
-        SuperProductsAct.startAct(getActivity());
+        GifBagListAct.startAct(getActivity());
+    }
+
+    @Override
+    public void getGifList(List<GifProductEntity.Product> productList) {
+        recyclerView.setAdapter(new SimpleRecyclerAdapter<GifProductEntity.Product>(getActivity(), R.layout.item_product_img, productList) {
+            @Override
+            public void convert(SimpleViewHolder holder, GifProductEntity.Product product, int position) {
+                MyImageView myImageView = holder.getView(R.id.miv_img);
+                GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, product.thumb, 5);
+            }
+
+            @Override
+            public int getItemCount() {
+                if (productList.size() >= 4) {
+                    return 4;
+                }
+                return super.getItemCount();
+            }
+        });
     }
 }

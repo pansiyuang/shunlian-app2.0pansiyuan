@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.bean.PlusMemberEntity;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
@@ -23,6 +24,7 @@ import com.shunlian.app.widget.MyImageView;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -317,6 +319,11 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
         } else {
             tv_member_count.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void getPlusMember(List<PlusMemberEntity.PlusMember> plusMembers) {
+
     }
 
     @Override
