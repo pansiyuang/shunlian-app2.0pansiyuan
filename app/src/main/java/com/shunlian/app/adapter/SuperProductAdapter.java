@@ -148,6 +148,8 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 mShareInfoParam.title = share.title;
                 mShareInfoParam.desc = share.content;
                 mShareInfoParam.img = share.pic;
+                mShareInfoParam.userName = share.nick_name;
+                mShareInfoParam.userAvatar = share.portrait;
                 mShareInfoParam.shareLink = share.share_url;
                 mShareInfoParam.goodsPrice = superProduct.price;
                 mShareLinstener.onShare(mShareInfoParam);
