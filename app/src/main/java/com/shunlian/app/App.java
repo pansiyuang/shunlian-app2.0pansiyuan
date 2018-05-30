@@ -78,7 +78,6 @@ public class App extends Application {
         super.onCreate();
         mApp = this;
         context = getApplicationContext();
-
         //初始化bugly,建议在测试阶段建议设置成true，发布时设置为false。
         if (BuildConfig.DEBUG) {
             Constant.BUGLY_ID="9f3fcbbba0";//测试

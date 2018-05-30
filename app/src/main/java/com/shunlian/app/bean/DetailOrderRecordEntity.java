@@ -27,6 +27,7 @@ public class DetailOrderRecordEntity {
         public String order_sn;
         public String status_desc;
         public String order_time;
+        public String deal_type;
         public List<OrderGoods> order_goods;
     }
 

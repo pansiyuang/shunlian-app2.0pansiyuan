@@ -72,7 +72,15 @@ public class DetailOrderRecordAdapter extends BaseRecyclerAdapter<DetailOrderRec
         background.setColor(Color.parseColor("#FB0036"));
         background.setColor(Color.parseColor("#FB9A00"));
         background.setStroke(0,getColor(R.color.white));
-        mHolder.mtv_buy.setText("买");
+        String deal_type = item.deal_type;
+        GradientDrawable buyDrawable = (GradientDrawable) mHolder.mtv_buy.getBackground();
+        if ("1".equals(deal_type)) {
+            mHolder.mtv_buy.setText("买");
+            buyDrawable.setColor(Color.parseColor("#FB9A00"));
+        } else {
+            mHolder.mtv_buy.setText("卖");
+            buyDrawable.setColor(getColor(R.color.pink_color));
+        }
     }
 
     public class DetailOrderRecordHolder extends BaseRecyclerViewHolder {

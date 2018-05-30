@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -31,7 +31,7 @@ import butterknife.BindView;
 public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.SuperProduct> {
     private static final int TYPE_BANNER = 10001;
     private static final int TYPE_GOODS = 10002;
-
+    private ShareInfoParam mShareInfoParam = new ShareInfoParam();
     private OnShareClickListener mShareLinstener;
 
     public SuperProductAdapter(Context context, List<SuperProductEntity.SuperProduct> lists) {
@@ -144,7 +144,15 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         goodsViewHolder.miv_share.setOnClickListener(v -> {
             //分享
             if (mShareLinstener != null) {
-                mShareLinstener.onShare(superProduct.share);
+                SuperProductEntity.Share share = superProduct.share;
+                mShareInfoParam.title = share.title;
+                mShareInfoParam.desc = share.content;
+                mShareInfoParam.img = share.pic;
+                mShareInfoParam.userName = share.nick_name;
+                mShareInfoParam.userAvatar = share.portrait;
+                mShareInfoParam.shareLink = share.share_url;
+                mShareInfoParam.goodsPrice = superProduct.price;
+                mShareLinstener.onShare(mShareInfoParam);
             }
         });
     }
@@ -215,6 +223,6 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     }
 
     public interface OnShareClickListener {
-        void onShare(SuperProductEntity.Share share);
+        void onShare(ShareInfoParam infoParam);
     }
 }
