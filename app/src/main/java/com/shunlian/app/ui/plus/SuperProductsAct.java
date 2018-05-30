@@ -22,7 +22,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/5/24.
  */
 
-public class SuperProductsAct extends BaseActivity implements ISuperProductView {
+public class SuperProductsAct extends BaseActivity implements ISuperProductView, SuperProductAdapter.OnShareClickListener {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
@@ -71,6 +71,7 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView 
 
         if (mAdapter == null) {
             mAdapter = new SuperProductAdapter(this, mData);
+            mAdapter.setOnShareClickListener(this);
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();
@@ -84,5 +85,10 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView 
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void onShare(SuperProductEntity.Share share) {
+        
     }
 }

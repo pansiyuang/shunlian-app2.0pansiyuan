@@ -4,39 +4,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.CommonLazyPagerAdapter;
 import com.shunlian.app.bean.PlusDataEntity;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
-import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IShareBifGifView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.mylibrary.ImmersionBar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
- * Created by Administrator on 2018/5/23.
+ * Created by Administrator on 2018/5/29.
  */
 
-public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
+public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.OnClickListener {
 
     public final int Mode_Month = 1001;
     public final int Mode_Year = 1002;
@@ -46,6 +45,9 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
 
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     @BindView(R.id.tv_tab1_left)
     TextView tv_tab1_left;
@@ -104,9 +106,7 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
     @BindView(R.id.miv_invite)
     MyImageView miv_invite;
 
-    @BindView(R.id.flayout_content)
-    FrameLayout flayout_content;
-
+    private Unbinder bind;
     private int screenWidth;
     private int tabOneWidth, tabTwoWidth;
     private int tabOneMode = Mode_Year;
@@ -122,25 +122,25 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
     private String invitationsUrl;
 
     public static void startAct(Context context) {
-        context.startActivity(new Intent(context, ShareBigGifAct.class));
+        context.startActivity(new Intent(context, MyPlusAct.class));
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.act_share_big_gif;
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.act_my_plus, container, false);
+        bind = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-
         tv_title.setText(getStringResouce(R.string.share_store_big_gif));
         tv_title_right.setText(getStringResouce(R.string.my_order));
         tv_title_right.setVisibility(View.VISIBLE);
+        miv_close.setVisibility(View.GONE);
 
-        screenWidth = DeviceInfoUtil.getDeviceWidth(this);
-        space = TransformUtil.dip2px(this, 5);
+        screenWidth = DeviceInfoUtil.getDeviceWidth(getActivity());
+        space = TransformUtil.dip2px(getActivity(), 5);
 
         Calendar calendar = Calendar.getInstance();
         currentYear = calendar.get(Calendar.YEAR);
@@ -149,7 +149,7 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
         showTabOneButton(Mode_Year);
         initTabsWidth();
         initFragments();
-        mPresenter = new ShareBigGifPresenter(this, this);
+        mPresenter = new ShareBigGifPresenter(getActivity(), this);
         mPresenter.getPlusData();
     }
 
@@ -164,10 +164,21 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
         miv_invite.setOnClickListener(this);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
+    }
+
     private void initTabsWidth() {
 
-        tabOneWidth = (screenWidth - TransformUtil.dip2px(this, 20)) / 2;
-        tabTwoWidth = (screenWidth - TransformUtil.dip2px(this, 20)) / 3;
+        tabOneWidth = (screenWidth - TransformUtil.dip2px(getActivity(), 20)) / 2;
+        tabTwoWidth = (screenWidth - TransformUtil.dip2px(getActivity(), 20)) / 3;
 
         tv_tab1_left.setWidth(tabOneWidth);
         tv_tab2_left.setWidth(tabTwoWidth + space);
@@ -176,7 +187,7 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
     }
 
     public void initFragments() {
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager = getActivity().getSupportFragmentManager();
         recordClick();
     }
 
@@ -257,13 +268,12 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
                 showTabTwoButton(3);
                 break;
             case R.id.tv_title_right:
-                PlusOrderAct.startAct(this);
+                PlusOrderAct.startAct(getActivity());
                 break;
             case R.id.miv_invite:
-                GifBagListAct.startAct(this);
+                GifBagListAct.startAct(getActivity());
                 break;
         }
-        super.onClick(view);
     }
 
     public void showTabOneButton(int mode) {
@@ -308,7 +318,7 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
     @Override
     public void getPlusData(PlusDataEntity plusDataEntity) {   //小店级别：0=普通会员，1=plus店主，2=销售主管，3=销售经理
         PlusDataEntity.BaseInfo baseInfo = plusDataEntity.base_info;
-        GlideUtils.getInstance().loadCircleImage(this, miv_icon, baseInfo.avatar);
+        GlideUtils.getInstance().loadCircleImage(getActivity(), miv_icon, baseInfo.avatar);
         tv_sales_type.setText(baseInfo.role_desc);
         tv_sales_date.setText("有效期:" + baseInfo.expire_time);
         seekbar_plus.setProgress(12);
@@ -331,5 +341,11 @@ public class ShareBigGifAct extends BaseActivity implements IShareBifGifView {
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        bind.unbind();
+        super.onDestroyView();
     }
 }
