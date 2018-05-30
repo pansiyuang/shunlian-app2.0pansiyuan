@@ -172,6 +172,7 @@ public class Common {
             case "coupon":
                 return "GetCouponAct";
             case "plusdetail":
+            case "pulsdetail":
                 return "PlusGifDetailAct";
             default:
                 return "";
@@ -274,6 +275,7 @@ public class Common {
                 GifBagListAct.startAct(context);
                 break;
             case "plusdetail":
+            case "pulsdetail":
                 PlusGifDetailAct.startAct(context,params[0]);
                 break;
             case "login":
