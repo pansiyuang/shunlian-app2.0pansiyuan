@@ -85,6 +85,11 @@ public class StoreGifFrag extends BaseFragment implements View.OnClickListener, 
             public void convert(SimpleViewHolder holder, GifProductEntity.Product product, int position) {
                 MyImageView myImageView = holder.getView(R.id.miv_img);
                 GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, product.thumb, 5);
+                myImageView.setOnClickListener(v -> {
+                    if (!isEmpty(product.product_id)) {
+                        PlusGifDetailAct.startAct(getActivity(), product.product_id);
+                    }
+                });
             }
 
             @Override
