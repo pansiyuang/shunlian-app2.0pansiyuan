@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -814,14 +815,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         GlideUtils.getInstance().loadCircleImage(getContext(),
                 miv_user_head,mShareInfoParam.userAvatar);
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
-        mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
+        mtv_nickname.setText(mShareInfoParam.userName);
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
-        int i = TransformUtil.countRealWidth(getContext(), 140);
-        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+        int i = TransformUtil.countRealWidth(getContext(), 160);
+        Bitmap bitmap_logo = BitmapFactory.decodeResource(getResources(), R.mipmap.img_plus_logo);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, bitmap_logo, i);
         miv_code.setImageBitmap(qrImage);
-
-        savePic(inflate);
+        inflate.postDelayed(()->savePic(inflate),200);
     }
 
 

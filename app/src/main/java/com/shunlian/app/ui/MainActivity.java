@@ -269,10 +269,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     public void mainPageClick() {
         isFirst = true;
         if (mainPageFrag == null) {
-//            mainPageFrag = (MainPageFrag) fragmentMap.get(flags[0]);
             mainPageFrag = (FirstPageFrag) fragmentMap.get(flags[0]);
             if (mainPageFrag == null) {
-//                mainPageFrag = new MainPageFrag();
                 mainPageFrag = new FirstPageFrag();
                 fragmentMap.put(flags[0], mainPageFrag);
             }
@@ -357,10 +355,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             personalCenterFrag.getPersonalcenterData();
         }
 
-
-//        if (personalCenterFrag.personalcenterPresenter!=null){
-//            personalCenterFrag.personalcenterPresenter.getApiData();
-//        }
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(personalCenterFrag);
         pageIndex = 4;
