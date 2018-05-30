@@ -24,6 +24,7 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -952,5 +953,64 @@ public class Common {
         }else {
             return true;
         }
+    }
+
+    public static void urlToPage(Context context,String url){
+        //LogUtil.httpLogW("链接:" + url);
+        if (url.startsWith("slmall://")) {
+            String type = interceptBody(url);
+            if (!TextUtils.isEmpty(type)) {
+                String id = "";
+                String id1 = "";
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+                    id = interceptId(url);
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                    id1 = interceptId(url);
+                Common.goGoGo(context, type, id, id1);
+            }
+        }
+    }
+
+    /**
+     * 完整url slmall://goods/item.json?goodsId=138471
+     * 截取之后goods/item.json
+     *
+     * @param url
+     * @return
+     */
+    private static String interceptBody(String url) {
+        String[] split = url.split("\\?");
+        String s = split[0];
+        if (!TextUtils.isEmpty(s)) {
+            String[] split1 = s.split("//");
+            if (!TextUtils.isEmpty(split1[1])) {
+                return split1[1];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 截取商品id
+     *
+     * @param url
+     * @return
+     */
+    private static String interceptId(String url) {
+        String[] split = url.split("\\?");
+        String s = split[1];
+        String[] split1 = s.split("=");
+        String s1 = split1[1];
+        return s1;
+    }
+
+    /**
+     * 解析剪切板内容
+     * @param context
+     */
+    public static void parseClipboard(Context context){
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        Common.urlToPage(context,cm.getText().toString());
+        cm.setText("");
     }
 }
