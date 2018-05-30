@@ -98,7 +98,6 @@
             <com.shunlian.app.widget.MyImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
                 android:src="@mipmap/img_share_logo"
                 app:iv_control_adapter="true"
                 app:iv_control_height="55"

@@ -143,6 +143,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             messageCountManager.initData();
             messageCountManager.setOnGetMessageListener(this);
         }
+        Common.parseClipboard(this);
     }
 
     @Override
