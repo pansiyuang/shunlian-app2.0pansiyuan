@@ -148,7 +148,7 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
         initTabsWidth();
         initFragments();
         mPresenter = new ShareBigGifPresenter(this, this);
-        mPresenter.getPlusData();
+        mPresenter.getPlusData(tabOneMode);
     }
 
     @Override
@@ -239,11 +239,7 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_tab1_right:
-                if (tabOneMode == Mode_Year) {
-                    showTabOneButton(Mode_Month);
-                } else if (tabOneMode == Mode_Month) {
-                    showTabOneButton(Mode_Year);
-                }
+                mPresenter.getPlusData(tabOneMode);
                 break;
             case R.id.tv_invitation_record:
                 showTabTwoButton(1);
@@ -313,6 +309,7 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
         tv_earn_money.setText("赚" + baseInfo.invite_reward + "奖励");
 
         invitationsUrl = baseInfo.invite_strategy;
+        showTabOneButton(tabOneMode);
 
         if (baseInfo.role >= 3) {
             tv_member_count.setVisibility(View.VISIBLE);
