@@ -31,14 +31,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:drawablePadding="3.5dp"
+            android:drawableRight="@mipmap/img_common_arrowright_r"
+            android:gravity="center"
             android:text="更多礼包"
             android:textColor="@color/value_E71B1E"
             android:textSize="12sp" />
-
-        <com.shunlian.app.widget.MyImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

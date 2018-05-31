@@ -7,9 +7,9 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
-//    signingConfigs {
+    signingConfigs {
 //        ShunLianPower {
-//            List<String> lists = new File('C:/Augus/file/signState.txt').readLines()
+//            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
 //            String alias = lists.get(0)
 //            String pwd = lists.get(1)
 //            storeFile file('C:/Augus/file/ShunLianPower.jks')
@@ -17,7 +17,7 @@ android {
 //            keyAlias alias
 //            keyPassword pwd
 //        }
-//    }
+    }
     compileSdkVersion 25
     buildToolsVersion '27.0.1'
 

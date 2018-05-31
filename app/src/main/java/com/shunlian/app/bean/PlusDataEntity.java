@@ -13,6 +13,8 @@ public class PlusDataEntity {
     public BaseInfo base_info;
     public Achievement achievement;
     public List<Chart> chart;
+    public String max_sale;
+    public String max_num;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BaseInfo {

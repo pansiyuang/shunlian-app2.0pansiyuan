@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -13,7 +14,7 @@ import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.presenter.GifDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IGifDetailView;
 import com.shunlian.app.widget.ParamDialog;
 
@@ -40,6 +41,7 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
     private LinearLayoutManager manager;
     private ParamDialog paramDialog;
     private ProductDetailEntity mEntity;
+    private PromptDialog promptDialog;
 
     public static void startAct(Context context, String productId) {
         Intent intent = new Intent(context, PlusGifDetailAct.class);
@@ -78,8 +80,8 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
         tv_buy.setOnClickListener(v -> {
             if (paramDialog == null) {
                 paramDialog = new ParamDialog(this, mEntity);
+                paramDialog.isSelectCount = false;
                 paramDialog.setOnSelectCallBack(this);
-                paramDialog.isSelectCount = true;
             } else {
                 paramDialog.setParamGoods(mEntity);
             }
@@ -111,10 +113,19 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
 
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-        String skuid = null;
-        if (sku != null) {
-            skuid = sku.id;
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(this);
+            promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.plus_open_up), mEntity.member_code),
+                    getStringResouce(R.string.SelectRecommendAct_sure), v -> {
+                        String skuid = null;
+                        if (sku != null) {
+                            skuid = sku.id;
+                        }
+                        PLUSConfirmOrderAct.startAct(PlusGifDetailAct.this, currentId, skuid);
+                        promptDialog.dismiss();
+                    }, getStringResouce(R.string.errcode_cancel),
+                    v -> promptDialog.dismiss());
         }
-        PLUSConfirmOrderAct.startAct(this, currentId, skuid);
+        promptDialog.show();
     }
 }

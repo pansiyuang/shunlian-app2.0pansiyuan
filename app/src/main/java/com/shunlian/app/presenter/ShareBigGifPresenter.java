@@ -38,8 +38,9 @@ public class ShareBigGifPresenter extends BasePresenter<IShareBifGifView> {
 
     }
 
-    public void getPlusData() {
+    public void getPlusData(int type) {
         Map<String, String> map = new HashMap<>();
+        map.put("type", String.valueOf(type));
         sortAndMD5(map);
 
         Call<BaseEntity<PlusDataEntity>> baseEntityCall = getAddCookieApiService().getPlusData(map);
