@@ -38,7 +38,6 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="海阔天空风"
                 android:textColor="@color/pink_color"
                 android:textSize="12sp" />
 
@@ -48,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/img_plus_phb_zhuguan" />
+             />
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +66,6 @@
                 android:layout_weight="1"
                 android:lineSpacingExtra="5dp"
                 android:maxWidth="60dp"
-                android:text="2017-08-0817:14:24 "
                 android:textColor="@color/value_7C1212"
                 android:textSize="10sp" />
         </LinearLayout>

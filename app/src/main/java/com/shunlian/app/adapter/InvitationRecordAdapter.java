@@ -43,6 +43,25 @@ public class InvitationRecordAdapter extends BaseRecyclerAdapter<InvitationEntit
         } else {
             invitationViewHolder.view_line.setVisibility(View.VISIBLE);
         }
+        switch (invitation.role) {
+            case 0: //普通
+                invitationViewHolder.miv_identity.setVisibility(View.GONE);
+                break;
+            case 1: //店主
+                invitationViewHolder.miv_identity.setVisibility(View.VISIBLE);
+                invitationViewHolder.miv_identity.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                break;
+            case 2://销售主管
+                invitationViewHolder.miv_identity.setVisibility(View.VISIBLE);
+                invitationViewHolder.miv_identity.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                break;
+            case 3://销售经理
+            default:
+                invitationViewHolder.miv_identity.setVisibility(View.VISIBLE);
+                invitationViewHolder.miv_identity.setImageResource(R.mipmap.img_plus_phb_jingli);
+                break;
+        }
+
     }
 
     public class InvitationViewHolder extends BaseRecyclerViewHolder {
@@ -58,6 +77,9 @@ public class InvitationRecordAdapter extends BaseRecyclerAdapter<InvitationEntit
 
         @BindView(R.id.view_line)
         View view_line;
+
+        @BindView(R.id.miv_identity)
+        MyImageView miv_identity;
 
         public InvitationViewHolder(View itemView) {
             super(itemView);
