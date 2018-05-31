@@ -1133,6 +1133,12 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
 
         public TitleHolder(View itemView) {
             super(itemView);
+            if (isEmpty(mGoodsEntity.self_buy_earn)){
+                gone(llayout_plus);
+            }else {
+                visible(llayout_plus);
+                mtv_plus_prefPrice.setText(getString(R.string.rmb)+mGoodsEntity.self_buy_earn);
+            }
         }
         @OnClick(R.id.mtv_act)
         public void actTitle(){
@@ -1141,12 +1147,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 Common.goGoGo(context,activity.url.type,activity.url.item_id);
             }
 
-            if (isEmpty(mGoodsEntity.self_buy_earn)){
-                gone(llayout_plus);
-            }else {
-                visible(llayout_plus);
-                mtv_plus_prefPrice.setText(getString(R.string.rmb)+mGoodsEntity.self_buy_earn);
-            }
         }
 
         @OnClick({R.id.miv_share,R.id.mtv_share})
