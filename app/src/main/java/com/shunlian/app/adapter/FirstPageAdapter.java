@@ -457,6 +457,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     }
                     GetDataEntity.MData data = lists.get(position);
+
                     GlideUtils.getInstance().loadImage(context, fiveHolder.miv_photo, data.pic);
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
                     fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));

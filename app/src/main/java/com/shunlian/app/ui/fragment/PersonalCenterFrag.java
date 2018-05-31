@@ -505,16 +505,27 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         }
         mtv_yaoqingma.setText("邀请码:" + personalcenterEntity.invite_code);
         miv_levels.setVisibility(View.VISIBLE);
-        switch (personalcenterEntity.member_role) {
-            case "1":
-                miv_levels.setImageResource(R.mipmap.img_chuangkejingying);
-                break;
-            case "2":
-                miv_levels.setImageResource(R.mipmap.img_jingyingdaoshi);
-                break;
-            default:
-                miv_levels.setVisibility(View.INVISIBLE);
-                break;
+
+//        switch (personalcenterEntity.role) {
+//            case "1":
+//                miv_levels.setImageResource(R.mipmap.img_chuangkejingying);
+//                break;
+//            case "2":
+//                miv_levels.setImageResource(R.mipmap.img_jingyingdaoshi);
+//                break;
+//            default:
+//                miv_levels.setVisibility(View.INVISIBLE);
+//                break;
+//        }
+        if (!isEmpty(personalcenterEntity.role)) {
+            int level = Integer.parseInt(personalcenterEntity.role);
+            if (level < 2) {
+                miv_levels.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+            } else if (level == 2) {
+                miv_levels.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+            } else {
+                miv_levels.setImageResource(R.mipmap.img_plus_phb_jingli);
+            }
         }
         GlideUtils.getInstance().loadCircleImage(baseContext, miv_avar, personalcenterEntity.avatar);
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
