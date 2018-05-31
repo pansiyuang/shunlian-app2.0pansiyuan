@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -166,6 +167,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
 
     @Override
     protected void initData() {
+        ImmersionBar.with(this).fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
         tv_title.setText(getStringResouce(R.string.share_store_big_gif));
         tv_title_right.setText(getStringResouce(R.string.my_order));
         tv_title_right.setVisibility(View.VISIBLE);
@@ -374,9 +379,13 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         tv_sales_date.setText("有效期:" + baseInfo.expire_time);
         seekbar_plus.setProgress(12);
         tv_earn_money.setText("赚" + baseInfo.invite_reward + "奖励");
-
+        seekbar_plus.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         invitationsUrl = baseInfo.invite_strategy;
-
         if (baseInfo.role >= 3) {
             tv_member_count.setVisibility(View.VISIBLE);
         } else {

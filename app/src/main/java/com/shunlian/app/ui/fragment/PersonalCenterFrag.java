@@ -28,6 +28,7 @@ import com.shunlian.app.ui.help.HelpOneAct;
 import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
+import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.MyPlusAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
@@ -375,7 +376,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                MyPlusAct.startAct(baseActivity);
+                GifBagListAct.startAct(baseContext);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -727,7 +728,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_chakan:
                 if (mainActivity.isPlus()){
-                    MyPlusAct.startAct(baseActivity);
+                    mainActivity.myPlusClick();
                 }else {
                     initHintDialog();
                 }

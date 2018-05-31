@@ -74,7 +74,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/mtv_price"
         android:layout_below="@+id/mtv_price"
-        android:text="¥ 99.00"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
         app:tv_control_adapter="true"

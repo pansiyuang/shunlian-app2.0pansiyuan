@@ -24,6 +24,7 @@ package com.shunlian.app.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -79,6 +80,7 @@ import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
+import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
@@ -169,6 +171,9 @@ public class Common {
                 return "MyProfitAct";
             case "coupon":
                 return "GetCouponAct";
+            case "plusdetail":
+            case "pulsdetail":
+                return "PlusGifDetailAct";
             default:
                 return "";
         }
@@ -267,6 +272,10 @@ public class Common {
                 break;
             case "goToPayPlus":
                 GifBagListAct.startAct(context);
+                break;
+            case "plusdetail":
+            case "pulsdetail":
+                PlusGifDetailAct.startAct(context,params[0]);
                 break;
             case "login":
                 LoginAct.startAct(context);
@@ -951,6 +960,67 @@ public class Common {
             return false;
         }else {
             return true;
+        }
+    }
+
+    public static void urlToPage(Context context,String url){
+        //LogUtil.httpLogW("链接:" + url);
+        if (url.startsWith("slmall://")) {
+            String type = interceptBody(url);
+            if (!TextUtils.isEmpty(type)) {
+                String id = "";
+                String id1 = "";
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
+                    id = interceptId(url);
+                if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id1")))
+                    id1 = interceptId(url);
+                Common.goGoGo(context, type, id, id1);
+            }
+        }
+    }
+
+    /**
+     * 完整url slmall://goods/item.json?goodsId=138471
+     * 截取之后goods/item.json
+     *
+     * @param url
+     * @return
+     */
+    private static String interceptBody(String url) {
+        String[] split = url.split("\\?");
+        String s = split[0];
+        if (!TextUtils.isEmpty(s)) {
+            String[] split1 = s.split("//");
+            if (!TextUtils.isEmpty(split1[1])) {
+                return split1[1];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 截取商品id
+     *
+     * @param url
+     * @return
+     */
+    private static String interceptId(String url) {
+        String[] split = url.split("\\?");
+        String s = split[1];
+        String[] split1 = s.split("=");
+        String s1 = split1[1];
+        return s1;
+    }
+
+    /**
+     * 解析剪切板内容
+     * @param context
+     */
+    public static void parseClipboard(Context context){
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (!TextUtils.isEmpty(cm.getText()) && cm.getText().toString().contains("slmall://")) {
+            Common.urlToPage(context, cm.getText().toString());
+            cm.setText("");
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
@@ -307,7 +308,12 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
         tv_sales_date.setText("有效期:" + baseInfo.expire_time);
         seekbar_plus.setProgress(12);
         tv_earn_money.setText("赚" + baseInfo.invite_reward + "奖励");
-
+        seekbar_plus.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         invitationsUrl = baseInfo.invite_strategy;
         showTabOneButton(tabOneMode);
 

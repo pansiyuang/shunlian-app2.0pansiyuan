@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SuperProductAdapter;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.presenter.SuperproductPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISuperProductView;
 
@@ -78,6 +81,12 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
             mAdapter = new SuperProductAdapter(this, mData);
             mAdapter.setOnShareClickListener(this);
             recycler_list.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Common.goGoGo(getBaseContext(),mData.get(position).url.type,mData.get(position).url.item_id);
+                }
+            });
         }
         mAdapter.notifyDataSetChanged();
     }

@@ -43,7 +43,7 @@ public class SuperproductPresenter extends BasePresenter<ISuperProductView> {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         Call<BaseEntity<SuperProductEntity>> classesshare = getApiService().superProductsList(map);
-        getNetData(false, classesshare, new SimpleNetDataCallback<BaseEntity<SuperProductEntity>>() {
+        getNetData(true, classesshare, new SimpleNetDataCallback<BaseEntity<SuperProductEntity>>() {
             @Override
             public void onSuccess(BaseEntity<SuperProductEntity> entity) {
                 super.onSuccess(entity);

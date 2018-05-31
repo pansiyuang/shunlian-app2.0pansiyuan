@@ -106,7 +106,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/img_share_logo"
-            android:scaleType="fitXY"
             app:iv_control_adapter="true"
             app:iv_control_height="50"
             app:iv_control_width="218"

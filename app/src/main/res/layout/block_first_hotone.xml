@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    android:paddingBottom="5dp">
+    android:paddingBottom="15dp">
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_pingzhi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="15dp">
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
@@ -47,7 +48,7 @@
         android:id="@+id/mtv_topic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:layout_marginTop="22dp" />
 
@@ -57,7 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
         android:adjustViewBounds="true" />
 
     <com.shunlian.app.widget.MyRelativeLayout

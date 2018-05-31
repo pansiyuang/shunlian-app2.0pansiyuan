@@ -425,19 +425,19 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 //如果进度条隐藏则让它显示
                 if (mProgressbar!=null&&View.INVISIBLE == mProgressbar.getVisibility() && isContinue == false) {
                     mProgressbar.setVisibility(View.VISIBLE);
-                }
-                //大于80的进度的时候,放慢速度加载,否则交给自己加载
-                if (newProgress >= 80) {
-                    //拦截webView自己的处理方式
-                    if (isContinue) {
-                        return;
+                    //大于80的进度的时候,放慢速度加载,否则交给自己加载
+                    if (newProgress >= 80) {
+                        //拦截webView自己的处理方式
+                        if (isContinue) {
+                            return;
+                        }
+                        mProgressbar.setCurProgress(100, 3000, () -> {
+                            finishOperation(true);
+                        });
+                        isContinue = true;
+                    } else {
+                        mProgressbar.setNormalProgress(newProgress);
                     }
-                    mProgressbar.setCurProgress(100, 3000, () -> {
-                        finishOperation(true);
-                    });
-                    isContinue = true;
-                } else {
-                    mProgressbar.setNormalProgress(newProgress);
                 }
             }
 
