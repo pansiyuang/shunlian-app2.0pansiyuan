@@ -18,6 +18,7 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.banner.Kanner;
+import com.shunlian.app.widget.banner.MyKanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BANNER:
-                return new BannerViewHolder(LayoutInflater.from(context).inflate(R.layout.banner, parent, false));
+                return new BannerViewHolder(LayoutInflater.from(context).inflate(R.layout.block_first_page_banner, parent, false));
             case TYPE_GOODS:
                 return new GoodsViewHolder(LayoutInflater.from(context).inflate(R.layout.item_superior_products, parent, false));
         }
@@ -88,6 +89,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
             for (SuperProductEntity.BannerEntity bannerEntity : bannerEntityList) {
                 banners.add(bannerEntity.thumb);
             }
+            viewHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
             viewHolder.kanner.setBanner(banners);
 
             ViewGroup.LayoutParams frameLayout = viewHolder.kanner.getLayoutParams();
@@ -126,6 +128,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
             goodsViewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + superProduct.earned);
         }
 
+        goodsViewHolder.ll_tags.removeAllViews();
         if (1 == superProduct.is_new) {
             goodsViewHolder.ll_tags.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), goodsViewHolder));
         }
@@ -141,6 +144,8 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
         if (1 == superProduct.is_recommend) {
             goodsViewHolder.ll_tags.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), goodsViewHolder));
         }
+
+
         goodsViewHolder.miv_share.setOnClickListener(v -> {
             //分享
             if (mShareLinstener != null) {
@@ -160,7 +165,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
 
     public class BannerViewHolder extends BaseRecyclerViewHolder {
         @BindView(R.id.kanner)
-        Kanner kanner;
+        MyKanner kanner;
 
         public BannerViewHolder(View itemView) {
             super(itemView);

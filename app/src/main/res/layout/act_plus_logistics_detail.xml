@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
             android:layout_toRightOf="@+id/miv_icon"
-            android:text="物流状态：已签收"
             android:textColor="@color/value_048BFE"
             android:textSize="13sp" />
 
@@ -39,7 +38,6 @@
             android:layout_marginLeft="13dp"
             android:layout_marginTop="7dp"
             android:layout_toRightOf="@+id/miv_icon"
-            android:text="快递：圆通快递"
             android:textColor="@color/new_text"
             android:textSize="13sp" />
 
@@ -51,7 +49,6 @@
             android:layout_marginLeft="13dp"
             android:layout_marginTop="7dp"
             android:layout_toRightOf="@+id/miv_icon"
-            android:text="单号：123456789955156"
             android:textColor="@color/new_text"
             android:textSize="13sp" />
     </RelativeLayout>

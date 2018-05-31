@@ -83,9 +83,9 @@ public class PlusLogisticsDetailAct extends BaseActivity implements IPlusLogisti
         OrderLogisticsEntity.NowStatus nowStatus = logisticsEntity.now_status;
 
         GlideUtils.getInstance().loadImage(this, miv_icon, logisticsEntity.thumb);
-        tv_logistics_company.setText("快递:" + logisticsEntity.express_com);
-        tv_logistics_status.setText("物流状态:" + nowStatus.AcceptStation);
-        tv_logistics_number.setText("单号:" + logisticsEntity.express_sn);
+        tv_logistics_company.setText("快递：" + logisticsEntity.express_com);
+        tv_logistics_status.setText("物流状态：" + nowStatus.AcceptStation);
+        tv_logistics_number.setText("单号：" + logisticsEntity.express_sn);
 
         if (!isEmpty(logisticsEntity.traces)) {
             traceAdapter = new PlusLogisticsAdapter(this, logisticsEntity.traces);
