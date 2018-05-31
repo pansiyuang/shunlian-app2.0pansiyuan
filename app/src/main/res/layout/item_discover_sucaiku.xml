@@ -61,7 +61,7 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:layout_toLeftOf="@id/mtv_zan"
-            android:src="@mipmap/icon_found_zan_n" />
+            android:src="@mipmap/icon_found_pinglun_zan_n" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_share"

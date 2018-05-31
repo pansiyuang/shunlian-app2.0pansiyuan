@@ -55,7 +55,7 @@
     <!--主页tab-->
     <string name="main_page">首页</string>
     <string name="sort">分类</string>
-    <string name="main_shengjiplus">升级PLUS</string>
+    <string name="main_shengjiplus">我的店</string>
     <string name="discover_center">发现中心</string>
     <string name="shopping_car">购物车</string>
     <string name="person_center">个人中心</string>

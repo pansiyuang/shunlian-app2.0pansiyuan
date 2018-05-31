@@ -517,8 +517,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                miv_levels.setVisibility(View.INVISIBLE);
 //                break;
 //        }
-        if (!isEmpty(personalcenterEntity.role)) {
-            int level = Integer.parseInt(personalcenterEntity.role);
+        if (!isEmpty(personalcenterEntity.plus_role)) {
+            int level = Integer.parseInt(personalcenterEntity.plus_role);
             if (level < 2) {
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_dianzhu);
             } else if (level == 2) {

@@ -60,7 +60,6 @@
             android:ellipsize="end"
             android:maxEms="3"
             android:maxLines="1"
-            android:text="优惠券"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:tv_control_adapter="true"

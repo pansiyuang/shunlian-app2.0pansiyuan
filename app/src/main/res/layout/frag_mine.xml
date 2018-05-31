@@ -79,16 +79,17 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:layout_marginLeft="120dp" />
-
-                            <com.shunlian.app.widget.MyImageView
-                                android:id="@+id/miv_call"
-                                android:layout_width="13dp"
-                                android:layout_height="13dp"
-                                android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toRightOf="@id/miv_level"
-                                android:scaleType="fitXY" />
+                                android:layout_toRightOf="@id/miv_level"/>
+
+                            <!--<com.shunlian.app.widget.MyImageView-->
+                                <!--android:id="@+id/miv_call"-->
+                                <!--android:layout_width="13dp"-->
+                                <!--android:layout_height="13dp"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:layout_toRightOf="@id/miv_level"-->
+                                <!--android:scaleType="fitXY" />-->
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_yaoqingma"

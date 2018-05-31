@@ -33,28 +33,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="50dp" />
 
-    <com.shunlian.app.widget.MyRelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/miv_avar"
-        android:layout_marginLeft="13dp"
-        android:layout_centerVertical="true">
-
-        <com.shunlian.app.widget.NewTextView
-            android:id="@+id/ntv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/new_text"
-            android:textSize="13sp" />
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ntv_name"
-            android:layout_marginTop="6dp"/>
-    </com.shunlian.app.widget.MyRelativeLayout>
-
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_desc"
         android:layout_width="wrap_content"
@@ -64,6 +42,33 @@
         android:layout_marginRight="20dp"
         android:textColor="@color/my_dark_grey"
         android:textSize="16sp" />
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/miv_avar"
+        android:layout_marginLeft="13dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/mtv_desc"
+        android:layout_marginRight="10dp">
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/new_text"
+            android:textSize="13sp" />
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mtv_name"
+            android:layout_marginTop="5dp"/>
+    </com.shunlian.app.widget.MyRelativeLayout>
+
 </com.shunlian.app.widget.MyRelativeLayout>
 
 

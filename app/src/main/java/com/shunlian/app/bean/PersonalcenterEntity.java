@@ -14,7 +14,6 @@ public class PersonalcenterEntity {
     public String nickname;
     public String avatar;
     public String level;
-    public String role;
     public String member_role;
     public String balance;
     public String coupon_num;

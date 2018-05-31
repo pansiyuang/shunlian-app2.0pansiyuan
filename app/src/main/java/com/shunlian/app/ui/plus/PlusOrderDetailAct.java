@@ -602,7 +602,8 @@ public class PlusOrderDetailAct extends BaseActivity implements View.OnClickList
 //                StoreAct.startAct(this, storeId);
 //                break;
             case R.id.mtv_title1:
-                OrderLogisticsActivity.startAct(this, plus_order_id);
+                PlusLogisticsDetailAct.startAct(this, plus_order_id);
+//                OrderLogisticsActivity.startAct(this, plus_order_id);
 
 //                text = mtv_title1.getText();
 //                if (getString(R.string.contact_seller).equals(text)) {//联系商家

@@ -62,7 +62,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             viewHolder.mtv_zan.setTextColor(getColor(R.color.pink_color));
         } else {
             viewHolder.isZan=false;
-            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_n);
+            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         }
         viewHolder.miv_zan.setOnClickListener(new View.OnClickListener() {
