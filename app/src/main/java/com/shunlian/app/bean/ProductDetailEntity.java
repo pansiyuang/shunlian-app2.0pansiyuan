@@ -10,6 +10,8 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDetailEntity {
+    public String member_code;
+    public int is_plus;
     public String product_id;
     public String title;
     public String thumb;

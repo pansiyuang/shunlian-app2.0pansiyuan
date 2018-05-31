@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -130,6 +131,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.chart_view)
     MySplineChartView chart_view;
 
+    @BindView(R.id.miv_show_chart)
+    MyImageView miv_show_chart;
+
+    @BindView(R.id.rl_tab_one)
+    RelativeLayout rl_tab_one;
+
     QuickActions quick_actions;
     private Unbinder bind;
     private int screenWidth;
@@ -152,6 +159,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isStop, isCrash;
     private int size, position;
     private boolean isPause = true;
+    private boolean isExpand; //是否展开
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
 
     public static void startAct(Context context) {
@@ -205,6 +213,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         tv_invitations.setOnClickListener(this);
         tv_title_right.setOnClickListener(this);
         miv_invite.setOnClickListener(this);
+        miv_show_chart.setOnClickListener(this);
     }
 
     @Override
@@ -325,6 +334,8 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
                 quick_actions.shareInfo(mShareInfoParam);
                 quick_actions.shareStyle2Dialog(true, 4);
                 break;
+            case R.id.miv_show_chart:
+                break;
         }
     }
 
@@ -370,8 +381,6 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void getPlusData(PlusDataEntity plusDataEntity) {   //小店级别：0=普通会员，1=plus店主，2=销售主管，3=销售经理
 
-        LogUtil.httpLogW("getPlusData()");
-
         PlusDataEntity.BaseInfo baseInfo = plusDataEntity.base_info;
         PlusDataEntity.Achievement achievement = plusDataEntity.achievement;
         GlideUtils.getInstance().loadCircleImage(getActivity(), miv_icon, baseInfo.avatar);
@@ -379,17 +388,15 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         tv_sales_date.setText("有效期:" + baseInfo.expire_time);
         seekbar_plus.setProgress(12);
         tv_earn_money.setText("赚" + baseInfo.invite_reward + "奖励");
-        seekbar_plus.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
+        seekbar_plus.setOnTouchListener((view, motionEvent) -> true);
         invitationsUrl = baseInfo.invite_strategy;
+
         if (baseInfo.role >= 3) {
+            rl_tab_one.setVisibility(View.VISIBLE);
             tv_member_count.setVisibility(View.VISIBLE);
         } else {
             tv_member_count.setVisibility(View.GONE);
+            rl_tab_one.setVisibility(View.GONE);
         }
 
         tv_group_money.setText(achievement.total_sales);

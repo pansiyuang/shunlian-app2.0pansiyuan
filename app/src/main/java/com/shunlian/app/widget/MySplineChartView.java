@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.utils.LogUtil;
 import com.zh.chartlibrary.chart.CustomLineData;
 import com.zh.chartlibrary.chart.PointD;
 import com.zh.chartlibrary.chart.SplineChart;
@@ -44,7 +45,6 @@ public class MySplineChartView extends ChartView {
 
     private List<CustomLineData> mXCustomLineDataset = new ArrayList<>();
     private int[] ltrb = new int[4];
-    private List<PlusDataEntity.Chart> mChartList;
 
     //线1的数据集
     List<PointD> linePoint1 = new ArrayList<>();
@@ -52,8 +52,6 @@ public class MySplineChartView extends ChartView {
 
     private int Max_Sale_Num = 100;
     private int Max_Member_Num = 100;
-    private int leftofferset;
-    private int rightofferset;
 
     public MySplineChartView(Context context) {
         super(context);
@@ -78,7 +76,6 @@ public class MySplineChartView extends ChartView {
         ltrb[1] = DensityUtil.dip2px(getContext(), 40); //top
         ltrb[2] = DensityUtil.dip2px(getContext(), 40); //right
         ltrb[3] = DensityUtil.dip2px(getContext(), 40); //bottom
-        mChartList = new ArrayList<>();
 
         chartRender();
         chartLnRender();
@@ -96,6 +93,7 @@ public class MySplineChartView extends ChartView {
     }
 
     public void setChartData(List<PlusDataEntity.Chart> chartList) {
+        LogUtil.httpLogW("setChartData( )");
         if (chartList == null || chartList.size() == 0) {
             return;
         }
@@ -133,11 +131,11 @@ public class MySplineChartView extends ChartView {
         chart.setCategories(labels);
         chart.setDataSource(chartData);
         lnChart.setCategories(labels);
-
         lnChart.setDataSource(chartDataLn);
 
         initView();
-        this.invalidate();
+
+        invalidate();
     }
 
     @Override

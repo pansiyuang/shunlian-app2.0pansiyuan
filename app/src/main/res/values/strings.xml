@@ -743,4 +743,5 @@
     <string name="logistics">物流</string>
     <string name="logistics_info">物流信息</string>
     <string name="plus_xiaoshoupaihang">销售排行榜等待揭晓</string>
+    <string name="plus_open_up">您的ID为%s，购买后将为此ID开通plus权益，确定为此ID账号开通么？</string>
 </resources>
