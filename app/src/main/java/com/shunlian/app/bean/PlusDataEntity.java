@@ -27,6 +27,7 @@ public class PlusDataEntity {
         public String invite_reward;
         public String invite_strategy;
         public ShareInfo share_info;
+        public int plus_num;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

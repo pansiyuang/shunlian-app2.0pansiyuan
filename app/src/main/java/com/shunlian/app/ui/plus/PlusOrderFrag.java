@@ -60,7 +60,6 @@ public class PlusOrderFrag extends BaseLazyFragment implements IPlusOrderView {
     protected void onFragmentFirstVisible() {
 
         fromType = getArguments().getString("from_type");
-        LogUtil.httpLogW("fromType:" + fromType);
 
         mPresenter = new PlusOrderPresenter(getActivity(), this);
         mPresenter.getOrderList(fromType, true);

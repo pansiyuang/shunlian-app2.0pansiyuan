@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -80,10 +81,13 @@ public class StoreGifFrag extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void getGifList(List<GifProductEntity.Product> productList) {
+        int imgWidth = (recyclerView.getWidth() - TransformUtil.dip2px(getActivity(), 5)) / 2;
         recyclerView.setAdapter(new SimpleRecyclerAdapter<GifProductEntity.Product>(getActivity(), R.layout.item_product_img, productList) {
             @Override
             public void convert(SimpleViewHolder holder, GifProductEntity.Product product, int position) {
                 MyImageView myImageView = holder.getView(R.id.miv_img);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(imgWidth, imgWidth);
+                myImageView.setLayoutParams(layoutParams);
                 GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, product.thumb, 5);
                 myImageView.setOnClickListener(v -> {
                     if (!isEmpty(product.product_id)) {
