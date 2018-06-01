@@ -30,6 +30,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="9dp"
             android:layout_toRightOf="@+id/tv_full_min"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 

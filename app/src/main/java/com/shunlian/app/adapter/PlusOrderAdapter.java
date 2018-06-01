@@ -27,13 +27,26 @@ import butterknife.BindView;
 public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOrder> {
 
     public PlusOrderAdapter(Context context, List<PlusOrderEntity.PlusOrder> lists) {
-        super(context, false, lists);
+        super(context, true, lists);
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return new OrderViewHolder(LayoutInflater.from(context).inflate(R.layout.item_plus_order, parent, false));
     }
+
+    @Override
+    public void setFooterHolderParams(BaseFooterHolder baseFooterHolder) {
+        super.setFooterHolderParams(baseFooterHolder);
+        baseFooterHolder.layout_load_error.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_normal.setBackgroundColor(getColor(R.color.white_ash));
+        baseFooterHolder.layout_no_more.setText(getString(R.string.no_more_order));
+        baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_load_error.setTextSize(12);
+        baseFooterHolder.mtv_loading.setTextSize(12);
+    }
+
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {

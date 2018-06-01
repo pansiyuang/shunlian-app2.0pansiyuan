@@ -19,6 +19,7 @@ public class InvitationEntity extends BaseEntity {
         public String avatar;
         public String nickname;
         public String role_desc;
+        public int role;
         public String enter_time;
     }
 
