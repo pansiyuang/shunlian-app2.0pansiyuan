@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.register.TestAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IRegisterOneView;
@@ -115,9 +113,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @OnClick(R.id.miv_icon)
     public void test(){
-        if (BuildConfig.DEBUG){
+        /*if (BuildConfig.DEBUG){
             TestAct.startAct(baseContext);
-        }
+        }*/
     }
 
     @Override

@@ -118,6 +118,18 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
             }
         });
 
+        et_phone.setOnTouchListener((v, event) -> {
+            if (isEtIdEmpty()) {
+                return false;
+            } else {
+                if (TextUtils.isEmpty(id)) {
+                    id = et_id.getText().toString();
+                }
+                onePresenter.checkCode(id);
+            }
+            return false;
+        });
+
         et_phone.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -152,8 +164,23 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
         unique_sign = arguments.getString("unique_sign");
         if (state == USER_STATES || state == USER_STATES_OLD) {
             gone(rl_id);
+            setEdittextFocusable(true,et_phone);
+        }else {
+            visible(rl_id);
+            setEdittextFocusable(true,et_id);
         }
         onePresenter = new RegisterOnePresenter(baseActivity, this);
+    }
+
+    private boolean isEtIdEmpty() {
+        Editable text = et_id.getText();
+        if (TextUtils.isEmpty(text)) {
+            Common.staticToast(getString(R.string.RegisterOneAct_tjridbnwk));
+            setEdittextFocusable(true, et_id);
+            setEdittextFocusable(false, et_phone, et_code);
+            return true;
+        }
+        return false;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -187,7 +214,9 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
 
     @Override
     public void checkCode(boolean isSuccess) {
-
+        if (!isSuccess) {
+            setEdittextFocusable(true, et_id);
+        }
     }
 
     @Override
