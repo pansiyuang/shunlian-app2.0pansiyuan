@@ -1,34 +1,37 @@
 package com.shunlian.app.ui.register;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
-import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SimpleTextWatcher;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.PhoneTextWatcher;
-import com.shunlian.mylibrary.KeyboardPatch;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
 
-public class RegisterOneAct extends BaseActivity implements View.OnClickListener, IRegisterOneView {
+public class RegisterOneFrag extends BaseFragment implements View.OnClickListener, IRegisterOneView {
 
     @BindView(R.id.et_id)
     EditText et_id;
@@ -54,49 +57,45 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.sv_content)
     ScrollView sv_content;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
     private String id;//推荐人id
     private RegisterOnePresenter onePresenter;
     private boolean isCheckCode;
-    private String unique_sign;
     private boolean isCheckMobile;
 
-    public static void stratAct(Context context) {
-        Intent intent = new Intent(context, RegisterOneAct.class);
-        context.startActivity(intent);
-    }
-
-
+    /**
+     * 设置布局id
+     *
+     * @param inflater
+     * @param container
+     * @return
+     */
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_register_one;
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.activity_register_one, null);
+        return view;
     }
 
     @Override
     protected void initListener() {
         super.initListener();
         et_phone.addTextChangedListener(new PhoneTextWatcher(et_phone));
+        miv_close.setOnClickListener(this);
         tv_select.setOnClickListener(this);
         miv_code.setOnClickListener(this);
-        miv_logo.setOnClickListener(this);
-        sv_content.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        et_phone.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (isEtIdEmpty()) {
-                    return false;
-                } else {
-                    if (TextUtils.isEmpty(id)) {
-                        id = et_id.getText().toString();
-                    }
-                    onePresenter.checkCode(id);
-                }
+        sv_content.setOnTouchListener((v, event) -> true);
+        et_phone.setOnTouchListener((v, event) -> {
+            if (isEtIdEmpty()) {
                 return false;
+            } else {
+                if (TextUtils.isEmpty(id)) {
+                    id = et_id.getText().toString();
+                }
+                onePresenter.checkCode(id);
             }
+            return false;
         });
 
         et_phone.addTextChangedListener(new SimpleTextWatcher() {
@@ -114,15 +113,12 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        et_code.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (isEtIdEmpty())
-                    return false;
-                if (isEtPhoneEmpty())
-                    return false;
+        et_code.setOnTouchListener((v, event) -> {
+            if (isEtIdEmpty())
                 return false;
-            }
+            if (isEtPhoneEmpty())
+                return false;
+            return false;
         });
         et_code.addTextChangedListener(new SimpleTextWatcher() {
             @Override
@@ -136,6 +132,24 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
                 }
             }
         });
+    }
+
+    @Override
+    protected void initData() {
+        EventBus.getDefault().register(this);
+        GradientDrawable background = (GradientDrawable) tv_select.getBackground();
+        background.setColor(getColorResouce(R.color.bg_gray_two));
+        setEdittextFocusable(true,et_id);
+        visible(miv_logo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            visible(view_title);
+        }else {
+            gone(view_title);
+        }
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(baseActivity, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        onePresenter = new RegisterOnePresenter(baseActivity, this);
     }
 
     private boolean isEtPhoneEmpty() {
@@ -166,52 +180,29 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void initData() {
-
-        GradientDrawable background = (GradientDrawable) tv_select.getBackground();
-        background.setColor(getColorResouce(R.color.bg_gray_two));
-        setEdittextFocusable(true,et_id);
-        miv_logo.setVisibility(View.VISIBLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            view_title.setVisibility(View.VISIBLE);
-            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
-            KeyboardPatch.patch(this).enable();
-        }else {
-            view_title.setVisibility(View.GONE);
-        }
-
-        unique_sign = getIntent().getStringExtra("unique_sign");
-        onePresenter = new RegisterOnePresenter(RegisterOneAct.this, this);
-    }
-
-    @Override
     public void onClick(View v) {
         if (MyOnClickListener.isFastClick()){
             return;
         }
         switch (v.getId()) {
             case R.id.tv_select:
-                SelectRecommendAct.startAct(this);
+                SelectRecommendAct.startAct(baseActivity);
                 break;
             case R.id.miv_code:
                 onePresenter.getCode();
+                et_code.setText("");
                 break;
-            case R.id.miv_logo:
-                TestAct.startAct(this);
+            case R.id.miv_close:
+                baseActivity.finish();
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 201 && resultCode == 200) {
-            id = data.getStringExtra("id");
-            String nickname = data.getStringExtra("nickname");
-            et_id.setText(nickname);
-            setEdittextFocusable(true, et_phone);
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getRecommenderId(String id){
+        this.id = id;
+        et_id.setText(id);
+        setEdittextFocusable(true, et_phone);
     }
 
     @Override
@@ -233,9 +224,11 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            Common.staticToast(smsCode);
-            RegisterTwoAct.startAct(this, smsCode, et_phone.getText().toString(), id, unique_sign, RegisterTwoAct.TYPE_REGIST,et_code.getText().toString());
-            finish();
+            //Common.staticToast(smsCode);
+            String phone = et_phone.getText().toString();
+            String code = et_code.getText().toString();
+            ((RegisterAct)baseActivity).addRegisterTwo(phone,smsCode,id,code,
+                    null,RegisterTwoFrag.TYPE_REGIST);
         } else {
             onePresenter.getCode();
             et_code.setText("");
@@ -266,8 +259,9 @@ public class RegisterOneAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroyView() {
         Common.hideKeyboard(et_phone);
-        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 }

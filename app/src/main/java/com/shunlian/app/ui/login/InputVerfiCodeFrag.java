@@ -1,12 +1,15 @@
 package com.shunlian.app.ui.login;
 
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -14,12 +17,13 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.LoginPresenter;
-import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.ILoginView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,12 +37,15 @@ import butterknife.BindView;
  * Created by Administrator on 2017/10/18.
  */
 
-public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListener, VerificationCodeInput.Listener, ILoginView {
+public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickListener,
+        VerificationCodeInput.Listener, ILoginView {
+
     private CountDownTimer countDownTimer;
     private String currentPhone;
     private String currentVerfiCode;
     private String picCode;
     private LoginPresenter loginPresenter;
+
     @BindView(R.id.tv_phone)
     TextView tv_phone;
 
@@ -48,37 +55,43 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.input_code)
     VerificationCodeInput input_code;
 
-    @BindView(R.id.et_pwd)
-    EditText et_pwd;
+    @BindView(R.id.rlayout_pwd)
+    RelativeLayout rlayout_pwd;
 
-    @BindView(R.id.et_rpwd)
-    EditText et_rpwd;
+    @BindView(R.id.rlayout_reset_pwd)
+    RelativeLayout rlayout_reset_pwd;
 
     @BindView(R.id.et_nickname)
     EditText et_nickname;
 
     @BindView(R.id.btn_complete)
     Button btn_complete;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+    @BindView(R.id.llayout_clause)
+    LinearLayout llayout_clause;
+
     private String jumpType;
 
 
-    public static void startAct(Context context, String phoneNum, String vCode) {
-        Intent intent = new Intent(context, InputVerfiCodeAct.class);
-        intent.putExtra("phoneNum", phoneNum);
-        intent.putExtra("vCode", vCode);
-        context.startActivity(intent);
-    }
-
+    /**
+     * 设置布局id
+     *
+     * @param inflater
+     * @param container
+     * @return
+     */
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_register_two;
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.activity_register_two, null);
+        return view;
     }
 
-
-    private void initViews() {
-        et_pwd.setVisibility(View.GONE);
-        et_rpwd.setVisibility(View.GONE);
-        et_nickname.setVisibility(View.GONE);
+    protected void initViews() {
+        visible(llayout_clause);
+        gone(rlayout_pwd,et_nickname,rlayout_reset_pwd);
         btn_complete.setText(getString(R.string.LoginPswFrg_dl));
 
         tv_phone.setText(currentPhone);
@@ -86,14 +99,18 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         countDownTimer = new CountDownTimer(60 * 1000, 1000) {
             @Override
             public void onTick(long l) {
-                tv_time.setText((int) Math.floor(l / 1000) + "s");
-                tv_time.setEnabled(false);
+                if (tv_time != null) {
+                    tv_time.setText((int) Math.floor(l / 1000) + "s");
+                    tv_time.setEnabled(false);
+                }
             }
 
             @Override
             public void onFinish() {
-                tv_time.setText(getResources().getString(R.string.LoginPswFrg_cxhq));
-                tv_time.setEnabled(true);
+                if (tv_time != null) {
+                    tv_time.setText(getResources().getString(R.string.LoginPswFrg_cxhq));
+                    tv_time.setEnabled(true);
+                }
             }
         };
         countDownTimer.start();
@@ -102,17 +119,17 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        currentPhone = getIntent().getStringExtra("phoneNum");
-        picCode = getIntent().getStringExtra("vCode");
-        loginPresenter = new LoginPresenter(this, this, LoginPresenter.TYPE_MOBILE);
+        Bundle arguments = getArguments();
+        currentPhone = arguments.getString("phoneNum");
+        picCode = arguments.getString("vCode");
+        loginPresenter = new LoginPresenter(baseActivity, this, LoginPresenter.TYPE_MOBILE);
         initViews();
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        miv_close.setOnClickListener(this);
         tv_time.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
         input_code.setOnCompleteListener(this);
@@ -137,12 +154,15 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
                 }
                 loginPresenter.LoginMobile(currentPhone.replaceAll(" ", ""), currentVerfiCode);
                 break;
+            case R.id.miv_close:
+                ((LoginAct)baseActivity).backPage();
+                break;
         }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         countDownTimer.cancel();
         countDownTimer = null;
         EventBus.getDefault().unregister(this);
@@ -167,14 +187,16 @@ public class InputVerfiCodeAct extends BaseActivity implements View.OnClickListe
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag!=null)
         SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
+        //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
+
         JpushUtil.setJPushAlias();
         if (!isEmpty(jumpType)){
-            Common.goGoGo(this,jumpType);
+            Common.goGoGo(baseActivity,jumpType);
         }
-        finish();
+        baseActivity.finish();
     }
 
     @Override

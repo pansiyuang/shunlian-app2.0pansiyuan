@@ -10,10 +10,7 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:ll_control_adapter="true"
-        app:ll_control_width="720"
-        app:ll_control_height="1280"
-        app:ll_margin_top="60"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
 
@@ -128,5 +125,6 @@
                 app:iv_control_width="144"
                 android:layout_alignParentRight="true"/>
         </com.shunlian.app.widget.MyRelativeLayout>
+
     </com.shunlian.app.widget.MyLinearLayout>
 </ScrollView>

@@ -97,8 +97,11 @@
     <string name="LoginPswFrg_qsrmm">请输入密码</string>
     <string name="LoginPswFrg_qsryzm">请输入验证码</string>
     <string name="LoginPswFrg_wxdl">微信登录</string>
-    <string name="LoginPswFrg_xyhzc">新用户注册</string>
+    <string name="LoginPswFrg_codeLogin">验证码登录</string>
+    <string name="LoginPswFrg_AccountNumber">账号登录</string>
     <string name="LoginPswFrg_cxhq">重新获取</string>
+    <string name="help">帮助</string>
+    <string name="register">注册</string>
 
     <!--微信登录-->
     <string name="errcode_cancel">取消</string>

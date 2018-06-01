@@ -9,19 +9,22 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.ui.register.TestAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.PhoneTextWatcher;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/10/17.
@@ -41,8 +44,8 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     @BindView(R.id.iv_verifi)
     MyImageView iv_verifi;
 
-    @BindView(R.id.tv_new_regist)
-    TextView tv_new_regist;
+    @BindView(R.id.mtv_accountLogin)
+    MyTextView mtv_accountLogin;
 
     @BindView(R.id.tv_wx_login)
     TextView tv_wx_login;
@@ -72,7 +75,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         phoneTextWatcher = new PhoneTextWatcher(edt_account);
         edt_account.addTextChangedListener(phoneTextWatcher);
         phoneTextWatcher.setOnInputListener(this);
-        tv_new_regist.setOnClickListener(this);
+        mtv_accountLogin.setOnClickListener(this);
 
         edt_verifi.addTextChangedListener(new MyTextWatch());
         iv_verifi.setOnClickListener(this);
@@ -96,14 +99,24 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         switch (view.getId()) {
             case R.id.iv_verifi:
                 onePresenter.getCode();
+                edt_verifi.setText("");
                 break;
-            case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext);
+            case R.id.mtv_accountLogin:
+                if (baseActivity instanceof LoginAct){
+                    ((LoginAct)baseActivity).pwdLogin();
+                }
                 break;
             case R.id.tv_wx_login:
                 WXEntryActivity.startAct(baseActivity, "login",null);
                 baseActivity.finish();
                 break;
+        }
+    }
+
+    @OnClick(R.id.miv_icon)
+    public void test(){
+        if (BuildConfig.DEBUG){
+            TestAct.startAct(baseContext);
         }
     }
 
@@ -129,8 +142,9 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         Common.staticToast(smsCode);
         String currentPhoneNum = edt_account.getText().toString();
         String verifiCode = edt_verifi.getText().toString();
-        InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum, verifiCode);
-        getActivity().finish();
+        ((LoginAct)baseActivity).inputSmsCodePage(currentPhoneNum,verifiCode);
+        //InputVerfiCodeAct.startAct(getActivity(), currentPhoneNum, verifiCode);
+        //getActivity().finish();
     }
 
     @Override
