@@ -130,7 +130,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void setCode(byte[] bytes) {
-        if (bytes != null) {
+        if (bytes != null && iv_verifi != null) {
             iv_verifi.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }
     }
