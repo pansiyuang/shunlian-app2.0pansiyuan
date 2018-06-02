@@ -75,7 +75,6 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
     private SimpleRecyclerAdapter simpleRecyclerAdapter;
 
     public static void startAct(Context context, String id, String firstName, String secondName){
-
         Intent intent = new Intent(context,RankingListAct.class);
         intent.putExtra("id",id);
         intent.putExtra("firstName",firstName);
@@ -187,6 +186,7 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
         }
 
         listAdapter.setOnItemClickListener((view, position) -> {
+            itemCenter(position);
             listAdapter.currentPosition = position;
             listAdapter.notifyDataSetChanged();
             RankingListEntity.Category category = categoryList.get(position);
@@ -212,6 +212,7 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             showCategory();
             listAdapter.currentPosition = position;
             listAdapter.notifyDataSetChanged();
+            horManager.scrollToPosition(position);
         });
     }
 
@@ -270,6 +271,14 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             else
                 adapter.notifyItemInserted(presenter.page_size);
         }
+    }
+
+    private void itemCenter(int position){
+        int firstPosition = horManager.findFirstVisibleItemPosition();
+        int lastPosition = horManager.findLastVisibleItemPosition();
+        int left = recy_view.getChildAt(position - firstPosition).getLeft();
+        int right = recy_view.getChildAt(lastPosition - position).getLeft();
+        recy_view.scrollBy((left - right)/2,0);
     }
 
     @Override
