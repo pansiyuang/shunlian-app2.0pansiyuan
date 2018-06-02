@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
@@ -374,8 +373,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     @Override
     public void resetPsw(String message) {
         Common.staticToast(message);
-        App.getActivityHelper().finishAllActivity();
-        LoginAct.startAct(baseActivity);
+        baseActivity.finish();
     }
 
     @Override

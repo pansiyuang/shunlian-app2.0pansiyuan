@@ -100,8 +100,8 @@ public class RegisterTwoPresenter extends BasePresenter<IRegisterTwoView> {
         getNetData(register, new SimpleNetDataCallback<BaseEntity<RegisterFinishEntity>>() {
             @Override
             public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
-                iView.resetPsw(entity.message);
                 super.onSuccess(entity);
+                iView.resetPsw(entity.message);
             }
         });
     }

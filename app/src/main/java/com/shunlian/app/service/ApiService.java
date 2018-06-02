@@ -2182,7 +2182,7 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("message/punish")
+    @GET("message/punish")
     Call<BaseEntity<PunishEntity>> punish(@QueryMap Map<String, String> map);
 
     /**

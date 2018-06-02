@@ -13,6 +13,9 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.register.RegisterAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.widget.MyImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,9 @@ public class LoginAct extends BaseActivity {
 
     @BindView(R.id.rlayout_title)
     RelativeLayout rlayout_title;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     private ViewPagerAdapter mAdapter;
     //密码
@@ -66,6 +72,9 @@ public class LoginAct extends BaseActivity {
         closeSideslip();
         initView();
         setHeader();
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(this, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
     }
 
     private void initView() {
@@ -90,6 +99,14 @@ public class LoginAct extends BaseActivity {
         RegisterAct.startAct(this,RegisterAct.NEW_USER,null);
     }
 
+    @OnClick(R.id.miv_close)
+    public void close(){
+        if (isCanBack) {
+            backPage();
+        }else {
+            Common.goGoGo(this,"mainPage");
+        }
+    }
     /**
      * 验证码登录
      */
@@ -131,6 +148,9 @@ public class LoginAct extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK){
             if (isCanBack) {
                 backPage();
+                return true;
+            }else {
+                Common.goGoGo(this,"mainPage");
                 return true;
             }
         }

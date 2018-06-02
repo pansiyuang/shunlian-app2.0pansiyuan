@@ -22,6 +22,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
@@ -119,6 +120,11 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
+
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(baseActivity, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+
         Bundle arguments = getArguments();
         currentPhone = arguments.getString("phoneNum");
         picCode = arguments.getString("vCode");
