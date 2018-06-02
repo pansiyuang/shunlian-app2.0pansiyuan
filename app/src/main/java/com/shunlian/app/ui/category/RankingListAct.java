@@ -252,12 +252,9 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             adapter = new SingleCategoryAdapter(this, true, goodsList);
             recy_view_list.setAdapter(adapter);
             adapter.setPageLoading(page,allpage);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (presenter != null){
-                        presenter.onRefresh();
-                    }
+            adapter.setOnReloadListener(() -> {
+                if (presenter != null){
+                    presenter.onRefresh();
                 }
             });
         }else {
