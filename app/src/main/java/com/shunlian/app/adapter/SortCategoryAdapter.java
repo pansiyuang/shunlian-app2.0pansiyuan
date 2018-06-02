@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.SortFragEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -57,7 +58,8 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
     //二级分类显示条目位置对应的k:V
     public Map<Integer,SortFragEntity.SubList> titleData = new HashMap<>();
 
-    public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children, SortFragEntity.Toplist toplist) {
+    public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children,
+                               SortFragEntity.Toplist toplist) {
         super(context, false, children);
         mToplist = toplist;
         counts = new ArrayList<>();//二级分类显示条目位置
@@ -67,12 +69,14 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             titleData.put(counts.get(counts.size() - 1), subLists.get(0));
             for (int i = 0; i < subLists.size(); i++) {//遍历二级分类
                 SortFragEntity.SubList subList = subLists.get(i);
-                if (!isEmpty(subList.children)) {//判断三级分类
-                    if (i + 1 != subLists.size()) {//非最后一个列表
-                        //counts最后一次了的位置加上 上一个二级类目下的数量再加1 = 当前二级类目的位置
-                        counts.add(counts.get(counts.size() - 1) + subList.children.size()+1);
-                        titleData.put(counts.get(counts.size() - 1), subLists.get(i + 1));
+                if (i + 1 != subLists.size()) {//非最后一个列表
+                    //counts最后一次了的位置加上 上一个二级类目下的数量再加1 = 当前二级类目的位置
+                    int count = 0;
+                    if (!isEmpty(subList.children)){
+                        count = subList.children.size();
                     }
+                    counts.add(counts.get(counts.size() - 1) + count+1);
+                    titleData.put(counts.get(counts.size() - 1), subLists.get(i + 1));
                 }
             }
         }
@@ -140,22 +144,29 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
 
 
     private void handleTitle(RecyclerView.ViewHolder holder, int position) {
-        TitleHolder mHolder = (TitleHolder) holder;
-        if (counts.contains(position)) {//有title
-            SortFragEntity.SubList subList = titleData.get(position);
-            if (subList == null){
-                return;
+        if (holder instanceof TitleHolder) {
+            TitleHolder mHolder = (TitleHolder) holder;
+            if (counts.contains(position)) {//有title
+                SortFragEntity.SubList subList = titleData.get(position);
+                if (subList == null) {
+                    return;
+                }
+                if (isEmpty(subList.name)){
+                    gone(mHolder.sort_tv_title,mHolder.view_line1,mHolder.view_line2);
+                }else {
+                    visible(mHolder.sort_tv_title,mHolder.view_line1,mHolder.view_line2);
+                    mHolder.sort_tv_title.setText(subList.name);
+                }
+
+                String on_ranking = subList.on_ranking;
+                if ("1".equalsIgnoreCase(on_ranking)) {
+                    visible(mHolder.mtv_ranking);
+                } else {
+                    gone(mHolder.mtv_ranking);
+                }
+            } else {
+                mHolder.sort_tv_title.setVisibility(View.GONE);
             }
-            mHolder.sort_tv_title.setVisibility(View.VISIBLE);
-            mHolder.sort_tv_title.setText(subList.name);
-            String on_ranking = subList.on_ranking;
-            if ("1".equalsIgnoreCase(on_ranking)){
-                mHolder.mtv_ranking.setVisibility(View.VISIBLE);
-            }else {
-                mHolder.mtv_ranking.setVisibility(View.GONE);
-            }
-        }else {
-            mHolder.sort_tv_title.setVisibility(View.GONE);
         }
     }
 
@@ -253,9 +264,16 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
         @BindView(R.id.mtv_ranking)
         MyTextView mtv_ranking;
 
+        @BindView(R.id.view_line1)
+        View view_line1;
+
+        @BindView(R.id.view_line2)
+        View view_line2;
+
         public TitleHolder(View itemView) {
             super(itemView);
-
+            int i = TransformUtil.dip2px(context, 20);
+            TransformUtil.expandViewTouchDelegate(mtv_ranking,i,i,i,i);
             mtv_ranking.setOnClickListener(this);
         }
 

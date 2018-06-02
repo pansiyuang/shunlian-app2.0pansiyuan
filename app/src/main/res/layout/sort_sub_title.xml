@@ -12,8 +12,10 @@
         android:orientation="horizontal">
 
         <View
+            android:id="@+id/view_line1"
             android:layout_width="25dp"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="#dddddd" />
 
         <TextView
@@ -27,8 +29,10 @@
             android:textSize="14sp" />
 
         <View
+            android:id="@+id/view_line2"
             android:layout_width="25dp"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="#dddddd" />
     </LinearLayout>
 
@@ -41,6 +45,7 @@
         android:drawableRight="@mipmap/img_common_viewarrow"
         android:paddingTop="20dp"
         android:text="排行榜"
+        android:visibility="gone"
         android:textColor="@color/new_gray"
         android:textSize="11sp" />
 </RelativeLayout>

@@ -9,17 +9,17 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.RankingListAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.adapter.SingleCategoryAdapter;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.RankingListEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.RankingListPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.HorItemDecoration;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRankingListView;
 import com.shunlian.app.widget.MyImageView;
@@ -60,6 +60,9 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
 
     @BindView(R.id.miv_pic)
     MyImageView miv_pic;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private LinearLayoutManager verManager;
     private boolean isShow;//默认不显示
@@ -141,6 +144,12 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
 
     }
 
+    @OnClick(R.id.rl_more)
+    public void more() {
+        quick_actions.setVisibility(View.VISIBLE);
+        quick_actions.category();
+    }
+
     /**
      * 显示网络请求失败的界面
      *
@@ -177,19 +186,16 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             presenter.cid = g_cid;
         }
 
-        listAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                listAdapter.currentPosition = position;
-                listAdapter.notifyDataSetChanged();
-                RankingListEntity.Category category = categoryList.get(position);
-                presenter.getNewRankingList(category.g_cid);
-            }
+        listAdapter.setOnItemClickListener((view, position) -> {
+            listAdapter.currentPosition = position;
+            listAdapter.notifyDataSetChanged();
+            RankingListEntity.Category category = categoryList.get(position);
+            presenter.getNewRankingList(category.g_cid);
         });
 
         if (simpleRecyclerAdapter == null) {
-            simpleRecyclerAdapter = new SimpleRecyclerAdapter<RankingListEntity.Category>(this, R.layout.layout_ranking_title, categoryList) {
-
+            simpleRecyclerAdapter = new SimpleRecyclerAdapter<RankingListEntity.Category>(
+                    this, R.layout.layout_ranking_title, categoryList) {
                 @Override
                 public void convert(SimpleViewHolder holder, RankingListEntity.Category category, int position) {
                     MyTextView mtv_text = holder.getView(R.id.mtv_text);
@@ -198,18 +204,14 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
                     mtv_text.setText(category.name);
                 }
             };
-
             recy_view_text.setAdapter(simpleRecyclerAdapter);
         }
-        simpleRecyclerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                RankingListEntity.Category category = categoryList.get(position);
-                presenter.getNewRankingList(category.g_cid);
-                showCategory();
-                listAdapter.currentPosition = position;
-                listAdapter.notifyDataSetChanged();
-            }
+        simpleRecyclerAdapter.setOnItemClickListener((view, position) -> {
+            RankingListEntity.Category category = categoryList.get(position);
+            presenter.getNewRankingList(category.g_cid);
+            showCategory();
+            listAdapter.currentPosition = position;
+            listAdapter.notifyDataSetChanged();
         });
     }
 
@@ -257,6 +259,10 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
                     presenter.onRefresh();
                 }
             });
+            adapter.setOnItemClickListener((v,position)->{
+                GoodsDeatilEntity.Goods goodsItem = goodsList.get(position);
+                Common.goGoGo(this,"goods",goodsItem.id);
+            });
         }else {
             adapter.setPageLoading(page,allpage);
             if (goodsList.size() <= presenter.page_size)
@@ -264,5 +270,12 @@ public class RankingListAct extends BaseActivity implements IRankingListView{
             else
                 adapter.notifyItemInserted(presenter.page_size);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }
