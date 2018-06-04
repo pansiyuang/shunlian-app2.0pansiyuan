@@ -2,10 +2,7 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,7 +14,7 @@ import com.shunlian.app.utils.TransformUtil;
  * Created by Administrator on 2017/10/30.
  */
 
-public class NewTextView extends android.support.v7.widget.AppCompatTextView {
+public class NewTextView extends TextView {
 
     private boolean aBoolean;
     private int control_width;
@@ -27,9 +24,6 @@ public class NewTextView extends android.support.v7.widget.AppCompatTextView {
     private int margin_top;
     private int margin_bottom;
     private int margin_right;
-    private final Paint mPaint = new Paint();
-
-    private final Rect mBounds = new Rect();
 
     public NewTextView(Context context) {
         this(context,null);
@@ -52,6 +46,7 @@ public class NewTextView extends android.support.v7.widget.AppCompatTextView {
         margin_top = a.getInteger(R.styleable.MyTextView_tv_margin_top, 0);
         margin_right = a.getInteger(R.styleable.MyTextView_tv_margin_right, 0);
         margin_bottom = a.getInteger(R.styleable.MyTextView_tv_margin_bottom, 0);
+        setIncludeFontPadding(false);
         a.recycle();
 //        init();
     }
@@ -95,8 +90,6 @@ public class NewTextView extends android.support.v7.widget.AppCompatTextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        calculateTextParams();
-        setMeasuredDimension(mBounds.right - mBounds.left, -mBounds.top + mBounds.bottom);
         if (aBoolean) {
             if (control_width == 0 && control_height == 0){
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -107,28 +100,6 @@ public class NewTextView extends android.support.v7.widget.AppCompatTextView {
         }
     }
 
-    @Override
-    protected void onDraw(@NonNull Canvas canvas) {
-        final String text = calculateTextParams();
-
-        final int left = mBounds.left;
-        final int bottom = mBounds.bottom;
-        mBounds.offset(-mBounds.left, -mBounds.top);
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(getCurrentTextColor());
-        canvas.drawText(text, -left, mBounds.bottom - bottom, mPaint);
-    }
-
-    private String calculateTextParams() {
-        final String text = getText().toString();
-        final int textLength = text.length();
-        mPaint.setTextSize(getTextSize());
-        mPaint.getTextBounds(text, 0, textLength, mBounds);
-        if (textLength == 0) {
-            mBounds.right = mBounds.left;
-        }
-        return text;
-    }
     /**
      * 设置中划线
      */

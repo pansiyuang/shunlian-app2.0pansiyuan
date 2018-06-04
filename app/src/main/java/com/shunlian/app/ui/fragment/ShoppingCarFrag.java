@@ -165,7 +165,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         expand_shoppingcar.addFooterView(footView);
         expand_shoppingcar.addFooterView(probabyTitleView);
         expand_shoppingcar.addFooterView(probabyView);
-
+        probabyTitleView.setVisibility(View.GONE);
         recyclerDialog = new RecyclerDialog(baseContext);
     }
 
@@ -191,7 +191,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     public void getShoppingCarData() {
         if (shopCarPresenter != null) {
-            shopCarPresenter.getApiData();
+            shopCarPresenter.initShopData();
         }
     }
 
@@ -437,9 +437,12 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnGetProbabyGoods(List<ProbabyLikeGoodsEntity.Goods> goodsList) {
         if (!isEmpty(goodsList)) {
+            probabyTitleView.setVisibility(View.VISIBLE);
             probabyGoods.clear();
             probabyGoods.addAll(goodsList);
             goodsAdapter.notifyDataSetChanged();
+        }else {
+            probabyTitleView.setVisibility(View.GONE);
         }
     }
 

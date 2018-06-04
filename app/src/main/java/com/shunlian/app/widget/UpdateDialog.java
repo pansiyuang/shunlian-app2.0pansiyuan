@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.utils.Constant;
@@ -224,6 +225,11 @@ public class UpdateDialog implements IMain {
 
     @Override
     public void setAD(AdEntity data) {
+
+    }
+
+    @Override
+    public void setCommond(CommondEntity data) {
 
     }
 

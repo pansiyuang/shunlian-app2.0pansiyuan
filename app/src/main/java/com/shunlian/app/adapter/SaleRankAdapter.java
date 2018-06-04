@@ -11,7 +11,6 @@ import com.shunlian.app.bean.WeekSaleTopEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.NewTextView;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             WeekSaleTopEntity.Cate goods = lists.get(position);
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_avar, goods.avatar);
-            viewHolder.ntv_name.setText(goods.nickname);
+            viewHolder.mtv_name.setText(goods.nickname);
             viewHolder.miv_level.setVisibility(View.GONE);
             viewHolder.mtv_level.setVisibility(View.GONE);
             switch (position) {
@@ -78,7 +77,7 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
                 }
             }
             viewHolder.mtv_desc.setText(goods.sales);
-            viewHolder.ntv_name.setText(goods.nickname);
+            viewHolder.mtv_name.setText(goods.nickname);
         }
     }
 
@@ -96,8 +95,8 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
 
-        @BindView(R.id.ntv_name)
-        NewTextView ntv_name;
+        @BindView(R.id.mtv_name)
+        MyTextView mtv_name;
 
         @BindView(R.id.mtv_desc)
         MyTextView mtv_desc;

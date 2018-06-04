@@ -3,14 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--<com.shunlian.app.widget.refresh.ring.RingRefreshView-->
-        <!--android:id="@+id/refreshview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@color/pink_color"-->
-        <!--android:visibility="gone">-->
-
-    <!--</com.shunlian.app.widget.refresh.ring.RingRefreshView>-->
 
     <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/lay_refresh"
@@ -18,14 +10,11 @@
         android:layout_height="match_parent"
         android:background="@color/pink_color"
         android:visibility="visible">
-    <!--</com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>-->
         <com.shunlian.app.widget.CompileScrollView
             android:id="@+id/csv_out"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg_gray"
-
-
             android:scrollbars="none"
             android:overScrollMode="never">
 
@@ -79,16 +68,17 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:layout_marginLeft="120dp" />
-
-                            <com.shunlian.app.widget.MyImageView
-                                android:id="@+id/miv_call"
-                                android:layout_width="13dp"
-                                android:layout_height="13dp"
-                                android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toRightOf="@id/miv_level"
-                                android:scaleType="fitXY" />
+                                android:layout_toRightOf="@id/miv_level"/>
+
+                            <!--<com.shunlian.app.widget.MyImageView-->
+                                <!--android:id="@+id/miv_call"-->
+                                <!--android:layout_width="13dp"-->
+                                <!--android:layout_height="13dp"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:layout_toRightOf="@id/miv_level"-->
+                                <!--android:scaleType="fitXY" />-->
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_yaoqingma"
@@ -1094,7 +1084,6 @@
                 </com.shunlian.app.widget.MyLinearLayout>
             </com.shunlian.app.widget.MyRelativeLayout>
         </com.shunlian.app.widget.CompileScrollView>
-    <!--</com.shunlian.app.widget.refresh.ring.RingRefreshView>-->
     </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
     <View
         android:id="@+id/view_bg"

@@ -2102,6 +2102,24 @@ public interface ApiService {
     @POST("goods/mayBeBuy")
     Call<BaseEntity<ProbablyLikeEntity>> mayBeBuy(@Body RequestBody body);
 
+    /**
+     * 解析分享密码
+     *
+     * @param body
+     * @return
+     */
+    @POST("share/parseSecretWord")
+    Call<BaseEntity<CommondEntity>> parseSecretWord(@Body RequestBody body);
+
+    /**
+     * 分享计数
+     *
+     * @param body
+     * @return
+     */
+    @POST("share/add")
+    Call<BaseEntity<CommonEntity>> shareAdd(@Body RequestBody body);
+
 
     /**
      * 闪屏广告

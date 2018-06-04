@@ -12,6 +12,7 @@ public class ShareInfoParam implements Serializable {
     public String desc;
     public String img;
     public String photo;
+    public String type;
     //店铺分享
     public String shop_star;
     public String shop_logo;

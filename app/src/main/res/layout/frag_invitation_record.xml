@@ -52,4 +52,11 @@
         android:background="@drawable/rounded_rectangle_20px"
         android:overScrollMode="never"
         android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="50dp"
+        android:visibility="gone" />
 </LinearLayout>

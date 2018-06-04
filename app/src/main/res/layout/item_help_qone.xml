@@ -23,7 +23,6 @@
             android:textColor="@color/new_text"
             android:layout_toRightOf="@id/miv_icon"
             android:textSize="14sp"
-            android:includeFontPadding="false"
             android:layout_marginLeft="6dp"/>
 
         <com.shunlian.app.widget.NewTextView
