@@ -262,7 +262,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
 
     public void initFragments() {
         fragmentManager = getChildFragmentManager();
-        recordClick();
+        showTabTwoButton(2);
     }
 
     public void switchContent(Fragment show) {
