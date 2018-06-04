@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusDataEntity;
+import com.shunlian.app.utils.LogUtil;
 import com.zh.chartlibrary.chart.CustomLineData;
 import com.zh.chartlibrary.chart.PointD;
 import com.zh.chartlibrary.chart.SplineChart;
@@ -60,8 +61,13 @@ public class MySplineChartView extends ChartView {
 
     public void initView(int saleNum, int memberNum, List<PlusDataEntity.Chart> chartList) {
 
-        Max_Sale_Num = saleNum;
-        Max_Sale_Num = memberNum;
+        if (saleNum != 0) {
+            Max_Sale_Num = saleNum;
+        }
+
+        if (memberNum != 0) {
+            Max_Member_Num = memberNum;
+        }
 
         if (chartList == null || chartList.size() == 0) {
             return;
