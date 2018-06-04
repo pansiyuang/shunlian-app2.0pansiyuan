@@ -232,4 +232,13 @@ public class VerificationCodeInput extends LinearLayout implements TextWatcher, 
     public interface Listener {
         void onComplete(String content);
     }
+
+    public void clearAll(){
+        for (int i = 0; i < getChildCount(); i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof EditText){
+                ((EditText)childAt).setText("");
+            }
+        }
+    }
 }

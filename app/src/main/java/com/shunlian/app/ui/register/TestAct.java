@@ -128,13 +128,13 @@ public class TestAct extends BaseActivity implements View.OnClickListener {
     public void onClick(final View v) {
         switch (v.getId()){
             case R.id.tv1:
-                BindingPhoneAct.startAct(this,0,null);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,null);
                 break;
             case R.id.tv2:
-                BindingPhoneAct.startAct(this,1,null);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,null);
                 break;
             case R.id.tv3:
-                BindingPhoneAct.startAct(this,2,null);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_OLD_USER,null);
                 break;
             case  R.id.rtv_car:
                 System.out.println("点击按钮");

@@ -119,9 +119,6 @@
         android:layout_below="@+id/mrlayout_category"
         android:background="@color/value_ECECEC" />
 
-
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recy_view_list"
         android:layout_width="match_parent"
@@ -150,4 +147,10 @@
 
 
     </LinearLayout>
+
+    <com.shunlian.app.utils.QuickActions
+        android:id="@+id/quick_actions"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

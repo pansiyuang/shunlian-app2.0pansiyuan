@@ -569,7 +569,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      */
     @Override
     public void specailAct() {
-        mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FFE324));
+        mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
         mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_FB0236));
     }
 

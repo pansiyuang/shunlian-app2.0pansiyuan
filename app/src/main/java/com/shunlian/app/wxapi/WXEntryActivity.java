@@ -17,7 +17,7 @@ import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.register.BindingPhoneAct;
+import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -296,14 +296,16 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String unique_sign = wxLoginEntity.unique_sign;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {
-                BindingPhoneAct.startAct(this, 0, unique_sign);
+                //BindingPhoneAct.startAct(this, 0, unique_sign);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
             } else if ("1".equals(status)) {
                 Common.staticToast("登录成功");
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
                 SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
                 SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
             } else {
-                BindingPhoneAct.startAct(this, 1, unique_sign);
+                //BindingPhoneAct.startAct(this, 1, unique_sign);
+                RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
             }
             finish();
         } else {

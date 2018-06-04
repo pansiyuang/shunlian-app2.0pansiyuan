@@ -148,7 +148,6 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
      * @param toplist
      */
     public void subRightList(final SortFragEntity.Toplist toplist) {
-
         final List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
         List<SortFragEntity.SubList> children = toplist.children;
         if (!isEmpty(children)) {
@@ -159,10 +158,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 }
             }
         }
-
-
         final SortCategoryAdapter adapter = new SortCategoryAdapter(this, itemLists, toplist);
-
         recycler_sort.setAdapter(adapter);
 
         adapter.setOnItemClickListener((view, position) -> {

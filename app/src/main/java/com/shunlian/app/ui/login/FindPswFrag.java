@@ -1,21 +1,24 @@
 package com.shunlian.app.ui.login;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
-import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.register.RegisterTwoAct;
+import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.register.RegisterAct;
+import com.shunlian.app.ui.register.RegisterTwoFrag;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
@@ -23,14 +26,15 @@ import com.shunlian.app.widget.PhoneTextWatcher;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.ui.register.RegisterTwoAct.TYPE_FIND_PSW;
-
 /**
  * Created by Administrator on 2017/10/23.
  */
 
-public class FindPswAct extends BaseActivity implements View.OnClickListener, IRegisterOneView, PhoneTextWatcher.OnInputCompleteListener {
+public class FindPswFrag extends BaseFragment implements View.OnClickListener, IRegisterOneView,
+        PhoneTextWatcher.OnInputCompleteListener {
+
     private RegisterOnePresenter onePresenter;
+
     private PhoneTextWatcher phoneTextWatcher;
 
     @BindView(R.id.tv_title)
@@ -48,39 +52,56 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     @BindView(R.id.miv_code)
     MyImageView miv_code;
 
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, FindPswAct.class);
-        context.startActivity(intent);
-    }
+    @BindView(R.id.sv_content)
+    ScrollView sv_content;
 
+    @BindView(R.id.view_title)
+    View view_title;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
+    /**
+     * 设置布局id
+     *
+     * @param inflater
+     * @param container
+     * @return
+     */
     @Override
-    protected int getLayoutId() {
-        return R.layout.binding_phone;
-    }
-
-    @Override
-    protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        setEdittextFocusable(true, et_code, et_phone);
-        onePresenter = new RegisterOnePresenter(this, this);
-        initViews();
-    }
-
-    public void initViews() {
-        rl_id.setVisibility(View.GONE);
-        tv_title.setText(getResources().getString(R.string.FindPsw_zhmm));
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.binding_phone, null);
+        return view;
     }
 
     @Override
     protected void initListener() {
+        super.initListener();
+        miv_close.setOnClickListener(this);
         miv_code.setOnClickListener(this);
         phoneTextWatcher = new PhoneTextWatcher(et_phone);
         et_phone.addTextChangedListener(phoneTextWatcher);
         phoneTextWatcher.setOnInputListener(this);
-
         et_code.addTextChangedListener(new MyTextWatch());
-        super.initListener();
+        sv_content.setOnTouchListener((v, event) -> true);
+    }
+
+    @Override
+    protected void initData() {
+        gone(rl_id);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            visible(view_title);
+        } else {
+            gone(view_title);
+        }
+
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(baseActivity, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+
+        tv_title.setText(getStringResouce(R.string.FindPsw_zhmm));
+        setEdittextFocusable(true, et_code, et_phone);
+        onePresenter = new RegisterOnePresenter(baseActivity, this);
     }
 
     @Override
@@ -94,7 +115,9 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
     public void smsCode(String smsCode) {
         String phoneNum = et_phone.getText().toString();
         Common.staticToast(smsCode);
-        RegisterTwoAct.startAct(this, smsCode, phoneNum, "", "", TYPE_FIND_PSW, et_code.getText().toString());
+        String code = et_code.getText().toString();
+        ((RegisterAct) baseActivity).addRegisterTwo(phoneNum, smsCode, "", code,
+                null, RegisterTwoFrag.TYPE_FIND_PSW);
     }
 
     @Override
@@ -119,7 +142,14 @@ public class FindPswAct extends BaseActivity implements View.OnClickListener, IR
 
     @Override
     public void onClick(View view) {
-        onePresenter.getCode();
+        switch (view.getId()) {
+            case R.id.miv_close:
+                baseActivity.finish();
+                break;
+            case R.id.miv_code:
+                onePresenter.getCode();
+                break;
+        }
     }
 
     @Override

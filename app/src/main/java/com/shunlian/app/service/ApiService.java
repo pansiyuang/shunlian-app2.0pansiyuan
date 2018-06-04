@@ -847,7 +847,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/goods/search")
+    @POST("goods/search")
     Call<BaseEntity<SearchGoodsEntity>> getSearchGoods(@Body RequestBody body);
 
     /**
@@ -2200,7 +2200,7 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("message/punish")
+    @GET("message/punish")
     Call<BaseEntity<PunishEntity>> punish(@QueryMap Map<String, String> map);
 
     /**

@@ -1,23 +1,25 @@
 package com.shunlian.app.ui.setting.change_user;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.ChangeUserPresenter;
-import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IChangeUserView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/4/23.
  */
 
-public class SettingPwdAct extends BaseActivity implements IChangeUserView {
+public class SettingPwdFrag extends BaseFragment implements IChangeUserView, View.OnClickListener {
 
     @BindView(R.id.mbtn_save)
     MyButton mbtn_save;
@@ -66,6 +68,8 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
     @BindView(R.id.iv_hidden_rpsw)
     MyImageView iv_hidden_rpsw;
 
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
 
     public static final int CONFIRM_CODE = 1;//验证码验证
     public static final int BIND_CODE = 2;//绑定手机号
@@ -79,32 +83,26 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
     private String mMobile;
     private String mKey;
 
-    public static void startAct(Context context, int state,String mobile,String key) {
-        Intent intent = new Intent(context, SettingPwdAct.class);
-        intent.putExtra("state", state);
-        intent.putExtra("mobile", mobile);
-        intent.putExtra("key", key);
-        context.startActivity(intent);
-    }
-
     /**
-     * 布局id
+     * 设置布局id
      *
+     * @param inflater
+     * @param container
      * @return
      */
     @Override
-    protected int getLayoutId() {
-        return R.layout.act_settingpwd;
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.act_settingpwd, null);
+        return view;
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        miv_close.setOnClickListener(this);
         iv_hidden_psw.setOnClickListener(this);
         iv_hidden_rpsw.setOnClickListener(this);
-        input_code.setOnCompleteListener((content)->{
-            mSmsCode = content;
-        });
+        input_code.setOnCompleteListener(content->mSmsCode = content);
 
 
         et_pwd.setOnTouchListener((v,event)->{
@@ -168,11 +166,21 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
      */
     @Override
     protected void initData() {
-        setStatusBarColor(R.color.white);
-        setStatusBarFontDark();
-        state = getIntent().getIntExtra("state", -1);
-        mMobile = getIntent().getStringExtra("mobile");
-        mKey = getIntent().getStringExtra("key");
+
+        Bundle arguments = getArguments();
+        state = arguments.getInt("state", -1);
+        mMobile = arguments.getString("mobile");
+        mKey = arguments.getString("key");
+
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(baseActivity, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        presenter = new ChangeUserPresenter(baseActivity, this);
+
+        reset();
+    }
+
+    private void reset() {
         if (state == BIND_CODE) {//绑定手机
             mbtn_save.setText("绑定");
             mtv_phone.setText(mMobile);
@@ -180,15 +188,18 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
         } else if (state == CONFIRM_CODE) {//验证码验证
             mbtn_save.setText("验证");
             gone(rlayout_pwd, rlayout_reset_pwd);
+            presenter.getMobile();
         } else {//设置密码
             visible(rlayout_pwd, rlayout_reset_pwd);
             mbtn_save.setText("完成");
+            et_pwd.setText("");
+            et_rpwd.setText("");
             GradientDrawable background = (GradientDrawable) mbtn_save.getBackground();
             background.setColor(getColorResouce(R.color.color_value_6c));
+            presenter.getMobile();
         }
+        input_code.clearAll();
         countDown();
-        presenter = new ChangeUserPresenter(this, this);
-        presenter.getMobile();
     }
 
     /**
@@ -218,7 +229,7 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
 
     @Override
     public void key(String key) {
-        ChangeUserAct.startAct(this,true,false,key);
+        ((ModifyAct)baseActivity).modifyOnePage(true,false,key);
     }
 
     @Override
@@ -230,20 +241,22 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
     public void bindMobileSuccess() {
         // TODO: 2018/4/25 绑定成功
         /***登录成功后去个人中心***/
-        LoginAct.startAct(this);
+        LoginAct.startAct(baseContext);
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = dispachJump.personal;
         EventBus.getDefault().postSticky(dispachJump);
+        baseActivity.finish();
     }
 
     @Override
     public void modifyPwdSuccess() {
         // TODO: 2018/4/25 修改密码成功
         /***登录成功后去个人中心***/
-        LoginAct.startAct(this);
+        LoginAct.startAct(baseActivity);
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = dispachJump.personal;
         EventBus.getDefault().postSticky(dispachJump);
+        baseActivity.finish();
     }
 
     @OnClick(R.id.tv_time)
@@ -284,25 +297,27 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
     }
 
     private void countDown() {
-        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-            @Override
-            public void onTick(long l) {
-                tv_time.setText((int) Math.floor(l / 1000) + "s");
-                tv_time.setEnabled(false);
-            }
+        if (countDownTimer == null){
+            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+                @Override
+                public void onTick(long l) {
+                    tv_time.setText((int) Math.floor(l / 1000) + "s");
+                    tv_time.setEnabled(false);
+                }
 
-            @Override
-            public void onFinish() {
-                tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
-                tv_time.setEnabled(true);
-            }
-        };
+                @Override
+                public void onFinish() {
+                    tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
+                    tv_time.setEnabled(true);
+                }
+            };
+        }
+        countDownTimer.cancel();
         countDownTimer.start();
     }
 
     @Override
     public void onClick(View view) {
-        super.onClick(view);
         switch (view.getId()){
             case R.id.iv_hidden_psw:
                 if (isHiddenPwd) {//隐藏
@@ -326,6 +341,14 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
                     iv_hidden_rpsw.setImageResource(R.mipmap.icon_login_eyes_n);
                 }
                 break;
+            case R.id.miv_close:
+                // TODO: 2018/6/1 待定
+                if (state == SET_PWD_CODE) {
+                    ((ModifyAct) baseActivity).modifyOnePage(false, true, null);
+                }else {
+                    ((ModifyAct) baseActivity).modifyOnePage(false, false, null);
+                }
+                break;
         }
     }
 
@@ -339,11 +362,18 @@ public class SettingPwdAct extends BaseActivity implements IChangeUserView {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer = null;
         }
+    }
+
+    public void setArgument(int state, String mobile, String key) {
+        this.state = state;
+        this.mMobile = mobile;
+        this.mKey = key;
+        reset();
     }
 }

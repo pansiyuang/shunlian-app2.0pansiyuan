@@ -1146,7 +1146,6 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             if (activity.url != null){
                 Common.goGoGo(context,activity.url.type,activity.url.item_id);
             }
-
         }
 
         @OnClick({R.id.miv_share,R.id.mtv_share})

@@ -15,6 +15,7 @@
         app:iv_control_adapter="true"
         app:iv_control_height="31"
         app:iv_control_width="31"
+        app:iv_margin_top="30"
         app:iv_margin_left="30" />
 
     <com.shunlian.app.widget.MyTextView

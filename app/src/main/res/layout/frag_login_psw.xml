@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:background="@color/white">
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="21dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
         android:src="@mipmap/icon_login_logo" />
-
 
     <com.shunlian.app.widget.ClearableEditText
         android:id="@+id/edt_account"
         style="@style/editText_attribute"
+        android:layout_below="@+id/miv_icon"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="33dp"
         android:drawableRight="@mipmap/icon_login_delet"
+        android:gravity="start|center_vertical"
         android:maxLength="16"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:gravity="start|center_vertical"
         app:hintText="@string/LoginPswFrg_qsrsjh" />
 
     <View
+        android:id="@+id/view_line1"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_below="@+id/edt_account"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:background="@color/light_gray_two"></View>
 
     <RelativeLayout
+        android:id="@+id/rlayout_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/view_line1"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp">
@@ -46,9 +50,9 @@
             style="@style/editText_attribute"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_hidden_psw"
+            android:gravity="start|center_vertical"
             android:inputType="textPassword"
             android:maxLength="16"
-            android:gravity="start|center_vertical"
             app:hintText="@string/LoginPswFrg_qsrmm" />
 
         <com.shunlian.app.widget.MyImageView
@@ -65,15 +69,19 @@
     </RelativeLayout>
 
     <View
+        android:id="@+id/view_line2"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_below="@+id/rlayout_pwd"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:background="@color/light_gray_two"></View>
 
     <RelativeLayout
+        android:id="@+id/rlayout_loginType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_line2">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/tv_wx_login"
@@ -84,44 +92,71 @@
             android:padding="25dp"
             android:text="@string/LoginPswFrg_wxdl"
             android:textColor="@color/text_black_one"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/tv_new_regist"
+            android:id="@+id/mtv_veriCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:padding="25dp"
-            android:text="@string/LoginPswFrg_xyhzc"
-            android:textColor="@color/new_gray"
-            android:textSize="12sp" />
+            android:text="@string/LoginPswFrg_codeLogin"
+            android:textColor="@color/text_black_one"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <com.shunlian.app.widget.MyButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_below="@+id/rlayout_loginType"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/shape_pink_btn"
-        android:text="@string/LoginPswFrg_dl"
         android:gravity="center"
+        android:text="@string/LoginPswFrg_dl"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:textStyle="bold"></com.shunlian.app.widget.MyButton>
+        android:textStyle="bold"/>
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/tv_find_psw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_login"
+        android:layout_marginLeft="25dp"
+        android:paddingBottom="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="20dp"
+        android:text="@string/FindPsw_zhmm"
+        android:textColor="@color/my_gray_one"
+        android:textSize="14sp"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/llayout_clause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/tv_find_psw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="25dp"
-            android:text="@string/FindPsw_zhmm"
-            android:textColor="@color/share_text"
-            android:textSize="12sp"
-            android:textStyle="bold"></com.shunlian.app.widget.MyTextView>
+            android:text="登录即代表阅读并同意"
+            android:textColor="@color/my_gray_one"
+            android:textSize="12sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="服务条款"
+            android:textColor="@color/pink_color"
+            android:textSize="12sp" />
+
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

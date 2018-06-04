@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.ChangeUserPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.setting.change_user.ChangeUserAct;
+import com.shunlian.app.ui.setting.change_user.ModifyAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
@@ -96,10 +96,10 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
         super.onClick(view);
         switch (view.getId()) {
             case R.id.llayout_login_user:
-                ChangeUserAct.startAct(this,false,false,null);
+                ModifyAct.startAct(this,false,false,null);
                 break;
             case R.id.llayout_login_pwd:
-                ChangeUserAct.startAct(this,false,true,null);
+                ModifyAct.startAct(this,false,true,null);
                 break;
         }
     }

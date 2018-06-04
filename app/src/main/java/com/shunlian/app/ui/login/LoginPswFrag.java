@@ -3,7 +3,6 @@ package com.shunlian.app.ui.login;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,18 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.register.RegisterOneAct;
+import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.view.ILoginView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,18 +46,25 @@ import static com.shunlian.app.presenter.LoginPresenter.TYPE_USER;
 public class LoginPswFrag extends BaseFragment implements View.OnClickListener, ILoginView {
     @BindView(R.id.iv_hidden_psw)
     MyImageView iv_hidden_psw;
+
     @BindView(R.id.edt_account)
     EditText edt_account;
+
     @BindView(R.id.edt_psw)
     MyEditText edt_psw;
-    @BindView(R.id.tv_new_regist)
-    TextView tv_new_regist;
+
+    @BindView(R.id.mtv_veriCode)
+    MyTextView mtv_veriCode;
+
     @BindView(R.id.btn_login)
     MyButton btn_login;
+
     @BindView(R.id.tv_find_psw)
     TextView tv_find_psw;
+
     @BindView(R.id.tv_wx_login)
     TextView tv_wx_login;
+
     private View rootView;
     private boolean isHidden = true;
     private LoginPresenter loginPresenter;
@@ -71,30 +79,19 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        btn_login.setWHProportion(650, 90);
         setEdittextFocusable(true, edt_psw, edt_account);
-        loginPresenter = new LoginPresenter(getActivity(), this, TYPE_USER);
+        loginPresenter = new LoginPresenter(baseActivity, this, TYPE_USER);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        tv_new_regist.setOnClickListener(this);
+        mtv_veriCode.setOnClickListener(this);
         iv_hidden_psw.setOnClickListener(this);
         btn_login.setOnClickListener(this);
         tv_wx_login.setOnClickListener(this);
         tv_find_psw.setOnClickListener(this);
-        edt_psw.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+        edt_psw.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (edt_psw.getText().toString().isEmpty()) {
@@ -120,12 +117,15 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                     edt_psw.setSelection(index);
                 }
                 break;
-            case R.id.tv_new_regist:
-                RegisterOneAct.stratAct(baseContext);
+
+            case R.id.mtv_veriCode://验证码登录
+                if (baseActivity instanceof LoginAct){
+                    ((LoginAct)baseActivity).verificationCodeLogin();
+                }
                 break;
 
             case R.id.tv_find_psw:
-                FindPswAct.startAct(getActivity());
+                RegisterAct.startAct(baseActivity,RegisterAct.FIND_PWD,null);
                 break;
             case R.id.btn_login:
                 String currentAccount = edt_account.getText().toString();
@@ -180,9 +180,12 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag != null)
             SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
+
+        //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
+
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));

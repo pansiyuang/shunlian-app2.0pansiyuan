@@ -31,6 +31,8 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.circle.CircleImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,8 +42,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.tv_next)
-    TextView tv_next;
+    @BindView(R.id.tv_help)
+    TextView tv_help;
 
     @BindView(R.id.frame_detail)
     FrameLayout frame_detail;
@@ -61,14 +63,18 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     @BindView(R.id.tv_notSelect)
     MyTextView tv_notSelect;
 
+    @BindView(R.id.mtv_label)
+    MyTextView mtv_label;
+
+
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
 
-    @BindView(R.id.tv_resg_time)
-    TextView tv_resg_time;
+    @BindView(R.id.mtv_id)
+    TextView mtv_id;
 
-    @BindView(R.id.tv_hot)
-    TextView tv_hot;
+    @BindView(R.id.mtv_vip)
+    TextView mtv_vip;
 
     @BindView(R.id.tv_sure)
     TextView tv_sure;
@@ -76,8 +82,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     @BindView(R.id.miv_vip)
     MyImageView miv_vip;
 
-    @BindView(R.id.tv_vipname)
-    TextView tv_vipname;
+    @BindView(R.id.mtv_synopsis)
+    TextView mtv_synopsis;
 
     private String recommenderId;
     private String nickname;
@@ -100,7 +106,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     @Override
     protected void initListener() {
         super.initListener();
-        tv_next.setOnClickListener(this);
+        tv_help.setOnClickListener(this);
         tv_notSelect.setOnClickListener(this);
         tv_select.setOnClickListener(this);
         tv_sure.setOnClickListener(this);
@@ -155,6 +161,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
             @Override
             public void onAnimationEnd(Animation animation) {
                 sv_mask.setVisibility(View.GONE);
+                EventBus.getDefault().post(recommenderId);
+                finish();
             }
 
             @Override
@@ -170,8 +178,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
             return;
         }
        switch (v.getId()){
-           case R.id.tv_next:
-               presenter.initApi();
+           case R.id.tv_help://帮助
+
                break;
            case R.id.tv_notSelect:
                dialogHidden();
@@ -181,11 +189,12 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                dialogHidden();
                break;
            case R.id.tv_sure:
-               Intent intent = new Intent();
-               intent.putExtra("id",recommenderId);
-               intent.putExtra("nickname",nickname);
-               setResult(200,intent);
-               finish();
+//               Intent intent = new Intent();
+//               intent.putExtra("id",recommenderId);
+//               intent.putExtra("nickname",nickname);
+//               setResult(200,intent);
+//               finish();
+               presenter.initApi();
                break;
        }
     }
@@ -244,14 +253,14 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 MemberCodeListEntity.ListBean listBean = listBeens.get(position);
                 GlideUtils.getInstance().loadImage(SelectRecommendAct.this, miv_icon,listBean.avatar);
                 tv_nickname.setText(listBean.nickname);
-                tv_resg_time.setText(listBean.regtime);
-                tv_hot.setText(listBean.heat);
+//                tv_resg_time.setText(listBean.regtime);
+//                tv_hot.setText(listBean.heat);
                 nickname = listBean.nickname;
                 recommenderId = listBean.code;
 
                 Bitmap bitmap = TransformUtil.convertVIP(SelectRecommendAct.this, listBean.level);
                 miv_vip.setImageBitmap(bitmap);
-                if ("1".equals(listBean.member_role)){
+                /*if ("1".equals(listBean.member_role)){
                     tv_vipname.setVisibility(View.VISIBLE);
                     tv_vipname.setText(listBean.member_role_msg);
                     tv_vipname.setBackgroundResource(R.mipmap.bg_login_chuangkejingying);
@@ -261,7 +270,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                     tv_vipname.setBackgroundResource(R.mipmap.bg_login_jingyingdaoshi);
                 }else {
                     tv_vipname.setVisibility(View.INVISIBLE);
-                }
+                }*/
 
                 dialogDetail();
             }

@@ -1,36 +1,37 @@
 package com.shunlian.app.ui.register;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
-import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
-import com.shunlian.mylibrary.KeyboardPatch;
 
 import butterknife.BindView;
 
-public class RegisterTwoAct extends BaseActivity implements View.OnClickListener, IRegisterTwoView {
+public class RegisterTwoFrag extends BaseFragment implements View.OnClickListener, IRegisterTwoView {
     public static String TYPE_FIND_PSW = "find_password";
     public static String TYPE_REGIST = "regist";
     private String currentType;
@@ -66,6 +67,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.view_title)
     View view_title;
 
+    @BindView(R.id.llayout_agreement)
+    LinearLayout llayout_agreement;
+
+    @BindView(R.id.miv_close)
+    MyImageView miv_close;
+
     private String nickname;
     private boolean isHiddenPwd;
     private boolean isHiddenRPwd;
@@ -77,22 +84,19 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     private String phone;
     private String mCode;
 
-    public static void startAct(Context context, String smsCode, String phone, String codeId, String unique_sign, String type,String pictureCode) {
-        Intent intent = new Intent(context, RegisterTwoAct.class);
-        intent.putExtra("phone", phone);//手机号
-        intent.putExtra("smsCode", smsCode);//手机验证码
-        intent.putExtra("codeId", codeId);//推荐人id
-        intent.putExtra("unique_sign", unique_sign);//微信标识
-        intent.putExtra("type", type);
-        intent.putExtra("pictureCode", pictureCode);//图形验证码
-        context.startActivity(intent);
-    }
 
+    /**
+     * 设置布局id
+     *
+     * @param inflater
+     * @param container
+     * @return
+     */
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_register_two;
+    protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
+        View view = inflater.inflate(R.layout.activity_register_two, null);
+        return view;
     }
-
 
     @Override
     protected void initListener() {
@@ -100,15 +104,12 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
         iv_hidden_psw.setOnClickListener(this);
         iv_hidden_rpsw.setOnClickListener(this);
         tv_time.setOnClickListener(this);
+        miv_close.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
 
         input_code.setOnCompleteListener(content -> {
             mCode = content;
-//                if (!smsCode.equals(content)){
-//                    Common.staticToast(getString(R.string.RegisterTwoAct_shyzmcw));
-//                }else {
-                setEdittextFocusable(true,et_pwd);
-//                }
+            setEdittextFocusable(true,et_pwd);
         });
 
         et_pwd.setOnTouchListener((v, event) -> {
@@ -227,32 +228,50 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            view_title.setVisibility(View.VISIBLE);
-            immersionBar.statusBarColor(R.color.white).keyboardEnable(true).statusBarDarkFont(true, 0.2f).init();
-            KeyboardPatch.patch(this).enable();
+            visible(view_title);
         }else {
-            view_title.setVisibility(View.GONE);
+            gone(view_title);
         }
+        //显示协议
+        visible(llayout_agreement);
+        countDown();
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(baseActivity, 20);
+        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
 
-        phone = getIntent().getStringExtra("phone");
-        smsCode = getIntent().getStringExtra("smsCode");
-        codeId = getIntent().getStringExtra("codeId");
-        unique_sign = getIntent().getStringExtra("unique_sign");
-        currentType = getIntent().getStringExtra("type");
-        pictureCode = getIntent().getStringExtra("pictureCode");
+        Bundle arguments = getArguments();
+        phone = arguments.getString("phone");
+        smsCode = arguments.getString("smsCode");
+        codeId = arguments.getString("codeId");
+        unique_sign = arguments.getString("unique_sign");
+        currentType = arguments.getString("type");
+        pictureCode = arguments.getString("pictureCode");
         if (!TextUtils.isEmpty(unique_sign)){
             btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
         }
-        tv_phone.setText(phone);
-
+        tv_phone.setText(this.phone);
         if (TYPE_FIND_PSW.equals(currentType)) {
             et_nickname.setVisibility(View.GONE);
         }
+        registerTwoPresenter = new RegisterTwoPresenter(baseActivity, this);
+    }
 
-        countDown();
+    public void setArgument(String phone,String smsCode,String codeId,
+                             String pictureCode,String unique_sign,String currentType){
+        this.phone = phone;
+        this.smsCode = smsCode;
+        this.codeId = codeId;
+        this.pictureCode = pictureCode;
+        this.currentType = currentType;
+        this.unique_sign = unique_sign;
 
-        registerTwoPresenter = new RegisterTwoPresenter(this, this);
-
+        if (!TextUtils.isEmpty(unique_sign)){
+            btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
+        }
+        tv_phone.setText(this.phone);
+        if (TYPE_FIND_PSW.equals(currentType)) {
+            et_nickname.setVisibility(View.GONE);
+        }
     }
 
     private void countDown() {
@@ -262,7 +281,6 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 tv_time.setText((int) Math.floor(l / 1000) + "s");
                 tv_time.setEnabled(false);
             }
-
             @Override
             public void onFinish() {
                 tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
@@ -278,6 +296,9 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
             return;
         }
         switch (v.getId()) {
+            case R.id.miv_close:
+                ((RegisterAct)baseActivity).addRegisterOne();
+                break;
             case R.id.iv_hidden_psw:
                 if (isHiddenPwd) {//隐藏
                     isHiddenPwd = false;
@@ -318,11 +339,14 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
                 }
                 LogUtil.httpLogW("TYPE_FIND_PSW："+TYPE_FIND_PSW);
                 if (TYPE_FIND_PSW.equals(currentType)) {
-                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""), et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
+                    registerTwoPresenter.findPsw(phone.replaceAll(" ", ""),
+                            et_pwd.getText().toString(), et_rpwd.getText().toString(), mCode);
                 } else if (TYPE_REGIST.equals(currentType)) {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, "");
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""),
+                            mCode, codeId, et_pwd.getText().toString(), nickname, "");
                 } else {
-                    registerTwoPresenter.register(phone.replaceAll(" ", ""), mCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
+                    registerTwoPresenter.register(phone.replaceAll(" ", ""),
+                            mCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;
         }
@@ -338,8 +362,8 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer = null;
@@ -349,19 +373,18 @@ public class RegisterTwoAct extends BaseActivity implements View.OnClickListener
     @Override
     public void resetPsw(String message) {
         Common.staticToast(message);
-        App.getActivityHelper().finishAllActivity();
-        LoginAct.startAct(this);
+        baseActivity.finish();
     }
 
     @Override
     public void registerFinish(RegisterFinishEntity entity) {
         if (TYPE_REGIST.equals(currentType) || TYPE_FIND_PSW.equals(currentType)){
-            LoginAct.startAct(this);
+            LoginAct.startAct(baseActivity);
         }else {
             SharedPrefUtil.saveSharedPrfString("token", entity.token);
         }
         Common.staticToast("注册成功");
-        finish();
+        baseActivity.finish();
     }
 
     @Override

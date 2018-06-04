@@ -15,7 +15,6 @@ import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -139,9 +138,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
         if (holder instanceof SingleViewHolder) {
             GoodsDeatilEntity.Goods goods;
             if (mStore != null) {
-                goods = mGoods.get(position - 1);
+                goods = lists.get(position - 1);
             } else {
-                goods = mGoods.get(position);
+                goods = lists.get(position);
             }
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);

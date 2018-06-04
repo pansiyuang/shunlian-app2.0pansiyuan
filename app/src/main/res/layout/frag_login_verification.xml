@@ -8,9 +8,10 @@
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="75dp"
         android:src="@mipmap/icon_login_logo" />
 
 
@@ -50,6 +51,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/iv_verifi"
             android:maxLength="4"
+            android:inputType="number"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:gravity="start|center_vertical"
@@ -83,16 +85,16 @@
             android:padding="25dp"
             android:text="@string/LoginPswFrg_wxdl"
             android:textColor="@color/text_black_one"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <com.shunlian.app.widget.MyTextView
-            android:id="@+id/tv_new_regist"
+            android:id="@+id/mtv_accountLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:padding="25dp"
-            android:text="@string/LoginPswFrg_xyhzc"
-            android:textColor="@color/new_gray"
-            android:textSize="12sp" />
+            android:text="@string/LoginPswFrg_AccountNumber"
+            android:textColor="@color/text_black_one"
+            android:textSize="14sp" />
     </RelativeLayout>
 </LinearLayout>
