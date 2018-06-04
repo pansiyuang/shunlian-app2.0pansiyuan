@@ -180,6 +180,8 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     public void getPlusData() {
         if (mPresenter != null) {
             mPresenter.getPlusData(tabOneMode);
+            showTabTwoButton(1);
+            invitationRecordFrag.getInviteHistory();
         }
     }
 
