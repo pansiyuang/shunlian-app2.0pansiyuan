@@ -122,7 +122,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         SystemMsgEntity.ContentBean body = msgType.body;
         switch (isEmpty(msgType.jump) ? "0" : msgType.jump) {
             case "1":
-                if ("1003".equals(body.opt))
+                if ("1001".equals(body.opt))
                     CouponListAct.startAct(context);
                 else if ("1002".equals(body.opt))
                     CouponMsgAct.startAct(context,body.id);
