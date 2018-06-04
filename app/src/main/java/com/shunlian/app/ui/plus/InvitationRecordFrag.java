@@ -12,9 +12,12 @@ import com.shunlian.app.bean.InvitationEntity;
 import com.shunlian.app.presenter.InvitationRecordPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.view.IInvitationRecordeView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/5/28.
@@ -22,6 +25,9 @@ import java.util.List;
  */
 
 public class InvitationRecordFrag extends BaseFragment implements IInvitationRecordeView {
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     RecyclerView recycler_list;
     private InvitationRecordPresenter mPresenter;
@@ -45,6 +51,9 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
 
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.plus_ninhaimei));
+        nei_empty.setButtonText(null);
+
         mList = new ArrayList<>();
         mPresenter = new InvitationRecordPresenter(getActivity(), this);
         mPresenter.getInviteHistory(true);
@@ -53,6 +62,7 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
 
     @Override
     public void getInvitationRecord(int page, int totalPage, List<InvitationEntity.Invitation> invitationList) {
+
         if (page == 1) {
             mList.clear();
         }
@@ -66,15 +76,24 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();
+        if (isEmpty(mList)){
+            visible(nei_empty);
+            gone(recycler_list);
+        }else {
+            visible(recycler_list);
+            gone(nei_empty);
+        }
     }
 
     @Override
     public void showFailureView(int request_code) {
-
+        visible(nei_empty);
+        gone(recycler_list);
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-
+       visible(nei_empty);
+       gone(recycler_list);
     }
 }

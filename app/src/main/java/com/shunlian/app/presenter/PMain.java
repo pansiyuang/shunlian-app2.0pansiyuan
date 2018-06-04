@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommondEntity;
+import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IMain;
@@ -11,6 +13,7 @@ import com.shunlian.app.view.IMain;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -35,6 +38,25 @@ public class PMain extends BasePresenter<IMain> {
     @Override
     protected void initApi() {
 
+    }
+
+    public void getCommond(String word){
+        Map<String,String> map = new HashMap<>();
+        map.put("word",word);
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<CommondEntity>> baseEntityCall = getAddCookieApiService().parseSecretWord(requestBody);
+
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommondEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommondEntity> entity) {
+                super.onSuccess(entity);
+                CommondEntity data = entity.data;
+                if (data != null) {
+                    iView.setCommond(data);
+                }
+            }
+        });
     }
 
     public void getSplashAD() {

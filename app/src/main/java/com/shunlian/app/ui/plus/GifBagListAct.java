@@ -11,6 +11,7 @@ import com.shunlian.app.adapter.GifProductAdapter;
 import com.shunlian.app.bean.GifProductEntity;
 import com.shunlian.app.presenter.GifBagPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGifBagView;
@@ -65,6 +66,10 @@ public class GifBagListAct extends BaseActivity implements IGifBagView {
             mAdapter = new GifProductAdapter(this, productList);
             mAdapter.setOnItemClickListener((view, position) -> {
                 GifProductEntity.Product product = productList.get(position);
+                if (product.sell_out == 1) {
+                    Common.staticToast("已售罄");
+                    return;
+                }
                 PlusGifDetailAct.startAct(GifBagListAct.this, product.product_id);
             });
             recycler_list.setAdapter(mAdapter);

@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.plus.MyPlusAct;
+import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -198,8 +199,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @OnClick(R.id.mllayout_scan)
     public void scan() {
-//        ZXingDemoAct.startAct(baseActivity, false, 0);
-        MyPlusAct.startAct(baseActivity);
+        ZXingDemoAct.startAct(baseActivity, false, 0);
+//        MyPlusAct.startAct(baseActivity);
     }
 
     @OnClick(R.id.mllayout_search)

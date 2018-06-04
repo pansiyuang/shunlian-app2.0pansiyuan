@@ -164,6 +164,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isPause = true;
     private boolean isExpand = true; //是否展开
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
+    public boolean isclick=false;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyPlusAct.class));
@@ -174,6 +175,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         View view = inflater.inflate(R.layout.act_my_plus, container, false);
         bind = ButterKnife.bind(this, view);
         return view;
+    }
+
+    public void getPlusData() {
+        if (mPresenter != null) {
+            mPresenter.getPlusData(tabOneMode);
+        }
     }
 
     @Override
@@ -222,6 +229,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void onResume() {
         beginToast();
+        if (!isHidden()&&!isclick){
+            isclick=false;
+            getPlusData();
+        }
         super.onResume();
     }
 
@@ -249,7 +260,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
 
     public void initFragments() {
         fragmentManager = getChildFragmentManager();
-        recordClick();
+        showTabTwoButton(2);
     }
 
     public void switchContent(Fragment show) {

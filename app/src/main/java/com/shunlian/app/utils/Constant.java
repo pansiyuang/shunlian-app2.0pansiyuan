@@ -86,6 +86,9 @@ public final class Constant {
 
     public static String BUGLY_ID = "1400008795";//正式
 
+    public static String SHARE_TYPE = "";//分享类型
+    public static String SHARE_ID = "";//分享id
+
     public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";      //小米推送KEY
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

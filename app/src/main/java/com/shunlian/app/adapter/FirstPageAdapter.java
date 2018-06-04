@@ -457,19 +457,28 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     }
                     GetDataEntity.MData data = lists.get(position);
-                    GlideUtils.getInstance().loadImage(context, fiveHolder.miv_photo, data.pic);
+                    int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
+                    int height=picWidth*158/340;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+                    params.setMargins(TransformUtil.dip2px(context,10),0,TransformUtil.dip2px(context,10),0);
+                    fiveHolder.miv_photo.setLayoutParams(params);
+                    GlideUtils.getInstance().loadBgImage(context, fiveHolder.miv_photo, data.pic);
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
-                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
+//                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
+                    fiveHolder.view_line.setVisibility(View.GONE);
                     if (isFirst) {
-                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
-                        fiveHolder.mtv_desc.setText(data.content);
+                        if (!isEmpty(data.content)){
+                            fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
+                            fiveHolder.mtv_desc.setText(data.content);
+                        }
                         fiveHolder.mtv_title.setText(data.title);
                     } else {
                         if (!isShow || showPosition == position) {
                             showPosition = position;
                             fiveHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
                             fiveHolder.mtv_topic.setVisibility(View.VISIBLE);
-                            fiveHolder.view_line.setBackgroundColor(getColor(R.color.value_F7F7F7));
+//                            fiveHolder.view_line.setBackgroundColor(getColor(R.color.value_F7F7F7));
+                            fiveHolder.view_line.setVisibility(View.VISIBLE);
                             isShow = true;
                         }
 //                        fiveHolder.mtv_topic.setText(data.title);
@@ -513,7 +522,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
                     }
                     GetDataEntity.MData data = lists.get(position);
-                    GlideUtils.getInstance().loadImage(context, sixHolder.miv_photo, data.pic);
+                    int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
+                    int height=picWidth*158/340;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+                    params.setMargins(TransformUtil.dip2px(context,10),0,TransformUtil.dip2px(context,10),0);
+                    sixHolder.miv_photo.setLayoutParams(params);
+                    GlideUtils.getInstance().loadBgImage(context, sixHolder.miv_photo, data.pic);
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

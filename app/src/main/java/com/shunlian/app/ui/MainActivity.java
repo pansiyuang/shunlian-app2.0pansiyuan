@@ -2,11 +2,13 @@ package com.shunlian.app.ui;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -35,8 +38,10 @@ import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
+import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.app.widget.MyFrameLayout;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.UpdateDialog;
 
 import java.util.HashMap;
@@ -94,7 +99,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
-    private Dialog dialog_ad;
+    private Dialog dialog_ad,dialog_commond;
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
@@ -146,6 +151,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         Common.parseClipboard(this);
     }
 
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -159,6 +165,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onResume() {
+        if (isPlus()){
+            tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
+        }else {
+            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
+        }
         if (Common.isAlreadyLogin()) {
             if (isPerson) {
                 personCenterClick();
@@ -290,7 +301,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 myPlusFrag = new MyPlusFrag();
                 fragmentMap.put(flags[1], myPlusFrag);
             }
+        } else {
+            myPlusFrag.isclick = true;
+            myPlusFrag.getPlusData();
         }
+
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
         switchContent(myPlusFrag);
         pageIndex = 1;
@@ -480,6 +495,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //可以开始设置消息数量的数据了
     }
 
+
     public void initDialog(AdEntity data) {
         if (dialog_ad == null) {
             dialog_ad = new Dialog(this, R.style.popAd);
@@ -505,12 +521,19 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         dialog_ad.show();
     }
 
+
     @Override
     public void setAD(AdEntity data) {
         if ("1".equals(data.show) && !SharedPrefUtil.getCacheSharedPrf("ad_id", "").equals(data.list.ad_sn)) {
             initDialog(data);
             SharedPrefUtil.saveCacheSharedPrf("ad_id", data.list.ad_sn);
         }
+        CommondDialog commondDialog=new CommondDialog(this);
+        commondDialog.parseCommond();
+    }
+
+    @Override
+    public void setCommond(CommondEntity data) {
     }
 
     @Override

@@ -10,12 +10,16 @@ import android.webkit.WebViewClient;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+
+import butterknife.BindView;
 
 /**
  * Created by Administrator on 2018/5/28.
  */
 
 public class InvitationsFrag extends BaseFragment {
+
 
     public static InvitationsFrag getInstance(String url) {
         InvitationsFrag invitationsFrag = new InvitationsFrag();

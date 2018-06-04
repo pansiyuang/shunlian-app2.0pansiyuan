@@ -69,7 +69,7 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         mHolder.data = lists.get(position);
         GlideUtils.getInstance().loadImage(context, mHolder.miv_photo, mHolder.data.bg_img);
         GlideUtils.getInstance().loadImage(context, mHolder.miv_logo, mHolder.data.logo);
-        mHolder.mtv_title.setText(mHolder.data.content);
+        mHolder.mtv_title.setText(mHolder.data.title);
         mHolder.mtv_desc.setText(mHolder.data.slogan);
         int seconds=(int)(System.currentTimeMillis()/1000)-second;
         mHolder.downTime_firsts.cancelDownTimer();

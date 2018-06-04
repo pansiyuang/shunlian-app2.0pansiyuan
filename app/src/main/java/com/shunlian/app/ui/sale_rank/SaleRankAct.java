@@ -14,7 +14,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.view.IWeekSale;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.NewTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
@@ -27,8 +26,8 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
-    @BindView(R.id.ntv_time)
-    NewTextView ntv_time;
+    @BindView(R.id.mtv_time)
+    MyTextView mtv_time;
 
     @BindView(R.id.mtv_times)
     MyTextView mtv_times;
@@ -94,7 +93,7 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
             gone(nei_empty);
             visible(rv_list);
         }
-        ntv_time.setText(weekSaleTopEntity.month_banner);
+        mtv_time.setText(weekSaleTopEntity.month_banner);
         mtv_times.setText(weekSaleTopEntity.update_time);
         rv_list.setAdapter(new SaleRankAdapter(getBaseContext(),weekSaleTopEntity.list));
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
