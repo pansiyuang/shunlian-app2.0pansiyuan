@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.register;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -30,6 +31,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class RegisterTwoFrag extends BaseFragment implements View.OnClickListener, IRegisterTwoView {
     public static String TYPE_FIND_PSW = "find_password";
@@ -73,6 +75,9 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
+    @BindView(R.id.miv_agree)
+    MyImageView miv_agree;
+
     private String nickname;
     private boolean isHiddenPwd;
     private boolean isHiddenRPwd;
@@ -83,6 +88,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     private RegisterTwoPresenter registerTwoPresenter;
     private String phone;
     private String mCode;
+    private boolean isAgree;
 
 
     /**
@@ -105,6 +111,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         iv_hidden_rpsw.setOnClickListener(this);
         tv_time.setOnClickListener(this);
         miv_close.setOnClickListener(this);
+        llayout_agreement.setOnClickListener(this);
         btn_complete.setOnClickListener(this);
 
         input_code.setOnCompleteListener(content -> {
@@ -232,12 +239,11 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         }else {
             gone(view_title);
         }
-        //显示协议
-        visible(llayout_agreement);
         countDown();
         //返回键扩大点击范围
         int i = TransformUtil.dip2px(baseActivity, 20);
         TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        TransformUtil.expandViewTouchDelegate(miv_agree,i,i,i,i);
 
         Bundle arguments = getArguments();
         phone = arguments.getString("phone");
@@ -248,10 +254,18 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         pictureCode = arguments.getString("pictureCode");
         if (!TextUtils.isEmpty(unique_sign)){
             btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
+            gone(llayout_agreement);
         }
         tv_phone.setText(this.phone);
         if (TYPE_FIND_PSW.equals(currentType)) {
-            et_nickname.setVisibility(View.GONE);
+            gone(llayout_agreement,et_nickname);
+        }
+
+        if (TYPE_REGIST.equals(currentType)){//显示协议
+            visible(llayout_agreement);
+            GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+            completeBG.setColor(getColorResouce(R.color.color_value_6c));
+            btn_complete.setEnabled(false);
         }
         registerTwoPresenter = new RegisterTwoPresenter(baseActivity, this);
     }
@@ -267,10 +281,18 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
 
         if (!TextUtils.isEmpty(unique_sign)){
             btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
+            gone(llayout_agreement);
         }
         tv_phone.setText(this.phone);
         if (TYPE_FIND_PSW.equals(currentType)) {
-            et_nickname.setVisibility(View.GONE);
+            gone(llayout_agreement,et_nickname);
+        }
+
+        if (TYPE_REGIST.equals(currentType)){
+            visible(llayout_agreement);
+            GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+            completeBG.setColor(getColorResouce(R.color.color_value_6c));
+            btn_complete.setEnabled(false);
         }
     }
 
@@ -349,6 +371,9 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
                             mCode, codeId, et_pwd.getText().toString(), nickname, unique_sign);
                 }
                 break;
+            case R.id.llayout_agreement:
+                Common.staticToast("霸王条款：必须同意");
+                break;
         }
     }
 
@@ -402,4 +427,17 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
 
     }
 
+    @OnClick(R.id.miv_agree)
+    public void agree(){
+        GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+        if (isAgree){
+            miv_agree.setImageResource(R.mipmap.img_balance_xieyi_n);
+            completeBG.setColor(getColorResouce(R.color.color_value_6c));
+        }else {
+            miv_agree.setImageResource(R.mipmap.img_balance_xieyi_h);
+            completeBG.setColor(getColorResouce(R.color.pink_color));
+        }
+        btn_complete.setEnabled(!isAgree);
+        isAgree = !isAgree;
+    }
 }

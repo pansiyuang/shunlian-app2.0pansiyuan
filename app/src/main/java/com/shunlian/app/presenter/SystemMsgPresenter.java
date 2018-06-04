@@ -142,7 +142,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
                 CommentListAct.startAct((Activity) context, body.id);
                 break;
             case "9":
-//                Common.goGoGo();
+                Common.goGoGo(context,"special",body.id);
                 break;
             case "10":
                 Common.goGoGo(context, body.target, body.targetId);

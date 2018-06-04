@@ -16,6 +16,7 @@ import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -36,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.HashSet;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.shunlian.app.presenter.LoginPresenter.TYPE_USER;
 
@@ -194,6 +196,10 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         if (!isEmpty(jumpType)) {
             Common.goGoGo(baseActivity, jumpType);
         }
+
+        if ("0".equals(content.is_tag)){
+            SexSelectAct.startAct(baseActivity);
+        }
         baseActivity.finish();
     }
 
@@ -215,6 +221,11 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
     @Override
     public void showDataEmptyView(int rquest_code) {
 
+    }
+
+    @OnClick(R.id.llayout_clause)
+    public void showClause(){
+        Common.staticToast("霸王条款：必须同意");
     }
 
     @Override

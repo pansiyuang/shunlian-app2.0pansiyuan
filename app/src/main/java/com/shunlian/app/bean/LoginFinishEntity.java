@@ -3,7 +3,6 @@ package com.shunlian.app.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Administrator on 2017/11/14.
@@ -25,5 +24,6 @@ public class LoginFinishEntity {
     public String token;
     public String expires_in;
     public String plus_role;
+    public String is_tag;//是否有标签1是0否
     public List<String> tag;
 }
