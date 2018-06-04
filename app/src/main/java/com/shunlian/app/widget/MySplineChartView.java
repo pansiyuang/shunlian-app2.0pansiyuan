@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -283,7 +285,23 @@ public class MySplineChartView extends ChartView {
             paint.setColor(getResources().getColor(R.color.value_7C1212));
             float textHeight = DrawHelper.getInstance().getPaintFontHeight(paint);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("销售额", chart.getPlotArea().getLeft(), chart.getPlotArea().getTop() - textHeight, paint);
+            String saleText = "销售额";
+            String memberText = "会员数";
+            Rect saleRect = new Rect();
+            Rect memberRect = new Rect();
+            paint.getTextBounds(saleText, 0, saleText.length(), saleRect);
+            paint.getTextBounds(memberText, 0, memberText.length(), memberRect);
+            canvas.drawText(saleText, chart.getPlotArea().getLeft(), chart.getPlotArea().getTop() - textHeight, paint);
+            canvas.drawText(memberText, lnChart.getPlotArea().getRight(), lnChart.getPlotArea().getTop() - textHeight, paint);
+
+            int saleWidth = saleRect.width();
+            int saleHeight = saleRect.height();
+            int memberWidth = memberRect.width();
+            int memberHeight = memberRect.height();
+            paint.setColor(getResources().getColor(R.color.pink_color));
+            canvas.drawCircle(chart.getPlotArea().getLeft() - (saleWidth / 2) - 15, chart.getPlotArea().getTop() - (saleHeight / 2) - textHeight + 2, 4, paint);
+            paint.setColor(getResources().getColor(R.color.value_920783));
+            canvas.drawCircle(lnChart.getPlotArea().getRight() - (memberWidth / 2) - 15, lnChart.getPlotArea().getTop() - (memberHeight / 2) - textHeight + 2, 4, paint);
         } catch (Exception e) {
             e.printStackTrace();
         }
