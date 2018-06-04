@@ -59,7 +59,20 @@ public class InvitationRecordPresenter extends BasePresenter<IInvitationRecordeV
             }
 
             @Override
+            public void onErrorData(BaseEntity<InvitationEntity> invitationEntityBaseEntity) {
+                iView.showFailureView(0);
+                super.onErrorData(invitationEntityBaseEntity);
+            }
+
+            @Override
+            public void onFailure() {
+                iView.showFailureView(0);
+                super.onFailure();
+            }
+
+            @Override
             public void onErrorCode(int code, String message) {
+                iView.showFailureView(0);
                 Common.staticToast(message);
                 super.onErrorCode(code, message);
             }

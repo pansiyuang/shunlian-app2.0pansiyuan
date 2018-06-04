@@ -16,6 +16,7 @@ import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PADiscoverSucaiku;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -138,7 +139,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                             getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Common.openWeiXin(context);
+                            Common.openWeiXin(context,"material",content.id);
                             viewHolder.promptDialog.dismiss();
                         }
                     }, getString(R.string.errcode_cancel), new View.OnClickListener() {

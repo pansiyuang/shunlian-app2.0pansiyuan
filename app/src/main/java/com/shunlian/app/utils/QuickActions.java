@@ -96,6 +96,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private int px;
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
+    private String shareType="";
 //    private String tag="";
 
 
@@ -326,8 +327,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
         rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareStyle2Dialog(false,2);
+        shareStyle2Dialog(false,2,"article");
     }
+
 
     /**
      * 店铺
@@ -504,6 +506,63 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 //                break;
 //        }
 //    }
+    /**
+     * 分享微信和复制链接，图文分享
+     */
+    public void shareStyle2Dialog(boolean isShow,int textPicState,String type){
+        mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
+                .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem(textPicState==4?"保存二维码":"图文分享",
+                        textPicState==4?getResources().getDrawable(R.mipmap.icon_erweima):
+                                getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
+                .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                Constant.SHARE_TYPE=type;
+                                mllayout_content.setVisibility(VISIBLE);
+                                WXEntryActivity.startAct(getContext(),
+                                        "shareFriend", mShareInfoParam);
+                                hide();
+                                break;
+                            case 1:
+                                shareType=type;
+                                mllayout_content.setVisibility(VISIBLE);
+                                if (textPicState == 1)//店铺分享
+                                    saveshareShopPic();
+                                else if (textPicState == 2)//发现分享
+                                    saveshareFindPic();
+                                else if (textPicState == 3) {//优品分享
+                                    mShareInfoParam.isSuperiorProduct = true;
+                                    saveshareGoodsPic();
+                                }else if (textPicState == 4){//plus分享
+                                    savesharePLUS();
+                                }
+                                setVisibility(INVISIBLE);
+                                break;
+                            case 2:
+                                mllayout_content.setVisibility(VISIBLE);
+                                copyText();
+                                hide();
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onClickClose(View view) {
+                        mllayout_content.setVisibility(VISIBLE);
+                        hide();
+                    }
+                }).build();
+        if (isShow){
+            removeAllViews();
+            if (!mPopMenu.isShowing()) {
+                mPopMenu.show();
+            }
+        }
+    }
+
     /**
      * 分享微信和复制链接，图文分享
      */
@@ -710,7 +769,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 if (mContext instanceof GoodsDetailAct){
                                     ((GoodsDetailAct)mContext).moreHideAnim();
                                 }
-                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext);
+                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType);
                                 dialog.show();
                             } else {
                                 Common.staticToast("分享失败");
@@ -864,7 +923,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             Bitmap bitmapByView = getBitmapByView(inflate);
             boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
             if (isSuccess) {
-                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext);
+                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType);
                 dialog.show();
             } else {
                 Common.staticToast("分享失败");

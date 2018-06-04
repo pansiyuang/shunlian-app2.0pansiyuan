@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
@@ -158,7 +159,14 @@ public class StartAct extends MBaseActivity implements IMain {
             SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
 //            Intent intent = new Intent(baseFragActivity, GuideAct.class);
 //            startActivity(intent);
+            //暂时关闭引导页
             GuideAct.startAct(this);
+//            if (isAD){
+//                ADAct.startAct(getBaseContext(),data);
+//            }else {
+////                Constant.IS_GUIDE = false;
+//                MainActivity.startAct(this, "");
+//            }
         } else {
             if (isAD){
                 ADAct.startAct(getBaseContext(),data);
@@ -191,6 +199,11 @@ public class StartAct extends MBaseActivity implements IMain {
             }
             SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
         }
+    }
+
+    @Override
+    public void setCommond(CommondEntity data) {
+
     }
 
     @Override

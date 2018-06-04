@@ -29,7 +29,6 @@ import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
-import com.shunlian.app.ui.plus.MyPlusAct;
 import com.shunlian.app.ui.qr_code.QrCodeAct;
 import com.shunlian.app.ui.returns_order.RefundAfterSaleAct;
 import com.shunlian.app.ui.sale_data.SaleDataAct;
@@ -517,9 +516,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                miv_levels.setVisibility(View.INVISIBLE);
 //                break;
 //        }
+        miv_levels.setVisibility(View.GONE);
         if (!isEmpty(personalcenterEntity.plus_role)) {
             int level = Integer.parseInt(personalcenterEntity.plus_role);
-            if (level < 2) {
+            if (level>0)
+            miv_levels.setVisibility(View.VISIBLE);
+            if (level == 1) {
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_dianzhu);
             } else if (level == 2) {
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_zhuguan);

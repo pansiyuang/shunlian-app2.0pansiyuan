@@ -3,6 +3,7 @@
     <string name="app_name">顺联2.0</string>
     <string name="common_yuan">￥</string>
     <string name="common_go_shop">去逛逛</string>
+    <string name="common_chakanxiangqing">查看详情</string>
 
     <!-- IM -->
     <string name="year">年</string>
@@ -55,7 +56,8 @@
     <!--主页tab-->
     <string name="main_page">首页</string>
     <string name="sort">分类</string>
-    <string name="main_shengjiplus">我的店</string>
+    <string name="main_wodedian">我的店</string>
+    <string name="main_shengjiplus">升级PLUS</string>
     <string name="discover_center">发现中心</string>
     <string name="shopping_car">购物车</string>
     <string name="person_center">个人中心</string>
@@ -744,4 +746,5 @@
     <string name="logistics_info">物流信息</string>
     <string name="plus_xiaoshoupaihang">销售排行榜等待揭晓</string>
     <string name="plus_open_up">您的ID为%s，购买后将为此ID开通plus权益，确定为此ID账号开通么？</string>
+    <string name="plus_ninhaimei">您还没有邀请记录~</string>
 </resources>

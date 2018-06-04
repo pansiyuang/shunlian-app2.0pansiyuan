@@ -1,5 +1,6 @@
 package com.shunlian.app.ui;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
@@ -36,6 +37,7 @@ import com.shunlian.app.utils.sideslip.SlideBackHelper;
 import com.shunlian.app.utils.sideslip.SlideConfig;
 import com.shunlian.app.utils.sideslip.callbak.OnSlideListenerAdapter;
 import com.shunlian.app.utils.sideslip.widget.SlideBackLayout;
+import com.shunlian.app.widget.CommondDialog;
 import com.shunlian.mylibrary.BarHide;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -85,7 +87,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public static Map<Integer,NetDialog> dialogLists = new HashMap<>();
     private SlideBackLayout mSlideBackLayout;
     private OnSlideListenerAdapter mSlideBackListener;
+    protected CommondDialog commondDialog;
 
+
+    @Override
+    protected void onRestart() {
+        if (!(this instanceof ConfirmOrderAct) &&
+                !(this instanceof PayListActivity) &&
+                !(this instanceof SearchGoodsActivity)) {
+            if (commondDialog==null)
+                commondDialog=new CommondDialog(this);
+            commondDialog.parseCommond();
+        }
+        super.onRestart();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

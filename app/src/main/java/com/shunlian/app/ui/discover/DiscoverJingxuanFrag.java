@@ -15,6 +15,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
@@ -174,7 +175,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             if (quick_actions != null){
                 visible(quick_actions);
                 quick_actions.shareInfo(shareInfoParam);
-                quick_actions.shareStyle2Dialog(true,2);
+                quick_actions.shareStyle2Dialog(true,2,"article");
             }
         }
 

@@ -56,6 +56,9 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
@@ -87,12 +90,19 @@ import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.wxapi.WXEntryActivity;
+import com.shunlian.app.wxapi.WXEntryPresenter;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
 
 /**
  * Created by zhang on 2017/4/14 11 : 42.
@@ -893,7 +903,7 @@ public class Common {
         return false;
     }
 
-    public static void openWeiXin(Context context) {
+    public static void openWeiXin(Context context,String type,String id) {
         if (isWeixinAvilible(context)) {
             try {
                 Intent intent = new Intent();
@@ -904,6 +914,10 @@ public class Common {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setComponent(cmp);
                 context.startActivity(intent);
+                if (!TextUtils.isEmpty(type)){
+                    WXEntryPresenter wxEntryPresenter=new WXEntryPresenter(context,null);
+                    wxEntryPresenter.notifyShare(type,id);
+                }
             } catch (Exception e) {
                 staticToast("打开微信失败，请重试");
                 e.printStackTrace();
@@ -1023,4 +1037,5 @@ public class Common {
             cm.setText("");
         }
     }
+
 }

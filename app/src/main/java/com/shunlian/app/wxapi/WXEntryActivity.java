@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.ui.BaseActivity;
@@ -254,8 +255,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                 } else {
+                    if (!isEmpty(Constant.SHARE_TYPE)){
+                        wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,"");
+                    }else {
+                        finish();
+                    }
                     Common.staticToast("分享成功");
-                    finish();
                 }
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
@@ -304,6 +309,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         } else {
             finish();
         }
+        finish();
+    }
+
+    @Override
+    public void notifyCallback(CommonEntity commonEntity) {
         finish();
     }
 
