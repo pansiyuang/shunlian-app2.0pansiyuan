@@ -2,6 +2,7 @@ package com.shunlian.app.ui.setting;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -82,6 +83,8 @@ public class SelectLikeAct extends BaseActivity implements ISelectLikeView{
             presenter.currentCount = split.length;
         }
 
+        GradientDrawable sureBG = (GradientDrawable) mbtn_sure.getBackground();
+        sureBG.setColor(getColorResouce(R.color.pink_color));
         GridLayoutManager manager = new GridLayoutManager(this,3);
         recy_view.setLayoutManager(manager);
     }
@@ -92,11 +95,13 @@ public class SelectLikeAct extends BaseActivity implements ISelectLikeView{
     public void sure(){
         if (presenter != null){
             String[] tag = presenter.getCount();
-            Intent intent = new Intent();
-            intent.putExtra("name",tag[0]);
-            intent.putExtra("id",tag[1]);
-            setResult(Activity.RESULT_OK,intent);
-            finish();
+            if (tag != null && tag.length >= 2) {
+                Intent intent = new Intent();
+                intent.putExtra("name", tag[0]);
+                intent.putExtra("id", tag[1]);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
         }
     }
 

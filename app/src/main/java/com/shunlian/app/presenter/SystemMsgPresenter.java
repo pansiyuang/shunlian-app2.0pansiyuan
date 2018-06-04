@@ -8,6 +8,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.coupon.CouponListAct;
@@ -121,7 +122,10 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         SystemMsgEntity.ContentBean body = msgType.body;
         switch (isEmpty(msgType.jump) ? "0" : msgType.jump) {
             case "1":
-                CouponListAct.startAct(context);
+                if ("1003".equals(body.opt))
+                    CouponListAct.startAct(context);
+                else if ("1002".equals(body.opt))
+                    CouponMsgAct.startAct(context,body.id);
                 break;
             case "2":
                 OrderDetailAct.startAct(context, body.id);
