@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,7 +23,6 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
 
-import java.io.InputStream;
 import java.util.HashSet;
 
 import butterknife.BindView;
