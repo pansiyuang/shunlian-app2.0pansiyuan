@@ -83,7 +83,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.findDetail();
+        quick_actions.findDetail("");
         if (pDiscoverTiezi != null)
             quick_actions.shareInfo(pDiscoverTiezi.getShareInfoParam());
     }

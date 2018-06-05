@@ -96,7 +96,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     private int px;
     private PopMenu mPopMenu;
     private ShareInfoParam mShareInfoParam;
-    private String shareType="";
+    private String shareType="",shareId="";
 //    private String tag="";
 
 
@@ -323,11 +323,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 发现详情页
      */
-    public void findDetail() {
+    public void findDetail(String articleId) {
         topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
         rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
-        shareStyle2Dialog(false,2,"article");
+        if (TextUtils.isEmpty(articleId)){
+            shareStyle2Dialog(false,2);
+        }else {
+            shareStyle2Dialog(false,2,"article",articleId);
+        }
+
     }
 
 
@@ -509,7 +514,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     /**
      * 分享微信和复制链接，图文分享
      */
-    public void shareStyle2Dialog(boolean isShow,int textPicState,String type){
+    public void shareStyle2Dialog(boolean isShow,int textPicState,String type,String id){
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem(textPicState==4?"保存二维码":"图文分享",
@@ -522,6 +527,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         switch (position) {
                             case 0:
                                 Constant.SHARE_TYPE=type;
+                                Constant.SHARE_ID=id;
                                 mllayout_content.setVisibility(VISIBLE);
                                 WXEntryActivity.startAct(getContext(),
                                         "shareFriend", mShareInfoParam);
@@ -529,6 +535,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                             case 1:
                                 shareType=type;
+                                shareId=id;
                                 mllayout_content.setVisibility(VISIBLE);
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
@@ -769,7 +776,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 if (mContext instanceof GoodsDetailAct){
                                     ((GoodsDetailAct)mContext).moreHideAnim();
                                 }
-                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType);
+                                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
                                 dialog.show();
                             } else {
                                 Common.staticToast("分享失败");
@@ -886,20 +893,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
 
     private void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-            sb.append(mShareInfoParam.desc);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
-            sb.append(mShareInfoParam.shareLink);
-        }
-        sb.append("\n复制这条信息，打开顺联APP~");
-        ClipboardManager cm = (ClipboardManager) getContext()
-                .getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(getContext(), "复制链接成功", R.mipmap.icon_common_duihao);
+        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.desc);
     }
 
 
@@ -923,7 +917,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
             Bitmap bitmapByView = getBitmapByView(inflate);
             boolean isSuccess = BitmapUtil.saveImageToAlbumn(getContext(), bitmapByView);
             if (isSuccess) {
-                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType);
+                SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
                 dialog.show();
             } else {
                 Common.staticToast("分享失败");

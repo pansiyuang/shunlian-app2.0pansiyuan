@@ -43,11 +43,13 @@ public class PlusLogisticsDetailAct extends BaseActivity implements IPlusLogisti
 
     private PlusLogisticsPresenter mPresenter;
     private PlusLogisticsAdapter traceAdapter;
-    private String currentId;
+    private String currentId,mType;
 
-    public static void startAct(Context context, String plusId) {
+    public static void startAct(Context context, String query_id,String type) {
         Intent intent = new Intent(context, PlusLogisticsDetailAct.class);
-        intent.putExtra("gifId", plusId);
+        intent.putExtra("query_id", query_id);
+        //type 类型 1是普通订单物流 2退换货物流用户 3退换货商家 4礼包
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 
@@ -61,11 +63,12 @@ public class PlusLogisticsDetailAct extends BaseActivity implements IPlusLogisti
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
-        currentId = getIntent().getStringExtra("gifId");
+        currentId = getIntent().getStringExtra("query_id");
+        mType = getIntent().getStringExtra("type");
 
         tv_title.setText(getStringResouce(R.string.logistics_info));
         mPresenter = new PlusLogisticsPresenter(this, this);
-        mPresenter.getPlusLogistics(currentId);
+        mPresenter.getPlusLogistics(currentId,mType);
     }
 
     @Override

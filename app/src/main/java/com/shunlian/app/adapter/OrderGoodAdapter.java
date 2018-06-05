@@ -13,6 +13,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.order.ExchangeDetailAct;
+import com.shunlian.app.ui.plus.PlusGifDetailAct;
+import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -67,11 +69,16 @@ public class OrderGoodAdapter extends BaseRecyclerAdapter<OrderdetailEntity.Good
         }else {
             mHolder.mtv_market_price.setVisibility(View.GONE);
         }
+
         mHolder.mtv_count.setText(String.format(getString(R.string.x),orderGoodsBean.qty));
         mHolder.mrlayout_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoodsDetailAct.startAct(context,orderGoodsBean.goods_id);
+                if (!isEmpty(orderGoodsBean.product_id)){
+                    PlusGifDetailAct.startAct(context,orderGoodsBean.product_id);
+                }else {
+                    GoodsDetailAct.startAct(context,orderGoodsBean.goods_id);
+                }
             }
         });
         String offered = orderGoodsBean.offered;

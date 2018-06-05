@@ -602,7 +602,7 @@ public class PlusOrderDetailAct extends BaseActivity implements View.OnClickList
 //                StoreAct.startAct(this, storeId);
 //                break;
             case R.id.mtv_title1:
-                PlusLogisticsDetailAct.startAct(this, plus_order_id);
+                PlusLogisticsDetailAct.startAct(this, plus_order_id,"4");
 //                OrderLogisticsActivity.startAct(this, plus_order_id);
 
 //                text = mtv_title1.getText();

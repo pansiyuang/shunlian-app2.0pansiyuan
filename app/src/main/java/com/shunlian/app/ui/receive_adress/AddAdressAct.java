@@ -72,7 +72,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        mtv_delete.setVisibility(View.GONE);
+//        mtv_delete.setVisibility(View.GONE);
         mtv_title.setText(getStringResouce(R.string.address_add));
         if (getIntent().getSerializableExtra("address") != null) {
             //必须用getExtras
@@ -80,7 +80,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
             et_realname.setText(address.realname);
             et_mobile.setText(address.mobile);
             et_address.setText(address.address);
-            mtv_delete.setVisibility(View.VISIBLE);
+//            mtv_delete.setVisibility(View.VISIBLE);
             mtv_title.setText("编辑收货地址");
             if (!"1".equals(address.isdefault)) {
                 miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_n));
@@ -111,6 +111,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
         miv_locate.setOnClickListener(this);
         miv_default.setOnClickListener(this);
         mtv_save.setOnClickListener(this);
+//        mtv_delete.setOnClickListener(this);
     }
 
     @Override
@@ -120,9 +121,9 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                 tv_address.setHint("可定位获取");
                 addAddressPresenter.initDistrict();
                 break;
-            case R.id.mtv_delete:
-                addAddressPresenter.addressRemove(addressId);
-                break;
+//            case R.id.mtv_delete:
+//                addAddressPresenter.addressRemove(addressId);
+//                break;
             case R.id.mtv_save:
                 String isDefaults;
                 if (isDefault) {

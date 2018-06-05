@@ -21,10 +21,13 @@ import com.shunlian.app.bean.PlusMemberEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IShareBifGifView;
 import com.shunlian.app.widget.MyImageView;
@@ -416,6 +419,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         seekbar_plus.setOnTouchListener((view, motionEvent) -> true);
         invitationsUrl = baseInfo.invite_strategy;
 
+        if (baseInfo.role<1){
+            SharedPrefUtil.saveSharedPrfString("plus_role", String.valueOf(baseInfo.role));
+            H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
+        }
         if (baseInfo.role >= 3) {  //经理及以上身份才显示数据和表格
             rl_tab_one.setVisibility(View.VISIBLE);
         } else {
