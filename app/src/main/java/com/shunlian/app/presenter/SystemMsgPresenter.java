@@ -110,7 +110,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
 
             adapter.setOnItemClickListener((v, position) -> {
                 SystemMsgEntity.MsgType msgType = msgTypes.get(position);
-                handlerType(msgType);
+                handlerType(msgType,position);
             });
         } else {
             adapter.notifyDataSetChanged();
@@ -118,7 +118,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         adapter.setPageLoading(currentPage, allPage);
     }
 
-    private void handlerType(SystemMsgEntity.MsgType msgType) {
+    private void handlerType(SystemMsgEntity.MsgType msgType, int position) {
         SystemMsgEntity.ContentBean body = msgType.body;
         switch (isEmpty(msgType.jump) ? "0" : msgType.jump) {
             case "1":
@@ -155,8 +155,11 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
                 DayDayAct.startAct(context);
                 break;
         }
-        if ("0".equals(msgType.is_read))
-            msgRead(msgType.type,msgType.id);
+        if ("0".equals(msgType.is_read)) {
+            msgRead(msgType.type, msgType.id);
+            msgType.is_read = "1";
+            adapter.notifyItemChanged(position);
+        }
     }
 
 

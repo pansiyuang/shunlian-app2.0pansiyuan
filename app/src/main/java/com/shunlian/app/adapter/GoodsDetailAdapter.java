@@ -1261,9 +1261,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
+            if (!isEmpty(mGoodsEntity.attrs)){
+                mtv_params.setOnClickListener(this);
+                visible(mtv_params);
+            }else {
+                gone(mtv_params);
+            }
+
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
             tv_select_param.setOnClickListener(this);
-            mtv_params.setOnClickListener(this);
             if (!isEmpty(mGoodsEntity.return_7)){
                 mtv_reason.setText(mGoodsEntity.return_7);
                 visible(miv_reason,mtv_reason);
