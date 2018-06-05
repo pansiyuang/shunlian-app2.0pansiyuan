@@ -256,7 +256,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     String code = sendAuthResp.code;
                 } else {
                     if (!isEmpty(Constant.SHARE_TYPE)){
-                        wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,"");
+                        wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
                     }else {
                         finish();
                     }

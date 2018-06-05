@@ -554,20 +554,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * 复制链接
      */
     public void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-        if (!TextUtils.isEmpty(goodsTitle)) {
-            sb.append(goodsTitle);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(shareLink)) {
-            sb.append(shareLink);
-        }
-        sb.append("\n复制这条信息，打开顺联APP~");
-        ClipboardManager cm = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
+        Common.copyText(context,shareLink,goodsTitle);
     }
 
     /**

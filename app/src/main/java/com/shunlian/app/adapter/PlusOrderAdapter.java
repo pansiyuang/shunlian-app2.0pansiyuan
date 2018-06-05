@@ -84,7 +84,7 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
         }
         orderViewHolder.tv_logistics.setOnClickListener(v -> {
             //查看物流信息
-            PlusLogisticsDetailAct.startAct(context, plusOrder.product_id);
+            PlusLogisticsDetailAct.startAct(context, plusOrder.product_id,"4");
         });
     }
 

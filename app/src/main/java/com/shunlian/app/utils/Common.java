@@ -889,6 +889,26 @@ public class Common {
         return resid;
     }
 
+    public static void copyText(Context context,String shareLink,String shareDesc) {
+        StringBuffer sb = new StringBuffer();
+        sb.setLength(0);
+//        if (!TextUtils.isEmpty(shareTitle)) {
+//            sb.append(shareTitle);
+//            sb.append("\n");
+//        }
+        if (!TextUtils.isEmpty(shareDesc)) {
+            sb.append(shareDesc);
+            sb.append("\n");
+        }
+        if (!TextUtils.isEmpty(shareLink)) {
+            sb.append(shareLink);
+        }
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(sb.toString());
+        staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
+        Constant.SHARE_LINK=sb.toString();
+    }
+
     public static boolean isWeixinAvilible(Context context) {
         final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息

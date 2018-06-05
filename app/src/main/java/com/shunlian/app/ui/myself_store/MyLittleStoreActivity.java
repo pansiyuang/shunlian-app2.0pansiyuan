@@ -130,7 +130,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                             WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
                             break;
                         case 1:
-                            copyText();
+                            Common.copyText(MyLittleStoreActivity.this,shareLink,shareDesc);
                             break;
                         case 2:
                             GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
@@ -140,24 +140,6 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 .build();
     }
 
-    private void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-//        if (!TextUtils.isEmpty(shareTitle)) {
-//            sb.append(shareTitle);
-//            sb.append("\n");
-//        }
-        if (!TextUtils.isEmpty(shareDesc)) {
-            sb.append(shareDesc);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(shareLink)) {
-            sb.append(shareLink);
-        }
-        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(MyLittleStoreActivity.this, "复制链接成功", R.mipmap.icon_common_duihao);
-    }
 
     @Override
     protected void onResume() {

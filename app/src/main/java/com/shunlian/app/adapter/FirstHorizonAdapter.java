@@ -45,7 +45,7 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
                 getString(R.string.common_yuan), 11);
         mHolder.mtv_price.setText(priceBuilder);
         if (isNew){
-            mHolder.mtv_title.setText(data.description);
+            mHolder.mtv_title.setText(data.title);
             mHolder.mtv_title.setVisibility(View.VISIBLE);
         }else {
             mHolder.mtv_title.setVisibility(View.GONE);

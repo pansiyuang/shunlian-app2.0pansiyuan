@@ -19,6 +19,7 @@ import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ExchangeDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
+import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -158,7 +159,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     HourNoWhiteDownTimerView downTime_order;
 
     private ExchangeDetailPresenter exchangeDetailPresenter;
-    private String refund_id = "53",orderId="";
+    private String refund_id = "53";
     private MessageCountManager messageCountManager;
     private RefundDetailEntity.RefundDetail refundDetail;
 
@@ -231,6 +232,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         super.initListener();
         mtv_contact.setOnClickListener(this);
         mtv_wuliu.setOnClickListener(this);
+        mtv_wulius.setOnClickListener(this);
     }
 
     @Override
@@ -243,7 +245,11 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
                 exchangeDetailPresenter.getUserId(refundDetail.store_id);
                 break;
             case R.id.mtv_wuliu:
-                OrderLogisticsActivity.startAct(this,orderId);
+                //查看物流信息
+                PlusLogisticsDetailAct.startAct(this, refund_id,"2");
+                break;
+            case R.id.mtv_wulius:
+                PlusLogisticsDetailAct.startAct(this, refund_id,"3");
                 break;
 
         }
@@ -263,7 +269,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     public void setData(RefundDetailEntity refundDetailEntity) {
         refundDetail = refundDetailEntity.refund_detail;
-        orderId=refundDetail.order_id;
+        refund_id=refundDetail.refund_id;
         int time = 0;
         if (!TextUtils.isEmpty(refundDetail.rest_second))
             time = Integer.parseInt(refundDetail.rest_second);

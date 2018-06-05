@@ -190,20 +190,6 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
-    private void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-            sb.append(mShareInfoParam.desc);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
-            sb.append(mShareInfoParam.shareLink);
-        }
-        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(this, "复制链接成功", R.mipmap.icon_common_duihao);
-    }
 
     /**
      * 分享微信和复制链接
@@ -221,7 +207,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                copyText();
+                                Common.copyText(PingpaiListAct.this,mShareInfoParam.shareLink,mShareInfoParam.desc);
                                 break;
                         }
                     }

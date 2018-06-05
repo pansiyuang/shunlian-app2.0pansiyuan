@@ -67,10 +67,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         mDatasss.clear();
         pFirstPage.getContentData(channel_id,isShow);
         isShow=true;
-        if (firstPageAdapter != null) {
-            firstPageAdapter.showPosition = -1;
-            firstPageAdapter.isShow = false;
-        }
     }
     @Override
     protected void initListener() {
@@ -139,15 +135,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (lay_refresh!=null)
-                lay_refresh.setRefreshing(false);
-            }
-        },3000);
-
+        if (lay_refresh!=null)
+            lay_refresh.setRefreshing(false);
         int size=0;
         mDatass.clear();
         if (getDataEntity!=null){

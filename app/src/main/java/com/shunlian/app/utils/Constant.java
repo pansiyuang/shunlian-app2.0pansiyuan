@@ -89,7 +89,9 @@ public final class Constant {
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
 
-    public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";      //小米推送KEY
+    public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
+    public static  String SHARE_LINK = "";
+
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId
 //    public static final int IM_ACCOUNT_TYPE = 3415;   //腾讯IM SDK  accountType
