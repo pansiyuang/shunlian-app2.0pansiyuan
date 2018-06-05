@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/img_pingtai"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="15dp">
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
+            android:layout_width="51.5dp"
+            android:layout_height="51.5dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6.5dp"
+            android:text="多美滋官方旗舰店"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/img_liaotian_quan"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="14dp">
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¥200"
+                    android:textColor="@color/new_text"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_price"
+                    android:layout_marginBottom="3dp"
+                    android:layout_toRightOf="@+id/tv_price"
+                    android:text="满1000减"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_price"
+                    android:layout_marginTop="5dp"
+                    android:text="有效期：2018/06/23-2018/06/28"
+                    android:textColor="@color/new_text"
+                    android:textSize="9sp" />
+
+                <View
+                    android:id="@+id/view_dash_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_below="@+id/tv_date"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/shape_dash_line"
+                    android:text="有效期：2018/06/23-2018/06/28"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view_dash_line"
+                    android:layout_marginTop="5dp"
+                    android:text="该优惠券指定商品可用"
+                    android:textColor="@color/new_gray"
+                    android:textSize="9sp" />
+            </RelativeLayout>
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_quan_hong"></com.shunlian.app.widget.MyImageView>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

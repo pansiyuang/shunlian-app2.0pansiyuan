@@ -180,20 +180,20 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 dia_tv_price.setText("¥" + goodsDeatilEntity.price);
             }
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), goodsDeatilEntity.stock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
         }
         if (mGoods != null) {
             dia_tv_price.setText("¥" + mGoods.price);
             totalStock = Integer.valueOf(mGoods.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), mGoods.stock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
         }
 
         if (productDetailEntity != null) {
             dia_tv_price.setText("¥" + productDetailEntity.price);
             totalStock = Integer.valueOf(productDetailEntity.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), productDetailEntity.stock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
         }
 
@@ -253,6 +253,11 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
+                if (currentCount > totalStock) {
+                    Common.staticToast("库存不足");
+                    return;
+                }
+
                 if ("1".equals(hasOption)) {
                     GoodsDeatilEntity.Sku s = checkLinkmap(true);
                     if (selectCallBack != null && s != null) {

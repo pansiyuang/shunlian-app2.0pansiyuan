@@ -14,6 +14,8 @@ import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.presenter.GifDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.IGifDetailView;
 import com.shunlian.app.widget.ParamDialog;
@@ -65,7 +67,6 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
 
         manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
-
     }
 
     @Override
@@ -99,6 +100,18 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
         ProductDetailEntity.Detail detail = productDetailEntity.detail;
         mAdapter = new ProductDetailAdapter(this, productDetailEntity, detail.pics);
         recycler_list.setAdapter(mAdapter);
+
+        if (Integer.valueOf(productDetailEntity.stock) == 0) {//已售罄
+            tv_buy.setBackgroundColor(getColorResouce(R.color.white_ash));
+            tv_buy.setText(getStringResouce(R.string.seller_out));
+            tv_buy.setTextColor(getColorResouce(R.color.my_gray_one));
+            tv_buy.setEnabled(false);
+        } else {
+            tv_buy.setBackgroundColor(getColorResouce(R.color.pink_color));
+            tv_buy.setText(getStringResouce(R.string.to_buy));
+            tv_buy.setTextColor(getColorResouce(R.color.white));
+            tv_buy.setEnabled(true);
+        }
     }
 
     @Override

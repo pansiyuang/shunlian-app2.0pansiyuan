@@ -38,13 +38,13 @@ public class ShareBigGifPresenter extends BasePresenter<IShareBifGifView> {
 
     }
 
-    public void getPlusData(int type) {
+    public void getPlusData(int type,boolean isFirst) {
         Map<String, String> map = new HashMap<>();
         map.put("type", String.valueOf(type));
         sortAndMD5(map);
 
-        Call<BaseEntity<PlusDataEntity>> baseEntityCall = getApiService().getPlusData(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PlusDataEntity>>() {
+        Call<BaseEntity<PlusDataEntity>> baseEntityCall = getAddCookieApiService().getPlusData(map);
+        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PlusDataEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PlusDataEntity> entity) {
                 super.onSuccess(entity);

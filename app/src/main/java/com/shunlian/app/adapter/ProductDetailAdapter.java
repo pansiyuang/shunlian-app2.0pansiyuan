@@ -102,7 +102,7 @@ public class ProductDetailAdapter extends BaseRecyclerAdapter<String> {
         attributeViewHolder.tv_title.setText(productDetailEntity.title);
         String price = getString(R.string.common_yuan) + productDetailEntity.price;
         attributeViewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 12));
-        attributeViewHolder.tv_market_price.setText(productDetailEntity.market_price);
+        attributeViewHolder.tv_market_price.setText(getString(R.string.common_yuan) + productDetailEntity.market_price);
         attributeViewHolder.tv_market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         attributeViewHolder.tv_title_image.setText(productDetailEntity.detail.text);
     }

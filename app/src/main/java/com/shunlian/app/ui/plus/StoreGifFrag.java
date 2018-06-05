@@ -88,7 +88,7 @@ public class StoreGifFrag extends BaseFragment implements View.OnClickListener, 
                 MyImageView myImageView = holder.getView(R.id.miv_img);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(imgWidth, imgWidth);
                 myImageView.setLayoutParams(layoutParams);
-                GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, product.thumb, 5);
+                GlideUtils.getInstance().loadCornerImage(getActivity(), myImageView, product.pic, 5);
                 myImageView.setOnClickListener(v -> {
                     if (!isEmpty(product.product_id)) {
                         PlusGifDetailAct.startAct(getActivity(), product.product_id);

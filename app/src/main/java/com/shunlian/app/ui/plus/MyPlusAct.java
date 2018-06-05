@@ -149,7 +149,7 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
         initTabsWidth();
         initFragments();
         mPresenter = new ShareBigGifPresenter(this, this);
-        mPresenter.getPlusData(tabOneMode);
+        mPresenter.getPlusData(tabOneMode,true);
     }
 
     @Override
@@ -240,7 +240,7 @@ public class MyPlusAct extends BaseActivity implements IShareBifGifView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_tab1_right:
-                mPresenter.getPlusData(tabOneMode);
+                mPresenter.getPlusData(tabOneMode,false);
                 break;
             case R.id.tv_invitation_record:
                 showTabTwoButton(1);

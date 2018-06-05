@@ -167,7 +167,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isPause = true;
     private boolean isExpand = true; //是否展开
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
-    public boolean isclick=false;
+    public boolean isclick = false;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyPlusAct.class));
@@ -182,7 +182,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
 
     public void getPlusData() {
         if (mPresenter != null) {
-            mPresenter.getPlusData(tabOneMode);
+            mPresenter.getPlusData(tabOneMode, false);
             showTabTwoButton(1);
             invitationRecordFrag.getInviteHistory();
         }
@@ -210,7 +210,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         initTabsWidth();
         initFragments();
         mPresenter = new ShareBigGifPresenter(getActivity(), this);
-        mPresenter.getPlusData(1);
+        mPresenter.getPlusData(1, true);
 
         //分享
         quick_actions = new QuickActions(baseActivity);
@@ -334,7 +334,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
                 } else {
                     tabOneMode = Mode_Month;
                 }
-                mPresenter.getPlusData(tabOneMode);
+                mPresenter.getPlusData(tabOneMode, false);
                 break;
             case R.id.tv_invitation_record:
                 showTabTwoButton(1);
@@ -429,16 +429,12 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             rl_tab_one.setVisibility(View.GONE);
         }
 
-        if (baseInfo.role == 3) {//经理才显示plus会员数量
-            tv_member_count.setVisibility(View.VISIBLE);
-        }
+        tv_member_count.setText(baseInfo.plus_num);
 
-        if (baseInfo.plus_num <= 0) {
-            tv_member_count.setVisibility(View.GONE);
-        } else if (baseInfo.plus_num > 12) {
-            tv_member_count.setText("12+");
+        if (baseInfo.role >= 3) {//经理才显示plus会员数量
+            tv_member_count.setVisibility(View.VISIBLE);
         } else {
-            tv_member_count.setText(String.valueOf(baseInfo.plus_num));
+            tv_member_count.setVisibility(View.GONE);
         }
 
         tv_group_money.setText(achievement.total_sales);
