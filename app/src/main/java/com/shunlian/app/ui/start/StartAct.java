@@ -17,8 +17,6 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -229,9 +227,9 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         releaseImageViewResouce(miv_bg1);
         releaseImageViewResouce(miv_bg2);
-        super.onDestroy();
         tryRecycleAnimationDrawable(flashAnimation);
     }
 

@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
@@ -49,7 +48,9 @@ public class ReturnRequestPresenter extends BasePresenter<IReturnRequestView> {
 
     }
 
-    public void applyRefund(String refundId, String ogId, String qty, String amount, String type, String reasonId, String remark, String images, boolean isEdit) {
+    public void applyRefund(String refundId, String ogId, String qty, String amount,
+                            String type, String reasonId, String remark,
+                            String images, boolean isEdit) {
         Map<String, String> map = new HashMap<>();
         map.put("og_id", ogId);
         map.put("qty", qty);

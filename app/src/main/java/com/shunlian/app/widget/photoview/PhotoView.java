@@ -19,13 +19,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
-import android.widget.ImageView;
 
 
 public class PhotoView extends AppCompatImageView implements IPhotoView {
@@ -259,10 +257,10 @@ public class PhotoView extends AppCompatImageView implements IPhotoView {
 
     @Override
     protected void onDetachedFromWindow() {
-        releaseImageViewResouce(this);
         mAttacher.cleanup();
         mAttacher = null;
         super.onDetachedFromWindow();
+        //releaseImageViewResouce(this);
     }
 
     @Override
@@ -271,16 +269,16 @@ public class PhotoView extends AppCompatImageView implements IPhotoView {
         super.onAttachedToWindow();
     }
 
-    public void releaseImageViewResouce(ImageView imageView) {
-        if (imageView == null) return;
-        Drawable drawable = imageView.getDrawable();
-        if (drawable != null && drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-        }
-    }
+//    public void releaseImageViewResouce(ImageView imageView) {
+//        if (imageView == null) return;
+//        Drawable drawable = imageView.getDrawable();
+//        if (drawable != null && drawable instanceof BitmapDrawable) {
+//            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+//            Bitmap bitmap = bitmapDrawable.getBitmap();
+//            if (bitmap != null && !bitmap.isRecycled()) {
+//                bitmap.recycle();
+//                bitmap = null;
+//            }
+//        }
+//    }
 }
