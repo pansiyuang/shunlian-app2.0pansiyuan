@@ -15,6 +15,9 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IPlusLogisticsView;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -88,7 +91,9 @@ public class PlusLogisticsDetailAct extends BaseActivity implements IPlusLogisti
         tv_logistics_number.setText("单号：" + logisticsEntity.express_sn);
 
         if (!isEmpty(logisticsEntity.traces)) {
-            traceAdapter = new PlusLogisticsAdapter(this, logisticsEntity.traces);
+            List<OrderLogisticsEntity.Trace> traceList = logisticsEntity.traces;
+            Collections.reverse(traceList);
+            traceAdapter = new PlusLogisticsAdapter(this, traceList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recycler_list.setLayoutManager(linearLayoutManager);
             recycler_list.setNestedScrollingEnabled(false);

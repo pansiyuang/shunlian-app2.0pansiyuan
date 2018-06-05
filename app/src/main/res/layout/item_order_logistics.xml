@@ -42,7 +42,6 @@
             android:id="@+id/tv_logistics_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="【杭州市】已签收，签收人是本人感谢使用申通快递，期待再次为您服务！"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 

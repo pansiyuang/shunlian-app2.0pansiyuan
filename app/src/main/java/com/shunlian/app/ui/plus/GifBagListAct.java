@@ -66,10 +66,6 @@ public class GifBagListAct extends BaseActivity implements IGifBagView {
             mAdapter = new GifProductAdapter(this, productList);
             mAdapter.setOnItemClickListener((view, position) -> {
                 GifProductEntity.Product product = productList.get(position);
-                if (product.sell_out == 1) {
-                    Common.staticToast("已售罄");
-                    return;
-                }
                 PlusGifDetailAct.startAct(GifBagListAct.this, product.product_id);
             });
             recycler_list.setAdapter(mAdapter);

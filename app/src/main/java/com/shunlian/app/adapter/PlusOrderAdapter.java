@@ -60,15 +60,11 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
         orderViewHolder.tv_param.setText(plusOrder.sku_desc);
         orderViewHolder.tv_count.setText("x" + plusOrder.qty);
         orderViewHolder.tv_total_count.setText("共计" + plusOrder.qty + "件商品");
-        try {
-            double shippingFee = Double.valueOf(plusOrder.shipping_fee);
-            if (shippingFee > 0) {
-                orderViewHolder.tv_total_price.setText("合计:" + price + "(包邮)");
-            } else {
-                orderViewHolder.tv_total_price.setText("合计:" + price);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if ("0".equals(plusOrder.shipping_fee)) {
+            orderViewHolder.tv_total_price.setText("合计:" + price + "(包邮)");
+        } else {
+            orderViewHolder.tv_total_price.setText("合计:" + price);
         }
         switch (plusOrder.status) {
             case 1: //待发货

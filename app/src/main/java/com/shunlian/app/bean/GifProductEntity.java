@@ -17,6 +17,7 @@ public class GifProductEntity {
         public String title;
         public String thumb;
         public String price;
+        public String pic;
         public String market_price;
         public int sell_out;
     }

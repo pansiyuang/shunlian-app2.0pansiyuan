@@ -160,13 +160,13 @@ public class StartAct extends MBaseActivity implements IMain {
 //            Intent intent = new Intent(baseFragActivity, GuideAct.class);
 //            startActivity(intent);
             //暂时关闭引导页
-            GuideAct.startAct(this);
-//            if (isAD){
-//                ADAct.startAct(getBaseContext(),data);
-//            }else {
-////                Constant.IS_GUIDE = false;
-//                MainActivity.startAct(this, "");
-//            }
+//            GuideAct.startAct(this);
+            if (isAD){
+                ADAct.startAct(getBaseContext(),data);
+            }else {
+//                Constant.IS_GUIDE = false;
+                MainActivity.startAct(this, "");
+            }
         } else {
             if (isAD){
                 ADAct.startAct(getBaseContext(),data);

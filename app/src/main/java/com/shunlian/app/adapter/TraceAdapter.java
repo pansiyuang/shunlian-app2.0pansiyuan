@@ -65,12 +65,12 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
                 traceViewHolder.rl_logistics.setPadding(0, 0, 0, 0);
             }
 
-            if (position + 1 == getItemCount() - 1) {
+            if (position == 1) {
                 params.width = TransformUtil.dip2px(context, 14);
                 params.height = TransformUtil.dip2px(context, 14);
                 traceViewHolder.miv_logistics.setLayoutParams(params);
                 traceViewHolder.miv_logistics.setImageResource(R.mipmap.img_wuliu_active);
-                traceViewHolder.view_logistics_line.setVisibility(View.GONE);
+                traceViewHolder.view_logistics_line.setVisibility(View.VISIBLE);
                 traceViewHolder.tv_logistics_detail.setTextColor(getColor(R.color.pink_color));
             } else {
                 params.width = TransformUtil.dip2px(context, 10);
@@ -90,7 +90,7 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
                     traceViewHolder.tv_logistics_more.setVisibility(View.GONE);
                     traceViewHolder.view_logistics_line.setVisibility(View.VISIBLE);
                 } else {
-                    if (position == getItemCount() - 2) {
+                    if (position == 1) {
                         traceViewHolder.setVisibility(true);
                         traceViewHolder.rl_logistics.setPadding(0, TransformUtil.dip2px(context, 15), 0, 0);
                         traceViewHolder.tv_logistics_more.setVisibility(View.VISIBLE);
@@ -101,12 +101,9 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
                 }
             }
 
-            traceViewHolder.tv_logistics_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!showMore) {
-                        setVisibility(true);
-                    }
+            traceViewHolder.tv_logistics_more.setOnClickListener(v -> {
+                if (!showMore) {
+                    setVisibility(true);
                 }
             });
         }
@@ -131,12 +128,9 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
         footViewHolder.recycler_footmark.setNestedScrollingEnabled(false);
         footViewHolder.recycler_footmark.setLayoutManager(gridLayoutManager);
         footViewHolder.recycler_footmark.setAdapter(footMarkAdapter);
-        footMarkAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                OrderLogisticsEntity.FootMark footMark = footMarkList.get(position);
-                GoodsDetailAct.startAct(context, footMark.goods_id);
-            }
+        footMarkAdapter.setOnItemClickListener((view, position) -> {
+            OrderLogisticsEntity.FootMark footMark = footMarkList.get(position);
+            GoodsDetailAct.startAct(context, footMark.goods_id);
         });
     }
 

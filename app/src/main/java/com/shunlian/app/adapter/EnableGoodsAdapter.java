@@ -107,18 +107,22 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             enableViewHolder.tv_active.setText(everyDay.remind + " " + everyDay.left_time);
             enableViewHolder.tv_active.setVisibility(View.VISIBLE);
             enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);
-            enableViewHolder.tv_edit_promo.setVisibility(View.GONE);
             enableViewHolder.rl_prefer.setEnabled(false);
         } else {
             enableViewHolder.tv_active.setVisibility(View.GONE);
-            if (isEmpty(goods.all_prom)) {
+            if ("0".equals(goods.prom_id)) {
                 enableViewHolder.rl_prefer.setVisibility(View.GONE);
                 enableViewHolder.rl_prefer.setEnabled(false);
             } else {
                 enableViewHolder.rl_prefer.setVisibility(View.VISIBLE);
-                enableViewHolder.tv_edit_promo.setVisibility(View.VISIBLE);
                 enableViewHolder.rl_prefer.setEnabled(true);
             }
+        }
+
+        if (isEmpty(goods.all_prom)) {
+            enableViewHolder.tv_edit_promo.setVisibility(View.GONE);
+        } else {
+            enableViewHolder.tv_edit_promo.setVisibility(View.VISIBLE);
         }
 
         enableViewHolder.tv_goods_add.setOnClickListener(v -> {
