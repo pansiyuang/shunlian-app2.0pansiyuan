@@ -22,6 +22,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.presenter.CategoryPresenter;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.SideslipBaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
@@ -32,6 +33,7 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
 import com.shunlian.app.widget.CategorySortPopWindow;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +46,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.shunlian.app.ui.discover.other.ExperiencePublishActivity.FROM_EXPERIENCE_PUBLISH;
 import static com.shunlian.app.utils.TransformUtil.expandViewTouchDelegate;
 
 /**
@@ -84,6 +87,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private CategoryPresenter presenter;
     private SingleCategoryAdapter singleAdapter;
@@ -189,7 +195,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     }
 
     @OnClick(R.id.rl_title_more)
-    public void more(){
+    public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.search();
     }
@@ -244,6 +250,17 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             quick_actions.setMessageCount(s);
     }
 
+    public void showEmptyView(boolean isShowEmpty) {
+        if (isShowEmpty) {
+            nei_empty.setImageResource(R.mipmap.img_empty_dingdan).setText("暂无商品").setButtonText(null);
+            nei_empty.setVisibility(View.VISIBLE);
+            recycle_category.setVisibility(View.GONE);
+        } else {
+            nei_empty.setVisibility(View.GONE);
+            recycle_category.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void getSearchGoods(SearchGoodsEntity goodsEntity, int page, int allPage) {
         currentPage = page;
@@ -253,8 +270,14 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             mRefStore = goodsEntity.ref_store;
             singleAdapter.setStoreData(mRefStore);
             doubleAdapter.setStoreData(mRefStore);
+
+            if (isEmpty(goodsEntity.goods_list) && goodsEntity.ref_store == null) {
+                showEmptyView(true);
+            } else {
+                showEmptyView(false);
+            }
         }
-        if (goodsEntity.goods_list != null && goodsEntity.goods_list.size() != 0) {
+        if (!isEmpty(goodsEntity.goods_list)) {
             mGoods.addAll(goodsEntity.goods_list);
         }
         if (currentMode == MODE_SINGLE) {

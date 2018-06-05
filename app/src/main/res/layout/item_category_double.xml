@@ -13,8 +13,8 @@
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_product"
-        android:layout_width="61dp"
-        android:layout_height="61dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"

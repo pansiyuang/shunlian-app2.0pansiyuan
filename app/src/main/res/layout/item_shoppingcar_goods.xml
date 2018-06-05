@@ -164,8 +164,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/shape_rectangle_gray"
                     android:gravity="center"
-                    android:inputType="number"
                     android:imeOptions="actionDone"
+                    android:inputType="number"
                     android:text="1"
                     android:textColor="@color/new_text"
                     android:textSize="15sp" />
@@ -273,7 +273,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="9dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_edit_promo"
             android:layout_toRightOf="@+id/tv_prefer"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/new_text"
             android:textSize="12sp" />
 

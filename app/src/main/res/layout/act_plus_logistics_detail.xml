@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
             android:layout_toRightOf="@+id/miv_icon"
-            android:textColor="@color/value_048BFE"
+            android:textColor="@color/pink_color"
             android:textSize="13sp" />
 
         <TextView
@@ -62,7 +62,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="18dp"
         android:text="@string/logistics_info"
-        android:textColor="@color/value_048BFE" />
+        android:textColor="@color/pink_color" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_list"

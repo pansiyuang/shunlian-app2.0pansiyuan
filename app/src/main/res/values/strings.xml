@@ -750,4 +750,5 @@
     <string name="plus_xiaoshoupaihang">销售排行榜等待揭晓</string>
     <string name="plus_open_up">您的ID为%s，购买后将为此ID开通plus权益，确定为此ID账号开通么？</string>
     <string name="plus_ninhaimei">您还没有邀请记录~</string>
+    <string name="seller_out">已售完</string>
 </resources>

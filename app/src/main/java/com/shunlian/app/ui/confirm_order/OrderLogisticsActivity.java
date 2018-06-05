@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -123,8 +124,9 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
             return;
         }
         if (!isEmpty(logisticsEntity.traces)) {
-            Collections.reverse(logisticsEntity.traces);
-            traceAdapter = new TraceAdapter(this, false, logisticsEntity.traces, logisticsEntity);
+            List<OrderLogisticsEntity.Trace> traces = logisticsEntity.traces;
+            Collections.reverse(traces);
+            traceAdapter = new TraceAdapter(this, false, traces, logisticsEntity);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recycler_order_logistics.setLayoutManager(linearLayoutManager);
             recycler_order_logistics.setNestedScrollingEnabled(false);
