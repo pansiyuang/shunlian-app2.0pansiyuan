@@ -12,12 +12,15 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.OrderLogisticsEntity;
+import com.shunlian.app.presenter.OrderLogisticsPresenter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,13 +39,38 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
     private GridSpacingItemDecoration gridSpacingItemDecoration;
     private FootMarkAdapter footMarkAdapter;
     private GridLayoutManager gridLayoutManager;
+    private int currentPage;
+    public OrderLogisticsPresenter mPresenter;
 
-    public TraceAdapter(Context context, boolean isShowFooter, List<OrderLogisticsEntity.Trace> lists, OrderLogisticsEntity entity) {
-        super(context, isShowFooter, lists);
+    public TraceAdapter(Context context, List<OrderLogisticsEntity.Trace> lists, OrderLogisticsEntity entity) {
+        super(context, false, lists);
         this.orderLogisticsEntity = entity;
-        this.footMarkList = entity.history.mark_data;
         gridSpacingItemDecoration = new GridSpacingItemDecoration(TransformUtil.dip2px(context, 5), false);
-        footMarkAdapter = new FootMarkAdapter(context, false, footMarkList);
+        OrderLogisticsEntity.History history = entity.history;
+        footMarkList = new ArrayList<>();
+        if (history.page == 1) {
+            footMarkList.clear();
+        }
+        if (!isEmpty(history.mark_data)) {
+            footMarkList.addAll(history.mark_data);
+        }
+
+        footMarkAdapter = new FootMarkAdapter(context, true, footMarkList);
+    }
+
+    public void setData(OrderLogisticsEntity entity) {
+        OrderLogisticsEntity.History history = entity.history;
+        if (history.page == 1) {
+            footMarkList.clear();
+        }
+        if (!isEmpty(history.mark_data)) {
+            footMarkList.addAll(history.mark_data);
+            footMarkAdapter.setData(footMarkList);
+        }
+    }
+
+    public void setPresenter(OrderLogisticsPresenter presenter) {
+        this.mPresenter = presenter;
     }
 
     @Override
@@ -131,6 +159,20 @@ public class TraceAdapter extends BaseRecyclerAdapter<OrderLogisticsEntity.Trace
         footMarkAdapter.setOnItemClickListener((view, position) -> {
             OrderLogisticsEntity.FootMark footMark = footMarkList.get(position);
             GoodsDetailAct.startAct(context, footMark.goods_id);
+        });
+        footViewHolder.recycler_footmark.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (gridLayoutManager != null) {
+                    int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
+                    LogUtil.httpLogW("lastPosition:" + lastPosition + "getItemCount():" + gridLayoutManager.getItemCount());
+                    if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
+                        if (mPresenter != null) {
+                            mPresenter.onRefresh();
+                        }
+                    }
+                }
+            }
         });
     }
 

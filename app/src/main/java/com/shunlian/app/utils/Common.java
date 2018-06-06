@@ -1038,4 +1038,15 @@ public class Common {
         }
     }
 
+    /**
+     * 判断是否是plus会员
+     * @return
+     */
+
+    public static boolean isPlus() {
+        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+        if (!TextUtils.isEmpty(plus) && Integer.parseInt(plus) > 0)
+            return true;
+        return false;
+    }
 }

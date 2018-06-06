@@ -140,6 +140,9 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.ll_close_tab1)
     LinearLayout ll_close_tab1;
 
+    @BindView(R.id.miv_bg_top)
+    MyImageView miv_bg_top;
+
     QuickActions quick_actions;
     private Unbinder bind;
     private int screenWidth;
@@ -212,6 +215,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_bg_top.getLayoutParams();
+        layoutParams.height = TransformUtil.countRealHeight(getActivity(), 390);
+        miv_bg_top.setLayoutParams(layoutParams);
     }
 
     @Override

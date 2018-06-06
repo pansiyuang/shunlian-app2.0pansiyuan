@@ -277,10 +277,10 @@ public class PhotoView extends AppCompatImageView implements IPhotoView {
         if (drawable != null && drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
+//            if (bitmap != null && !bitmap.isRecycled()) {
+//                bitmap.recycle();
+//                bitmap = null;
+//            }
         }
     }
 }

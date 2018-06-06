@@ -56,6 +56,7 @@ public class StoreGifFrag extends BaseFragment implements View.OnClickListener, 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(getActivity(), 5), false));
         recyclerView.setLayoutManager(manager);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override

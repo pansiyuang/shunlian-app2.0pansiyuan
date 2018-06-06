@@ -38,13 +38,14 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
     private List<FootprintEntity.MarkData> mList;
 
     private List<Integer> timeShowPosition = new ArrayList<>();
-    public Map<Integer, FootprintEntity.DateInfo> timeDatas = new HashMap<>();
+    public Map<Integer, FootprintEntity.DateInfo> timeDatas;
     private int titleCount;
     private float titleSpace = 105.5f;
 
     public FootprintAdapter(Context context, List<FootprintEntity.MarkData> lists, List<FootprintEntity.DateInfo> dateList) {
         super(context, true, lists);
         inflater = LayoutInflater.from(context);
+        timeDatas = new HashMap<>();
         initData(lists, dateList);
     }
 
@@ -54,6 +55,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
         timeShowPosition.clear();
         timeDatas.clear();
         timeShowPosition.add(1);
+        if (isEmpty(dList)) {
+            return;
+        }
         timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(0));
         for (int i = 0; i < dList.size(); i++) {//计算日期显示的位置
             FootprintEntity.DateInfo dateInfo = dList.get(i);
@@ -147,7 +151,7 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
 
     @Override
     public int getItemCount() {
-        return super.getItemCount() + timeShowPosition.size();
+        return super.getItemCount() + timeShowPosition.size() + 1;
     }
 
     @Override
@@ -200,12 +204,9 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_n));
                 }
 
-                mHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mListener != null) {
-                            mListener.OnDateSelect(position, dateInfo);
-                        }
+                mHolder.itemView.setOnClickListener(v -> {
+                    if (mListener != null) {
+                        mListener.OnDateSelect(position, dateInfo);
                     }
                 });
             }

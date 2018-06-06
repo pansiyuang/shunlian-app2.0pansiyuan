@@ -8,5 +8,5 @@ import com.shunlian.app.bean.OrderLogisticsEntity;
 
 public interface ITraceView extends IView {
 
-    void getLogistics(OrderLogisticsEntity logisticsEntity);
+    void getLogistics(OrderLogisticsEntity logisticsEntity,int page,int totalPage);
 }
