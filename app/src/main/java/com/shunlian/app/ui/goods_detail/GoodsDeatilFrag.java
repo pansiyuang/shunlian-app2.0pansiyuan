@@ -138,9 +138,6 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
         manager = new LinearLayoutManager(baseActivity);
         recy_view_root.setLayoutManager(manager);
         recy_view_root.setNestedScrollingEnabled(false);
-        RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
-        recy_view_root.setRecycledViewPool(pool);
-        pool.setMaxRecycledViews(0,5);
 
         GoodsDeatilEntity.Detail detail = goodsDeatilEntity.detail;
         ArrayList<String> pics = null;
@@ -150,8 +147,9 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             pics = new ArrayList<>();
         }
 
-        goodsDetailAdapter = new GoodsDetailAdapter(baseActivity,goodsDeatilEntity,pics,pool);
+        goodsDetailAdapter = new GoodsDetailAdapter(baseActivity,goodsDeatilEntity,pics);
         recy_view_root.setAdapter(goodsDetailAdapter);
+        recy_view_root.setNestedScrollingEnabled(false);
 
     }
 

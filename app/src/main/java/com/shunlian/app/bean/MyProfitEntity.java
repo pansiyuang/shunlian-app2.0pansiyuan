@@ -32,6 +32,7 @@ public class MyProfitEntity {
         public String estimate_profit;
         public String today_profit;
         public String month_profit;
+        public String order_profit;
         public String meritocrat_profit;
         public String available_profit;
         public String withdrawed_profit;

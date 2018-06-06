@@ -182,13 +182,24 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.miv_grade)
     MyImageView miv_grade;
 
+    @BindView(R.id.llayout_order_profit)
+    LinearLayout llayout_order_profit;
+
+    @BindView(R.id.miv_order_profit)
+    MyImageView miv_order_profit;
+
+    @BindView(R.id.mtv_order_profit)
+    MyTextView mtv_order_profit;
+
 
     private MyProfitPresenter presenter;
     private String profit_help_url;
     private float monthReward;//月奖励收益
     private float weekReward;//周奖励收益
+    private float orderProfit;//订单收益
     private boolean isWeekAnimRuning = false;
     private boolean isMonthAnimRuning = false;
+    private boolean isOrderAnimRuning = false;
     private float availableProfit;//可提现金额
     private boolean isShowData = true;
     public final static String ASTERISK = "****";
@@ -217,6 +228,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         miv_toolbar_help.setOnClickListener(this);
         mtv_immediate_cash.setOnClickListener(this);
         llayout_week_reward.setOnClickListener(this);
+        llayout_order_profit.setOnClickListener(this);
         llayout_month_reward.setOnClickListener(this);
         llayout_assertionProfit.setOnClickListener(this);
 
@@ -291,6 +303,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         presenter = new MyProfitPresenter(this, this);
         translateAnimation(miv_week);
         translateAnimation(miv_month);
+        translateAnimation(miv_order_profit);
     }
 
     /**
@@ -356,20 +369,34 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         changeState();
         profit_help_url = profitInfo.profit_help_url;
 
-        weekReward = Float.parseFloat(profitInfo.week_reward);
-        monthReward = Float.parseFloat(profitInfo.month_reward);
-        availableProfit = Float.parseFloat(profitInfo.available_profit);
-        if (weekReward > 0){
+        weekReward = Float.parseFloat(isEmpty(profitInfo.week_reward)?"0":profitInfo.week_reward);
+        monthReward = Float.parseFloat(isEmpty(profitInfo.month_reward)?"0":profitInfo.month_reward);
+        orderProfit = Float.parseFloat(isEmpty(profitInfo.order_profit)?"0":profitInfo.order_profit);
+        availableProfit = Float.parseFloat(isEmpty(profitInfo.available_profit)
+                ?"0":profitInfo.available_profit);
+
+        /*weekReward = 10;
+        monthReward = 10;
+        orderProfit = 10;*/
+
+        if (weekReward > 0){//周补贴
             miv_week.setImageResource(R.mipmap.zhoubutie);
         }else {
             gone(llayout_week_reward);
         }
 
-        if (monthReward > 0){
+        if (monthReward > 0){//推广补贴
             miv_month.setImageResource(R.mipmap.tuiguangbutie);
         }else {
             gone(llayout_month_reward);
         }
+
+        if (orderProfit > 0){//订单收益
+            miv_order_profit.setImageResource(R.mipmap.dingdan_n);
+        }else {
+            gone(llayout_order_profit);
+        }
+
         if (llayout_week_reward.getVisibility() == View.GONE &&
                 llayout_month_reward.getVisibility() == View.GONE){
             gone(llayout_reward);
@@ -398,11 +425,16 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             miv_week.setImageResource(R.mipmap.zhoubutie);
             energySphereClick(miv_week, Color.parseColor("#FFBCCA"));
             mtv_week_reward.setText("0.00");
-        }else {
+        }else if ("2".equals(type)){
             isMonthAnimRuning = true;
             miv_month.setImageResource(R.mipmap.tuiguangbutie);
             energySphereClick(miv_month, Color.parseColor("#FEE8DD"));
             mtv_month_reward.setText("0.00");
+        }else {
+            isOrderAnimRuning = true;
+            miv_order_profit.setImageResource(R.mipmap.dingdan_n);
+            energySphereClick(miv_order_profit, Color.parseColor("#02CC91"));
+            mtv_order_profit.setText("0.00");
         }
     }
 
@@ -469,6 +501,11 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             case R.id.llayout_month_reward:
                 if (monthReward > 0 && !isMonthAnimRuning) {
                     presenter.receiveReward("2");
+                }
+                break;
+            case R.id.llayout_order_profit:
+                if (orderProfit > 0 && !isOrderAnimRuning) {
+                    presenter.receiveReward("3");
                 }
                 break;
         }
@@ -570,9 +607,15 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                     availableProfit +=monthReward;
                     mtv_surplus_extract_m.setText(""+availableProfit);
                     gone(llayout_month_reward);
+                }else if (view == miv_order_profit){
+                    isOrderAnimRuning = false;
+                    availableProfit +=orderProfit;
+                    mtv_surplus_extract_m.setText(""+availableProfit);
+                    gone(llayout_order_profit);
                 }
                 if (llayout_week_reward.getVisibility() == View.GONE &&
-                        llayout_month_reward.getVisibility() == View.GONE){
+                        llayout_month_reward.getVisibility() == View.GONE &&
+                        llayout_order_profit.getVisibility() == View.GONE){
                     gone(llayout_reward);
                 }
             }
@@ -608,6 +651,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         mtv_surplus_extract_m.setText(!isShowData?ASTERISK:mProfitInfo.available_profit);
         mtv_already_extract_m.setText(!isShowData?ASTERISK:mProfitInfo.withdrawed_profit);
         mtv_week_reward.setText(!isShowData?ASTERISK:mProfitInfo.week_reward);
+        mtv_order_profit.setText(!isShowData?ASTERISK:mProfitInfo.order_profit);
         mtv_month_reward.setText(!isShowData?ASTERISK:mProfitInfo.month_reward);
         mtv_estimate_profit.setText(!isShowData?ASTERISK:mProfitInfo.estimate_profit);
         mtv_today_profit.setText(!isShowData?ASTERISK:mProfitInfo.today_profit);
@@ -618,6 +662,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     protected void onDestroy() {
         miv_week.clearAnimation();
         miv_month.clearAnimation();
+        miv_order_profit.clearAnimation();
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();

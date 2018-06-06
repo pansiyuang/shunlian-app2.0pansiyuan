@@ -1,6 +1,6 @@
 package com.shunlian.app.ui.my_profit;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,10 +39,10 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
     private int label;
 
 
-    public static void startAct(Context context,int label){
+    public static void startAct(Activity context, int label){
         Intent intent = new Intent(context,SelectLabelAct.class);
         intent.putExtra("label",label);
-        context.startActivity(intent);
+        context.startActivityForResult(intent,100);
     }
 
     /**
@@ -113,7 +113,8 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
 
     @Override
     public void success() {
-
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
     @Override

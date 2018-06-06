@@ -1,8 +1,10 @@
 package com.shunlian.app.ui.my_profit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.view.KeyEvent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
@@ -104,5 +106,19 @@ public class SexSelectAct extends BaseActivity {
             return;
         }
         SelectLabelAct.startAct(this,sexSelect);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK){
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK)return true;
+        return super.onKeyDown(keyCode, event);
     }
 }

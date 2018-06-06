@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.SystemMsgEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -63,7 +62,7 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         SysMsgHolder mHolder = (SysMsgHolder) holder;
         SystemMsgEntity.MsgType msgType = lists.get(position);
-        LogUtil.zhLogW("==系统消息==========" + msgType.type);
+        //LogUtil.zhLogW("==系统消息==========" + msgType.type);
         switch (msgType.type) {
             case "100":
                 couponType(mHolder, msgType);

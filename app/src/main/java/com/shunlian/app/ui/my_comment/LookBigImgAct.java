@@ -22,7 +22,6 @@ import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -147,12 +146,7 @@ public class LookBigImgAct extends BaseActivity {
             try {
                 final String url = list.get(position);
                 loadImg(url, imageView, spinner, layout_error);
-                layout_error.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loadImg(url, imageView, spinner, layout_error);
-                    }
-                });
+                layout_error.setOnClickListener(v -> loadImg(url, imageView, spinner, layout_error));
             } catch (Exception e) {
                 e.printStackTrace();
             }
