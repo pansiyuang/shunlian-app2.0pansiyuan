@@ -106,7 +106,7 @@ public class FindPswFrag extends BaseFragment implements View.OnClickListener, I
 
     @Override
     public void setCode(byte[] bytes) {
-        if (bytes != null) {
+        if (bytes != null && miv_code != null) {
             miv_code.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }
     }
@@ -148,6 +148,7 @@ public class FindPswFrag extends BaseFragment implements View.OnClickListener, I
                 break;
             case R.id.miv_code:
                 onePresenter.getCode();
+                et_code.setText("");
                 break;
         }
     }

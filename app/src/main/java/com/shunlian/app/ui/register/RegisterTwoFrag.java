@@ -294,6 +294,10 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
             completeBG.setColor(getColorResouce(R.color.color_value_6c));
             btn_complete.setEnabled(false);
         }
+        input_code.clearAll();
+        et_pwd.setText("");
+        et_rpwd.setText("");
+        et_nickname.setText("");
     }
 
     private void countDown() {

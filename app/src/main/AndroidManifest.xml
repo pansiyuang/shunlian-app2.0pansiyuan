@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shunlian.app">
 
+
     <!-- 本项目中使用权限 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -261,8 +262,15 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/wx" />
+            android:theme="@style/wx" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="wx4453de455c6da56a" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.store.StoreAct"
             android:exported="false"

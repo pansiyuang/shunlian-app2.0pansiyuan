@@ -240,6 +240,8 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
         isCheckCode = isSuccess;
         if (!isSuccess) {
             setEdittextFocusable(true, et_id);
+        }else {
+            setEdittextFocusable(true, et_phone);
         }
     }
 

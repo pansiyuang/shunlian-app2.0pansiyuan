@@ -212,6 +212,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                     mListener.onSelectVoucher(0);
                 }
                 String v = Common.formatFloat(enabled.sub_total, voucher1.denomination);
+                if (Float.parseFloat(v) <= 0){
+                    v = "0.00";
+                }
                 mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+v,11));
                 mHolder.mllayout_discount.setVisibility(View.VISIBLE);
             }else {
@@ -362,7 +365,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                         }
                         /************计算折后小计*************/
                         //显示店铺小计
-                        mtv_goods_price.setText(getString(R.string.rmb).concat(enabled.post_discount_price));
+                        if (Float.parseFloat(enabled.post_discount_price) <= 0){
+                            enabled.post_discount_price = "0.00";
+                        }
+                        mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
+                                .concat(enabled.post_discount_price),11));
                         if (mListener != null){
                             mListener.onSelectVoucher(position);
                         }
@@ -405,8 +412,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                             /*********优惠券额度*************/
 
                             //显示店铺小计
-                            mtv_goods_price.setText(getString(R.string.rmb)
-                                    .concat(enabled.post_discount_price));
+                            if (Float.parseFloat(enabled.post_discount_price) <= 0){
+                                enabled.post_discount_price = "0.00";
+                            }
+                            mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
+                                    .concat(enabled.post_discount_price),11));
                             if (mListener != null){
                                 mListener.onSelectVoucher(position);
                             }

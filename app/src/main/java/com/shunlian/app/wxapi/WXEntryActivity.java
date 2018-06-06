@@ -21,19 +21,18 @@ import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXImageObject;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler, WXEntryView {
     private String deviceId;
@@ -65,13 +64,20 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         deviceId = SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
-        //api = WXAPIFactory.createWXAPI(this,null);
-        api.registerApp(Constant.WX_APP_ID);// 注册到微信列表，没什么用，笔者不知道干嘛用的，有知道的请告诉我，该文件顶部有我博客链接。或加Q1692475028,谢谢！
-        try {
-            api.handleIntent(getIntent(), this);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        // 注册到微信列表，没什么用，笔者不知道干嘛用的，有知道的请告诉我，该文件顶部有我博客链接。或加Q1692475028,谢谢！
+        Intent intent = getIntent();
+        flag = intent.getExtras().getString("flag");
+        if (isEmpty(flag)) {
+            try {
+                api.handleIntent(getIntent(), this);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }else {
+            api.registerApp(Constant.WX_APP_ID);
+            SharedPrefUtil.saveSharedPrfString("flag", flag);
         }
+
         int wxSdkVersion = api.getWXAppSupportAPI();
         if (wxSdkVersion >= Constant.TIMELINE_SUPPORTED_VERSION) {
             initGet();
@@ -86,65 +92,73 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     public void initGet() {
         mHandler = new MyHandler();
-        if (getIntent().getStringExtra("flag") != null) {
-            //必须用getExtras
-            flag = getIntent().getExtras().getString("flag");
-            if (getIntent().getSerializableExtra("shareInfoParam") != null) {
-                ShareInfoParam shareInfoParam = (ShareInfoParam) getIntent()
-                        .getSerializableExtra("shareInfoParam");
-                if (!TextUtils.isEmpty(shareInfoParam.photo)) {
-                    Glide.with(this).load(shareInfoParam.photo)
-                            .asBitmap().into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource,GlideAnimation<? super Bitmap> glideAnimation) {
-                            sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
-                        }
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            Common.staticToasts(getBaseContext(), "分享失败", R.mipmap.icon_common_tanhao);
-                        }
-                    });
-                } else {
-                    if (!TextUtils.isEmpty(shareInfoParam.title)) {
-                        currTitle = shareInfoParam.title;
-                    } else {
-                        currTitle = "顺联动力";
-                    }
-                    if (!TextUtils.isEmpty(shareInfoParam.desc)) {
-                        currentDesc = shareInfoParam.desc;
-                    } else {
-                        currentDesc = "顺联动力商城";
-                    }
-                    if (!TextUtils.isEmpty(shareInfoParam.shareLink)) {
-                        shareLink = shareInfoParam.shareLink;
-                    } else {
-                        shareLink = "www.shunliandongli.com";
-                    }
-                    if (!TextUtils.isEmpty(shareInfoParam.img)) {
-                        String mImg = shareInfoParam.img;
-                        Glide.with(this).load(mImg).asBitmap().into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                if (flag.equals("shareFriend")) {
-                                    shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
-                                            currTitle, currentDesc, resource, "friend");
-                                }
-                            }
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                defShare();
-                            }
-                        });
-                    } else {
-                        defShare();
-                    }
-                }
-            }
+        //必须用getExtras
+        Intent intent = getIntent();
+        ShareInfoParam shareInfoParam = (ShareInfoParam) intent.getSerializableExtra("shareInfoParam");
+        if (!isEmpty(flag)) {
             if (flag.equals("login") || flag.equals("bind")) {
                 login();
+            }else if (shareInfoParam != null) {
+                if (!isEmpty(shareInfoParam.photo)) {
+                    downloadPic(shareInfoParam);
+                } else {
+                    defShare(shareInfoParam);
+                }
             }
         }
+    }
+
+    //分享添加默认数据
+    private void defShare(ShareInfoParam shareInfoParam) {
+        if (!isEmpty(shareInfoParam.title)) {
+            currTitle = shareInfoParam.title;
+        } else {
+            currTitle = "顺联动力";
+        }
+        if (!isEmpty(shareInfoParam.desc)) {
+            currentDesc = shareInfoParam.desc;
+        } else {
+            currentDesc = "顺联动力商城";
+        }
+        if (!isEmpty(shareInfoParam.shareLink)) {
+            shareLink = shareInfoParam.shareLink;
+        } else {
+            shareLink = "www.shunliandongli.com";
+        }
+        if (!isEmpty(shareInfoParam.img)) {
+            Glide.with(this).load(shareInfoParam.img).asBitmap().into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource,GlideAnimation<? super Bitmap> glideAnimation) {
+                    if (flag.equals("shareFriend")) {
+                        shareUrl2Circle(shareLink, SendMessageToWX.Req.WXSceneSession,
+                                currTitle, currentDesc, resource, "friend");
+                    }
+                }
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    defShare();
+                }
+            });
+        } else {
+            defShare();
+        }
+    }
+    //下载图片成功后去分享
+    private void downloadPic(ShareInfoParam shareInfoParam) {
+        Glide.with(this).load(shareInfoParam.photo)
+                .asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource,
+                                        GlideAnimation<? super Bitmap> glideAnimation) {
+                sharePicture(SendMessageToWX.Req.WXSceneSession, resource);
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                Common.staticToasts(getBaseContext(),
+                        "分享失败", R.mipmap.icon_common_tanhao);
+            }
+        });
     }
 
     private void defShare() {
@@ -194,7 +208,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     /**
      * @param url 要分享的链接
      */
-    private void shareUrl2Circle(final String url, int type, String title, String desc, Bitmap img, String flag) {
+    private void shareUrl2Circle(final String url, int type, String title,
+                                 String desc, Bitmap img, String flag) {
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
@@ -235,6 +250,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     @Override
     public void onReq(BaseReq baseReq) {
+
     }
 
     @Override
@@ -243,18 +259,14 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         if (wxEntryPresenter == null) {
             wxEntryPresenter = new WXEntryPresenter(this, this);
         }
-        LogUtil.zhLogW("=onResp============"+baseResp.errCode);
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                flag = SharedPrefUtil.getSharedPrfString("flag", "");
+                String flag = SharedPrefUtil.getSharedPrfString("flag", "");
                 if ("login".equals(flag)) {
                     SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
                     String code = sendAuthResp.code;
                     wxEntryPresenter.wxLogin(code);
-                } else if ("bind".equals(flag)) {
-                    SendAuth.Resp sendAuthResp = (SendAuth.Resp) baseResp;// 用于分享时不要有这个，不能强转
-                    String code = sendAuthResp.code;
-                } else {
+                }else {
                     if (!isEmpty(Constant.SHARE_TYPE)){
                         wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
                     }else {
@@ -296,15 +308,13 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String unique_sign = wxLoginEntity.unique_sign;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {
-                //BindingPhoneAct.startAct(this, 0, unique_sign);
                 RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
             } else if ("1".equals(status)) {
                 Common.staticToast("登录成功");
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
                 SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
                 SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
-            } else {
-                //BindingPhoneAct.startAct(this, 1, unique_sign);
+            } else if ("0".equals(status) || "3".equals(status)){
                 RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
             }
             finish();
@@ -341,5 +351,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             }
             super.handleMessage(msg);
         }
+    }
+
+    protected boolean isEmpty(CharSequence sequence){
+        return TextUtils.isEmpty(sequence);
     }
 }

@@ -188,8 +188,13 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     currentPrice += Float.parseFloat(isEmpty(post_discount_price)
                             ? "0" : post_discount_price);
                 }
-                mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                        .getString(R.string.rmb).concat(Common.formatFloat(currentPrice)),11));
+                String totalPrice = null;
+                if (currentPrice <= 0){
+                    totalPrice = "0.00";
+                }else {
+                    totalPrice = currentPrice+"";
+                }
+                mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+totalPrice,11));
             });
         }
     }
@@ -203,8 +208,11 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @Override
     public void goodsTotalPrice(String count, String price) {
         mTotalPrice = price;
-        mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                .getString(R.string.rmb).concat(price),11));
+        String s = Common.formatFloat(mTotalPrice);
+        if (Float.parseFloat(s) <= 0){
+            mTotalPrice = "0.00";
+        }
+        mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb).concat(mTotalPrice),11));
     }
 
     @Override
@@ -270,17 +278,10 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
                 .setSureAndCancleListener(getStringResouce(R.string.leave_behind_goods),
-                        getStringResouce(R.string.i_think), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-            }
-        }, getStringResouce(R.string.to_resolve), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptDialog.dismiss();
-                finish();
-            }
+                        getStringResouce(R.string.i_think), v -> promptDialog.dismiss(),
+                        getStringResouce(R.string.to_resolve), v -> {
+            promptDialog.dismiss();
+            finish();
         }).show();
     }
 
