@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
@@ -131,6 +132,11 @@ public class BalanceVerifyPhoneAct extends BaseActivity implements View.OnClickL
 
     @Override
     public void bindAlipayCall(String account_number) {
+
+    }
+
+    @Override
+    public void setApiData(BalanceInfoEntity data) {
 
     }
 

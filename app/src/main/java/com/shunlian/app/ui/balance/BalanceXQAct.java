@@ -130,9 +130,9 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (isBack)
             BalanceMainAct.startAct(getBaseContext(), true);
+        super.onBackPressed();
     }
 
     public void initHintDialog() {
@@ -145,7 +145,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
                 if (balanceInfoEntity.is_set_password){
                     BalancePaySetTwoAct.startAct(getBaseContext(), "", "bindPay", "",true,false);
                 }else {
-                    BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,false);
+                    BalancePaySetOneAct.startAct(getBaseContext(),false,false);
                 }
                 promptDialog.dismiss();
             }

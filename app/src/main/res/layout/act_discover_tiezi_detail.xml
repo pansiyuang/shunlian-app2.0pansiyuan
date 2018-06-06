@@ -79,8 +79,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:paddingLeft="8dp"
-                    android:layout_toLeftOf="@id/mtv_like"
-                    android:src="@mipmap/icon_found_quanzi_xin_n" />
+                    android:layout_toLeftOf="@id/mtv_like" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_avar"

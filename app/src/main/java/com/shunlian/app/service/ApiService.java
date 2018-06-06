@@ -1643,6 +1643,22 @@ public interface ApiService {
     Call<BaseEntity<BalanceDetailEntity>> balanceTransactionList(@Body RequestBody body);
 
     /**
+     * 我的收益提现明细
+     *
+     * @return
+     */
+    @POST("member/myprofit/withdrawList")
+    Call<BaseEntity<WithdrawListEntity>> withdrawList(@Body RequestBody body);
+
+    /**
+     * 我的收益提现详情
+     *
+     * @return
+     */
+    @POST("member/myprofit/withdrawLogDetail")
+    Call<BaseEntity<AmountDetailEntity>> withdrawLogDetail(@Body RequestBody body);
+
+    /**
      * 提现到支付宝
      *
      * @return

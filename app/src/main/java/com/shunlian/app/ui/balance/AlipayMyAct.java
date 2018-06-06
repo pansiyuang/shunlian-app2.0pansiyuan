@@ -33,11 +33,11 @@ public class AlipayMyAct extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
-    private boolean isBack,isPaySet;
+    private boolean isBack,needPaySet;
 
-    public static void startAct(Context context,boolean isHave, boolean isPaySet, boolean isBack, String account_number) {
+    public static void startAct(Context context,boolean isHave, boolean needPaySet, boolean isBack, String account_number) {
         Intent intent = new Intent(context, AlipayMyAct.class);
-        intent.putExtra("isPaySet", isPaySet);
+        intent.putExtra("needPaySet", needPaySet);//是否需要设置支付密码
         intent.putExtra("isHave", isHave);
         intent.putExtra("isBack", isBack);
         intent.putExtra("account_number", account_number);
@@ -68,8 +68,9 @@ public class AlipayMyAct extends BaseActivity implements View.OnClickListener {
                 AlipayDetailAct.startAct(this);
                 break;
             case R.id.mtv_tianjiazhi:
-                if (isPaySet){
-                    BalanceVerifyPhoneAct.startAct(this,true,true,false);
+                if (needPaySet){
+                    BalancePaySetOneAct.startAct(this,false,true);
+//                    BalanceVerifyPhoneAct.startAct(this,true,true,false);
                 }else {
                     BalancePaySetTwoAct.startAct(this, "", "bindPay", "",false,true);
                 }
@@ -91,7 +92,7 @@ public class AlipayMyAct extends BaseActivity implements View.OnClickListener {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         isBack=getIntent().getBooleanExtra("isBack", false);
-        isPaySet=getIntent().getBooleanExtra("isPaySet", false);
+        needPaySet=getIntent().getBooleanExtra("needPaySet", false);
         if (getIntent().getBooleanExtra("isHave", false)) {
             mrlayout_zhifubao.setVisibility(View.VISIBLE);
             mtv_desc.setVisibility(View.VISIBLE);

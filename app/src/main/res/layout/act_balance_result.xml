@@ -43,6 +43,7 @@
         android:gravity="center_horizontal">
 
         <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"

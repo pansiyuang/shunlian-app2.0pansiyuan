@@ -10,15 +10,21 @@
         android:id="@+id/mtv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textColor="@color/share_text"
         android:textSize="14sp" />
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/mtv_title"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:singleLine="true"
         android:textColor="@color/new_text"
-        android:layout_alignParentRight="true"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
 </com.shunlian.app.widget.MyRelativeLayout>

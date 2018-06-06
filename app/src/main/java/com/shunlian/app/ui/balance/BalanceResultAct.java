@@ -11,6 +11,7 @@ import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.my_profit.MyProfitAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalanceMain;
@@ -31,6 +32,12 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
+
+    @BindView(R.id.mtv_result)
+    MyTextView mtv_result;
+
+    @BindView(R.id.miv_icon)
+    MyImageView miv_icon;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -58,8 +65,11 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.mtv_finish:
             case R.id.miv_close:
-                if (data != null)
+                if (Constant.ISBALANCE&&data != null){
                     BalanceXQAct.startAct(getBaseContext(), data,true);
+                }else {
+                    MyProfitAct.startAct(getBaseContext(),true);
+                }
                 finish();
                 break;
         }
@@ -73,8 +83,12 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
     }
     @Override
     public void onBackPressed() {
+        if (Constant.ISBALANCE){
+            BalanceXQAct.startAct(getBaseContext(), data,true);
+        }else {
+            MyProfitAct.startAct(getBaseContext(),true);
+        }
         super.onBackPressed();
-        BalanceXQAct.startAct(getBaseContext(), data,true);
     }
     @Override
     protected void initData() {
@@ -84,10 +98,14 @@ public class BalanceResultAct extends BaseActivity implements View.OnClickListen
         copyBackground.setColor(getColorResouce(R.color.pink_color));
         if (isEmpty(getIntent().getStringExtra("error"))){
             mtv_desc.setText(getStringResouce(R.string.balance_tixianzhanghu));
+            mtv_result.setText(getStringResouce(R.string.balance_tixianshengqing));
             mtv_account.setText(getIntent().getStringExtra("accountType")+"("+getIntent().getStringExtra("account")+")");
             mtv_amount.setText(getIntent().getStringExtra("amount"));
+            miv_icon.setImageResource(R.mipmap.img_balance_tixian);
         }else {
             mtv_desc.setText(getStringResouce(R.string.balance_shibaiyuanyin));
+            mtv_result.setText(getStringResouce(R.string.balance_tixianshibai));
+            miv_icon.setImageResource(R.mipmap.img_balance_tixianshibai);
             mtv_amount.setText(getIntent().getStringExtra("amount"));
             mtv_account.setText(getIntent().getStringExtra("error"));
         }
