@@ -49,6 +49,7 @@
             android:src="@mipmap/img_balance_tixian"/>
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -94,6 +95,7 @@
         android:paddingRight="10dp">
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_desc"
             android:textColor="@color/share_text"
             android:textSize="14sp"
             android:layout_width="wrap_content"

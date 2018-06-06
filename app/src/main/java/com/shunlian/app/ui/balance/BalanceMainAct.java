@@ -21,8 +21,14 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
     @BindView(R.id.mtv_yueminxi)
     MyTextView mtv_yueminxi;
 
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
+
+    @BindView(R.id.mtv_keyong)
+    MyTextView mtv_keyong;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -38,7 +44,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
 
     private PBalanceMain pBalanceMain;
     private BalanceInfoEntity data;
-    private boolean isBack;
+    private boolean isBack,isBalance=false;
 
     public static void startAct(Context context,boolean isBack) {
         Intent intent = new Intent(context, BalanceMainAct.class);
@@ -101,6 +107,16 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         isBack=getIntent().getBooleanExtra("isBack", false);
+        isBalance=Constant.ISBALANCE;
+        if (isBalance){
+            mtv_title.setText(getStringResouce(R.string.balance_yue));
+            mtv_yueminxi.setVisibility(View.VISIBLE);
+            mtv_keyong.setText(getStringResouce(R.string.balance_keyong));
+        }else {
+            mtv_title.setText(getStringResouce(R.string.balance_shouyixiangqing));
+            mtv_yueminxi.setVisibility(View.GONE);
+            mtv_keyong.setText(getStringResouce(R.string.balance_keyongshouyi));
+        }
     }
 
     @Override

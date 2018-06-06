@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.balance;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
@@ -9,16 +10,23 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
+import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.presenter.PBalanceTX;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.view.IBalanceTX;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.gridpasswordview.GridPasswordView;
 
 import butterknife.BindView;
 
-public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
+import static com.shunlian.app.ui.balance.BalanceTXAct.PASSWORDERROR;
+import static com.shunlian.app.ui.balance.BalanceTXAct.PASSWORDLOCK;
+
+public class BalanceXQAct extends BaseActivity implements View.OnClickListener, IBalanceTX {
     @BindView(R.id.mtv_yueminxi)
     MyTextView mtv_yueminxi;
 
@@ -28,8 +36,14 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.mtv_tixian)
     MyTextView mtv_tixian;
 
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
     @BindView(R.id.mtv_tishi)
     MyTextView mtv_tishi;
+
+    @BindView(R.id.mtv_account)
+    MyTextView mtv_account;
 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
@@ -39,6 +53,11 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
     private PromptDialog promptDialog;
     private boolean isBack;
     private GradientDrawable copyBackground;
+    private PBalanceTX pBalanceTX;
+    private GridPasswordView gpv_customUi;
+    private Dialog dialog_pay;
+    private MyTextView mtv_amount;
+    private String balance;
 
     public static void startAct(Context context, BalanceInfoEntity balanceInfoEntity, boolean isBack) {
         Intent intent = new Intent(context, BalanceXQAct.class);
@@ -52,6 +71,37 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
     protected int getLayoutId() {
         return R.layout.act_balance_xq;
     }
+    public void initDialog() {
+        if (gpv_customUi!=null)
+            gpv_customUi.clearPassword();
+        if (dialog_pay == null) {
+            dialog_pay = new Dialog(this, R.style.Mydialog);
+            dialog_pay.setContentView(R.layout.dialog_pay_password);
+            MyImageView miv_close = (MyImageView) dialog_pay.findViewById(R.id.miv_close);
+            mtv_amount = (MyTextView) dialog_pay.findViewById(R.id.mtv_amount);
+            MyTextView mtv_fee = (MyTextView) dialog_pay.findViewById(R.id.mtv_fee);
+            mtv_fee.setVisibility(View.GONE);
+            gpv_customUi = (GridPasswordView) dialog_pay.findViewById(R.id.gpv_customUi);
+            miv_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog_pay.dismiss();
+                }
+            });
+            gpv_customUi.setOnPasswordChangedListener(new GridPasswordView.OnPasswordChangedListener() {
+                @Override
+                public void onTextChanged(String psw) {
+                }
+
+                @Override
+                public void onInputFinish(String psw) {
+                    pBalanceTX.tiXian(psw, balance, "");
+                }
+            });
+        }
+        mtv_amount.setText(getStringResouce(R.string.common_yuan) + balance);
+        dialog_pay.show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -61,7 +111,11 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.mtv_tixian:
                 if (balanceInfoEntity.havePayAccount) {
-                    BalanceTXAct.startAct(this);
+                    if (Constant.ISBALANCE){
+                        BalanceTXAct.startAct(this);
+                    }else {
+                        initDialog();
+                    }
                 } else {
                     initHintDialog();
                 }
@@ -113,27 +167,97 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initData() {
+        pBalanceTX = new PBalanceTX(this, this);
+        if (Constant.ISBALANCE){
+            mtv_account.setText(getStringResouce(R.string.balance_zhanghuyue));
+            mtv_title.setText(getStringResouce(R.string.balance_yuexiangqing));
+            mtv_yueminxi.setVisibility(View.VISIBLE);
+        }else {
+            mtv_account.setText(getStringResouce(R.string.balance_zhanghushouyi));
+            mtv_title.setText(getStringResouce(R.string.balance_shouyitixian));
+            mtv_yueminxi.setVisibility(View.GONE);
+        }
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         isBack = getIntent().getBooleanExtra("isBack", false);
         balanceInfoEntity = (BalanceInfoEntity) getIntent().getSerializableExtra("balance");
         if (balanceInfoEntity != null) {
-            mtv_count.setText(getStringResouce(R.string.common_yuan) + balanceInfoEntity.balance);
+            balance=balanceInfoEntity.balance;
+            mtv_count.setText(getStringResouce(R.string.common_yuan) + balance);
             copyBackground = (GradientDrawable) mtv_tixian.getBackground();
-            if (!TextUtils.isEmpty(balanceInfoEntity.balance) && Float.parseFloat(balanceInfoEntity.balance) > 0) {
+            if (!TextUtils.isEmpty(balance) && Float.parseFloat(balance) > 0) {
                 copyBackground.setColor(getColorResouce(R.color.pink_color));
                 mtv_tixian.setClickable(true);
             } else {
                 copyBackground.setColor(getColorResouce(R.color.color_value_6c));
                 mtv_tixian.setClickable(false);
             }
-            String free= String.valueOf(Float.parseFloat(balanceInfoEntity.limit_amount)+Float.parseFloat(balanceInfoEntity.profit));
-            String content = String.format(getStringResouce(R.string.balance_wenxintishi),free
-                    ,balanceInfoEntity.rate_name);
-            SpannableStringBuilder tishiBuilder = Common.changeColors(content,
-                    getColorResouce(R.color.pink_color), "度为" + free
-                    ,"分按"+balanceInfoEntity.rate_name);
-            mtv_tishi.setText(tishiBuilder);
+            if (Constant.ISBALANCE){
+                String free= String.valueOf(Float.parseFloat(balanceInfoEntity.limit_amount)+Float.parseFloat(balanceInfoEntity.profit));
+                String content = String.format(getStringResouce(R.string.balance_wenxintishi),free
+                        ,balanceInfoEntity.rate_name);
+                SpannableStringBuilder tishiBuilder = Common.changeColors(content,
+                        getColorResouce(R.color.pink_color), "度为" + free
+                        ,"分按"+balanceInfoEntity.rate_name);
+                mtv_tishi.setText(tishiBuilder);
+            }else {
+                mtv_tishi.setText(getStringResouce(R.string.balance_wenxintishis));
+            }
         }
+    }
+
+    @Override
+    public void setApiData(CommonEntity data) {
+
+    }
+    public void initHintDialog(String title, String left,String right) {
+        if (promptDialog == null) {
+            promptDialog = new PromptDialog(this);
+        }
+        promptDialog.setSureAndCancleListener(title, right, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+                if (right.equals(getStringResouce(R.string.balance_chongxinshuru))) {
+                    initDialog();
+                }
+            }
+        }, left, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promptDialog.dismiss();
+                BalanceVerifyPhoneAct.startAct(getBaseContext(),false,false,true);
+            }
+        }).show();
+    }
+
+    @Override
+    public void tiXianCallback(CommonEntity data, int code, String message) {
+        if (data != null) {
+            BalanceResultAct.startAct(this, data.amount, data.account, data.account_type,data.error);
+        } else {
+            String right,left;
+            gpv_customUi.clearPassword();
+            dialog_pay.dismiss();
+            if (code == PASSWORDLOCK) {
+                right = getStringResouce(R.string.errcode_cancel);
+                left = getStringResouce(R.string.balance_zhaohuimima);
+                initHintDialog(message, left,right);
+            } else if (code==PASSWORDERROR){
+                right = getStringResouce(R.string.balance_chongxinshuru);
+                left = getStringResouce(R.string.balance_wangjimima);
+                initHintDialog(message, left,right);
+            }
+        }
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

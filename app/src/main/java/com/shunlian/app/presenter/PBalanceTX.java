@@ -5,6 +5,7 @@ import android.content.Context;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalanceTX;
 
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import retrofit2.Call;
 public class PBalanceTX extends BasePresenter<IBalanceTX> {
     public PBalanceTX(Context context, IBalanceTX iView) {
         super(context, iView);
-        initApi();
     }
 
     @Override
@@ -32,8 +32,7 @@ public class PBalanceTX extends BasePresenter<IBalanceTX> {
 
     }
 
-    @Override
-    protected void initApi() {
+    public void initApiData(){
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);
         sortAndMD5(map);
@@ -51,14 +50,26 @@ public class PBalanceTX extends BasePresenter<IBalanceTX> {
         });
     }
 
+    @Override
+    protected void initApi() {
+
+    }
+
     public void tiXian(String password, String amount, String account_number) {
         Map<String, String> map = new HashMap<>();
-        map.put("password", password);
-        map.put("amount", amount);
-        map.put("account_number", account_number);
-        sortAndMD5(map);
-
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().balanceWithdraw(getRequestBody(map));
+        Call<BaseEntity<CommonEntity>> baseEntityCall;
+        if (Constant.ISBALANCE){
+            map.put("password", password);
+            map.put("amount", amount);
+            map.put("account_number", account_number);
+            sortAndMD5(map);
+            baseEntityCall= getAddCookieApiService().balanceWithdraw(getRequestBody(map));
+        }else {
+            map.put("pwd", password);
+            map.put("money", amount);
+            sortAndMD5(map);
+            baseEntityCall= getAddCookieApiService().withdrawProfit(map);
+        }
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {

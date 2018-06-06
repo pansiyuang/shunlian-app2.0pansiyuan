@@ -627,6 +627,11 @@
 
     <!--余额-->
     <string name="balance_yue">余额</string>
+    <string name="balance_shibaiyuanyin">失败原因</string>
+    <string name="balance_wenxintishis">温馨提示：收益超过100元才能申请提现，每次提现收益将全部提完。
+</string>
+    <string name="balance_shouyixiangqing">收益详情</string>
+    <string name="balance_shouyitixian">收益提现</string>
     <string name="balance_zhifubaoxiang">支付宝详情</string>
     <string name="balance_jiechubang">解除绑定</string>
     <string name="balance_woyiyuedu">我已阅读并同意此</string>
@@ -636,6 +641,7 @@
     <string name="balance_wozaixiang">我再想想</string>
     <string name="balance_yuemingxi">余额明细</string>
     <string name="balance_keyong">可用余额(元)</string>
+    <string name="balance_keyongshouyi">可用收益(元)</string>
     <string name="balance_zhifushezhi">支付设置</string>
     <string name="balance_wodezhifu">我的支付宝</string>
     <string name="balance_zhifubao">支付宝(%s)</string>
@@ -645,6 +651,7 @@
     <string name="balance_shouzhiminxi">收支明细</string>
     <string name="balance_yuexiangqing">余额详情</string>
     <string name="balance_zhanghuyue">账户余额</string>
+    <string name="balance_zhanghushouyi">账户收益</string>
     <string name="balance_tixian">提现</string>
     <string name="balance_yuetixian">余额提现</string>
     <string name="balance_tixianzhi">提现至</string>

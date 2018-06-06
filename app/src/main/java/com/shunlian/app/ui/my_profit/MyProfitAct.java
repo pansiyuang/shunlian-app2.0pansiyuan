@@ -28,6 +28,7 @@ import com.shunlian.app.bean.MyProfitEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.MyProfitPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
@@ -425,7 +426,9 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 break;
             case R.id.mtv_immediate_cash:
                 if (availableProfit >= 100) {
-                    ProfitExtractAct.startAct(this, availableProfit+"");
+                    Constant.ISBALANCE=false;
+                    BalanceMainAct.startAct(this,false);
+//                    ProfitExtractAct.startAct(this, availableProfit+"");
                 }else {
                     Common.staticToast("您的收益满100方可提现");
                 }

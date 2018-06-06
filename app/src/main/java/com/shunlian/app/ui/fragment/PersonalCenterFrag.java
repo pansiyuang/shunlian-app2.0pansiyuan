@@ -36,6 +36,7 @@ import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
@@ -717,6 +718,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.mllayout_yue:
+                Constant.ISBALANCE=true;
                 BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.mllayout_youhuiquan:

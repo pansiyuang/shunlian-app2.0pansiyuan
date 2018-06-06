@@ -639,10 +639,10 @@
             android:name=".ui.my_profit.MyProfitAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my_profit.ProfitExtractAct"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".ui.my_profit.ProfitExtractAct"-->
+            <!--android:exported="false"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
             android:name=".ui.my_profit.DetailOrderRecordAct"
             android:exported="false"

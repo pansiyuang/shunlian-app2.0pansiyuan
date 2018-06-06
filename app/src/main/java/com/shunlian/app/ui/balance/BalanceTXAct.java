@@ -121,6 +121,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
         copyBackground = (GradientDrawable) mtv_tixian.getBackground();
         copyBackground.setColor(getColorResouce(R.color.color_value_6c));
         pBalanceTX = new PBalanceTX(this, this);
+        pBalanceTX.initApiData();
     }
 
     @Override
@@ -141,7 +142,7 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void tiXianCallback(CommonEntity data, int code, String message) {
         if (data != null) {
-            BalanceResultAct.startAct(this, data.amount, data.account, accountType);
+            BalanceResultAct.startAct(this, data.amount, data.account, accountType,"");
         } else {
             String right,left;
             gpv_customUi.clearPassword();
