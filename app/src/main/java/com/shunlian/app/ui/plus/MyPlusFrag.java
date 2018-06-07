@@ -186,8 +186,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     public void getPlusData() {
         if (mPresenter != null) {
             mPresenter.getPlusData(tabOneMode, false);
-            showTabTwoButton(1);
-            invitationRecordFrag.getInviteHistory();
+            showTabTwoButton(2);
+            if (invitationRecordFrag != null) {
+                invitationRecordFrag.getInviteHistory();
+            }
         }
     }
 
@@ -241,8 +243,8 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void onResume() {
         beginToast();
-        if (!isHidden()&&!isclick){
-            isclick=false;
+        if (!isHidden() && !isclick) {
+            isclick = false;
             getPlusData();
         }
         super.onResume();
@@ -426,7 +428,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         seekbar_plus.setOnTouchListener((view, motionEvent) -> true);
         invitationsUrl = baseInfo.invite_strategy;
 
-        if (baseInfo.role<1){
+        if (baseInfo.role < 1) {
             SharedPrefUtil.saveSharedPrfString("plus_role", String.valueOf(baseInfo.role));
             H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
         }

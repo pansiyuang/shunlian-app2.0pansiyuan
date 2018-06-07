@@ -740,7 +740,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
-                if (mainActivity.isPlus()){
+                if (Common.isPlus()){
                     mainActivity.myPlusClick();
                 }else {
                     initHintDialog();

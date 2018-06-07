@@ -46,12 +46,14 @@ public class GifProductAdapter extends BaseRecyclerAdapter<GifProductEntity.Prod
             viewHolder.miv_sold_out.setVisibility(View.VISIBLE);
             viewHolder.tv_buy.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_solid_e5_8px));
             viewHolder.tv_buy.setTextColor(getColor(R.color.value_A0A0A0));
+            viewHolder.tv_buy.setText(getString(R.string.seller_out));
             viewHolder.tv_price.setTextColor(getColor(R.color.value_A0A0A0));
         } else {
             viewHolder.miv_sold_out.setVisibility(View.GONE);
             viewHolder.tv_buy.setBackgroundDrawable(getDrawable(R.drawable.rounded_corner_solid_pink_8px));
             viewHolder.tv_buy.setTextColor(getColor(R.color.white));
             viewHolder.tv_price.setTextColor(getColor(R.color.pink_color));
+            viewHolder.tv_buy.setText(getString(R.string.to_buy));
         }
     }
 

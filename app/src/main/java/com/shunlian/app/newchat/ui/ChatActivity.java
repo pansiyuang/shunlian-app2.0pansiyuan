@@ -253,6 +253,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             initUser(mCurrentUser);
             mAdapter.setUser(mCurrentUser);
             mAdapter.setCurrentStatus(mWebsocketClient.getMemberStatus());
+            mAdapter.setChatRole(Integer.valueOf(chatRoleType));
         }
         mWebsocketClient.addOnMessageReceiveListener(this);
 
@@ -1005,6 +1006,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_LEFT) {
                 if (msgInfo.m_user_id.equals(chat_m_user_Id) || baseMessage.from_user_id.equals(chat_m_user_Id)) {
                     mAdapter.addMsgInfo(msgInfo);
+                    readedMsg(chat_m_user_Id);
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {
@@ -1023,6 +1025,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_SYSTEM) {
                 mAdapter.addMsgInfo(msgInfo);
+                readedMsg(chat_m_user_Id);
             }
             runOnUiThread(() -> {
                 recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部

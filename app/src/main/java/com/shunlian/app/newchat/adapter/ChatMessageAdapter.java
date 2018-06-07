@@ -55,6 +55,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.CenterAlignImageSpan;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
@@ -113,6 +114,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     private String currentUserId;
     private UserInfoEntity.Info.User mUser;
     private MemberStatus memberStatus;
+    private int chatRole;
 
     public ChatMessageAdapter(Context context, List<MsgInfo> lists, RecyclerView recyclerView) {
         super(context, false, lists);
@@ -130,6 +132,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     public void setCurrentStatus(MemberStatus status) {
         memberStatus = status;
+    }
+
+    public void setChatRole(int role) {
+        chatRole = role;
     }
 
     public int getSendType(String fromUserId) {
@@ -388,6 +394,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         leftTxtViewHolder.tv_name.setText(textMessage.from_nickname);
         GlideUtils.getInstance().loadCornerImage(context, leftTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
         leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text, leftTxtViewHolder.tv_content));
+
+        leftTxtViewHolder.tv_content.setBackgroundResource(getLeftNomalDrawableRes());
     }
 
     public void handRightTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -406,6 +414,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         } else {
             rightTxtViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
+        rightTxtViewHolder.tv_content.setBackgroundResource(getRightNomalDrawableRes());
     }
 
     public void handLeftImg(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -520,6 +529,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 GoodsDetailAct.startAct(context, goods.goodsId);
             });
         }
+        leftGoodsViewHolder.layout_goods.setBackgroundResource(getLeftNomalDrawableRes());
     }
 
     public void handRightGoods(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
@@ -553,6 +563,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         } else {
             rightGoodsViewHolder.rl_msg_status.setVisibility(View.GONE);
         }
+        rightGoodsViewHolder.layout_goods.setBackgroundResource(getRightProductDrawableRes());
     }
 
     public void handEvaluate(RecyclerView.ViewHolder holder, BaseMessage baseMessage, final MsgInfo msgInfo) {
@@ -1389,4 +1400,26 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         iv.setLayoutParams(lp);
     }
 
+    public int getRightNomalDrawableRes() {
+        if (Common.isPlus() && memberStatus == MemberStatus.Member) {
+            return R.drawable.bg_chat_plus_me;
+        }
+        return R.drawable.bg_chat_me;
+    }
+
+    public int getRightProductDrawableRes() {
+        if (Common.isPlus() && memberStatus == MemberStatus.Member) {
+            return R.drawable.bg_chat_plus_product;
+        }
+        return R.drawable.bg_chat_product;
+    }
+
+    public int getLeftNomalDrawableRes() {
+        if (Common.isPlus() && memberStatus == MemberStatus.Member) {
+            if (chatRole == 1 || chatRole == 2) {
+                return R.drawable.bg_chat_plus_other;
+            }
+        }
+        return R.drawable.bg_chat_other;
+    }
 }

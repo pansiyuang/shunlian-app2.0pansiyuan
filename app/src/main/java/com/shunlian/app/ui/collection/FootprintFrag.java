@@ -81,7 +81,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
     private boolean mControlsVisible = true;
     private int currentMonth;
     private int currentYear;
-    private int currentDay;
     public static Calendar mCurrentCalendar = null;
 
     @Override
@@ -105,7 +104,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false); //解决刷新item图片闪烁的问题
 
         tv_date.setText(calendarView.getCurYear() + "年" + calendarView.getCurMonth() + "月");
-        currentDay = calendarView.getCurDay();
         printPresenter.getMarkCalendar();
         printPresenter.getMarklist(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()), false);
         initCalendarView();
@@ -206,20 +204,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         if (isEmpty(ids)) {
             return;
         }
-        String date, month, day;
-        if (currentMonth < 10) {
-            month = "0" + currentMonth;
-        } else {
-            month = String.valueOf(currentMonth);
-        }
-        if (currentDay < 10) {
-            day = "0" + currentDay;
-        } else {
-            day = String.valueOf(currentDay);
-        }
-        date = currentYear + month + day;
-        LogUtil.httpLogW("删除日期：" + date);
-        printPresenter.deleteBatch(ids, date);
+        printPresenter.deleteBatch(ids);
     }
 
     /**
@@ -399,7 +384,6 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             } else {
                 mCurrentCalendar = calendar;
                 printPresenter.initPage();
-                currentDay = mCurrentCalendar.getDay();
                 printPresenter.getMarklist(String.valueOf(calendar.getYear()), String.valueOf(calendar.getMonth()), String.valueOf(calendar.getDay()), false);
             }
         }
@@ -447,6 +431,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             return;
         }
         if (dateInfo.isSelect) {
+            LogUtil.httpLogW("");
             toSelectDate(dateInfo.date, false);
         } else {
             toSelectDate(dateInfo.date, true);

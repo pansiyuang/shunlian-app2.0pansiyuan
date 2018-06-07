@@ -54,10 +54,10 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
         titleCount = 0;
         timeShowPosition.clear();
         timeDatas.clear();
-        timeShowPosition.add(1);
-        if (isEmpty(dList)) {
+        if (dList == null || dList.size() == 0) {
             return;
         }
+        timeShowPosition.add(1);
         timeDatas.put(timeShowPosition.get(timeShowPosition.size() - 1), dList.get(0));
         for (int i = 0; i < dList.size(); i++) {//计算日期显示的位置
             FootprintEntity.DateInfo dateInfo = dList.get(i);
