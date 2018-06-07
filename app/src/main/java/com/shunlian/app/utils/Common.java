@@ -266,7 +266,7 @@ public class Common {
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
                 } else {
-                    MyProfitAct.startAct(context);
+                    MyProfitAct.startAct(context,false);
                 }
                 break;
             case "myvoucherlist":

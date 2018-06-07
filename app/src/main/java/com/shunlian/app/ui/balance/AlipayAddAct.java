@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -157,10 +158,17 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
     @Override
     public void bindAlipayCall(String account_number) {
         if (getIntent().getBooleanExtra("isAli",false)){
-            AlipayMyAct.startAct(this,true,true,true,account_number);
-        }else {
+            AlipayMyAct.startAct(this,true,false,true,account_number);
+        }else if (Constant.ISBALANCE){
             BalanceTXAct.startAct(this);
+        }else {
+            pBalancePaySetOne.getData();
         }
+    }
+
+    @Override
+    public void setApiData(BalanceInfoEntity data) {
+        BalanceXQAct.startAct(this,data,true);
     }
 
     @Override

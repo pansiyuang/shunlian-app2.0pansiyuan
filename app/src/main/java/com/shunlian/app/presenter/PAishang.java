@@ -174,6 +174,12 @@ public class PAishang extends BasePresenter<IAishang> {
                 hotDatas.addAll(hot.goods_list);
                 iView.setHotsData(hotDatas, hot.page, hot.total_page);
             }
+
+            @Override
+            public void onFailure() {
+                iView.showDataEmptyView(1);
+                super.onFailure();
+            }
         });
     }
 

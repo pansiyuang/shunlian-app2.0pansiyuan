@@ -55,6 +55,7 @@
         android:src="@mipmap/icon_balance_zhanghuyue" />
 
     <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

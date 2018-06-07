@@ -288,7 +288,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 mtv_like.setTextColor(getColorResouce(R.color.pink_color));
             } else {
                 isLike = false;
-                miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_n);
+                miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_ns);
                 mtv_like.setTextColor(getColorResouce(R.color.value_88));
             }
             mtv_desc.setText(data.inv_info.content);
@@ -313,7 +313,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             mtv_like.setTextColor(getColorResouce(R.color.pink_color));
         } else {
             isLike = false;
-            miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_n);
+            miv_like.setImageResource(R.mipmap.icon_found_quanzi_xin_ns);
             mtv_like.setTextColor(getColorResouce(R.color.value_88));
         }
         mtv_like.setText(String.valueOf(data.likes));

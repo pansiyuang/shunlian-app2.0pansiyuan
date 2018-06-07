@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IBalanceMain;
 import com.shunlian.app.view.IQrCode;
@@ -40,8 +41,12 @@ public class PBalanceMain extends BasePresenter<IBalanceMain> {
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);
         sortAndMD5(map);
-
-        Call<BaseEntity<BalanceInfoEntity>> baseEntityCall = getApiService().balanceInfo(map);
+        Call<BaseEntity<BalanceInfoEntity>> baseEntityCall;
+        if (Constant.ISBALANCE){
+            baseEntityCall = getApiService().balanceInfo(map);
+        }else {
+            baseEntityCall = getApiService().balanceDetail(map);
+        }
         getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<BalanceInfoEntity>>() {
             @Override
             public void onSuccess(BaseEntity<BalanceInfoEntity> entity) {

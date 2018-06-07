@@ -43,6 +43,27 @@ public class PBalancePaySetOne extends BasePresenter<IBalancePaySetOne> {
     protected void initApi() {
     }
 
+    public void getData(){
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+        Call<BaseEntity<BalanceInfoEntity>> baseEntityCall;
+        if (Constant.ISBALANCE){
+            baseEntityCall = getApiService().balanceInfo(map);
+        }else {
+            baseEntityCall = getApiService().balanceDetail(map);
+        }
+        getNetData(false,baseEntityCall, new SimpleNetDataCallback<BaseEntity<BalanceInfoEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<BalanceInfoEntity> entity) {
+                super.onSuccess(entity);
+                BalanceInfoEntity data = entity.data;
+                if (data != null) {
+                    iView.setApiData(data);
+                }
+            }
+        });
+    }
     public void getCode(){
         Map<String, String> map = new HashMap<>();
 //        map.put("storeId", storeId);

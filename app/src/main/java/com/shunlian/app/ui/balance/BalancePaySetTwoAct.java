@@ -10,6 +10,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.PBalancePaySetTwo;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IBalancePaySetTwo;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.gridpasswordview.GridPasswordView;
@@ -35,6 +36,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
 
     private PBalancePaySetTwo pBalancePaySetTwo;
     private String mpsw, before, tag, key;
+    private boolean isPaySet,isAli;
 
 
     public static void startAct(Context context, String before, String tag, String key,boolean isPaySet,boolean isAli) {
@@ -116,6 +118,8 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
         before = getIntent().getStringExtra("before");
         tag = getIntent().getStringExtra("tag");
         key = getIntent().getStringExtra("key");
+        isPaySet = getIntent().getBooleanExtra("isPaySet",false);
+        isAli = getIntent().getBooleanExtra("isAli",false);
         if ("set".equals(tag)) {
             mtv_title.setText(getStringResouce(R.string.balance_shezhimima));
             if (TextUtils.isEmpty(before)) {
@@ -154,10 +158,10 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void setPasswordCall() {
         Common.staticToasts(this, getStringResouce(R.string.balance_shezhichenggong), R.mipmap.icon_common_duihao);
-        if (getIntent().getBooleanExtra("isPaySet",false)){
+        if (isPaySet){
             BalancePaySetAct.startAct(this, true, true);
         }else{
-            AlipayAddAct.startAct(this,getIntent().getBooleanExtra("isAli",false));
+            AlipayAddAct.startAct(this,isAli);
         }
     }
 
@@ -176,9 +180,9 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     public void checkPasswordCall(boolean isRight, String key) {
         if (isRight) {
             if ("modify".equals(tag)) {
-                BalancePaySetTwoAct.startAct(this, "", "sets", key,false,false);
+                BalancePaySetTwoAct.startAct(this, "", "sets", key,isPaySet,isAli);
             } else {
-                AlipayAddAct.startAct(this,getIntent().getBooleanExtra("isAli",false));
+                AlipayAddAct.startAct(this,isAli);
             }
         } else {
             gpv_customUi.clearPassword();
@@ -188,7 +192,7 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     @Override
     public void unbindAliPayCall(boolean isOk) {
         if (isOk) {
-            AlipayMyAct.startAct(this, false,true, true, "");
+            AlipayMyAct.startAct(this, false,false, true, "");
         } else {
             gpv_customUi.clearPassword();
         }
@@ -198,9 +202,9 @@ public class BalancePaySetTwoAct extends BaseActivity implements IBalancePaySetT
     public void checkRuleValidCall(boolean isOk) {
         if (isOk) {
             if (getIntent().getBooleanExtra("isForget",false)){
-                BalancePaySetTwoAct.startActForResult(this, mpsw, tag, key,false,false,true);
+                BalancePaySetTwoAct.startActForResult(this, mpsw, tag, key,isPaySet,isAli,true);
             }else {
-                BalancePaySetTwoAct.startAct(this, mpsw, tag, key,false,false);
+                BalancePaySetTwoAct.startAct(this, mpsw, tag, key,isPaySet,isAli);
             }
         } else {
             gpv_customUi.clearPassword();

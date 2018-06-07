@@ -9,16 +9,15 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BalanceDetailAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.WithdrawDetailAdapter;
 import com.shunlian.app.bean.BalanceDetailEntity;
-import com.shunlian.app.bean.BalanceInfoEntity;
+import com.shunlian.app.bean.WithdrawListEntity;
 import com.shunlian.app.presenter.PBalanceDetail;
-import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.VerticalItemDecoration;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalanceDetail;
-import com.shunlian.app.view.IBalanceMain;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.List;
 
@@ -28,9 +27,16 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
     @BindView(R.id.rv_detai)
     RecyclerView rv_detai;
 
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     private PBalanceDetail pBalanceDetail;
     private LinearLayoutManager linearLayoutManager;
     private BalanceDetailAdapter balanceDetailAdapter;
+    private WithdrawDetailAdapter withdrawDetailAdapter;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, BalanceDetailAct.class);
@@ -53,7 +59,11 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
                     int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
                         if (pBalanceDetail != null) {
-                            pBalanceDetail.refreshBaby();
+                            if (Constant.ISBALANCE){
+                                pBalanceDetail.refreshBaby();
+                            }else {
+                                pBalanceDetail.refreshBabys();
+                            }
                         }
                     }
                 }
@@ -63,9 +73,21 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initData() {
+        if (Constant.ISBALANCE){
+            mtv_title.setText(getStringResouce(R.string.balance_yuexiangqing));
+        }else {
+            mtv_title.setText(getStringResouce(R.string.balance_tixianmingxi));
+        }
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         pBalanceDetail=new PBalanceDetail(this,this);
+        if (Constant.ISBALANCE){
+            pBalanceDetail.getApiData();
+        }else {
+            pBalanceDetail.getApiDatas();
+        }
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.balance_zanwutixian));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -75,12 +97,20 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_detai);
     }
 
 
     @Override
     public void setApiData(BalanceDetailEntity data, List<BalanceDetailEntity.Balance> balanceList) {
+        if (isEmpty(balanceList)){
+            visible(nei_empty);
+            gone(rv_detai);
+        }else {
+            gone(nei_empty);
+            visible(rv_detai);
+        }
         if (balanceDetailAdapter == null) {
             boolean isShowFooter;
             if (balanceList!=null&&balanceList.size()>5){
@@ -103,5 +133,39 @@ public class BalanceDetailAct extends BaseActivity implements View.OnClickListen
             balanceDetailAdapter.notifyDataSetChanged();
         }
         balanceDetailAdapter.setPageLoading(Integer.parseInt(data.page),Integer.parseInt( data.total_page));
+    }
+
+    @Override
+    public void setApiDatas(WithdrawListEntity.Pager pager, List<WithdrawListEntity.Record> records) {
+        if (isEmpty(records)){
+            visible(nei_empty);
+            gone(rv_detai);
+        }else {
+            gone(nei_empty);
+            visible(rv_detai);
+        }
+        if (withdrawDetailAdapter == null) {
+            boolean isShowFooter;
+            if (records!=null&&records.size()>5){
+                isShowFooter=true;
+            }else {
+                isShowFooter=false;
+            }
+            withdrawDetailAdapter = new WithdrawDetailAdapter(getBaseContext(), isShowFooter, records);
+            linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            rv_detai.setLayoutManager(linearLayoutManager);
+            rv_detai.setAdapter(withdrawDetailAdapter);
+            withdrawDetailAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    AmountDetailAct.startAct(getBaseContext(),records.get(position).id
+                    );
+                }
+            });
+        } else {
+            withdrawDetailAdapter.notifyDataSetChanged();
+        }
+        withdrawDetailAdapter.setPageLoading(Integer.parseInt(pager.page),Integer.parseInt( pager.total_page));
+
     }
 }
