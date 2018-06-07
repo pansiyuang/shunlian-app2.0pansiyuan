@@ -37,8 +37,8 @@ import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPayListView;
 import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MyImageView;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.List;
 
@@ -290,6 +290,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public void payOrder(PayOrderEntity entity) {
         this.order_id = entity.order_id;
         pay_sn = entity.pay_sn;
+        if (!isEmpty(entity.zero_pay)){
+            paySuccess();
+            return;
+        }
         switch (currentPayType){
             case "alipay":
                 alipay(entity.alipay);

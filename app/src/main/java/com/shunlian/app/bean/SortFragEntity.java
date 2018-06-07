@@ -45,6 +45,7 @@ public class SortFragEntity {
         public String name;
         public String thumb;
         public String op_cid;
+        public String keyword;
         public String g_cid;
         public String is_attr;
         public List<GoodsSearchParam.Attr> attrs;
