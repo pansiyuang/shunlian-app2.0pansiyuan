@@ -64,7 +64,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/rl_title"
         android:layout_marginTop="50dp"/>
-
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_menu"
         android:layout_width="wrap_content"
@@ -76,4 +81,5 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </com.shunlian.app.widget.MyRelativeLayout>
