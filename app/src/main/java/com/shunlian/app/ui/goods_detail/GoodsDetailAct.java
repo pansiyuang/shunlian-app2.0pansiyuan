@@ -42,7 +42,6 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -682,11 +681,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 String buyText = mtv_buy_immediately.getText().toString();
                 if (getStringResouce(R.string.now_buy).equals(buyText)){//立刻购买
                     isNowBuy = true;
-                    if (goodsCount == 0){
+                    goodsDeatilFrag.showParamDialog();
+                    /*if (goodsCount == 0){
                         goodsDeatilFrag.showParamDialog();
                     }else {
-                        ConfirmOrderAct.startAct(this,goodsId,String.valueOf(goodsCount),sku==null?"":sku.id);
-                    }
+                        ConfirmOrderAct.startAct(this,goodsId,String
+                        .valueOf(goodsCount),sku==null?"":sku.id);
+                    }*/
                 }else {//设置提醒
                     if (getStringResouce(R.string.day_setting_remind).equals(buyText)){//设置提醒
                         if (goodsDetailPresenter != null){
@@ -943,7 +944,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             @Override
             public void onAnimationEnd(Animator animation) {
                 num += goodsCount;
-                LogUtil.zhLogW("num======"+num);
                 if (rnview != null) {
                     rnview.setVisibility(View.VISIBLE);
                     rnview.setNumber(num - goodsCount);
@@ -983,6 +983,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
         this.sku = sku;
         goodsCount = count;
+        //LogUtil.zhLogW("=goodsCount=========="+goodsCount);
         if (isAddcart){
             isAddcart = false;
             rnview.setVisibility(View.VISIBLE);

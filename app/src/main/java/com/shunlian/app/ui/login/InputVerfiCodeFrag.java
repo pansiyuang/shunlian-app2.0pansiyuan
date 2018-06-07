@@ -18,6 +18,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.HashSet;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/10/18.
@@ -202,6 +204,10 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
         }
+
+        if ("0".equals(content.is_tag)){
+            SexSelectAct.startAct(baseActivity);
+        }
         baseActivity.finish();
     }
 
@@ -218,6 +224,11 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
     @Override
     public void showFailureView(int rquest_code) {
 
+    }
+
+    @OnClick(R.id.llayout_clause)
+    public void showClause(){
+        Common.staticToast("霸王条款：必须同意");
     }
 
     @Override

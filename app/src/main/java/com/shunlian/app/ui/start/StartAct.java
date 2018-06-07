@@ -17,8 +17,6 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -71,8 +69,15 @@ public class StartAct extends MBaseActivity implements IMain {
         miv_anim.setBackgroundResource(R.drawable.flash_animation);
         flashAnimation = (AnimationDrawable) miv_anim.getBackground();
         flashAnimation.start();
+//        loadBitmap();
         isHave=true;
         Handler handler = new Handler();
+//      handler.postDelayed(new Runnable() {
+//          @Override
+//          public void run() {
+//              flashAnimation.stop();
+//          }
+//      },1100);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -86,6 +91,38 @@ public class StartAct extends MBaseActivity implements IMain {
 
     }
 
+//    private void loadBitmap(){
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inPurgeable=true;
+//        options.inInputShareable=true;
+//        //设置该属性可获得图片的长宽等信息，但是避免了不必要的提前加载动画
+//        options.inJustDecodeBounds=false;
+//        InputStream is=null;
+//        int[] raw={
+//                R.mipmap.imgss_02,R.mipmap.imgss_03,R.mipmap.imgss_05,R.mipmap.imgss_07,R.mipmap.imgss_09,
+//                R.mipmap.imgss_11,R.mipmap.imgss_13,R.mipmap.imgss_16,R.mipmap.imgss_17,R.mipmap.imgss_18,
+//                R.mipmap.imgss_19,R.mipmap.imgss_21,R.mipmap.imgss_23,R.mipmap.imgss_25,R.mipmap.imgss_27,
+//                R.mipmap.imgss_29,R.mipmap.imgss_31,R.mipmap.imgss_32,R.mipmap.imgss_33,R.mipmap.imgss_34,
+//                R.mipmap.imgss_35,R.mipmap.imgss_37,R.mipmap.imgss_39,R.mipmap.imgss_41,R.mipmap.imgss_43,
+//                R.mipmap.imgss_45,R.mipmap.imgss_47,R.mipmap.imgss_49
+//        };
+//        Bitmap[] mbitMap=new Bitmap[5];
+//        for(int i=0,j=0;i<5&&j<5;i++,j++){
+//            is=getResources().openRawResource(raw[i]);
+//            Bitmap bitmap =BitmapFactory.decodeStream(is, null, options);
+//            mbitMap[j]=bitmap;
+//        }
+//
+//        AnimationDrawable clipDrawable= new AnimationDrawable();
+//        for(int i=0;i<5;i++){
+//            clipDrawable.addFrame(new BitmapDrawable(mbitMap[i]), 50);
+//        }
+//        clipDrawable.setOneShot(true);
+//        flashAnimation=clipDrawable;
+//        MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
+////        miv_anim.setBackgroundResource(R.drawable.flash_animation);
+//        miv_anim.setBackground(flashAnimation);
+//    }
     /**
      * 删除快捷方式
      */
@@ -105,6 +142,12 @@ public class StartAct extends MBaseActivity implements IMain {
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
 //        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(Intent.ACTION_MAIN).setComponent(comp));//对应判断快捷方式是否存在
         sendBroadcast(shortcut);
+    }
+
+    @Override
+    protected void onStop() {
+        tryRecycleAnimationDrawable(flashAnimation);
+        super.onStop();
     }
 
     //创建桌面快捷方式
@@ -232,7 +275,6 @@ public class StartAct extends MBaseActivity implements IMain {
         releaseImageViewResouce(miv_bg1);
         releaseImageViewResouce(miv_bg2);
         super.onDestroy();
-        tryRecycleAnimationDrawable(flashAnimation);
     }
 
     public void releaseImageViewResouce(ImageView imageView) {

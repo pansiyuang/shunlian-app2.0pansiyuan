@@ -125,6 +125,10 @@ public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
     }
 
     public String[] getCount(){
+        if (currentCount <= 0){
+            Common.staticToast("至少选择一个");
+            return null;
+        }
         String[] str = new String[2];
         StringBuilder sb1 = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();

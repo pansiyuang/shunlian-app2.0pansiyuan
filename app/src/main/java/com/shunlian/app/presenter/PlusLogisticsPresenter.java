@@ -39,9 +39,10 @@ public class PlusLogisticsPresenter extends BasePresenter<IPlusLogisticsView> {
 
     }
 
-    public void getPlusLogistics(String queryId) {
+    public void getPlusLogistics(String queryId,String type) {
+        //type 类型 1是普通订单物流 2退换货物流用户 3退换货商家 4礼包
         Map<String, String> map = new HashMap<>();
-        map.put("type", "4");
+        map.put("type", type);
         map.put("query_id", queryId);
         sortAndMD5(map);
         Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getAddCookieApiService().getOppositeTraces(getRequestBody(map));

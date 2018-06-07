@@ -435,7 +435,10 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
                     return;
                 }
                 String imageStr = getImageString();
-                presenter.applyRefund(currentRefundId, currentInfoEntity.og_Id, String.valueOf(customer_goods.getCurrentCount()), edt_return_money.getText().toString(), currentServiceType, currentReasonId, edt_refunds.getText().toString(), imageStr, isEdit);
+                presenter.applyRefund(currentRefundId, currentInfoEntity.og_Id,
+                        String.valueOf(customer_goods.getCurrentCount()),
+                        edt_return_money.getText().toString(), currentServiceType,
+                        currentReasonId, edt_refunds.getText().toString(), imageStr, isEdit);
                 break;
         }
     }

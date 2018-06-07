@@ -264,6 +264,17 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                     LookBigImgAct.startAct(context, bigImgEntity);
                 });
             }
+
+            visible(mHolder.mtv_comment_state);
+            if ("1".equals(data.star_level)){//1差评，3中评，5好评
+                mHolder.mtv_comment_state.setText("差评");
+            }else if ("3".equals(data.star_level)){
+                mHolder.mtv_comment_state.setText("中评");
+            }else if ("5".equals(data.star_level)){
+                mHolder.mtv_comment_state.setText("好评");
+            }else {
+                gone(mHolder.mtv_comment_state);
+            }
         }
     }
 
@@ -336,6 +347,10 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
         @BindView(R.id.nei_empty)
         NetAndEmptyInterface nei_empty;
+
+        @BindView(R.id.mtv_comment_state)
+        MyTextView mtv_comment_state;
+
         public CommentHolder(View itemView) {
             super(itemView);
             miv_vip.setWHProportion(23,23);

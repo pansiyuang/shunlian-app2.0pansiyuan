@@ -53,9 +53,9 @@ public final class Constant {
     public static String HELP_PHONE ="";
 
     public static final String KEY = "sdf21111111111";
-    public static final String WX_APP_ID = "wxbffd8c8c412e4c73";// 微信开放平台申请到的app_id
+//    public static final String WX_APP_ID = "wxbffd8c8c412e4c73";// 微信开放平台申请到的app_id
 //        public static final String WX_APP_ID = "wx32f8315ee438f6be";// 易云商城app_id
-//    public static final String WX_APP_ID = "wx823a21585581c53b";// 易云商城（测试专用）app_id
+    public static final String WX_APP_ID = "wx823a21585581c53b";// 易云商城（测试专用）app_id
 //        public static final String WX_APP_ID = "wx4453de455c6da56a";// 微信Demo开放平台申请到的app_id
     //    public static final String WX_APP_ID ="wxaea5641b2b1fdb77";// 微信公众号的app_id
     public static final String QQ_APP_ID = "1105343909";// QQ开放平台申请到的app_id
@@ -89,7 +89,9 @@ public final class Constant {
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
 
-    public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";      //小米推送KEY
+    public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
+    public static  String SHARE_LINK = "";
+
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId
 //    public static final int IM_ACCOUNT_TYPE = 3415;   //腾讯IM SDK  accountType

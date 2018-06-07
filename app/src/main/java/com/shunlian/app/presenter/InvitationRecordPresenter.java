@@ -19,6 +19,7 @@ import retrofit2.Call;
 
 public class InvitationRecordPresenter extends BasePresenter<IInvitationRecordeView> {
     public static final int PAGE_SIZE = 20;
+    public int currentPage=1;
 
     public InvitationRecordPresenter(Context context, IInvitationRecordeView iView) {
         super(context, iView);
@@ -52,6 +53,7 @@ public class InvitationRecordPresenter extends BasePresenter<IInvitationRecordeV
                 InvitationEntity.Pager pager = invitationEntity.pager;
                 isLoading = false;
                 currentPage = pager.page;
+
                 allPage = pager.total_page;
                 iView.getInvitationRecord(currentPage, allPage, invitationEntity.list);
                 currentPage++;

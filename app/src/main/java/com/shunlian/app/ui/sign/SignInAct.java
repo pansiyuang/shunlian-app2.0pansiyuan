@@ -100,12 +100,12 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        alpha[0] = alpha[0] + 0.03f;
+                        alpha[0] = alpha[0] + 0.06f;
                         mtv_score.setAlpha(alpha[0]);
                     }
                 });
             }
-        }, 0, 50);
+        }, 0, 70);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -116,7 +116,7 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
                 mtv_score.setAlpha(0);
                 mtv_scores.setText(scores);
             }
-        }, 1650);
+        }, 1190);
         isSign = true;
         signAnimation.stop();
         signAnimation.start();

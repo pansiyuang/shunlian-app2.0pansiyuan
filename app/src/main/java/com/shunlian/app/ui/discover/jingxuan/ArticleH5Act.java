@@ -129,7 +129,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
                 break;
             case R.id.rl_title_more:
                 quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.findDetail();
+                quick_actions.findDetail(articleId);
                 quick_actions.shareInfo(shareInfoParam);
                 break;
         }

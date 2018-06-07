@@ -64,8 +64,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     private static final int TYPE7 = 7;//goods
     private static final int TYPE8 = 8;//cate
     private static final int TYPE10 = 10;//moreGoods
-    public boolean isFirst = false, isShow = false;
-    public int mergePosition = 0, showPosition = -1;
+    public boolean isFirst = false;
+    public int mergePosition = 0;
     private CateGoryFrag cateGoryFrag;
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
     private int second = (int) (System.currentTimeMillis() / 1000);
@@ -449,13 +449,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE5:
                 if (holder instanceof FiveHolder) {
                     FiveHolder fiveHolder = (FiveHolder) holder;
-                    if (hotPosition == -1 && isFirst)
-                        hotPosition = position;
-                    if (position == hotPosition) {
-                        fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
-                    } else {
-                        fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
-                    }
                     GetDataEntity.MData data = lists.get(position);
                     int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
                     int height=picWidth*158/340;
@@ -466,20 +459,24 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
 //                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
                     fiveHolder.view_line.setVisibility(View.GONE);
+                    fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                    if (hotPosition == -1 )
+                        hotPosition = position;
                     if (isFirst) {
+                        if (position == hotPosition) {
+                            fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                        }
                         if (!isEmpty(data.content)){
                             fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
                             fiveHolder.mtv_desc.setText(data.content);
                         }
                         fiveHolder.mtv_title.setText(data.title);
                     } else {
-                        if (!isShow || showPosition == position) {
-                            showPosition = position;
+                        if (position == hotPosition) {
                             fiveHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
                             fiveHolder.mtv_topic.setVisibility(View.VISIBLE);
 //                            fiveHolder.view_line.setBackgroundColor(getColor(R.color.value_F7F7F7));
                             fiveHolder.view_line.setVisibility(View.VISIBLE);
-                            isShow = true;
                         }
 //                        fiveHolder.mtv_topic.setText(data.title);
                         fiveHolder.mtv_title.setText(data.content);
@@ -514,12 +511,22 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             case TYPE6:
                 if (holder instanceof SixHolder) {
                     SixHolder sixHolder = (SixHolder) holder;
-                    if (hotPosition == -1 && isFirst)
+                    sixHolder.mtv_topic.setVisibility(View.GONE);
+//                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
+                    sixHolder.view_line.setVisibility(View.GONE);
+                    sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                    if (hotPosition == -1 )
                         hotPosition = position;
-                    if (position == hotPosition) {
-                        sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                    if (isFirst) {
+                        if (position == hotPosition) {
+                            sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                        }
                     } else {
-                        sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                        if (position == hotPosition) {
+                            sixHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
+                            sixHolder.mtv_topic.setVisibility(View.VISIBLE);
+                            sixHolder.view_line.setVisibility(View.VISIBLE);
+                        }
                     }
                     GetDataEntity.MData data = lists.get(position);
                     int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
@@ -652,22 +659,6 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    private void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-            sb.append(mShareInfoParam.desc);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
-            sb.append(mShareInfoParam.shareLink);
-        }
-        ClipboardManager cm = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
-    }
-
     /**
      * 分享微信和复制链接
      */
@@ -684,7 +675,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                copyText();
+                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc);
                                 break;
                         }
                     }
@@ -923,6 +914,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         MyImageView miv_photo;
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
+        @BindView(R.id.mtv_topic)
+        MyTextView mtv_topic;
+        @BindView(R.id.view_line)
+        View view_line;
         @BindView(R.id.mllayout_pingzhi)
         MyLinearLayout mllayout_pingzhi;
         private FirstHorizonAdapter firstHorizonAdapter;

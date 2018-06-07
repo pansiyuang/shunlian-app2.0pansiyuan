@@ -77,21 +77,6 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         mHolder.downTime_firsts.startDownTimer();
     }
 
-    private void copyText() {
-        StringBuffer sb = new StringBuffer();
-        sb.setLength(0);
-        if (!TextUtils.isEmpty(mShareInfoParam.desc)) {
-            sb.append(mShareInfoParam.desc);
-            sb.append("\n");
-        }
-        if (!TextUtils.isEmpty(mShareInfoParam.shareLink)) {
-            sb.append(mShareInfoParam.shareLink);
-        }
-        ClipboardManager cm = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
-        cm.setText(sb.toString());
-        Common.staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
-    }
 
     /**
      * 分享微信和复制链接
@@ -109,7 +94,7 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                copyText();
+                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc);
                                 break;
                         }
                     }

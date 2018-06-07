@@ -59,6 +59,12 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
         mPresenter.getInviteHistory(true);
     }
 
+    public void getInviteHistory() {
+        if (mPresenter != null) {
+            mPresenter.currentPage=1;
+            mPresenter.getInviteHistory(true);
+        }
+    }
 
     @Override
     public void getInvitationRecord(int page, int totalPage, List<InvitationEntity.Invitation> invitationList) {

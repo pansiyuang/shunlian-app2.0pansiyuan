@@ -18,12 +18,13 @@ public class SaveAlbumDialog {
     private final Activity ctx;
     private TextView mtv_close;
     private TextView mtv_go_weChat;
-    private String type="";
+    private String type="",id="";
 
 
-    public SaveAlbumDialog(Activity ctx,String type) {
+    public SaveAlbumDialog(Activity ctx,String type,String id) {
         this.ctx = ctx;
         this.type=type;
+        this.id=id;
         logoutDialog = new Dialog(ctx, R.style.Mydialog);
         logoutDialog.setContentView(R.layout.dialog_savealbum);
         initView(logoutDialog);
@@ -36,7 +37,7 @@ public class SaveAlbumDialog {
         mtv_close.setOnClickListener((v) -> release());
 
         mtv_go_weChat.setOnClickListener((v) -> {
-            Common.openWeiXin(ctx,type,"");
+            Common.openWeiXin(ctx,type,id);
             release();
         });
     }

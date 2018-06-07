@@ -270,7 +270,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         GuanzhuEntity.DynamicListBean dy = mListBeans.get(currentPosition);
         dy.likes = new_likes;
         dy.has_like = "1".equals(dy.has_like)?"0":"1";
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemChanged(currentPosition);
     }
 
     public void articleUnLike(final String articleId) {

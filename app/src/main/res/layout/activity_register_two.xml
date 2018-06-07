@@ -204,14 +204,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="15dp"
+                android:paddingTop="15dp"
                 android:gravity="center_vertical"
                 android:visibility="gone">
 
                 <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_agree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/img_balance_xieyi_h"
+                    android:src="@mipmap/img_balance_xieyi_n"
                     android:layout_marginRight="6dp"/>
 
                 <com.shunlian.app.widget.MyTextView

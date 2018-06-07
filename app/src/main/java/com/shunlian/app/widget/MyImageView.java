@@ -2,6 +2,7 @@ package com.shunlian.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -122,6 +123,16 @@ public class MyImageView extends ImageView {
                 setMeasuredDimension(realWH[0],realWH[1]);
             }
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        try {
+            super.onDraw(canvas);
+        }catch (RuntimeException e){
+        }catch (OutOfMemoryError error){
+        }catch (Exception e){
+        }catch (Error e){}
     }
 
     /**
