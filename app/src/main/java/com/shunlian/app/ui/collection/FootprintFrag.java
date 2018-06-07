@@ -326,6 +326,10 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                 }
                 markDataList.add(markData);
             }
+        } else {
+            if (page == 1) {
+                ((MyCollectionAct) baseActivity).recoveryManage(this);
+            }
         }
 
         if (footprintAdapter == null) {
@@ -349,8 +353,13 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
             }
         }
 
-        footprintAdapter.initData(markDataList, dateInfos);
-        footprintAdapter.notifyDataSetChanged();
+        if (markDataList.size() == 0) {
+            printPresenter.initPage();
+            printPresenter.getMarklist(String.valueOf(calendarView.getCurYear()), String.valueOf(calendarView.getCurMonth()), false);
+        } else {
+            footprintAdapter.initData(markDataList, dateInfos);
+            footprintAdapter.notifyDataSetChanged();
+        }
         Common.staticToast(msg);
     }
 
