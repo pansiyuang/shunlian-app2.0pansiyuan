@@ -116,6 +116,7 @@
         <!--其他-->
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_private"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp">

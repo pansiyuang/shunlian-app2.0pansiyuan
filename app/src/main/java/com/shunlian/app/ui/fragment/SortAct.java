@@ -171,7 +171,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 GoodsSearchParam param = new GoodsSearchParam();
                 param.cid = itemList.g_cid;
                 param.attr_data = itemList.attrs;
-                param.keyword = itemList.name;
+                param.keyword = itemList.keyword;
                 CategoryAct.startAct(this, param);
             }
         });

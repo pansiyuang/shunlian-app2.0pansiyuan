@@ -77,8 +77,12 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
 
         if (!isEmpty(currentOrder)) {
             orderLogisticsPresenter = new OrderLogisticsPresenter(this, this);
-            orderLogisticsPresenter.orderLogistics(currentOrder);
+            orderLogisticsPresenter.orderLogistics(true, currentOrder);
         }
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recycler_order_logistics.setLayoutManager(linearLayoutManager);
+        recycler_order_logistics.setNestedScrollingEnabled(false);
     }
 
     @OnClick(R.id.rl_title_more)
@@ -119,18 +123,21 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
     }
 
     @Override
-    public void getLogistics(OrderLogisticsEntity logisticsEntity) {
+    public void getLogistics(OrderLogisticsEntity logisticsEntity, int page, int totalPage) {
         if (logisticsEntity == null) {
             return;
         }
         if (!isEmpty(logisticsEntity.traces)) {
             List<OrderLogisticsEntity.Trace> traces = logisticsEntity.traces;
             Collections.reverse(traces);
-            traceAdapter = new TraceAdapter(this, false, traces, logisticsEntity);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            recycler_order_logistics.setLayoutManager(linearLayoutManager);
-            recycler_order_logistics.setNestedScrollingEnabled(false);
-            recycler_order_logistics.setAdapter(traceAdapter);
+
+            if (traceAdapter == null) {
+                traceAdapter = new TraceAdapter(this, traces, logisticsEntity);
+                traceAdapter.setPresenter(orderLogisticsPresenter);
+                recycler_order_logistics.setAdapter(traceAdapter);
+            } else {
+                traceAdapter.setData(logisticsEntity);
+            }
         }
     }
 

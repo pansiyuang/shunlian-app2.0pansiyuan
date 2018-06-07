@@ -57,10 +57,11 @@
             </LinearLayout>
 
             <!--头像-->
-            <com.shunlian.app.widget.circle.CircleImageView
+            <com.shunlian.app.widget.MyImageView
                 android:id="@+id/civ_head"
                 android:layout_width="58dp"
                 android:layout_height="58dp"
+                android:scaleType="fitXY"
                 android:layout_below="@+id/mtv_growth_value"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp" />
@@ -337,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:text="0.00"
                         android:textColor="@color/new_text"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
@@ -367,14 +368,14 @@
                         android:layout_height="wrap_content"
                         android:text="0.00"
                         android:textColor="@color/new_text"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="今日收益"
-                        android:textColor="#FF7646"
+                        android:textColor="@color/new_text"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -397,14 +398,14 @@
                         android:layout_height="wrap_content"
                         android:text="0.00"
                         android:textColor="@color/new_text"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <com.shunlian.app.widget.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="本月收益"
-                        android:textColor="#FF7646"
+                        android:textColor="@color/new_text"
                         android:textSize="14sp" />
 
                 </LinearLayout>

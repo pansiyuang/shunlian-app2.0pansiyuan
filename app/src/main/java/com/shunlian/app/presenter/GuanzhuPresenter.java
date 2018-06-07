@@ -32,7 +32,6 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     private List<GuanzhuEntity.DynamicListBean> mListBeans = new ArrayList<>();
     private GuanzhuAdapter adapter;
     private final String page_size = "10";
-    private int operationId = 0;
     private int currentPosition;
     private ShareInfoParam shareInfoParam;
 
@@ -117,7 +116,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             adapter = new GuanzhuAdapter(context, mListBeans);
             iView.setAdapter(adapter);
             adapter.setOnFollowShopListener((position)-> {
-                operationId = position;
+                currentPosition = position;
                 //是否关注，1是，0否
                 GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                 String store_id = dynamicListBean.store_id;
@@ -129,7 +128,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             });
 
             adapter.setOnItemClickListener((view,position)-> {
-                operationId = position;
+                currentPosition = position;
                 GuanzhuEntity.DynamicListBean dynamicListBean = mListBeans.get(position);
                 if (!"new_sales".equals(dynamicListBean.type)){//文章
                     ArticleH5Act.startAct(context, dynamicListBean.id, ArticleH5Act.MODE_SONIC);
@@ -147,7 +146,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
                     shareInfoParam.desc = dynamicListBean.full_title;
                     iView.share(shareInfoParam);
                 }else {//点赞
-                    if ("1".equals(dynamicListBean.has_like)){
+                    if ("1".equals(dynamicListBean.had_like)){
                         articleUnLike(dynamicListBean.id);
                     }else {
                         articleLike(dynamicListBean.id);
@@ -207,13 +206,13 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     关注结果，true是已关注，false未关注
      */
     private void followResult(boolean b) {
-        GuanzhuEntity.DynamicListBean dy = mListBeans.get(operationId);
+        GuanzhuEntity.DynamicListBean dy = mListBeans.get(currentPosition);
         if (b){
             dy.has_follow = "1";
         }else {
             dy.has_follow = "0";
         }
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemChanged(currentPosition,dy);
     }
 
 
@@ -269,8 +268,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     private void changeLikeNum(String new_likes) {
         GuanzhuEntity.DynamicListBean dy = mListBeans.get(currentPosition);
         dy.likes = new_likes;
-        dy.has_like = "1".equals(dy.has_like)?"0":"1";
-        adapter.notifyItemChanged(currentPosition);
+        dy.had_like = "1".equals(dy.had_like)?"0":"1";
+        adapter.notifyItemChanged(currentPosition,dy);
     }
 
     public void articleUnLike(final String articleId) {

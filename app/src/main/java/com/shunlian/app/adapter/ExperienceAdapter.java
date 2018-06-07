@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
@@ -74,18 +76,17 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_name.setText(memberInfo.nickname);
             holderView.tv_date.setText(experience.add_time);
             holderView.tv_content.setText(experience.content);
+            holderView.tv_content.setMaxLines(5);
+            holderView.tv_content.setEllipsize(TextUtils.TruncateAt.END);
 
             if (!isEmpty(experience.image)) {
                 GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
                 holderView.recycler_img.setAdapter(gridImageAdapter);
-                gridImageAdapter.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList<String>) experience.image;
-                        bigImgEntity.index = position;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
+                gridImageAdapter.setOnItemClickListener((view, position1) -> {
+                    BigImgEntity bigImgEntity = new BigImgEntity();
+                    bigImgEntity.itemList = (ArrayList<String>) experience.image;
+                    bigImgEntity.index = position1;
+                    LookBigImgAct.startAct(context, bigImgEntity);
                 });
             }
 
@@ -95,32 +96,27 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             } else {
                 GlideUtils.getInstance().loadImage(context, holderView.miv_icon, goods.thumb);
                 holderView.tv_title.setText(goods.title);
-                holderView.tv_price.setText(goods.price);
+                String price = getString(R.string.common_yuan) + goods.price;
+                holderView.tv_price.setText(price);
                 holderView.ll_goods.setVisibility(View.VISIBLE);
             }
 
             holderView.tv_comment_count.setText(experience.comment_num);
             holderView.tv_evaluate_count.setText(experience.praise_num);
 
-            holderView.tv_add_car.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isEmpty(goods.id)) {
-                        GoodsDetailAct.startAct(context, goods.id);
-                    }
+            holderView.tv_add_car.setOnClickListener(v -> {
+                if (!isEmpty(goods.id)) {
+                    GoodsDetailAct.startAct(context, goods.id);
                 }
             });
-            holderView.tv_evaluate_count.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isFastClick()) {
-                        return;
-                    }
-                    if ("1".equals(experience.praise)) {
-                        mFragment.toPraiseExperience(experience.id, "2");
-                    } else {
-                        mFragment.toPraiseExperience(experience.id, "1");
-                    }
+            holderView.tv_evaluate_count.setOnClickListener(v -> {
+                if (isFastClick()) {
+                    return;
+                }
+                if ("1".equals(experience.praise)) {
+                    mFragment.toPraiseExperience(experience.id, "2");
+                } else {
+                    mFragment.toPraiseExperience(experience.id, "1");
                 }
             });
             setPraiseImg(experience.praise, holderView.tv_evaluate_count);
