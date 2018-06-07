@@ -63,10 +63,6 @@ public class ExperiencePresenter extends BasePresenter<IExperienceView> {
                     iView.refreshFinish();
                 }
                 currentPage++;
-                if (currentPage == 1) {
-                    iView.refreshFinish();
-                }
-                currentPage++;
             }
 
             @Override

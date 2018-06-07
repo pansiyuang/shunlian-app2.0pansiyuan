@@ -88,11 +88,30 @@ public class MyReceiver extends BroadcastReceiver {
             String toPage = "";
             String id = "";
             String id1 = "";
+
+            //适用于IM推送相关
+            String to_shop_id = "";
+            String from_shop_id = "";
+            String from_nickname = "";
+            String from_type = "";
+            String to_type = "";
+            String from_user_id = "";
+            String to_user_id = "";
+
             JSONObject jsonObj = null;
             try {
                 jsonObj = new JSONObject(extVal);
-                toPage = jsonObj.getString("to_page");
-                id = jsonObj.getString("id");
+                toPage = jsonObj.optString("to_page");
+                id = jsonObj.optString("id");
+
+                to_shop_id = jsonObj.optString("to_shop_id");
+                from_shop_id = jsonObj.optString("from_shop_id");
+                from_nickname = jsonObj.optString("from_nickname");
+                from_type = jsonObj.optString("from_type");
+                to_type = jsonObj.optString("to_type");
+                from_user_id = jsonObj.optString("from_user_id");
+                to_user_id = jsonObj.optString("to_user_id");
+
                 Log.i("--toPage---", "--toPage---" + toPage);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -102,7 +121,17 @@ public class MyReceiver extends BroadcastReceiver {
                 Constant.JPUSH.add(toPage);
                 Constant.JPUSH.add(id);
                 Constant.JPUSH.add(id1);
-                Common.goGoGo(context, toPage, id, id1);
+
+                //适用于IM
+                Constant.JPUSH.add(to_shop_id);
+                Constant.JPUSH.add(from_shop_id);
+                Constant.JPUSH.add(from_nickname);
+                Constant.JPUSH.add(from_type);
+                Constant.JPUSH.add(to_type);
+                Constant.JPUSH.add(from_user_id);
+                Constant.JPUSH.add(to_user_id);
+
+                Common.goGoGo(context, toPage, id, id1, to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(context, "推送数据异常" + e.getMessage(), Toast.LENGTH_SHORT).show();

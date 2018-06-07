@@ -112,13 +112,12 @@ public class FootPrintPresenter extends BasePresenter<IFootPrintView> {
         });
     }
 
-    public void deleteBatch(String ids, String date) {
+    public void deleteBatch(String ids) {
         if (Common.loginPrompt()) {
             return;
         }
         Map<String, String> map = new HashMap<>();
         map.put("ids", ids);
-        map.put("date", date);
         sortAndMD5(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().deleteBatch(map);
         getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {

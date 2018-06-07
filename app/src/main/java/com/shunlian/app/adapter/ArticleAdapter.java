@@ -312,7 +312,6 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recycler_change.setLayoutManager(manager);
             recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
-            miv_small_icon.setWHProportion(215, 190);
         }
 
         @Override

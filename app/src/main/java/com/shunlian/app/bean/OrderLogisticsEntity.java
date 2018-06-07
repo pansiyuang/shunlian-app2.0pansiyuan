@@ -33,6 +33,10 @@ public class OrderLogisticsEntity {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class History {
+        public int total_page;
+        public int count;
+        public int page;
+        public int page_size;
         public List<MarkInfo> mark_info;
         public List<FootMark> mark_data;
     }

@@ -58,7 +58,10 @@ import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.PlusDataEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.ui.MessageActivity;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
@@ -184,6 +187,8 @@ public class Common {
             case "plusdetail":
             case "pulsdetail":
                 return "PlusGifDetailAct";
+            case "chat":
+                return "ChatActivity";
             default:
                 return "";
         }
@@ -266,7 +271,7 @@ public class Common {
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
                 } else {
-                    MyProfitAct.startAct(context,false);
+                    MyProfitAct.startAct(context, false);
                 }
                 break;
             case "myvoucherlist":
@@ -285,7 +290,7 @@ public class Common {
                 break;
             case "plusdetail":
             case "pulsdetail":
-                PlusGifDetailAct.startAct(context,params[0]);
+                PlusGifDetailAct.startAct(context, params[0]);
                 break;
             case "login":
                 LoginAct.startAct(context);
@@ -345,6 +350,31 @@ public class Common {
                 break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);
+                break;
+            case "chat"://聊天
+
+//                Common.goGoGo(context, toPage, id, id1, to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
+
+                if (TextUtils.isEmpty(token)) {
+                    LoginAct.startAct(context);
+                } else {
+
+                    ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+
+                    if (!"0".equals(params[2])) {//赋值shopId
+                        chatMember.shop_id = params[2];
+                    } else if (!"0".equals(params[3])) {
+                        chatMember.shop_id = params[3];
+                    }
+                    chatMember.nickname = params[4];
+                    chatMember.type = params[5];
+                    chatMember.m_user_id = params[7];
+
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra("chatMember", chatMember);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
                 break;
             default://首页
                 MainActivity.startAct(context, "");
@@ -441,14 +471,14 @@ public class Common {
                     //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
                 }
             }
-            if (location==null)
+            if (location == null)
                 locateDialog(activity);
             return location;
         } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             LogUtil.augusLogW("opop2222");
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // 通过NETWORK获取位置
             //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            if (location==null)
+            if (location == null)
                 locateDialog(activity);
             return location;
         } else {
@@ -467,9 +497,9 @@ public class Common {
             public void onClick(View view) {
                 try {
                     Uri packageURI = Uri.parse("package:" + "com.shunlian.app");
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
                     activity.startActivity(intent);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
                 }
                 promptDialog.dismiss();
@@ -889,7 +919,7 @@ public class Common {
         return resid;
     }
 
-    public static void copyText(Context context,String shareLink,String shareDesc) {
+    public static void copyText(Context context, String shareLink, String shareDesc) {
         StringBuffer sb = new StringBuffer();
         sb.setLength(0);
 //        if (!TextUtils.isEmpty(shareTitle)) {
@@ -906,7 +936,7 @@ public class Common {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
         staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
-        Constant.SHARE_LINK=sb.toString();
+        Constant.SHARE_LINK = sb.toString();
     }
 
     public static boolean isWeixinAvilible(Context context) {
@@ -923,7 +953,7 @@ public class Common {
         return false;
     }
 
-    public static void openWeiXin(Context context,String type,String id) {
+    public static void openWeiXin(Context context, String type, String id) {
         if (isWeixinAvilible(context)) {
             try {
                 Intent intent = new Intent();
@@ -934,9 +964,9 @@ public class Common {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setComponent(cmp);
                 context.startActivity(intent);
-                if (!TextUtils.isEmpty(type)){
-                    WXEntryPresenter wxEntryPresenter=new WXEntryPresenter(context,null);
-                    wxEntryPresenter.notifyShare(type,id);
+                if (!TextUtils.isEmpty(type)) {
+                    WXEntryPresenter wxEntryPresenter = new WXEntryPresenter(context, null);
+                    wxEntryPresenter.notifyShare(type, id);
                 }
             } catch (Exception e) {
                 staticToast("打开微信失败，请重试");
@@ -972,32 +1002,33 @@ public class Common {
 
     /**
      * 判断昵称是否合法
+     *
      * @param nickname 最多12个汉字 24个字母
      * @return 昵称过长返回false
      */
-    public static boolean isNicknameLegitimate(String nickname){
-        if (TextUtils.isEmpty(nickname)){
+    public static boolean isNicknameLegitimate(String nickname) {
+        if (TextUtils.isEmpty(nickname)) {
             return true;
         }
-        String Reg="^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
+        String Reg = "^[\u4e00-\u9fa5]{1}$";  //汉字的正规表达式
         int charLength = 0;
         String[] split = nickname.split("");
         for (int i = 0; i < split.length; i++) {
-            if (Pattern.matches(Reg,split[i])){
+            if (Pattern.matches(Reg, split[i])) {
                 charLength += 2;
-            }else {
+            } else {
                 charLength++;
             }
         }
-        if (charLength > 25){
+        if (charLength > 25) {
             Common.staticToast(getResources().getString(R.string.RegisterTwoAct_ncszgc));
             return false;
-        }else {
+        } else {
             return true;
         }
     }
 
-    public static void urlToPage(Context context,String url){
+    public static void urlToPage(Context context, String url) {
         //LogUtil.httpLogW("链接:" + url);
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
@@ -1048,9 +1079,10 @@ public class Common {
 
     /**
      * 解析剪切板内容
+     *
      * @param context
      */
-    public static void parseClipboard(Context context){
+    public static void parseClipboard(Context context) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (!TextUtils.isEmpty(cm.getText()) && cm.getText().toString().contains("slmall://")) {
             Common.urlToPage(context, cm.getText().toString());
@@ -1058,4 +1090,16 @@ public class Common {
         }
     }
 
+    /**
+     * 判断是否是plus会员
+     *
+     * @return
+     */
+
+    public static boolean isPlus() {
+        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
+        if (!TextUtils.isEmpty(plus) && Integer.parseInt(plus) > 0)
+            return true;
+        return false;
+    }
 }

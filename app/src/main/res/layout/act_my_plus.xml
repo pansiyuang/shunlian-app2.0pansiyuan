@@ -34,7 +34,7 @@
                     android:id="@+id/miv_bg_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@mipmap/img_plus_beijing" />
 
                 <com.shunlian.app.widget.MyImageView

@@ -143,6 +143,9 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.ll_close_tab1)
     LinearLayout ll_close_tab1;
 
+    @BindView(R.id.miv_bg_top)
+    MyImageView miv_bg_top;
+
     QuickActions quick_actions;
     private Unbinder bind;
     private int screenWidth;
@@ -183,8 +186,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     public void getPlusData() {
         if (mPresenter != null) {
             mPresenter.getPlusData(tabOneMode, false);
-            showTabTwoButton(1);
-            invitationRecordFrag.getInviteHistory();
+            showTabTwoButton(2);
+            if (invitationRecordFrag != null) {
+                invitationRecordFrag.getInviteHistory();
+            }
         }
     }
 
@@ -217,6 +222,10 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) miv_bg_top.getLayoutParams();
+        layoutParams.height = TransformUtil.countRealHeight(getActivity(), 390);
+        miv_bg_top.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -234,8 +243,8 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void onResume() {
         beginToast();
-        if (!isHidden()&&!isclick){
-            isclick=false;
+        if (!isHidden() && !isclick) {
+            isclick = false;
             getPlusData();
         }
         super.onResume();
@@ -419,7 +428,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         seekbar_plus.setOnTouchListener((view, motionEvent) -> true);
         invitationsUrl = baseInfo.invite_strategy;
 
-        if (baseInfo.role<1){
+        if (baseInfo.role < 1) {
             SharedPrefUtil.saveSharedPrfString("plus_role", String.valueOf(baseInfo.role));
             H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
         }

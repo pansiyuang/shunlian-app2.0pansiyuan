@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onResume() {
-        if (isPlus()){
+        if (Common.isPlus()){
             tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
         }else {
             tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
@@ -251,7 +251,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         mainPageClick();
                         break;
                     case R.id.ll_tab_sort:
-                        if (isPlus()) {
+                        if (Common.isPlus()) {
                             myPlusClick();
                         } else {
                             H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
@@ -269,13 +269,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 }
             }
         }, 300);
-    }
-
-    public boolean isPlus() {
-        String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
-        if (!isEmpty(plus) && Integer.parseInt(plus) > 0)
-            return true;
-        return false;
     }
 
     public void mainPageClick() {
@@ -451,7 +444,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 mainPageClick();
                 break;
             case "myplus":
-                if (isPlus()){
+                if (Common.isPlus()){
                     myPlusClick();
                 }else {
                     H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
