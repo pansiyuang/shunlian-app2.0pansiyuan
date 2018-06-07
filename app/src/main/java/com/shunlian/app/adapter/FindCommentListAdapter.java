@@ -255,6 +255,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
             miv_zan.setOnClickListener(this);
             int i = TransformUtil.dip2px(context, 20);
             TransformUtil.expandViewTouchDelegate(miv_zan,i,i,i,i);
+            TransformUtil.expandViewTouchDelegate(mtv_zan_count,i,i,i,i);
         }
 
         @Override

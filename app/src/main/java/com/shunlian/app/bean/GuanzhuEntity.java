@@ -24,7 +24,7 @@ public class GuanzhuEntity {
         public String store_logo;
         public String store_name;
         public String has_follow;
-        public String has_like;
+        public String had_like;
         public String is_recommend;
         public String id;
         public String title;

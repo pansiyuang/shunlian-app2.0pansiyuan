@@ -1,10 +1,8 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
-import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.FindCommentListAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -53,7 +51,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         isLoading = false;
         mItemComments.clear();
         if (adapter != null){
-//            adapter.unbind();
+            //adapter.unbind();
             adapter = null;
             mItemComments = null;
         }
@@ -116,37 +114,26 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             adapter = new FindCommentListAdapter(context, mItemComments,
                     hotCommentCount,comment_type);
             iView.setAdapter(adapter);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    onRefresh();
-                }
-            });
+            adapter.setOnReloadListener(() -> onRefresh());
 
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    position = adapter.getPosition(position);
-                    currentTouchItem = position;
-                    itemComment = mItemComments.get(position);
-                    if ("1".equals(itemComment.delete_enable)) {//删除
-                        iView.delPrompt();
-                    } else {
-                        if (getIsAllType())
-                            iView.showorhideKeyboard("@".concat(itemComment.nickname));
-                    }
+            adapter.setOnItemClickListener((view, position) -> {
+                position = adapter.getPosition(position);
+                currentTouchItem = position;
+                itemComment = mItemComments.get(position);
+                if ("1".equals(itemComment.delete_enable)) {//删除
+                    iView.delPrompt();
+                } else {
+                    if (getIsAllType())
+                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
                 }
             });
 
 
-            adapter.setPointFabulousListener(new FindCommentListAdapter.OnPointFabulousListener() {
-                @Override
-                public void onPointFabulous(int position) {
-                    position = adapter.getPosition(position);
-                    currentTouchItem = position;
-                    FindCommentListEntity.ItemComment itemComment = mItemComments.get(position);
-                    pointFabulous(itemComment.item_id, itemComment.had_like);
-                }
+            adapter.setPointFabulousListener(position -> {
+                position = adapter.getPosition(position);
+                currentTouchItem = position;
+                FindCommentListEntity.ItemComment itemComment = mItemComments.get(position);
+                pointFabulous(itemComment.item_id, itemComment.had_like);
             });
         } else {
             adapter.notifyDataSetChanged();

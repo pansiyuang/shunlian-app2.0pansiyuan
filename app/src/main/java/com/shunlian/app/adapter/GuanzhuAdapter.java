@@ -54,6 +54,40 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
     }
 
     @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (isEmpty(payloads)){
+            super.onBindViewHolder(holder, position, payloads);
+        }else {
+            if (holder instanceof GuanzhuHolder) {
+                GuanzhuHolder mHolder = (GuanzhuHolder) holder;
+                GuanzhuEntity.DynamicListBean dy = (GuanzhuEntity.DynamicListBean) payloads.get(0);
+
+                //点赞
+                if ("1".equals(dy.had_like)){//点赞
+                    mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
+                }else {
+                    mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_n);
+                    mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
+                }
+                mHolder.mtv_zan_count.setText(dy.likes);
+
+                //关注
+                GradientDrawable gradientDrawable = (GradientDrawable) mHolder.mtv_follow.getBackground();
+                if ("1".equals(dy.has_follow)){
+                    gradientDrawable.setColor(getColor(R.color.white));
+                    mHolder.mtv_follow.setTextColor(getColor(R.color.pink_color));
+                    mHolder.mtv_follow.setText(getString(R.string.discover_alear_follow));
+                }else {
+                    gradientDrawable.setColor(getColor(R.color.pink_color));
+                    mHolder.mtv_follow.setTextColor(getColor(R.color.white));
+                    mHolder.mtv_follow.setText(getString(R.string.discover_follow));
+                }
+            }
+        }
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GuanzhuHolder) {
             GuanzhuEntity.DynamicListBean dy = lists.get(position);
@@ -75,7 +109,7 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
                 mHolder.mtv_fx_count.setText(dy.forwards);
                 mHolder.mtv_pl_count.setText(dy.comments);
                 mHolder.mtv_zan_count.setText(dy.likes);
-                if ("1".equals(dy.has_like)){//点赞
+                if ("1".equals(dy.had_like)){//点赞
                     mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
                     mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
                 }else {

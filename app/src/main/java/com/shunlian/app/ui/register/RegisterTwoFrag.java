@@ -298,21 +298,26 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         et_pwd.setText("");
         et_rpwd.setText("");
         et_nickname.setText("");
+        countDown();
     }
 
     private void countDown() {
-        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-            @Override
-            public void onTick(long l) {
-                tv_time.setText((int) Math.floor(l / 1000) + "s");
-                tv_time.setEnabled(false);
-            }
-            @Override
-            public void onFinish() {
-                tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
-                tv_time.setEnabled(true);
-            }
-        };
+        if (countDownTimer == null) {
+            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+                @Override
+                public void onTick(long l) {
+                    tv_time.setText((int) Math.floor(l / 1000) + "s");
+                    tv_time.setEnabled(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    tv_time.setText(getString(R.string.LoginPswFrg_cxhq));
+                    tv_time.setEnabled(true);
+                }
+            };
+        }
+        countDownTimer.cancel();
         countDownTimer.start();
     }
 

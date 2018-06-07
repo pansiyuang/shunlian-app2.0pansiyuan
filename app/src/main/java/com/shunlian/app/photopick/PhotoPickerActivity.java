@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -26,13 +26,11 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -193,6 +191,9 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
         mGridView = (GridView) findViewById(R.id.grid);
         mGridView.setNumColumns(getNumColnums());
         mPopupAnchorView = findViewById(R.id.photo_picker_footer);
+
+        GradientDrawable sendBG = (GradientDrawable) tv_send.getBackground();
+        sendBG.setColor(getColorResouce(R.color.pink_color));
     }
 
     @Override
