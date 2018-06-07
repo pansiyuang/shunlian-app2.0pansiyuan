@@ -36,6 +36,7 @@ import com.shunlian.app.ui.sale_rank.SaleRankAct;
 import com.shunlian.app.ui.setting.SettingAct;
 import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
@@ -394,6 +395,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity=personalcenterEntity;
+        if (!isEmpty(personalcenterEntity.balance)&&Float.parseFloat(personalcenterEntity.balance)>0){
+            mllayout_yue.setVisibility(View.VISIBLE);
+        }else {
+            mllayout_yue.setVisibility(View.GONE);
+        }
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
         changeState();
         managerUrl = personalcenterEntity.son_manage_url;
@@ -717,13 +723,14 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.mllayout_yue:
+                Constant.ISBALANCE=true;
                 BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.mllayout_youhuiquan:
                 CouponListAct.startAct(baseActivity);
                 break;
             case R.id.mllayout_dongli:
-                MyProfitAct.startAct(baseActivity);
+                MyProfitAct.startAct(baseActivity,false);
                 break;
             case R.id.mllayout_xiaoshou:
                 SaleDataAct.startAct(baseActivity);

@@ -11,6 +11,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmountDetailEntity {
     public List<Content> list;
+    public String amount_label;
+    public String amount;
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Content {
         public String name;

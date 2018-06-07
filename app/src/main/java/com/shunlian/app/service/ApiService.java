@@ -1541,7 +1541,7 @@ public interface ApiService {
      * @return
      */
     @GET("member/myprofit/withdrawProfit")
-    Call<BaseEntity<EmptyEntity>> withdrawProfit(@QueryMap Map<String, String> map);
+    Call<BaseEntity<CommonEntity>> withdrawProfit(@QueryMap Map<String, String> map);
 
     /**
      * 预估收益  详情订单记录
@@ -1643,12 +1643,29 @@ public interface ApiService {
     Call<BaseEntity<BalanceDetailEntity>> balanceTransactionList(@Body RequestBody body);
 
     /**
+     * 我的收益提现明细
+     *
+     * @return
+     */
+    @POST("member/myprofit/withdrawList")
+    Call<BaseEntity<WithdrawListEntity>> withdrawList(@Body RequestBody body);
+
+    /**
+     * 我的收益提现详情
+     *
+     * @return
+     */
+    @POST("member/myprofit/withdrawLogDetail")
+    Call<BaseEntity<AmountDetailEntity>> withdrawLogDetail(@Body RequestBody body);
+
+    /**
      * 提现到支付宝
      *
      * @return
      */
     @POST("balance/withdraw")
     Call<BaseEntity<CommonEntity>> balanceWithdraw(@Body RequestBody body);
+
 
     /**
      * 验证短信验证码
@@ -1714,6 +1731,14 @@ public interface ApiService {
      */
     @GET("balance/info")
     Call<BaseEntity<BalanceInfoEntity>> balanceInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 收益余额详情
+     *
+     * @return
+     */
+    @GET("member/myprofit/balanceDetail")
+    Call<BaseEntity<BalanceInfoEntity>> balanceDetail(@QueryMap Map<String, String> map);
 
     /**
      * 余额明细详情

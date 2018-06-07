@@ -37,7 +37,8 @@
             android:padding="10dp"
             android:text="@string/balance_yuemingxi"
             android:textColor="@color/new_text"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"
@@ -52,6 +53,7 @@
         android:background="@mipmap/bg_balance_balance">
 
         <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_keyong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

@@ -11,9 +11,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IBalancePaySetOne;
 import com.shunlian.app.widget.MyTextView;
 
@@ -39,9 +41,11 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
     private String code;
 
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,boolean isPaySet,boolean isAli) {
         Intent intent = new Intent(context, BalancePaySetOneAct.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("isPaySet",isPaySet);
+        intent.putExtra("isAli",isAli);
         context.startActivity(intent);
     }
 
@@ -111,11 +115,16 @@ public class BalancePaySetOneAct extends BaseActivity implements View.OnClickLis
 
     @Override
     public void nextCall(String key) {
-        BalancePaySetTwoAct.startAct(this, "", "set", key, false, false);
+        BalancePaySetTwoAct.startAct(this, "", "set", key, getIntent().getBooleanExtra("isPaySet",false),getIntent().getBooleanExtra("isAli",false));
     }
 
     @Override
     public void bindAlipayCall(String account_number) {
+
+    }
+
+    @Override
+    public void setApiData(BalanceInfoEntity data) {
 
     }
 
