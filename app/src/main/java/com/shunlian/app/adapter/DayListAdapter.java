@@ -102,18 +102,9 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.view_title.setVisibility(View.GONE);
             }
             GradientDrawable copyBackground = (GradientDrawable) oneHolder.mllayout_remind.getBackground();
-            if ("1".equals(data.remind_status)) {
-                oneHolder.isRemind = true;
-                oneHolder.miv_clock.setVisibility(View.GONE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
-                copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
-            } else {
-                oneHolder.isRemind = false;
-                oneHolder.miv_clock.setVisibility(View.VISIBLE);
-                oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
-            }
             if ("1".equals(isStart)) {
                 //设置圆角背景
+                oneHolder.miv_clock.setVisibility(View.GONE);
                 oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
                 copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
                 oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
@@ -129,11 +120,23 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 });
                 oneHolder.mtv_number.setVisibility(View.INVISIBLE);
             } else {
+                if ("1".equals(data.remind_status)) {
+                    oneHolder.isRemind = true;
+                    oneHolder.miv_clock.setVisibility(View.GONE);
+                    oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
+                    copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
+                } else {
+                    oneHolder.isRemind = false;
+                    oneHolder.miv_clock.setVisibility(View.VISIBLE);
+                    oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
+                    copyBackground.setColor(getColor(R.color.value_2096F2));//设置填充色
+                }
                 oneHolder.mtv_priceA.setTextColor(getColor(R.color.value_2096F2));
-                copyBackground.setColor(getColor(R.color.value_2096F2));//设置填充色
                 oneHolder.seekbar_grow.setVisibility(View.GONE);
-                oneHolder.mtv_number.setVisibility(View.VISIBLE);
-                oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+                if (!isEmpty(data.remind_count)&&Float.parseFloat(data.remind_count)>0){
+                    oneHolder.mtv_number.setVisibility(View.VISIBLE);
+                    oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+                }
             }
             GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
         }

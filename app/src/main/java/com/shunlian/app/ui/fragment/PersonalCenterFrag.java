@@ -458,7 +458,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                return true;
 //            }
 //        });
-        switch (personalcenterEntity.level) {
+        switch (personalcenterEntity.my_rank_code) {
             case "up":
                 miv_equal.setImageResource(R.mipmap.icon_personalcenter_shangjiantou);
                 SpannableStringBuilder upBuilder = Common.changeColor(personalcenterEntity.my_rank_label + personalcenterEntity.my_rank_info, personalcenterEntity.my_rank_info, getColorResouce(R.color.value_01C269));
