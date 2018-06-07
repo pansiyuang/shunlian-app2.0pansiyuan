@@ -20,7 +20,6 @@ public class ExchangDetailEntity {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ExperienceInfo{
         public String id;
-        public String member_id;
         public String content;
         public String goods_id;
         public String praise_num;
@@ -28,12 +27,10 @@ public class ExchangDetailEntity {
         public String check_comment;
         public String status;
         public String remark;
+        public MemberInfo member_info;
         public String had_like;
         public String add_time;
         public GoodsBean goods;
-        public String nickname;
-        public String avatar;
-        public String level;
         public List<String> image;
 
     }
@@ -46,4 +43,11 @@ public class ExchangDetailEntity {
         public String price;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class MemberInfo {
+        public String member_id;
+        public String nickname;
+        public String avatar;
+        public String level;
+    }
 }

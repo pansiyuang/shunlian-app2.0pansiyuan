@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -157,20 +156,12 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
     public void delPrompt() {
         final PromptDialog dialog = new PromptDialog(this);
         dialog.setSureAndCancleListener(getStringResouce(R.string.are_you_sure_del_comment),
-                getStringResouce(R.string.confirm), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (presenter != null){
-                            presenter.delComment();
-                        }
-                        dialog.dismiss();
+                getStringResouce(R.string.confirm), v -> {
+                    if (presenter != null){
+                        presenter.delComment();
                     }
-                }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                }).show();
+                    dialog.dismiss();
+                }, getStringResouce(R.string.errcode_cancel), v -> dialog.dismiss()).show();
     }
 
     private boolean isSoftShowing() {
