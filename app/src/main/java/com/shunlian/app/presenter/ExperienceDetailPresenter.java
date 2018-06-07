@@ -119,7 +119,8 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
 
     private void handleData() {
         if (adapter == null) {
-            adapter = new ExperienceDetailAdapter(context, mExperienceInfo, mCommentLists);
+            adapter = new ExperienceDetailAdapter(context,isEmpty(mCommentLists)?false:true,
+                    mExperienceInfo, mCommentLists);
             iView.setAdapter(adapter);
             adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 String delete_enable = "0";
@@ -133,21 +134,17 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                             iView.delPrompt();
                         } else {
                             if (getIsAllType())
-                                iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                                iView.showorhideKeyboard("@"+itemComment.nickname);
                         }
                     }else if (position == 0){
-                        iView.showorhideKeyboard("@".concat(mExperienceInfo.nickname));
+                        ExchangDetailEntity.MemberInfo member_info = mExperienceInfo.member_info;
+                        if (member_info != null)
+                            iView.showorhideKeyboard("@"+member_info.nickname);
                     }
-
                 }
             });
 
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    onRefresh();
-                }
-            });
+            adapter.setOnReloadListener(() -> onRefresh());
         }else {
             adapter.notifyDataSetChanged();
         }
@@ -177,7 +174,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                 super.onSuccess(entity);
                 mExperienceInfo.had_like = "1".equals(mExperienceInfo.had_like)?"0":"1";
                 mExperienceInfo.praise_num = entity.data.new_likes;
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemChanged(currentPosition,mExperienceInfo);
                 currentPosition = -1;
             }
 
@@ -216,7 +213,7 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
                                 .get(currentPosition - 2);
                         itemComment.had_like = "1".equals(itemComment.had_like)?"0":"1";
                         itemComment.likes = entity.data.new_likes;
-                        adapter.notifyDataSetChanged();
+                        adapter.notifyItemChanged(currentPosition,itemComment);
                         currentPosition = -1;
                     }
                 });
