@@ -44,7 +44,6 @@ import com.shunlian.app.view.IMyProfitView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,7 +65,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     @BindView(R.id.mtv_request_code)
     MyTextView mtv_request_code;
     @BindView(R.id.civ_head)
-    CircleImageView civ_head;
+    MyImageView civ_head;
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
     @BindView(R.id.mtv_already_extract_m)
@@ -312,17 +311,17 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     public void setUserInfo(MyProfitEntity.UserInfo userInfo) {
         mtv_growth_value.setText("成长值：" + userInfo.grow_num);
         mtv_request_code.setText("邀请码：" + userInfo.invite_code);
-        String plus_role_code = userInfo.plus_role_code;
+        int plus_role_code = Integer.parseInt(userInfo.plus_role_code);
         //plus_role_code = "3";
-        if ("1".equals(plus_role_code)) {//店主 1=plus店主，2=销售主管，3=销售经理
+        if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
             visible(miv_PhotoFrame, miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
             miv_grade.setImageResource(R.mipmap.img_plus_dianzhude);
-        } else if ("3".equals(plus_role_code)) {//经理
+        } else if (plus_role_code >= 3) {//经理
             visible(miv_PhotoFrame, miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
             miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
-        } else if ("2".equals(plus_role_code)) {//主管
+        } else if (plus_role_code == 2) {//主管
             visible(miv_PhotoFrame, miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
             miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
@@ -330,7 +329,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);
         }
-        GlideUtils.getInstance().loadImage(this, civ_head, userInfo.avatar);
+        GlideUtils.getInstance().loadCircleImage(this, civ_head, userInfo.avatar);
         mtv_nickname.setText(userInfo.nickname);
     }
 

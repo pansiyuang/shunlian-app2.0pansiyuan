@@ -46,6 +46,7 @@
                     android:src="@mipmap/img_set_defaulthead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
                     app:iv_control_adapter="true"
                     app:iv_control_height="100"
                     app:iv_control_width="100"
