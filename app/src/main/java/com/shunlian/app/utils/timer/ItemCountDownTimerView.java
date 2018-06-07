@@ -7,7 +7,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -111,12 +110,14 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置边框宽
+     *
      * @return
      */
     protected abstract int getStrokeWidth();
 
     /**
      * 获取标签宽高
+     *
      * @return
      */
     protected abstract int[] getLabelWidthHeight();
@@ -138,6 +139,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间单位颜色
+     *
      * @return
      */
     protected abstract int getTimeUnitColor();
@@ -150,16 +152,33 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间单位padding
+     *
      * @return
      */
     protected abstract int[] getTimeUnitPadding();
 
     /**
+     * 设置时间字体大小
+     *
+     * @param padding
+     */
+    public void setTimeUnitPadding(int padding) {
+        int i = dip2px(padding);
+        if (getIsShowDay()) {
+            mTimeUnitDay.setPadding(i, i, i, i);
+        }
+        mTtimeUnitHour.setPadding(i, i, i, i);
+        mTimeUnitMin.setPadding(i, i, i, i);
+        mTimeUnitSec.setPadding(i, i, i, i);
+        requestLayout();
+    }
+
+    /**
      * 是否显示天
+     *
      * @return
      */
     protected abstract boolean getIsShowDay();
-
 
     private void init() {
         this.setOrientation(HORIZONTAL);// 设置布局排列方式
@@ -173,8 +192,8 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
      * 创建时、分、秒的标签
      */
     public void createView(int[] padding) {
-        if (!(padding != null && padding.length == 4)){
-            padding = new int[]{0,0,0,0};
+        if (!(padding != null && padding.length == 4)) {
+            padding = new int[]{0, 0, 0, 0};
         }
         if (getIsShowDay()) {
             mDayTextView = createLabel(padding[0], padding[1], padding[2], padding[3]);
@@ -216,16 +235,16 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
     private TextView createLabel(int left, int top, int right, int bottom) {
         TextView textView = new GradientTextView(mContext)
                 .setTextColor(getTextColor())
-                .setStrokeColor(getStrokeWidth(),getStrokeColor())
+                .setStrokeColor(getStrokeWidth(), getStrokeColor())
                 .setBackgroundColor(getBackgroundColor())
                 .setTextSize(getTextSize())
                 .setStrokeRadius(getCornerRadius())
                 .setTextWH(getLabelWidthHeight())
                 .build();
         textView.setPadding(dip2px(left), dip2px(top), dip2px(right), dip2px(bottom));
-        if (isTextBold()){
-            textView .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        }else {
+        if (isTextBold()) {
+            textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        } else {
             textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         }
         return textView;
@@ -239,20 +258,19 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
     private TextView createColon(String divide) {
         TextView textView = new TextView(mContext);
         int color = getTimeUnitColor();
-        if (color != 0){
+        if (color != 0) {
             textView.setTextColor(color);
         }
         textView.setTextSize(getTimeUnitSize());
         textView.setText(divide);
         int[] timeUnitPadding = getTimeUnitPadding();
-        if (!(timeUnitPadding != null && timeUnitPadding.length == 4)){
-            timeUnitPadding = new int[]{0,0,0,0};
+        if (!(timeUnitPadding != null && timeUnitPadding.length == 4)) {
+            timeUnitPadding = new int[]{0, 0, 0, 0};
         }
         textView.setPadding(dip2px(timeUnitPadding[0]), dip2px(timeUnitPadding[1]),
                 dip2px(timeUnitPadding[2]), dip2px(timeUnitPadding[3]));
         return textView;
     }
-
 
     /**
      * 创建倒计时
@@ -286,11 +304,11 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
         long totalHours = totalMinutes / 60;
         String hour = "";
         String day = "";
-        if (getIsShowDay()){
+        if (getIsShowDay()) {
             hour = (int) (totalHours % 24) + "";// 时
             long totalDays = totalHours / 24;
             day = (int) (totalDays % 100) + "";// 天
-        }else {
+        } else {
             hour = (int) (totalHours) + "";// 时
         }
         if (!empty(day) && day.length() == 1) {
@@ -305,16 +323,39 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
         if (second.length() == 1) {
             second = "0" + second;
         }
+
         if (!empty(day)) {
-            mDayTextView.setText(day);
+            if (!"00".equals(day)) {
+                mDayTextView.setText(day);
+                mDayTextView.setVisibility(VISIBLE);
+                mTimeUnitDay.setVisibility(VISIBLE);
+            } else {
+                mDayTextView.setVisibility(GONE);
+                mTimeUnitDay.setVisibility(GONE);
+            }
         }
-        mHourTextView.setText(hour);
-        mMinTextView.setText(minute);
+
+//        if (!"00".equals(hour)) {
+            mHourTextView.setText(hour);
+//            mHourTextView.setVisibility(VISIBLE);
+//            mTtimeUnitHour.setVisibility(VISIBLE);
+//        } else {
+//            mHourTextView.setVisibility(GONE);
+//            mTtimeUnitHour.setVisibility(GONE);
+//        }
+//        if (!"00".equals(minute)) {
+            mMinTextView.setText(minute);
+//            mMinTextView.setVisibility(VISIBLE);
+//            mTimeUnitMin.setVisibility(VISIBLE);
+//        } else {
+//            mMinTextView.setVisibility(GONE);
+//            mTimeUnitMin.setVisibility(GONE);
+//        }
         mSecondTextView.setText(second);
         boolean isDay = false;
-        if (getIsShowDay()){
+        if (getIsShowDay()) {
             isDay = "00".equals(day);
-        }else {
+        } else {
             isDay = true;
         }
         if (isDay && "00".equals(hour) && "00".equals(minute) && "01".equals(second)) {
@@ -351,10 +392,11 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间背景色
+     *
      * @param color
      */
-    public void setLabelBackgroundColor(int color){
-        if (getIsShowDay()){
+    public void setLabelBackgroundColor(int color) {
+        if (getIsShowDay()) {
             GradientDrawable backgroundDay = (GradientDrawable) mDayTextView.getBackground();
             backgroundDay.setColor(color);
         }
@@ -369,6 +411,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间颜色
+     *
      * @param color
      */
     public void setTimeTextColor(int color) {
@@ -383,9 +426,10 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间字体大小
+     *
      * @param size
      */
-    public void setTimeTextSize(int size){
+    public void setTimeTextSize(int size) {
         if (getIsShowDay()) {
             mDayTextView.setTextSize(size);
         }
@@ -397,10 +441,11 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间单位的字体颜色
+     *
      * @param color
      */
-    public void setTimeUnitTextColor(int color){
-        if (getIsShowDay()){
+    public void setTimeUnitTextColor(int color) {
+        if (getIsShowDay()) {
             mTimeUnitDay.setTextColor(color);
         }
         mTtimeUnitHour.setTextColor(color);
@@ -411,30 +456,16 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 设置时间字体大小
+     *
      * @param size
      */
-    public void setTimeUnitTextSize(int size){
+    public void setTimeUnitTextSize(int size) {
         if (getIsShowDay()) {
             mTimeUnitDay.setTextSize(size);
         }
         mTtimeUnitHour.setTextSize(size);
         mTimeUnitMin.setTextSize(size);
         mTimeUnitSec.setTextSize(size);
-        requestLayout();
-    }
-
-    /**
-     * 设置时间字体大小
-     * @param padding
-     */
-    public void setTimeUnitPadding(int padding){
-        int i = dip2px(padding);
-        if (getIsShowDay()) {
-            mTimeUnitDay.setPadding(i,i,i,i);
-        }
-        mTtimeUnitHour.setPadding(i,i,i,i);
-        mTimeUnitMin.setPadding(i,i,i,i);
-        mTimeUnitSec.setPadding(i,i,i,i);
         requestLayout();
     }
 
@@ -462,6 +493,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * dp-->px
+     *
      * @param dipValue
      * @return
      */
@@ -472,6 +504,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     /**
      * 是否为空
+     *
      * @param str
      * @return
      */

@@ -234,12 +234,14 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
             time = Integer.parseInt(orderdetailEntity.notice_status.surplus_time);
         if (time > 0) {
             downTime_order.cancelDownTimer();
-            downTime_order.setDownTime(time);
+            downTime_order.setDownTime(time+2);
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    downTime_order.cancelDownTimer();
-                    orderDetailPresenter.initApiData();
+                    if (downTime_order!=null&&orderDetailPresenter!=null){
+                        downTime_order.cancelDownTimer();
+                        orderDetailPresenter.initApiData();
+                    }
                 }
 
             });
@@ -656,6 +658,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onDestroy() {
+        downTime_order.cancelDownTimer();
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);

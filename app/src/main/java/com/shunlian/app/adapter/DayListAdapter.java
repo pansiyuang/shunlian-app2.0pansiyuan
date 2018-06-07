@@ -85,14 +85,16 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                     oneHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
                         @Override
                         public void onFinish() {
-                            oneHolder.isStartDownTime = false;
-                            if (context instanceof DayDayAct) {
-                                DayDayAct act = (DayDayAct) context;
-                                if (act.isFinishing()) {
-                                    oneHolder.ddp_downTime.cancelDownTimer();
-                                    return;
+                            if (oneHolder!=null){
+                                oneHolder.isStartDownTime = false;
+                                if (context instanceof DayDayAct) {
+                                    DayDayAct act = (DayDayAct) context;
+                                    if (act.isFinishing()) {
+                                        oneHolder.ddp_downTime.cancelDownTimer();
+                                        return;
+                                    }
+                                    act.minitData();
                                 }
-                                act.minitData();
                             }
                         }
                     });

@@ -58,7 +58,7 @@
     <string name="sort">分类</string>
     <string name="main_wodedian">我的店</string>
     <string name="main_shengjiplus">升级PLUS</string>
-    <string name="discover_center">发现中心</string>
+    <string name="discover_center">发现</string>
     <string name="shopping_car">购物车</string>
     <string name="person_center">个人中心</string>
     <string name="common_zhifubaohint">您还没有安装支付宝，请先安装~</string>
@@ -468,6 +468,7 @@
     <string name="day_set_remind">设置提醒成功</string>
     <string name="day_jiangzaikaiqiang">将在开抢前三分钟提醒您</string>
     <string name="day_cancel_remind">取消提醒成功</string>
+    <string name="day_haohuotaiduo">好货太多，还在准备中~</string>
     <item name="tag_day_menu_id" type="id" />
 
     <!--收藏-->
@@ -649,7 +650,7 @@
     <string name="balance_zhifubao">支付宝(%s)</string>
     <string name="balance_ninhaimeiyou">您还没有添加过支付宝~</string>
     <string name="balance_wodelicai">我的理财</string>
-    <string name="balance_tixiandao">提现到支付宝</string>
+    <string name="balance_tixiandao">支付宝账户</string>
     <string name="balance_shouzhiminxi">收支明细</string>
     <string name="balance_yuexiangqing">余额详情</string>
     <string name="balance_tixianmingxi">提现明细</string>
