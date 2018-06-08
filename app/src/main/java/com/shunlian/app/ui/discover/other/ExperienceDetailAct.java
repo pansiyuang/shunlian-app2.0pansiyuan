@@ -3,6 +3,7 @@ package com.shunlian.app.ui.discover.other;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -88,6 +89,8 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
         recy_view.addItemDecoration(new VerticalItemDecoration(space,
                 0,0,getColorResouce(R.color.white)));
 
+        GradientDrawable textBG = (GradientDrawable) met_text.getBackground();
+        textBG.setColor(getColorResouce(R.color.value_F2F6F9));
     }
 
     /**

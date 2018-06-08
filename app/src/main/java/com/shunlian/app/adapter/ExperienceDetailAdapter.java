@@ -187,10 +187,10 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     ExperienceDetailTitleHolder mHolder = (ExperienceDetailTitleHolder) holder;
                     Drawable drawable = null;
                     if ("1".equals(info.had_like)) {
-                        drawable = getDrawable(R.mipmap.icon_found_pinglun_zan_h);
+                        drawable = getDrawable(R.mipmap.icon_found_zan_h);
                         mHolder.tv_evaluate_count.setTextColor(getColor(R.color.pink_color));
                     } else {
-                        drawable = getDrawable(R.mipmap.icon_found_pinglun_zan_n);
+                        drawable = getDrawable(R.mipmap.icon_found_zan_n);
                         mHolder.tv_evaluate_count.setTextColor(getColor(R.color.share_text));
                     }
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -253,10 +253,10 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
 
             if ("1".equals(itemComment.had_like)) {
                 mHolder.mtv_zan_count.setTextColor(getColor(R.color.pink_color));
-                mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_h);
+                mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
             } else {
                 mHolder.mtv_zan_count.setTextColor(getColor(R.color.share_text));
-                mHolder.miv_zan.setImageResource(R.mipmap.img_pingjia_zan_n);
+                mHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_n);
             }
 
             List<FindCommentListEntity.ReplyList> reply_list = itemComment.reply_list;

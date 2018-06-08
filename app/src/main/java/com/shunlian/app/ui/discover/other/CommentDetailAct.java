@@ -2,7 +2,6 @@ package com.shunlian.app.ui.discover.other;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,7 +107,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
         mtv_toolbar_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
-        gradientDrawable.setColor(Color.parseColor("#F2F6F9"));
+        gradientDrawable.setColor(getColorResouce(R.color.value_F2F6F9));
 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);

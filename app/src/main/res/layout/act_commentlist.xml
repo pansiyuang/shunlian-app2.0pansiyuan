@@ -66,6 +66,8 @@
             android:minHeight="35dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:textColor="@color/new_text"
             android:textColorHint="@color/share_text"
             android:textSize="13sp" />
