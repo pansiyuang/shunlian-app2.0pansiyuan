@@ -583,8 +583,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     EightHolder eightHolder = (EightHolder) holder;
                     List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
                     if (eightHolder.firstCategoryMenuAdapter == null) {
-                        cateGoryFrag.cate_id = data.get(0).id;
-                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
+//                        cateGoryFrag.cate_id = data.get(0).id;
+//                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
                         eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
                         if (isFirst)
                             eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));

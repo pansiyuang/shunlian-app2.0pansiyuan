@@ -227,6 +227,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
                 }
 
             });
+            downTime_firsts.startDownTimer();
             hotPushAdapter=new HotPushAdapter(getBaseContext(),mData);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getBaseContext(), 2);
             rv_list.setLayoutManager(gridLayoutManager);
