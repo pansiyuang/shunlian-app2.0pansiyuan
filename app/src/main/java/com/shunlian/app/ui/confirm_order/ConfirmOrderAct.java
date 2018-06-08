@@ -111,8 +111,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                     if (firstPosition == 0){
                         gone(mtv_address);
                     }else {
-                        gone(mtv_address);
-//                        visible(mtv_address);
+                        visible(mtv_address);
                     }
                 }
             }

@@ -90,9 +90,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
             if (isEtIdEmpty()) {
                 return false;
             } else {
-                if (TextUtils.isEmpty(id)) {
-                    id = et_id.getText().toString();
-                }
+                id = et_id.getText().toString();
                 onePresenter.checkCode(id);
             }
             return false;
@@ -118,6 +116,8 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
                 return false;
             if (isEtPhoneEmpty())
                 return false;
+            id = et_id.getText().toString();
+            onePresenter.checkCode(id);
             return false;
         });
         et_code.addTextChangedListener(new SimpleTextWatcher() {
@@ -221,9 +221,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
             if (!isCheckMobile){
                 return;
             }
-            if (TextUtils.isEmpty(id)) {
-                id = et_id.getText().toString();
-            }
+            id = et_id.getText().toString();
             //Common.staticToast(smsCode);
             String phone = et_phone.getText().toString();
             String code = et_code.getText().toString();
@@ -231,7 +229,6 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
                     null,RegisterTwoFrag.TYPE_REGIST);
         } else {
             onePresenter.getCode();
-            et_code.setText("");
         }
     }
 
@@ -241,7 +238,8 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
         if (!isSuccess) {
             setEdittextFocusable(true, et_id);
         }else {
-            setEdittextFocusable(true, et_phone);
+            if (isEmpty(et_phone.getText()))
+                setEdittextFocusable(true, et_phone);
         }
     }
 
