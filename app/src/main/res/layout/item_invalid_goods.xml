@@ -2,8 +2,7 @@
 <com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_inva"
@@ -14,8 +13,7 @@
         android:textSize="14sp"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:paddingLeft="10dp"
-        />
+        android:paddingLeft="10dp"/>
 
     <View
         android:id="@+id/line"

@@ -467,7 +467,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             super(itemView);
             ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            layoutParams.width = TransformUtil.dip2px(context,41);
+            layoutParams.height = TransformUtil.dip2px(context,41);
             itemView.setLayoutParams(layoutParams);
         }
     }
