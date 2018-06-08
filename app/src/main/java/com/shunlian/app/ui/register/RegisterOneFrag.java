@@ -190,7 +190,6 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.miv_code:
                 onePresenter.getCode();
-                et_code.setText("");
                 break;
             case R.id.miv_close:
                 baseActivity.finish();
@@ -207,9 +206,10 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
 
     @Override
     public void setCode(byte[] bytes) {
-        if (bytes != null) {
+        if (bytes != null && miv_code != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             miv_code.setImageBitmap(bitmap);
+            et_code.setText("");
         } else {
             Common.staticToast(getString(R.string.RegisterOneAct_hqyzmsb));
         }
@@ -265,5 +265,14 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
         Common.hideKeyboard(et_phone);
         EventBus.getDefault().unregister(this);
         super.onDestroyView();
+    }
+
+    /**
+     * 刷新验证码
+     */
+    public void refreshCode() {
+        if (onePresenter != null){
+            onePresenter.getCode();
+        }
     }
 }

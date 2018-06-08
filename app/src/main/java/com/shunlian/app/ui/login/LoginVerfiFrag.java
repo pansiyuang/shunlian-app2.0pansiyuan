@@ -20,7 +20,7 @@ import com.shunlian.app.widget.ClearableEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.PhoneTextWatcher;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.shunlian.app.wxapi.WXEntryActivity;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -111,11 +111,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 }
                 break;
             case R.id.tv_wx_login:
-//                WXEntryActivity.startAct(baseActivity, "login",null);
-                final SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
-                wxapi.sendReq(req);
+                WXEntryActivity.startAct(baseActivity, "login",null);
                 baseActivity.finish();
                 break;
         }

@@ -126,6 +126,9 @@ public class RegisterAct extends BaseActivity {
     public void addRegisterOne(){
         isCanBack = false;
         switchContent(mRegisterFrag1);
+        if (mRegisterFrag1 instanceof RegisterOneFrag){
+            ((RegisterOneFrag)mRegisterFrag1).refreshCode();
+        }
     }
 
 
