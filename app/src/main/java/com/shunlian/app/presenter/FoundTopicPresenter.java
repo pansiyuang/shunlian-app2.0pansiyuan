@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.utils.Common;
@@ -68,6 +69,16 @@ public class FoundTopicPresenter extends BasePresenter<IFoundTopicView> {
                 super.onErrorCode(code, message);
             }
         });
+    }
+
+    public void msgRead(String type,String msg_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("type",type);
+        map.put("msg_id",msg_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().messageRead(getRequestBody(map));
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback<>());
     }
 
     @Override

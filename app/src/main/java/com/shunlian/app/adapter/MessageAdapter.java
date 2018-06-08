@@ -41,6 +41,11 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
         this.msgList = msgs;
     }
 
+    public void setMsgList(List<MessageListEntity.Msg> msgs) {
+        this.msgList = msgs;
+        notifyDataSetChanged();
+    }
+
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
         return null;

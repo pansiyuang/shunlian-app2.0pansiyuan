@@ -53,11 +53,11 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
                 viewHolder.tv_name.setText(getString(R.string.platform_message));
                 viewHolder.tv_official.setVisibility(View.GONE);
                 if (isLoad) {
-                    String custom_msg = Common.formatBadgeNumber(manager.getCustom_msg());
-                    if (isEmpty(custom_msg)) {
+                    String platform_msg = Common.formatBadgeNumber(manager.getPlatform_msg());
+                    if (isEmpty(platform_msg)) {
                         viewHolder.tv_count.setVisibility(View.GONE);
                     } else {
-                        viewHolder.tv_count.setText(custom_msg);
+                        viewHolder.tv_count.setText(platform_msg);
                         viewHolder.tv_count.setVisibility(View.VISIBLE);
                     }
                 }

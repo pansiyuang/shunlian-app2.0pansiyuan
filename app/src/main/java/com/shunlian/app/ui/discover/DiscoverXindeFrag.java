@@ -13,6 +13,7 @@ import com.shunlian.app.adapter.ExperienceAdapter;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.presenter.ExperiencePresenter;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;
@@ -133,7 +134,7 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
                 }
                 experience.praise = currentStatus;
                 experience.praise_num = String.valueOf(count);
-                mAdapter.notifyItemRangeChanged(0, experienceList.size());
+                mAdapter.notifyItemChanged(i, experience);
             }
         }
     }

@@ -34,8 +34,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9.5dp"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:textSize="12sp" />
+
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9.5dp"
+                android:orientation="horizontal">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/order_haisheng"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <com.shunlian.app.utils.timer.HourNoWhiteDownTimerView
+                    android:id="@+id/downTime_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </com.shunlian.app.widget.MyLinearLayout>
         </com.shunlian.app.widget.MyLinearLayout>
 
         <View
