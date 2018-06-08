@@ -24,7 +24,10 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.timer.HourNoWhiteDownTimerView;
+import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.view.IPlatformInterventionRequestView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
 
@@ -65,8 +68,15 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     @BindView(R.id.grid_imgs)
     GridView grid_imgs;
 
+    @BindView(R.id.mllayout_time)
+    MyLinearLayout mllayout_time;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.downTime_order)
+    HourNoWhiteDownTimerView downTime_order;
+
 
     public RefundDetailEntity.RefundDetail.Edit mEdit;
     private ReturnGoodsDialog dialog;
@@ -76,13 +86,13 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     private PlatformInterventionPresenter presenter;
     private String refundId;
     private String currentStatusId;
+    public RefundDetailEntity.RefundDetail refundDetail;
     private boolean isEdit;
     private int index;
 
-    public static void startAct(Context context, String refundId, RefundDetailEntity.RefundDetail.Edit edit, boolean isEdit) {
+    public static void startAct(Context context, RefundDetailEntity.RefundDetail detail, boolean isEdit) {
         Intent intent = new Intent(context, PlatformInterventionRequestActivity.class);
-        intent.putExtra("edit", edit);
-        intent.putExtra("refundId", refundId);
+        intent.putExtra("refundDetail", detail);
         intent.putExtra("isEdit", isEdit);
         context.startActivity(intent);
     }
@@ -100,8 +110,9 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         tv_title.setText(getStringResouce(R.string.platform_intervention_request));
         rl_title_more.setVisibility(View.VISIBLE);
 
-        refundId = getIntent().getStringExtra("refundId");
-        mEdit = (RefundDetailEntity.RefundDetail.Edit) getIntent().getSerializableExtra("edit");
+        refundDetail = (RefundDetailEntity.RefundDetail) getIntent().getSerializableExtra("refundDetail");
+        mEdit = refundDetail.edit;
+        refundId = refundDetail.refund_id;
         isEdit = getIntent().getBooleanExtra("isEdit", false);
 
         mtv_time.setText(mEdit.time_desc);
@@ -129,6 +140,27 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         grid_imgs.setAdapter(singleImgAdapter);
 
         presenter = new PlatformInterventionPresenter(this, this);
+
+        int time = 0;
+        if (!TextUtils.isEmpty(refundDetail.rest_second))
+            time = Integer.parseInt(refundDetail.rest_second);
+        if (time > 0) {
+            downTime_order.cancelDownTimer();
+            downTime_order.setDownTime(time);
+            downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
+                @Override
+                public void onFinish() {
+                    downTime_order.cancelDownTimer();
+                }
+            });
+            downTime_order.startDownTimer();
+            mtv_time.setVisibility(View.GONE);
+            mllayout_time.setVisibility(View.VISIBLE);
+        } else {
+            mtv_time.setVisibility(View.VISIBLE);
+            mllayout_time.setVisibility(View.GONE);
+            mtv_time.setText(refundDetail.time_desc);
+        }
     }
 
     @Override
@@ -140,7 +172,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     }
 
     @OnClick(R.id.rl_title_more)
-    public void more(){
+    public void more() {
         visible(quick_actions);
         quick_actions.afterSale();
     }

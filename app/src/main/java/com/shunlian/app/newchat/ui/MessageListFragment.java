@@ -72,19 +72,20 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         mPresenter.getMessageList(true, "", "");
         msgs = new ArrayList<>();
         memberList = new ArrayList<>();
-
         manager = new LinearLayoutManager(getActivity());
+
+        mClient = EasyWebsocketClient.getInstance(getActivity());
+        if (mClient != null) {
+            mClient.addOnMessageReceiveListener(this);
+        }
+
+        initSystemMsg();
         mAdapter = new MessageAdapter(getActivity(), msgs, memberList);
         mAdapter.setDelMode(true);
         recycler_list.setLayoutManager(manager);
         recycler_list.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnStatusClickListener(this);
-
-        mClient = EasyWebsocketClient.getInstance(getActivity());
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
 
         statusDialog = new SwitchStatusDialog(getActivity()).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
@@ -105,31 +106,51 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         mPresenter.getMessageList(false, "", "");
     }
 
-    @Override
-    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
+    public void initSystemMsg() {
         msgs.clear();
-        if (systemMessageEntity.sysMsg != null) {
-            MessageListEntity.Msg msg = new MessageListEntity.Msg();
-            msg.type = "4";
-            msg.title = systemMessageEntity.sysMsg.title;
-            msgs.add(msg);
-        }
-        if (systemMessageEntity.discovery != null) {
-            MessageListEntity.Msg msg = new MessageListEntity.Msg();
-            msg.type = "5";
-            msg.title = systemMessageEntity.discovery.title;
-            msgs.add(msg);
-        }
+
+        //添加系统消息
+        MessageListEntity.Msg sysMsg = new MessageListEntity.Msg();
+        sysMsg.type = "4";
+        sysMsg.title = "系统通知";
+        msgs.add(sysMsg);
+
+        //添加头条消息
+        MessageListEntity.Msg topicMsg = new MessageListEntity.Msg();
+        topicMsg.type = "5";
+        topicMsg.title = "头条";
+        msgs.add(topicMsg);
+
         if (mClient.isBindAdmin()) { //平台客服
             MessageListEntity.Msg msg = new MessageListEntity.Msg();
             msg.type = "1";
             msgs.add(msg);
         }
+
         if (mClient.isBindSeller()) { //商家客服
             MessageListEntity.Msg msg = new MessageListEntity.Msg();
             msg.type = "2";
             msgs.add(msg);
         }
+    }
+
+    @Override
+    public void getSysMessage(SystemMessageEntity systemMessageEntity) {
+        if (systemMessageEntity == null) {
+            return;
+        }
+        for (int i = 0; i < msgs.size(); i++) {
+            if (systemMessageEntity.sysMsg != null && "4".equals(msgs.get(i).type)) {
+                msgs.get(i).title = systemMessageEntity.sysMsg.title;
+                msgs.get(i).date = systemMessageEntity.sysMsg.date;
+            }
+
+            if (systemMessageEntity.discovery != null && "5".equals(msgs.get(i).type)) {
+                msgs.get(i).title = systemMessageEntity.discovery.title;
+                msgs.get(i).date = systemMessageEntity.discovery.date;
+            }
+        }
+        mAdapter.setMsgList(msgs);
     }
 
     @Override

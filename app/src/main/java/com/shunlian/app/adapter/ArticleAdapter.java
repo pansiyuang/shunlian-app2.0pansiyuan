@@ -20,6 +20,7 @@ import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
@@ -109,7 +110,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
                 articleViewHolder.tv_small_title.setText(article.title);
                 articleViewHolder.tv_big_title.setText(article.title);
             }
-            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb);
+            GlideUtils.getInstance().loadOverrideImage(context, articleViewHolder.miv_small_icon, article.thumb, TransformUtil.dip2px(context, 107.5f), TransformUtil.dip2px(context, 95f));
             GlideUtils.getInstance().findFollowList(context, articleViewHolder.miv_big_icon, article.thumb);
             articleViewHolder.tv_share_count.setText(article.forwards);
             articleViewHolder.tv_comment_count.setText(article.comments);
@@ -179,10 +180,10 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
         for (int i = 0; i < lists.size(); i++) {
             if (articleId.equals(lists.get(i).id)) {
                 lists.get(i).had_like = hadLike;
+                notifyItemChanged(i + 1);
                 break;
             }
         }
-        notifyItemRangeChanged(0, lists.size());
     }
 
     public void setTopicData(final List<ArticleEntity.Topic> topicData, LinearLayout linearLayout, RecyclerView recyclerView) {

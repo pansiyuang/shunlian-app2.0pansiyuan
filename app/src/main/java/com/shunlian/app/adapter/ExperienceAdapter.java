@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,11 +18,13 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.ExperienceEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.discover.DiscoverXindeFrag;
+import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -66,13 +69,25 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
     }
 
     @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        ExperienceHolderView holderView = (ExperienceHolderView) holder;
+        if (isEmpty(payloads)) {
+            super.onBindViewHolder(holder, position, payloads);
+        } else {
+            ExperienceEntity.Experience experience = (ExperienceEntity.Experience) payloads.get(0);
+            setPraiseImg(experience.praise, holderView.tv_evaluate_count);
+            holderView.tv_evaluate_count.setText(experience.praise_num);
+        }
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ExperienceHolderView) {
             ExperienceHolderView holderView = (ExperienceHolderView) holder;
             final ExperienceEntity.Experience experience = lists.get(position);
             ExperienceEntity.MemberInfo memberInfo = experience.member_info;
 
-            GlideUtils.getInstance().loadImage(context, holderView.miv_avatar, memberInfo.avatar);
+            GlideUtils.getInstance().loadCircleImage(context, holderView.miv_avatar, memberInfo.avatar);
             holderView.tv_name.setText(memberInfo.nickname);
             holderView.tv_date.setText(experience.add_time);
             holderView.tv_content.setText(experience.content);
@@ -120,6 +135,13 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                 }
             });
             setPraiseImg(experience.praise, holderView.tv_evaluate_count);
+
+            holderView.recycler_img.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    ExperienceDetailAct.startAct(context, experience.id);
+                }
+                return false;
+            });
         }
     }
 

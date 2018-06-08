@@ -10,6 +10,7 @@ import java.util.List;
  * Created by Administrator on 2017/12/5.
  */
 public class GoodsSearchParam implements Serializable {
+    public String name;
     public String keyword;
     public String min_price;
     public String max_price;

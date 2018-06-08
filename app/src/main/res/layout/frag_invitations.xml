@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,8 +10,25 @@
     android:orientation="vertical"
     tools:ignore="WebViewLayout">
 
+    <com.shunlian.app.widget.WebViewProgressBar
+        android:id="@+id/mProgressbar"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/rl_title"
+        app:max="100"
+        app:progressColor="@color/value_048BFE"
+        app:progressHeight="3" />
+
     <WebView
         android:id="@+id/mWebView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></WebView>
+        android:layout_height="wrap_content"
+        android:minHeight="340dp"></WebView>
+
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="340dp"
+        android:visibility="gone" />
 </LinearLayout>

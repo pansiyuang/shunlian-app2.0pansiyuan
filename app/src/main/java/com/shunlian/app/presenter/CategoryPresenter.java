@@ -104,6 +104,7 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
                 currentPage = Integer.parseInt(entity.data.page);
                 allPage = Integer.parseInt(entity.data.total_page);
                 iView.getSearchGoods(searchGoodsEntity, currentPage, allPage);
+                currentPage++;
             }
         });
     }
@@ -123,7 +124,6 @@ public class CategoryPresenter extends BasePresenter<ICategoryView> {
         if (!isLoading) {
             isLoading = true;
             if (currentPage <= allPage) {
-                currentPage++;
                 getSearchGoods(mParam, false);
             }
         }

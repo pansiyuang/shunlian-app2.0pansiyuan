@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -45,6 +46,25 @@ public class TopicMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
         baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (isEmpty(payloads)) {
+            super.onBindViewHolder(holder, position, payloads);
+        } else {
+            if (holder instanceof TopicMsgViewHolder) {
+                TopicMsgViewHolder topicMsgViewHolder = (TopicMsgViewHolder) holder;
+                StoreMsgEntity.StoreMsg storeMsg = lists.get(0);
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) topicMsgViewHolder.tv_date.getLayoutParams();
+                if (storeMsg.is_read == 1) { //已读
+                    topicMsgViewHolder.miv_point.setVisibility(View.GONE);
+                    layoutParams.setMargins(0, TransformUtil.dip2px(context, 6), 0, 0);
+                } else {
+                    topicMsgViewHolder.miv_point.setVisibility(View.VISIBLE);
+                    layoutParams.setMargins(TransformUtil.dip2px(context, 12), TransformUtil.dip2px(context, 6), 0, 0);
+                }
+            }
+        }
+    }
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
@@ -65,7 +85,7 @@ public class TopicMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
         topicMsgViewHolder.tv_date.setText(storeMsg.create_time);
         topicMsgViewHolder.tv_content.setText(body.content);
 
-        if ("1".equals(body.expire)) {//已过期
+        if (2 == body.expire) {//已过期
             topicMsgViewHolder.tv_title.setTextColor(getColor(R.color.new_gray));
             topicMsgViewHolder.tv_content.setTextColor(getColor(R.color.new_gray));
             topicMsgViewHolder.tv_bg.setVisibility(View.VISIBLE);
