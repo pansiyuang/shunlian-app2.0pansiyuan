@@ -155,6 +155,7 @@ public class SearchCouponAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getCouponCallBack(boolean isCommon, int position) {
+        pGetCoupon.mDatas.get(position).if_get = "1";
         couponsAdapter.notifyItemChanged(position);
     }
 

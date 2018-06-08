@@ -130,6 +130,21 @@
             android:padding="10dp"
             android:src="@mipmap/icon_more_fanhui" />
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_titles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/miv_close"
+            android:layout_toLeftOf="@id/miv_more"
+            android:layout_marginRight="60dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="18sp" />
+
         <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/rl_more"
             android:layout_width="50dp"
@@ -159,20 +174,6 @@
                 android:textSize="9sp"
                 android:visibility="gone" />
 
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_titles"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="8dp"
-                android:layout_toLeftOf="@id/miv_more"
-                android:layout_toRightOf="@id/miv_close"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textColor="@color/my_dark_grey"
-                android:textSize="18sp" />
         </com.shunlian.app.widget.MyRelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
     <com.shunlian.app.utils.QuickActions

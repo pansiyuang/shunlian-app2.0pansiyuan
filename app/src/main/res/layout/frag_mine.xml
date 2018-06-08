@@ -1088,13 +1088,13 @@
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="58dp"
         android:background="@color/pink_color" />
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="58dp">
 
         <com.shunlian.app.widget.MyRelativeLayout
             android:layout_width="match_parent"

@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:visibility="gone"
-        android:layout_marginBottom="3dp"/>
+        android:visibility="gone" />
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_two"
