@@ -36,6 +36,7 @@
         android:textColor="@color/new_text"
         android:textSize="13sp" />
 
+    <!--v0-v6-->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7.5dp"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <com.shunlian.app.widget.MyImageView
@@ -63,5 +65,13 @@
             android:textSize="10sp" />
 
     </LinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_large_vip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_nickname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7.5dp"/>
 
 </RelativeLayout>

@@ -120,8 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:src="@mipmap/img_plus_phb_dianzhu" />
+                android:layout_marginTop="15dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -151,7 +150,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="969854698574"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -186,7 +184,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="Plus会员"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -221,7 +218,6 @@
                     android:id="@+id/mtv_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="男、购物达人、美食控"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -258,7 +254,6 @@
                     android:id="@+id/mtv_synopsis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本人性格热情开朗，待人友好"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 

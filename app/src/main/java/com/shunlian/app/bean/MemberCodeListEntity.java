@@ -37,11 +37,14 @@ public class MemberCodeListEntity {
         public String nickname;
         public String avatar;
         public String level;
+        public String role;
         public String member_role;
         public String member_role_msg;
         public String heat;
         public String regtime;
         public String code;
+        public String tag_val;//标签
+        public String signature;//个人签名
 
         @Override
         public String toString() {

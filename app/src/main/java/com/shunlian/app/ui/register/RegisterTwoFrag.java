@@ -260,10 +260,12 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         if (TYPE_FIND_PSW.equals(currentType)) {
             gone(llayout_agreement,et_nickname);
         }
+        GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+        completeBG.setColor(getColorResouce(R.color.pink_color));
+        btn_complete.setEnabled(true);
 
         if (TYPE_REGIST.equals(currentType)){//显示协议
             visible(llayout_agreement);
-            GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
             completeBG.setColor(getColorResouce(R.color.color_value_6c));
             btn_complete.setEnabled(false);
         }
@@ -279,6 +281,10 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         this.currentType = currentType;
         this.unique_sign = unique_sign;
 
+        GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+        completeBG.setColor(getColorResouce(R.color.pink_color));
+        btn_complete.setEnabled(true);
+
         if (!TextUtils.isEmpty(unique_sign)){
             btn_complete.setText(getString(R.string.SelectRecommendAct_bind));
             gone(llayout_agreement);
@@ -290,7 +296,6 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
 
         if (TYPE_REGIST.equals(currentType)){
             visible(llayout_agreement);
-            GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
             completeBG.setColor(getColorResouce(R.color.color_value_6c));
             btn_complete.setEnabled(false);
         }

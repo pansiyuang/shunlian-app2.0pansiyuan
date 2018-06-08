@@ -33,7 +33,7 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
         sortAndMD5(map);
 
         Call<BaseEntity<MemberCodeListEntity>> baseEntityCall = getApiService().memberCodeList(map);
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<MemberCodeListEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<MemberCodeListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<MemberCodeListEntity> entity) {
                 super.onSuccess(entity);

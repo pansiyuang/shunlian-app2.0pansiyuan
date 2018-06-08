@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.login;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -132,6 +133,9 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         picCode = arguments.getString("vCode");
         loginPresenter = new LoginPresenter(baseActivity, this, LoginPresenter.TYPE_MOBILE);
         initViews();
+        GradientDrawable completeBG = (GradientDrawable) btn_complete.getBackground();
+        completeBG.setColor(getColorResouce(R.color.pink_color));
+        btn_complete.setEnabled(true);
     }
 
     @Override
