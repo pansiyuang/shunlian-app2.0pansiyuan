@@ -16,6 +16,7 @@ import com.shunlian.app.ui.returns_order.ConsultHistoryAct;
 import com.shunlian.app.ui.returns_order.ReturnRequestActivity;
 import com.shunlian.app.ui.returns_order.SelectServiceActivity;
 import com.shunlian.app.ui.returns_order.SubmitLogisticsInfoAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
@@ -37,15 +38,19 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
     private String refund_id;
     private ExchangeDetailAct exchangeDetailAct;
     private RefundDetailEntity.RefundDetail.Edit mEdit;
+    private RefundDetailEntity.RefundDetail refundDetail;
+    private long firstMillies;
+    private int second;
 
-    public ExchangeDetailOptAdapter(Context context, boolean isShowFooter, List<RefundDetailEntity.RefundDetail.Opt> opts,String refund_id,RefundDetailEntity.RefundDetail.Edit edit) {
-        super(context, isShowFooter,opts);
-        exchangeDetailAct= (ExchangeDetailAct) context;
-        this.refund_id=refund_id;
+    public ExchangeDetailOptAdapter(Context context, List<RefundDetailEntity.RefundDetail.Opt> opts, RefundDetailEntity.RefundDetail detail) {
+        super(context, false, opts);
+        exchangeDetailAct = (ExchangeDetailAct) context;
+        this.refund_id = refund_id;
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
         strokeWidth = TransformUtil.dip2px(context, 0.5f);
-        this.mEdit = edit;
+        this.mEdit = detail.edit;
+        refundDetail = detail;
     }
 
     @Override
@@ -53,17 +58,21 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
         return new MsgHolder(LayoutInflater.from(context).inflate(R.layout.item_exchange_detail_opt, parent, false));
     }
 
+    public void setCurrentDate(long millies) {
+        firstMillies = millies;
+    }
+
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         MsgHolder mHolder = (MsgHolder) holder;
-        final RefundDetailEntity.RefundDetail.Opt opt=lists.get(position);
+        final RefundDetailEntity.RefundDetail.Opt opt = lists.get(position);
         GradientDrawable btGround;
         mHolder.mtv_button.setText(opt.name);
-        if ("N".equals(opt.is_highlight)){
+        if ("N".equals(opt.is_highlight)) {
             btGround = (GradientDrawable) mHolder.mtv_button.getBackground();
             btGround.setStroke(strokeWidth, new_gray);
             mHolder.mtv_button.setTextColor(new_gray);
-        }else {
+        } else {
             btGround = (GradientDrawable) mHolder.mtv_button.getBackground();
             btGround.setStroke(strokeWidth, pink_color);
             mHolder.mtv_button.setTextColor(pink_color);
@@ -74,28 +83,36 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                 if (MyOnClickListener.isFastClick()) {
                     return;
                 }
-                switch (opt.code){
+                switch (opt.code) {
                     case "view_history_enable":
-                        ConsultHistoryAct.startAct(context,refund_id);
+                        ConsultHistoryAct.startAct(context, refund_id);
                         break;
                     case "edit_apply_enable":
-                        if ("1".equals(mEdit.edit_apply_type)){
+                        if ("1".equals(mEdit.edit_apply_type)) {
                             SelectServiceActivity.startAct(context, mEdit.og_id);
-                        }else {
-                            ReturnRequestActivity.startAct(context,mEdit,true,refund_id);
+                        } else {
+                            ReturnRequestActivity.startAct(context, mEdit, true, refund_id);
                         }
                         break;
                     case "call_plat_enable":
-                        PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,false);
+                        if (isEmpty(getLimitTime(firstMillies))) {
+                            return;
+                        }
+                        refundDetail.rest_second = getLimitTime(firstMillies);
+                        PlatformInterventionRequestActivity.startAct(context, refundDetail, false);
                         break;
                     case "edit_call_plat_enable":
-                        PlatformInterventionRequestActivity.startAct(context,refund_id,mEdit,true);
+                        if (isEmpty(getLimitTime(firstMillies))) {
+                            return;
+                        }
+                        refundDetail.rest_second = getLimitTime(firstMillies);
+                        PlatformInterventionRequestActivity.startAct(context, refundDetail, true);
                         break;
                     case "add_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context,refund_id,SubmitLogisticsInfoAct.APPLY);
+                        SubmitLogisticsInfoAct.startAct(context, refund_id, SubmitLogisticsInfoAct.APPLY);
                         break;
                     case "edit_ship_enable":
-                        SubmitLogisticsInfoAct.startAct(context,refund_id,SubmitLogisticsInfoAct.MODIFY);
+                        SubmitLogisticsInfoAct.startAct(context, refund_id, SubmitLogisticsInfoAct.MODIFY);
                         break;
                     case "check_receive_enable":
                         confirmreceipt(refund_id);
@@ -115,7 +132,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
                 getString(R.string.confirm_goods), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (exchangeDetailAct != null){
+                        if (exchangeDetailAct != null) {
                             exchangeDetailAct.confirmreceipt(refund_id);
                         }
                         promptDialog.dismiss();
@@ -137,5 +154,16 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
             super(itemView);
         }
 
+    }
+
+    public String getLimitTime(Long beginTime) {
+        String restSecond;
+        LogUtil.httpLogW("ceil:" + (System.currentTimeMillis() - beginTime) / 1000);
+        second = (int) Math.ceil((System.currentTimeMillis() - beginTime) / 1000);
+        if (second <= 0) {
+            return null;
+        }
+        restSecond = String.valueOf(Integer.valueOf(refundDetail.rest_second) - second);
+        return restSecond;
     }
 }

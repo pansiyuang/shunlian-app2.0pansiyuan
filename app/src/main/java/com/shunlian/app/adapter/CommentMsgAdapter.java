@@ -75,6 +75,7 @@ public class CommentMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreM
 
         public CommentMsgViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(v -> listener.onItemClick(v,getAdapterPosition()));
         }
     }
 }

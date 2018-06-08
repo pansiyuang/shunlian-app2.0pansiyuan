@@ -88,8 +88,6 @@ public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageCh
         setStatusBarFontDark();
 
         tv_title.setText(getStringResouce(R.string.found_msg));
-        miv_title_right.setVisibility(View.VISIBLE);
-        miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
         line_title.setVisibility(View.GONE);
 
         messageCountManager = MessageCountManager.getInstance(this);

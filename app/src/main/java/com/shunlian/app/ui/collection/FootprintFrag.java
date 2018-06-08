@@ -19,6 +19,7 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.presenter.FootPrintPresenter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IFootPrintView;
@@ -156,6 +157,22 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
                 }
 
                 super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case 0://recyclerview已经停止滚动
+                        GlideUtils.getInstance().resumeRequests(getActivity());
+                        break;
+                    case 1://recyclerview正在被拖拽
+                        GlideUtils.getInstance().resumeRequests(getActivity());
+                        break;
+                    case 2://recyclerview正在依靠惯性滚动
+                        GlideUtils.getInstance().pauseRequests(getActivity());
+                        break;
+                }
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
         super.initListener();

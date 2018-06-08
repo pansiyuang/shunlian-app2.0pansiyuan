@@ -28,6 +28,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ICategoryView;
@@ -146,7 +147,12 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         if (searchParam == null) {
             searchParam = new GoodsSearchParam();
         }
-        tv_keyword.setText(searchParam.keyword);
+
+        if (!isEmpty(searchParam.keyword)) {
+            tv_keyword.setText(searchParam.keyword);
+        } else if (!isEmpty(searchParam.name)) {
+            tv_keyword.setText(searchParam.name);
+        }
 //        searchParam.keyword = "";
         presenter = new CategoryPresenter(this, this);
         presenter.getSearchGoods(searchParam, true);
@@ -528,8 +534,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 setSalesMode(false);
                 tv_filter.setTextColor(getColorResouce(R.color.new_text));
                 tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
-                searchParam = new GoodsSearchParam();
-                initFiltrate();
+//                searchParam = new GoodsSearchParam();
+//                initFiltrate();
 
                 searchParam.keyword = keyword;
                 tv_keyword.setText(keyword);

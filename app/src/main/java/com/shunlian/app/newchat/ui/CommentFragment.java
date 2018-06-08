@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentMsgAdapter;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.FoundCommentPresenter;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.view.IFoundCommentView;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
@@ -63,6 +65,14 @@ public class CommentFragment extends BaseFragment implements IFoundCommentView {
         storeMsgList = new ArrayList<>();
         mAdapter = new CommentMsgAdapter(getActivity(), storeMsgList);
         recycler_list.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((view, position) -> {
+            StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
+            if (isEmpty(storeMsg.id)) {
+                return;
+            }
+            mPresenter.msgRead(String.valueOf(storeMsg.type), storeMsg.id);
+            ArticleH5Act.startAct(getActivity(), storeMsg.id, ArticleH5Act.MODE_SONIC);
+        });
     }
 
     @Override

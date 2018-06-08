@@ -22,6 +22,7 @@ import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.timer.HourNoWhiteDownTimerView;
@@ -162,6 +163,8 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     private String refund_id = "53";
     private MessageCountManager messageCountManager;
     private RefundDetailEntity.RefundDetail refundDetail;
+    private ExchangeDetailOptAdapter mAdapter;
+    private long firstDateMillies;
 
     public static void startAct(Context context, String refund_id) {
         Intent intent = new Intent(context, ExchangeDetailAct.class);
@@ -246,10 +249,10 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.mtv_wuliu:
                 //查看物流信息
-                PlusLogisticsDetailAct.startAct(this, refund_id,"2");
+                PlusLogisticsDetailAct.startAct(this, refund_id, "2");
                 break;
             case R.id.mtv_wulius:
-                PlusLogisticsDetailAct.startAct(this, refund_id,"3");
+                PlusLogisticsDetailAct.startAct(this, refund_id, "3");
                 break;
 
         }
@@ -269,7 +272,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
     @Override
     public void setData(RefundDetailEntity refundDetailEntity) {
         refundDetail = refundDetailEntity.refund_detail;
-        refund_id=refundDetail.refund_id;
+        refund_id = refundDetail.refund_id;
         int time = 0;
         if (!TextUtils.isEmpty(refundDetail.rest_second))
             time = Integer.parseInt(refundDetail.rest_second);
@@ -307,7 +310,9 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
         rv_opt.setLayoutManager(managerH);
         rv_opt.setNestedScrollingEnabled(false);
         refundDetail.edit.store_name = refundDetail.store_name;
-        rv_opt.setAdapter(new ExchangeDetailOptAdapter(this, false, refundDetail.opt_list, refundDetail.refund_id, refundDetail.edit));
+
+        mAdapter = new ExchangeDetailOptAdapter(this, refundDetail.opt_list, refundDetail);
+        rv_opt.setAdapter(mAdapter);
 
         mtv_state.setText(refundDetail.status_desc);
         if (refundDetail.return_address != null
@@ -409,6 +414,11 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mtv_order.setText(key + "编号：" + refundDetail.refund_sn);
             mtv_order.setVisibility(View.VISIBLE);
         }
+
+
+        firstDateMillies = System.currentTimeMillis();
+        LogUtil.httpLogW("设置数据时间:" + firstDateMillies);
+        mAdapter.setCurrentDate(firstDateMillies);
     }
 
     @Override
