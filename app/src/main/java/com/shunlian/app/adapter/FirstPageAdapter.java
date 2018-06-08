@@ -1,7 +1,6 @@
 package com.shunlian.app.adapter;
 
 import android.app.Activity;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -875,9 +874,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
             downTime_first.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    if (downTime_first != null)
+                    if (downTime_first != null&&cateGoryFrag!=null){
                         downTime_first.cancelDownTimer();
-                    cateGoryFrag.refresh();
+                        cateGoryFrag.refresh();
+                    }
                 }
 
             });

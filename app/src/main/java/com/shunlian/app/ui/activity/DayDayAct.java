@@ -106,7 +106,7 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
         minitData();
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
-        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.day_haohuotaiduo));
         nei_empty.setButtonText(null);
     }
 
