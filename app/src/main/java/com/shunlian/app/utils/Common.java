@@ -67,6 +67,7 @@ import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.collection.MyCollectionAct;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.core.AishangAct;
 import com.shunlian.app.ui.core.GetCouponAct;
 import com.shunlian.app.ui.core.HotRecommendAct;
@@ -184,6 +185,10 @@ public class Common {
                 return "MyProfitAct";
             case "coupon":
                 return "GetCouponAct";
+            case "order":
+                return "OrderDetailAct";
+            case "shipping":
+                return "OrderLogisticsActivity";
             case "plusdetail":
             case "pulsdetail":
                 return "PlusGifDetailAct";
@@ -203,6 +208,15 @@ public class Common {
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "nojump":
+                LogUtil.augusLogW("gogogo---nojump");
+                break;
+            case "shipping":
+                OrderLogisticsActivity.startAct(context,params[0]);
+                break;
+            case "order":
+                OrderDetailAct.startAct(context,params[0]);
                 break;
             case "categories":
                 SortAct.startAct(context);

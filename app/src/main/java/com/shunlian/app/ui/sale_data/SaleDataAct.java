@@ -23,7 +23,6 @@ import com.shunlian.app.view.ISaleDataView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,7 +46,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     MyTextView mtv_request_code;
 
     @BindView(R.id.civ_head)
-    CircleImageView civ_head;
+    MyImageView civ_head;
 
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
@@ -336,7 +335,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setHeadNickname(String head, String nickname) {
-        GlideUtils.getInstance().loadImage(this, civ_head, head);
+        GlideUtils.getInstance().loadCircleImage(this, civ_head, head);
         mtv_nickname.setText(nickname);
     }
 
@@ -348,15 +347,16 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @Override
     public void setplusrole(String plus_role_code) {
         //plus_role_code = "2";
-        if ("1".equals(plus_role_code)){//店主 1=plus店主，2=销售主管，3=销售经理
+        int plusCode = Integer.parseInt(plus_role_code);
+        if (plusCode == 1){//店主 1=plus店主，2=销售主管，>=3 销售经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_dianzhu);
             miv_grade.setImageResource(R.mipmap.img_plus_dianzhude);
-        }else if ("3".equals(plus_role_code)){//经理
+        }else if (plusCode >= 3){//经理
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_jingli);
             miv_grade.setImageResource(R.mipmap.img_plus_xiaoshoujingli);
-        }else if ("2".equals(plus_role_code)){//主管
+        }else if (plusCode == 2){//主管
             visible(miv_PhotoFrame,miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
             miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);

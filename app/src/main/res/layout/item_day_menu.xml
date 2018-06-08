@@ -11,23 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="vertical"
+        android:gravity="center"
         android:background="@color/new_text">
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_time"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/white"/>
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_desc"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textSize="11sp"
-            android:gravity="center|center_horizontal|top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
             android:textColor="@color/white" />
     </com.shunlian.app.widget.MyLinearLayout>
 

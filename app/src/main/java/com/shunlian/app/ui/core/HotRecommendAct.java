@@ -222,6 +222,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
+                    if (downTime_firsts!=null)
                     downTime_firsts.cancelDownTimer();
                 }
 

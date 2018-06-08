@@ -20,6 +20,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.DayDayView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +40,9 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
@@ -102,6 +106,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
         minitData();
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.day_haohuotaiduo));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -136,7 +142,8 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
 
     @Override
     public void showDataEmptyView(int rquest_code) {
-
+        visible(nei_empty);
+        gone(rv_list);
     }
 
     @Override
@@ -160,6 +167,13 @@ public class DayDayAct extends BaseActivity implements View.OnClickListener, Day
             });
         } else {
             dayDayMenuAdapter.notifyDataSetChanged();
+        }
+        if (isEmpty(list)) {
+            visible(nei_empty);
+            gone(rv_list);
+        } else {
+            gone(nei_empty);
+            visible(rv_list);
         }
         if (dayListAdapter == null) {
             dayListAdapter = new DayListAdapter(this, true, list,dayDayPresenter, activityListEntity);

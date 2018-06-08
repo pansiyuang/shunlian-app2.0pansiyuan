@@ -74,12 +74,14 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
                 isLoading = false;
+                iView.showDataEmptyView(1);
             }
 
             @Override
             public void onFailure() {
                 super.onFailure();
                 isLoading = false;
+                iView.showDataEmptyView(1);
             }
         });
     }
@@ -99,6 +101,8 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 babyDatas.get(position).remind_status="1";
+                if (!isEmpty(babyDatas.get(position).remind_count))
+                    babyDatas.get(position).remind_count=String.valueOf(Integer.parseInt(babyDatas.get(position).remind_count)+1);
                 iView.activityState(position);
                 Common.staticToasts(context,context.getString(R.string.day_set_remind),context.getString(R.string.day_jiangzaikaiqiang),R.mipmap.icon_common_duihao);
             }
@@ -121,6 +125,8 @@ public class DayDayPresenter extends BasePresenter<DayDayView> {
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
                 babyDatas.get(position).remind_status="0";
+                if (!isEmpty(babyDatas.get(position).remind_count))
+                babyDatas.get(position).remind_count=String.valueOf(Integer.parseInt(babyDatas.get(position).remind_count)-1);
                 iView.activityState(position);
                 Common.staticToasts(context,context.getString(R.string.day_cancel_remind),R.mipmap.icon_common_tanhao);
             }

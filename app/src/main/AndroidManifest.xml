@@ -202,7 +202,7 @@
         <!-- augus:4a85a233f140802d8ff97cff   ee43de8743a5ffe348cb1d88 -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="3cbe47ad444ddec83ea45d31" />
+            android:value="4a85a233f140802d8ff97cff" />
         <!--jpush-->
         <!-- 多渠道打包时改成360，因为360市场要上传原apk -->
         <meta-data

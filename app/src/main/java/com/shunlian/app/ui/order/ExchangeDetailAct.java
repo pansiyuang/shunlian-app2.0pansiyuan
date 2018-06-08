@@ -282,8 +282,10 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    downTime_order.cancelDownTimer();
-                    exchangeDetailPresenter.initApiData();
+                    if (downTime_order!=null&&exchangeDetailPresenter!=null){
+                        downTime_order.cancelDownTimer();
+                        exchangeDetailPresenter.initApiData();
+                    }
                 }
 
             });

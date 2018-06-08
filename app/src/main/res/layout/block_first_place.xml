@@ -3,15 +3,15 @@
     android:id="@+id/mrlayout_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:paddingBottom="3dp">
+    android:background="@color/white">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_marginBottom="3dp"/>
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_two"
@@ -20,7 +20,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="3dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_twol"
@@ -45,7 +46,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="3dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_threel"
@@ -78,7 +80,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="3dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_four1"
@@ -119,7 +122,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="3dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_fivel"
