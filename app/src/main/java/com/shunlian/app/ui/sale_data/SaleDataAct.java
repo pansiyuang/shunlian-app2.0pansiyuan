@@ -195,7 +195,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.miv_grade)
     MyImageView miv_grade;
 
-
+    @BindView(R.id.llayout_nickname)
+    LinearLayout llayout_nickname;
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
     private boolean isShowData = true;
@@ -241,6 +242,10 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             chart_view.setLayoutParams(layoutParams);
         }
         presenter = new SaleDataPresenter(this, this);
+
+        //扩大眼睛点击范围
+        int dp = TransformUtil.dip2px(this, 30);
+        TransformUtil.expandViewTouchDelegate(miv_isShow_data,dp,dp,dp,dp);
     }
 
     @Override
@@ -363,6 +368,9 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         }else {
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams
+                    lp = (RelativeLayout.LayoutParams) llayout_nickname.getLayoutParams();
+            lp.topMargin = 0;
         }
     }
 

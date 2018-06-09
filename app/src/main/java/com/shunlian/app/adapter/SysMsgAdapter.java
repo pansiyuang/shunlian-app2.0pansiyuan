@@ -126,7 +126,7 @@ public class SysMsgAdapter extends BaseRecyclerAdapter<SystemMsgEntity.MsgType> 
         mHolder.mtv_goods_title.setText(content.title);
         mHolder.mtv_goods_desc.setText(content.content);
         mHolder.mtv_source.setText(content.remark);
-        GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, content.thumb);
+        GlideUtils.getInstance().loadOverrideImage(context, mHolder.miv_icon, content.thumb,122,118);
         if ("1".equals(msgType.is_read)){
             gone(mHolder.red_dot_goods);
         }else {
