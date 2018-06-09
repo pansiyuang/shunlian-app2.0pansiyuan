@@ -367,7 +367,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mrlayout_wulius.setVisibility(View.VISIBLE);
             mtv_wulius.setVisibility(View.VISIBLE);
             view_wulius.setVisibility(View.VISIBLE);
-            mtv_wulius.setText(refundDetail.express);
+            mtv_wulius.setText(refundDetail.s_express);
         }
 
         if (refundDetail.gift != null && !TextUtils.isEmpty(refundDetail.gift.thumb)) {

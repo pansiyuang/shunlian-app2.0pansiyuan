@@ -202,6 +202,13 @@ public class BalanceTXAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void afterTextChanged(Editable editable) {
+        String temp = editable.toString();
+        int posDot = temp.indexOf(".");
+        if (posDot <= 0) return;
+        if (temp.length() - posDot - 1 > 2)
+        {
+            editable.delete(posDot + 3, posDot + 4);
+        }
         balance = editable.toString();
         if (balance.startsWith("."))
             balance = "0." + balance.substring(1);
