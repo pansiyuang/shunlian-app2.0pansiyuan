@@ -32,6 +32,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import static com.shunlian.app.service.InterentTools.H5_HOST;
+
 /**
  * Created by zhang on 2017/4/14 11 : 38.
  * 常量
@@ -92,6 +94,8 @@ public final class Constant {
 
     public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
     public static  String SHARE_LINK = "";
+    public static  String ZHIFUBAOURL=H5_HOST+"agreement/5";
+
 
     //测试
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId

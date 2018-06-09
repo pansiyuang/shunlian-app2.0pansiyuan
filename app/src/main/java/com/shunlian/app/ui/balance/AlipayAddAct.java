@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalancePaySetOne;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalancePaySetOne;
@@ -70,6 +71,9 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
             case R.id.mtv_timer:
                 pBalancePaySetOne.getCode();
                 break;
+            case R.id.mtv_xieyi:
+                H5Act.startAct(this,Constant.ZHIFUBAOURL,H5Act.MODE_SONIC);
+                break;
             case R.id.mtv_next:
                 String account_name=et_shengfengzheng.getText().toString();
                 String account_number=et_zhifubao.getText().toString();
@@ -115,6 +119,7 @@ public class AlipayAddAct extends BaseActivity implements View.OnClickListener, 
         mtv_timer.setOnClickListener(this);
         mtv_next.setOnClickListener(this);
         miv_xieyi.setOnClickListener(this);
+        mtv_xieyi.setOnClickListener(this);
     }
 
     @Override

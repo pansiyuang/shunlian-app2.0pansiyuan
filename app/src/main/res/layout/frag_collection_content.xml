@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.shunlian.app.widget.refresh.turkey.SlRefreshView
-        android:id="@+id/refreshview"
+    <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
+        android:id="@+id/lay_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:mode="follow">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-    </com.shunlian.app.widget.refresh.turkey.SlRefreshView>
+            android:scrollbars="none"/>
+    </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>
 </LinearLayout>

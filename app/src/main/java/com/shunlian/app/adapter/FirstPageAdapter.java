@@ -239,6 +239,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     GetDataEntity.MData data = lists.get(position);
                     if (Common.isColor(data.bg_color))
                         threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                    if (!isEmpty(data.number))
                     switch (data.number) {
                         case "1":
                             threeHolder.miv_one.setVisibility(View.VISIBLE);
@@ -616,8 +617,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
                     GlideUtils.getInstance().loadImage(context, tenHolder.miv_photo, goods.thumb);
                     tenHolder.mtv_title.setText(goods.title);
-                    SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
-                    tenHolder.mtv_price.setText(spannableStringBuilder);
+                    if (!isEmpty(goods.price)){
+                        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
+                        tenHolder.mtv_price.setText(spannableStringBuilder);
+                    }
                     tenHolder.mllayout_tag.removeAllViews();
                     tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
