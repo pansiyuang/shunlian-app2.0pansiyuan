@@ -51,7 +51,8 @@ public class LoginAct extends BaseActivity {
     private FragmentManager fragmentManager;
     private boolean isCanBack = false;//是否可以返回 默认不可以
     private InputVerfiCodeFrag inputVerfiCodeFrag;
-
+    /***************登录条款************/
+    public static final String TERMS_OF_SERVICE = "agreement/1";
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, LoginAct.class);
