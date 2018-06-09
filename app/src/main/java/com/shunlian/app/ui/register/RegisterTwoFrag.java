@@ -246,7 +246,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         countDown();
         //返回键扩大点击范围
         int i = TransformUtil.dip2px(baseActivity, 20);
-        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        TransformUtil.expandViewTouchDelegate(miv_close,i*2,i*2,i*2,i*2);
         TransformUtil.expandViewTouchDelegate(miv_agree,i,i,i,i);
 
         Bundle arguments = getArguments();

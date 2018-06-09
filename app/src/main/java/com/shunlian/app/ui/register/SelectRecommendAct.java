@@ -20,6 +20,7 @@ import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.MemberCodeListEntity;
 import com.shunlian.app.presenter.SelectRecommendPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -90,6 +91,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
     private SelectRecommendPresenter presenter;
     private SimpleRecyclerAdapter<MemberCodeListEntity.ListBean> simpleRecyclerAdapter;
+    private String mHelpUrl;
 
 
     public static void startAct(Activity context){
@@ -185,7 +187,9 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
         }
        switch (v.getId()){
            case R.id.tv_help://帮助
-
+               if (!isEmpty(mHelpUrl)){
+                   H5Act.startAct(this,mHelpUrl,H5Act.MODE_SONIC);
+               }
                break;
            case R.id.tv_notSelect:
                dialogHidden();
@@ -292,6 +296,11 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
 
             dialogDetail();
         });
+    }
+
+    @Override
+    public void help(String url) {
+        mHelpUrl = url;
     }
 
     @Override

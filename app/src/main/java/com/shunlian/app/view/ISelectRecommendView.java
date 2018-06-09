@@ -12,4 +12,5 @@ public interface ISelectRecommendView extends IView {
 
     void selectCodeList(List<MemberCodeListEntity.ListBean> listBeens);
 
+    void help(String url);
 }
