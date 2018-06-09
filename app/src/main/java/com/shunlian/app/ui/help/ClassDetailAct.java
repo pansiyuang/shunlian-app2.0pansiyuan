@@ -5,19 +5,28 @@ import android.content.Intent;
 import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ClassDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IClassDetailView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by Administrator on 2018/5/4.
  */
 
-public class ClassDetailAct extends H5Act implements IClassDetailView{
+public class ClassDetailAct extends H5Act implements IClassDetailView, MessageCountManager.OnGetMessageListener {
 
 
     private ClassDetailPresenter mPresenter;
-
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String url,String id, int mode) {
         Intent intentH5 = new Intent(context, ClassDetailAct.class);
@@ -28,12 +37,48 @@ public class ClassDetailAct extends H5Act implements IClassDetailView{
         context.startActivity(intentH5);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
     /**
      * 初始化数据
      */
     @Override
     protected void initData() {
         super.initData();
+        EventBus.getDefault().register(this);
         String id = mIntent.getStringExtra("id");
         mPresenter = new ClassDetailPresenter(this,this,id);
     }
@@ -71,10 +116,18 @@ public class ClassDetailAct extends H5Act implements IClassDetailView{
         switch (view.getId()){
             case R.id.rl_title_more:
                 quick_actions.setVisibility(View.VISIBLE);
-                quick_actions.classDetailShare();
-                if (mPresenter != null)
-                    quick_actions.shareInfo(mPresenter.getShareInfoParam());
+                if (mPresenter != null&&mPresenter.shareInfoParam!=null&&!isEmpty(mPresenter.shareInfoParam.shareLink)){
+                    quick_actions.classDetailShare();
+                    quick_actions.shareInfo(mPresenter.shareInfoParam);
+                }else {
+                    quick_actions.order();
+                }
                 break;
         }
+    }
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

@@ -131,7 +131,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     protected int getLayoutId() {
-        setHideStatus();
+//        setHideStatus();
         return R.layout.act_discover_tiezi;
     }
 

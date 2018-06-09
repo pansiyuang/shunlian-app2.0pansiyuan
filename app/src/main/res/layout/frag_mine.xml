@@ -943,6 +943,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:textColor="@color/new_text"
                                 android:textSize="8sp"
                                 android:visibility="invisible" />
@@ -956,6 +958,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_before"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
@@ -964,6 +968,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_befores"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -991,6 +997,8 @@
                                 android:layout_marginTop="6dp"
                                 android:textColor="@color/new_text"
                                 android:textSize="8sp"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:visibility="invisible" />
 
                             <com.shunlian.app.widget.MyImageView
@@ -1002,6 +1010,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_mid"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
@@ -1010,6 +1020,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_mids"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -1034,6 +1046,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_after"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
@@ -1042,6 +1056,8 @@
 
                             <com.shunlian.app.widget.MyTextView
                                 android:id="@+id/mtv_afters"
+                                android:singleLine="true"
+                                android:ellipsize="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -1088,13 +1104,13 @@
     <View
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="58dp"
         android:background="@color/pink_color" />
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/rLayout_title"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="58dp">
 
         <com.shunlian.app.widget.MyRelativeLayout
             android:layout_width="match_parent"

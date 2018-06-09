@@ -229,55 +229,6 @@
                 android:visibility="gone" />
 
             <com.shunlian.app.widget.MyRelativeLayout
-                android:id="@+id/mrlayout_wuliu"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:visibility="gone">
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_yonghutuihuo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/exchange_yonghutuihuo"
-                    android:textColor="@color/new_text"
-                    android:textSize="14sp" />
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_wuliu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="7.5dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_toRightOf="@id/mtv_yonghutuihuo"
-                    android:ellipsize="end"
-                    android:gravity="right"
-                    android:singleLine="true"
-                    android:textColor="@color/new_text"
-                    android:textSize="14sp" />
-
-                <com.shunlian.app.widget.MyImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/img_common_viewarrow_1" />
-            </com.shunlian.app.widget.MyRelativeLayout>
-
-            <View
-                android:id="@+id/view_wuliu"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/white_ash"
-                android:visibility="gone" />
-
-            <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/mrlayout_wulius"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -303,7 +254,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="7.5dp"
                     android:layout_marginRight="25dp"
-                    android:layout_toRightOf="@id/mtv_yonghutuihuo"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
@@ -320,6 +270,54 @@
 
             <View
                 android:id="@+id/view_wulius"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/white_ash"
+                android:visibility="gone" />
+
+            <com.shunlian.app.widget.MyRelativeLayout
+                android:id="@+id/mrlayout_wuliu"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="13dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_yonghutuihuo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/exchange_yonghutuihuo"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_wuliu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="7.5dp"
+                    android:layout_marginRight="25dp"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:singleLine="true"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/img_common_viewarrow_1" />
+            </com.shunlian.app.widget.MyRelativeLayout>
+
+            <View
+                android:id="@+id/view_wuliu"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="14dp"

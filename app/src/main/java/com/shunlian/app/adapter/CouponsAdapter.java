@@ -14,6 +14,7 @@ import com.shunlian.app.bean.VouchercenterplEntity;
 import com.shunlian.app.presenter.PGetCoupon;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -47,6 +48,17 @@ public class CouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MD
         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.denomination + data.use_condition
                 , data.denomination, 21);
         mHolder.mtv_price.setText(spannableStringBuilder);
+        switch (data.new_or_old){
+            case "1":
+                mHolder.miv_tag.setImageResource(R.mipmap.img_zuixin);
+                break;
+            case "-1":
+                mHolder.miv_tag.setImageResource(R.mipmap.img_xiajia);
+                break;
+            default:
+                mHolder.miv_tag.setImageResource(0);
+                break;
+        }
         if ("0".equals(data.if_get)) {
             mHolder.mtv_yiqiang.setText(getString(R.string.first_yiqiang) + data.already_get + "%");
             mHolder.seekbar_grow.setProgress(Integer.parseInt(data.already_get));
@@ -94,6 +106,9 @@ public class CouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MD
 
         @BindView(R.id.mtv_yiling)
         MyTextView mtv_yiling;
+
+        @BindView(R.id.miv_tag)
+        MyImageView miv_tag;
 
         @BindView(R.id.seekbar_grow)
         SeekBar seekbar_grow;

@@ -25,6 +25,7 @@ import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -33,6 +34,8 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -431,6 +434,9 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
             SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
             SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
             SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
+
+            JpushUtil.setJPushAlias();
+
             if (!"1".equals(content.is_tag)){
                 SexSelectAct.startAct(baseActivity);
             }else {

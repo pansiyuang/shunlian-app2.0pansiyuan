@@ -91,6 +91,7 @@ import com.shunlian.app.ui.plus.PlusGifDetailAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
+import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -189,6 +190,8 @@ public class Common {
                 return "OrderDetailAct";
             case "shipping":
                 return "OrderLogisticsActivity";
+            case "shop":
+                return "StoreAct";
             case "plusdetail":
             case "pulsdetail":
                 return "PlusGifDetailAct";
@@ -208,6 +211,9 @@ public class Common {
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "shop":
+                StoreAct.startAct(context, params[0]);
                 break;
             case "nojump":
                 LogUtil.augusLogW("gogogo---nojump");

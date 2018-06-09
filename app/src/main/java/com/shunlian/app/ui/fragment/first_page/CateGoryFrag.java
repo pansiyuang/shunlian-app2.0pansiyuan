@@ -148,6 +148,9 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
+
+        if (!isEmpty(mDatass)&&!isEmpty(mDatass.get(mDatass.size()-1).cates))
+        pFirstPage.resetBaby(mDatass.get(mDatass.size()-1).cates.get(0).id);
 //        }else {
 ////            mtv_empty.setVisibility(View.VISIBLE);
 ////            rv_view.setVisibility(View.GONE);

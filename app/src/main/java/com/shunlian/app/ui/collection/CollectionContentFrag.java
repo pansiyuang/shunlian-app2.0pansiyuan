@@ -11,14 +11,14 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ContentAdapter;
 import com.shunlian.app.bean.ArticleEntity;
-import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ContentPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IContentView;
-import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
-import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
+import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
+import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
+import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,8 +40,8 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
     @BindView(R.id.recycler_content)
     RecyclerView recycler_content;
 
-    @BindView(R.id.refreshview)
-    SlRefreshView refreshview;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
 
     private ContentPresenter mPresenter;
     private ContentAdapter mAdapter;
@@ -63,20 +63,9 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
         mPresenter.getFavoriteArticles(true);
 
         //新增下拉刷新
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
-        refreshview.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.initPage();
-                mPresenter.getFavoriteArticles(true);
-            }
-
-            @Override
-            public void onLoadMore() {
-
-            }
-        });
+        //新增下拉刷新
+        NestedSlHeader header = new NestedSlHeader(getContext());
+        lay_refresh.setRefreshHeaderView(header);
 
         ((SimpleItemAnimator) recycler_content.getItemAnimator()).setSupportsChangeAnimations(false); //解决刷新item图片闪烁的问题
         recycler_content.setNestedScrollingEnabled(false);
@@ -87,6 +76,13 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
 
     @Override
     protected void initListener() {
+        lay_refresh.setOnRefreshListener(new onRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.initPage();
+                mPresenter.getFavoriteArticles(true);
+            }
+        });
         recycler_content.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -199,7 +195,7 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
 
     @Override
     public void refreshFinish() {
-        refreshview.stopRefresh(true);
+        lay_refresh.setRefreshing(false);
     }
 
     @Override
@@ -232,7 +228,7 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
 
     @Override
     public void showFailureView(int request_code) {
-
+        lay_refresh.setRefreshing(false);
     }
 
     @Override
