@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
             android:padding="6dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp">
 
@@ -43,8 +43,7 @@
                 android:drawableBottom = "@drawable/edittext_line"
                 android:drawablePadding ="10dp"
                 android:gravity="start|center_vertical"
-                android:layout_alignParentBottom="true"
-                />
+                android:layout_alignParentBottom="true"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_select"
@@ -111,8 +110,8 @@
                 android:drawableBottom="@drawable/edittext_line"
                 android:drawablePadding="10dp"
                 app:hintText="@string/RegisterOneAct_qsryzm"
-                android:layout_marginTop="10dp"
                 android:inputType="number"
+                android:layout_marginTop="5dp"
                 android:gravity="start|center_vertical"
                 android:maxLength="4"/>
 

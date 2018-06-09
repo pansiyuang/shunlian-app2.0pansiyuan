@@ -22,7 +22,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
-import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -110,9 +109,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 if (manager != null){
                     int firstPosition = manager.findFirstVisibleItemPosition();
                     if (firstPosition == 0){
-                        mtv_address.setVisibility(View.GONE);
+                        gone(mtv_address);
                     }else {
-                        mtv_address.setVisibility(View.VISIBLE);
+                        visible(mtv_address);
                     }
                 }
             }
@@ -144,8 +143,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
         int space = TransformUtil.dip2px(this, 10);
-        recy_view.addItemDecoration(new VerticalItemDecoration(space,
-                0, 0, getResources().getColor(R.color.white_ash)));
+        recy_view.addItemDecoration(new OrderDecoration(space,getColorResouce(R.color.white_ash)));
     }
 
     @Override

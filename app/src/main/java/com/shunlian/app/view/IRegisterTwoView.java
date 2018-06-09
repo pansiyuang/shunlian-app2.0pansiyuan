@@ -1,5 +1,6 @@
 package com.shunlian.app.view;
 
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 
 /**
@@ -8,6 +9,6 @@ import com.shunlian.app.bean.RegisterFinishEntity;
 
 public interface IRegisterTwoView extends IView {
     void resetPsw(String message);
-    void registerFinish(RegisterFinishEntity entity);
+    void registerFinish(BaseEntity<RegisterFinishEntity> entity);
     void smsCode(String smsCode);
 }

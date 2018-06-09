@@ -16,10 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
@@ -386,7 +390,8 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.llayout_agreement:
-                Common.staticToast("霸王条款：必须同意");
+                H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+                        +RegisterAct.REGISTRATION_AGREEMENT,H5Act.MODE_SONIC);
                 break;
         }
     }
@@ -416,13 +421,22 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void registerFinish(RegisterFinishEntity entity) {
-        if (TYPE_REGIST.equals(currentType) || TYPE_FIND_PSW.equals(currentType)){
+    public void registerFinish(BaseEntity<RegisterFinishEntity> entity) {
+        if (TYPE_FIND_PSW.equals(currentType)){//找回密码
             LoginAct.startAct(baseActivity);
-        }else {
-            SharedPrefUtil.saveSharedPrfString("token", entity.token);
+        }else if (TYPE_REGIST.equals(currentType)){//注册
+            Common.staticToast(entity.message);
+            RegisterFinishEntity content = entity.data;
+            SharedPrefUtil.saveSharedPrfString("token", content.token);
+            SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
+            SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+            SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
+            if (!"1".equals(content.is_tag)){
+                SexSelectAct.startAct(baseActivity);
+            }else {
+                Common.goGoGo(baseActivity,"mainPage");
+            }
         }
-        Common.staticToast("注册成功");
         baseActivity.finish();
     }
 

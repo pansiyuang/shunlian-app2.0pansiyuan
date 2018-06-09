@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.SelectLabelPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectLabelView;
@@ -114,6 +115,7 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
     @Override
     public void success() {
         setResult(Activity.RESULT_OK);
+        Common.goGoGo(this,"mainPage");
         finish();
     }
 

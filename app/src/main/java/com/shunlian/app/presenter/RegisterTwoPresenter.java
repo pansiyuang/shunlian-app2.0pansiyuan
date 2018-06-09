@@ -77,7 +77,7 @@ public class RegisterTwoPresenter extends BasePresenter<IRegisterTwoView> {
             @Override
             public void onSuccess(BaseEntity<RegisterFinishEntity> entity) {
                 super.onSuccess(entity);
-                iView.registerFinish(entity.data);
+                iView.registerFinish(entity);
             }
         });
     }

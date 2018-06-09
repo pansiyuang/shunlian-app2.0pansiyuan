@@ -12,11 +12,14 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectLabelView;
 import com.shunlian.app.widget.MyTextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -105,27 +108,36 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
         });
     }
 
-    private String iteratorList(){
+    private String iteratorList(int label){
         if (!isEmpty(list)){
             StringBuilder sb = new StringBuilder();
+            List<String> tag = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 ArtTagEntity.Item item = list.get(i);
                 if (item.isSelect){
                     selCount++;
                     sb.append(item.id);
                     sb.append(",");
+                    tag.add(item.name);
                 }
             }
             if (sb.length() == 0){
                 return "";
             }
+
+            if (label == 1){
+                tag.add("男");
+            }else if (label == 2){
+                tag.add("女");
+            }
+            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(tag));
             return sb.substring(0,sb.length()-1);
         }
         return "";
     }
 
     public void submit(int label) {
-        String s = iteratorList();
+        String s = iteratorList(label);
         if (selCount < 3){
             Common.staticToast("标签至少选择3个");
             return;

@@ -37,6 +37,9 @@ public class RegisterFinishEntity {
     public String token;
     public String balance;
     public String credit;
+    public String refresh_token;
+    public String is_tag;
+    public String plus_role;
 
     @Override
     public String toString() {

@@ -40,7 +40,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public final class InterentTools {
 //    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
 //        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
-        public final static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
+    public final static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
+    public final static String USER_PROTOCOL_FIELD = "http://v20-wx.shunliandongli.com/";//用户协议域名
     public final static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名
 
     /**********h5域名******************/
