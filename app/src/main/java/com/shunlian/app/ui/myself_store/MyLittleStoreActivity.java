@@ -107,6 +107,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         goodsList = new ArrayList<>();
         selectList = new ArrayList<>();
         mAdapter = new LittleStoreAdapter(this, goodsList);
+        mAdapter.setHasStableIds(true);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         recycler_goods.setLayoutManager(manager);
         recycler_goods.setAdapter(mAdapter);

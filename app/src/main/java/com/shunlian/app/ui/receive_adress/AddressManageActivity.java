@@ -66,6 +66,7 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
         setStatusBarFontDark();
         tv_title.setText(getString(R.string.address_manage));
         orderAddressPresenter = new OrderAddressPresenter(this, this);
+        recycler_address.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 10), 0, 0, getColorResouce(R.color.bg_gray)));
     }
 
     @Override
@@ -98,8 +99,6 @@ public class AddressManageActivity extends BaseActivity implements View.OnClickL
         recycler_address.setLayoutManager(layoutManager);
         recycler_address.setAdapter(manageAdapter);
         recycler_address.setNestedScrollingEnabled(false);
-        recycler_address.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 10), 0, 0, getColorResouce(R.color.bg_gray)));
-
         manageAdapter.setOnAddressDelListener(this);
     }
 
