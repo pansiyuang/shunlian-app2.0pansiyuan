@@ -12,6 +12,7 @@ public class MemberCodeListEntity {
 
     public List<ListBean> list;
 
+    public String url;
     @Override
     public String toString() {
         return "DataBean{" +

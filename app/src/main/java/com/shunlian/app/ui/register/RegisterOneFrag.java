@@ -147,7 +147,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
             gone(view_title);
         }
         //返回键扩大点击范围
-        int i = TransformUtil.dip2px(baseActivity, 20);
+        int i = TransformUtil.dip2px(baseActivity, 40);
         TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
         onePresenter = new RegisterOnePresenter(baseActivity, this);
     }

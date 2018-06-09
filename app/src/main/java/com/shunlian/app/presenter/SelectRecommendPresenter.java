@@ -41,6 +41,7 @@ public class SelectRecommendPresenter extends BasePresenter<ISelectRecommendView
                 if (data != null){
                     List<MemberCodeListEntity.ListBean> list = data.list;
                     iView.selectCodeList(list);
+                    iView.help(data.url);
                 }
             }
         });
