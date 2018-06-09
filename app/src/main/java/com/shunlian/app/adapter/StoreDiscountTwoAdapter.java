@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StorePromotionGoodsListTwoEntity;
+import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.widget.MyTextView;
 
@@ -52,7 +53,7 @@ public class StoreDiscountTwoAdapter extends BaseRecyclerAdapter<StorePromotionG
                     twoHolder.storeDiscountTwoAdapters.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            GoodsDetailAct.startAct(context,mData.data.get(position).id);
+                            ComboDetailAct.startAct(context,mData.id,mData.data.get(position).id);
                         }
                     });
                 }else {

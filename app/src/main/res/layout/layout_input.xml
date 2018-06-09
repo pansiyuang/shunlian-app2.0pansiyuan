@@ -26,13 +26,13 @@
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"/>
 
-        <com.shunlian.app.widget.MyRelativeLayout
+        <RelativeLayout
             android:id="@+id/rl_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
             android:padding="6dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp">
 
@@ -43,8 +43,7 @@
                 android:drawableBottom = "@drawable/edittext_line"
                 android:drawablePadding ="10dp"
                 android:gravity="start|center_vertical"
-                android:layout_alignParentBottom="true"
-                />
+                android:layout_alignParentBottom="true"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_select"
@@ -52,14 +51,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/rounded_rectangle_3px"
-                android:padding="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/RegisterOneAct_sjxztjr"
                 android:textColor="@color/new_text"
                 android:textSize="11sp" />
 
-        </com.shunlian.app.widget.MyRelativeLayout>
+        </RelativeLayout>
 
-        <com.shunlian.app.widget.MyLinearLayout
+        <LinearLayout
             android:id="@+id/ll_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,15 +96,14 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/light_gray_two" />
 
-        </com.shunlian.app.widget.MyLinearLayout>
+        </LinearLayout>
 
-        <com.shunlian.app.widget.MyRelativeLayout
+        <RelativeLayout
             android:id="@+id/rl_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/et_phone"
             android:layout_marginLeft="25dp"
-            android:padding="6dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="15dp">
 
@@ -110,21 +112,19 @@
                 style="@style/editText_attribute"
                 android:drawableBottom="@drawable/edittext_line"
                 android:drawablePadding="10dp"
-                app:hintText="@string/RegisterOneAct_qsryzm"
-                android:layout_marginTop="10dp"
-                android:inputType="number"
                 android:gravity="start|center_vertical"
-                android:maxLength="4"/>
+                android:inputType="number"
+                android:maxLength="4"
+                android:padding="6dp"
+                app:hintText="@string/RegisterOneAct_qsryzm" />
 
             <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_code"
                 android:layout_width="72dp"
                 android:layout_height="30dp"
-                app:iv_control_adapter="true"
-                app:iv_control_height="60"
-                app:iv_control_width="144"
+                android:scaleType="fitXY"
                 android:layout_alignParentRight="true"/>
-        </com.shunlian.app.widget.MyRelativeLayout>
+        </RelativeLayout>
 
     </com.shunlian.app.widget.MyLinearLayout>
 </ScrollView>

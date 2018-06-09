@@ -42,8 +42,10 @@ public class RegisterAct extends BaseActivity {
     private static Map<String, BaseFragment> fragmentMap = new HashMap<>();
     private static final String[] flags = {"register1", "register2"};
     private String mUniqueSign;
+    /***************注册协议************/
+    public static final String REGISTRATION_AGREEMENT = "agreement/2";
 
-    public static void startAct(Context context, int state,String unique_sign){
+    public static void startAct(Context context, int state, String unique_sign){
         Intent intent = new Intent(context,RegisterAct.class);
         intent.putExtra("state",state);
         intent.putExtra("unique_sign",unique_sign);

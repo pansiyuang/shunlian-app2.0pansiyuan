@@ -668,6 +668,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 goodsDeatilFrag.setScrollPosition(1,offset);
                 break;
             case R.id.mll_chat:
+                if (store_info!=null)
                 goodsDetailPresenter.getUserId(store_info.store_id);
                 break;
             case R.id.miv_close:

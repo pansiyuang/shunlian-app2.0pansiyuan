@@ -36,6 +36,7 @@ import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.StorePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;

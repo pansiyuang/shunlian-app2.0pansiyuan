@@ -115,7 +115,7 @@ public class PGetCoupon extends BasePresenter<IGetCoupon> {
         sortAndMD5(map);
 
         Call<BaseEntity<VouchercenterplEntity>> baseEntityCall = getApiService().vouchercenter(map);
-        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<VouchercenterplEntity>>() {
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<VouchercenterplEntity>>() {
             @Override
             public void onSuccess(BaseEntity<VouchercenterplEntity> entity) {
                 super.onSuccess(entity);

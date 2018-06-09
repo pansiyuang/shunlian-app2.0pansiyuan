@@ -20,7 +20,7 @@ import retrofit2.Call;
 public class ClassDetailPresenter extends BasePresenter<IClassDetailView> {
 
     private String mId;
-    private ShareInfoParam shareInfoParam;
+    public ShareInfoParam shareInfoParam;
 
     public ClassDetailPresenter(Context context, IClassDetailView iView, String id) {
         super(context, iView);
@@ -60,12 +60,10 @@ public class ClassDetailPresenter extends BasePresenter<IClassDetailView> {
                 shareInfoParam = new ShareInfoParam();
                 shareInfoParam.shareLink = entity.data.share_url;
                 shareInfoParam.title = entity.data.title;
-                shareInfoParam.desc = entity.data.desc;
+                shareInfoParam.desc = entity.data.content;
+                shareInfoParam.img = entity.data.pic;
             }
         });
     }
 
-    public ShareInfoParam getShareInfoParam() {
-        return shareInfoParam;
-    }
 }

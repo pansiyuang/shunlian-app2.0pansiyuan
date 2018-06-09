@@ -113,7 +113,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     protected int getLayoutId() {
-        setHideStatus();
+//        setHideStatus();
         return R.layout.act_discover_tiezi_detail;
     }
 

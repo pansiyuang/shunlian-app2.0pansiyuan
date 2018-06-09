@@ -18,7 +18,9 @@ import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.LoginPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
@@ -199,17 +201,17 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag!=null)
         SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
+        JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
-        JpushUtil.setJPushAlias();
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
         }
 
-        if ("0".equals(content.is_tag)){
+        if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
         }
         baseActivity.finish();
@@ -232,7 +234,8 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
 
     @OnClick(R.id.llayout_clause)
     public void showClause(){
-        Common.staticToast("霸王条款：必须同意");
+        H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+                +LoginAct.TERMS_OF_SERVICE,H5Act.MODE_SONIC);
     }
 
     @Override

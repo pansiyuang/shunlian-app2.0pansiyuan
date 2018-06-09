@@ -15,7 +15,9 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.Common;
@@ -197,7 +199,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
             Common.goGoGo(baseActivity, jumpType);
         }
 
-        if ("0".equals(content.is_tag)){
+        if (!"1".equals(content.is_tag)){
             SexSelectAct.startAct(baseActivity);
         }
         baseActivity.finish();
@@ -225,7 +227,8 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @OnClick(R.id.llayout_clause)
     public void showClause(){
-        Common.staticToast("霸王条款：必须同意");
+        H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+                +LoginAct.TERMS_OF_SERVICE,H5Act.MODE_SONIC);
     }
 
     @Override

@@ -16,11 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -29,6 +34,8 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
+
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -242,7 +249,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         countDown();
         //返回键扩大点击范围
         int i = TransformUtil.dip2px(baseActivity, 20);
-        TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
+        TransformUtil.expandViewTouchDelegate(miv_close,i*2,i*2,i*2,i*2);
         TransformUtil.expandViewTouchDelegate(miv_agree,i,i,i,i);
 
         Bundle arguments = getArguments();
@@ -386,7 +393,8 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.llayout_agreement:
-                Common.staticToast("霸王条款：必须同意");
+                H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+                        +RegisterAct.REGISTRATION_AGREEMENT,H5Act.MODE_SONIC);
                 break;
         }
     }
@@ -416,13 +424,25 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void registerFinish(RegisterFinishEntity entity) {
-        if (TYPE_REGIST.equals(currentType) || TYPE_FIND_PSW.equals(currentType)){
+    public void registerFinish(BaseEntity<RegisterFinishEntity> entity) {
+        if (TYPE_FIND_PSW.equals(currentType)){//找回密码
             LoginAct.startAct(baseActivity);
-        }else {
-            SharedPrefUtil.saveSharedPrfString("token", entity.token);
+        }else if (TYPE_REGIST.equals(currentType)){//注册
+            Common.staticToast(entity.message);
+            RegisterFinishEntity content = entity.data;
+            SharedPrefUtil.saveSharedPrfString("token", content.token);
+            SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
+            SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+            SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
+
+            JpushUtil.setJPushAlias();
+
+            if (!"1".equals(content.is_tag)){
+                SexSelectAct.startAct(baseActivity);
+            }else {
+                Common.goGoGo(baseActivity,"mainPage");
+            }
         }
-        Common.staticToast("注册成功");
         baseActivity.finish();
     }
 

@@ -3,7 +3,10 @@
     android:id="@+id/layout_parent"
     android:layout_width="match_parent"
     android:layout_height="128dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="@color/white">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_photo"

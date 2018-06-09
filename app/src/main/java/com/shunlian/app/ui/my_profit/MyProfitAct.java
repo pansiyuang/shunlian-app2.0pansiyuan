@@ -153,6 +153,10 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     MyImageView miv_order_profit;
     @BindView(R.id.mtv_order_profit)
     MyTextView mtv_order_profit;
+
+    @BindView(R.id.llayout_nickname)
+    LinearLayout llayout_nickname;
+
     private MyProfitPresenter presenter;
     private String profit_help_url;
     private float monthReward;//月奖励收益
@@ -280,6 +284,10 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         translateAnimation(miv_week);
         translateAnimation(miv_month);
         translateAnimation(miv_order_profit);
+
+        //扩大眼睛点击范围
+        int dp = TransformUtil.dip2px(this, 30);
+        TransformUtil.expandViewTouchDelegate(miv_isShow_data,dp,dp,dp,dp);
     }
 
     /**
@@ -325,9 +333,12 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
             visible(miv_PhotoFrame, miv_grade);
             miv_PhotoFrame.setImageResource(R.mipmap.img_plus_shouyi_zhuguan);
             miv_grade.setImageResource(R.mipmap.img_plus_xiaoshouzhuguan);
-        } else {
+        } else {//没有级别
             gone(miv_grade);
             miv_PhotoFrame.setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams
+                    lp = (RelativeLayout.LayoutParams) llayout_nickname.getLayoutParams();
+            lp.topMargin = 0;
         }
         GlideUtils.getInstance().loadCircleImage(this, civ_head, userInfo.avatar);
         mtv_nickname.setText(userInfo.nickname);
