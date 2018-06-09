@@ -173,13 +173,25 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
         setListMode(currentMode);
 
         singleAdapter.setOnItemClickListener((view, position) -> {
-            GoodsDeatilEntity.Goods goods = mGoods.get(position);
+            int mposition;
+            if (mRefStore==null){
+                mposition=position;
+            }else {
+                mposition=position-1;
+            }
+            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }
         });
         doubleAdapter.setOnItemClickListener((view, position) -> {
-            GoodsDeatilEntity.Goods goods = mGoods.get(position);
+            int mposition;
+            if (mRefStore==null){
+                mposition=position;
+            }else {
+                mposition=position-1;
+            }
+            GoodsDeatilEntity.Goods goods = mGoods.get(mposition);
             if (!isEmpty(goods.id)) {
                 GoodsDetailAct.startAct(CategoryAct.this, goods.id);
             }

@@ -16,7 +16,7 @@ public class ShareEntity implements Serializable{
         public String share_url;
         public String title;
         public String content;
-        public String logo;
+        public String pic;
 
     }
 }

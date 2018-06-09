@@ -47,8 +47,8 @@ public class CommonEntity {
     public String user_id;//通过店铺Id获取客服管理的userId
     //分享
     public String title;
-    public String image;
+    public String pic;
     public String share_url;
-    public String desc;
+    public String content;
 
 }

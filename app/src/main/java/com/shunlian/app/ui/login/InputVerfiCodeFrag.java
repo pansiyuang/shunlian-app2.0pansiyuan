@@ -201,12 +201,12 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag!=null)
         SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
+        JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
-        JpushUtil.setJPushAlias();
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
         }

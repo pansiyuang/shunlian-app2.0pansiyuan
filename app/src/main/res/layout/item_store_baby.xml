@@ -67,7 +67,7 @@
             android:id="@+id/mrlayout_plus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginLeft="9dp">
             <LinearLayout
                 android:id="@+id/llayout_plus"
@@ -80,7 +80,7 @@
                 android:gravity="center">
 
                 <com.shunlian.app.widget.MyTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#F3C262"
                     android:gravity="center"

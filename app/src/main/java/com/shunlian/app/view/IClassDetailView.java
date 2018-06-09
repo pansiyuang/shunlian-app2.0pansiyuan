@@ -5,4 +5,5 @@ package com.shunlian.app.view;
  */
 
 public interface IClassDetailView extends IView {
+
 }
