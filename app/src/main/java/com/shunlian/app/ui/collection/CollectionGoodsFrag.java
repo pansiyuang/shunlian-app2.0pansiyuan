@@ -11,17 +11,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CollectionGoodsAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.CollectionGoodsEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionGoodsView;
@@ -197,15 +194,11 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
      */
     @Override
     public void showFailureView(int request_code) {
-        LogUtil.zhLogW("showFailureView=========request_code="+request_code);
         if (request_code == CollectionGoodsPresenter.DISPLAY_NET_FAIL){
             visible(nei_empty);
-            nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null){
-                        mPresenter.sort();
-                    }
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (mPresenter != null){
+                    mPresenter.sort();
                 }
             });
         }else {
@@ -264,44 +257,32 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page,allPage);
             //添加购物车
-            adapter.setAddShoppingCarListener(new CollectionGoodsAdapter.IAddShoppingCarListener() {
-                @Override
-                public void onGoodsId(View view, int position) {
-                    CollectionGoodsEntity.Goods goods = goodsLists.get(position);
-                    mPresenter.getGoodsSku(goods.goods_id);
-                }
+            adapter.setAddShoppingCarListener((view, position) -> {
+                CollectionGoodsEntity.Goods goods = goodsLists.get(position);
+                mPresenter.getGoodsSku(goods.goods_id);
             });
             //点击条目
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CollectionGoodsEntity.Goods goods = goodsLists.get(position);
-                    if (adapter.isShowSelect) {
-                        goods.isSelect = !goods.isSelect;
-                        adapter.notifyDataSetChanged();
-                        ((MyCollectionAct) baseActivity).setManageState(selectState());
-                    }else {
-                        GoodsDetailAct.startAct(baseActivity,goods.goods_id);
-                    }
+            adapter.setOnItemClickListener((view, position) -> {
+                CollectionGoodsEntity.Goods goods = goodsLists.get(position);
+                if (adapter.isShowSelect) {
+                    goods.isSelect = !goods.isSelect;
+                    adapter.notifyDataSetChanged();
+                    ((MyCollectionAct) baseActivity).setManageState(selectState());
+                }else {
+                    GoodsDetailAct.startAct(baseActivity,goods.goods_id);
                 }
             });
             //重新获取数据
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (mPresenter != null){
-                        mPresenter.onRefresh();
-                    }
+            adapter.setOnReloadListener(() -> {
+                if (mPresenter != null){
+                    mPresenter.onRefresh();
                 }
             });
             //侧滑删除
-            adapter.setDelCollectionGoodsListener(new CollectionGoodsAdapter.IDelCollectionGoodsListener() {
-                @Override
-                public void onDelGoods(CollectionGoodsEntity.Goods goods) {
-                    mPresenter.goodsFavRemove(goods.favo_id);
-                    delLists = new ArrayList<>();
-                    delLists.add(goods);
-                }
+            adapter.setDelCollectionGoodsListener(goods -> {
+                mPresenter.goodsFavRemove(goods.favo_id);
+                delLists = new ArrayList<>();
+                delLists.add(goods);
             });
         }else {
             adapter.setPageLoading(page,allPage);
@@ -348,20 +329,17 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                 }
             };
             recycle_category.setAdapter(cateAdapter);
-            cateAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CollectionGoodsEntity.Cates cate = cates.get(position);
-                    selectId = cate.id;
-                    mPresenter.setCateOrIscut(cate.id,"0");
-                    cateAdapter.notifyDataSetChanged();
-                    mtv_cate_name.setText(cate.name);
-                    gone(flayout_category);
-                    mPresenter.sort();
-                    GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
-                    background.setColor(getColorResouce(R.color.white));
-                    mtv_cut_price.setTextColor(getColorResouce(R.color.new_text));
-                }
+            cateAdapter.setOnItemClickListener((view, position) -> {
+                CollectionGoodsEntity.Cates cate1 = cates.get(position);
+                selectId = cate1.id;
+                mPresenter.setCateOrIscut(cate1.id,"0");
+                cateAdapter.notifyDataSetChanged();
+                mtv_cate_name.setText(cate1.name);
+                gone(flayout_category);
+                mPresenter.sort();
+                GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
+                background.setColor(getColorResouce(R.color.white));
+                mtv_cut_price.setTextColor(getColorResouce(R.color.new_text));
             });
         }
     }
@@ -372,12 +350,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
             nei_empty.setImageResource(R.mipmap.img_empty_common)
                     .setText("未发现收藏的商品")
                     .setButtonText("去逛逛")
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Common.staticToast("去首页");
-                        }
-                    });
+                    .setOnClickListener(v ->Common.goGoGo(baseActivity,"mainPage"));
         }else {
             gone(nei_empty);
         }
@@ -392,12 +365,9 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     public void showGoodsSku(final GoodsDeatilEntity.Goods goods) {
         ParamDialog paramDialog = new ParamDialog(baseActivity,goods);
         paramDialog.show();
-        paramDialog.setOnSelectCallBack(new ParamDialog.OnSelectCallBack() {
-            @Override
-            public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
-                if (mPresenter != null){
-                    mPresenter.addCart(goods.goods_id,sku.id,String.valueOf(count));
-                }
+        paramDialog.setOnSelectCallBack((sku, count) -> {
+            if (mPresenter != null){
+                mPresenter.addCart(goods.goods_id,sku.id,String.valueOf(count));
             }
         });
     }

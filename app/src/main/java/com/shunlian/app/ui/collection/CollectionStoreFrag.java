@@ -11,17 +11,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CollectionStoresAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.CollectionStoresEntity;
-import com.shunlian.app.listener.OnItemClickListener;
 import com.shunlian.app.presenter.CollectionGoodsPresenter;
 import com.shunlian.app.presenter.CollectionStoresPresenter;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ICollectionStoresView;
@@ -204,15 +201,11 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
      */
     @Override
     public void showFailureView(int request_code) {
-        LogUtil.zhLogW("showFailureView=========request_code=" + request_code);
         if (request_code == CollectionGoodsPresenter.DISPLAY_NET_FAIL) {
             visible(nei_empty);
-            nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.sort();
-                    }
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (mPresenter != null) {
+                    mPresenter.sort();
                 }
             });
         } else {
@@ -260,35 +253,26 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             adapter = new CollectionStoresAdapter(baseActivity, stores);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CollectionStoresEntity.Store store = stores.get(position);
-                    if (adapter.isShowSelect) {
-                        store.isSelect = !store.isSelect;
-                        adapter.notifyItemChanged(position);
-                        ((MyCollectionAct) baseActivity).setManageState(selectState());
-                    } else if ("1".equals(store.status)){
-                        StoreAct.startAct(baseActivity, store.store_id);
-                    }
+            adapter.setOnItemClickListener((view, position) -> {
+                CollectionStoresEntity.Store store = stores.get(position);
+                if (adapter.isShowSelect) {
+                    store.isSelect = !store.isSelect;
+                    adapter.notifyItemChanged(position);
+                    ((MyCollectionAct) baseActivity).setManageState(selectState());
+                } else if ("1".equals(store.status)){
+                    StoreAct.startAct(baseActivity, store.store_id);
                 }
             });
 
             //侧滑删除
-            adapter.setDelCollectionStoresListener(new CollectionStoresAdapter.IDelCollectionStoresListener() {
-                @Override
-                public void onDelStores(CollectionStoresEntity.Store store) {
-                    mPresenter.storesFavRemove(store.id);
-                    delLists = new ArrayList<>();
-                    delLists.add(store);
-                }
+            adapter.setDelCollectionStoresListener(store -> {
+                mPresenter.storesFavRemove(store.id);
+                delLists = new ArrayList<>();
+                delLists.add(store);
             });
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (mPresenter != null) {
-                        mPresenter.onRefresh();
-                    }
+            adapter.setOnReloadListener(() -> {
+                if (mPresenter != null) {
+                    mPresenter.onRefresh();
                 }
             });
         } else {
@@ -366,19 +350,16 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 }
             };
             recycle_category.setAdapter(cateAdapter);
-            cateAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    CollectionStoresEntity.Cates cate = mcates.get(position);
-                    if (cate.id != null) {
-                        selectId = cate.id;
-                    }
-                    mtv_cate.setText(cate.name);
-                    mPresenter.setCate(cate.id);
-                    cateAdapter.notifyDataSetChanged();
-                    gone(flayout_category);
-                    mPresenter.sort();
+            cateAdapter.setOnItemClickListener((view, position) -> {
+                CollectionStoresEntity.Cates cate = mcates.get(position);
+                if (cate.id != null) {
+                    selectId = cate.id;
                 }
+                mtv_cate.setText(cate.name);
+                mPresenter.setCate(cate.id);
+                cateAdapter.notifyDataSetChanged();
+                gone(flayout_category);
+                mPresenter.sort();
             });
         }
     }
@@ -389,12 +370,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             nei_empty.setImageResource(R.mipmap.img_empty_common)
                     .setText(getStringResouce(R.string.collection_empty))
                     .setButtonText(getStringResouce(R.string.common_go_shop))
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Common.staticToast("去首页");
-                        }
-                    });
+                    .setOnClickListener(v -> Common.goGoGo(baseActivity,"mainPage"));
         } else {
             gone(nei_empty);
         }
