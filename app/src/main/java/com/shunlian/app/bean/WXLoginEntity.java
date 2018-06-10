@@ -2,6 +2,8 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/10/24.
  */
@@ -31,6 +33,8 @@ public class WXLoginEntity {
     public String token;
     public String refresh_token;
     public String plus_role;
+    public String is_tag;
+    public List<String> tag;
 
     @Override
     public String toString() {

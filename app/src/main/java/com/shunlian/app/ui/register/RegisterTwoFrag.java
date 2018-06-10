@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.RegisterFinishEntity;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.RegisterTwoPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
@@ -34,8 +35,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterTwoView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.VerificationCodeInput;
-
-import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -435,6 +434,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
             SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
             SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
 
+            EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
             JpushUtil.setJPushAlias();
 
             if (!"1".equals(content.is_tag)){

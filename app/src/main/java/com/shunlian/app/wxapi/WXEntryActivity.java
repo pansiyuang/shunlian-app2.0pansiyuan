@@ -13,14 +13,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.ui.register.RegisterAct;
 import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -33,6 +37,8 @@ import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.util.HashSet;
 
 public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler, WXEntryView {
     private String deviceId;
@@ -303,17 +309,27 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     @Override
-    public void onWXCallback(WXLoginEntity wxLoginEntity) {
-        if (wxLoginEntity != null) {
+    public void onWXCallback(BaseEntity<WXLoginEntity> entity) {
+        if (entity != null && entity.data != null) {
+            WXLoginEntity wxLoginEntity = entity.data;
             String unique_sign = wxLoginEntity.unique_sign;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {
                 RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
             } else if ("1".equals(status)) {
-                Common.staticToast("登录成功");
+                Common.staticToast(entity.message);
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
                 SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
                 SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
+                if (wxLoginEntity.tag != null)
+                    SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
+
+                EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
+                JpushUtil.setJPushAlias();
+
+                if (!"1".equals(wxLoginEntity.is_tag)){
+                    SexSelectAct.startAct(this);
+                }
             } else if ("0".equals(status) || "3".equals(status)){
                 RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
             }
