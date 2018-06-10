@@ -10,7 +10,6 @@ import com.shunlian.app.bean.WXLoginEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.presenter.BasePresenter;
 import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -91,7 +90,7 @@ public class WXEntryPresenter extends BasePresenter<WXEntryView>{
             @Override
             public void onSuccess(BaseEntity<WXLoginEntity> entity) {
                 super.onSuccess(entity);
-                iView.onWXCallback(entity.data);
+                iView.onWXCallback(entity);
             }
 
             @Override

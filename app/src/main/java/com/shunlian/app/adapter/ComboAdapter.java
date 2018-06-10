@@ -24,19 +24,12 @@ import static com.shunlian.app.utils.Common.firstSmallText;
  * Created by Administrator on 2017/11/15.
  */
 
-public class ComboAdapter extends BaseRecyclerAdapter {
-    private Context context;
-    private List<GoodsDeatilEntity.Combo> combos;
+public class ComboAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Combo> {
+
 
     public ComboAdapter(Context context,List<GoodsDeatilEntity.Combo> lists) {
         super(context, false, lists);
-        this.context = context;
-        this.combos = lists;
-    }
 
-    public void setData(List<GoodsDeatilEntity.Combo> lists) {
-        this.combos = lists;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -49,7 +42,7 @@ public class ComboAdapter extends BaseRecyclerAdapter {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ComboViewHolder viewHolder = (ComboAdapter.ComboViewHolder) holder;
-        GoodsDeatilEntity.Combo combo = combos.get(position);
+        GoodsDeatilEntity.Combo combo = lists.get(position);
         String comboPrice = context.getResources().getString(R.string.rmb)+ combo.combo_price+"-"+combo.max_combo_price;
         firstSmallText(viewHolder.tv_combo_price, comboPrice, 9);
         viewHolder.tv_market_price.setText(String.format(getString(R.string.combo_original_price),

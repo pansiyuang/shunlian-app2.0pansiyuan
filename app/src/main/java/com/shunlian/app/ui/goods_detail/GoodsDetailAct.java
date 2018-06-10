@@ -268,9 +268,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }else {
             goodsDeatilFrag = (GoodsDeatilFrag) fragments.get(FRAG_GOODS);
         }
-        mll_goods.setVisibility(View.VISIBLE);
+        visible(mll_goods,mll_detail);
         mll_goods.setEnabled(true);
-        mll_detail.setVisibility(View.VISIBLE);
         mll_detail.setEnabled(true);
         switchContent(goodsDeatilFrag);
     }
@@ -291,12 +290,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         mll_goods.setEnabled(false);
         mll_detail.setVisibility(View.INVISIBLE);
         mll_detail.setEnabled(false);
-        mtv_comment.setTextColor(getResources().getColor(R.color.new_text));
+        mtv_comment.setTextColor(getColorResouce(R.color.new_text));
         view_comment.setVisibility(View.INVISIBLE);
         switchContent(commentFrag);
         commentFrag.setPresenter(goodsDetailPresenter,id);
         goodsDetailPresenter.commentList(GoodsDetailPresenter.COMMENT_EMPTY_CODE,
                 GoodsDetailPresenter.COMMENT_FAILURE_CODE,true,goodsId,"ALL","1",id);
+        setToolbar();
     }
 
     public void setBgColor(int position, int totalDy) {

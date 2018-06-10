@@ -23,7 +23,6 @@ import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.goods_detail.ComboDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 
@@ -65,6 +64,7 @@ public class RecyclerDialog extends Dialog{
     private int fullCut = 0;
     private int fullDiscount = 0;
     private int buyGift = 0;
+    private PromotionAdapter promotionAdapter;
 
     public RecyclerDialog(Context context) {
         this(context, R.style.MyDialogStyleBottom);
@@ -104,8 +104,6 @@ public class RecyclerDialog extends Dialog{
         this.mCombos = combos;
         if (comboAdapter == null) {
             comboAdapter = new ComboAdapter(mContext, mCombos);
-        } else {
-            comboAdapter.setData(mCombos);
         }
         dialog_title.setText(mContext.getResources().getText(R.string.select_combo));
         recycler_list.setAdapter(comboAdapter);
@@ -121,11 +119,9 @@ public class RecyclerDialog extends Dialog{
     }
 
     public void setAttributes(List<GoodsDeatilEntity.Attrs> attributes) {
-        attributeAdapter = new AttributeAdapter(mContext, false, mAttributes);
         this.mAttributes = attributes;
         if (attributeAdapter == null) {
-        } else {
-            attributeAdapter.setData(mAttributes);
+            attributeAdapter = new AttributeAdapter(mContext, false, mAttributes);
         }
         dialog_title.setText(mContext.getResources().getText(R.string.goods_attribute));
         recycler_list.setAdapter(attributeAdapter);
@@ -146,7 +142,6 @@ public class RecyclerDialog extends Dialog{
         voucherAdapter.setOnItemClickListener((v, p) -> {
             GoodsDeatilEntity.Voucher voucher = voucheres.get(p);
             if (mCallBack != null) {
-                LogUtil.zhLogW("=setVoucheres============="+voucher.voucher_id);
                 mCallBack.onVoucherSelect(voucher);
                 mCallBack.itemVoucher(voucher,p);
             }
@@ -174,8 +169,6 @@ public class RecyclerDialog extends Dialog{
             moreAdapter = new ActivityMoreAdapter(mContext, false, allActs, fullCut, fullDiscount, buyGift);
             int px = TransformUtil.dip2px(mContext, 20);
             recycler_list.addItemDecoration(new VerticalItemDecoration(px, 0, 0));
-        } else {
-
         }
         dialog_title.setText(mContext.getResources().getText(R.string.shop_promotion_activity));
         recycler_list.setAdapter(moreAdapter);
@@ -202,8 +195,9 @@ public class RecyclerDialog extends Dialog{
     public void setPromotionDetail(List<ConfirmOrderEntity.PromotionInfo> infos) {
         layout_title.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         dialog_title.setText(mContext.getResources().getString(R.string.promotional_details));
-        PromotionAdapter adapter = new PromotionAdapter(mContext, false, infos);
-        recycler_list.setAdapter(adapter);
+        if (promotionAdapter == null)
+            promotionAdapter = new PromotionAdapter(mContext, false, infos);
+        recycler_list.setAdapter(promotionAdapter);
     }
 
     public void setOnVoucherCallBack(OnVoucherCallBack callBack) {

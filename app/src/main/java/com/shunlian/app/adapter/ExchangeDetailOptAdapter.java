@@ -45,7 +45,7 @@ public class ExchangeDetailOptAdapter extends BaseRecyclerAdapter<RefundDetailEn
     public ExchangeDetailOptAdapter(Context context, List<RefundDetailEntity.RefundDetail.Opt> opts, RefundDetailEntity.RefundDetail detail) {
         super(context, false, opts);
         exchangeDetailAct = (ExchangeDetailAct) context;
-        this.refund_id = refund_id;
+        this.refund_id = detail.refund_id;
         pink_color = getColor(R.color.pink_color);
         new_gray = getColor(R.color.new_gray);
         strokeWidth = TransformUtil.dip2px(context, 0.5f);

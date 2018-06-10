@@ -113,7 +113,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
             mtv_yueminxi.setVisibility(View.VISIBLE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyong));
         }else {
-            mtv_title.setText(getStringResouce(R.string.balance_shouyixiangqing));
+            mtv_title.setText(getStringResouce(R.string.balance_shouyitixian));
             mtv_yueminxi.setVisibility(View.GONE);
             mtv_keyong.setText(getStringResouce(R.string.balance_keyongshouyi));
         }

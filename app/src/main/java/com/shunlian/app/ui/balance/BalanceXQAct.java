@@ -174,7 +174,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
             mtv_yueminxi.setVisibility(View.VISIBLE);
         }else {
             mtv_account.setText(getStringResouce(R.string.balance_zhanghushouyi));
-            mtv_title.setText(getStringResouce(R.string.balance_shouyitixian));
+            mtv_title.setText(getStringResouce(R.string.balance_shouyixiangqing));
             mtv_yueminxi.setVisibility(View.GONE);
         }
         setStatusBarColor(R.color.white);

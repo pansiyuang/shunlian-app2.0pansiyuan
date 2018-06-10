@@ -19,30 +19,22 @@ import butterknife.BindView;
  */
 
 public class AttributeAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Attrs> {
-    private List<GoodsDeatilEntity.Attrs> mData;
-    private Context mContext;
 
     public AttributeAdapter(Context context, boolean isShowFooter, List<GoodsDeatilEntity.Attrs> lists) {
         super(context, isShowFooter, lists);
-        this.mData = lists;
-        this.mContext = context;
-    }
-
-    public void setData(List<GoodsDeatilEntity.Attrs> attrs) {
-        this.mData = attrs;
-        notifyDataSetChanged();
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        AttributeViewHolder viewHolder = new AttributeViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_attribute, parent, false));
+        AttributeViewHolder viewHolder = new AttributeViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.item_attribute, parent, false));
         return viewHolder;
     }
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         AttributeViewHolder attributeViewHolder = (AttributeViewHolder) holder;
-        GoodsDeatilEntity.Attrs attrs = mData.get(position);
+        GoodsDeatilEntity.Attrs attrs = lists.get(position);
         attributeViewHolder.tv_param_name.setText(attrs.label);
         attributeViewHolder.tv_param_value.setText(attrs.value);
     }

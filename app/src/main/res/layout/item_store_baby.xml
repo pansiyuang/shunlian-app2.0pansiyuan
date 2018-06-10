@@ -67,7 +67,7 @@
             android:id="@+id/mrlayout_plus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_marginLeft="9dp">
             <LinearLayout
                 android:id="@+id/llayout_plus"
