@@ -225,7 +225,7 @@
     <string name="select_goods_Specifications">请选择商品规格</string>
     <string name="full_yuan_available">满%s元可用</string>
     <string name="good_comment">好评(%s)</string>
-    <string name="praise_rate">好评率%s%%</string>
+    <string name="praise_rate">好评率%s</string>
     <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
     <string name="buy_gift">买赠</string>
@@ -484,6 +484,7 @@
     <string name="cancels_collection">取消关注</string>
     <string name="i_have_a_bottom_line">我是有底线的</string>
     <string name="no_more_footmark">您已经没有更多足迹了</string>
+    <string name="no_more_content">暂时没有收藏的内容了</string>
     <string name="collection_haopinglv">好评率：</string>
     <string name="collection_shangxin">上新</string>
     <string name="collection_empty">未发现收藏的店铺</string>

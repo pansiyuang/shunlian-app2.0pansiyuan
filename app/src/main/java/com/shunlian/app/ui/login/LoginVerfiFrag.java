@@ -67,7 +67,7 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     protected void initData() {
-        setEdittextFocusable(true,edt_verifi,edt_account);
+        setEdittextFocusable(true, edt_verifi, edt_account);
         onePresenter = new RegisterOnePresenter(getActivity(), this);
         wxapi = WXAPIFactory.createWXAPI(baseActivity, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);
@@ -85,6 +85,10 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         iv_verifi.setOnClickListener(this);
         tv_wx_login.setOnClickListener(this);
 
+    }
+
+    public void refreshCode() {
+        onePresenter.getCode();
     }
 
     @Override
@@ -106,19 +110,19 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
                 edt_verifi.setText("");
                 break;
             case R.id.mtv_accountLogin:
-                if (baseActivity instanceof LoginAct){
-                    ((LoginAct)baseActivity).pwdLogin();
+                if (baseActivity instanceof LoginAct) {
+                    ((LoginAct) baseActivity).pwdLogin();
                 }
                 break;
             case R.id.tv_wx_login:
-                WXEntryActivity.startAct(baseActivity, "login",null);
+                WXEntryActivity.startAct(baseActivity, "login", null);
                 baseActivity.finish();
                 break;
         }
     }
 
     @OnClick(R.id.miv_icon)
-    public void test(){
+    public void test() {
         /*if (BuildConfig.DEBUG){
             TestAct.startAct(baseContext);
         }*/
@@ -143,10 +147,13 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @Override
     public void smsCode(String smsCode) {
+        if (isEmpty(smsCode)) {
+            return;
+        }
         Common.staticToast(smsCode);
         String currentPhoneNum = edt_account.getText().toString();
         String verifiCode = edt_verifi.getText().toString();
-        ((LoginAct)baseActivity).inputSmsCodePage(currentPhoneNum,verifiCode);
+        ((LoginAct) baseActivity).inputSmsCodePage(currentPhoneNum, verifiCode);
     }
 
     @Override

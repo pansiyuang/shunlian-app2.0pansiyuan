@@ -10,6 +10,9 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -22,6 +25,10 @@ import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -29,7 +36,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/3/15.
  */
 
-public class CommentDetailAct extends BaseActivity implements IFindCommentDetailView{
+public class CommentDetailAct extends BaseActivity implements IFindCommentDetailView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
@@ -46,6 +53,9 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @BindView(R.id.mtv_send)
     MyTextView mtv_send;
 
+    @BindView(R.id.mtv_toolbar_msgCount)
+    MyTextView mtv_toolbar_msgCount;
+
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
@@ -54,6 +64,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
 
     private FindCommentDetailPresenter presenter;
     private LinearLayoutManager manager;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context,String experience_id,String comment_id){
         Intent intent = new Intent(context, CommentDetailAct.class);
@@ -65,6 +76,18 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
     @Override
     protected int getLayoutId() {
         return R.layout.act_commentlist;
+    }
+
+    @Override
+    protected void onResume() {
+        if (messageCountManager.isLoad()) {
+            String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
+        } else {
+            messageCountManager.initData();
+        }
+        super.onResume();
     }
 
     @Override
@@ -104,6 +127,7 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
                 .statusBarDarkFont(true, 0.2f)
                 .keyboardEnable(true)
                 .init();
+        EventBus.getDefault().register(this);
 
         mtv_toolbar_title.setText(getStringResouce(R.string.comment_details));
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
@@ -115,6 +139,9 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
         String comment_id = getIntent().getStringExtra("comment_id");
         String experience_id = getIntent().getStringExtra("experience_id");
         presenter = new FindCommentDetailPresenter(this,this,experience_id,comment_id);
+
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
 
     }
 
@@ -238,5 +265,26 @@ public class CommentDetailAct extends BaseActivity implements IFindCommentDetail
             presenter.detachView();
             presenter = null;
         }
+        EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
 }

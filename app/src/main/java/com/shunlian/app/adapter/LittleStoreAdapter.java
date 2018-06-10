@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -48,7 +47,7 @@ public class LittleStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             LittleStoreHolderView littleHolderView = (LittleStoreHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
 
-            GlideUtils.getInstance().loadImage(context, littleHolderView.miv_icon, goods.thumb, false);
+            GlideUtils.getInstance().loadImage(context, littleHolderView.miv_icon, goods.thumb);
 
             littleHolderView.tv_goods_title.setText(goods.title);
             if (!isEmpty(goods.price)) {

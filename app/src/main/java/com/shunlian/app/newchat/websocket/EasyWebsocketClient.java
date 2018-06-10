@@ -184,11 +184,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                     baseMessage.setSendTime(msgInfo.send_time);
 
                     if (!getIsChating()) {
-                        EventBus.getDefault().post(new NewMessageEvent(1));
                         if (messageCountManager.isLoad()) {
                             int count = messageCountManager.getAll_msg();
                             messageCountManager.setAll_msg(count + 1);
+                            LogUtil.httpLogW("setAll_msg:" + (count + 1));
                         }
+                        EventBus.getDefault().post(new NewMessageEvent(1));
                     }
                     break;
                 case "pingjia":

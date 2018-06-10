@@ -60,6 +60,10 @@ public class GoodsSearchPresenter extends BasePresenter<IGoodsSearchView> {
             map.put("min_price", goodsSearchParam.min_price);
         }
 
+        if (!TextUtils.isEmpty(goodsSearchParam.keyword)) {
+            map.put("keyword", goodsSearchParam.keyword);
+        }
+
         if (!TextUtils.isEmpty(goodsSearchParam.max_price)) {
             map.put("max_price", goodsSearchParam.max_price);
         }

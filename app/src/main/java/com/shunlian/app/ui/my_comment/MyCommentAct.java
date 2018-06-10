@@ -9,10 +9,14 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MyCommentAdapter;
 import com.shunlian.app.adapter.WaitAppendCommentAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.eventbus_bean.CommentEvent;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.MyCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -36,7 +40,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/11.
  */
 
-public class MyCommentAct extends BaseActivity implements IMyCommentListView {
+public class MyCommentAct extends BaseActivity implements IMyCommentListView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -62,8 +66,14 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    private MessageCountManager messageCountManager;
+
     private int pink_color;
     private int new_text;
     private MyCommentListPresenter presenter;
@@ -117,10 +127,11 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        pink_color = getResources().getColor(R.color.pink_color);
-        new_text = getResources().getColor(R.color.new_text);
+
         EventBus.getDefault().register(this);
 
+        pink_color = getResources().getColor(R.color.pink_color);
+        new_text = getResources().getColor(R.color.new_text);
         presenter = new MyCommentListPresenter(this, this);
 
         manager = new LinearLayoutManager(this);
@@ -142,6 +153,18 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             case MyCommentListPresenter.APPEND:
                 appendComment();
                 break;
+        }
+
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
         }
     }
 
@@ -296,6 +319,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
         if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS || event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
             presenter.myCommentListAll();
         }
+
     }
 
     @Override
@@ -307,5 +331,25 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView {
             presenter.detachView();
         }
         EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

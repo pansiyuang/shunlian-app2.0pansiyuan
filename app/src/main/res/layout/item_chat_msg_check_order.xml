@@ -42,7 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/miv_icon"
+                android:ellipsize="end"
                 android:includeFontPadding="false"
+                android:maxLines="2"
                 android:text="2016年夏季新款两侧大口袋收腰欧美风时尚中长款连衣裙"
                 android:textColor="@color/new_text"
                 android:textSize="14sp" />
