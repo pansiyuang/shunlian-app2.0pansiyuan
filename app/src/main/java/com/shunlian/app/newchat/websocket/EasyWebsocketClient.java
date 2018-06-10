@@ -187,7 +187,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                         if (messageCountManager.isLoad()) {
                             int count = messageCountManager.getAll_msg();
                             messageCountManager.setAll_msg(count + 1);
-                            LogUtil.httpLogW("setAll_msg:" + (count + 1));
                         }
                         EventBus.getDefault().post(new NewMessageEvent(1));
                     }
