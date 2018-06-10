@@ -85,7 +85,6 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        LogUtil.httpLogW("refreshData.....................");
         messageCountManager.setTextCount(tv_msg_count);
     }
 
