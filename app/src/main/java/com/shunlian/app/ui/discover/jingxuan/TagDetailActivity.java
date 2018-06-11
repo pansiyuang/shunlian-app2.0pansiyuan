@@ -92,6 +92,7 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
         recycler_tags.setLayoutManager(manager);
         recycler_tags.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(this, 10), 0, 0));
         ((SimpleItemAnimator) recycler_tags.getItemAnimator()).setSupportsChangeAnimations(false);
+        recycler_tags.setNestedScrollingEnabled(false);
     }
 
 

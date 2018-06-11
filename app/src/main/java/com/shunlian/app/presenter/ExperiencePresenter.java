@@ -74,6 +74,7 @@ public class ExperiencePresenter extends BasePresenter<IExperienceView> {
             @Override
             public void onErrorCode(int code, String message) {
                 super.onErrorCode(code, message);
+                Common.staticToast(message);
                 isLoading = false;
             }
         });

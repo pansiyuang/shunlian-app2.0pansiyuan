@@ -171,11 +171,11 @@ public class MessageCountManager implements IMessageCountView {
         this.allMessageCountEntity.custom_msg = custom_msg;
     }
 
-    public int getPlatform_msg(){
+    public int getPlatform_msg() {
         return allMessageCountEntity.platform_msg;
     }
 
-    public void setPlatform_msg(int platform_msg){
+    public void setPlatform_msg(int platform_msg) {
         this.allMessageCountEntity.platform_msg = platform_msg;
     }
 
@@ -185,12 +185,13 @@ public class MessageCountManager implements IMessageCountView {
         }
         if (getAll_msg() > 0) {
             textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
         }
         if (getAll_msg() > 99) {
             textView.setText("99+");
         } else {
             textView.setText(String.valueOf(getAll_msg()));
-            LogUtil.httpLogW("setTextCount:" + getAll_msg());
         }
         return textView.getText().toString();
     }

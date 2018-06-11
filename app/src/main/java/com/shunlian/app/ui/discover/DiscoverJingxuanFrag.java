@@ -18,6 +18,7 @@ import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 
@@ -37,6 +38,9 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private ArticleAdapter mArticleAdapter;
     private ChosenPresenter mPresenter;
@@ -71,6 +75,10 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         ViewGroup decorView = (ViewGroup) getActivity().getWindow().getDecorView();
         decorView.addView(quick_actions);
         quick_actions.setVisibility(View.INVISIBLE);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("暂时没有用户发布精选文章")
+                .setButtonText(null);
     }
 
     @Override
@@ -151,6 +159,11 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
                     index = articleEntity.article_list.size() - 1;
                 }
                 articleEntity.article_list.get(index).topic_list = topicList;
+                lay_refresh.setVisibility(View.VISIBLE);
+                nei_empty.setVisibility(View.GONE);
+            }else{
+                lay_refresh.setVisibility(View.GONE);
+                nei_empty.setVisibility(View.VISIBLE);
             }
 
             mArticleAdapter = new ArticleAdapter(getActivity(), mArticleList, this, mTags);

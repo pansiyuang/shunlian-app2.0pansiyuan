@@ -49,7 +49,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
         map.put("order_id", order_id);
         sortAndMD5(map);
         Call<BaseEntity<OrderdetailEntity>> baseEntityCall = getApiService().orderdetail(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderdetailEntity>>() {
+        getNetData(true,baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderdetailEntity>>() {
             @Override
             public void onSuccess(BaseEntity<OrderdetailEntity> entity) {
                 super.onSuccess(entity);
@@ -67,7 +67,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
         map.put("reason",String.valueOf(reason));
         sortAndMD5(map);
         Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().cancleOrder(getRequestBody(map));
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

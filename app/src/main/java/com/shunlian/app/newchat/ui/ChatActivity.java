@@ -395,9 +395,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         sendTextMessage(et_input.getText().toString());
         et_input.setText("");
 
-        if (et_input.isBottomPanelVisible()) {
-            et_input.setBottomPanelInVisible();
-        }
+//        if (et_input.isBottomPanelVisible()) {
+//            et_input.setBottomPanelInVisible();
+//        }
     }
 
     @Override
