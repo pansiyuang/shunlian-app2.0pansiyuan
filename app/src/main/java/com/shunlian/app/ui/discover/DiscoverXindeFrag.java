@@ -17,6 +17,7 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -34,6 +35,9 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private ExperiencePresenter mPresenter;
     private ExperienceAdapter mAdapter;
@@ -61,6 +65,10 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
         ((SimpleItemAnimator) recycler_list.getItemAnimator()).setSupportsChangeAnimations(false);
 
         experienceList = new ArrayList<>();
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("暂时没有用户发布心得")
+                .setButtonText(null);
     }
 
     @Override
@@ -106,6 +114,14 @@ public class DiscoverXindeFrag extends DiscoversFrag implements IExperienceView,
     public void getExperienceList(List<ExperienceEntity.Experience> list, int page, int totalPage) {
         if (page == 1) {
             experienceList.clear();
+
+            if (isEmpty(list)) {
+                lay_refresh.setVisibility(View.GONE);
+                nei_empty.setVisibility(View.VISIBLE);
+            } else {
+                lay_refresh.setVisibility(View.VISIBLE);
+                nei_empty.setVisibility(View.GONE);
+            }
         }
 
         if (!isEmpty(list)) {

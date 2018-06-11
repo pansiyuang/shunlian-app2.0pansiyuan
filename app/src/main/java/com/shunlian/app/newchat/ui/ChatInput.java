@@ -422,7 +422,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @Override
     public void OnEmojiClick(int emojiIndex, String emojiStr) {
         SpannableString str = new SpannableString(emojiStr);
-        Bitmap emojiBitmap =  getEmojiBitmap(emojiIndex);
+        Bitmap emojiBitmap = getEmojiBitmap(emojiIndex);
 
         if (emojiBitmap != null) {
             ImageSpan span = new ImageSpan(getContext(), emojiBitmap);
@@ -435,6 +435,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     @Override
     public void OnEmojiDel() {
         int index = editText.getSelectionStart();
+        if (index == 0) {
+            return;
+        }
         Editable editable = editText.getText();
         editable.delete(index - 1, index);
     }

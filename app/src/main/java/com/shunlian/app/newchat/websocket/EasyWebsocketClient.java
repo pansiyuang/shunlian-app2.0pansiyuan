@@ -98,7 +98,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void buildeWebsocketClient() {
         try {
             mClient = null;
-            mClient = new Client(new URI("ws://123.207.107.21:8086"), new Draft_17());//ws://api.shunliandongli.com/v1/im2.alias
+            mClient = new Client(new URI("ws://ws.v2.shunliandongli.com"), new Draft_17());//ws://123.207.107.21:8086
             mClient.setOnClientConnetListener(this);
             mClient.connect();
             isInit = true;
@@ -308,7 +308,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LogUtil.httpLogW("connetService:" + jsonObject.toString() + " mStatus:" + mStatus);
         if (mClient != null && mStatus == Status.CONNECTED) {
             mClient.send(jsonObject.toString());
         }
@@ -468,6 +467,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
      */
     public UserInfoEntity.Info.User getUser() {
         if (userInfoEntity == null) {
+            return null;
+        }
+        if (userInfoEntity.info == null) {
             return null;
         }
         MemberStatus status = getMemberStatus();
