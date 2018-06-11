@@ -93,7 +93,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
-        android:text="@string/balance_tixian"
         android:textColor="@color/share_text"
         android:textSize="12sp" />
 

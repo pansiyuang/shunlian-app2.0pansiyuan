@@ -9,6 +9,7 @@ import com.shunlian.app.bean.BalanceInfoEntity;
 import com.shunlian.app.presenter.PBalanceMain;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.view.IBalanceMain;
 import com.shunlian.app.widget.MyImageView;
@@ -86,7 +87,7 @@ public class BalanceMainAct extends BaseActivity implements View.OnClickListener
                 AlipayMyAct.startAct(this,data.havePayAccount,!data.is_set_password,false,data.account_number);
                 break;
             case R.id.mrlayout_licai:
-
+                H5Act.startAct(this,data.profit_help_url,H5Act.MODE_SONIC);
                 break;
         }
     }

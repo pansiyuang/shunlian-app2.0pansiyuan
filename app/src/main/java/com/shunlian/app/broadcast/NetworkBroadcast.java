@@ -7,8 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
-import com.shunlian.app.newchat.websocket.Status;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 
@@ -38,8 +38,13 @@ public class NetworkBroadcast extends BroadcastReceiver {
                 case NetworkUtils.NETWORK_CLASS_4_G:
                 case NetworkUtils.NETWORK_CLASS_3_G:
                 case NetworkUtils.NETWORK_CLASS_2_G:
-                    Common.staticToast("已切换到4G/3G/2G");
+//                    if (Constant.ISWIFI)
+                        Common.staticToast("已切换到4G/3G/2G");
+//                    Constant.ISWIFI=false;
                     break;
+//                default:
+//                    Constant.ISWIFI=true;
+//                    break;
             }
             EasyWebsocketClient client = EasyWebsocketClient.getInstance(context);
             if (client.getClient() != null) {

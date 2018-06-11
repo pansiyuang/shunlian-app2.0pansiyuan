@@ -632,9 +632,10 @@
     <string name="balance_zanwutixian">暂无提现明细</string>
     <string name="balance_tixianchenggong">提现成功</string>
     <string name="balance_shibaiyuanyin">失败原因</string>
-    <string name="balance_wenxintishis">温馨提示：收益超过100元才能申请提现，每次提现收益将全部提完。
+    <string name="balance_wenxintishis">温馨提示：收益超过%s元才能申请提现，每次提现收益将全部提完。
 </string>
     <string name="balance_shouyixiangqing">收益详情</string>
+    <string name="balance_nindeshouyi">您的收益满%s方可提现</string>
     <string name="balance_shouyitixian">收益提现</string>
     <string name="balance_zhifubaoxiang">支付宝详情</string>
     <string name="balance_jiechubang">解除绑定</string>

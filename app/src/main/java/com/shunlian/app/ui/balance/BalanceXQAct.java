@@ -110,7 +110,9 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
                 BalanceDetailAct.startAct(getBaseContext());
                 break;
             case R.id.mtv_tixian:
-                if (balanceInfoEntity.havePayAccount) {
+                if (Float.parseFloat(balanceInfoEntity.balance)<Float.parseFloat(balanceInfoEntity.withdraw_limit)){
+                    Common.staticToast(String.format(getStringResouce(R.string.balance_nindeshouyi),balanceInfoEntity.withdraw_limit));
+                }else if (balanceInfoEntity.havePayAccount) {
                     if (Constant.ISBALANCE){
                         BalanceTXAct.startAct(this);
                     }else {
@@ -201,7 +203,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
                         ,"分按"+balanceInfoEntity.rate_name);
                 mtv_tishi.setText(tishiBuilder);
             }else {
-                mtv_tishi.setText(getStringResouce(R.string.balance_wenxintishis));
+                mtv_tishi.setText(String.format(getStringResouce(R.string.balance_wenxintishis),balanceInfoEntity.withdraw_limit));
             }
         }
     }

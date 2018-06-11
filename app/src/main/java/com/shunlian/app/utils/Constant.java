@@ -95,6 +95,7 @@ public final class Constant {
     public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
     public static  String SHARE_LINK = "";
     public static  String ZHIFUBAOURL=H5_HOST+"agreement/5";
+//    public static boolean ISWIFI=false;
 
 
     //测试
