@@ -14,6 +14,7 @@ import com.shunlian.app.bean.ProductDetailEntity;
 import com.shunlian.app.presenter.GifDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
@@ -126,6 +127,10 @@ public class PlusGifDetailAct extends BaseActivity implements IGifDetailView, Pa
 
     @Override
     public void onSelectComplete(GoodsDeatilEntity.Sku sku, int count) {
+        if (!Common.isAlreadyLogin()) {
+            LoginAct.startAct(this);
+            return;
+        }
         if (promptDialog == null) {
             promptDialog = new PromptDialog(this);
             promptDialog.setSureAndCancleListener(String.format(getStringResouce(R.string.plus_open_up), mEntity.member_code),

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -20,6 +21,7 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IGoodsSearchView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,11 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
     @BindView(R.id.tv_add_goods)
     TextView tv_add_goods;
 
+    @BindView(R.id.ll_bottom)
+    LinearLayout ll_bottom;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private GoodsSearchPresenter presenter;
     private GoodsSearchAdapter singleAdapter;
@@ -108,24 +115,27 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
         linearLayoutManager = new LinearLayoutManager(this);
         recycle_category.setLayoutManager(linearLayoutManager);
 
-        singleAdapter = new GoodsSearchAdapter(this, mGoods, mRefStore,goods_list);
+        singleAdapter = new GoodsSearchAdapter(this, mGoods, mRefStore, goods_list);
 
         int space = TransformUtil.dip2px(this, 0.5f);
         recycle_category.addItemDecoration(new VerticalItemDecoration(space,
-                0,0,getColorResouce(R.color.value_ECECEC)));
+                0, 0, getColorResouce(R.color.value_ECECEC)));
         recycle_category.setAdapter(singleAdapter);
 
         singleAdapter.setOnItemClickListener((view, position) -> {
             GoodsDeatilEntity.Goods goods = mGoods.get(position);
-            if (goods_list.contains(goods.id)){
+            if (goods_list.contains(goods.id)) {
                 goods_list.remove(goods.id);
-            }else {
+            } else {
                 goods_list.add(goods.id);
             }
             singleAdapter.notifyDataSetChanged();
             tv_add_goods.setText(String.format(getStringResouce(R.string.add_some_goods)
-                    ,String.valueOf(count-goods_list.size())));
+                    , String.valueOf(count - goods_list.size())));
         });
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("暂无商品").setButtonText("");
     }
 
     @Override
@@ -136,6 +146,18 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
             mGoods.clear();
             mRefStore = goodsEntity.ref_store;
             singleAdapter.setStoreData(mRefStore);
+
+            if (isEmpty(goodsEntity.goods_list)) {
+                nei_empty.setVisibility(View.VISIBLE);
+                recycle_category.setVisibility(View.GONE);
+                tv_add_goods.setVisibility(View.GONE);
+                ll_bottom.setVisibility(View.GONE);
+            } else {
+                nei_empty.setVisibility(View.GONE);
+                recycle_category.setVisibility(View.VISIBLE);
+                tv_add_goods.setVisibility(View.VISIBLE);
+                ll_bottom.setVisibility(View.VISIBLE);
+            }
         }
         if (!isEmpty(goodsEntity.goods_list)) {
             mGoods.addAll(goodsEntity.goods_list);
@@ -165,28 +187,28 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
         }
     }*/
 
-   @OnClick(R.id.tv_store_add)
-   public void addStore(){
-       StringBuilder sb = new StringBuilder();
-       for (int i = 0; i < goods_list.size(); i++) {
-           String s = goods_list.get(i);
-           sb.append(s);
-           if (i + 1 != goods_list.size()){
-               sb.append(",");
-           }
-       }
-       presenter.addStoreGoods(sb.toString());
-   }
+    @OnClick(R.id.tv_store_add)
+    public void addStore() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < goods_list.size(); i++) {
+            String s = goods_list.get(i);
+            sb.append(s);
+            if (i + 1 != goods_list.size()) {
+                sb.append(",");
+            }
+        }
+        presenter.addStoreGoods(sb.toString());
+    }
 
-   @OnClick(R.id.mtv_cancel)
-   public void cancle(){
-       finish();
-   }
+    @OnClick(R.id.mtv_cancel)
+    public void cancle() {
+        finish();
+    }
 
-   @OnClick(R.id.ll_search)
-   public void search(){
-       SearchGoodsActivity.startActivityForResult(this);
-   }
+    @OnClick(R.id.ll_search)
+    public void search() {
+        SearchGoodsActivity.startActivityForResult(this);
+    }
 
     @Override
     public void getFairishNums(String count) {
@@ -213,14 +235,14 @@ public class GoodsSearchAct extends BaseActivity implements IGoodsSearchView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == SearchGoodsActivity.SEARCH_REQUEST_CODE && resultCode == RESULT_OK) {
             String keyword = data.getStringExtra("keyword");
             if (searchParam == null) {
                 searchParam = new GoodsSearchParam();
             }
             tv_keyword.setText(keyword);
             searchParam.keyword = keyword;
-            presenter.getSearchGoods(searchParam,true);
+            presenter.getSearchGoods(searchParam, true);
         }
     }
 }

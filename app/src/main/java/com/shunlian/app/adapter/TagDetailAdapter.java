@@ -353,6 +353,7 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
             itemView.setOnClickListener(this);
             LinearLayoutManager manager = new LinearLayoutManager(context);
             recycler_change.setLayoutManager(manager);
+            recycler_change.setNestedScrollingEnabled(false);
             recycler_change.addItemDecoration(new VerticalItemDecoration(TransformUtil.dip2px(context, 0.5f), 0, 0, getColor(R.color.background_gray1)));
         }
 
