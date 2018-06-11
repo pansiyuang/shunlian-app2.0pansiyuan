@@ -46,8 +46,10 @@ public class SelectAccountDialog extends Dialog  {
         String netState = SharedPrefUtil.getCacheSharedPrf("netState","");
         if (netState.contains("v20-front-api")){//测试
             commonEntities.add(addAccount("15805729571","a1234567"));
+            commonEntities.add(addAccount("15068713363","a1234567"));
         }else if (netState.contains("api-front.v2")){//预发布
             commonEntities.add(addAccount("15805729571","123456"));
+            commonEntities.add(addAccount("15068713363","123456"));
         }else {//正式
 
         }

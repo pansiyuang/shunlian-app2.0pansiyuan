@@ -11,9 +11,12 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -43,6 +46,7 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     private int refreshPosition;//刷新位置
     /**是否刷新条目**/
     public static boolean isRefreshItem;
+    private MyOrderEntity.Orders currentOrder;
 
     public static AllFrag getInstance(int id) {
         AllFrag allFrag = new AllFrag();
@@ -148,6 +152,13 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         }
     }
 
+    public void getUserId(int position){
+        if (ordersLists.get(position) != null) {
+            currentOrder = ordersLists.get(position);
+            mPresenter.getUserId(currentOrder.store_id);
+        }
+    }
+
     /**
      * 订单列表
      *
@@ -240,6 +251,20 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             }
         }
         emptyPage();
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        if (isEmpty(userId) || "0".equals(userId)) {
+            Common.staticToast("该商家未开通客服");
+            return;
+        }
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = currentOrder.store_name;
+        chatMember.type = "3";
+        chatMember.m_user_id = userId;
+        chatMember.shop_id = currentOrder.store_id;
+        ChatManager.getInstance(getActivity()).init().MemberChatToStore(chatMember);
     }
 
     private void removeItem() {

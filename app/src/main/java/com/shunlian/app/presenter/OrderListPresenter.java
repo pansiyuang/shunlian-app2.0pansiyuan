@@ -242,4 +242,26 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
             }
         });
     }
+
+    public void getUserId(String storeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_id", storeId);
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getUserId(commonEntity.user_id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
+        });
+    }
 }

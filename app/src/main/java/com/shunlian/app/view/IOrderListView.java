@@ -28,4 +28,6 @@ public interface IOrderListView extends IView {
      * @param orders
      */
     void refreshOrder(MyOrderEntity.Orders orders);
+
+    void getUserId(String userId);
 }

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
@@ -310,7 +311,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                 case R.id.mtv_title1:
                     text = mtv_title1.getText();
                     if (getString(R.string.contact_seller).equals(text)) {//联系商家
-
+                        mAllFrag.getUserId(getAdapterPosition());
                     } else if (getString(R.string.remind_send).equals(text)) {//提醒发货
                         if (mAllFrag != null) {
                             mAllFrag.remindseller(orders.id);
