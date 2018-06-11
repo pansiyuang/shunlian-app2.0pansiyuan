@@ -201,6 +201,8 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
             });
         }
         mAdapter.notifyDataSetChanged();
+
+        recycler_tags.smoothScrollToPosition(0);
     }
 
     public void toLikeArticle(String articleId) {

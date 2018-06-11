@@ -70,10 +70,10 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
-        ExperienceHolderView holderView = (ExperienceHolderView) holder;
         if (isEmpty(payloads)) {
             super.onBindViewHolder(holder, position, payloads);
         } else {
+            ExperienceHolderView holderView = (ExperienceHolderView) holder;
             ExperienceEntity.Experience experience = (ExperienceEntity.Experience) payloads.get(0);
             setPraiseImg(experience.praise, holderView.tv_evaluate_count);
             holderView.tv_evaluate_count.setText(experience.praise_num);
