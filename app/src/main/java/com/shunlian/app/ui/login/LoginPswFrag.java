@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
@@ -31,6 +32,7 @@ import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.SelectAccountDialog;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,7 +73,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     private View rootView;
     private boolean isHidden = true;
-    private LoginPresenter loginPresenter;
+    public LoginPresenter loginPresenter;
     private String jumpType;
 
     @Override
@@ -134,20 +136,26 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
             case R.id.btn_login:
                 String currentAccount = edt_account.getText().toString();
                 String currentPsw = edt_psw.getText().toString();
-                if (TextUtils.isEmpty(currentAccount)) {
-                    Common.staticToast("账号不能为空喔~");
-                    return;
-                }
+                if (BuildConfig.DEBUG&&isEmpty(currentAccount)){
+                    SelectAccountDialog selectAccountDialog=new SelectAccountDialog(this);
+                    selectAccountDialog.setCanceledOnTouchOutside(true);
+                    selectAccountDialog.show();
+                }else {
+                    if (TextUtils.isEmpty(currentAccount)) {
+                        Common.staticToast("账号不能为空喔~");
+                        return;
+                    }
 
-                if (TextUtils.isEmpty(currentPsw)) {
-                    Common.staticToast("密码不能为空喔~");
-                    return;
+                    if (TextUtils.isEmpty(currentPsw)) {
+                        Common.staticToast("密码不能为空喔~");
+                        return;
+                    }
+                    if (edt_psw.getText().length() < 8) {
+                        Common.staticToast("密码输入太短~");
+                        return;
+                    }
+                    loginPresenter.LoginUserName(currentAccount, currentPsw);
                 }
-                if (edt_psw.getText().length() < 8) {
-                    Common.staticToast("密码输入太短~");
-                    return;
-                }
-                loginPresenter.LoginUserName(currentAccount, currentPsw);
                 break;
             case R.id.tv_wx_login:
                 WXEntryActivity.startAct(baseActivity, "login", null);

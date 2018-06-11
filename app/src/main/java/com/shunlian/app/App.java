@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.utils.sideslip.ActivityHelper;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -123,5 +124,8 @@ public class App extends Application {
             DOWNLOAD_PATH = this.getCacheDir().getPath();
         }
         initJPush();
+        if (BuildConfig.DEBUG){
+            SwitchHostUtil.setHostMethod();
+        }
     }
 }

@@ -110,7 +110,7 @@ public class BalanceXQAct extends BaseActivity implements View.OnClickListener, 
                 BalanceDetailAct.startAct(getBaseContext());
                 break;
             case R.id.mtv_tixian:
-                if (Float.parseFloat(balanceInfoEntity.balance)<Float.parseFloat(balanceInfoEntity.withdraw_limit)){
+                if (!Constant.ISBALANCE&&Float.parseFloat(balanceInfoEntity.balance)<Float.parseFloat(balanceInfoEntity.withdraw_limit)){
                     Common.staticToast(String.format(getStringResouce(R.string.balance_nindeshouyi),balanceInfoEntity.withdraw_limit));
                 }else if (balanceInfoEntity.havePayAccount) {
                     if (Constant.ISBALANCE){

@@ -6,9 +6,12 @@ import android.os.AsyncTask;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.SettingPresenter;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_comment.MyCommentAct;
@@ -18,6 +21,7 @@ import com.shunlian.app.utils.ClearCacheUtil;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
+import com.shunlian.app.utils.SwitchHostUtil;
 import com.shunlian.app.view.ISettingView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -32,7 +36,7 @@ import cn.jpush.android.api.JPushInterface;
  * Created by Administrator on 2018/4/23.
  */
 
-public class SettingAct extends BaseActivity implements ISettingView{
+public class SettingAct extends BaseActivity implements ISettingView {
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
@@ -75,6 +79,9 @@ public class SettingAct extends BaseActivity implements ISettingView{
 
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
+
+    @BindView(R.id.tv_transfer)
+    TextView tv_transfer;
 
     @BindView(R.id.miv_message)
     MyImageView miv_message;
@@ -123,22 +130,41 @@ public class SettingAct extends BaseActivity implements ISettingView{
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         mtv_toolbar_title.setText("设置");
-        gone(mrlayout_toolbar_more,mtv_app_score);
+        gone(mrlayout_toolbar_more, mtv_app_score);
 
-        presenter = new SettingPresenter(this,this);
+        presenter = new SettingPresenter(this, this);
 
         String localVersion = SharedPrefUtil.getSharedPrfString("localVersion", "");
-        mtv_app_version.setText("V"+localVersion);
+        mtv_app_version.setText("V" + localVersion);
 
         //计算缓存大小
         CacheSize cacheSize = new CacheSize();
         cacheSize.execute();
+        if (BuildConfig.DEBUG) {
+            tv_transfer.setVisibility(View.VISIBLE);
+            tv_transfer.setOnClickListener(this);
+            if (InterentTools.HTTPADDR.contains("v20-front-api")) {
+                tv_transfer.setText("当前测试环境");
+            } else if (InterentTools.HTTPADDR.contains("api-front.v2")) {
+                tv_transfer.setText("当前预发布环境");
+            } else {
+                tv_transfer.setText("当前正式环境");
+            }
+        }
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        switch (view.getId()){
+        switch (view.getId()) {
+            case R.id.tv_transfer:
+                SwitchHostUtil.switchMethod(this);
+                if (!isEmpty(mtv_count.getText())) {
+                    ClearCacheUtil cacheUtil = new ClearCacheUtil();
+                    cacheUtil.execute();
+                    mtv_count.setText("");
+                }
+                break;
             case R.id.mtv_personal_data:
                 PersonalDataAct.startAct(this);
                 break;
@@ -152,7 +178,7 @@ public class SettingAct extends BaseActivity implements ISettingView{
                 UserSecurityAct.startAct(this);
                 break;
             case R.id.llayout_clear:
-                if (!isEmpty(mtv_count.getText())){
+                if (!isEmpty(mtv_count.getText())) {
                     ClearCacheUtil cacheUtil = new ClearCacheUtil();
                     cacheUtil.execute();
                     mtv_count.setText("");
@@ -162,28 +188,28 @@ public class SettingAct extends BaseActivity implements ISettingView{
                 if (isPushOpen) {//停止推送服务
                     miv_message.setImageResource(R.mipmap.icon_chat_userlist_n);
                     JPushInterface.stopPush(Common.getApplicationContext());
-                    if (presenter != null){
+                    if (presenter != null) {
                         presenter.updatePushSetting("0");
                     }
-                }else {//开启推送服务
+                } else {//开启推送服务
                     miv_message.setImageResource(R.mipmap.icon_chat_userlist_h);
                     JPushInterface.resumePush(Common.getApplicationContext());
-                    if (presenter != null){
+                    if (presenter != null) {
                         presenter.updatePushSetting("1");
                     }
                 }
                 isPushOpen = !isPushOpen;
                 break;
             case R.id.mtv_feedback:
-                BeforeFeedBackAct.startAct(this,null);
+                BeforeFeedBackAct.startAct(this, null);
                 break;
             case R.id.mtv_app_score:
                 break;
             case R.id.mtv_app_recommend:
-                BusinessCardAct.startAct(this,mAppQRCode);
+                BusinessCardAct.startAct(this, mAppQRCode);
                 break;
             case R.id.llayout_about:
-                H5Act.startAct(this,mAboutUrl,H5Act.MODE_SONIC);
+                H5Act.startAct(this, mAboutUrl, H5Act.MODE_SONIC);
                 break;
         }
     }
@@ -215,10 +241,10 @@ public class SettingAct extends BaseActivity implements ISettingView{
      */
     @Override
     public void pushSwitch(String push_on) {
-        if ("0".equals(push_on)){//接收推送，1是，0否
+        if ("0".equals(push_on)) {//接收推送，1是，0否
             isPushOpen = false;
             miv_message.setImageResource(R.mipmap.icon_chat_userlist_n);
-        }else {
+        } else {
             isPushOpen = true;
             miv_message.setImageResource(R.mipmap.icon_chat_userlist_h);
         }
@@ -231,7 +257,7 @@ public class SettingAct extends BaseActivity implements ISettingView{
      */
     @Override
     public void aboutUrl(String about_url) {
-        mAboutUrl = about_url+"?versioncode="+mtv_app_version.getText();
+        mAboutUrl = about_url + "?versioncode=" + mtv_app_version.getText();
     }
 
     /**
@@ -244,19 +270,19 @@ public class SettingAct extends BaseActivity implements ISettingView{
         mAppQRCode = appQRCode;
     }
 
-    class CacheSize extends AsyncTask<Void,Void,String>{
+    class CacheSize extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
             File file = new File(Constant.CACHE_PATH_EXTERNAL);
             if (file.exists()) {
-                long t = getTotalSizeOfFilesInDir(file)/1000;
-                if (t > 5 * 1000*1000){//大于5兆可清理缓存
+                long t = getTotalSizeOfFilesInDir(file) / 1000;
+                if (t > 5 * 1000 * 1000) {//大于5兆可清理缓存
                     String s = Formatter.formatFileSize(SettingAct.this, t);
                     return s;
                 }
                 return null;
-            }else {
+            } else {
                 file.mkdirs();
             }
             return null;

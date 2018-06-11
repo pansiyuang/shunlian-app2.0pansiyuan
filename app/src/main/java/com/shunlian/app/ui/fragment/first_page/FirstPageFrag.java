@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment.first_page;
 
+import android.os.Debug;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GetDataEntity;
@@ -107,6 +109,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onResume() {
+        if (BuildConfig.DEBUG){
+            pFirstPage.getMenuData();
+        }
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseContext);
             if (messageCountManager.isLoad()) {
@@ -192,7 +197,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         pFirstPage = new PFirstPage(getContext(), this, null);
-        pFirstPage.getMenuData();
+        if (!BuildConfig.DEBUG){
+            pFirstPage.getMenuData();
+        }
         mainActivity= (MainActivity) getActivity();
     }
 
