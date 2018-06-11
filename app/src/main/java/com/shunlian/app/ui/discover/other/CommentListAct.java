@@ -10,6 +10,9 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.FindCommentListPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
@@ -24,6 +27,10 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -31,7 +38,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/3/14.
  */
 
-public class CommentListAct extends BaseActivity implements IFindCommentListView{
+public class CommentListAct extends BaseActivity implements IFindCommentListView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
@@ -48,6 +55,9 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
     @BindView(R.id.mtv_send)
     MyTextView mtv_send;
 
+    @BindView(R.id.mtv_toolbar_msgCount)
+    MyTextView mtv_toolbar_msgCount;
+
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
@@ -59,6 +69,7 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
 
     private LinearLayoutManager manager;
     private FindCommentListPresenter presenter;
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Activity activity,String article_id){
         Intent intent = new Intent(activity, CommentListAct.class);
@@ -110,6 +121,8 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 .keyboardEnable(true)
                 .init();
 
+        EventBus.getDefault().register(this);
+
         mtv_toolbar_title.setText(getStringResouce(R.string.comments));
 
         GradientDrawable gradientDrawable = (GradientDrawable) met_text.getBackground();
@@ -126,6 +139,23 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                 0,0,getColorResouce(R.color.white)));
 
     }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
 
     @OnClick(R.id.mrlayout_toolbar_more)
     public void more(){
@@ -241,5 +271,25 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
             presenter.detachView();
             presenter = null;
         }
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

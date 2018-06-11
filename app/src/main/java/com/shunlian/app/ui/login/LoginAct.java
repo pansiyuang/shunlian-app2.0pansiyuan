@@ -94,6 +94,13 @@ public class LoginAct extends BaseActivity {
         mViewPager.setAdapter(mAdapter);
     }
 
+    @Override
+    protected void onRestart() {
+        if (verfiFrag != null) {
+            verfiFrag.refreshCode();
+        }
+        super.onRestart();
+    }
 
     @OnClick(R.id.mtv_register)
     public void goRegister(){

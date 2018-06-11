@@ -9,9 +9,13 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.ServiceTypeAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.SelectServicePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -19,6 +23,10 @@ import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.ISelectServiceView;
 import com.shunlian.app.widget.CustomerGoodsView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -29,7 +37,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/26.
  */
 
-public class SelectServiceActivity extends BaseActivity implements ISelectServiceView, BaseRecyclerAdapter.OnItemClickListener {
+public class SelectServiceActivity extends BaseActivity implements ISelectServiceView, BaseRecyclerAdapter.OnItemClickListener, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.customer_goods)
     CustomerGoodsView customer_goods;
@@ -43,9 +51,14 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
 
+    @BindView(R.id.mtv_toolbar_msgCount)
+    MyTextView mtv_toolbar_msgCount;
+
     private String currentOgId;
     private SelectServicePresenter presenter;
     private RefundDetailEntity.RefundDetail.Edit mEntity;
+
+    private MessageCountManager messageCountManager;
 
     public static void startAct(Context context, String ogId) {
         Intent intent = new Intent(context, SelectServiceActivity.class);
@@ -62,6 +75,9 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        EventBus.getDefault().register(this);
+
         mtv_toolbar_title.setText(getStringResouce(R.string.select_service_type));
 
         presenter = new SelectServicePresenter(this, this);
@@ -70,6 +86,23 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
             presenter.getRefundInfo(currentOgId);
         }
     }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
 
     @Override
     protected void initListener() {
@@ -98,7 +131,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     }
 
     @OnClick(R.id.mrlayout_toolbar_more)
-    public void more(){
+    public void more() {
         visible(quick_actions);
         quick_actions.afterSale();
     }
@@ -120,7 +153,7 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
             RefundDetailEntity.RefundDetail.Edit.RefundChoice choice = choices.get(position);
             mEntity.serviceType = choice.type;
             mEntity.og_Id = currentOgId;
-            ReturnRequestActivity.startAct(this, mEntity,false,null);
+            ReturnRequestActivity.startAct(this, mEntity, false, null);
         }
     }
 
@@ -128,6 +161,26 @@ public class SelectServiceActivity extends BaseActivity implements ISelectServic
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

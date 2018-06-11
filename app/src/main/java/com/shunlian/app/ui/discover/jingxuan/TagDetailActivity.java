@@ -18,6 +18,7 @@ import com.shunlian.app.bean.ArticleEntity;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IChosenView;
@@ -190,11 +191,12 @@ public class TagDetailActivity extends BaseActivity implements IChosenView, TagD
             mAdapter = new TagDetailAdapter(this, articleList, mTag);
             mAdapter.setOnLayoutSizeListener(this);
             recycler_tags.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
+            mAdapter.setOnItemClickListener((view, position) -> {
+                try {
                     ArticleEntity.Article article = articleList.get(position - 1);
                     ArticleH5Act.startAct(TagDetailActivity.this, article.id, ArticleH5Act.MODE_SONIC);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }

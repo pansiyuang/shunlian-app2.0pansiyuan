@@ -148,9 +148,9 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
     public void setPraiseImg(String status, TextView textView) {
         Drawable drawable;
         if ("2".equals(status)) {
-            drawable = context.getResources().getDrawable(R.mipmap.icon_found_pinglun_zan_n);
+            drawable = context.getResources().getDrawable(R.mipmap.icon_found_zan_n);
         } else {
-            drawable = context.getResources().getDrawable(R.mipmap.icon_found_pinglun_zan_h);
+            drawable = context.getResources().getDrawable(R.mipmap.icon_found_zan_h);
         }
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         textView.setCompoundDrawables(drawable, null, null, null);

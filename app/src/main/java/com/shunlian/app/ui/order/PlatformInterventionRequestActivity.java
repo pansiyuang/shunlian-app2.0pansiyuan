@@ -14,9 +14,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.SingleImgAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.presenter.PlatformInterventionPresenter;
 import com.shunlian.app.ui.BaseActivity;
@@ -30,6 +33,10 @@ import com.shunlian.app.view.IPlatformInterventionRequestView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ReturnGoodsDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +53,7 @@ import static com.shunlian.app.adapter.SingleImgAdapter.REQUEST_CAMERA_CODE;
  * Created by Administrator on 2018/1/8.
  */
 
-public class PlatformInterventionRequestActivity extends BaseActivity implements View.OnClickListener, IPlatformInterventionRequestView, ReturnGoodsDialog.ISelectListener {
+public class PlatformInterventionRequestActivity extends BaseActivity implements View.OnClickListener, IPlatformInterventionRequestView, ReturnGoodsDialog.ISelectListener, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.tv_title)
     TextView tv_title;
 
@@ -77,6 +84,8 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     @BindView(R.id.downTime_order)
     HourNoWhiteDownTimerView downTime_order;
 
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
 
     public RefundDetailEntity.RefundDetail.Edit mEdit;
     private ReturnGoodsDialog dialog;
@@ -87,6 +96,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     private String refundId;
     private String currentStatusId;
     public RefundDetailEntity.RefundDetail refundDetail;
+    private MessageCountManager messageCountManager;
     private boolean isEdit;
     private int index;
 
@@ -107,6 +117,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        EventBus.getDefault().register(this);
         tv_title.setText(getStringResouce(R.string.platform_intervention_request));
         rl_title_more.setVisibility(View.VISIBLE);
 
@@ -175,6 +186,22 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     public void more() {
         visible(quick_actions);
         quick_actions.afterSale();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
     }
 
     @Override
@@ -327,10 +354,29 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         }
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

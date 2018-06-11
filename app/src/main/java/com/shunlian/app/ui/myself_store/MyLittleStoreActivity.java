@@ -130,7 +130,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                             WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
                             break;
                         case 1:
-                            Common.copyText(MyLittleStoreActivity.this,shareLink,shareDesc);
+                            Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc);
                             break;
                         case 2:
                             GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
@@ -242,8 +242,6 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
             tv_title_right.setText(getStringResouce(R.string.manage));
             tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
 
-
-            LogUtil.httpLogW("isEdit:" + isEdit);
             if (isEdit) {
                 rl_share.setVisibility(View.GONE);
                 ll_manager.setVisibility(View.VISIBLE);

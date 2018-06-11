@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.presenter.AllMessageCountPresenter;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IMessageCountView;
 
 
@@ -189,6 +190,7 @@ public class MessageCountManager implements IMessageCountView {
             textView.setText("99+");
         } else {
             textView.setText(String.valueOf(getAll_msg()));
+            LogUtil.httpLogW("setTextCount:" + getAll_msg());
         }
         return textView.getText().toString();
     }

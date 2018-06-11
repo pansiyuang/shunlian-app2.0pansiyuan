@@ -7,14 +7,22 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.PunishEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PunishPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IPunishView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,7 +31,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/4/3.
  */
 
-public class PunishAct extends BaseActivity implements IPunishView{
+public class PunishAct extends BaseActivity implements IPunishView, MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
@@ -52,9 +60,10 @@ public class PunishAct extends BaseActivity implements IPunishView{
     @BindView(R.id.mtv_complaints)
     MyTextView mtv_complaints;
 
+    @BindView(R.id.mtv_toolbar_msgCount)
+    MyTextView mtv_toolbar_msgCount;
 
-
-
+    private MessageCountManager messageCountManager;
 
     private PunishPresenter presenter;
     private String mOPT;
@@ -90,6 +99,9 @@ public class PunishAct extends BaseActivity implements IPunishView{
         mtv_toolbar_title.setText(getStringResouce(R.string.punish));
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+
+        EventBus.getDefault().register(this);
+
         String id = getIntent().getStringExtra("id");
         mOPT = getIntent().getStringExtra("opt");
 
@@ -103,6 +115,22 @@ public class PunishAct extends BaseActivity implements IPunishView{
     public void more(){
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.message();
+    }
+
+    @Override
+    public void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
     }
 
     @Override
@@ -150,6 +178,26 @@ public class PunishAct extends BaseActivity implements IPunishView{
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(mtv_toolbar_msgCount);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

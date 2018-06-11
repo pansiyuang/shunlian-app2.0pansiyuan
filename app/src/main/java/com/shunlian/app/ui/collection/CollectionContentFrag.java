@@ -15,7 +15,9 @@ import com.shunlian.app.eventbus_bean.ArticleEvent;
 import com.shunlian.app.presenter.ContentPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IContentView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -43,6 +45,9 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     private ContentPresenter mPresenter;
     private ContentAdapter mAdapter;
     private LinearLayoutManager manager;
@@ -63,7 +68,6 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
         mPresenter.getFavoriteArticles(true);
 
         //新增下拉刷新
-        //新增下拉刷新
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
 
@@ -72,6 +76,9 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
         mArticleList = new ArrayList<>();
         manager = new LinearLayoutManager(getActivity());
         recycler_content.setLayoutManager(manager);
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.no_more_content));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -176,12 +183,24 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
     public void getFavoriteArticles(List<ArticleEntity.Article> articleList, int page, int totalPage) {
         if (page == 1) {
             mArticleList.clear();
+
+            if (isEmpty(articleList)) {
+                visible(nei_empty);
+                gone(lay_refresh);
+            } else {
+                gone(nei_empty);
+                visible(lay_refresh);
+            }
         }
         if (!isEmpty(articleList)) {
             for (ArticleEntity.Article article : articleList) {
                 article.isSelect = isSelectAll;
             }
             mArticleList.addAll(articleList);
+        } else {
+            if (page == 1) {
+                ((MyCollectionAct) baseActivity).recoveryManage(this);
+            }
         }
         if (mAdapter == null) {
             mAdapter = new ContentAdapter(getActivity(), mArticleList);
@@ -211,6 +230,11 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
                 break;
             }
         }
+
+        if (mArticleList.size() == 0) {
+            visible(nei_empty);
+            gone(lay_refresh);
+        }
         mAdapter.notifyDataSetChanged();
     }
 
@@ -222,6 +246,10 @@ public class CollectionContentFrag extends CollectionFrag implements IContentVie
             if (article.isSelect) {
                 it.remove();
             }
+        }
+        if (mArticleList.size() == 0) {
+            mPresenter.initPage();
+            mPresenter.getFavoriteArticles(true);
         }
         mAdapter.notifyDataSetChanged();
     }

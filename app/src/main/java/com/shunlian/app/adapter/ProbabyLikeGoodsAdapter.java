@@ -15,6 +15,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
@@ -106,7 +107,7 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
         } else { //右边
             layoutParams.setMargins(0, margin, 0, 0);
         }
-
+        childrenViewHolder.mrlayout_plus.setVisibility(View.GONE);
         childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));
     }
 
@@ -144,6 +145,9 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
         @BindView(R.id.miv_onel)
         MyImageView miv_onel;
+
+        @BindView(R.id.mrlayout_plus)
+        MyRelativeLayout mrlayout_plus;
 
 
         public ChildrenViewHolder(View itemView) {
