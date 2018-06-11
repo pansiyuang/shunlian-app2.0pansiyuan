@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IRegisterOneView;
 
 import java.io.IOException;
@@ -43,6 +42,7 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
+                    if (response.body() == null)return;
                     byte[] bytes = response.body().bytes();
                     iView.setCode(bytes);
                 } catch (IOException e) {
