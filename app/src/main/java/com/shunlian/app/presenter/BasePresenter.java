@@ -216,7 +216,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     httpDialog.dismiss();
                 }
                 BaseEntity<T> body = response.body();
-                LogUtil.longW("onResponse============" + body.toString());
+                //LogUtil.longW("onResponse============" + body.toString());
+                if (body == null)return;
                 if (body.code == 1000) {//请求成功
                     if (body.data instanceof EmptyEntity){
                         callback.onSuccess(body);
