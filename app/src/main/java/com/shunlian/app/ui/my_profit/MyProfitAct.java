@@ -449,13 +449,13 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                 SaleDetailAct.startAct(this, SaleDetailAct.REWARD_DETAIL);
                 break;
             case R.id.mtv_immediate_cash:
-                if (availableProfit >= 100) {
+//                if (availableProfit >= 100) {
                     Constant.ISBALANCE = false;
                     BalanceMainAct.startAct(this, false);
 //                    ProfitExtractAct.startAct(this, availableProfit+"");
-                } else {
-                    Common.staticToast("您的收益满100方可提现");
-                }
+//                } else {
+//                    Common.staticToast("您的收益满100方可提现");
+//                }
                 break;
             case R.id.mtv_detail:
                 Constant.ISBALANCE = false;
