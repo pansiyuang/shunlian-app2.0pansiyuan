@@ -17,6 +17,8 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.WXLoginEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
+import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
@@ -37,6 +39,9 @@ import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
 
@@ -67,6 +72,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     @Override
     protected void initData() {
         setHideStatusAndNavigation();
+        EventBus.getDefault().register(this);
         deviceId = SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D");
         //初始注册方法必须有，即使就算第二次回调启动的时候先调用onResp，也必须有注册方法，否则会出错
         api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
@@ -308,6 +314,14 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     }
 
+    @Subscribe(sticky = true)
+    public void eventBus(DispachJump jump) {
+        if (jump != null && !isEmpty(jump.jumpType))
+            SharedPrefUtil.saveSharedPrfString("wx_jump",jump.jumpType);
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().postSticky(jump);
+    }
+
     @Override
     public void onWXCallback(BaseEntity<WXLoginEntity> entity) {
         if (entity != null && entity.data != null) {
@@ -321,11 +335,24 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
                 SharedPrefUtil.saveSharedPrfString("refresh_token", wxLoginEntity.refresh_token);
                 SharedPrefUtil.saveSharedPrfString("member_id", wxLoginEntity.member_id);
+                SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
                 if (wxLoginEntity.tag != null)
                     SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
 
+                //通知登录成功
+                DefMessageEvent event = new DefMessageEvent();
+                event.loginSuccess = true;
+                EventBus.getDefault().post(event);
+
                 EasyWebsocketClient.getInstance(this).initChat(); //初始化聊天
+                if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+                    Common.goGoGo(this, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
+                }
                 JpushUtil.setJPushAlias();
+                String jumpType = SharedPrefUtil.getSharedPrfString("wx_jump", "");
+                if (!isEmpty(jumpType)) {
+                    Common.goGoGo(this, jumpType);
+                }
 
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
@@ -367,6 +394,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             }
             super.handleMessage(msg);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     protected boolean isEmpty(CharSequence sequence){
