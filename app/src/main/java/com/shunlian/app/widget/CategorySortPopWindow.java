@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -95,6 +97,19 @@ public class CategorySortPopWindow extends PopupWindow {
             }
         };
         recyclerView.setAdapter(recyclerAdapter);
+    }
+
+    @Override
+    public void showAsDropDown(View anchor) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // Android 7.x中,PopupWindow高度为match_parent时,会出现兼容性问题,需要处理兼容性
+            int[] location = new int[2];
+            anchor.getLocationOnScreen(location);
+            int x = location[0];
+            int y = location[1];
+            showAtLocation(anchor, Gravity.NO_GRAVITY, 0, y + anchor.getHeight());
+        } else {
+            super.showAsDropDown(anchor);
+        }
     }
 
     public void setOnSortSelectListener(OnSortSelectListener l) {
