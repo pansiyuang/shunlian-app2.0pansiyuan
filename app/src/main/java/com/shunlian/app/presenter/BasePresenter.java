@@ -312,7 +312,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 if (data != null) {
                     LogUtil.httpLogW("刷新token");
                     SharedPrefUtil.saveSharedPrfString("token", data.token);
-                    SharedPrefUtil.saveSharedPrfString("token", data.plus_role);
+                    SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
                     SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
                     getNetData(emptyCode,failureCode,isLoading,clone,new SimpleNetDataCallback<BaseEntity<T>>());
                 }

@@ -340,7 +340,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setHeadNickname(String head, String nickname) {
-        GlideUtils.getInstance().loadCircleImage(this, civ_head, head);
+        GlideUtils.getInstance().loadCircleHeadImage(this, civ_head, head);
         mtv_nickname.setText(nickname);
     }
 
