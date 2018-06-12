@@ -45,6 +45,9 @@ public final class InterentTools {
     public final static String USER_PROTOCOL_FIELD = "http://v20-wx.shunliandongli.com/";//用户协议域名
     public final static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名
 
+    public static String IM_SOCKET_TEST_ADDRESS = "ws://123.207.107.21:8086";   //测试 IM地址
+    public static String IM_SOCKET_PRE_ADDRESS = "ws://ws.v2.shunliandongli.com";  //预发布 IM地址
+
     /**********h5域名******************/
     public final static String H5_HOST = "http://v20-wx.shunliandongli.com/";
 
