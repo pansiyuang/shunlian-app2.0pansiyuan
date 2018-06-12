@@ -56,6 +56,20 @@ public class GlideUtils {
         loadImage(context, imageView, imgUrl, true);
     }
 
+    public void loadImage(Context context, ImageView imageView, String imgUrl, @DrawableRes int placeholder) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+//                    .error(R.mipmap.error)
+                .placeholder(placeholder)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
+
     /**
      * 常规加载图片
      *
@@ -66,7 +80,7 @@ public class GlideUtils {
      */
 
     public void loadImage(Context context, ImageView imageView, String imgUrl, boolean isFade) {
-        if (imageView == null)return;
+        if (imageView == null) return;
         if (isFade) {
             Glide.with(context)
                     .load(imgUrl)
@@ -121,7 +135,7 @@ public class GlideUtils {
      * @param heightSize
      */
     public void loadOverrideImage(Context context, ImageView imageView, String imgUrl, int withSize, int heightSize) {
-        if (imageView == null)return;
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.img_default_common)
@@ -161,12 +175,24 @@ public class GlideUtils {
      * @param imgUrl
      */
     public void loadCircleImage(Context context, ImageView imageView, String imgUrl) {
-        if (imageView == null)return;
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
-//                .placeholder(R.mipmap.error)
                 .placeholder(R.mipmap.img_zhanweitu)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new GlideCircleTransform(context))
+                .into(imageView);
+    }
+
+    public void loadCircleImage(Context context, ImageView imageView, String imgUrl, @DrawableRes int placeholder) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+//                .error(R.mipmap.error)
+                .placeholder(placeholder)
                 .crossFade()
                 .priority(Priority.NORMAL) //下载的优先级
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
@@ -222,8 +248,8 @@ public class GlideUtils {
      * @param imageView
      * @param imgUrl
      */
-    public void loadCornerImage(Context context, ImageView imageView, String imgUrl,int radius) {
-        if (imageView == null)return;
+    public void loadCornerImage(Context context, ImageView imageView, String imgUrl, int radius) {
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
 //                .error(R.mipmap.error)
@@ -236,6 +262,7 @@ public class GlideUtils {
                         new GlideRoundTransform(context, radius))
                 .into(imageView);
     }
+
     /**
      * 加载模糊的圆角图片
      *
@@ -337,7 +364,7 @@ public class GlideUtils {
      */
 
     public void loadLocalImageWithView(Context context, @DrawableRes int resourceId, ImageView view) {
-        if (view == null)return;
+        if (view == null) return;
         Glide.with(context).
                 load(resourceId).
                 asBitmap().
@@ -379,25 +406,26 @@ public class GlideUtils {
         Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                BitmapUtil.saveImageToAlbumn(context,resource);
-                Common.staticToasts(context,"保存成功",R.mipmap.icon_common_duihao);
+                BitmapUtil.saveImageToAlbumn(context, resource);
+                Common.staticToasts(context, "保存成功", R.mipmap.icon_common_duihao);
             }
 
             @Override
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                Common.staticToasts(context,"保存失败",R.mipmap.icon_common_tanhao);
+                Common.staticToasts(context, "保存失败", R.mipmap.icon_common_tanhao);
             }
         });
     }
 
     /**
      * 发现关注列表
+     *
      * @param context
      * @param imageView
      * @param imgUrl
      */
-    public void findFollowList(Context context,ImageView imageView,String imgUrl){
-        if (imageView == null)return;
+    public void findFollowList(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -412,12 +440,13 @@ public class GlideUtils {
 
     /**
      * 圈子的轮播
+     *
      * @param context
      * @param imageView
      * @param imgUrl
      */
-    public void communityBanner(Context context,ImageView imageView,String imgUrl){
-        if (imageView == null)return;
+    public void communityBanner(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)
@@ -432,12 +461,13 @@ public class GlideUtils {
 
     /**
      * 圈子顶部图
+     *
      * @param context
      * @param imageView
      * @param imgUrl
      */
-    public void communityTopPic(Context context,ImageView imageView,String imgUrl,int radius){
-        if (imageView == null)return;
+    public void communityTopPic(Context context, ImageView imageView, String imgUrl, int radius) {
+        if (imageView == null) return;
         Glide.with(context)
                 .load(imgUrl)
                 //.error(R.mipmap.error)

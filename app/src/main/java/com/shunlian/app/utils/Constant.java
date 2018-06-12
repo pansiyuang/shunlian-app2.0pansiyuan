@@ -90,6 +90,7 @@ public final class Constant {
 
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
+    public static String IM_ADDRESS = "";//IM 地址
     public static boolean ISBALANCE=false;
 
     public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
@@ -111,4 +112,5 @@ public final class Constant {
     //正式
     public static int IM_XIAOMI_BUSID = 431;      //IM 绑定小米推送证书ID
     public static int IM_HUAWEI_BUSID = 432;      //IM 绑定华为推送证书ID
+
 }

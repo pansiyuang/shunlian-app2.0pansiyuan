@@ -83,8 +83,8 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
     @BindView(R.id.tv_sales_volume)
     TextView tv_sales_volume;
 
-    @BindView(R.id.view_line)
-    View view_line;
+    @BindView(R.id.view_category_line)
+    View view_category_line;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
@@ -366,7 +366,7 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
             case R.id.tv_general_sort:
                 popupWindow.initData(currentSortPosition);
                 if (!popupWindow.isShowing()) {
-                    popupWindow.showAsDropDown(view_line);
+                    popupWindow.showAsDropDown(view_category_line);
                     miv_general_sort.setRotation(180);
                 }
                 break;
