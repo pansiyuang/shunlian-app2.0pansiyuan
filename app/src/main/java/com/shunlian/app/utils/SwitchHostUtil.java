@@ -53,6 +53,7 @@ public class SwitchHostUtil {
 //                    MyHttpUtil.H5_HOST = Constant.TEST_HOST;
                 }else {
                     //正式
+
 //                    MyHttpUtil.HTTPADDR = "https://api.shunliandongli.com/v1/";
 //                    MyHttpUtil.HTTPADDR_IM = "https://im.api.shunliandongli.com/";
 //                    Constant.IM_SDK_APPID = 1400008795;
@@ -96,6 +97,8 @@ public class SwitchHostUtil {
                 Constant.IM_HUAWEI_BUSID = 432;
 //                MyHttpUtil.H5_HOST = Constant.RELEASE_HOST;
             }
+        }else {
+            SharedPrefUtil.saveCacheSharedPrf("netState",InterentTools.HTTPADDR);
         }
     }
 }

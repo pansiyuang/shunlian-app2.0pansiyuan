@@ -236,7 +236,7 @@ public class StartAct extends MBaseActivity implements IMain {
                 isAD=true;
                 this.data=data;
             }
-            if ("1".equals(data.is_tag)&&data.tag != null&&data.tag.size()>0){
+            if ("1".equals(data.is_tag)&&!isEmpty(data.tag )){
                 SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(data.tag));
                 JpushUtil.setJPushAlias();
             }

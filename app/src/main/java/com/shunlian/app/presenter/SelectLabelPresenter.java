@@ -12,6 +12,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectLabelView;
@@ -34,7 +35,7 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
     private final int w;
     private List<ArtTagEntity.Item> list;
     private int selCount= 0;//选择标签数量
-
+    private List<String> tag;
     public SelectLabelPresenter(Context context, ISelectLabelView iView) {
         super(context, iView);
         initApi();
@@ -111,7 +112,7 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
     private String iteratorList(int label){
         if (!isEmpty(list)){
             StringBuilder sb = new StringBuilder();
-            List<String> tag = new ArrayList<>();
+            tag = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 ArtTagEntity.Item item = list.get(i);
                 if (item.isSelect){
@@ -130,7 +131,6 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
             }else if (label == 2){
                 tag.add("女");
             }
-            SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(tag));
             return sb.substring(0,sb.length()-1);
         }
         return "";
@@ -154,6 +154,8 @@ public class SelectLabelPresenter extends BasePresenter<ISelectLabelView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(tag));
+                JpushUtil.setJPushAlias();
                 iView.success();
             }
 
