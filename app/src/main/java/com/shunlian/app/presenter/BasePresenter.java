@@ -327,7 +327,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     }
 
-    private String getStringMD5(String str) {
+    public String getStringMD5(String str) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(str.getBytes());

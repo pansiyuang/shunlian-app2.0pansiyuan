@@ -25,6 +25,7 @@ import chihane.shunlian.BottomDialog;
 import chihane.shunlian.ISelectAble;
 import chihane.shunlian.Selector;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -63,11 +64,11 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
      */
     @Override
     public void initApi() {
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
 
         Call<BaseEntity<PersonalDataEntity>> baseEntityCall = getApiService().personalData(map);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<PersonalDataEntity>>(){
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PersonalDataEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PersonalDataEntity> entity) {
                 super.onSuccess(entity);
@@ -75,7 +76,7 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
                 iView.setAvatar(data.avatar);
                 iView.setNickname(data.nickname);
                 iView.setSex(data.sex);
-                iView.setLocation(data.location,null);
+                iView.setLocation(data.location, null);
                 iView.setTag(data.tag);
                 iView.setBirth(data.birth);
                 iView.setSignature(data.signature);
@@ -84,13 +85,13 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
     }
 
 
-    public void setInfo(String key,String value){
-        Map<String,String> map = new HashMap<>();
-        map.put(key,value);
+    public void setInfo(String key, String value) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, value);
         sortAndMD5(map);
 
         Call<BaseEntity<EmptyEntity>> setinfo = getAddCookieApiService().setinfo(getRequestBody(map));
-        getNetData(true,setinfo,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        getNetData(true, setinfo, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -238,28 +239,24 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
     }
 
     public void uploadPic(List<ImageEntity> filePath, final String uploadPath) {
-        Map<String, RequestBody> params = new HashMap<>();
-        for (int i = 0; i < filePath.size(); i++) {
-            LogUtil.httpLogW("I:"+i);
-            File file = filePath.get(i).file;
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
-                @Override
-                public void onProgress(int progress, String tag) {
-                    LogUtil.httpLogW("tag:" + tag + "    progress:" + progress);
-//                    iView.uploadProgress(progress, tag);
-                }
-
-                @Override
-                public void onDetailProgress(long written, long total, String tag) {
-
-                }
-            },file.getAbsolutePath());
-            params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
+        if (isEmpty(filePath)) {
+            return;
         }
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
-        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(params, body);
-        getNetData(true,call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (int i = 0; i < filePath.size(); i++) {
+            File file = filePath.get(i).file;
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("file[]", file.getName(), requestBody);
+            parts.add(part);
+        }
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("path_name", uploadPath);
+        sortAndMD5(map);
+
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(parts, map);
+        getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);
@@ -267,7 +264,7 @@ public class PersonalDataPresenter extends BasePresenter<IPersonalDataView> {
                 String domain = uploadPicEntity.domain;
                 if (!isEmpty(uploadPicEntity.relativePath)) {
                     String s = uploadPicEntity.relativePath.get(0);
-                    iView.setRefundPics(s,domain);
+                    iView.setRefundPics(s, domain);
                 }
             }
         });

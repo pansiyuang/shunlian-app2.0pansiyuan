@@ -173,17 +173,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             return false;
         });
 
-        recycler_chat.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == SCROLL_STATE_IDLE) { // 滚动静止时才加载图片资源，极大提升流畅度
-                    mAdapter.setScrolling(false);
-                    mAdapter.notifyDataSetChanged(); // notify调用后onBindViewHolder会响应调用
-                } else
-                    mAdapter.setScrolling(true);
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {

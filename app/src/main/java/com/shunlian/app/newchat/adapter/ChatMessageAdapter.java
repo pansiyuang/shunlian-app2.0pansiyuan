@@ -428,13 +428,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             String imgUrl = image.img_host + image.img_small;
             setImg(leftImgViewHolder.miv_img, image);
 
-            if (!isScrolling) {
-                GlideUtils.getInstance().loadImage(context, leftImgViewHolder.miv_img, imgUrl);
-                GlideUtils.getInstance().loadCornerImage(context, leftImgViewHolder.miv_icon, imageMessage.from_headurl, 3);
-            } else {
-                leftImgViewHolder.miv_img.setImageResource(R.mipmap.img_guige_moren);
-                leftImgViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
-            }
+            GlideUtils.getInstance().loadImage(context, leftImgViewHolder.miv_img, imgUrl);
+            GlideUtils.getInstance().loadCornerImage(context, leftImgViewHolder.miv_icon, imageMessage.from_headurl, 3);
 
             leftImgViewHolder.miv_img.setOnClickListener(v -> {
                 if (isEmpty(image.img_small)) {
@@ -466,19 +461,10 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 //                    imagehost = "https://" + imagehost;
 //                }
                 current_small_url = imagehost + image.img_small;
-
-                if (!isScrolling) {
-                    GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_small_url);
-                } else {
-                    rightImgViewHolder.miv_img.setImageResource(R.mipmap.img_guige_moren);
-                }
+                GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_small_url);
             } else {
                 current_bigl_url = "file://" + image.localUrl;
-                if (!isScrolling) {
-                    GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_bigl_url);
-                } else {
-                    rightImgViewHolder.miv_img.setImageResource(R.mipmap.img_guige_moren);
-                }
+                GlideUtils.getInstance().loadImage(context, rightImgViewHolder.miv_img, current_bigl_url);
             }
             rightImgViewHolder.miv_img.setOnClickListener(v -> {
                 List<String> imgs = new ArrayList<>();
@@ -514,12 +500,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         GlideUtils.getInstance().loadCornerImage(context, leftGoodsViewHolder.miv_icon, goodsMessage.from_headurl, 3);
         if (goodsBody.goods != null) {
             GoodsMessage.Goods goods = goodsBody.goods;
-            if (!isScrolling) {
-                GlideUtils.getInstance().loadImage(context, leftGoodsViewHolder.miv_good_img, goods.goodsImage);
-            } else {
-                leftGoodsViewHolder.miv_good_img.setImageResource(R.mipmap.img_guige_moren);
-            }
-
+            GlideUtils.getInstance().loadImage(context, leftGoodsViewHolder.miv_good_img, goods.goodsImage);
             leftGoodsViewHolder.tv_goods_title.setText(goods.title);
 
             String price = getString(R.string.rmb) + goods.price;
@@ -539,11 +520,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         GlideUtils.getInstance().loadCornerImage(context, rightGoodsViewHolder.miv_icon, goodsMessage.from_headurl, 3);
         if (goodsBody.goods != null) {
             GoodsMessage.Goods goods = goodsBody.goods;
-            if (!isScrolling) {
-                GlideUtils.getInstance().loadImage(context, rightGoodsViewHolder.miv_good_img, goods.goodsImage);
-            } else {
-                rightGoodsViewHolder.miv_good_img.setImageResource(R.mipmap.img_guige_moren);
-            }
+            GlideUtils.getInstance().loadImage(context, rightGoodsViewHolder.miv_good_img, goods.goodsImage);
             rightGoodsViewHolder.tv_goods_title.setText(goods.title);
 
             String price = getString(R.string.rmb) + goods.price;
@@ -600,11 +577,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 orderViewHolder.tv_seller_id.setText(order.store_id);
                 if (!isEmpty(order.orderGoods)) {
                     OrderMessage.OrderGoods orderGoodsBean = order.orderGoods.get(0);
-                    if (!isScrolling) {
-                        GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.goodsImage);
-                    } else {
-                        orderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
-                    }
+                    GlideUtils.getInstance().loadImage(context, orderViewHolder.miv_icon, orderGoodsBean.goodsImage);
                     orderViewHolder.tv_title.setText(orderGoodsBean.title);
                     orderViewHolder.tv_price.setText("共" + order.orderGoods.size() + "件商品，共计¥" + orderGoodsBean.price);
                 }
@@ -642,11 +615,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 OrderMessage.OrderGoods orderGoodsBean = orderGoodsBeanList.get(0);
                 checkOrderViewHolder.tv_price.setText("共" + orderGoodsBeanList.size() + "件商品，共计¥" + order.price);
                 checkOrderViewHolder.tv_title.setText(orderGoodsBean.title);
-                if (!isScrolling) {
-                    GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.goodsImage);
-                } else {
-                    checkOrderViewHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
-                }
+                GlideUtils.getInstance().loadImage(context, checkOrderViewHolder.miv_icon, orderGoodsBean.goodsImage);
             }
         }
     }
@@ -747,11 +716,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                 helpHolder.recycler_help.setNestedScrollingEnabled(false);
             }
         }
-        if (!isScrolling) {
-            GlideUtils.getInstance().loadCornerImage(context, helpHolder.miv_icon, helpMessage.from_headurl, 3);
-        } else {
-            helpHolder.miv_icon.setImageResource(R.mipmap.img_guige_moren);
-        }
+        GlideUtils.getInstance().loadCornerImage(context, helpHolder.miv_icon, helpMessage.from_headurl, 3);
     }
 
     public void handSysText(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
