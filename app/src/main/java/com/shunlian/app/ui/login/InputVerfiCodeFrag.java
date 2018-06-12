@@ -23,6 +23,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.my_profit.SexSelectAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -207,6 +208,9 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
+        if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
+            Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
+        }
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
         }

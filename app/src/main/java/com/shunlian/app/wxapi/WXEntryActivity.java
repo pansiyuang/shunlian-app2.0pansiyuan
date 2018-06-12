@@ -338,7 +338,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 SharedPrefUtil.saveSharedPrfString("plus_role", wxLoginEntity.plus_role);
                 if (wxLoginEntity.tag != null)
                     SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(wxLoginEntity.tag));
-
+                JpushUtil.setJPushAlias();
                 //通知登录成功
                 DefMessageEvent event = new DefMessageEvent();
                 event.loginSuccess = true;
@@ -348,7 +348,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
                     Common.goGoGo(this, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
                 }
-                JpushUtil.setJPushAlias();
                 String jumpType = SharedPrefUtil.getSharedPrfString("wx_jump", "");
                 if (!isEmpty(jumpType)) {
                     Common.goGoGo(this, jumpType);

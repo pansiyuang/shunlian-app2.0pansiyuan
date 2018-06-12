@@ -192,7 +192,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
         if (content.tag != null)
             SharedPrefUtil.saveSharedPrfStringss("tags", new HashSet<>(content.tag));
-
+        JpushUtil.setJPushAlias();
         //通知登录成功
         DefMessageEvent event = new DefMessageEvent();
         event.loginSuccess = true;
@@ -202,7 +202,6 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2));
         }
-        JpushUtil.setJPushAlias();
         if (!isEmpty(jumpType)) {
             Common.goGoGo(baseActivity, jumpType);
         }
