@@ -97,11 +97,12 @@ public class GlideUtils {
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
                     .dontAnimate()
-                    .placeholder(R.mipmap.img_default_common)
+                    .placeholder(imageView.getDrawable()) //解决点击图片加载闪动的bug
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
                     //source:缓存源资源   result：缓存转换后的资源
-                    .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .bitmapTransform(new CenterCrop(context))
                     .into(imageView);
         }
     }

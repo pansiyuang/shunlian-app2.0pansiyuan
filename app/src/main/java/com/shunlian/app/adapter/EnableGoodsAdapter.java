@@ -238,6 +238,9 @@ public class EnableGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         });
 
         enableViewHolder.rl_prefer.setOnClickListener(v -> {
+            if (isEmpty(goods.all_prom)) {
+                return;
+            }
             if (preferDialog == null) {
                 preferDialog = new ChangePreferDialog(mContext, goods.all_prom);
             }

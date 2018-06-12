@@ -35,7 +35,8 @@
                 android:layout_width="107.5dp"
                 android:layout_height="95dp"
                 android:layout_alignParentRight="true"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_default_find_articlelist1" />
 
             <TextView
                 android:id="@+id/tv_small_content"
@@ -88,7 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
                 android:layout_marginTop="12dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@mipmap/img_default_find_articlelist2" />
         </LinearLayout>
 
         <View
@@ -211,8 +213,8 @@
             android:id="@+id/recycler_change"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
             android:focusableInTouchMode="true"
+            android:overScrollMode="never"
             android:scrollbars="none"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 

@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
@@ -61,7 +64,7 @@ public class AddGoodsAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goods
             GoodsHolderView goodsHolderView = (GoodsHolderView) holder;
             GoodsDeatilEntity.Goods goods = lists.get(position);
 
-            GlideUtils.getInstance().loadImage(context, goodsHolderView.miv_icon, goods.thumb);
+            GlideUtils.getInstance().loadImage(context, goodsHolderView.miv_icon, goods.thumb,false);
             goodsHolderView.tv_goods_title.setText(goods.title);
             if (!isEmpty(goods.price)) {
                 goodsHolderView.tv_price.setText(getString(R.string.common_yuan) + " " + goods.price);
