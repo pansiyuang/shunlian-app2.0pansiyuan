@@ -114,6 +114,10 @@ public class BusinessCardAct extends BaseActivity implements IBusinessCardView{
                 GlideUtils.getInstance().savePicture(getBaseContext(), urlCode);
                 break;
             case R.id.llayout_share:
+                if (isEmpty(urlCode)){
+                    Common.staticToast("分享失败");
+                    return;
+                }
                 GlideUtils.getInstance().savePicture(getBaseContext(), urlCode);
                 if (!isEmpty(urlCode))
                     Common.openWeiXin(this,"","");
