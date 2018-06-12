@@ -10,6 +10,7 @@
         android:id="@+id/miv_icon"
         android:layout_width="match_parent"
         android:layout_height="168.5dp"
+        android:src="@mipmap/img_default_common"
         android:scaleType="centerCrop" />
 
     <TextView

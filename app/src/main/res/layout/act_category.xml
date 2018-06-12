@@ -179,16 +179,17 @@
         android:overScrollMode="never"
         android:scrollbars="none" />
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_category_line"
+        android:visibility="gone" />
+
     <com.shunlian.app.utils.QuickActions
         android:id="@+id/quick_actions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <com.shunlian.app.widget.empty.NetAndEmptyInterface
-        android:id="@+id/nei_empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/view_line"
-        android:visibility="gone" />
 </RelativeLayout>

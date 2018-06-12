@@ -199,7 +199,7 @@ public class SubmitLogisticsInfoAct extends BaseActivity implements ISubmitLogis
         }else if (requestCode == SingleImgAdapter.REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK){
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             index = 0;
-            imgList.clear();
+//            imgList.clear();
             compressImgs(index, picturePaths);
         }else if (requestCode == LOGISTICS_NAME && resultCode == Activity.RESULT_OK){
             String name = data.getStringExtra("name");
