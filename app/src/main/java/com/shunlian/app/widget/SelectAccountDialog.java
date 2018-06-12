@@ -13,7 +13,6 @@ import com.shunlian.app.adapter.AccountAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.ui.login.LoginPswFrag;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import java.util.ArrayList;
@@ -47,9 +46,11 @@ public class SelectAccountDialog extends Dialog  {
         if (netState.contains("v20-front-api")){//测试
             commonEntities.add(addAccount("15805729571","a1234567"));
             commonEntities.add(addAccount("15068713363","a1234567"));
+            commonEntities.add(addAccount("13007562706","zh123456"));
         }else if (netState.contains("api-front.v2")){//预发布
             commonEntities.add(addAccount("15805729571","123456"));
             commonEntities.add(addAccount("15068713363","123456"));
+            commonEntities.add(addAccount("13007562706","123456"));
         }else {//正式
 
         }
