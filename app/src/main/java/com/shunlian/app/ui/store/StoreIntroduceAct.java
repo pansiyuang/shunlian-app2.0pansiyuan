@@ -1,7 +1,6 @@
 package com.shunlian.app.ui.store;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -159,6 +158,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         intent.putExtra("storeId", storeId);//店铺id
         intent.putExtra("storeScore", storeScore);
         intent.putExtra("isFocus", isFocus);
+
         activity.startActivityForResult(intent,0);
     }
 

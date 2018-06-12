@@ -90,8 +90,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/icon_login_logo" />
+                    android:scaleType="centerCrop"/>
 
                 <com.shunlian.app.widget.MyImageView
                     android:id="@+id/miv_star"
@@ -110,7 +109,6 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/miv_storeLogo"
-                    android:text="美特斯邦威"
                     android:textColor="@color/new_text"
                     android:textSize="12sp" />
 
@@ -133,7 +131,6 @@
                     android:layout_below="@id/mtv_attention"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="4dp"
-                    android:text="1699人"
                     android:textColor="@color/share_text"
                     android:textSize="11sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
@@ -165,7 +162,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="999"
                     android:textColor="@color/pink_color"
                     android:textSize="14sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
@@ -240,7 +236,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="999"
                     android:textColor="@color/share_text"
                     android:textSize="14sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
@@ -272,7 +267,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="999"
                     android:textColor="@color/share_text"
                     android:textSize="14sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
@@ -331,7 +325,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="999"
                     android:textColor="@color/share_text"
                     android:textSize="14sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
@@ -363,7 +356,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="999"
                     android:textColor="@color/share_text"
                     android:textSize="14sp" />
             </com.shunlian.app.widget.MyRelativeLayout>
