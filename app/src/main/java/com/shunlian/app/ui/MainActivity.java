@@ -34,6 +34,7 @@ import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
     private boolean isPerson = false, isCart = false, isFirst = false;
+//    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
 
@@ -172,6 +174,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (Common.isAlreadyLogin()) {
             if (isPerson) {
+                LogUtil.augusLogW("yxf444--");
                 personCenterClick();
                 isPerson = false;
             } else if (isCart) {
@@ -190,6 +193,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
+            LogUtil.augusLogW("yxf333--"+flag);
             switch2jump(flag);
         }
     }
@@ -295,7 +299,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[1], myPlusFrag);
             }
         } else {
-            myPlusFrag.isclick = true;
             myPlusFrag.getPlusData();
         }
 
@@ -335,7 +338,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
         } else {
-            shoppingCarFrag.isclick = true;
             shoppingCarFrag.getShoppingCarData();
         }
 
@@ -360,7 +362,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         } else {
-            personalCenterFrag.isclick = true;
             personalCenterFrag.getPersonalcenterData();
         }
 

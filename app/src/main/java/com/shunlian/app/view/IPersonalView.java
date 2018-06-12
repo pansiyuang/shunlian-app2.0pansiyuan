@@ -9,5 +9,4 @@ import com.shunlian.app.bean.PersonalcenterEntity;
 
 public interface IPersonalView extends IView {
     void getApiData(PersonalcenterEntity personalcenterEntity);
-    void getFail();
 }

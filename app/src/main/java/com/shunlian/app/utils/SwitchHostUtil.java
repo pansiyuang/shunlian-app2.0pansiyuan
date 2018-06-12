@@ -73,6 +73,7 @@ public class SwitchHostUtil {
                 Constant.JPUSH = null;
 //                Common.goGoGo(activity, "");
                 LoginAct.startAct(activity);
+                activity.finish();
             }
         });
         builder.show();
