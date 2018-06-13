@@ -187,7 +187,7 @@ public class MessageCountManager implements IMessageCountView {
         if (getAll_msg() > 9) {
             textView.setText("9+");
         } else if (getAll_msg() <= 0) {
-            textView.setText(" ");
+            textView.setText("");
         } else {
             textView.setText(String.valueOf(getAll_msg()));
         }
