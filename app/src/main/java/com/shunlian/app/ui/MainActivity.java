@@ -248,8 +248,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
-                        if (isFirst&&!isEmpty(mainPageFrag.fragments)) {
+                        if (isFirst&&!isEmpty(mainPageFrag.fragments)&&mainPageFrag.fragments.get(position)!=null) {
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+                            if (cateGoryFrag.rv_view!=null)
                             cateGoryFrag.rv_view.scrollToPosition(0);
                         }
                         mainPageClick();

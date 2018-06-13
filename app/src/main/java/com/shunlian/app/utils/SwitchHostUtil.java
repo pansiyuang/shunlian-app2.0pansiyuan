@@ -37,19 +37,19 @@ public class SwitchHostUtil {
                     //测试
                     InterentTools.HTTPADDR = "http://v20-front-api.shunliandongli.com/";
 //                    InterentTools.HTTPADDR_IM = "http://im.api-test.shunliandongli.com/";
-                    Constant.IM_SDK_APPID = 1400018006;
-                    Constant.IM_ACCOUNT_TYPE = 3415;
-                    Constant.IM_XIAOMI_BUSID = 405;
-                    Constant.IM_HUAWEI_BUSID = 406;
+//                    Constant.IM_SDK_APPID = 1400018006;
+//                    Constant.IM_ACCOUNT_TYPE = 3415;
+//                    Constant.IM_XIAOMI_BUSID = 405;
+//                    Constant.IM_HUAWEI_BUSID = 406;
 //                    MyHttpUtil.H5_HOST = Constant.TEST_HOST;
                 }else if (which == 1){
                     //预发布
                     InterentTools.HTTPADDR = "http://api-front.v2.shunliandongli.com/";
 //                    MyHttpUtil.HTTPADDR_IM = "http://im.api-test.shunliandongli.com/";
-                    Constant.IM_SDK_APPID = 1400018006;
-                    Constant.IM_ACCOUNT_TYPE = 3415;
-                    Constant.IM_XIAOMI_BUSID = 405;
-                    Constant.IM_HUAWEI_BUSID = 406;
+//                    Constant.IM_SDK_APPID = 1400018006;
+//                    Constant.IM_ACCOUNT_TYPE = 3415;
+//                    Constant.IM_XIAOMI_BUSID = 405;
+//                    Constant.IM_HUAWEI_BUSID = 406;
 //                    MyHttpUtil.H5_HOST = Constant.TEST_HOST;
                 }else {
                     //正式
@@ -85,17 +85,17 @@ public class SwitchHostUtil {
             InterentTools.HTTPADDR = netState;
             if (netState.contains("v20-front-api")){
 //                MyHttpUtil.HTTPADDR_IM = "http://im.api-test.shunliandongli.com/";
-                Constant.IM_SDK_APPID = 1400018006;
-                Constant.IM_ACCOUNT_TYPE = 3415;
-                Constant.IM_XIAOMI_BUSID = 405;
-                Constant.IM_HUAWEI_BUSID = 406;
+//                Constant.IM_SDK_APPID = 1400018006;
+//                Constant.IM_ACCOUNT_TYPE = 3415;
+//                Constant.IM_XIAOMI_BUSID = 405;
+//                Constant.IM_HUAWEI_BUSID = 406;
 //                MyHttpUtil.H5_HOST = Constant.TEST_HOST;
             }else{
 //                MyHttpUtil.HTTPADDR_IM = "https://im.api.shunliandongli.com/";
-                Constant.IM_SDK_APPID = 1400008795;
-                Constant.IM_ACCOUNT_TYPE = 3425;
-                Constant.IM_XIAOMI_BUSID = 431;
-                Constant.IM_HUAWEI_BUSID = 432;
+//                Constant.IM_SDK_APPID = 1400008795;
+//                Constant.IM_ACCOUNT_TYPE = 3425;
+//                Constant.IM_XIAOMI_BUSID = 431;
+//                Constant.IM_HUAWEI_BUSID = 432;
 //                MyHttpUtil.H5_HOST = Constant.RELEASE_HOST;
             }
         }else {
