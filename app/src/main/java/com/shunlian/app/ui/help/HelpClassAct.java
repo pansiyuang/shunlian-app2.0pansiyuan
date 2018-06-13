@@ -126,13 +126,14 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         EventBus.getDefault().register(this);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        mtv_title.setText("");
 //        storeId = getIntent().getStringExtra("storeId");
         if (!TextUtils.isEmpty(getIntent().getStringExtra("cate_id")))
             cate_id=getIntent().getStringExtra("cate_id");
         pHelpTwo = new PHelpTwo(this, this);
+        pHelpTwo.getHelpPhone();
 //        pHelpTwo.resetBabys("3");
         pHelpTwo.resetBabys(cate_id);
-        mtv_title.setText(getStringResouce(R.string.help_xinshouketang));
     }
 
     public static void startAct(Context context,String cate_id) {
@@ -205,6 +206,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setClass(HelpClassEntity helpClassEntity, final List<HelpClassEntity.Article> articles) {
+        mtv_title.setText(helpClassEntity.cate);
         if (helpClasAdapter == null) {
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             helpClasAdapter = new HelpClasAdapter(this, false, articles);
@@ -232,6 +234,11 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
+    }
+
+    @Override
+    public void setPhoneNum(String phoneNum) {
+        Constant.HELP_PHONE = phoneNum;
     }
 
     @Override

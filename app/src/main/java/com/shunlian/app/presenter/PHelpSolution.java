@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.HelpcenterQuestionEntity;
 import com.shunlian.app.bean.HelpcenterSolutionEntity;
@@ -96,6 +97,28 @@ public class PHelpSolution extends BasePresenter<IHelpSolutionView> {
                iView.callFeedback();
             }
 
+        });
+    }
+
+    public void getUserId() {
+        Map<String, String> map = new HashMap<>();
+        map.put("shop_id", "-1");
+        sortAndMD5(map);
+
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getUserId(map);
+        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity commonEntity = entity.data;
+                iView.getUserId(commonEntity.user_id);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
         });
     }
 }

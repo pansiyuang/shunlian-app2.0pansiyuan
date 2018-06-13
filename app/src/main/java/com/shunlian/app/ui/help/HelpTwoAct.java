@@ -31,7 +31,6 @@ import com.shunlian.app.view.IHelpTwoView;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -285,6 +284,11 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
         chatMember.m_user_id = userId;
         chatMember.type = "1";
         ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
+    }
+
+    @Override
+    public void setPhoneNum(String phoneNum) {
+
     }
 
     @Override

@@ -95,6 +95,7 @@ public class SaleRankAct extends BaseActivity implements View.OnClickListener, I
         }
         mtv_time.setText(weekSaleTopEntity.month_banner);
         mtv_times.setText(weekSaleTopEntity.update_time);
+        rv_list.setNestedScrollingEnabled(false);
         rv_list.setAdapter(new SaleRankAdapter(getBaseContext(),weekSaleTopEntity.list));
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
     }
