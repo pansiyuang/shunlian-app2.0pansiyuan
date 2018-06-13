@@ -38,8 +38,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 
 public final class InterentTools {
-//    public final static String HTTPADDR = "https://api.shunliandongli.com/v1/";
-//        public final static String HTTPADDR = "https://api-test.shunliandongli.com/v1/";//测试接口
     public static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
     public  static String HTTPADDR_IM = "ws://123.207.107.21:8086";//测试聊天的域名
 //    public  static String HTTPADDR_IM = "ws.v2.shunliandongli.com:8086";//预发布聊天的域名

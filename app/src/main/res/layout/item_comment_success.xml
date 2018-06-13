@@ -19,9 +19,8 @@
         android:gravity="center"
         android:textColor="@color/new_text"
         android:textSize="14sp"
-        app:tv_control_adapter="true"
-        app:tv_margin_bottom="20"
-        app:tv_margin_top="40" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"/>
 
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mll_content"

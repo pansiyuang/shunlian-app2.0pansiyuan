@@ -45,9 +45,9 @@ public class ConfirmOrderEntity {
         public String sub_total;
         public String sub_count;
         public String remark;
-        public String post_discount_price;//折后价
+        public String store_discount_price;//店铺折后价总价
         public int selectVoucherId;//选择优惠券id，默认是0
-        public int selectPromotionId = -1;//选择促销活动id，默认是0
+        public int selectPromotionId = -1;//选择促销活动id，默认不选择是-1
 
         @Override
         public String toString() {
