@@ -14,6 +14,7 @@ public class PayOrderEntity {
     public String unionpay;
     public String paytype;
     public String zero_pay;
+    public String pay_url;
 
     public XiaoXiaopay xiaoxiaopay;
 

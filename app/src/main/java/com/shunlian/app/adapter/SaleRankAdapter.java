@@ -40,7 +40,7 @@ public class SaleRankAdapter extends BaseRecyclerAdapter<WeekSaleTopEntity.Cate>
         if (holder instanceof SingleViewHolder) {
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             WeekSaleTopEntity.Cate goods = lists.get(position);
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_avar, goods.avatar);
+            GlideUtils.getInstance().loadCircleAvar(context, viewHolder.miv_avar, goods.avatar);
             viewHolder.mtv_name.setText(goods.nickname);
             viewHolder.miv_level.setVisibility(View.GONE);
             viewHolder.mtv_level.setVisibility(View.GONE);

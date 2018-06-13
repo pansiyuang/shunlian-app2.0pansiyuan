@@ -27,6 +27,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PaySuccessAct;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
@@ -295,6 +296,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             return;
         }
         switch (currentPayType){
+            case "pay_url":
+                H5Act.startAct(this,entity.pay_url,H5Act.MODE_SONIC);
+                break;
             case "alipay":
                 alipay(entity.alipay);
                 break;
@@ -366,14 +370,18 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private void submitOrder(final PayListEntity.PayTypes pay_types) {
         currentPayType = pay_types.code;
         switch (pay_types.code){
+            case "pay_url":
+                payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
+                break;
             case "alipay":
                 if (!isEmpty(shop_goods)) {
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
                 }else if (!isEmpty(orderId)){
                     payListPresenter.fromOrderListGoPay(orderId,pay_types.code);
-                }else if (!isEmpty(mProductId)){
-                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
                 }
+//                else if (!isEmpty(mProductId)){
+//                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
+//                }
                 break;
             case "wechat":
                 break;
