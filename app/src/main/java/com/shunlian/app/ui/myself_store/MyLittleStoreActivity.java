@@ -357,4 +357,10 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
         mAdapter.notifyDataSetChanged();
         selectList.clear();
     }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.cancelRequest();
+        super.onDestroy();
+    }
 }

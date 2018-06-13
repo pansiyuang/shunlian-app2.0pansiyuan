@@ -123,7 +123,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private String lastMessageSendTime;
     private boolean isFirst = true;
     private GoodsDeatilEntity mGoodsDeatilEntity;
-    private int lastPosition;
+    private int firstPosition;
+    private int refreshViewHeight;
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -155,6 +156,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         currentDeviceId = DeviceInfoUtil.getDeviceId(this);
         chatName = getIntent().getStringExtra("chatName");
+
+        try {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.turkey_release);
+            refreshViewHeight = bitmap.getHeight();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         init();
         initPrf();
         initChat();
@@ -175,8 +184,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                LogUtil.httpLogW("onRefresh:" + recycler_chat.getLayoutManager().getHeight());
-                lastPosition = manager.findFirstVisibleItemPosition();
+                firstPosition = manager.findLastVisibleItemPosition();
+                LogUtil.httpLogW("onRefresh:" + firstPosition);
                 getChatHistory(isFirst);
             }
 
@@ -922,8 +931,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         if (isFirst) {
             recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
-        } else {
-            recycler_chat.scrollToPosition(msgInfoList.size() + lastPosition);
         }
         isFirst = false;
     }
