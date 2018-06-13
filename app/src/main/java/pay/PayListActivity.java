@@ -330,8 +330,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param unionpay
      */
     private void callbackH5Pay(final String unionpay,boolean isAli) {
-        if (!isAli||!Common.HasAliPay(this)){
-            h5_pay.setVisibility(View.VISIBLE);
+        if (!isAli){
+            h5_pay.setVisibility(View.INVISIBLE);
         }
         lLayout_pay.setVisibility(View.GONE);
         final HttpDialog httpDialog = new HttpDialog(this);
