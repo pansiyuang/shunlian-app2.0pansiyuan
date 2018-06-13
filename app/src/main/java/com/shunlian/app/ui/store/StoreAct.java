@@ -524,11 +524,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.augusLogW("fffff2222");
-        LogUtil.augusLogW("fffffrequestCode---"+requestCode);
-        LogUtil.augusLogW("fffffresultCode---"+resultCode);
         if (requestCode==0&&resultCode==1){
-            LogUtil.augusLogW("fffff1111");
             isFocus(data.getBooleanExtra("isFocus",false),data.getIntExtra("focusNum",0));
         }
     }
