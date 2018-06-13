@@ -89,38 +89,21 @@ public class RegisterAct extends BaseActivity {
             case UNBIND_OLD_USER:
             case UNBIND_NEW_USER:
             case UNBIND_SUPERIOR_USER:
-                if (mRegisterFrag1 == null) {
-                    mRegisterFrag1 = fragmentMap.get(flags[0]);
-                    if (mRegisterFrag1 == null) {
-                        mRegisterFrag1 = new BindingPhoneFrag();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("state",mState);
-                        bundle.putString("unique_sign",mUniqueSign);
-                        mRegisterFrag1.setArguments(bundle);
-                        fragmentMap.put(flags[0], mRegisterFrag1);
-                    }
-                }
-                break;
-            case FIND_PWD:
-                if (mRegisterFrag1 == null) {
-                    mRegisterFrag1 = fragmentMap.get(flags[0]);
-                    if (mRegisterFrag1 == null) {
-                        mRegisterFrag1 = new FindPswFrag();
-                        fragmentMap.put(flags[0], mRegisterFrag1);
-                    }
-                }
-                break;
-            case NEW_USER:
-            default:
-                if (mRegisterFrag1 == null) {
-                    mRegisterFrag1 = fragmentMap.get(flags[0]);
-                    if (mRegisterFrag1 == null) {
-                        mRegisterFrag1 = new RegisterOneFrag();
-                        fragmentMap.put(flags[0], mRegisterFrag1);
-                    }
-                }
+                mRegisterFrag1 = new BindingPhoneFrag();
+                Bundle bundle = new Bundle();
+                bundle.putInt("state",mState);
+                bundle.putString("unique_sign",mUniqueSign);
+                mRegisterFrag1.setArguments(bundle);
                 break;
 
+            case FIND_PWD:
+                mRegisterFrag1 = new FindPswFrag();
+                break;
+
+            case NEW_USER:
+            default:
+                mRegisterFrag1 = new RegisterOneFrag();
+                break;
         }
         addRegisterOne();
     }
@@ -128,9 +111,8 @@ public class RegisterAct extends BaseActivity {
     public void addRegisterOne(){
         isCanBack = false;
         switchContent(mRegisterFrag1);
-        if (mRegisterFrag1 instanceof RegisterOneFrag){
+        if (mRegisterFrag1 instanceof RegisterOneFrag)
             ((RegisterOneFrag)mRegisterFrag1).refreshCode();
-        }
     }
 
 
@@ -151,18 +133,20 @@ public class RegisterAct extends BaseActivity {
                 mRegisterFrag2.setArguments(bundle);
                 fragmentMap.put(flags[1], mRegisterFrag2);
             }else {
-                if (mRegisterFrag2 instanceof RegisterTwoFrag){
-                    ((RegisterTwoFrag)mRegisterFrag2).setArgument(phone,smsCode,
-                            codeId,pictureCode,unique_sign,currentType);
-                }
+                setArgument(phone, smsCode, codeId, pictureCode, unique_sign, currentType);
             }
         }else {
-            if (mRegisterFrag2 instanceof RegisterTwoFrag){
-                ((RegisterTwoFrag)mRegisterFrag2).setArgument(phone,smsCode,
-                        codeId,pictureCode,unique_sign,currentType);
-            }
+            setArgument(phone, smsCode, codeId, pictureCode, unique_sign, currentType);
         }
         switchContent(mRegisterFrag2);
+    }
+
+    private void setArgument(String phone, String smsCode, String codeId,
+                             String pictureCode, String unique_sign, String currentType) {
+        if (mRegisterFrag2 instanceof RegisterTwoFrag){
+            ((RegisterTwoFrag)mRegisterFrag2).setArgument(phone,smsCode,
+                    codeId,pictureCode,unique_sign,currentType);
+        }
     }
 
     public void switchContent(Fragment show) {

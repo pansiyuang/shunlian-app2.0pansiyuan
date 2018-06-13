@@ -481,4 +481,25 @@ public class GlideUtils {
                         new GlideRoundTransform(context, radius))
                 .into(imageView);
     }
+
+
+    /**
+     * 加载圆图
+     *
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void loadCircleHeadImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .error(R.mipmap.img_set_defaulthead)
+                .placeholder(R.mipmap.img_set_defaulthead)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new GlideCircleTransform(context))
+                .into(imageView);
+    }
 }

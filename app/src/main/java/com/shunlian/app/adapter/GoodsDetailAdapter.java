@@ -1352,6 +1352,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     (context,LinearLayoutManager.HORIZONTAL,false);
             recy_cardview.setLayoutManager(manager1);
             recy_cardview.setNestedScrollingEnabled(false);
+            recy_cardview.setFocusable(false);
         }
 
         /**
@@ -1428,6 +1429,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mtv_store_name.setOnClickListener(this);
             mtv_quality_goods.setOnClickListener(this);
             miv_starBar.setOnClickListener(this);
+            recy_view.setFocusable(false);
         }
 
         public void setCollectionState(int state){
