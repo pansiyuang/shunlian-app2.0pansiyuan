@@ -722,7 +722,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public void handSysText(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
         SysTextHolder sysTextHolder = (SysTextHolder) holder;
         TextMessage textMessage = (TextMessage) baseMessage;
-        sysTextHolder.tv_date.setText("(" + baseMessage.sendTime + ")");
+        sysTextHolder.tv_date.setText("(" + TimeUtil.getTime(baseMessage.sendTime * 1000, "yyyy/MM/dd HH:mm") + ")");
         if (textMessage.msg_body != null) {
             TextMessage.TextMessageBody textMessageBody = textMessage.msg_body;
             sysTextHolder.tv_content.setText(textMessageBody.text);

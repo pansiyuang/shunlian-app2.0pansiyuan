@@ -70,7 +70,6 @@ import butterknife.BindView;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static com.shunlian.app.utils.BitmapUtil.getFileFromMediaUri;
 
 /**
@@ -124,6 +123,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private String lastMessageSendTime;
     private boolean isFirst = true;
     private GoodsDeatilEntity mGoodsDeatilEntity;
+    private int lastPosition;
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -172,10 +172,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
             return false;
         });
-
         refreshview.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                LogUtil.httpLogW("onRefresh:" + recycler_chat.getLayoutManager().getHeight());
+                lastPosition = manager.findFirstVisibleItemPosition();
                 getChatHistory(isFirst);
             }
 
@@ -921,6 +922,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
         if (isFirst) {
             recycler_chat.scrollToPosition(mAdapter.getItemCount() - 1);//刷新到底部
+        } else {
+            recycler_chat.scrollToPosition(msgInfoList.size() + lastPosition);
         }
         isFirst = false;
     }
