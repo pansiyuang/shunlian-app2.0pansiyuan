@@ -236,7 +236,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (getMenuEntiy.logo!=null){
             logoType=getMenuEntiy.logo.type;
             logoId=getMenuEntiy.logo.item_id;
-            GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic);
+            GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic,R.mipmap.img_default_home_logo);
         }else {
             miv_photo.setVisibility(View.GONE);
         }

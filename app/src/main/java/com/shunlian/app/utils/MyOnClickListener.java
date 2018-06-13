@@ -8,6 +8,20 @@ import android.app.Activity;
 
 public class MyOnClickListener {
     private static long lastClickTime;
+    private static long lastRequestTime;
+
+    /**
+     * 禁止重复请求接口
+     * @return
+     */
+    public static boolean isFastRequest() {
+        long time = System.currentTimeMillis();
+        if ( time - lastRequestTime < 500) {
+            return true;
+        }
+        lastRequestTime = time;
+        return false;
+    }
 
     /**
      * 禁止快速点击

@@ -187,10 +187,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 if (holder instanceof TwoHolder) {
                     TwoHolder twoHolder = (TwoHolder) holder;
                     GetDataEntity.MData data = lists.get(position);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb);
+                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb,R.mipmap.img_default_home_nav);
+                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb,R.mipmap.img_default_home_nav);
+                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb,R.mipmap.img_default_home_nav);
+                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb,R.mipmap.img_default_home_nav);
                     twoHolder.mtv_nav1.setText(data.datass.get(0).title);
                     twoHolder.mtv_nav2.setText(data.datass.get(1).title);
                     twoHolder.mtv_nav3.setText(data.datass.get(2).title);
@@ -247,7 +247,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_three.setVisibility(View.GONE);
                             threeHolder.mllayout_four.setVisibility(View.GONE);
                             threeHolder.mllayout_five.setVisibility(View.GONE);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb,R.mipmap.img_default_home_retui);
                             if (!isEmpty(data.datass.get(0).width)){
                                 int picWidth = Common.getScreenWidth((Activity) context);
                                 int height=picWidth*Integer.parseInt(data.datass.get(0).height)/Integer.parseInt(data.datass.get(0).width);
@@ -267,8 +267,8 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_three.setVisibility(View.GONE);
                             threeHolder.mllayout_four.setVisibility(View.GONE);
                             threeHolder.mllayout_five.setVisibility(View.GONE);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_twol, data.datass.get(0).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_twor, data.datass.get(1).thumb);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_twol, data.datass.get(0).thumb,R.mipmap.img_default_home_promotion2);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_twor, data.datass.get(1).thumb,R.mipmap.img_default_home_promotion2);
                             threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -288,9 +288,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_three.setVisibility(View.VISIBLE);
                             threeHolder.mllayout_four.setVisibility(View.GONE);
                             threeHolder.mllayout_five.setVisibility(View.GONE);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threel, data.datass.get(0).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threem, data.datass.get(1).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threer, data.datass.get(2).thumb);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threel, data.datass.get(0).thumb,R.mipmap.img_default_home_promotion3);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threem, data.datass.get(1).thumb,R.mipmap.img_default_home_promotion3);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_threer, data.datass.get(2).thumb,R.mipmap.img_default_home_promotion3);
                             threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -316,10 +316,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_three.setVisibility(View.GONE);
                             threeHolder.mllayout_four.setVisibility(View.VISIBLE);
                             threeHolder.mllayout_five.setVisibility(View.GONE);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four1, data.datass.get(0).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four2, data.datass.get(1).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four3, data.datass.get(2).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four4, data.datass.get(3).thumb);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four1, data.datass.get(0).thumb,R.mipmap.img_default_home_promotion4);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four2, data.datass.get(1).thumb,R.mipmap.img_default_home_promotion4);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four3, data.datass.get(2).thumb,R.mipmap.img_default_home_promotion4);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_four4, data.datass.get(3).thumb,R.mipmap.img_default_home_promotion4);
                             threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -351,9 +351,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.mllayout_three.setVisibility(View.GONE);
                             threeHolder.mllayout_four.setVisibility(View.GONE);
                             threeHolder.mllayout_five.setVisibility(View.VISIBLE);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivel, data.datass.get(0).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivet, data.datass.get(1).thumb);
-                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fiveb, data.datass.get(2).thumb);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivel, data.datass.get(0).thumb,R.mipmap.img_default_home_promotion3_1);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivet, data.datass.get(1).thumb,R.mipmap.img_default_home_promotion3_2);
+                            GlideUtils.getInstance().loadImage(context, threeHolder.miv_fiveb, data.datass.get(2).thumb,R.mipmap.img_default_home_promotion3_2);
                             threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -383,13 +383,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     if (Common.isColor(data.bg_color))
                         fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_one,
-                            data.ttth.thumb);
+                            data.ttth.thumb,R.mipmap.img_default_home_ttth);
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_two,
-                            data.pptm.thumb);
+                            data.pptm.thumb,R.mipmap.img_default_home_pinpai);
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_three,
-                            data.asxp.thumb);
+                            data.asxp.thumb,R.mipmap.img_default_home_xinpin);
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_four,
-                            data.kbrx.thumb);
+                            data.kbrx.thumb,R.mipmap.img_default_home_xinpin);
                     int seconds = (int) (System.currentTimeMillis() / 1000) - second;
                     fourHolder.downTime_first.cancelDownTimer();
                     fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
@@ -455,7 +455,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
                     params.setMargins(TransformUtil.dip2px(context,10),0,TransformUtil.dip2px(context,10),0);
                     fiveHolder.miv_photo.setLayoutParams(params);
-                    GlideUtils.getInstance().loadBgImage(context, fiveHolder.miv_photo, data.pic);
+                    GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
 //                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
                     fiveHolder.view_line.setVisibility(View.GONE);
@@ -534,7 +534,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
                     params.setMargins(TransformUtil.dip2px(context,10),0,TransformUtil.dip2px(context,10),0);
                     sixHolder.miv_photo.setLayoutParams(params);
-                    GlideUtils.getInstance().loadBgImage(context, sixHolder.miv_photo, data.pic);
+                    GlideUtils.getInstance().loadBgImageChang(context, sixHolder.miv_photo, data.pic);
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -615,7 +615,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 if (holder instanceof TenHolder) {
                     TenHolder tenHolder = (TenHolder) holder;
                     GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
-                    GlideUtils.getInstance().loadImage(context, tenHolder.miv_photo, goods.thumb);
+                    GlideUtils.getInstance().loadImageZheng(context, tenHolder.miv_photo, goods.thumb);
                     tenHolder.mtv_title.setText(goods.title);
                     if (!isEmpty(goods.price)){
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);

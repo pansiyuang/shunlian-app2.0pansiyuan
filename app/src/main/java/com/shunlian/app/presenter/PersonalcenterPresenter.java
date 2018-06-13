@@ -54,11 +54,6 @@ public class PersonalcenterPresenter extends BasePresenter<IPersonalView> {
                 iView.getApiData(personalcenterEntity);
             }
 
-            @Override
-            public void onFailure() {
-                super.onFailure();
-                iView.getFail();
-            }
         });
     }
     @Override

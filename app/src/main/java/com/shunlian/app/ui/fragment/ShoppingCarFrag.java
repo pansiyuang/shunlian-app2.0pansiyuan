@@ -119,7 +119,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private String disGoodsIds;//失效订单的id
     private RecyclerDialog recyclerDialog;
     private List<ProbabyLikeGoodsEntity.Goods> probabyGoods;
-    public boolean isclick=false;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -190,7 +189,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void getShoppingCarData() {
-        if (shopCarPresenter != null) {
+        if (shopCarPresenter != null&& !MyOnClickListener.isFastRequest()) {
             shopCarPresenter.initShopData();
         }
     }
@@ -260,8 +259,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()&&!isclick){
-            isclick=false;
+        if (!isHidden()){
             getShoppingCarData();
         }
         super.onResume();

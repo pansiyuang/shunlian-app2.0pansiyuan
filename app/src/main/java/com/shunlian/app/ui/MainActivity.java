@@ -34,6 +34,7 @@ import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新
     private boolean isPerson = false, isCart = false, isFirst = false;
+//    private boolean  isFirst = false;
     private Handler handler;
     private CateGoryFrag cateGoryFrag;
 
@@ -244,8 +246,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             public void run() {
                 switch (view.getId()) {
                     case R.id.ll_tab_main_page:
-                        if (isFirst&&!isEmpty(mainPageFrag.fragments)) {
+                        if (isFirst&&!isEmpty(mainPageFrag.fragments)&&mainPageFrag.fragments.get(position)!=null) {
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
+                            if (cateGoryFrag.rv_view!=null)
                             cateGoryFrag.rv_view.scrollToPosition(0);
                         }
                         mainPageClick();
@@ -295,7 +298,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[1], myPlusFrag);
             }
         } else {
-            myPlusFrag.isclick = true;
             myPlusFrag.getPlusData();
         }
 
@@ -335,7 +337,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[3], shoppingCarFrag);
             }
         } else {
-            shoppingCarFrag.isclick = true;
             shoppingCarFrag.getShoppingCarData();
         }
 
@@ -360,7 +361,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 fragmentMap.put(flags[4], personalCenterFrag);
             }
         } else {
-            personalCenterFrag.isclick = true;
             personalCenterFrag.getPersonalcenterData();
         }
 
