@@ -90,7 +90,6 @@ public final class Constant {
 
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
-    public static String IM_ADDRESS = "";//IM 地址
     public static boolean ISBALANCE=false;
 
     public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";

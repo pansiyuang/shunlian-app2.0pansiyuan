@@ -580,12 +580,21 @@ public interface ApiService {
     Call<BaseEntity<StoreLicenseEntity>> storeLicense(@Body RequestBody body);
 
 
+
     /**
-     * 上传图片
+     * 上传图片 单张图片+多个参数
      */
     @Multipart
-    @POST("https://v20-test.shunliandongli.com/uploads/uploadotherimage")
-    Call<BaseEntity<UploadPicEntity>> uploadPic(@PartMap Map<String, RequestBody> params, @Part("path_name") RequestBody path_name);
+    @POST("/uploads/uploadotherimage")
+    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
+
+
+    /**
+     * 上传图片 多张图片+多个参数
+     */
+    @Multipart
+    @POST("/uploads/uploadotherimage")
+    Call<BaseEntity<UploadPicEntity>> uploadPic(@Part() List<MultipartBody.Part> parts, @QueryMap Map<String, String> maps);
 
     /**
      * 新增评价

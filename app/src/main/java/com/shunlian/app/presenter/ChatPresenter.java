@@ -1,6 +1,7 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
@@ -13,17 +14,22 @@ import com.shunlian.app.newchat.entity.HistoryEntity;
 import com.shunlian.app.newchat.entity.ImageMessage;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.upload.ProgressListener;
 import com.shunlian.app.utils.upload.UploadFileRequestBody;
 import com.shunlian.app.view.IChatView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 
@@ -53,22 +59,16 @@ public class ChatPresenter extends BasePresenter<IChatView> {
     }
 
     public void uploadPic(ImageEntity filePath, final String uploadPath, String tagId, final ImageMessage imageMessage) {
-        Map<String, RequestBody> params = new HashMap<>();
         File file = filePath.file;
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(requestBody, new ProgressListener() {
-            @Override
-            public void onProgress(int progress, String tag) {
-            }
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-            @Override
-            public void onDetailProgress(long written, long total, String tag) {
+        MultipartBody.Part[] files = new MultipartBody.Part[2];
+        files[0] = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        Map<String, String> map = new HashMap<>();
+        map.put("path_name", uploadPath);
+        sortAndMD5(map);
 
-            }
-        }, file.getAbsolutePath());
-        params.put("file[]\"; filename=\"" + file.getName(), uploadFileRequestBody);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("text/plain"), uploadPath);
-        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(params, body);
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(files, map);
         getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
@@ -79,6 +79,38 @@ public class ChatPresenter extends BasePresenter<IChatView> {
                 }
             }
         });
+    }
+
+    private RequestBody toRequestBody(String value) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
+        return requestBody;
+    }
+
+    public String getTimeStamp(String time) {
+        Map<String, String> map = new HashMap<>();
+        map.put("timestamp", String.valueOf(time));
+        List<String> strs = new ArrayList<>();
+        Iterator<String> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+            strs.add(next);
+        }
+        Collections.sort(strs);
+        StringBuilder sign = new StringBuilder();
+        for (int i = 0; i < strs.size(); i++) {
+            String key = strs.get(i);
+            String value = map.get(key);
+            if (TextUtils.isEmpty(value)) {
+                value = "";
+            }
+            sign.append(key + "=" + value);
+            sign.append("&");
+            if (i == strs.size() - 1) {
+                sign.append("key=" + Constant.KEY);
+            }
+        }
+        LogUtil.httpLogW("getTimeStamp:" + getStringMD5(sign.toString()));
+        return getStringMD5(sign.toString());
     }
 
     public void getChatHistoryMessage(boolean isLoad, String userId, String platform_type, String shopId, String sendTime) {
