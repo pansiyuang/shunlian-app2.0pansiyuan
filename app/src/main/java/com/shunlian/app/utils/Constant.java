@@ -92,7 +92,7 @@ public final class Constant {
     public static String SHARE_ID = "";//分享id
     public static boolean ISBALANCE=false;
 
-    public static final String PLUS_ADD = "http://v20-wx.shunliandongli.com/plus";
+    public static final String PLUS_ADD = H5_HOST+"plus";
     public static  String SHARE_LINK = "";
     public static  String ZHIFUBAOURL=H5_HOST+"agreement/5";
 //    public static boolean ISWIFI=false;

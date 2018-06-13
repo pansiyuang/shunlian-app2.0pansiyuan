@@ -14,4 +14,5 @@ public interface IHelpTwoView extends IView {
     void setCateTwo(HelpcenterQuestionEntity helpcenterQuestionEntity,List<HelpcenterQuestionEntity.Question> questions);
     void setClass(HelpClassEntity helpClassEntity, List<HelpClassEntity.Article> articles);
     void getUserId(String userId);
+    void setPhoneNum(String phoneNum);
 }

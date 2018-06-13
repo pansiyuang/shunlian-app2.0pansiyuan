@@ -3,6 +3,7 @@ package com.shunlian.app.ui.help;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -18,16 +19,19 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterSolutionEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpSolution;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpSolutionView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,22 +63,26 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     MyLinearLayout mllayout_dianhua;
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
-
-    private PHelpSolution pHelpSolution;
-    private Dialog dialog_feedback;
-    private boolean isChosen=false;
-    private ShareInfoParam shareInfoParam;
-
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
-
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
-
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
-
+    private PHelpSolution pHelpSolution;
+    private Dialog dialog_feedback;
+    private boolean isChosen = false;
+    private ShareInfoParam shareInfoParam;
     private MessageCountManager messageCountManager;
+
+    private PromptDialog promptDialog;
+
+    public static void startAct(Context context, String id) {
+        Intent intent = new Intent(context, HelpSolutionAct.class);
+        intent.putExtra("id", id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @Override
     public void onResume() {
@@ -126,22 +134,14 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
-
     @Override
     protected void initData() {
-            EventBus.getDefault().register(this);
-            setStatusBarColor(R.color.white);
-            setStatusBarFontDark();
-            mtv_title.setText(getStringResouce(R.string.help_jiejuefangan));
+        EventBus.getDefault().register(this);
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
+        mtv_title.setText(getStringResouce(R.string.help_jiejuefangan));
 //        storeId = getIntent().getStringExtra("storeId");
-            pHelpSolution = new PHelpSolution(this, getIntent().getStringExtra("id"), this);
-    }
-
-    public static void startAct(Context context, String id) {
-        Intent intent = new Intent(context, HelpSolutionAct.class);
-        intent.putExtra("id", id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-        context.startActivity(intent);
+        pHelpSolution = new PHelpSolution(this, getIntent().getStringExtra("id"), this);
     }
 
     @Override
@@ -153,20 +153,24 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mllayout_dianhua:
-
+                if (promptDialog == null) {
+                    initDialogs();
+                } else {
+                    promptDialog.show();
+                }
                 break;
             case R.id.mllayout_kefu:
-
+                pHelpSolution.getUserId();
                 break;
             case R.id.mtv_fou:
             case R.id.miv_fou:
                 if (!isChosen)
-                pHelpSolution.isSolved("2");
+                    pHelpSolution.isSolved("2");
                 break;
             case R.id.miv_shi:
             case R.id.mtv_shi:
                 if (!isChosen)
-                pHelpSolution.isSolved("1");
+                    pHelpSolution.isSolved("1");
                 break;
         }
     }
@@ -207,7 +211,8 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
             @Override
             public void onItemClick(View view, int position) {
                 HelpcenterSolutionEntity.Question question = solution.about.get(position);
-                HelpTwoAct.startAct(getBaseContext(), question.id, question.title);
+                HelpSolutionAct.startAct(getBaseContext(), question.id);
+                finish();
             }
         });
         if (shareInfoParam == null)
@@ -215,6 +220,14 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
         shareInfoParam.shareLink = solution.share_url;
         shareInfoParam.title = solution.question;
         shareInfoParam.desc = solution.answer;
+    }
+    public void initDialogs() {
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
     }
 
     public void initDialog() {
@@ -255,7 +268,7 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
                     et_moto.setText(s.subSequence(0, TEXT_TOTAL));
                 } else {
                     mtv_length.setText(s.length() + "/" + TEXT_TOTAL);
-                    if (s.length()<TEXT_TOTAL){
+                    if (s.length() < TEXT_TOTAL) {
                         mtv_error.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -275,11 +288,11 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initFeedback(boolean isSolved) {
-        isChosen=true;
-        if (isSolved){
+        isChosen = true;
+        if (isSolved) {
             mtv_shi.setTextColor(getColorResouce(R.color.pink_color));
             miv_shi.setImageResource(R.mipmap.img_bangzhu_shi_h);
-        }else {
+        } else {
             mtv_fou.setTextColor(getColorResouce(R.color.pink_color));
             miv_fou.setImageResource(R.mipmap.img_bangzhu_fou_h);
             if (dialog_feedback == null) {
@@ -293,6 +306,15 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     public void callFeedback() {
         dialog_feedback.dismiss();
         Common.staticToasts(getBaseContext(), getStringResouce(R.string.help_xiexiefankui), R.mipmap.icon_common_duihao);
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "官方客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
     }
 
 }

@@ -10,4 +10,5 @@ public interface IHelpSolutionView extends IView {
     void setApiData(HelpcenterSolutionEntity solution);
     void initFeedback(boolean isSolved);
     void callFeedback();
+    void getUserId(String userId);
 }

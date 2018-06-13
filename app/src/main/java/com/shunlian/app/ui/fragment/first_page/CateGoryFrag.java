@@ -1,7 +1,6 @@
 package com.shunlian.app.ui.fragment.first_page;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,17 +30,17 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
     public String cate_id;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
-    @BindView(R.id.lay_refresh)
-    NestedRefreshLoadMoreLayout lay_refresh;
     @BindView(R.id.rv_view)
     public RecyclerView rv_view;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
     //    @BindView(R.id.mtv_empty)
 //    MyTextView mtv_empty;
     private String channel_id;
     private FirstPageAdapter firstPageAdapter;
     private GridLayoutManager gridLayoutManager;
-    private boolean isFirst = false,isShow=true;
-
+    private boolean isFirst = false, isShow = true;
+    private View rootView;
 
     public static BaseFragment getInstance(String channel_id) {
         CateGoryFrag fragment = new CateGoryFrag();
@@ -59,23 +58,24 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
-        View rootView = inflater.inflate(R.layout.frag_category, container, false);
+        rootView = inflater.inflate(R.layout.frag_category, container, false);
         return rootView;
     }
 
-    public void refresh(){
+    public void refresh() {
         mDatasss.clear();
-        pFirstPage.getContentData(channel_id,isShow);
-        isShow=true;
+        pFirstPage.getContentData(channel_id, isShow);
+        isShow = true;
     }
+
     @Override
     protected void initListener() {
         super.initListener();
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
-                isShow=false;
-               refresh();
+                isShow = false;
+                refresh();
             }
         });
 
@@ -109,7 +109,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         }
 //        channel_id = "15";
         pFirstPage = new PFirstPage(baseActivity, this, this);
-        pFirstPage.getContentData(channel_id,isShow);
+        pFirstPage.getContentData(channel_id, isShow);
     }
 
 
@@ -135,22 +135,25 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 ////            rv_view.setVisibility(View.VISIBLE);
 //            mtv_empty.setVisibility(View.VISIBLE);
 //            rv_view.setVisibility(View.GONE);
-        if (lay_refresh!=null)
+        if (lay_refresh != null)
             lay_refresh.setRefreshing(false);
-        int size=0;
+        int size = 0;
         mDatass.clear();
-        if (getDataEntity!=null){
-            size=getDataEntity.datas.size();
+        if (getDataEntity != null) {
+            size = getDataEntity.datas.size();
             mDatass.addAll(getDataEntity.datas);
         }
 //        if (firstPageAdapter==null){
-        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this,size);
+        firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
+
+        if (rv_view==null)
+            rv_view= (RecyclerView) rootView.findViewById(R.id.rv_view);
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
 
-        if (!isEmpty(mDatass)&&!isEmpty(mDatass.get(mDatass.size()-1).cates))
-        pFirstPage.resetBaby(mDatass.get(mDatass.size()-1).cates.get(0).id);
+        if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates))
+            pFirstPage.resetBaby(mDatass.get(mDatass.size() - 1).cates.get(0).id);
 //        }else {
 ////            mtv_empty.setVisibility(View.VISIBLE);
 ////            rv_view.setVisibility(View.GONE);
@@ -166,7 +169,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
 
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        if (rv_view!=null&&rv_view.getScrollState() == 0) {
+        if (rv_view != null && rv_view.getScrollState() == 0) {
             firstPageAdapter.setPageLoading(page, allPage);
             for (int i = 0; i < mDatas.size(); i++) {
                 GetDataEntity.MData mData = new GetDataEntity.MData();
