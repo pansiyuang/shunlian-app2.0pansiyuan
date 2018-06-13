@@ -40,6 +40,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IPersonalView;
@@ -208,7 +209,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private MessageCountManager messageCountManager;
     private HelpArticleAdapter helpArticleAdapter;
     private String managerUrl, orderUrl;
-    public boolean isclick=false;
     private boolean isShowData = true;
     public final static String ASTERISK = "****";
     public final static String KEY = "person_isShow";
@@ -245,8 +245,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()&&!isclick){
-            isclick=false;
+        if (!isHidden()){
             getPersonalcenterData();
         }
         if (Common.isAlreadyLogin()) {
@@ -387,7 +386,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
 
     public void getPersonalcenterData() {
-        if (personalcenterPresenter != null) {
+        if (personalcenterPresenter != null&& !MyOnClickListener.isFastRequest()) {
             personalcenterPresenter.getApiData();
         }
     }
@@ -535,7 +534,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_jingli);
             }
         }
-        GlideUtils.getInstance().loadCircleImage(baseContext, miv_avar, personalcenterEntity.avatar);
+        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
         mtv_dianpu.setText(personalcenterEntity.store_fav_num);
         mtv_neirong.setText(personalcenterEntity.article_fav_num);
@@ -638,10 +637,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     }
 
-    @Override
-    public void getFail() {
-
-    }
 
 //    public void showLevel(final int percent, final String next_level_info) {
 //        seekbar_grow.setProgress(0);

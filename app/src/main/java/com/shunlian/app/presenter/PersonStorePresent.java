@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IPersonStoreView;
 
 import java.util.HashMap;
@@ -18,6 +19,8 @@ import retrofit2.Call;
  */
 
 public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
+
+    private Call<BaseEntity<CommonEntity>> fairishNumsCall;
 
     public PersonStorePresent(Context context, IPersonStoreView iView) {
         super(context, iView);
@@ -40,7 +43,7 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
     public void getPersonDetail() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<PersonShopEntity>> baseEntityCall = getApiService().getPersonShop(map);
+        Call<BaseEntity<PersonShopEntity>> baseEntityCall = getAddCookieApiService().getPersonShop(map);
         getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<PersonShopEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PersonShopEntity> entity) {
@@ -48,24 +51,36 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
                 PersonShopEntity personShopEntity = entity.data;
                 iView.getShopDetail(personShopEntity);
             }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
+            }
         });
     }
 
     public void getFairishNums() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().fairishNums(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        fairishNumsCall = getAddCookieApiService().fairishNums(map);
+        getNetData(false, fairishNumsCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity commonEntity = entity.data;
-                iView.getFairishNums(commonEntity.num,false);
+                iView.getFairishNums(commonEntity.num, false);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
     }
 
-    public void delStorGoods(String goodsIds){
+    public void delStorGoods(String goodsIds) {
         Map<String, String> map = new HashMap<>();
         map.put("goods_ids", goodsIds);
         sortAndMD5(map);
@@ -75,8 +90,20 @@ public class PersonStorePresent extends BasePresenter<IPersonStoreView> {
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity commonEntity = entity.data;
-                iView.getFairishNums(commonEntity.num,true);
+                iView.getFairishNums(commonEntity.num, true);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                Common.staticToast(message);
+                super.onErrorCode(code, message);
             }
         });
+    }
+
+    public void cancelRequest() {
+        if (fairishNumsCall != null && !fairishNumsCall.isCanceled()) {
+            fairishNumsCall.cancel();
+        }
     }
 }

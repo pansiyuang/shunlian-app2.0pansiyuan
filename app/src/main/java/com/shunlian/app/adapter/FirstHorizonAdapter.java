@@ -50,7 +50,7 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
         }else {
             mHolder.mtv_title.setVisibility(View.GONE);
         }
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_photo,data.thumb);
+        GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_photo,data.thumb);
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {

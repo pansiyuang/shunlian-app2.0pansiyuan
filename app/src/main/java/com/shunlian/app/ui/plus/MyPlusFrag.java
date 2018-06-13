@@ -26,6 +26,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
@@ -170,7 +171,6 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isPause = true;
     private boolean isExpand = true; //是否展开
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
-    public boolean isclick = false;
 
     public static void startAct(Context context) {
         context.startActivity(new Intent(context, MyPlusAct.class));
@@ -184,7 +184,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     }
 
     public void getPlusData() {
-        if (mPresenter != null) {
+        if (mPresenter != null&& !MyOnClickListener.isFastRequest()) {
             mPresenter.getPlusData(tabOneMode, false);
             showTabTwoButton(2);
             if (invitationRecordFrag != null) {
@@ -243,8 +243,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @Override
     public void onResume() {
         beginToast();
-        if (!isHidden() && !isclick) {
-            isclick = false;
+        if (!isHidden()) {
             getPlusData();
         }
         super.onResume();

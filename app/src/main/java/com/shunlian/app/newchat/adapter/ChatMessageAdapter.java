@@ -194,7 +194,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         for (MsgInfo info : infos) {
             addMsgInfo(position, info);
         }
-        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
+        ((Activity) context).runOnUiThread(() -> notifyItemRangeInserted(position,infos.size()));
     }
 
     public void updateEvaluateStatus(EvaluateEntity evaluateEntity) {
@@ -551,7 +551,6 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             evaluateMessageBody = evaluateMessage.msg_body;
             if (evaluateMessageBody.evaluate != null) {
                 EvaluateMessage.Evaluate evaluate = evaluateMessageBody.evaluate;
-                LogUtil.httpLogW("id:" + evaluate.id + " score:" + evaluate.score + " selectScore:" + evaluate.selectScore);
                 initEvaluteStatus(evaluate.score, evaluate.selectScore, evaluateViewHolder);
                 evaluateViewHolder.ratingBar.setOnRatingChangeListener(ratingCount -> {
                     evaluate.score = (int) ratingCount;

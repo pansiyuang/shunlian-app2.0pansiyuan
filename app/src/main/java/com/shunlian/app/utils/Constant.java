@@ -69,8 +69,8 @@ public final class Constant {
     public static final String CACHE_PATH_EXTERNAL = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + File.separator + "shunlian"+File.separator+"cache";
     public static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
-    public static final String IM_XIAOMI_APPID = "2882303761517495137"; //小米推送APPID
-    public static final String IM_XIAOMI_APPKEY = "5161749566137";      //小米推送KEY
+//    public static final String IM_XIAOMI_APPID = "2882303761517495137"; //小米推送APPID
+//    public static final String IM_XIAOMI_APPKEY = "5161749566137";      //小米推送KEY
     public static List<String> BRAND_IDS;//筛选品牌id
     public static List<String> BRAND_IDSBEFORE;//筛选品牌id,记录用
     public static Map<String, List<String>> BRAND_ATTRS;//筛选属性
@@ -102,14 +102,14 @@ public final class Constant {
 //    public static final int IM_SDK_APPID = 1400018006; //腾讯IM SDK appId
 //    public static final int IM_ACCOUNT_TYPE = 3415;   //腾讯IM SDK  accountType
     //正式
-    public static int IM_SDK_APPID = 1400008795; //腾讯IM SDK appId
-    public static int IM_ACCOUNT_TYPE = 3425;   //腾讯IM SDK  accountType
+//    public static int IM_SDK_APPID = 1400008795; //腾讯IM SDK appId
+//    public static int IM_ACCOUNT_TYPE = 3425;   //腾讯IM SDK  accountType
 
     //测试
 //    public static final int IM_XIAOMI_BUSID = 405;      //IM 绑定小米推送证书ID
 //    public static final int IM_HUAWEI_BUSID = 406;      //IM 绑定华为推送证书ID
     //正式
-    public static int IM_XIAOMI_BUSID = 431;      //IM 绑定小米推送证书ID
-    public static int IM_HUAWEI_BUSID = 432;      //IM 绑定华为推送证书ID
+//    public static int IM_XIAOMI_BUSID = 431;      //IM 绑定小米推送证书ID
+//    public static int IM_HUAWEI_BUSID = 432;      //IM 绑定华为推送证书ID
 
 }

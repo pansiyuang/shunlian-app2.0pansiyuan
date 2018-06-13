@@ -80,10 +80,12 @@
                 android:id="@+id/rv_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-            <com.shunlian.app.widget.empty.NetAndEmptyInterface
-                android:id="@+id/nei_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyScrollView>
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mrlayout_title"
+        android:layout_marginTop="190dp"/>
 </com.shunlian.app.widget.MyRelativeLayout>
