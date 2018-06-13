@@ -67,7 +67,7 @@ public class ExperiencePublishPresenter extends BasePresenter<IExperiencePublish
         sortAndMD5(map);
 
         Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(parts, map);
-        getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
+        getNetData(true, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
                 super.onSuccess(entity);

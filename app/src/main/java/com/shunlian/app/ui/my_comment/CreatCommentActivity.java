@@ -250,6 +250,11 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         switch (v.getId()) {
             case R.id.tv_title_right:
                 if (currentType == APPEND_COMMENT) {
+                    ReleaseCommentEntity releaseCommentEntity = commentList.get(0);
+                    if (isEmpty(releaseCommentEntity.content)) {
+                        Common.staticToast("请输入评价内容");
+                        return;
+                    }
                     String goodsString = getGoodsString();
                     if (!isEmpty(goodsString)) {
                         commentPresenter.appendComment(goodsString);

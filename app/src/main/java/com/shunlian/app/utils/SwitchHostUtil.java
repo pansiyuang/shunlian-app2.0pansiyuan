@@ -43,7 +43,7 @@ public class SwitchHostUtil {
                 } else if (which == 1) {
                     //预发布
                     InterentTools.HTTPADDR = "http://api-front.v2.shunliandongli.com/";
-                    InterentTools.HTTPADDR_IM = "ws.v2.shunliandongli.com:8086";
+                    InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
 //                    Constant.IM_SDK_APPID = 1400018006;
 //                    Constant.IM_ACCOUNT_TYPE = 3415;
 //                    Constant.IM_XIAOMI_BUSID = 405;
@@ -89,7 +89,7 @@ public class SwitchHostUtil {
 //                Constant.IM_HUAWEI_BUSID = 406;
 //                MyHttpUtil.H5_HOST = Constant.TEST_HOST;
             } else {
-                InterentTools.HTTPADDR_IM = "ws.v2.shunliandongli.com:8086";
+                InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
 //                Constant.IM_SDK_APPID = 1400008795;
 //                Constant.IM_ACCOUNT_TYPE = 3425;
 //                Constant.IM_XIAOMI_BUSID = 431;
