@@ -104,10 +104,8 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
         CommentSuccessHolder mHolder = (CommentSuccessHolder) holder;
         if (isEmpty(lists)){
             mHolder.nei_empty.setVisibility(View.VISIBLE);
-            mHolder.line.setVisibility(View.GONE);
-            mHolder.mtv_title.setVisibility(View.GONE);
-            mHolder.mll_content.setVisibility(View.GONE);
-            mHolder.line_bottom.setVisibility(View.GONE);
+            visible(mHolder.nei_empty);
+            gone(mHolder.line,mHolder.mtv_title,mHolder.mll_content,mHolder.line_bottom);
             mHolder.nei_empty.setImageResource(R.mipmap.img_empty_common)
                     .setText(getString(R.string.no_comment_goods)).setButtonText("");
             return;
@@ -115,50 +113,47 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
         CommentSuccessEntity.Comment comment = lists.get(position - 1);
 
         if (position == 1 && mCommentSize != 0) {
-            mHolder.line.setVisibility(View.GONE);
+            gone(mHolder.line_bottom,mHolder.line);
             mHolder.mtv_title.setText(getString(R.string.comment_next));
-            mHolder.line_bottom.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
             mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
         } else if (position < mCommentSize) {
-
-            mHolder.line.setVisibility(View.GONE);
-            mHolder.line_bottom.setVisibility(View.GONE);
-            mHolder.mtv_title.setVisibility(View.GONE);
+            gone(mHolder.line,mHolder.line_bottom,mHolder.mtv_title);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
             mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
-
         } else if (position == mCommentSize) {
-            mHolder.line.setVisibility(View.GONE);
-            mHolder.line_bottom.setVisibility(View.VISIBLE);
-            mHolder.mtv_title.setVisibility(View.GONE);
+            gone(mHolder.line,mHolder.mtv_title);
+            visible(mHolder.line_bottom);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.white));
             mHolder.mtv_go_comment.setText(getString(R.string.go_comment));
         } else if (position == mCommentSize + 1) {
-            if (mCommentSize == 0){
-                mHolder.line.setVisibility(View.GONE);
+            if (mCommentSize == 0 || mCommentSize == 1){
+                gone(mHolder.line);
             }else {
-                mHolder.line.setVisibility(View.VISIBLE);
+                visible(mHolder.line);
             }
-            mHolder.line_bottom.setVisibility(View.GONE);
+            gone(mHolder.line_bottom);
             mHolder.mtv_title.setText(getString(R.string.this_append_comment));
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.value_FEEAEA));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
         } else {
-            mHolder.line.setVisibility(View.GONE);
-            mHolder.line_bottom.setVisibility(View.GONE);
-            mHolder.mtv_title.setVisibility(View.GONE);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.value_FEEAEA));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
+            if (position + 1== getItemCount()){
+                visible(mHolder.line_bottom);
+            }else {
+                gone(mHolder.line,mHolder.line_bottom,mHolder.mtv_title);
+            }
         }
 
         mHolder.mtv_content.setText(comment.title);
-        GlideUtils.getInstance().loadImage(context, mHolder.miv_pic, comment.thumb);
+        GlideUtils.getInstance().loadOverrideImage(context,
+                mHolder.miv_pic, comment.thumb,116,116);
     }
 
     public class HeadHolder extends BaseRecyclerViewHolder {
@@ -205,17 +200,14 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mtv_go_comment.setWHProportion(116, 116);
             mtv_go_comment.setOnClickListener(this);
             if (isEmpty(lists)){
-                itemView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int measuredHeight = headView.getMeasuredHeight();
-                        ViewGroup.LayoutParams layoutParams = nei_empty.getLayoutParams();
-                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                        layoutParams.height = DeviceInfoUtil.getDeviceHeight(context)
-                                - measuredHeight - TransformUtil.dip2px(context,44)
-                                - ImmersionBar.getStatusBarHeight((Activity) context);
-                        nei_empty.setLayoutParams(layoutParams);
-                    }
+                itemView.post(() -> {
+                    int measuredHeight = headView.getMeasuredHeight();
+                    ViewGroup.LayoutParams layoutParams = nei_empty.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = DeviceInfoUtil.getDeviceHeight(context)
+                            - measuredHeight - TransformUtil.dip2px(context,44)
+                            - ImmersionBar.getStatusBarHeight((Activity) context);
+                    nei_empty.setLayoutParams(layoutParams);
                 });
             }
         }

@@ -142,6 +142,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         }
         manager = new LinearLayoutManager(this);
         recy_view.setLayoutManager(manager);
+        recy_view.setNestedScrollingEnabled(false);
         int space = TransformUtil.dip2px(this, 10);
         recy_view.addItemDecoration(new OrderDecoration(space,getColorResouce(R.color.white_ash)));
     }
@@ -190,7 +191,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 if (currentPrice <= 0){
                     totalPrice = "0.00";
                 }else {
-                    totalPrice = currentPrice+"";
+                    totalPrice = Common.formatFloat(currentPrice);
                 }
                 mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+totalPrice,11));
             });
@@ -210,7 +211,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         if (Float.parseFloat(s) <= 0){
             mTotalPrice = "0.00";
         }
-        mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb).concat(mTotalPrice),11));
+        mtv_total_price.setText(Common.dotAfterSmall(getStringResouce(R.string.rmb)+mTotalPrice,11));
     }
 
     @Override
