@@ -288,7 +288,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     @Override
     public void setAvatar(String avatar) {
         if (!isEmpty(avatar)){
-            GlideUtils.getInstance().loadCircleImage(this,miv_avatar,avatar);
+            GlideUtils.getInstance().loadCircleHeadImage(this,miv_avatar,avatar);
         }
     }
 

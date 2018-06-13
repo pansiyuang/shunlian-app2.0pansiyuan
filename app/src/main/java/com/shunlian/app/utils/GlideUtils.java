@@ -125,11 +125,12 @@ public class GlideUtils {
                     .load(imgUrl)
 //                    .error(R.mipmap.error)
                     .dontAnimate()
-                    .placeholder(R.mipmap.img_default_common)
+                    .placeholder(imageView.getDrawable()) //解决点击图片加载闪动的bug
                     .priority(Priority.NORMAL) //下载的优先级
                     //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
                     //source:缓存源资源   result：缓存转换后的资源
-                    .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .bitmapTransform(new CenterCrop(context))
                     .into(imageView);
         }
     }
@@ -573,6 +574,27 @@ public class GlideUtils {
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
                 .bitmapTransform(new CenterCrop(context),
                         new GlideRoundTransform(context, radius))
+                .into(imageView);
+    }
+
+
+    /**
+     * 加载圆图
+     *
+     * @param context
+     * @param imageView
+     * @param imgUrl
+     */
+    public void loadCircleHeadImage(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+                .error(R.mipmap.img_set_defaulthead)
+                .placeholder(R.mipmap.img_set_defaulthead)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .bitmapTransform(new GlideCircleTransform(context))
                 .into(imageView);
     }
 }

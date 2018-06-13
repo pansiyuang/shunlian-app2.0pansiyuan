@@ -98,20 +98,13 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
             final ArticleEntity.Article article = lists.get(position - 1);
 
-            if ("0".equals(article.thumb_type)) {
-                visible(articleViewHolder.rl_small);
-                gone(articleViewHolder.ll_big);
-            } else {
-                visible(articleViewHolder.ll_big);
-                gone(articleViewHolder.rl_small);
-            }
-
             if (!isEmpty(article.title)) {
                 articleViewHolder.tv_small_title.setText(article.title);
                 articleViewHolder.tv_big_title.setText(article.title);
             }
-            GlideUtils.getInstance().loadOverrideImage(context, articleViewHolder.miv_small_icon, article.thumb, TransformUtil.dip2px(context, 107.5f), TransformUtil.dip2px(context, 95f));
-            GlideUtils.getInstance().findFollowList(context, articleViewHolder.miv_big_icon, article.thumb);
+
+            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb, false);
+            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb,false);
             articleViewHolder.tv_share_count.setText(article.forwards);
             articleViewHolder.tv_comment_count.setText(article.comments);
             if ("0".equals(article.had_like)) {
@@ -151,6 +144,14 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             });
 
             setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);
+
+            if ("0".equals(article.thumb_type)) {
+                visible(articleViewHolder.rl_small);
+                gone(articleViewHolder.ll_big);
+            } else {
+                visible(articleViewHolder.ll_big);
+                gone(articleViewHolder.rl_small);
+            }
         }
     }
 

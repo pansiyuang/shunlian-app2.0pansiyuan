@@ -276,8 +276,8 @@ public class SettingAct extends BaseActivity implements ISettingView {
         protected String doInBackground(Void... voids) {
             File file = new File(Constant.CACHE_PATH_EXTERNAL);
             if (file.exists()) {
-                long t = getTotalSizeOfFilesInDir(file) / 1000;
-                if (t > 5 * 1000 * 1000) {//大于5兆可清理缓存
+                long t = getTotalSizeOfFilesInDir(file) - (80*1000*1000);
+                if (t > 20 * 1000 * 1000) {//大于20兆可清理缓存
                     String s = Formatter.formatFileSize(SettingAct.this, t);
                     return s;
                 }

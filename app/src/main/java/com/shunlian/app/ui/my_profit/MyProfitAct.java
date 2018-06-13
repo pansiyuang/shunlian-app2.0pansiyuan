@@ -34,7 +34,6 @@ import com.shunlian.app.ui.balance.BalanceMainAct;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.sale_data.SaleDetailAct;
 import com.shunlian.app.ui.sale_data.SplineChart06View;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -340,7 +339,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                     lp = (RelativeLayout.LayoutParams) llayout_nickname.getLayoutParams();
             lp.topMargin = 0;
         }
-        GlideUtils.getInstance().loadCircleImage(this, civ_head, userInfo.avatar);
+        GlideUtils.getInstance().loadCircleHeadImage(this, civ_head, userInfo.avatar);
         mtv_nickname.setText(userInfo.nickname);
     }
 

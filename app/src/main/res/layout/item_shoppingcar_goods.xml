@@ -149,7 +149,7 @@
 
                 <TextView
                     android:id="@+id/tv_goods_min"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@mipmap/img_shoppingcar_jian_line"
                     android:gravity="center"
@@ -172,7 +172,7 @@
 
                 <TextView
                     android:id="@+id/tv_goods_add"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@mipmap/img_shoppingcar_jia_line"
                     android:gravity="center"

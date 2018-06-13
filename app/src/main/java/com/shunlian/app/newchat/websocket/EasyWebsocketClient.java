@@ -16,6 +16,7 @@ import com.shunlian.app.newchat.entity.StatusEntity;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -99,7 +100,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void buildeWebsocketClient() {
         try {
             mClient = null;
-            mClient = new Client(new URI(Constant.IM_ADDRESS), new Draft_17());//ws://123.207.107.21:8086
+            mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086
             mClient.setOnClientConnetListener(this);
             mClient.connect();
             isInit = true;

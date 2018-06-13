@@ -278,8 +278,9 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     @Override
     public void getFairishNums(String count, boolean isDel) {
-        tv_add_count.setText(String.format(getStringResouce(R.string.add_some_goods), count));
-
+        if (!isEmpty(count)) {
+            tv_add_count.setText(String.format(getStringResouce(R.string.add_some_goods), count));
+        }
         if (isDel) {
             isEdit = false;
             if (promptDialog != null) {
