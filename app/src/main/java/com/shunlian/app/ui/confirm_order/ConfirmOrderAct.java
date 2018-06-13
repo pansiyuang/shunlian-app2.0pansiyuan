@@ -19,11 +19,11 @@ import com.shunlian.app.bean.SubmitGoodsEntity;
 import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IConfirmOrderView;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyNestedScrollView;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.ArrayList;
@@ -54,8 +54,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
     @BindView(R.id.miv_close)
     MyImageView miv_close;
 
+    @BindView(R.id.nsv_view)
+    MyNestedScrollView nsv_view;
 
-    private LinearLayoutManager manager;
     private String mTotalPrice;
     private boolean isOrderBuy = false;//是否直接购买
     private String detail_address;
@@ -102,18 +103,15 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
         super.initListener();
         mtv_go_pay.setOnClickListener(this);
         miv_close.setOnClickListener(this);
-        recy_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (manager != null){
-                    int firstPosition = manager.findFirstVisibleItemPosition();
-                    if (firstPosition == 0){
-                        gone(mtv_address);
-                    }else {
-                        visible(mtv_address);
-                    }
-                }
+
+        nsv_view.setOnScrollChangeListener((MyNestedScrollView.OnScrollChangeListener)
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            //LogUtil.zhLogW("v="+v+String.format("scrollY=%d;oldScrollY=%d",scrollY,oldScrollY));
+            //LogUtil.zhLogW("v="+v+String.format("scrollX=%d;oldScrollX=%d",scrollX,oldScrollX));
+            if (scrollY >= 260) {
+                visible(mtv_address);
+            } else {
+                gone(mtv_address);
             }
         });
     }
@@ -140,8 +138,8 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             isOrderBuy = true;
             confirmOrderPresenter.orderBuy(goods_id, qty, sku_id,null);
         }
-        manager = new LinearLayoutManager(this);
-        recy_view.setLayoutManager(manager);
+
+        recy_view.setLayoutManager(new LinearLayoutManager(this));
         recy_view.setNestedScrollingEnabled(false);
         int space = TransformUtil.dip2px(this, 10);
         recy_view.addItemDecoration(new OrderDecoration(space,getColorResouce(R.color.white_ash)));
@@ -253,7 +251,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-                LogUtil.zhLogW("go_pay=============="+shop_goods);
+                //LogUtil.zhLogW("go_pay=============="+shop_goods);
                 String price = mtv_total_price.getText().toString();
                 PayListActivity.startAct(this,shop_goods,addressId,null,
                         price.substring(1,price.length()));
