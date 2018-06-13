@@ -17,7 +17,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import com.alipay.sdk.app.H5PayCallback;
 import com.alipay.sdk.app.PayTask;
+import com.alipay.sdk.util.H5PayResultModel;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.PayListAdapter;
 import com.shunlian.app.bean.PayListEntity;
@@ -48,25 +50,22 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/7.
  */
 
-public class PayListActivity extends BaseActivity implements View.OnClickListener,IPayListView {
+public class PayListActivity extends BaseActivity implements View.OnClickListener, IPayListView {
 
 
+    public static final int FINISH_ACT_WHAT = 100;//finish act
+    private static final int SDK_PAY_FLAG = 1;
     private static Activity activity;
     @BindView(R.id.miv_close)
     MyImageView miv_close;
-
     @BindView(R.id.recy_pay)
     RecyclerView recy_pay;
-
     @BindView(R.id.h5_pay)
     WebView h5_pay;
-
     @BindView(R.id.lLayout_pay)
     LinearLayout lLayout_pay;
-
     private PayListPresenter payListPresenter;
     private IWXAPI wxapi;
-    private static final int SDK_PAY_FLAG = 1;
     private String order_id;
     private String orderId;
     private String price;
@@ -74,32 +73,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String addressId;
     private String currentPayType;//当前支付方式
     private String pay_sn;
-    public static final int FINISH_ACT_WHAT = 100;//finish act
     private String mProductId;
     private String mSkuId;
-
-    public static void startAct(Activity activity, String shop_goods, String addressId,String order_id,String price){
-        PayListActivity.activity = activity;
-        Intent intent = new Intent(activity, PayListActivity.class);
-        intent.putExtra("shop_goods",shop_goods);
-        intent.putExtra("addressId",addressId);
-        intent.putExtra("order_id",order_id);
-        intent.putExtra("price",price);
-        activity.startActivity(intent);
-    }
-
-    public static void startAct(Activity activity,String product_id,String sku_id,String addressId,
-                                String price,String plus){
-        PayListActivity.activity = activity;
-        Intent intent = new Intent(activity, PayListActivity.class);
-        intent.putExtra("product_id",product_id);
-        intent.putExtra("addressId",addressId);
-        intent.putExtra("sku_id",sku_id);
-        intent.putExtra("price",price);
-        activity.startActivity(intent);
-    }
-
-
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -108,13 +83,13 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 case SDK_PAY_FLAG:
                     @SuppressWarnings("unchecked")
                     PayResult payResult = new PayResult((String) msg.obj);
-                    LogUtil.zhLogW("msg.obj==========="+ msg.obj);
+                    LogUtil.zhLogW("msg.obj===========" + msg.obj);
                     /**
                      对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
                      */
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                     String resultStatus = payResult.getResultStatus();
-                    LogUtil.zhLogW("=resultStatus=========="+resultStatus);
+                    LogUtil.zhLogW("=resultStatus==========" + resultStatus);
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
@@ -126,43 +101,67 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     break;
                 case FINISH_ACT_WHAT:
                     if (activity instanceof ConfirmOrderAct ||
-                            activity instanceof PLUSConfirmOrderAct){
+                            activity instanceof PLUSConfirmOrderAct) {
                         activity.finish();
                     }
                     finish();
                     break;
             }
-        };
+        }
+
+        ;
     };
+
+    public static void startAct(Activity activity, String shop_goods, String addressId, String order_id, String price) {
+        PayListActivity.activity = activity;
+        Intent intent = new Intent(activity, PayListActivity.class);
+        intent.putExtra("shop_goods", shop_goods);
+        intent.putExtra("addressId", addressId);
+        intent.putExtra("order_id", order_id);
+        intent.putExtra("price", price);
+        activity.startActivity(intent);
+    }
+
+    public static void startAct(Activity activity, String product_id, String sku_id, String addressId,
+                                String price, String plus) {
+        PayListActivity.activity = activity;
+        Intent intent = new Intent(activity, PayListActivity.class);
+        intent.putExtra("product_id", product_id);
+        intent.putExtra("addressId", addressId);
+        intent.putExtra("sku_id", sku_id);
+        intent.putExtra("price", price);
+        activity.startActivity(intent);
+    }
 
     /**
      * 支付失败
      */
     private void payFail() {
         Common.staticToast(getStringResouce(R.string.pay_fail));
-        if (!isEmpty(mProductId)){
+        if (!isEmpty(mProductId)) {
             //支付失败不做任何操作
-        }else if (isEmpty(order_id)){
+        } else if (isEmpty(order_id)) {
             MyOrderAct.startAct(PayListActivity.this, 2);
-        }else {
+        } else {
             OrderDetailAct.startAct(PayListActivity.this, order_id);
         }
-        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
+        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
     }
+
     /*
     支付成功
      */
-    private void paySuccess(){
+    private void paySuccess() {
         Common.staticToast(getStringResouce(R.string.pay_success));
-        if (isEmpty(mProductId)){
-            PaySuccessAct.startAct(this, order_id,price,pay_sn,false);
-        }else {
+        if (isEmpty(mProductId)) {
+            PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
+        } else {
             String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
-            if (isEmpty(plus) ||Integer.parseInt(plus) <= 1)
+            if (isEmpty(plus) || Integer.parseInt(plus) <= 1)
                 SharedPrefUtil.saveSharedPrfString("plus_role", "1");
-            PaySuccessAct.startAct(this, order_id,price,pay_sn,true);
+            PaySuccessAct.startAct(this, order_id, price, pay_sn, true);
         }
-        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT,100);
+        mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
     }
 
     /**
@@ -198,7 +197,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         mSkuId = getIntent().getStringExtra("sku_id");
         boolean isPLUS = false;
         if (!isEmpty(mProductId)) isPLUS = true;
-        payListPresenter = new PayListPresenter(this,this,isPLUS);
+        payListPresenter = new PayListPresenter(this, this, isPLUS);
 
         wxapi = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
         wxapi.registerApp(Constant.WX_APP_ID);// 注册到微信列表
@@ -213,7 +212,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.miv_close:
                 backSelect();
                 break;
@@ -224,19 +223,20 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
                 .setSureAndCancleListener(getStringResouce(R.string.cancel_the_pay),
-                        getStringResouce(R.string.next_the_pay), (v)-> promptDialog.dismiss()
-                        , getStringResouce(R.string.SelectRecommendAct_sure), (v)-> {
+                        getStringResouce(R.string.next_the_pay), (v) -> promptDialog.dismiss()
+                        , getStringResouce(R.string.SelectRecommendAct_sure), (v) -> {
                             promptDialog.dismiss();
-                            finish();})
+                            finish();
+                        })
                 .show();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-            if (h5_pay.getVisibility() == View.VISIBLE){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (h5_pay.getVisibility() == View.VISIBLE) {
                 payFail();
-            }else {
+            } else {
                 backSelect();
             }
             return true;
@@ -272,10 +272,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     public void payList(final List<PayListEntity.PayTypes> payTypes) {
-        PayListAdapter adapter = new PayListAdapter(this,false,payTypes);
+        PayListAdapter adapter = new PayListAdapter(this, false, payTypes);
         recy_pay.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((view,position)-> {
+        adapter.setOnItemClickListener((view, position) -> {
             PayListEntity.PayTypes pay_types = payTypes.get(position);
             submitOrder(pay_types);
         });
@@ -290,18 +290,21 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     public void payOrder(PayOrderEntity entity) {
         this.order_id = entity.order_id;
         pay_sn = entity.pay_sn;
-        if (!isEmpty(entity.zero_pay)){
+        if (!isEmpty(entity.zero_pay)) {
             paySuccess();
             return;
         }
-        switch (currentPayType){
+        switch (currentPayType) {
+            case "pay_url":
+                callbackH5Pay(entity.pay_url,true);
+                break;
             case "alipay":
                 alipay(entity.alipay);
                 break;
             case "wechat":
                 break;
             case "unionpay":
-                callbackH5Pay(entity.unionpay);
+                callbackH5Pay(entity.unionpay,false);
 //                callbackH5Pay("http://pay-test.shunliandongli.com/app_jump_test.php");
                 break;
             case "credit":
@@ -323,16 +326,19 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
     /**
      * 调起银联支付
+     *
      * @param unionpay
      */
-    private void callbackH5Pay(final String unionpay) {
-        h5_pay.setVisibility(View.VISIBLE);
+    private void callbackH5Pay(final String unionpay,boolean isAli) {
+        if (!isAli){
+            h5_pay.setVisibility(View.INVISIBLE);
+        }
         lLayout_pay.setVisibility(View.GONE);
         final HttpDialog httpDialog = new HttpDialog(this);
         WebSettings mWebSettings = h5_pay.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
         h5_pay.setWebChromeClient(new WebChromeClient());
-        h5_pay.setWebViewClient(new WebViewClient(){
+        h5_pay.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -341,15 +347,55 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.zhLogW("====="+url);
-                if (url.startsWith("slmall://")){
-                    if (url.contains("success")){
+                LogUtil.zhLogW("=====" + url);
+                if (url.startsWith("slmall://")) {
+                    if (url.contains("success")) {
                         paySuccess();
-                    }else {
+                    } else {
                         payFail();
                     }
-                }else {
-                    view.loadUrl(url, setWebviewHeader());
+                } else {
+                    final PayTask task = new PayTask(PayListActivity.this);
+                    boolean isIntercepted = task.payInterceptorWithUrl(url, true, new H5PayCallback() {
+                        @Override
+                        public void onPayResult(final H5PayResultModel result) {
+                            // 支付结果返回
+                            if ("9000".equals(result.getResultCode())){
+                                PayListActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        paySuccess();
+                                    }
+                                });
+                            }else {
+                                final String url = result.getReturnUrl();
+                                if (!TextUtils.isEmpty(url)) {
+                                    PayListActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            view.loadUrl(url);
+                                        }
+                                    });
+                                }else {
+                                    PayListActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            payFail();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
+                    /**
+                     * 判断是否成功拦截
+                     * 若成功拦截，则无需继续加载该URL；否则继续加载
+                     */
+                    if (!isIntercepted) {
+                        view.loadUrl(url, setWebviewHeader());
+                    }
+                    return true;
                 }
                 return true;
             }
@@ -360,28 +406,32 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 httpDialog.dismiss();
             }
         });
-        h5_pay.loadUrl(unionpay,setWebviewHeader());
+        h5_pay.loadUrl(unionpay, setWebviewHeader());
     }
 
     private void submitOrder(final PayListEntity.PayTypes pay_types) {
         currentPayType = pay_types.code;
-        switch (pay_types.code){
+        switch (pay_types.code) {
+            case "pay_url":
+                payListPresenter.submitPLUSOrder(mProductId, mSkuId, addressId, pay_types.code);
+                break;
             case "alipay":
                 if (!isEmpty(shop_goods)) {
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
-                }else if (!isEmpty(orderId)){
-                    payListPresenter.fromOrderListGoPay(orderId,pay_types.code);
-                }else if (!isEmpty(mProductId)){
-                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
+                } else if (!isEmpty(orderId)) {
+                    payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }
+//                else if (!isEmpty(mProductId)){
+//                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
+//                }
                 break;
             case "wechat":
                 break;
             case "unionpay":
                 if (!isEmpty(shop_goods)) {
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
-                }else if (!isEmpty(orderId)){
-                    payListPresenter.fromOrderListGoPay(orderId,pay_types.code);
+                } else if (!isEmpty(orderId)) {
+                    payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
                 }
                 break;
             case "credit":
@@ -392,7 +442,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                     if (!isEmpty(shop_goods))
                                         payListPresenter.orderCheckout(shop_goods,
                                                 addressId, pay_types.code);
-                                     else if (!isEmpty(orderId))
+                                    else if (!isEmpty(orderId))
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);
                                     promptDialog.dismiss();
@@ -405,6 +455,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
     /**
      * call alipay sdk pay. 调用SDK支付
+     *
      * @param alipayRequest
      */
     public void alipay(final String alipayRequest) {
@@ -415,7 +466,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                 PayTask alipay = new PayTask(PayListActivity.this);
                 // 调用支付接口，获取支付结果
                 String result = alipay.pay(alipayRequest, true);
-                LogUtil.zhLogW("result============:"+result);
+                LogUtil.zhLogW("result============:" + result);
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
                 msg.obj = result;

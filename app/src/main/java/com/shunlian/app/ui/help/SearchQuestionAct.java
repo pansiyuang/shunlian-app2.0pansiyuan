@@ -2,6 +2,7 @@ package com.shunlian.app.ui.help;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -15,12 +16,15 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SearchQAdapter;
 import com.shunlian.app.bean.HelpSearchEntity;
+import com.shunlian.app.newchat.entity.ChatMemberEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.PSearchQuestion;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.view.ISearchQView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -48,7 +52,13 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
     @BindView(R.id.recycler_search)
     RecyclerView recycler_search;
 
+    @BindView(R.id.mllayout_dianhua)
+    MyLinearLayout mllayout_dianhua;
 
+    @BindView(R.id.mllayout_kefu)
+    MyLinearLayout mllayout_kefu;
+
+    private PromptDialog promptDialog;
     private PSearchQuestion presenter;
     private SearchQAdapter searchQAdapter;
     private String keyWord = "";
@@ -77,6 +87,8 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
         super.initListener();
         tv_search_cancel.setOnClickListener(this);
         edt_goods_search.addTextChangedListener(this);
+        mllayout_kefu.setOnClickListener(this);
+        mllayout_dianhua.setOnClickListener(this);
     }
 
 
@@ -96,9 +108,27 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
             case R.id.tv_search_cancel:
                 finish();
                 break;
+            case R.id.mllayout_dianhua:
+                if (promptDialog == null) {
+                    initDialog();
+                } else {
+                    promptDialog.show();
+                }
+                break;
+            case R.id.mllayout_kefu:
+                presenter.getUserId();
+                break;
         }
     }
 
+    public void initDialog() {
+        promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+            startActivity(intentServePhoneOne);
+            promptDialog.dismiss();
+        }, "取消", view -> promptDialog.dismiss()).show();
+    }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,5 +172,14 @@ public class SearchQuestionAct extends BaseActivity implements ISearchQView, Tex
                 }
             });
         }
+    }
+
+    @Override
+    public void getUserId(String userId) {
+        ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
+        chatMember.nickname = "官方客服";
+        chatMember.m_user_id = userId;
+        chatMember.type = "1";
+        ChatManager.getInstance(this).init().MemberChat2Platform(chatMember);
     }
 }

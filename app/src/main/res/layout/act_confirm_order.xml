@@ -90,14 +90,24 @@
     </com.shunlian.app.widget.MyRelativeLayout>
 
     <!--content-->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recy_view"
-        android:overScrollMode="never"
-        android:background="@color/white"
+    <com.shunlian.app.widget.MyNestedScrollView
+        android:id="@+id/nsv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/mrl_bottom"
-        android:layout_below="@+id/mrl_title" />
+        android:layout_below="@+id/mrl_title"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:overScrollMode="never" />
+
+    </com.shunlian.app.widget.MyNestedScrollView>
+
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_address"

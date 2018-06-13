@@ -160,4 +160,21 @@ public class PHelpTwo extends BasePresenter<IHelpTwoView> {
             }
         });
     }
+
+    public void getHelpPhone(){
+        Map<String, String> map = new HashMap<>();
+//        map.put("storeId", storeId);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().helpcenterServiceTell(map);
+        getNetData(false,baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.setPhoneNum(data.tell);
+                }
+            }
+        });
+    }
 }

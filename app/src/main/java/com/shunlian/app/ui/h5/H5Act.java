@@ -32,6 +32,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.H5PayCallback;
+import com.alipay.sdk.app.PayTask;
+import com.alipay.sdk.util.H5PayResultModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
@@ -80,6 +83,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import pay.PayListActivity;
 
 import static com.shunlian.app.service.InterentTools.DOMAIN;
 
