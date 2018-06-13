@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
@@ -19,21 +18,20 @@ import com.shunlian.app.ui.login.LoginAct;
 public class SwitchHostUtil {
 
 
-    public static void switchMethod(final Activity activity){
+    public static void switchMethod(final Activity activity) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setIcon(R.mipmap.icon_login_logo);
         builder.setTitle("选择一个主机");
         //    指定下拉列表的显示数据
-        final String[] cities = { "测试接口", "预发布接口"};
+        final String[] cities = {"测试接口", "预发布接口"};
 //        final String[] cities = { "测试接口", "预发布接口","正式接口"};
         //    设置一个下拉的列表选择项
-        builder.setItems(cities, new DialogInterface.OnClickListener(){
+        builder.setItems(cities, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(activity, "选择的主机为：" + cities[which], Toast.LENGTH_SHORT).show();
-                if (which == 0){
+                if (which == 0) {
                     //测试
                     InterentTools.HTTPADDR = "http://v20-front-api.shunliandongli.com/";
                     InterentTools.HTTPADDR_IM = "ws://123.207.107.21:8086";
@@ -42,7 +40,7 @@ public class SwitchHostUtil {
 //                    Constant.IM_XIAOMI_BUSID = 405;
 //                    Constant.IM_HUAWEI_BUSID = 406;
 //                    MyHttpUtil.H5_HOST = Constant.TEST_HOST;
-                }else if (which == 1){
+                } else if (which == 1) {
                     //预发布
                     InterentTools.HTTPADDR = "http://api-front.v2.shunliandongli.com/";
                     InterentTools.HTTPADDR_IM = "ws.v2.shunliandongli.com:8086";
@@ -51,7 +49,7 @@ public class SwitchHostUtil {
 //                    Constant.IM_XIAOMI_BUSID = 405;
 //                    Constant.IM_HUAWEI_BUSID = 406;
 //                    MyHttpUtil.H5_HOST = Constant.TEST_HOST;
-                }else {
+                } else {
                     //正式
 
 //                    MyHttpUtil.HTTPADDR = "https://api.shunliandongli.com/v1/";
@@ -66,7 +64,7 @@ public class SwitchHostUtil {
 //                App myApp = (App) activity.getApplication();
 //                myApp.edNetIsTest.putString("netIsTest", MyHttpUtil.HTTPADDR);
 //                myApp.edNetIsTest.apply();
-                SharedPrefUtil.saveCacheSharedPrf("netState",InterentTools.HTTPADDR);
+                SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
 
                 Common.clearLoginInfo();
                 JpushUtil.setJPushAlias();
@@ -79,27 +77,27 @@ public class SwitchHostUtil {
         builder.show();
     }
 
-    public static void setHostMethod(){
-        String netState = SharedPrefUtil.getCacheSharedPrf("netState","");
-        if (!TextUtils.isEmpty(netState)){
+    public static void setHostMethod() {
+        String netState = SharedPrefUtil.getCacheSharedPrf("netState", "");
+        if (!TextUtils.isEmpty(netState)) {
             InterentTools.HTTPADDR = netState;
-            if (netState.contains("v20-front-api")){
-//                MyHttpUtil.HTTPADDR_IM = "http://im.api-test.shunliandongli.com/";
+            if (netState.contains("v20-front-api")) {
+                InterentTools.HTTPADDR_IM = "ws://123.207.107.21:8086";
 //                Constant.IM_SDK_APPID = 1400018006;
 //                Constant.IM_ACCOUNT_TYPE = 3415;
 //                Constant.IM_XIAOMI_BUSID = 405;
 //                Constant.IM_HUAWEI_BUSID = 406;
 //                MyHttpUtil.H5_HOST = Constant.TEST_HOST;
-            }else{
-//                MyHttpUtil.HTTPADDR_IM = "https://im.api.shunliandongli.com/";
+            } else {
+                InterentTools.HTTPADDR_IM = "ws.v2.shunliandongli.com:8086";
 //                Constant.IM_SDK_APPID = 1400008795;
 //                Constant.IM_ACCOUNT_TYPE = 3425;
 //                Constant.IM_XIAOMI_BUSID = 431;
 //                Constant.IM_HUAWEI_BUSID = 432;
 //                MyHttpUtil.H5_HOST = Constant.RELEASE_HOST;
             }
-        }else {
-            SharedPrefUtil.saveCacheSharedPrf("netState",InterentTools.HTTPADDR);
+        } else {
+            SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
         }
     }
 }

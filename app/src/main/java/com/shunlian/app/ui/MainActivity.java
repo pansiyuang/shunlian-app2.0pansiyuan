@@ -174,7 +174,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         if (Common.isAlreadyLogin()) {
             if (isPerson) {
-                LogUtil.augusLogW("yxf444--");
                 personCenterClick();
                 isPerson = false;
             } else if (isCart) {
@@ -193,7 +192,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
-            LogUtil.augusLogW("yxf333--"+flag);
             switch2jump(flag);
         }
     }
