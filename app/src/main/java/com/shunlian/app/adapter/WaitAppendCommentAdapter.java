@@ -62,7 +62,8 @@ public class WaitAppendCommentAdapter extends BaseRecyclerAdapter<CommentListEnt
             mHolder.mtv_title.setVisibility(View.GONE);
         }
 
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_goods_pic,data.thumb);
+        GlideUtils.getInstance().loadOverrideImage(context,
+                mHolder.miv_goods_pic,data.thumb,193,193);
         mHolder.mtv_goods_detail.setText(data.title);
         mHolder.mtv_price.setText(getString(R.string.rmb)+data.price);
         mHolder.mtv_append_comment_staus.setVisibility(View.VISIBLE);

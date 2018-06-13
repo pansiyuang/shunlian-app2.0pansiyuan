@@ -182,9 +182,9 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
             df.setSelectVoucherListener(position -> {
                 float currentPrice = 0;
                 for (int i = 0; i < enabled.size(); i++) {
-                    String post_discount_price = enabled.get(i).post_discount_price;
-                    currentPrice += Float.parseFloat(isEmpty(post_discount_price)
-                            ? "0" : post_discount_price);
+                    String store_discount_price = enabled.get(i).store_discount_price;
+                    currentPrice += Float.parseFloat(isEmpty(store_discount_price)
+                            ? enabled.get(i).sub_total : store_discount_price);
                 }
                 String totalPrice = null;
                 if (currentPrice <= 0){
