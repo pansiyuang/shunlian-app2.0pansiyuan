@@ -12,6 +12,7 @@
         app:ll_control_adapter="true"
         app:ll_margin_left="20"
         app:ll_margin_right="20"
+        app:ll_margin_bottom="30"
         app:ll_margin_top="30">
 
         <com.shunlian.app.widget.MyLinearLayout

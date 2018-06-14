@@ -316,7 +316,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(CommentEvent event) {
-        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS || event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
+        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS ||
+                event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
             presenter.myCommentListAll();
         }
 

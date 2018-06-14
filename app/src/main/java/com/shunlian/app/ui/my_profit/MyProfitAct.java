@@ -612,6 +612,8 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
                         llayout_month_reward.getVisibility() == View.GONE &&
                         llayout_order_profit.getVisibility() == View.GONE) {
                     gone(llayout_reward);
+                }else {
+                    visible(llayout_reward);
                 }
             }
         });

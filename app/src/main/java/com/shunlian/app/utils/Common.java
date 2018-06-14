@@ -352,7 +352,7 @@ public class Common {
                 HelpOneAct.startAct(context);
                 break;
             case "search"://搜索
-                SearchGoodsActivity.startActivityForResult((Activity) context);
+                SearchGoodsActivity.startAct((Activity) context, "", "sortFrag");
                 break;
             case "collection"://收藏
                 MyCollectionAct.startAct(context, null);

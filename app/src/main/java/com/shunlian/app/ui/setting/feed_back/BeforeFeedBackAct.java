@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -72,14 +73,15 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.rLayout_more:
-                Intent intent = new Intent(this, NewFeedBackAct.class);
+                /*Intent intent = new Intent(this, NewFeedBackAct.class);
                 intent.putExtra("goodsid", goodsid);
                 intent.putExtra("type", "1");
-                startActivity(intent);
+                startActivity(intent);*/
+                Common.goGoGo(this,"help");
                 break;
             case R.id.rLayout_mores:
                 Intent intents = new Intent(this, NewFeedBackAct.class);
-                intents.putExtra("goodsid", goodsid);
+                intents.putExtra("goodsid", "");
                 intents.putExtra("type", "0");
                 startActivity(intents);
                 break;

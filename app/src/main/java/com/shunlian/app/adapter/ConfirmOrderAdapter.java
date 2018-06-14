@@ -197,11 +197,11 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             }
             List<GoodsDeatilEntity.Goods> goods = enabled.goods;
             if (!isEmpty(goods)) {
-                mHolder.recy_view.setVisibility(View.VISIBLE);
+                visible(mHolder.recy_view);
                 mHolder.recy_view.setAdapter(new AppointGoodsAdapter(context,
                         false, goods));
             }else {
-                mHolder.recy_view.setVisibility(View.GONE);
+                gone(mHolder.recy_view);
             }
 
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
@@ -212,8 +212,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 if (Float.parseFloat(temp) <= 0) temp = "0.00";
                 enabled.store_discount_price = temp;
                 mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)+temp,11));
-                mHolder.mllayout_discount.setVisibility(View.VISIBLE);
-
+                visible(mHolder.mllayout_discount);
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
                 }
@@ -222,7 +221,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 enabled.store_discount_price = enabled.sub_total;
                 mHolder.mtv_goods_price.setText(Common.dotAfterSmall(getString(R.string.rmb)
                         +Common.formatFloat(enabled.sub_total),11));
-                mHolder.mllayout_discount.setVisibility(View.GONE);
+                gone(mHolder.mllayout_discount);
             }
 
 
@@ -240,11 +239,9 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 }else {
                     mHolder.mtv_promotion.setText(enabled.promotion_total_hint);
                 }
-                mHolder.mll_promotion.setVisibility(View.VISIBLE);
-                mHolder.line_activity.setVisibility(View.VISIBLE);
+                visible(mHolder.mll_promotion,mHolder.line_activity);
             }else {
-                mHolder.mll_promotion.setVisibility(View.GONE);
-                mHolder.line_activity.setVisibility(View.GONE);
+                gone(mHolder.mll_promotion,mHolder.line_activity);
             }
             mHolder.mtv_goods_count.setText(String.format(getString(R.string.all_goods),enabled.sub_count));
         }

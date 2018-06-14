@@ -122,7 +122,7 @@ public class CommonImgAdapter extends BaseRecyclerAdapter<ImageEntity> {
         if (!TextUtils.isEmpty(imgPath)) {
             GlideUtils.getInstance().loadFileImageWithView(context, new File(imgPath), viewHolder.miv_img);
         } else if (!TextUtils.isEmpty(imgUrl)) {
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_img, imgUrl);
+            GlideUtils.getInstance().loadImage(context, viewHolder.miv_img, imgUrl,false);
         }
         viewHolder.miv_img.setOnClickListener(new View.OnClickListener() {
             @Override
