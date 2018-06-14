@@ -54,7 +54,8 @@ public class OrderGoodsAdapter extends BaseRecyclerAdapter<MyOrderEntity.OrderGo
                 mHolder.miv_goods_pic,orderGoodsBean.thumb,160,160);
         mHolder.mtv_attribute.setText(orderGoodsBean.sku_desc);
         mHolder.mtv_price.setText(getString(R.string.rmb)+orderGoodsBean.price);
-        if (!isEmpty(orderGoodsBean.market_price))
+        if (!isEmpty(orderGoodsBean.market_price) &&
+                Float.parseFloat(orderGoodsBean.market_price) != 0)
             mHolder.mtv_market_price.setStrikethrough().setText(getString(R.string.rmb)+orderGoodsBean.market_price);
         mHolder.mtv_count.setText(String.format(getString(R.string.x),orderGoodsBean.qty));
         String offered = orderGoodsBean.offered;
