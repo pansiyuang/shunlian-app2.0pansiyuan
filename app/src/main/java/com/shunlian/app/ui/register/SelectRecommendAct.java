@@ -216,7 +216,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
             public void convert(SimpleViewHolder holder, MemberCodeListEntity.ListBean s,int position) {
                 holder.addOnClickListener(R.id.civ_head);
                 //头像
-                CircleImageView view = holder.getView(R.id.civ_head);
+                MyImageView view = holder.getView(R.id.civ_head);
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
                 int deviceWidth = DeviceInfoUtil.getDeviceWidth(SelectRecommendAct.this);
                 int v = (int) (160.0f / 750 * deviceWidth + 0.5f);
@@ -224,7 +224,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
                 layoutParams.height = v;
                 view.setLayoutParams(layoutParams);
 
-                GlideUtils.getInstance().loadImage(SelectRecommendAct.this, view,s.avatar);
+                GlideUtils.getInstance().loadCircleHeadImage(SelectRecommendAct.this, view,s.avatar);
                 //昵称
                 TextView tv_nickname = holder.getView(R.id.tv_nickname);
                 tv_nickname.setText(s.nickname);

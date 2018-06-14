@@ -63,11 +63,11 @@ public class MyCommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data
         final CommentListEntity.Data data = lists.get(position);
 
         if ("5".equals(data.star_level)) {//好评
-            mHolder.comment_rank.praiseRank();
+            if (mHolder.comment_rank != null) mHolder.comment_rank.praiseRank();
         } else if ("3".equals(data.star_level)) {//中评
-            mHolder.comment_rank.middleRank();
+            if (mHolder.comment_rank != null) mHolder.comment_rank.middleRank();
         } else {//差评
-            mHolder.comment_rank.badRank();
+            if (mHolder.comment_rank != null) mHolder.comment_rank.badRank();
         }
 
         String is_append = data.is_append;//追评状态  0不能追评   1可以追评 2已经追评
