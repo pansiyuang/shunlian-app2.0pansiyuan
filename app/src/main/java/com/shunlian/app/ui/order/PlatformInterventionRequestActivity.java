@@ -84,8 +84,8 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     @BindView(R.id.downTime_order)
     HourNoWhiteDownTimerView downTime_order;
 
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
+    @BindView(R.id.tv_title_number)
+    TextView tv_msg_count;
 
     public RefundDetailEntity.RefundDetail.Edit mEdit;
     private ReturnGoodsDialog dialog;

@@ -141,14 +141,10 @@ public class CommentSuccessAdapter extends BaseRecyclerAdapter<CommentSuccessEnt
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
         } else {
+            gone(mHolder.line,mHolder.line_bottom,mHolder.mtv_title);
             mHolder.mtv_go_comment.setBackgroundColor(getColor(R.color.value_FEEAEA));
             mHolder.mtv_go_comment.setTextColor(getColor(R.color.pink_color));
             mHolder.mtv_go_comment.setText(getString(R.string.go_append_comment));
-            if (position + 1== getItemCount()){
-                visible(mHolder.line_bottom);
-            }else {
-                gone(mHolder.line,mHolder.line_bottom,mHolder.mtv_title);
-            }
         }
 
         mHolder.mtv_content.setText(comment.title);
