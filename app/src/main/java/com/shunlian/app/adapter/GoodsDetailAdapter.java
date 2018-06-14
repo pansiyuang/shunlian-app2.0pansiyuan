@@ -1258,14 +1258,17 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.miv_certified_products)
         MyImageView miv_certified_products;
 
+        @BindView(R.id.view_params)
+        View view_params;
+
         public ParamAttrsHolder(View itemView) {
             super(itemView);
             this.setIsRecyclable(false);
             if (!isEmpty(mGoodsEntity.attrs)){
                 mtv_params.setOnClickListener(this);
-                visible(mtv_params);
+                visible(mtv_params,view_params);
             }else {
-                gone(mtv_params);
+                gone(mtv_params,view_params);
             }
 
             GoodsDetailAdapter.this.tv_select_param = tv_select_param;
