@@ -1,12 +1,14 @@
 package com.shunlian.app.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.shunlian.app.adapter.ProbablyLikeAdapter;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IPaySuccessView;
 
 import java.util.HashMap;
@@ -23,7 +25,6 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
 
     private String mPay_sn;
     private boolean isPlus=false;
-    public String plus_order_id="";
 
     public PaySuccessPresenter(Context context, IPaySuccessView iView, String pay_sn,boolean isPlus) {
         super(context, iView);
@@ -67,20 +68,8 @@ public class PaySuccessPresenter extends BasePresenter<IPaySuccessView>{
                     @Override
                     public void onSuccess(BaseEntity<ProbablyLikeEntity> entity) {
                         super.onSuccess(entity);
-                        if (!isEmpty(entity.data.may_be_buy_list)){
-
-                            ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
-                                    (context,entity.data.may_be_buy_list,isPlus);
-                            plus_order_id=entity.data.order_id;
-                            iView.setAdapter(adapter);
-                            adapter.setOnItemClickListener((v,p)->{
-                                ProbablyLikeEntity.MayBuyList mayBuyList = entity.
-                                        data.may_be_buy_list.get(p);
-                                Common.goGoGo(context,"goods",mayBuyList.id);
-                            });
-                        }else {
-                            iView.showDataEmptyView(100);
-                        }
+                        if (entity.data!=null)
+                            iView.setData(entity.data);
                     }
                 });
     }

@@ -30,33 +30,31 @@
 
         <RelativeLayout
             android:id="@+id/rl_more"
-            android:layout_width="50dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp">
+            android:paddingRight="8dp">
 
             <com.shunlian.app.widget.MyImageView
-                android:id="@+id/miv_more"
+                android:id="@+id/miv_dot"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_height="4dp"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="9.5dp"
+                android:adjustViewBounds="true"
                 android:src="@mipmap/icon_common_more_white" />
 
             <com.shunlian.app.widget.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/miv_more"
+                android:id="@+id/tv_msg_count"
+                android:layout_width="16dp"
+                android:layout_height="12dp"
+                android:layout_above="@id/miv_dot"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/rounded_rectangle_12px"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/bg_message_more_white"
+                android:gravity="center"
                 android:text="9+"
                 android:textColor="@color/pink_color"
-                android:textSize="8.5sp"
-                android:visibility="gone" />
+                android:textSize="9sp" />
         </RelativeLayout>
     </com.shunlian.app.widget.MyRelativeLayout>
 

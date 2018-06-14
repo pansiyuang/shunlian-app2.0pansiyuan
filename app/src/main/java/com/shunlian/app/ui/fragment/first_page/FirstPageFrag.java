@@ -175,7 +175,6 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             public void onPageSelected(int arg0) {
                 mAppbar.setExpanded(true);
                 mainActivity.position=arg0;
-                LogUtil.augusLogW("uuu----"+arg0);
             }
 
             @Override

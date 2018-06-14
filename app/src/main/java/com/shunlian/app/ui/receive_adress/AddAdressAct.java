@@ -135,8 +135,8 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
                     Common.staticToast("请先输入收货人姓名");
                 } else if (et_mobile.getText().toString().isEmpty()) {
                     Common.staticToast("请输入收货人电话");
-                } else if (TextUtils.isEmpty(district_ids)) {
-                    Common.staticToast("请选择省、市、区");
+//                } else if (TextUtils.isEmpty(district_ids)) {
+//                    Common.staticToast("请选择省、市、区");
                 } else if (et_address.getText().toString().isEmpty()) {
                     Common.staticToast("请输入详细地址");
                 } else {

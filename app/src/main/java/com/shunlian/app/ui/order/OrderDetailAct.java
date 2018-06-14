@@ -12,6 +12,7 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.OrderGoodAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
@@ -42,6 +43,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

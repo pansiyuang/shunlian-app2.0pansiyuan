@@ -1,6 +1,6 @@
 package com.shunlian.app.view;
 
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.ProbablyLikeEntity;
 
 /**
  * Created by Administrator on 2018/4/28.
@@ -8,5 +8,5 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 
 public interface IPaySuccessView extends IView {
 
-    void setAdapter(BaseRecyclerAdapter adapter);
+    void setData(ProbablyLikeEntity probablyLikeEntity);
 }
