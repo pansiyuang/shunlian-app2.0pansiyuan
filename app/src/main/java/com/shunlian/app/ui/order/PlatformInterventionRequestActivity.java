@@ -84,8 +84,8 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
     @BindView(R.id.downTime_order)
     HourNoWhiteDownTimerView downTime_order;
 
-    @BindView(R.id.tv_msg_count)
-    MyTextView tv_msg_count;
+    @BindView(R.id.tv_title_number)
+    TextView tv_title_number;
 
     public RefundDetailEntity.RefundDetail.Edit mEdit;
     private ReturnGoodsDialog dialog;
@@ -193,7 +193,7 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(getBaseContext());
             if (messageCountManager.isLoad()) {
-                String s = messageCountManager.setTextCount(tv_msg_count);
+                String s = messageCountManager.setTextCount(tv_title_number);
                 if (quick_actions != null)
                     quick_actions.setMessageCount(s);
             } else {
@@ -356,14 +356,14 @@ public class PlatformInterventionRequestActivity extends BaseActivity implements
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(NewMessageEvent event) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_title_number);
         if (quick_actions != null)
             quick_actions.setMessageCount(s);
     }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        String s = messageCountManager.setTextCount(tv_msg_count);
+        String s = messageCountManager.setTextCount(tv_title_number);
         if (quick_actions != null)
             quick_actions.setMessageCount(s);
     }
