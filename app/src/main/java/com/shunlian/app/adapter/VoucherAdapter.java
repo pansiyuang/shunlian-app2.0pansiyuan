@@ -42,13 +42,13 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         return mData.size();
     }
 
-    public void getItemSuccess(String voucherId) {
+    public void getItemSuccess(String voucherId,String isGet) {
         if (isEmpty(mData) || isEmpty(voucherId)) {
             return;
         }
         for (int i = 0; i < mData.size(); i++) {
             if (voucherId.equals(mData.get(i).voucher_id)) {
-                mData.get(i).is_get = "1";
+                mData.get(i).is_get = isGet;
                 notifyItemChanged(i);
                 break;
             }

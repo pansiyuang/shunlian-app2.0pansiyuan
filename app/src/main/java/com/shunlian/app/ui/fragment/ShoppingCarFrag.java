@@ -27,6 +27,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -427,8 +428,11 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnGetVoucher(GoodsDeatilEntity.Voucher voucher) {
         //领取成功
+        Common.staticToast("领取成功");
         if (recyclerDialog != null) {
-            recyclerDialog.getVoucherSuccess(voucher.voucher_id);
+            if ("1".equals(voucher.is_get)) {
+                recyclerDialog.getVoucherSuccess(voucher.voucher_id, voucher.is_get);
+            }
         }
     }
 
