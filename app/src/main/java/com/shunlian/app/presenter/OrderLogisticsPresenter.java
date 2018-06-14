@@ -23,7 +23,7 @@ import retrofit2.Call;
 public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
 
     public static final int PAGE_SIZE = 20;
-    private String currentOrderId;
+    private String currentOrderStr, currentOrderId, currentOrderType;
 
     public OrderLogisticsPresenter(Context context, ITraceView iView) {
         super(context, iView);
@@ -49,9 +49,9 @@ public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
     }
 
     public void orderLogistics(boolean isFirst, String orderStr) {
-        this.currentOrderId = orderStr;
+        this.currentOrderStr = orderStr;
         Map<String, String> map = new HashMap<>();
-        map.put("order_id", String.valueOf(currentOrderId));
+        map.put("order_id", String.valueOf(currentOrderStr));
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
@@ -76,13 +76,48 @@ public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
         });
     }
 
+    public void getPlusLogistics(boolean isFirst, String queryId, String type) {
+        //type 类型 1是普通订单物流 2退换货物流用户 3退换货商家 4礼包
+        this.currentOrderId = queryId;
+        this.currentOrderType = type;
+        Map<String, String> map = new HashMap<>();
+        map.put("type", currentOrderType);
+        map.put("query_id", currentOrderId);
+        map.put("page", String.valueOf(currentPage));
+        map.put("page_size", String.valueOf(PAGE_SIZE));
+        sortAndMD5(map);
+        Call<BaseEntity<OrderLogisticsEntity>> baseEntityCall = getAddCookieApiService().getOppositeTraces(getRequestBody(map));
+        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<OrderLogisticsEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<OrderLogisticsEntity> entity) {
+                super.onSuccess(entity);
+                isLoading = false;
+                OrderLogisticsEntity.History history = entity.data.history;
+                iView.getLogistics(entity.data, history.page, history.total_page);
+                currentPage = history.page;
+                allPage = history.total_page;
+                currentPage++;
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+            }
+        });
+    }
+
     @Override
     public void onRefresh() {
         super.onRefresh();
         if (!isLoading) {
             isLoading = true;
             if (currentPage <= allPage) {
-                orderLogistics(false, currentOrderId);
+                if (!isEmpty(currentOrderStr)) {
+                    orderLogistics(false, currentOrderStr);
+                } else {
+                    getPlusLogistics(false, currentOrderId, currentOrderType);
+                }
             }
         }
     }

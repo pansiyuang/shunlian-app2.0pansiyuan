@@ -189,7 +189,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void getShoppingCarData() {
-        if (shopCarPresenter != null&& !MyOnClickListener.isFastRequest()) {
+        if (shopCarPresenter != null && !MyOnClickListener.isFastRequest()) {
             shopCarPresenter.initShopData();
         }
     }
@@ -259,7 +259,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()){
+        if (!isHidden()) {
             getShoppingCarData();
         }
         super.onResume();
@@ -322,7 +322,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void showVouchersDialog(int position) {
-        if (mCarEntity.enabled.get(position).store_voucher != null && mCarEntity.enabled.get(position).store_voucher.size() != 0) {
+        if (!isEmpty(mCarEntity.enabled.get(position).store_voucher)) {
             List<GoodsDeatilEntity.Voucher> voucherList = mCarEntity.enabled.get(position).store_voucher;
             recyclerDialog.setVoucheres(voucherList);
             recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
@@ -428,7 +428,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     public void OnGetVoucher(GoodsDeatilEntity.Voucher voucher) {
         //领取成功
         if (recyclerDialog != null) {
-            recyclerDialog.getVoucherSuccess(voucher.id);
+            recyclerDialog.getVoucherSuccess(voucher.voucher_id);
         }
     }
 
@@ -439,7 +439,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             probabyGoods.clear();
             probabyGoods.addAll(goodsList);
             goodsAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             probabyTitleView.setVisibility(View.GONE);
         }
     }
