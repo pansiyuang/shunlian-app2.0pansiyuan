@@ -81,6 +81,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     protected int currentPage = 1;//当前页
     protected int allPage;//总页数
     private final Resources resources;
+    private final boolean isOpenLog = true;//是否打开log日志 默认打开
 
     public BasePresenter(Context context, IV iView) {
         this.context = context;
@@ -99,7 +100,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     private Retrofit getRetrofit() {
         InterentTools tools = new InterentTools.Builder()
-                .isOpenLogging(true)
+                .isOpenLogging(isOpenLog)
                 .connectTimeout()
                 .addHeaderInterceptor()
                 .build();
@@ -114,7 +115,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      */
     private Retrofit getSaveCookieRetrofit() {
         InterentTools tools = new InterentTools.Builder()
-                .isOpenLogging(true)
+                .isOpenLogging(isOpenLog)
                 .connectTimeout()
                 .addHeaderInterceptor()
                 .addCookiesInterceptor()
@@ -131,7 +132,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      */
     private Retrofit getAddCookieRetrofit() {
         InterentTools tools = new InterentTools.Builder()
-                .isOpenLogging(true)
+                .isOpenLogging(isOpenLog)
                 .connectTimeout()
                 .addHeaderInterceptor()
                 .addCookiesInterceptor()

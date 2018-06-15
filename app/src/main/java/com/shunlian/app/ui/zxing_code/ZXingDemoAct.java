@@ -11,15 +11,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.photopick.PhotoPickerActivity;
 import com.shunlian.app.photopick.PhotoPickerIntent;
 import com.shunlian.app.photopick.SelectModel;
+import com.shunlian.app.presenter.ZXingPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.myself_store.QrcodeStoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.view.IZXingView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.mylibrary.ImmersionBar;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,7 +26,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/28.
  */
 
-public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
+public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate,IZXingView {
 
     @BindView(R.id.zxingview)
     QRCodeView mQRCodeView;
@@ -40,6 +38,8 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
     public static final int RESULT_CODE = 200;//结果码
     public static final int REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY = 666;
     private boolean isResult;
+    private ZXingPresenter mPresenter;
+
 
     public static void startAct(Activity activity, boolean isResult, int requestCode) {
         if (isResult) {
@@ -73,6 +73,8 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
         mrlayout_title.setLayoutParams(layoutParams);
         isResult = getIntent().getBooleanExtra("isResult", false);
         mQRCodeView.setDelegate(this);
+
+        mPresenter = new ZXingPresenter(this,this);
     }
 
     @OnClick(R.id.mllayout_light)
@@ -90,7 +92,7 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
         PhotoPickerIntent intent = new PhotoPickerIntent(this);
         intent.setSelectModel(SelectModel.MULTI);
         intent.setShowCarema(true); // 是否显示拍照
-        intent.setMaxTotal(1); // 最多选择照片数量，默认为9
+        intent.setMaxTotal(1); // 最多选择照片数量，默认为1
         startActivityForResult(intent, REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY);
     }
 
@@ -138,7 +140,8 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
             setResult(RESULT_CODE, intent);
             finish();
         } else {
-            switch2Jump(result);
+            if (mPresenter != null)
+                mPresenter.parseUrl(result);
         }
     }
 
@@ -179,7 +182,8 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
                             setResult(RESULT_CODE, intent);
                             finish();
                         } else {
-                            Common.staticToast(result);
+                            if (mPresenter != null)
+                                mPresenter.parseUrl(result);
                         }
                     }
                 }
@@ -187,30 +191,23 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate {
         }
     }
 
-    public void switch2Jump(String url) {
-        String type = getURLParameterValue(url, "type");
-        String memberId = getURLParameterValue(url, "item_id");
-        LogUtil.httpLogW("type:" + type);
-        LogUtil.httpLogW("memberId:" + memberId);
-        if (TextUtils.isEmpty(type)) {
-            return;
-        }
-        switch (type) {
-            case "myshop":
-                if (!TextUtils.isEmpty(memberId)) {
-                    QrcodeStoreAct.startAct(this, memberId);
-                    finish();
-                }
-                break;
-        }
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
     }
 
-    public static String getURLParameterValue(String url, String parameter) {
-        Matcher accessMatcher = Pattern.compile(parameter + "=(.+?)(?:&|$)").matcher(url);
-        String parameterValue = null;
-        if (accessMatcher.find()) {
-            parameterValue = accessMatcher.group(1);
-        }
-        return parameterValue;
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
     }
 }

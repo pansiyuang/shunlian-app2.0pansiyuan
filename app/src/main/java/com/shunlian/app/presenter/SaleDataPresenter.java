@@ -66,7 +66,7 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                 iView.setHeadNickname(data.user_info.avatar,data.user_info.nickname);
                 iView.setMonthVip_Order(data.sales_info.month_sales,
                         data.sales_info.today_members,data.sales_info.today_orders);
-                iView.setEliteTutorData(data.master_info);
+                iView.setEliteTutorData(data.master_info,data.user_info.member_role_code);
                 iView.setplusrole(data.user_info.plus_role_code);
                 iView.setSaleTip(data.tip);
             }

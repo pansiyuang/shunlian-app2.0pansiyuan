@@ -19,6 +19,7 @@ import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterOneView;
@@ -170,6 +171,12 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
             setEdittextFocusable(true,et_id);
         }
         onePresenter = new RegisterOnePresenter(baseActivity, this);
+
+        //如果有推荐人，直接填写推荐人
+        String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
+        if (!isEmpty(member_id)){
+            et_id.setText(member_id);
+        }
     }
 
     private boolean isEtIdEmpty() {

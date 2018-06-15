@@ -51,49 +51,50 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     /*
         轮播
      */
-    public static final int BANNER_LAYOUT = 2;
+    public static final int BANNER_LAYOUT = 1 << 1;
     /*
     商品信息
      */
-    public static final int TITLE_LAYOUT = 3;
+    public static final int TITLE_LAYOUT = 1 << 2;
     /*
     活动和优惠券
      */
-    public static final int ACTIVITY_COUPON_LAYOUT = 4;
+    public static final int ACTIVITY_COUPON_LAYOUT = 1 << 3;
     /*
      *参数和属性
      */
-    public static final int PARAM_ATTRS_LAYOUT = 5;
+    public static final int PARAM_ATTRS_LAYOUT = 1 << 4;
     /*
     评价
      */
-    public static final int COMMNT_LAYOUT = 6;
+    public static final int COMMNT_LAYOUT = 1 << 5;
     /*
     店铺信息
      */
-    public static final int STORE_GOODS_LAYOUT = 7;
+    public static final int STORE_GOODS_LAYOUT = 1 << 6;
     /*
     参看图文详情
      */
-    public static final int GOODS_DETAIL_DIVISION = 8;
+    public static final int GOODS_DETAIL_DIVISION = 1 << 7;
     /*
     优惠券
      */
-    public static final int COUPON_LAYOUT = 9;
+    public static final int COUPON_LAYOUT = 1 << 8;
     /*
     详情富文本
      */
-    public static final int RICH_TEXT_LAYOUT = 10;
+    public static final int RICH_TEXT_LAYOUT = 1 << 9;
+    private static final int ITEM_DIFFERENT = (1 << 3) | 1;//不同条目数
+
     private final LayoutInflater mInflater;
     private GoodsDeatilEntity mGoodsEntity;
     private boolean isAttentionShop;
-    private List<GoodsDeatilEntity.StoreInfo.Item> storeItems = new ArrayList<>();
+    private List<GoodsDeatilEntity.StoreInfo.Item> storeItems;
     private GoodsDetailShopAdapter goodsDetailShopAdapter;
-    private static final int ITEM_DIFFERENT = 9;//不同条目数
     public ParamDialog paramDialog;
     private RecyclerDialog recyclerDialog;
     private MyTextView tv_select_param;
-    private StringBuilder strLengthMeasure= new StringBuilder();//字符串长度测量
+    private StringBuilder strLengthMeasure;//字符串长度测量
     private int detailCouponPosi = -1;//详情下的优惠券位置
     private StoreVoucherAdapter couponAdapter;
     private boolean isStartDownTime = false;
@@ -123,19 +124,19 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             return BANNER_LAYOUT;
         }else if (position == 1){
             return TITLE_LAYOUT;
-        }else if (position == 2){
+        }else if (position == 1 << 1){
             return ACTIVITY_COUPON_LAYOUT;
-        }else if (position == 3){
+        }else if (position == (1|(1 << 1))){
             return PARAM_ATTRS_LAYOUT;
-        }else if (position == 4){
+        }else if (position == (1 << 2)){
             return COMMNT_LAYOUT;
-        }else if (position == 5){
+        }else if (position == ((1 << 2) | 1)){
             return STORE_GOODS_LAYOUT;
-        }else if (position == 6){
+        }else if (position == ((1 << 2) | (1 << 1))){
             return GOODS_DETAIL_DIVISION;
-        }else if (position == 7){
+        }else if (position == ((1 << 2) | 3)){
             return COUPON_LAYOUT;
-        }else if (position == 8){
+        }else if (position == (1 << 3)){
             if (isEmpty(mRichText)){
                 return super.getItemViewType(position);
             }else {
@@ -193,6 +194,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
+        //LogUtil.zhLogW("onBindViewHolder========"+itemViewType);
         switch (itemViewType){
             case BANNER_LAYOUT:
                 handleBannerTitle(holder,position);
@@ -329,6 +331,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     }
 
     private void setStoreOtherGoods(RecyclerView recy_view,List<GoodsDeatilEntity.StoreInfo.Item> item){
+        if (storeItems == null) storeItems = new ArrayList<>();
         storeItems.clear();
         storeItems.addAll(item);
         if (goodsDetailShopAdapter == null) {
@@ -430,6 +433,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.view_coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_ling_Coupon.setVisibility(View.VISIBLE);
                 mHolder.mll_Coupon.removeAllViews();
+                if (strLengthMeasure == null)strLengthMeasure = new StringBuilder();
                 strLengthMeasure.delete(0,strLengthMeasure.length());
                 for (int i = 0; i < vouchers.size(); i++) {
                     if (i > 2){

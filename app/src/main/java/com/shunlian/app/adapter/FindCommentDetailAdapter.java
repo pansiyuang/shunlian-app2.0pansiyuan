@@ -62,7 +62,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             mHolder.mtv_name.setText(lastLikesBean.nickname);
 
             String level = lastLikesBean.level;
-            Bitmap bitmap = TransformUtil.convertVIP(context, level);
+            Bitmap bitmap = TransformUtil.convertNewVIP(context, level);
             mHolder.miv_vip.setImageBitmap(bitmap);
 
             mHolder.mtv_time.setText(lastLikesBean.add_time);

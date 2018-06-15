@@ -185,7 +185,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             }
 
             GlideUtils.getInstance().loadImage(context,mHolder.civ_head,data.avatar);
-            Bitmap bitmap = TransformUtil.convertVIP(context, data.level);
+            Bitmap bitmap = TransformUtil.convertNewVIP(context, data.level);
             mHolder.miv_vip.setImageBitmap(bitmap);
             if ("1".equals(data.member_role)){//精英
                 visible(mHolder.miv_medal);

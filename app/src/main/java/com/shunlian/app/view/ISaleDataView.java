@@ -54,7 +54,7 @@ public interface ISaleDataView extends IView {
      * 设置精英导师数据
      * @param masterInfo
      */
-    void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo);
+    void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo,String code);
 
     /**
      * 销售数据说明
