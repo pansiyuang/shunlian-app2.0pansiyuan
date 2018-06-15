@@ -69,7 +69,7 @@ public class CommentFrag extends BaseFragment {
         goodsId = getArguments().getString("goodsId");
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
                 recy_view.getLayoutParams();
-        layoutParams.topMargin = ((GoodsDetailAct)baseActivity).offset;
+        layoutParams.topMargin = ((GoodsDetailAct)baseActivity).toolbarHeight;
         recy_view.setLayoutParams(layoutParams);
         manager = new LinearLayoutManager(baseActivity);
         recy_view.setLayoutManager(manager);
