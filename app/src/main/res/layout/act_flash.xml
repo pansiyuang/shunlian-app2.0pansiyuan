@@ -2,20 +2,32 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/value_DB1211">
+    <!--android:background="@color/new_text">-->
+
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_bg1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@mipmap/img_head"/>
+        android:src="@mipmap/img_head"
+        android:visibility="gone"/>
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:lottie_cacheStrategy="none" />
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_anim"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_bg2"
@@ -23,5 +35,6 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/img_shunlian"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="50dp"
+        android:visibility="gone"/>
 </com.shunlian.app.widget.MyRelativeLayout>
