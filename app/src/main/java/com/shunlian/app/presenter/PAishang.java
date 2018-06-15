@@ -65,7 +65,7 @@ public class PAishang extends BasePresenter<IAishang> {
         }
     }
 
-    public void refreshBaby(String type, String cate_id) {
+    public void refreshBaby(String type, String cate_id,String channeId) {
         if (!babyIsLoading && babyPage <= babyAllPage) {
             babyIsLoading = true;
             switch (type) {
@@ -76,7 +76,7 @@ public class PAishang extends BasePresenter<IAishang> {
                     getCoreNews(cate_id);
                     break;
                 case "push":
-                    getHotRd(cate_id);
+                    getHotRd(cate_id,channeId);
                     break;
 //            case "hot":
 //                break;
@@ -104,8 +104,9 @@ public class PAishang extends BasePresenter<IAishang> {
         });
     }
 
-    public void getHotRd(String hotId) {
+    public void getHotRd(String hotId,String channeId) {
         Map<String, String> map = new HashMap<>();
+        map.put("channeId", channeId);
         map.put("hotId", hotId);
         map.put("page", String.valueOf(babyPage));
         map.put("pageSize", String.valueOf(pageSize));

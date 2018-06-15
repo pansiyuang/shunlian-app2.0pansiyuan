@@ -1,6 +1,7 @@
 package com.shunlian.app.ui.fragment;
 
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.shunlian.app.ui.discover.DiscoversFrag;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.ui.discover.other.SearchArticleActivity;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
