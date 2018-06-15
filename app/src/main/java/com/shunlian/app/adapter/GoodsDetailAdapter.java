@@ -84,7 +84,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     详情富文本
      */
     public static final int RICH_TEXT_LAYOUT = 1 << 9;
-    private static final int ITEM_DIFFERENT = (1 << 3) + 1;//不同条目数
+    private static final int ITEM_DIFFERENT = (1 << 3) | 1;//不同条目数
 
     private final LayoutInflater mInflater;
     private GoodsDeatilEntity mGoodsEntity;
@@ -194,6 +194,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
+        //LogUtil.zhLogW("onBindViewHolder========"+itemViewType);
         switch (itemViewType){
             case BANNER_LAYOUT:
                 handleBannerTitle(holder,position);
