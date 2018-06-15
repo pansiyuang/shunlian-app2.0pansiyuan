@@ -225,7 +225,7 @@
     <string name="select_goods_Specifications">请选择商品规格</string>
     <string name="full_yuan_available">满%s元可用</string>
     <string name="good_comment">评价(%s)</string>
-    <string name="praise_rate">好评率%s</string>
+    <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
     <string name="buy_gift">买赠</string>

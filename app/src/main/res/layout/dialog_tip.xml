@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_solid_white_16px"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <com.shunlian.app.widget.MyImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:src="@mipmap/img_erweima_abnormal" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="暂不支持识别非顺联动力官方二维码"
+            android:textColor="@color/my_dark_grey"
+            android:textSize="16sp" />
+
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/new_gray"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_sure"
+        android:layout_width="135dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/llayout_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corner_solid_pink_30px"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+</LinearLayout>

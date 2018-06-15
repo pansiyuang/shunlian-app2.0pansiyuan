@@ -43,7 +43,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -2294,4 +2293,11 @@ public interface ApiService {
      */
     @GET("product/getjoinlist")
     Call<BaseEntity<PlusMemberEntity>> getPlusMember(@QueryMap Map<String, String> map);
+
+    /**
+     * 扫二维码解析url
+     * @return
+     */
+    @POST("share/parseUrlForApp")
+    Call<BaseEntity<ScanCodeEntity>> scanCodeParseUrl(@Body RequestBody body);
 }
