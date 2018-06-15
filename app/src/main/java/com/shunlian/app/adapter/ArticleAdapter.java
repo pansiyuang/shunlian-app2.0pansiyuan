@@ -86,10 +86,15 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
     public void handlerTag(RecyclerView.ViewHolder holder) {
         if (holder instanceof TagViewHolder) {
             TagViewHolder tagViewHolder = (TagViewHolder) holder;
-            chosenTagAdapter = new ChosenTagAdapter(context, mTags);
-            tagViewHolder.recycler_tags.setAdapter(chosenTagAdapter);
 
-            chosenTagAdapter.setOnItemClickListener((view, position) -> TagDetailActivity.startAct(context, mTags.get(position).id));
+            if (!isEmpty(mTags)) {
+                chosenTagAdapter = new ChosenTagAdapter(context, mTags);
+                tagViewHolder.recycler_tags.setAdapter(chosenTagAdapter);
+                chosenTagAdapter.setOnItemClickListener((view, position) -> TagDetailActivity.startAct(context, mTags.get(position).id));
+            } else {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context, 10));
+                tagViewHolder.itemView.setLayoutParams(layoutParams);
+            }
         }
     }
 
@@ -104,7 +109,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             }
 
             GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_small_icon, article.thumb, false);
-            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb,false);
+            GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_big_icon, article.thumb, false);
             articleViewHolder.tv_share_count.setText(article.forwards);
             articleViewHolder.tv_comment_count.setText(article.comments);
             if ("0".equals(article.had_like)) {
@@ -114,13 +119,15 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
             }
             articleViewHolder.tv_evaluate_count.setText(article.likes);
 
-            if (!isEmpty(article.tags)) {
+            if (isEmpty(article.tags)) {
+                articleViewHolder.tv_small_content.setText(article.full_title);
+                articleViewHolder.tv_big_content.setText(article.full_title);
+            } else {
                 articleViewHolder.tv_small_content.setMovementMethod(LinkMovementMethod.getInstance());
-                articleViewHolder.tv_small_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
                 articleViewHolder.tv_big_content.setMovementMethod(LinkMovementMethod.getInstance());
+                articleViewHolder.tv_small_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
                 articleViewHolder.tv_big_content.setText(addClickablePart(article.tags, article.full_title), TextView.BufferType.SPANNABLE);
             }
-
             articleViewHolder.ll_evaluate.setOnClickListener(v -> {
                 if (isFastClick()) {
                     return;
