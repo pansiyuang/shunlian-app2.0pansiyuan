@@ -70,9 +70,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private GoodsDeatilFrag goodsDeatilFrag;
     public static final String FRAG_GOODS = GoodsDeatilFrag.class.getName();
     public static final String FRAG_COMMENT = CommentFrag.class.getName();
-    public static final int GOODS_ID = 0;
-    public static final int COMMENT_ID = 1;
-    public static final int DETAIL_ID = 2;
+    public static final int GOODS_ID = 0;//商品
+    public static final int COMMENT_ID = 1;//评论
+    public static final int DETAIL_ID = 2;//详情
     public static int CURRENT_ID = GOODS_ID;
 
     @BindView(R.id.rnview)
@@ -156,29 +156,31 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    private PathMeasure mPathMeasure;
-    private boolean isStopAnimation;
 
-    private float[] mCurrentPosition = new float[2];
     private MyImageView myImageView;
     private GoodsDetailPresenter goodsDetailPresenter;
     private String store_id;
-    private GoodsDeatilEntity.Sku sku;
-    private int goodsCount;
-    private int bannerHeight;
-    public int offset;
-    private Map<String,BaseFragment> fragments;
+    //private GoodsDeatilEntity.Sku sku;
     private CommentFrag commentFrag;
     private GoodsDeatilEntity.StoreInfo store_info;
     private GoodsDeatilEntity mGoodsDeatilEntity;
     private FootprintEntity mFootprintEntity;
     private FootprintDialog footprintDialog;
     private String goodsId;
+
+
+    private Map<String,BaseFragment> fragments;
+    private float[] mCurrentPosition = new float[2];
+    private PathMeasure mPathMeasure;
+    private boolean isStopAnimation;
+    private int goodsCount;//商品数量
+    private int offset;//导航栏先从透明到完全显示的偏移量
+    public int toolbarHeight;//toolbar高
     private boolean isAddcart = false;//是否加入购物车
     private boolean isNowBuy = false;//是否立即购买
-    private String favId;
-    public int bottomListHeight;
-    private int num;
+    private String favId;//收藏商品id
+    public int bottomListHeight;//底部导航高度
+    private int num;//加入购物车的商品数量
     private int currentQuickAction = -1;//当前快速点击位置
 
     public static void startAct(Context context,String goodsId){
@@ -212,22 +214,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
 
     protected void initData() {
-        fragments = new HashMap();
-        goodsFrag();
-        defToolbar();
         goodsId = getIntent().getStringExtra("goodsId");
+
+        initConstant();
+        defToolbar();
+        goodsFrag();
         goodsDetailPresenter = new GoodsDetailPresenter(this, this, goodsId);
-
         carNum();
-
-        //轮播高
-        bannerHeight = DeviceInfoUtil.getDeviceWidth(this)
-                - offset - ImmersionBar.getStatusBarHeight(this);
-        //底部按钮高
-        mll_bottom.post(()-> bottomListHeight = mll_bottom.getMeasuredHeight());
-        RelativeLayout.LayoutParams shareLayoutParams = (RelativeLayout.LayoutParams)
-                mll_share.getLayoutParams();
-        shareLayoutParams.topMargin = ImmersionBar.getStatusBarHeight(this);
 
         //猜你喜欢列表初始化
         GridLayoutManager manager = new GridLayoutManager(this,2);
@@ -237,6 +230,21 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         ViewGroup.LayoutParams recyLayoutParams = recy_view.getLayoutParams();
         recyLayoutParams.height = TransformUtil.countRealHeight(this,678);
 
+    }
+    /*
+    初始化常量
+     */
+    private void initConstant() {
+        fragments = new HashMap();
+        int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
+        //偏移量
+        offset = (deviceWidth - toolbarHeight - statusBarHeight)/2;
+        //底部按钮高
+        mll_bottom.post(()-> bottomListHeight = mll_bottom.getMeasuredHeight());
+        RelativeLayout.LayoutParams
+                shareLayoutParams = (RelativeLayout.LayoutParams) mll_share.getLayoutParams();
+        shareLayoutParams.topMargin = statusBarHeight;
     }
 
     private void carNum() {
@@ -256,7 +264,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 .init();
 
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-        offset = toolbarParams.height;
+        toolbarHeight = toolbarParams.height;
     }
     /*
     商品
@@ -299,14 +307,18 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         setToolbar();
     }
 
+    /**
+     * 导航栏渐变
+     * @param position
+     * @param totalDy
+     */
     public void setBgColor(int position, int totalDy) {
         ImmersionBar immersionBar = ImmersionBar.with(this)
                 .addViewSupportTransformColor(toolbar, R.color.white);
-        if (totalDy <= bannerHeight) {
-            if (totalDy <= 0){
-                totalDy = 0;
-            }
-            float alpha = (float) totalDy / bannerHeight;
+        if (totalDy <= offset) {
+            if (totalDy <= 0)totalDy = 0;
+
+            float alpha = (float) totalDy / offset;
             immersionBar.statusBarAlpha(alpha)
                     .addTag(GoodsDetailAct.class.getName())
                     .init();
@@ -325,7 +337,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             if (alpha < 1.0f)
                 line.setVisibility(View.INVISIBLE);
             else
-                line.setVisibility(View.VISIBLE);
+                visible(line);
         } else {
             setToolbar();
         }
@@ -342,6 +354,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         miv_more.setAlpha(1.0f);
         line.setVisibility(View.VISIBLE);
     }
+
     /*
     替换fragment内容
      */
@@ -399,9 +412,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public void showFailureView(int rquest_code) {}
 
     @Override
-    public void showDataEmptyView(int rquest_code) {
-
-    }
+    public void showDataEmptyView(int rquest_code) {}
 
     @Override
     public void getUserId(String userId) {
@@ -430,7 +441,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         //购物车角标数字
         String member_cart_count = isEmpty(goodsDeatilEntity.member_cart_count) ?
                 "0" : goodsDeatilEntity.member_cart_count;
-
         num = Integer.parseInt(member_cart_count);
         if (num == 0){
             rnview.setVisibility(View.GONE);
@@ -439,8 +449,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             rnview.setNumber(num);
             rnview.setTargetNumber(num);
         }
-
-//        LogUtil.zhLogW("num======"+num+"  ;member_cart_count=="+member_cart_count);
         if (store_info != null){
             store_id = store_info.store_id;
         }
@@ -543,7 +551,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /**
-     * 活动状态
+     * 天天特惠活动状态
      */
     @Override
     public void activityState(String status,String remindStatus) {
@@ -590,8 +598,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     /*
-       显示足迹列表
-        */
+    显示足迹列表
+    */
     public void showFootprintList() {
         if (mFootprintEntity == null) {
             goodsDetailPresenter.footprint();
@@ -635,45 +643,44 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     rnview.setVisibility(View.VISIBLE);
                     goodsDetailPresenter.addCart(goodsId,sku.id,String.valueOf(goodsCount));
                 }*/
-
                 //需求更改：每次加入购物车都需要选择属性
                 goodsDeatilFrag.showParamDialog();
                 break;
             case R.id.miv_more:
                 moreAnim();
                 break;
+
             case R.id.miv_close_share:
                 moreHideAnim();
                 break;
+
             case R.id.mll_goods:
-                if (mll_item.getAlpha() <= 0.2f){
-                    return;
-                }
+                if (mll_item.getAlpha() <= 0.2f) return;
                 listTop();
                 break;
+
             case R.id.mll_detail:
-                if (mll_item.getAlpha() <= 0.2f){
-                    return;
-                }
+                if (mll_item.getAlpha() <= 0.2f)return;
                 setToolbar();
                 setTabBarStatue(DETAIL_ID);
-                goodsDeatilFrag.setScrollPosition(2,offset);
+                goodsDeatilFrag.setScrollPosition(2,toolbarHeight);
                 break;
+
             case R.id.mll_comment:
-                if (mll_item.getAlpha() <= 0.2f){
-                    return;
-                }
+                if (mll_item.getAlpha() <= 0.2f)return;
                 setToolbar();
                 setTabBarStatue(COMMENT_ID);
-                goodsDeatilFrag.setScrollPosition(1,offset);
+                goodsDeatilFrag.setScrollPosition(1,toolbarHeight);
                 break;
+
             case R.id.mll_chat:
-                if (store_info!=null)
-                goodsDetailPresenter.getUserId(store_info.store_id);
+                if (store_info!=null) goodsDetailPresenter.getUserId(store_info.store_id);
                 break;
+
             case R.id.miv_close:
                 backOrder();
                 break;
+
             case R.id.mtv_buy_immediately:
                 if (!Common.isAlreadyLogin()){
                     LoginAct.startAct(this);
@@ -691,17 +698,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     }*/
                 }else {//设置提醒
                     if (getStringResouce(R.string.day_setting_remind).equals(buyText)){//设置提醒
-                        if (goodsDetailPresenter != null){
-                            goodsDetailPresenter.settingRemind();
-                        }
+                        if (goodsDetailPresenter != null)goodsDetailPresenter.settingRemind();
                     }else {//取消提醒
-                        if (goodsDetailPresenter != null){
-                            goodsDetailPresenter.cancleRemind();
-                        }
+                        if (goodsDetailPresenter != null)goodsDetailPresenter.cancleRemind();
                     }
-
                 }
                 break;
+
             case R.id.miv_is_fav:
                 if (TextUtils.isEmpty(favId) || "0".equals(favId)){
                     goodsDetailPresenter.goodsFavAdd(goodsId);
@@ -709,6 +712,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     goodsDetailPresenter.goodsFavRemove(favId);
                 }
                 break;
+
             case R.id.mllayout_car:
                 MainActivity.startAct(this,"shoppingcar");
                 break;
@@ -719,7 +723,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         setTabBarStatue(GOODS_ID);
         mll_item.setAlpha(0);
         immersionBar.statusBarAlpha(0f).addTag(GoodsDetailAct.class.getName()).init();
-        goodsDeatilFrag.setScrollPosition(0,offset);
+        goodsDeatilFrag.setScrollPosition(0,toolbarHeight);
     }
 
     private void backOrder(){
@@ -799,11 +803,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * 显示分享框
      */
     public void moreAnim() {
+        float alpha = mll_item.getAlpha();
+        if (alpha < 1 && alpha > 0)return;//导航栏没有全部显示的情况下，显示分享框会有透明条
         immersionBar.statusBarColor(R.color.white).init();
         mll_share.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
-                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,-1,Animation.RELATIVE_TO_SELF,0);
-
+                Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,
+                -1,Animation.RELATIVE_TO_SELF,0);
         animation.setDuration(250);
         mll_share.setAnimation(animation);
     }
@@ -876,9 +882,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         // 匀速线性插值器
         valueAnimator1.setInterpolator(new LinearInterpolator());
         valueAnimator1.addUpdateListener((animation)-> {
-                if (myImageView == null){
-                    return;
-                }
+                if (myImageView == null)return;
                 // 当插值计算进行时，获取中间的每个值，
                 // 这里这个值是中间过程中的曲线长度（下面根据这个值来得出中间点的坐标值）
                 float value = (Float) animation.getAnimatedValue("parabola");
@@ -888,8 +892,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 // pos会自动填充上坐标，这个方法很重要。
                 // mCurrentPosition此时就是中间距离点的坐标值
                 mPathMeasure.getPosTan(value, mCurrentPosition, null);
-//                System.out.println("mCurrentPosition[0]=="+mCurrentPosition[0]);
-//                System.out.println("mCurrentPosition[1]=="+mCurrentPosition[1]);
                 // 移动的商品图片（动画图片）的坐标设置为该中间点的坐标
                 myImageView.setX(mCurrentPosition[0]);
                 myImageView.setY(mCurrentPosition[1]);
@@ -906,9 +908,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (rl_rootview != null) {
-                    rl_rootview.removeView(myImageView);
-                }
+                if (rl_rootview != null) rl_rootview.removeView(myImageView);
                 myImageView = null;
                 isStopAnimation = false;
                 numAnimation();
@@ -982,7 +982,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
      * @param count
      */
     public void selectGoodsInfo(GoodsDeatilEntity.Sku sku, int count) {
-        this.sku = sku;
+        //this.sku = sku;
         goodsCount = count;
         //LogUtil.zhLogW("=goodsCount=========="+goodsCount);
         if (isAddcart){

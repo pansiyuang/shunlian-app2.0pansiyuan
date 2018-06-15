@@ -53,7 +53,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             int[] detail = new int[2];
             int[] comment = new int[2];
             GoodsDetailAct detailAct = (GoodsDetailAct) baseActivity;
-            int offset = detailAct.offset;
+            int offset = detailAct.toolbarHeight;
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
