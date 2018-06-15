@@ -561,7 +561,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.discover.quanzi.DiscoverTieziDetailAct"

@@ -564,7 +564,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         }
                         mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
                         mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
                     }
                     break;
                 case 2:
@@ -577,7 +577,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         }
                         mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
                         mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
                     }
                     if (personalcenterEntity.sl_user_ranks.get(1) != null) {
                         if ("1".equals(personalcenterEntity.sl_user_ranks.get(1).is_mine)) {
@@ -587,7 +587,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         }
                         mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
                         mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
                     }
                     break;
                 case 3:
@@ -596,7 +596,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                     if (personalcenterEntity.sl_user_ranks.get(0) != null) {
                         mtv_before.setText(personalcenterEntity.sl_user_ranks.get(0).nickname);
                         mtv_befores.setText(personalcenterEntity.sl_user_ranks.get(0).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_before, personalcenterEntity.sl_user_ranks.get(0).avatar);
                     }
                     if (personalcenterEntity.sl_user_ranks.get(1) != null) {
                         miv_equals.setVisibility(View.VISIBLE);
@@ -604,12 +604,12 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         mtv_mids.setTextColor(getColorResouce(R.color.pink_color));
                         mtv_mid.setText(personalcenterEntity.sl_user_ranks.get(1).nickname);
                         mtv_mids.setText(personalcenterEntity.sl_user_ranks.get(1).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_mid, personalcenterEntity.sl_user_ranks.get(1).avatar);
                     }
                     if (personalcenterEntity.sl_user_ranks.get(2) != null) {
                         mtv_after.setText(personalcenterEntity.sl_user_ranks.get(2).nickname);
                         mtv_afters.setText(personalcenterEntity.sl_user_ranks.get(2).sale);
-                        GlideUtils.getInstance().loadCircleImage(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
+                        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_after, personalcenterEntity.sl_user_ranks.get(2).avatar);
                     }
                     break;
                 default:
@@ -709,7 +709,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 SettingAct.startAct(baseContext);
                 break;
             case R.id.mrlayout_yaoqing:
-                QrCodeAct.startAct(baseContext);
+                QrCodeAct.startAct(baseContext,managerUrl);
                 break;
             case R.id.mrlayout_zidingyi:
                 MyLittleStoreActivity.startAct(getActivity());

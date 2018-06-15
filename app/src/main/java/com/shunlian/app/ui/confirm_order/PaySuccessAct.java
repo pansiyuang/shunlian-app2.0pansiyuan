@@ -8,8 +8,9 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.ProbablyLikeAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PaySuccessPresenter;
@@ -18,7 +19,6 @@ import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.PlusOrderDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -32,7 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PaySuccessAct extends BaseActivity implements View.OnClickListener ,IPaySuccessView, MessageCountManager.OnGetMessageListener {
+public class PaySuccessAct extends BaseActivity implements IPaySuccessView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.rv_goods)
     RecyclerView rv_goods;
 
@@ -112,16 +112,6 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
         quick_actions.paySuccess();
     }
 
-    @Override
-    public void onClick(View view) {
-        if (MyOnClickListener.isFastClick()) {
-            return;
-        }
-        switch (view.getId()) {
-
-        }
-    }
-
 
     @Override
     public void onResume() {
@@ -148,16 +138,6 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
         super.onDestroy();
     }
 
-    @Override
-    public void setAdapter(BaseRecyclerAdapter adapter) {
-        if (isPlus){
-            plus_order_id=presenter.plus_order_id;
-            mtv_name.setText(getStringResouce(R.string.pay_plusdianzhu));
-        }else {
-            mtv_name.setText(getStringResouce(R.string.pay_nikeneng));
-        }
-        rv_goods.setAdapter(adapter);
-    }
 
     /**
      * 显示网络请求失败的界面
@@ -196,5 +176,27 @@ public class PaySuccessAct extends BaseActivity implements View.OnClickListener 
     @Override
     public void OnLoadFail() {
 
+    }
+
+    @Override
+    public void setData(ProbablyLikeEntity probablyLikeEntity) {
+        plus_order_id=probablyLikeEntity.order_id;
+        if (!isEmpty(probablyLikeEntity.may_be_buy_list)){
+            ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
+                    (this,probablyLikeEntity.may_be_buy_list,isPlus);
+            rv_goods.setAdapter(adapter);
+            adapter.setOnItemClickListener((v,p)->{
+                ProbablyLikeEntity.MayBuyList mayBuyList = probablyLikeEntity.may_be_buy_list.get(p);
+                Common.goGoGo(this,"goods",mayBuyList.id);
+            });
+            if (isPlus){
+                mtv_name.setText(getStringResouce(R.string.pay_plusdianzhu));
+            }else {
+                mtv_name.setText(getStringResouce(R.string.pay_nikeneng));
+            }
+            mtv_name.setVisibility(View.VISIBLE);
+        }else {
+            mtv_name.setVisibility(View.GONE);
+        }
     }
 }

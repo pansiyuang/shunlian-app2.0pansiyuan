@@ -8,16 +8,23 @@ import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.SuccessfulTradePresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISuccessfulTradeView;
+import com.shunlian.app.widget.MyTextView;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,20 +33,25 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/20.
  */
 
-public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTradeView {
+public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTradeView, MessageCountManager.OnGetMessageListener {
+
+    @BindView(R.id.tv_msg_count)
+    MyTextView tv_msg_count;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    private MessageCountManager messageCountManager;
+
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
     private String order_id;
-    private ArrayList<ReleaseCommentEntity> commentList;
+    private String order_sn;
 
-    public static void startAct(Context context, ArrayList<ReleaseCommentEntity> entity, String id){
+    public static void startAct(Context context, String order_sn, String id){
         Intent intent = new Intent(context, SuccessfulTradeAct.class);
         intent.putExtra("order_id",id);
-        intent.putExtra("commentList",entity);
+        intent.putExtra("order_sn",order_sn);
         context.startActivity(intent);
     }
 
@@ -58,6 +70,7 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
      */
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         setStatusBarColor(R.color.pink_color);
         GridLayoutManager manager = new GridLayoutManager(this,2);
         recy_view.setLayoutManager(manager);
@@ -65,8 +78,7 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
                 (TransformUtil.dip2px(this, 5), false));
 
         order_id = getIntent().getStringExtra("order_id");
-        commentList = (ArrayList<ReleaseCommentEntity>)
-                getIntent().getSerializableExtra("commentList");
+        order_sn = getIntent().getStringExtra("order_sn");
         SuccessfulTradePresenter presenter = new SuccessfulTradePresenter(this,this, order_id);
     }
 
@@ -83,13 +95,16 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
 
     @OnClick(R.id.mtv_comment)
     public void comment(){
-        CreatCommentActivity.startAct(this,commentList,CreatCommentActivity.CREAT_COMMENT);
+        ReleaseCommentEntity entity = new ReleaseCommentEntity();
+        entity.order_sn = order_sn;
+        CreatCommentActivity.startAct(this,entity,CreatCommentActivity.CREAT_COMMENT);
     }
 
     @Override
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -114,7 +129,42 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
     }
 
     @Override
+    protected void onResume() {
+        if (Common.isAlreadyLogin()) {
+            messageCountManager = MessageCountManager.getInstance(getBaseContext());
+            if (messageCountManager.isLoad()) {
+                String s = messageCountManager.setTextCount(tv_msg_count);
+                if (quick_actions != null)
+                    quick_actions.setMessageCount(s);
+            } else {
+                messageCountManager.initData();
+            }
+            messageCountManager.setOnGetMessageListener(this);
+        }
+        super.onResume();
+    }
+
+    @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
         recy_view.setAdapter(adapter);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_msg_count);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

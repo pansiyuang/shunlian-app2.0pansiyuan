@@ -625,15 +625,9 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价
                     //MyOrderEntity.Orders orders = lists.get(getAdapterPosition());
-                    List<ReleaseCommentEntity> entities = new ArrayList<>();
-                    List<OrderdetailEntity.Good> order_goods = orderdetailEntity.order_goods;
-                    for (int i = 0; i < order_goods.size(); i++) {
-                        OrderdetailEntity.Good bean = order_goods.get(i);
-                        ReleaseCommentEntity entity = new ReleaseCommentEntity(orderId, bean.thumb, bean.title, bean.price, bean.goods_id);
-                        entity.order_sn = orderdetailEntity.order_sn;
-                        entities.add(entity);
-                    }
-                    CreatCommentActivity.startAct(this, entities, CreatCommentActivity.CREAT_COMMENT);
+                    ReleaseCommentEntity entity = new ReleaseCommentEntity();
+                    entity.order_sn = orderdetailEntity.order_sn;
+                    CreatCommentActivity.startAct(this, entity, CreatCommentActivity.CREAT_COMMENT);
 
                 } else if (getString(R.string.append_comment).equals(text)) {//追评
 

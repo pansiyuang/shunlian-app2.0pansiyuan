@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.CommondEntity;
@@ -17,12 +21,14 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
 
+import java.io.InputStream;
 import java.util.HashSet;
 
 import butterknife.BindView;
@@ -31,17 +37,17 @@ import butterknife.BindView;
  * Created by Administrator on 2016/4/12 0012.
  */
 public class StartAct extends MBaseActivity implements IMain {
-    private AnimationDrawable flashAnimation;
+//    private AnimationDrawable flashAnimation;
     private String localVersion;
     private AdEntity data;
     private boolean isAD=false,isHave=false;
-    private PMain pMain;
 
     @BindView(R.id.miv_bg1)
     MyImageView miv_bg1;
 
     @BindView(R.id.miv_bg2)
     MyImageView miv_bg2;
+
 
     @Override
     protected int getLayoutId() {
@@ -53,22 +59,54 @@ public class StartAct extends MBaseActivity implements IMain {
         setHeader();
         versionJudge();
         //假如时间间隔超过一天则自动清除图片缓存
-        long lastTime = SharedPrefUtil.getCacheSharedPrfLong("lastTime", -1);
-        if (lastTime != -1 && System.currentTimeMillis() - lastTime > 24 * 60 * 60 * 1000) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    LogUtil.httpLogW("-----clear cache---start----");
-//                    DataCleanManager.cleanApplicationCache(baseFragActivity.getApplicationContext());
-                    LogUtil.httpLogW("-----clear cache---end----");
-                }
-            });
-            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
+//        long lastTime = SharedPrefUtil.getCacheSharedPrfLong("lastTime", -1);
+//        if (lastTime != -1 && System.currentTimeMillis() - lastTime > 24 * 60 * 60 * 1000) {
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    LogUtil.httpLogW("-----clear cache---start----");
+////                    DataCleanManager.cleanApplicationCache(baseFragActivity.getApplicationContext());
+//                    LogUtil.httpLogW("-----clear cache---end----");
+//                }
+//            });
+//            SharedPrefUtil.saveCacheSharedPrfLong("lastTime", System.currentTimeMillis());
+//        }
+//        MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
+//        miv_anim.setBackgroundResource(R.drawable.flash_animation);
+//        flashAnimation = (AnimationDrawable) miv_anim.getBackground();
+//        flashAnimation.start();
+        try{
+            if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.JELLY_BEAN) {
+                LottieAnimationView animation_view = (LottieAnimationView) findViewById(R.id.animation_view);
+                animation_view.setAnimation("888.json");//在assets目录下的动画json文件名。
+                animation_view.loop(false);//设置动画循环播放
+                animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
+                animation_view.playAnimation();//播放动画
+            }else {
+                InputStream is=getAssets().open("images/img_1.png");
+                Bitmap bitmap= BitmapFactory.decodeStream(is);
+                MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
+                miv_anim.setImageBitmap(bitmap);
+            }
+        }catch(Exception e){
+            Log.w("splash","splash----crush");
         }
-        MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
-        miv_anim.setBackgroundResource(R.drawable.flash_animation);
-        flashAnimation = (AnimationDrawable) miv_anim.getBackground();
-        flashAnimation.start();
+
+
+//        animation_view.cancelAnimation();//停止
+//        try {
+//            //此方法用于复用动画比如列表的每个item中或者从网络请求一个JSONObject：
+//            LottieComposition.Factory.fromJson(getResources(),new JSONObject("888.json"), new OnCompositionLoadedListener() {
+//                @Override
+//                public void onCompositionLoaded(LottieComposition composition) {
+//                    animation_view.setComposition(composition);
+//                    animation_view.playAnimation();
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
 //        loadBitmap();
         isHave=true;
         Handler handler = new Handler();
@@ -82,47 +120,16 @@ public class StartAct extends MBaseActivity implements IMain {
             @Override
             public void run() {
                 isHave=false;
-                flashAnimation.stop();
+//                flashAnimation.stop();
+//                animation_view.cancelAnimation();
                 isFirstJudge();
             }
         }, 3 * 1000);
-        pMain=new PMain(this,this);
+        PMain pMain = new PMain(this, this);
         pMain.getSplashAD();
 
     }
 
-//    private void loadBitmap(){
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inPurgeable=true;
-//        options.inInputShareable=true;
-//        //设置该属性可获得图片的长宽等信息，但是避免了不必要的提前加载动画
-//        options.inJustDecodeBounds=false;
-//        InputStream is=null;
-//        int[] raw={
-//                R.mipmap.imgss_02,R.mipmap.imgss_03,R.mipmap.imgss_05,R.mipmap.imgss_07,R.mipmap.imgss_09,
-//                R.mipmap.imgss_11,R.mipmap.imgss_13,R.mipmap.imgss_16,R.mipmap.imgss_17,R.mipmap.imgss_18,
-//                R.mipmap.imgss_19,R.mipmap.imgss_21,R.mipmap.imgss_23,R.mipmap.imgss_25,R.mipmap.imgss_27,
-//                R.mipmap.imgss_29,R.mipmap.imgss_31,R.mipmap.imgss_32,R.mipmap.imgss_33,R.mipmap.imgss_34,
-//                R.mipmap.imgss_35,R.mipmap.imgss_37,R.mipmap.imgss_39,R.mipmap.imgss_41,R.mipmap.imgss_43,
-//                R.mipmap.imgss_45,R.mipmap.imgss_47,R.mipmap.imgss_49
-//        };
-//        Bitmap[] mbitMap=new Bitmap[5];
-//        for(int i=0,j=0;i<5&&j<5;i++,j++){
-//            is=getResources().openRawResource(raw[i]);
-//            Bitmap bitmap =BitmapFactory.decodeStream(is, null, options);
-//            mbitMap[j]=bitmap;
-//        }
-//
-//        AnimationDrawable clipDrawable= new AnimationDrawable();
-//        for(int i=0;i<5;i++){
-//            clipDrawable.addFrame(new BitmapDrawable(mbitMap[i]), 50);
-//        }
-//        clipDrawable.setOneShot(true);
-//        flashAnimation=clipDrawable;
-//        MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
-////        miv_anim.setBackgroundResource(R.drawable.flash_animation);
-//        miv_anim.setBackground(flashAnimation);
-//    }
     /**
      * 删除快捷方式
      */
@@ -146,7 +153,7 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     protected void onStop() {
-        tryRecycleAnimationDrawable(flashAnimation);
+//        tryRecycleAnimationDrawable(flashAnimation);
         super.onStop();
     }
 
@@ -203,13 +210,13 @@ public class StartAct extends MBaseActivity implements IMain {
 //            Intent intent = new Intent(baseFragActivity, GuideAct.class);
 //            startActivity(intent);
             //暂时关闭引导页
-//            GuideAct.startAct(this);
-            if (isAD){
-                ADAct.startAct(getBaseContext(),data);
-            }else {
-//                Constant.IS_GUIDE = false;
-                MainActivity.startAct(this, "");
-            }
+            GuideAct.startAct(this);
+//            if (isAD){
+//                ADAct.startAct(getBaseContext(),data);
+//            }else {
+////                Constant.IS_GUIDE = false;
+//                MainActivity.startAct(this, "");
+//            }
         } else {
             if (isAD){
                 ADAct.startAct(getBaseContext(),data);
@@ -290,19 +297,19 @@ public class StartAct extends MBaseActivity implements IMain {
         }
     }
 
-    private void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
-        if (animationDrawable != null) {
-            animationDrawable.stop();
-            for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
-                Drawable frame = animationDrawable.getFrame(i);
-                if (frame instanceof BitmapDrawable) {
-                    ((BitmapDrawable) frame).getBitmap().recycle();
-                }
-                frame.setCallback(null);
-            }
-            animationDrawable.setCallback(null);
-            animationDrawable = null;
-            System.gc();
-        }
-    }
+//    private void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
+//        if (animationDrawable != null) {
+//            animationDrawable.stop();
+//            for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
+//                Drawable frame = animationDrawable.getFrame(i);
+//                if (frame instanceof BitmapDrawable) {
+//                    ((BitmapDrawable) frame).getBitmap().recycle();
+//                }
+//                frame.setCallback(null);
+//            }
+//            animationDrawable.setCallback(null);
+//            animationDrawable = null;
+//            System.gc();
+//        }
+//    }
 }

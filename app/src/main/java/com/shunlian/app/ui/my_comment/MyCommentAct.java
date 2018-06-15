@@ -140,6 +140,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
         int space = TransformUtil.dip2px(this, 7.5f);
         recy_view.addItemDecoration(new VerticalItemDecoration(space, 0,
                 0, getResources().getColor(R.color.white_ash)));
+        recy_view.setFocusable(false);
 
     }
 
@@ -316,7 +317,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(CommentEvent event) {
-        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS || event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
+        if (event.getStatus() == CommentEvent.SUCCESS_CHANGE_STATUS ||
+                event.getStatus() == CommentEvent.SUCCESS_APPEND_STATUS) {
             presenter.myCommentListAll();
         }
 

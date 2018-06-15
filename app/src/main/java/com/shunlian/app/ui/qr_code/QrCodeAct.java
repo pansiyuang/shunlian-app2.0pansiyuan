@@ -10,6 +10,7 @@ import com.shunlian.app.bean.GetQrCardEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PQrCode;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.view.IQrCode;
@@ -46,9 +47,9 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     private PQrCode pQrCode;
     private String codeUrl;
 
-    public static void startAct(Context context) {
+    public static void startAct(Context context,String managerUrl) {
         Intent intent = new Intent(context, QrCodeAct.class);
-//        intent.putExtra("storeId", storeId);//店铺id
+        intent.putExtra("managerUrl", managerUrl);
         context.startActivity(intent);
     }
 
@@ -61,7 +62,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mtv_chakanxiaodian:
-
+                H5Act.startAct(this, getIntent().getStringExtra("managerUrl"), H5Act.MODE_SONIC);
                 break;
             case R.id.mllayout_yaoqingweixin:
                 ShareInfoParam shareInfoParam = new ShareInfoParam();
@@ -105,7 +106,7 @@ public class QrCodeAct extends BaseActivity implements View.OnClickListener, IQr
     @Override
     public void setApiData(GetQrCardEntity data) {
         codeUrl = data.card_path;
-        GlideUtils.getInstance().loadImage(this, miv_code, data.qrcode_path);
+        GlideUtils.getInstance().loadImageZheng(this, miv_code, data.qrcode_path);
         String invitedNum = String.format(getString(R.string.qr_yiyaoqing), data.invited);
         SpannableStringBuilder invitedNumBuilder = Common.changeColorAndSize(invitedNum, data.invited, 16, getColorResouce(R.color.pink_color));
         mtv_yiyaoqing.setText(invitedNumBuilder);

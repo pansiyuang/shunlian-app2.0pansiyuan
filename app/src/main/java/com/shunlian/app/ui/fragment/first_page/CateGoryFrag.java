@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnClickListener {
+public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public PFirstPage pFirstPage;
     public String cate_id;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
@@ -49,11 +49,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage, View.OnCli
         args.putSerializable("channel_id", channel_id);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override
