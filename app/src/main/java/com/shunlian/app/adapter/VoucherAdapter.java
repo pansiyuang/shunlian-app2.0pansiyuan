@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
@@ -41,22 +42,22 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         return mData.size();
     }
 
-    public void getItemSuccess(String voucherId) {
-        if (mData == null || mData.size() == 0) {
+    public void getItemSuccess(String voucherId,String isGet) {
+        if (isEmpty(mData) || isEmpty(voucherId)) {
             return;
         }
         for (int i = 0; i < mData.size(); i++) {
             if (voucherId.equals(mData.get(i).voucher_id)) {
-                mData.get(i).is_get = "1";
+                mData.get(i).is_get = isGet;
                 notifyItemChanged(i);
                 break;
             }
         }
     }
 
-    public void getItemSuccess(GoodsDeatilEntity.Voucher voucher,int position){
+    public void getItemSuccess(GoodsDeatilEntity.Voucher voucher, int position) {
         lists.remove(position);
-        lists.add(position,voucher);
+        lists.add(position, voucher);
         notifyDataSetChanged();
     }
 

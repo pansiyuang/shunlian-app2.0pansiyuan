@@ -209,9 +209,9 @@ public class RecyclerDialog extends Dialog{
         default void itemVoucher(GoodsDeatilEntity.Voucher voucher,int position){}
     }
 
-    public void getVoucherSuccess(String voucherId) {
+    public void getVoucherSuccess(String voucherId,String isGet) {
         if (voucherAdapter != null) {
-            voucherAdapter.getItemSuccess(voucherId);
+            voucherAdapter.getItemSuccess(voucherId,isGet);
         }
     }
 

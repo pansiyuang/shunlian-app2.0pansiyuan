@@ -373,15 +373,15 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
             if (count == maxGoodsCount) {
                 totalPrice = (Float.valueOf(currentInfoEntity.real_amount));
-                tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice) + freePrice);
+                tv_freight.setText("您最多能退 ¥ " + getPriceString(totalPrice) + freePrice);
             } else {
                 totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
-                tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
+                tv_freight.setText("您最多能退 ¥ " + getPriceString(totalPrice));
             }
 
         } else {
             totalPrice = count * (Float.valueOf(currentInfoEntity.return_price));
-            tv_freight.setText("您最多能退 ¥ " + Common.formatFloat(totalPrice));
+            tv_freight.setText("您最多能退 ¥ " + getPriceString(totalPrice));
         }
         edt_return_money.setText(Common.formatFloat(totalPrice));
         edt_return_money.setSelection(edt_return_money.getText().length());
@@ -398,6 +398,14 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
             list.add(imageEntity);
         }
         return list;
+    }
+
+    public String getPriceString(float price) {
+        if (price == 0) {
+            return "0.00";
+        } else {
+            return Common.formatFloat(totalPrice);
+        }
     }
 
     @Override
