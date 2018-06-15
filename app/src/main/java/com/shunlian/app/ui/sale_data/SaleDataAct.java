@@ -197,6 +197,15 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
     @BindView(R.id.llayout_nickname)
     LinearLayout llayout_nickname;
+
+    @BindView(R.id.miv_jingying)
+    MyImageView miv_jingying;
+
+    @BindView(R.id.mtv_name)
+    MyTextView mtv_name;
+
+    @BindView(R.id.view_line2)
+    View member_role_line;
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
     private boolean isShowData = true;
@@ -430,7 +439,19 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      * @param masterInfo
      */
     @Override
-    public void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo) {
+    public void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo,String member_role_code) {
+        //member_role_code = "2";
+        if ("1".equals(member_role_code)){
+            mtv_name.setText("精英导师");
+            miv_jingying.setImageResource(R.mipmap.img_jingyingdaoshi);
+            visible(mtv_name,miv_jingying,member_role_line);
+        }else if ("2".equals(member_role_code)){
+            mtv_name.setText("创客精英");
+            miv_jingying.setImageResource(R.mipmap.img_chuangkejingying);
+            visible(mtv_name,miv_jingying,member_role_line);
+        }else {
+            gone(mtv_name,miv_jingying,member_role_line);
+        }
         mtv_total_sum.setText(masterInfo.total_num);
         mtv_total_month.setText(masterInfo.continue_active);
         mtv_cStore_total_sum.setText(masterInfo.level1_active_num);

@@ -19,6 +19,7 @@ public class SaleDataEntity {
         public String nickname;
         public String grow_num;
         public String invite_code;
+        public String member_role_code;
         public String plus_role;
         public String plus_role_code;
     }
