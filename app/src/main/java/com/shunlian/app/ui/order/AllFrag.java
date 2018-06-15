@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.MyOrderEntity;
-import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.OrderListPresenter;
@@ -118,7 +117,7 @@ public class AllFrag extends LazyFragment implements IOrderListView {
 
     public void fetchNewData() {
         adapter = null;
-        recy_view.scrollToPosition(0);
+        recy_view.postDelayed(()->recy_view.scrollToPosition(0),100);
         if (ordersLists != null) {
             ordersLists.clear();
         }
@@ -218,17 +217,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         String id = ordersLists.get(refreshPosition).id;
         refreshOrder(id);
         if (status == OrderListPresenter.CONFIRM_RECEIPT){
-
-            ArrayList<ReleaseCommentEntity> entities = new ArrayList<>();
-            List<MyOrderEntity.OrderGoodsBean> order_goods = ordersLists
-                    .get(refreshPosition).order_goods;
-            for (int i = 0; i < order_goods.size(); i++) {
-                MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
-                ReleaseCommentEntity entity = new ReleaseCommentEntity(id, bean.thumb, bean.title, bean.price, bean.goods_id);
-                entity.order_sn = bean.order_sn;
-                entities.add(entity);
-            }
-            SuccessfulTradeAct.startAct(baseActivity,entities,id);
+            String order_sn = ordersLists.get(refreshPosition).order_sn;
+            SuccessfulTradeAct.startAct(baseActivity,order_sn,id);
         }
     }
 

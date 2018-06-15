@@ -13,7 +13,6 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.MyOrderEntity;
-import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderListPresenter;
@@ -207,16 +206,8 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
         refreshOrder(id);
         if (status == OrderListPresenter.CONFIRM_RECEIPT){
             // : 2017/12/20 确认收货界面
-            ArrayList<ReleaseCommentEntity> entities = new ArrayList<>();
-            List<MyOrderEntity.OrderGoodsBean> order_goods = ordersLists
-                    .get(refreshPosition).order_goods;
-            for (int i = 0; i < order_goods.size(); i++) {
-                MyOrderEntity.OrderGoodsBean bean = order_goods.get(i);
-                ReleaseCommentEntity entity = new ReleaseCommentEntity(id, bean.thumb, bean.title, bean.price, bean.goods_id);
-                entity.order_sn = bean.order_sn;
-                entities.add(entity);
-            }
-            SuccessfulTradeAct.startAct(this,entities, id);
+            String order_sn = ordersLists.get(refreshPosition).order_sn;
+            SuccessfulTradeAct.startAct(this,order_sn, id);
         }
     }
 

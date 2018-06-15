@@ -16,6 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.OrderLogisticsPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ITraceView;
 
@@ -54,12 +55,22 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
     public TraceAdapter traceAdapter;
     private String currentOrder;
     private MessageCountManager messageCountManager;
+    private String currentId, mType;
 
     public static void startAct(Context context, String orderStr) {
         Intent intent = new Intent(context, OrderLogisticsActivity.class);
         intent.putExtra("order", orderStr);
         context.startActivity(intent);
     }
+
+    public static void startAct(Context context, String query_id,String type) {
+        Intent intent = new Intent(context, OrderLogisticsActivity.class);
+        intent.putExtra("query_id", query_id);
+        //type 类型 1是普通订单物流 2退换货物流用户 3退换货商家 4礼包
+        intent.putExtra("type", type);
+        context.startActivity(intent);
+    }
+
 
     @Override
     protected int getLayoutId() {
@@ -75,9 +86,14 @@ public class OrderLogisticsActivity extends BaseActivity implements ITraceView, 
         tv_title.setText(getStringResouce(R.string.logistics_detail));
         currentOrder = getIntent().getStringExtra("order");
 
+        currentId = getIntent().getStringExtra("query_id");
+        mType = getIntent().getStringExtra("type");
+
+        orderLogisticsPresenter = new OrderLogisticsPresenter(this, this);
         if (!isEmpty(currentOrder)) {
-            orderLogisticsPresenter = new OrderLogisticsPresenter(this, this);
             orderLogisticsPresenter.orderLogistics(true, currentOrder);
+        } else {
+            orderLogisticsPresenter.getPlusLogistics(true, currentId, mType);
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

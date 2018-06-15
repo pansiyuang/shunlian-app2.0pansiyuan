@@ -4,20 +4,15 @@ import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.OrderdetailEntity;
-import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.ui.order.AllFrag;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.OrderdetailView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -153,15 +148,7 @@ public class OrderDetailPresenter extends BasePresenter<OrderdetailView> {
                 }
                 AllFrag.isRefreshItem = true;
                 SearchOrderResultActivity.isRefreshItem = true;
-
-                ArrayList<ReleaseCommentEntity> entities = new ArrayList<>();
-                for (int i = 0; i < orderdetailEntity.order_goods.size(); i++) {
-                    OrderdetailEntity.Good bean = orderdetailEntity.order_goods.get(i);
-                    ReleaseCommentEntity commentEntity = new ReleaseCommentEntity(order_id, bean.thumb, bean.title, bean.price, bean.goods_id);
-                    commentEntity.order_sn = orderdetailEntity.order_sn;
-                    entities.add(commentEntity);
-                }
-                SuccessfulTradeAct.startAct(context,entities,order_id);
+                SuccessfulTradeAct.startAct(context,orderdetailEntity.order_sn,order_id);
                 initApiData();
             }
         });

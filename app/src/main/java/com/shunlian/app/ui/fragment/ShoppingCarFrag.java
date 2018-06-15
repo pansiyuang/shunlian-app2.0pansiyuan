@@ -27,6 +27,7 @@ import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.MegerOrderActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
@@ -189,7 +190,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void getShoppingCarData() {
-        if (shopCarPresenter != null&& !MyOnClickListener.isFastRequest()) {
+        if (shopCarPresenter != null && !MyOnClickListener.isFastRequest()) {
             shopCarPresenter.initShopData();
         }
     }
@@ -259,7 +260,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void onResume() {
-        if (!isHidden()){
+        if (!isHidden()) {
             getShoppingCarData();
         }
         super.onResume();
@@ -322,7 +323,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     }
 
     public void showVouchersDialog(int position) {
-        if (mCarEntity.enabled.get(position).store_voucher != null && mCarEntity.enabled.get(position).store_voucher.size() != 0) {
+        if (!isEmpty(mCarEntity.enabled.get(position).store_voucher)) {
             List<GoodsDeatilEntity.Voucher> voucherList = mCarEntity.enabled.get(position).store_voucher;
             recyclerDialog.setVoucheres(voucherList);
             recyclerDialog.setOnVoucherCallBack(new RecyclerDialog.OnVoucherCallBack() {
@@ -427,8 +428,11 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     @Override
     public void OnGetVoucher(GoodsDeatilEntity.Voucher voucher) {
         //领取成功
+        Common.staticToast("领取成功");
         if (recyclerDialog != null) {
-            recyclerDialog.getVoucherSuccess(voucher.id);
+            if ("1".equals(voucher.is_get)) {
+                recyclerDialog.getVoucherSuccess(voucher.voucher_id, voucher.is_get);
+            }
         }
     }
 
@@ -439,7 +443,7 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             probabyGoods.clear();
             probabyGoods.addAll(goodsList);
             goodsAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             probabyTitleView.setVisibility(View.GONE);
         }
     }

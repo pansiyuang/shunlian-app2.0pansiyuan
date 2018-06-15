@@ -26,8 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -48,12 +46,12 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
     private String order_id;
-    private ArrayList<ReleaseCommentEntity> commentList;
+    private String order_sn;
 
-    public static void startAct(Context context, ArrayList<ReleaseCommentEntity> entity, String id){
+    public static void startAct(Context context, String order_sn, String id){
         Intent intent = new Intent(context, SuccessfulTradeAct.class);
         intent.putExtra("order_id",id);
-        intent.putExtra("commentList",entity);
+        intent.putExtra("order_sn",order_sn);
         context.startActivity(intent);
     }
 
@@ -80,8 +78,7 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
                 (TransformUtil.dip2px(this, 5), false));
 
         order_id = getIntent().getStringExtra("order_id");
-        commentList = (ArrayList<ReleaseCommentEntity>)
-                getIntent().getSerializableExtra("commentList");
+        order_sn = getIntent().getStringExtra("order_sn");
         SuccessfulTradePresenter presenter = new SuccessfulTradePresenter(this,this, order_id);
     }
 
@@ -98,7 +95,9 @@ public class SuccessfulTradeAct extends BaseActivity implements ISuccessfulTrade
 
     @OnClick(R.id.mtv_comment)
     public void comment(){
-        CreatCommentActivity.startAct(this,commentList,CreatCommentActivity.CREAT_COMMENT);
+        ReleaseCommentEntity entity = new ReleaseCommentEntity();
+        entity.order_sn = order_sn;
+        CreatCommentActivity.startAct(this,entity,CreatCommentActivity.CREAT_COMMENT);
     }
 
     @Override

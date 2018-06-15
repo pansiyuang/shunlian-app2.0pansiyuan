@@ -249,10 +249,10 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.mtv_wuliu:
                 //查看物流信息
-                PlusLogisticsDetailAct.startAct(this, refund_id, "2");
+                OrderLogisticsActivity.startAct(this, refund_id, "2");
                 break;
             case R.id.mtv_wulius:
-                PlusLogisticsDetailAct.startAct(this, refund_id, "3");
+                OrderLogisticsActivity.startAct(this, refund_id, "3");
                 break;
 
         }
@@ -282,7 +282,7 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             downTime_order.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
-                    if (downTime_order!=null&&exchangeDetailPresenter!=null){
+                    if (downTime_order != null && exchangeDetailPresenter != null) {
                         downTime_order.cancelDownTimer();
                         exchangeDetailPresenter.initApiData();
                     }

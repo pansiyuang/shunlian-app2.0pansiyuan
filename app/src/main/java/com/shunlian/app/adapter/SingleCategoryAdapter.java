@@ -142,6 +142,9 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             } else {
                 goods = lists.get(position);
             }
+            if (goods == null) {
+                return;
+            }
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
             viewHolder.tv_title.setText(goods.title);
