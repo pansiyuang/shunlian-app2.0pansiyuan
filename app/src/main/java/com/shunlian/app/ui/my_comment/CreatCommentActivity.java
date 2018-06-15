@@ -114,6 +114,8 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         tv_title_right.setText(R.string.comment_release);
         tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
 
+        addEmptyHead();
+
         commentPresenter = new CommentPresenter(this, this);
         commentList = new ArrayList<>();
         currentType = getIntent().getIntExtra("type", -1);
@@ -177,6 +179,19 @@ public class CreatCommentActivity extends BaseActivity implements ICommentView, 
         });
         super.initListener();
     }
+
+    /**
+     * 兼容android4.4手机ListView不显示footView的bug
+     */
+    public void addEmptyHead() {
+        View headerView = View.inflate(this, R.layout.empty_head, null);
+        recycler_creat_comment.addHeaderView(headerView);
+
+        headerView.measure(0, 0);
+        int height = headerView.getMeasuredHeight();
+        headerView.setPadding(0, -height, 0, 0);
+    }
+
 
     public void openAlbum(int position) {
         currentPosition = position;

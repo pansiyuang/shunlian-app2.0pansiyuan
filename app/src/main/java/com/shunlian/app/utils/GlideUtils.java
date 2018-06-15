@@ -463,8 +463,6 @@ public class GlideUtils {
         if (view == null) return;
         Glide.with(context).
                 load(resourceId).
-                asBitmap().
-                diskCacheStrategy(DiskCacheStrategy.ALL). //缓存策略
                 into(view);
     }
 
