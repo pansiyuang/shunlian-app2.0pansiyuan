@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.CateEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.NewMessageEvent;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.MegerPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
@@ -25,6 +28,10 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMegerView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -39,19 +46,19 @@ import static com.shunlian.app.App.getContext;
  * Created by Administrator on 2017/12/8.
  */
 
-public class MegerOrderActivity extends BaseActivity implements IMegerView, ParamDialog.OnSelectCallBack, View.OnClickListener {
+public class MegerOrderActivity extends BaseActivity implements IMegerView, ParamDialog.OnSelectCallBack, View.OnClickListener, MessageCountManager.OnGetMessageListener {
 
-    @BindView(R.id.tv_search)
-    TextView tv_search;
+    @BindView(R.id.rl_title_more)
+    RelativeLayout rl_title_more;
 
-    @BindView(R.id.rl_more)
-    RelativeLayout rl_more;
+    @BindView(R.id.tv_title_number)
+    TextView tv_title_number;
 
-    @BindView(R.id.miv_more)
-    MyImageView miv_more;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
 
-    @BindView(R.id.tv_number)
-    TextView tv_number;
+//    @BindView(R.id.tv_number)
+//    TextView tv_number;
 
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
@@ -72,6 +79,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     QuickActions quick_actions;
 
     public MegerPresenter megerPresenter;
+    private MessageCountManager messageCountManager;
     private String currentNeedId;
     private GoodsDeatilEntity.Goods currentGoods;
     private ParamDialog paramDialog;
@@ -94,7 +102,10 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
+        rl_title_more.setVisibility(View.VISIBLE);
+        tv_title.setText("凑单");
 
+        EventBus.getDefault().register(this);
         currentNeedId = getIntent().getStringExtra("need_more");
         if (!TextUtils.isEmpty(currentNeedId)) {
             megerPresenter = new MegerPresenter(this, this);
@@ -103,12 +114,27 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     }
 
     @Override
+    protected void onResume() {
+        messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
+        if (messageCountManager.isLoad()) {
+            String s = messageCountManager.setTextCount(tv_title_number);
+            if (quick_actions != null)
+                quick_actions.setMessageCount(s);
+        } else {
+            messageCountManager.initData();
+        }
+        super.onResume();
+    }
+
+
+    @Override
     protected void initListener() {
         tv_to_shopcar.setOnClickListener(this);
         super.initListener();
     }
 
-    @OnClick(R.id.rl_more)
+    @OnClick(R.id.rl_title_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.afterSale();
@@ -157,7 +183,7 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
 
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
         tv_meger_min.setText(cateEntity.hint);
-        setCateCount(cateEntity.sub_count);
+//        setCateCount(cateEntity.sub_count);
     }
 
     @Override
@@ -176,26 +202,26 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
         tv_meger_total.setText("小计：¥" + Common.dotAfterSmall(cateEntity.sub_amount, 11));
         tv_meger_min.setText(cateEntity.hint);
 
-        setCateCount(cateEntity.sub_count);
+//        setCateCount(cateEntity.sub_count);
     }
-
-    public void setCateCount(String cateStr) {
-        int count;
-        if (isEmpty(cateStr)) {
-            tv_number.setVisibility(View.GONE);
-        } else {
-            count = Integer.valueOf(cateStr);
-            if (count <= 0) {
-                tv_number.setVisibility(View.GONE);
-            } else if (count > 0 && count <= 99) {
-                tv_number.setVisibility(View.VISIBLE);
-                tv_number.setText(cateStr);
-            } else {
-                tv_number.setVisibility(View.VISIBLE);
-                tv_number.setText("99+");
-            }
-        }
-    }
+//
+//    public void setCateCount(String cateStr) {
+//        int count;
+//        if (isEmpty(cateStr)) {
+//            tv_number.setVisibility(View.GONE);
+//        } else {
+//            count = Integer.valueOf(cateStr);
+//            if (count <= 0) {
+//                tv_number.setVisibility(View.GONE);
+//            } else if (count > 0 && count <= 99) {
+//                tv_number.setVisibility(View.VISIBLE);
+//                tv_number.setText(cateStr);
+//            } else {
+//                tv_number.setVisibility(View.VISIBLE);
+//                tv_number.setText("99+");
+//            }
+//        }
+//    }
 
     public void getGoodsInfo(GoodsDeatilEntity.Goods goods, String promId) {
         currentGoods = goods;
@@ -209,9 +235,9 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
             return;
         }
         if (sku == null) {
-            megerPresenter.addCart(currentGoods.goods_id, null, String.valueOf(count),currentPromId);
+            megerPresenter.addCart(currentGoods.goods_id, null, String.valueOf(count), currentPromId);
         } else {
-            megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count),currentPromId);
+            megerPresenter.addCart(currentGoods.goods_id, sku.id, String.valueOf(count), currentPromId);
         }
     }
 
@@ -267,6 +293,26 @@ public class MegerOrderActivity extends BaseActivity implements IMegerView, Para
     protected void onDestroy() {
         if (quick_actions != null)
             quick_actions.destoryQuickActions();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(NewMessageEvent event) {
+        String s = messageCountManager.setTextCount(tv_title_number);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        String s = messageCountManager.setTextCount(tv_title_number);
+        if (quick_actions != null)
+            quick_actions.setMessageCount(s);
+    }
+
+    @Override
+    public void OnLoadFail() {
+
     }
 }

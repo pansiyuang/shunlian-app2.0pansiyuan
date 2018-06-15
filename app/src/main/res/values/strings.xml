@@ -451,7 +451,7 @@
     <item name="tag_category_isclick" type="id" />
     <string name="no_more_goods">您已经没有更多商品了</string>
 
-    <string name="sort_comment">%s条评论 %s好评</string>
+    <string name="sort_comment">%s%条评论 %s%好评</string>
     <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>
     <string name="submit_success">提交成功</string>
     <string name="leave_behind_goods">忍心丢下心仪商品？</string>
