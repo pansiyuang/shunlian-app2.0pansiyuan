@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/black"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12.5dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/tv_date"
+        android:layout_toRightOf="@+id/miv_icon"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="顺联动力-小玲"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginLeft="12.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/miv_icon"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="顺联动力-小玲"
+        android:textColor="@color/new_gray"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_name"
+        android:layout_alignParentRight="true"
+        android:text="12:25"
+        android:textColor="@color/new_gray"
+        android:textSize="12sp" />
+</RelativeLayout>

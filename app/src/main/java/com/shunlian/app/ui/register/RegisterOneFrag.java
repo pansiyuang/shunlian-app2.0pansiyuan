@@ -18,6 +18,7 @@ import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MyOnClickListener;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IRegisterOneView;
@@ -150,6 +151,12 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
         int i = TransformUtil.dip2px(baseActivity, 40);
         TransformUtil.expandViewTouchDelegate(miv_close,i,i,i,i);
         onePresenter = new RegisterOnePresenter(baseActivity, this);
+
+        //如果有推荐人，直接填写推荐人
+        String member_id = SharedPrefUtil.getSharedPrfString("share_code", "");
+        if (!isEmpty(member_id)){
+            et_id.setText(member_id);
+        }
     }
 
     private boolean isEtPhoneEmpty() {

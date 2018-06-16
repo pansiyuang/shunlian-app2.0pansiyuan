@@ -68,6 +68,12 @@ public class LoginAct extends BaseActivity {
     }
 
     @Override
+    protected void initListener() {
+        super.initListener();
+        miv_close.setOnClickListener(v->close());
+    }
+
+    @Override
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
@@ -108,21 +114,14 @@ public class LoginAct extends BaseActivity {
         RegisterAct.startAct(this,RegisterAct.NEW_USER,null);
     }
 
-    @Override
-    protected void initListener() {
-        super.initListener();
-        miv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isCanBack) {
-                    backPage();
-                }else {
-                    Common.goGoGo(getBaseContext(),"mainPage");
-                }
-            }
-        });
-    }
 
+    public void close(){
+        if (isCanBack) {
+            backPage();
+        }else {
+            Common.goGoGo(this,"mainPage");
+        }
+    }
     /**
      * 验证码登录
      */

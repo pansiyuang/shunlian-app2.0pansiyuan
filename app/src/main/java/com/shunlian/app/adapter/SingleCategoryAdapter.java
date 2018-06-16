@@ -110,7 +110,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
 
         GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, mStore.store_logo);
         viewHolder.tv_name.setText(mStore.store_name);
-        viewHolder.tv_comment.setText(mStore.praise_rate + "好评");
+        viewHolder.tv_comment.setText(mStore.praise_rate + "%好评");
         if (!isEmpty(mStore.head_banner)) {
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_bananer, mStore.head_banner);
             viewHolder.miv_bananer.setVisibility(View.VISIBLE);
@@ -187,9 +187,16 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                 viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
             }
 
-            viewHolder.tv_comment.setText(String.format(getString(R.string.sort_comment), goods.comment_num, goods.comment_rate));
+            if ("0".equals(goods.comment_num)) {
+                viewHolder.tv_comment.setText("暂无评论");
+            } else {
+                if ("0".equals(goods.comment_rate)) {
+                    viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+                } else {
+                    viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                }
+            }
             viewHolder.tv_address.setText(goods.send_area);
-
             if (goods.type == 1) { //是优品
                 viewHolder.miv_product.setVisibility(View.VISIBLE);
                 if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局

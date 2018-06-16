@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shunlian.app.App;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
@@ -15,6 +16,7 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.StatusEntity;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.util.ChatToast;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
@@ -191,6 +193,15 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             messageCountManager.setAll_msg(count + 1);
                         }
                         EventBus.getDefault().post(new NewMessageEvent(1));
+
+                        // TODO: 2018/6/15  新增新消息全局弹框
+//                        new Thread() {
+//                            public void run() {
+//                                Looper.prepare();
+//                                ChatToast.MakeText(App.getContext(), "", true).show();
+//                                Looper.loop();// 进入loop中的循环，查看消息队列
+//                            }
+//                        }.start();
                     }
                     break;
                 case "pingjia":

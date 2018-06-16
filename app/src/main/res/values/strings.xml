@@ -225,7 +225,7 @@
     <string name="select_goods_Specifications">请选择商品规格</string>
     <string name="full_yuan_available">满%s元可用</string>
     <string name="good_comment">评价(%s)</string>
-    <string name="praise_rate">好评率%s</string>
+    <string name="praise_rate">好评率%s%%</string>
     <string name="full_cut">满%s减%s</string>
     <string name="full_discount">满折</string>
     <string name="buy_gift">买赠</string>
@@ -451,7 +451,7 @@
     <item name="tag_category_isclick" type="id" />
     <string name="no_more_goods">您已经没有更多商品了</string>
 
-    <string name="sort_comment">%s条评论 %s好评</string>
+    <string name="sort_comment">%s%条评论 %s%好评</string>
     <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>
     <string name="submit_success">提交成功</string>
     <string name="leave_behind_goods">忍心丢下心仪商品？</string>

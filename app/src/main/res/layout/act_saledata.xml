@@ -657,6 +657,7 @@
                     app:iv_margin_top="32" />
 
                 <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/miv_jingying"
