@@ -41,6 +41,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.miv_star)
     MyImageView miv_star;
 
+    @BindView(R.id.miv_storeLogo)
+    MyImageView miv_storeLogo;
+
     @BindView(R.id.miv_chat)
     MyImageView miv_chat;
 
@@ -74,6 +77,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mrlayout_yingye)
     MyRelativeLayout mrlayout_yingye;
 
+    @BindView(R.id.mrlayout_erweima)
+    MyRelativeLayout mrlayout_erweima;
+
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
 
@@ -86,9 +92,10 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     private MessageCountManager messageCountManager;
 
     private boolean isFocus;
-    private String storeId,seller_id,storeScore;
+    private String storeId,storeScore,storeLogo;
     private StoreIntroducePresenter storeIntroducePresenter;
     private int focusNum=0;
+    private StoreIntroduceEntity storeIntroduceEntity;
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -136,7 +143,6 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         intent.putExtra("isFocus", isFocus);
         intent.putExtra("focusNum", focusNum);
         setResult(1,intent);
-        LogUtil.augusLogW("fffff3333");
         finish();
     }
     @Override
@@ -153,10 +159,11 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    public static void startActForResult(Activity activity, String storeId, String storeScore, boolean isFocus) {
+    public static void startActForResult(Activity activity, String storeId, String storeScore,String storeLogo, boolean isFocus) {
         Intent intent = new Intent(activity, StoreIntroduceAct.class);
         intent.putExtra("storeId", storeId);//店铺id
         intent.putExtra("storeScore", storeScore);
+        intent.putExtra("storeLogo", storeLogo);
         intent.putExtra("isFocus", isFocus);
 
         activity.startActivityForResult(intent,0);
@@ -178,13 +185,18 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
                 }
                 break;
             case R.id.mrlayout_yingye:
-                StoreLicenseAct.startAct(this,seller_id);
+                storeIntroduceEntity.isCode=false;
+                StoreLicenseAct.startAct(this,storeIntroduceEntity);
                 break;
             case R.id.miv_close:
                 mFinish();
                 break;
             case R.id.miv_chat:
                 storeIntroducePresenter.getUserId(storeId);
+                break;
+            case R.id.mrlayout_erweima:
+                storeIntroduceEntity.isCode=true;
+                StoreLicenseAct.startAct(this,storeIntroduceEntity);
                 break;
         }
     }
@@ -196,6 +208,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         mrlayout_yingye.setOnClickListener(this);
         miv_chat.setOnClickListener(this);
         miv_close.setOnClickListener(this);
+        mrlayout_erweima.setOnClickListener(this);
     }
 
     @Override
@@ -205,6 +218,7 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
         setStatusBarFontDark();
         storeId = getIntent().getStringExtra("storeId");
         storeScore= getIntent().getStringExtra("storeScore");
+        storeLogo= getIntent().getStringExtra("storeLogo");
         isFocus = getIntent().getBooleanExtra("isFocus",false);
         if (!isFocus) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
@@ -239,9 +253,12 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
 //            mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
 //            isFocus = true;
 //        }
-        seller_id=storeIntroduceEntity.seller_id;
+        this.storeIntroduceEntity=storeIntroduceEntity;
+        this.storeIntroduceEntity.storeScore=this.storeScore;
+        this.storeIntroduceEntity.storeLogo=this.storeLogo;
         mtv_storeName.setText(storeIntroduceEntity.store_name);
         GlideUtils.getInstance().loadImage(this, miv_star, storeScore);
+        GlideUtils.getInstance().loadImage(this, miv_storeLogo, storeLogo);
         if (!isEmpty(storeIntroduceEntity.store_collect))
             focusNum=Integer.parseInt(storeIntroduceEntity.store_collect);
         mtv_number.setText(storeIntroduceEntity.store_collect + "人");

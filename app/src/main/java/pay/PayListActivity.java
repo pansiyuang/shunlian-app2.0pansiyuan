@@ -108,8 +108,6 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     break;
             }
         }
-
-        ;
     };
 
     public static void startAct(Activity activity, String shop_goods, String addressId, String order_id, String price) {
@@ -347,14 +345,16 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.zhLogW("=====" + url);
+                LogUtil.augusLogW("====h5---"+url);
                 if (url.startsWith("slmall://")) {
                     if (url.contains("success")) {
                         paySuccess();
                     } else {
                         payFail();
                     }
-                } else {
+                } else if (!(url.startsWith("http") || url.startsWith("https"))) {
+                    return true;
+                }  else {
                     final PayTask task = new PayTask(PayListActivity.this);
                     boolean isIntercepted = task.payInterceptorWithUrl(url, true, new H5PayCallback() {
                         @Override
@@ -369,6 +369,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                                 });
                             }else {
                                 final String url = result.getReturnUrl();
+                                LogUtil.augusLogW("---h5---"+url);
                                 if (!TextUtils.isEmpty(url)) {
                                     PayListActivity.this.runOnUiThread(new Runnable() {
                                         @Override

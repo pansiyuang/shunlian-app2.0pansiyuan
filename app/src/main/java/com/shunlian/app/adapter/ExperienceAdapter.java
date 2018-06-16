@@ -95,14 +95,31 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_content.setEllipsize(TextUtils.TruncateAt.END);
 
             if (!isEmpty(experience.image)) {
-                GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
-                holderView.recycler_img.setAdapter(gridImageAdapter);
-                gridImageAdapter.setOnItemClickListener((view, position1) -> {
-                    BigImgEntity bigImgEntity = new BigImgEntity();
-                    bigImgEntity.itemList = (ArrayList<String>) experience.image;
-                    bigImgEntity.index = position1;
-                    LookBigImgAct.startAct(context, bigImgEntity);
-                });
+                if (experience.image.size()==1){
+                    gone(holderView.recycler_img);
+                    visible(holderView.miv_pic);
+                    GlideUtils.getInstance().loadImageShu(context, holderView.miv_pic, experience.image.get(0));
+                    holderView.miv_pic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            BigImgEntity bigImgEntity = new BigImgEntity();
+                            bigImgEntity.itemList = (ArrayList<String>) experience.image;
+                            bigImgEntity.index = 0;
+                            LookBigImgAct.startAct(context, bigImgEntity);
+                        }
+                    });
+                }else {
+                    gone(holderView.miv_pic);
+                    visible(holderView.recycler_img);
+                    GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
+                    holderView.recycler_img.setAdapter(gridImageAdapter);
+                    gridImageAdapter.setOnItemClickListener((view, position1) -> {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>) experience.image;
+                        bigImgEntity.index = position1;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }
             }
 
             final GoodsDeatilEntity.Goods goods = experience.goods;
@@ -174,6 +191,9 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
 
         @BindView(R.id.miv_icon)
         MyImageView miv_icon;
+
+        @BindView(R.id.miv_pic)
+        MyImageView miv_pic;
 
         @BindView(R.id.tv_title)
         TextView tv_title;

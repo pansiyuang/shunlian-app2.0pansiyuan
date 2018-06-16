@@ -86,7 +86,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             if (content.image.size() == 1) {
                 viewHolder.rv_pics.setVisibility(View.GONE);
                 viewHolder.miv_pic.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadImage(context,viewHolder.miv_pic,content.image.get(0));
+                GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,content.image.get(0));
                 viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

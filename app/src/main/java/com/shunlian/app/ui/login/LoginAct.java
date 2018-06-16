@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -107,14 +108,21 @@ public class LoginAct extends BaseActivity {
         RegisterAct.startAct(this,RegisterAct.NEW_USER,null);
     }
 
-    @OnClick(R.id.miv_close)
-    public void close(){
-        if (isCanBack) {
-            backPage();
-        }else {
-            Common.goGoGo(this,"mainPage");
-        }
+    @Override
+    protected void initListener() {
+        super.initListener();
+        miv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isCanBack) {
+                    backPage();
+                }else {
+                    Common.goGoGo(getBaseContext(),"mainPage");
+                }
+            }
+        });
     }
+
     /**
      * 验证码登录
      */

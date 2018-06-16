@@ -98,6 +98,20 @@ public class GlideUtils {
                 .into(imageView);
     }
 
+    public void loadImageShu(Context context, ImageView imageView, String imgUrl) {
+        if (imageView == null) return;
+        Glide.with(context)
+                .load(imgUrl)
+//                    .error(R.mipmap.error)
+                .placeholder(R.mipmap.img_default_home_promotion3)
+                .crossFade()
+                .priority(Priority.NORMAL) //下载的优先级
+                //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                //source:缓存源资源   result：缓存转换后的资源
+                .diskCacheStrategy(DiskCacheStrategy.ALL) //缓存策略
+                .into(imageView);
+    }
+
     /**
      * 常规加载图片
      *
@@ -424,6 +438,22 @@ public class GlideUtils {
                 .load(imgUrl)
                 .asBitmap()
                 .placeholder(R.mipmap.img_default_home_retui)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Drawable drawable = new BitmapDrawable(resource);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            view.setBackground(drawable);
+                        }
+                    }
+                });
+    }
+
+    public void loadBgImageShu(Context context, final View view, String imgUrl) {
+        Glide.with(context)
+                .load(imgUrl)
+                .asBitmap()
+                .placeholder(R.mipmap.img_default_home_promotion3)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
