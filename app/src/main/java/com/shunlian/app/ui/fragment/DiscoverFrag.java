@@ -25,6 +25,8 @@ import com.shunlian.app.ui.discover.DiscoversFrag;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.ui.discover.other.ExperiencePublishActivity;
 import com.shunlian.app.ui.discover.other.SearchArticleActivity;
+import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
@@ -403,6 +405,10 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 SearchArticleActivity.startAct(getActivity());
                 break;
             case R.id.miv_experience_publish:
+                if (!Common.isAlreadyLogin()) {
+                    LoginAct.startAct(getActivity());
+                    return;
+                }
                 ExperiencePublishActivity.startAct(getActivity());
                 break;
         }
