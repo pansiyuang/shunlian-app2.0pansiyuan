@@ -1,6 +1,5 @@
 package com.shunlian.app.presenter;
 
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -127,6 +126,12 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                         iView.superiorProduct();
                     }
                 }
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                ((GoodsDetailAct)context).finish();
             }
         });
     }

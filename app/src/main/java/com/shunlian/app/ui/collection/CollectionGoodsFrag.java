@@ -167,6 +167,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         if (adapter != null){
             adapter.isShowSelect = false;
             adapter.notifyDataSetChanged();
+            isAllSelect = false;
         }
     }
 
@@ -340,6 +341,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                 GradientDrawable background = (GradientDrawable) mtv_cut_price.getBackground();
                 background.setColor(getColorResouce(R.color.white));
                 mtv_cut_price.setTextColor(getColorResouce(R.color.new_text));
+                isAllSelect = false;
             });
         }
     }

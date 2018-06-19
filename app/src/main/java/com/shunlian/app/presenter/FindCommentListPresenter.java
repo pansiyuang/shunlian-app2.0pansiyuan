@@ -139,11 +139,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             adapter.notifyDataSetChanged();
         }
         adapter.setPageLoading(currentPage, allPage);
-        if (isEmpty(mItemComments)){
-            iView.showDataEmptyView(100);
-        }else {
-            iView.showDataEmptyView(0);
-        }
+        isEmpty();
     }
 
     @Override
@@ -211,7 +207,10 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         itemComment = null;
+        isEmpty();
     }
+
+
 
     @Override
     protected void delSuccess() {
@@ -219,6 +218,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         adapter.notifyDataSetChanged();
         currentTouchItem = -1;
         itemComment = null;
+        isEmpty();
     }
 
 
@@ -235,5 +235,13 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
             return true;
         else
             return false;
+    }
+
+    private void isEmpty() {
+        if (isEmpty(mItemComments)){
+            iView.showDataEmptyView(100);
+        }else {
+            iView.showDataEmptyView(0);
+        }
     }
 }

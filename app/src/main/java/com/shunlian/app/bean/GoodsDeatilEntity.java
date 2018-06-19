@@ -856,6 +856,7 @@ public class GoodsDeatilEntity implements Parcelable {
         public GoodsInfo goods_info;
         public String sku;                   //购物中的sku
         public String price;                 //价格
+        public String old_price;                 //套餐原价
         public String left;                  // 剩余数量提醒，  大于等于三的时候不提醒，该值为null
         public List<AllProm> all_prom;
         public String cate_id;
@@ -882,6 +883,9 @@ public class GoodsDeatilEntity implements Parcelable {
         public String every_day_ing;
         public String reduced;
 
+        public Goods() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -905,8 +909,9 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeParcelable(this.goods_info, flags);
             dest.writeString(this.sku);
             dest.writeString(this.price);
+            dest.writeString(this.old_price);
             dest.writeString(this.left);
-            dest.writeList(this.all_prom);
+            dest.writeTypedList(this.all_prom);
             dest.writeString(this.cate_id);
             dest.writeString(this.cate_name);
             dest.writeString(this.sales);
@@ -918,6 +923,8 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.has_coupon);
             dest.writeString(this.has_discount);
             dest.writeString(this.has_gift);
+            dest.writeInt(this.type);
+            dest.writeString(this.self_buy_earn);
             dest.writeString(this.free_ship);
             dest.writeString(this.send_area);
             dest.writeString(this.comment_num);
@@ -928,9 +935,6 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeByte(this.isSelect ? (byte) 1 : (byte) 0);
             dest.writeString(this.every_day_ing);
             dest.writeString(this.reduced);
-        }
-
-        public Goods() {
         }
 
         protected Goods(Parcel in) {
@@ -950,9 +954,9 @@ public class GoodsDeatilEntity implements Parcelable {
             this.goods_info = in.readParcelable(GoodsInfo.class.getClassLoader());
             this.sku = in.readString();
             this.price = in.readString();
+            this.old_price = in.readString();
             this.left = in.readString();
-            this.all_prom = new ArrayList<AllProm>();
-            in.readList(this.all_prom, AllProm.class.getClassLoader());
+            this.all_prom = in.createTypedArrayList(AllProm.CREATOR);
             this.cate_id = in.readString();
             this.cate_name = in.readString();
             this.sales = in.readString();
@@ -964,6 +968,8 @@ public class GoodsDeatilEntity implements Parcelable {
             this.has_coupon = in.readString();
             this.has_discount = in.readString();
             this.has_gift = in.readString();
+            this.type = in.readInt();
+            this.self_buy_earn = in.readString();
             this.free_ship = in.readString();
             this.send_area = in.readString();
             this.comment_num = in.readString();
@@ -976,7 +982,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.reduced = in.readString();
         }
 
-        public static final Parcelable.Creator<Goods> CREATOR = new Parcelable.Creator<Goods>() {
+        public static final Creator<Goods> CREATOR = new Creator<Goods>() {
             @Override
             public Goods createFromParcel(Parcel source) {
                 return new Goods(source);
@@ -1177,11 +1183,15 @@ public class GoodsDeatilEntity implements Parcelable {
         public String id;
         public String name;
         public String price;
+        public String old_price;//套餐原价
         public String market_price;
         public String weight;
         public String stock;
         public String specs;
         public String thumb;
+
+        public Sku() {
+        }
 
         @Override
         public int describeContents() {
@@ -1193,6 +1203,7 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.id);
             dest.writeString(this.name);
             dest.writeString(this.price);
+            dest.writeString(this.old_price);
             dest.writeString(this.market_price);
             dest.writeString(this.weight);
             dest.writeString(this.stock);
@@ -1200,13 +1211,11 @@ public class GoodsDeatilEntity implements Parcelable {
             dest.writeString(this.thumb);
         }
 
-        public Sku() {
-        }
-
         protected Sku(Parcel in) {
             this.id = in.readString();
             this.name = in.readString();
             this.price = in.readString();
+            this.old_price = in.readString();
             this.market_price = in.readString();
             this.weight = in.readString();
             this.stock = in.readString();
@@ -1214,7 +1223,7 @@ public class GoodsDeatilEntity implements Parcelable {
             this.thumb = in.readString();
         }
 
-        public static final Parcelable.Creator<Sku> CREATOR = new Parcelable.Creator<Sku>() {
+        public static final Creator<Sku> CREATOR = new Creator<Sku>() {
             @Override
             public Sku createFromParcel(Parcel source) {
                 return new Sku(source);

@@ -174,6 +174,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         if (adapter != null) {
             adapter.isShowSelect = false;
             adapter.notifyDataSetChanged();
+            isAllSelect = false;
         }
     }
 
@@ -360,6 +361,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 cateAdapter.notifyDataSetChanged();
                 gone(flayout_category);
                 mPresenter.sort();
+                isAllSelect = false;
             });
         }
     }
