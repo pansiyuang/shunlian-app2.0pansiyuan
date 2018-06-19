@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover;
 
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PDiscoverSucaiku;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverSucaiku;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -29,6 +31,12 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
     private PDiscoverSucaiku pDiscoverSucaiku;
     private LinearLayoutManager linearLayoutManager;
     private DiscoverSucaikuAdapter discoverSucaikuAdapter;
@@ -43,6 +51,8 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
         pDiscoverSucaiku=new PDiscoverSucaiku(getContext(),this);
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
+        nei_empty.setImageResource(R.mipmap.img_empty_faxian).setText(getString(R.string.discover_weifaxianxin));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -82,15 +92,22 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
     @Override
     public void setApiData(DiscoveryMaterialEntity data, List<DiscoveryMaterialEntity.Content> datas) {
         lay_refresh.setRefreshing(false);
-        if (discoverSucaikuAdapter == null) {
-            discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, datas);
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            rv_sucaiku.setLayoutManager(linearLayoutManager);
-            rv_sucaiku.setAdapter(discoverSucaikuAdapter);
-        } else {
-            discoverSucaikuAdapter.notifyDataSetChanged();
+        if (isEmpty(datas)){
+            visible(nestedScrollView);
+            gone(rv_sucaiku);
+        }else {
+            visible(rv_sucaiku);
+            gone(nestedScrollView);
+            if (discoverSucaikuAdapter == null) {
+                discoverSucaikuAdapter = new DiscoverSucaikuAdapter(getContext(), true, datas);
+                linearLayoutManager = new LinearLayoutManager(getContext());
+                rv_sucaiku.setLayoutManager(linearLayoutManager);
+                rv_sucaiku.setAdapter(discoverSucaikuAdapter);
+            } else {
+                discoverSucaikuAdapter.notifyDataSetChanged();
+            }
+            discoverSucaikuAdapter.setPageLoading(Integer.parseInt(data.page),Integer.parseInt( data.total_page));
         }
-        discoverSucaikuAdapter.setPageLoading(Integer.parseInt(data.page),Integer.parseInt( data.total_page));
     }
 
     @Override
@@ -100,6 +117,7 @@ public class DiscoverSucaikuFrag extends DiscoversFrag implements IDiscoverSucai
 
     @Override
     public void showDataEmptyView(int request_code) {
-
+        visible(nestedScrollView);
+        gone(rv_sucaiku);
     }
 }

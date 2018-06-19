@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.discover;
 
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,11 +13,12 @@ import com.shunlian.app.adapter.DiscoverNewAdapter;
 import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.presenter.PDiscoverQuanzi;
 import com.shunlian.app.ui.discover.quanzi.DiscoverTieziAct;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IDiscoverQuanzi;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -35,6 +37,25 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
 
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
+
+    @BindView(R.id.mtv_remen)
+    MyTextView mtv_remen;
+
+    @BindView(R.id.mrlayout_remen)
+    MyRelativeLayout mrlayout_remen;
+
+    @BindView(R.id.mtv_zuixin)
+    MyTextView mtv_zuixin;
+
+
+    @BindView(R.id.nsv_top)
+    NestedScrollView nsv_top;
+
+    @BindView(R.id.nsv_bootom)
+    NestedScrollView nsv_bootom;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
@@ -55,6 +76,8 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
         NestedSlHeader header = new NestedSlHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
 
+        nei_empty.setImageResource(R.mipmap.img_empty_faxian).setText(getString(R.string.discover_weifaxianxin));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -94,19 +117,14 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
     @Override
     public void setApiData(final DiscoveryCircleEntity.Mdata data, final List<DiscoveryCircleEntity.Mdata.Content> mdatas) {
         lay_refresh.setRefreshing(false);
-        if (newAdapter == null) {
-            newAdapter = new DiscoverNewAdapter(getContext(), true, mdatas);
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            rv_new.setLayoutManager(linearLayoutManager);
-            rv_new.setNestedScrollingEnabled(false);
-            rv_new.setAdapter(newAdapter);
-            newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    DiscoverTieziAct.startAct(getContext(), mdatas.get(position).id);
-                }
-            });
-            if (data.banner != null&&data.banner.size()>0) {
+        if (isEmpty(data.banner)&&isEmpty(mdatas)){
+            visible(nsv_bootom);
+            gone(nsv_top);
+        }else {
+            visible(nsv_top);
+            gone(nsv_bootom);
+            if (!isEmpty(data.banner)) {
+                visible(mtv_remen,mrlayout_remen);
                 List<String> strings=new ArrayList<>();
                 for (int i=0;i<data.banner.size();i++){
                     strings.add(data.banner.get(i).img);
@@ -127,20 +145,43 @@ public class DiscoverQuanZiFrag extends DiscoversFrag implements IDiscoverQuanzi
                         });
                     }
                 }
+            }else {
+                gone(mtv_remen,mrlayout_remen);
             }
-        } else {
-            newAdapter.notifyDataSetChanged();
+            if (isEmpty(mdatas)){
+                gone(mtv_zuixin,rv_new);
+            }else {
+                visible(mtv_zuixin,rv_new);
+                if (newAdapter == null) {
+                    newAdapter = new DiscoverNewAdapter(getContext(), true, mdatas);
+                    linearLayoutManager = new LinearLayoutManager(getContext());
+                    rv_new.setLayoutManager(linearLayoutManager);
+                    rv_new.setNestedScrollingEnabled(false);
+                    rv_new.setAdapter(newAdapter);
+                    newAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            DiscoverTieziAct.startAct(getContext(), mdatas.get(position).id);
+                        }
+                    });
+                } else {
+                    newAdapter.notifyDataSetChanged();
+                }
+                newAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
+            }
         }
-        newAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
     }
 
     @Override
     public void showFailureView(int request_code) {
+        visible(nsv_bootom);
+        gone(nsv_top);
         lay_refresh.setRefreshing(false);
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-
+        visible(nsv_bootom);
+        gone(nsv_top);
     }
 }

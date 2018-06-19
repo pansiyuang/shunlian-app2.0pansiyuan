@@ -69,6 +69,8 @@ import butterknife.OnClick;
 
 public class PersonalCenterFrag extends BaseFragment implements IPersonalView, View.OnClickListener, MessageCountManager.OnGetMessageListener {
 
+    public final static String ASTERISK = "****";
+    public final static String KEY = "person_isShow";
     public PersonalcenterPresenter personalcenterPresenter;
     @BindView(R.id.miv_before)
     MyImageView miv_before;
@@ -186,13 +188,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyTextView mtv_sendNum;
     @BindView(R.id.mtv_receiveNum)
     MyTextView mtv_receiveNum;
-
-
-//    @BindView(R.id.seekbar_grow)
+    //    @BindView(R.id.seekbar_grow)
 //    SeekBar seekbar_grow;
     @BindView(R.id.mtv_payNum)
     MyTextView mtv_payNum;
-//    @BindView(R.id.refreshview)
+    //    @BindView(R.id.refreshview)
 //    RingRefreshView refreshview;
     @BindView(R.id.view_bg)
     View view_bg;
@@ -206,15 +206,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyRelativeLayout mrlayout_paihang;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+    @BindView(R.id.lay_refresh)
+    NestedRefreshLoadMoreLayout lay_refresh;
     private MessageCountManager messageCountManager;
     private HelpArticleAdapter helpArticleAdapter;
     private String managerUrl, orderUrl;
     private boolean isShowData = true;
-    public final static String ASTERISK = "****";
-    public final static String KEY = "person_isShow";
     private PersonalcenterEntity personalcenterEntity;
-    @BindView(R.id.lay_refresh)
-    NestedRefreshLoadMoreLayout lay_refresh;
     private PromptDialog promptDialog;
     private MainActivity mainActivity;
 
@@ -237,15 +235,15 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
 
     @OnClick(R.id.miv_isShow_data)
-    public void isShowData(){
+    public void isShowData() {
         isShowData = !isShowData;
         changeState();
-        SharedPrefUtil.saveCacheSharedPrfBoolean(KEY,isShowData);
+        SharedPrefUtil.saveCacheSharedPrfBoolean(KEY, isShowData);
     }
 
     @Override
     public void onResume() {
-        if (!isHidden()){
+        if (!isHidden()) {
             getPersonalcenterData();
         }
         if (Common.isAlreadyLogin()) {
@@ -279,7 +277,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                .statusBarDarkFont(true, 0.2f)
 //                .init();
         //新增下拉刷新
-        mainActivity= (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         NestedRingHeader header = new NestedRingHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
 
@@ -290,15 +288,17 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         view_bg.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
     }
-    private void changeState(){
-        miv_isShow_data.setImageResource(!isShowData?R.mipmap.img_plus_guanbi_n:R.mipmap.img_guanbi_h);
-        if (personalcenterEntity!=null){
-            mtv_yue.setText(!isShowData?ASTERISK:personalcenterEntity.balance);
-            mtv_youhuiquan.setText(!isShowData?ASTERISK:personalcenterEntity.coupon_num);
-            mtv_donglizhishu.setText(!isShowData?ASTERISK:personalcenterEntity.all_sl_income);
-            mtv_xiaoshou.setText(!isShowData?ASTERISK:personalcenterEntity.team_sales);
+
+    private void changeState() {
+        miv_isShow_data.setImageResource(!isShowData ? R.mipmap.img_plus_guanbi_n : R.mipmap.img_guanbi_h);
+        if (personalcenterEntity != null) {
+            mtv_yue.setText(!isShowData ? ASTERISK : personalcenterEntity.balance);
+            mtv_youhuiquan.setText(!isShowData ? ASTERISK : personalcenterEntity.coupon_num);
+            mtv_donglizhishu.setText(!isShowData ? ASTERISK : personalcenterEntity.all_sl_income);
+            mtv_xiaoshou.setText(!isShowData ? ASTERISK : personalcenterEntity.team_sales);
         }
     }
+
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -375,7 +375,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                GifBagListAct.startAct(baseContext);
+                H5Act.startAct(baseContext, Constant.PLUS_ADD, H5Act.MODE_SONIC);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -386,17 +386,18 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
 
     public void getPersonalcenterData() {
-        if (personalcenterPresenter != null&& !MyOnClickListener.isFastRequest()) {
+        if (personalcenterPresenter != null && !MyOnClickListener.isFastRequest()) {
             personalcenterPresenter.getApiData();
         }
     }
+
     @Override
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
-        this.personalcenterEntity=personalcenterEntity;
-        if (!isEmpty(personalcenterEntity.balance)&&Float.parseFloat(personalcenterEntity.balance)>0){
+        this.personalcenterEntity = personalcenterEntity;
+        if (!isEmpty(personalcenterEntity.balance) && Float.parseFloat(personalcenterEntity.balance) > 0) {
             mllayout_yue.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mllayout_yue.setVisibility(View.GONE);
         }
         isShowData = SharedPrefUtil.getCacheSharedPrfBoolean(KEY, true);
@@ -524,8 +525,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         miv_levels.setVisibility(View.GONE);
         if (!isEmpty(personalcenterEntity.plus_role)) {
             int level = Integer.parseInt(personalcenterEntity.plus_role);
-            if (level>0)
-            miv_levels.setVisibility(View.VISIBLE);
+            if (level > 0)
+                miv_levels.setVisibility(View.VISIBLE);
             if (level == 1) {
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_dianzhu);
             } else if (level == 2) {
@@ -667,7 +668,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void onClick(View view) {
-        LogUtil.augusLogW("--"+view.getId());
+        LogUtil.augusLogW("--" + view.getId());
         switch (view.getId()) {
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);
@@ -709,23 +710,27 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 SettingAct.startAct(baseContext);
                 break;
             case R.id.mrlayout_yaoqing:
-                QrCodeAct.startAct(baseContext,managerUrl);
+                QrCodeAct.startAct(baseContext, managerUrl);
                 break;
             case R.id.mrlayout_zidingyi:
-                MyLittleStoreActivity.startAct(getActivity());
+                if (Common.isPlus()) {
+                    MyLittleStoreActivity.startAct(getActivity());
+                } else {
+                    initHintDialog();
+                }
                 break;
             case R.id.rl_more:
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.mllayout_yue:
-                Constant.ISBALANCE=true;
+                Constant.ISBALANCE = true;
                 BalanceMainAct.startAct(baseContext, false);
                 break;
             case R.id.mllayout_youhuiquan:
                 CouponListAct.startAct(baseActivity);
                 break;
             case R.id.mllayout_dongli:
-                MyProfitAct.startAct(baseActivity,false);
+                MyProfitAct.startAct(baseActivity, false);
                 break;
             case R.id.mllayout_xiaoshou:
                 SaleDataAct.startAct(baseActivity);
@@ -742,11 +747,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
-                if (Common.isPlus()){
-                    mainActivity.myPlusClick();
-                }else {
-                    initHintDialog();
-                }
+                mainActivity.myPlusClick();
                 //点击查看特权
                 break;
         }

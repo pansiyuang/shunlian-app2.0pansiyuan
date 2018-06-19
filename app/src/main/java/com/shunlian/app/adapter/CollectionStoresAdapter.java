@@ -67,7 +67,7 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CollectionStoresHolder) {
             CollectionStoresHolder mHolder = (CollectionStoresHolder) holder;
-            final CollectionStoresEntity.Store store = lists.get(position);
+            CollectionStoresEntity.Store store = lists.get(position);
             GlideUtils.getInstance().loadImage(context, mHolder.miv_goods_pic, store.store_avatar);
             GlideUtils.getInstance().loadImage(context, mHolder.miv_star, store.star);
             mHolder.mtv_title.setText(store.store_name);
@@ -83,6 +83,7 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
             mHolder.miv_arrow.setVisibility(View.VISIBLE);
             mHolder.mtv_add.setVisibility(View.GONE);
             String status = store.status;
+//            mHolder.miv_star.setAlpha(1);
             if ("0".equals(status)){//失效
                 mHolder.mtv_expired.setVisibility(View.VISIBLE);
                 mHolder.mtv_title.setTextColor(getColor(R.color.light_gray_three));
@@ -94,7 +95,7 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
                 mHolder.mtv_expired.setVisibility(View.GONE);
                 mHolder.mtv_title.setTextColor(getColor(R.color.new_text));
                 mHolder.mtv_nice.setTextColor(getColor(R.color.new_text));
-                mHolder.miv_star.setAlpha(1);
+                mHolder.miv_star.setAlpha(1.0f);
             }
             if (store.isSelect){
                 mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);

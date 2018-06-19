@@ -332,6 +332,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                         tab.setTextColor(tabTextColor);
                     } else {
                         tab.setTextColor(selectedTabTextColor);
+                        tab.getPaint().setFakeBoldText(true);//加粗
+//                        tab.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
                     }
                     ViewHelper.setAlpha(tabViews.get(i).get("normal"), 1);
                     ViewHelper.setAlpha(tabViews.get(i).get("selected"), 0);

@@ -113,7 +113,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pAishang != null) {
-                            pAishang.refreshBaby("new", cate_id);
+                            pAishang.refreshBaby("new", cate_id,"");
                         }
                     }
                 }

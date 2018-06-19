@@ -175,7 +175,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                 nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
                                     @Override
                                     public void onItemClick(int position) {
-                                        Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id);
+                                        Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id,data.datass.get(position).url.channe_id);
                                     }
                                 });
                             }
@@ -209,26 +209,26 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                         }
                     });
                     twoHolder.mllayout_nav2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id);
+                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id,data.datass.get(1).url.channe_id);
                         }
                     });
                     twoHolder.mllayout_nav3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id);
+                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id,data.datass.get(2).url.channe_id);
                         }
                     });
                     twoHolder.mllayout_nav4.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 //                            GetCouponAct.startAct(context);
-                            Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id);
+                            Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id,data.datass.get(3).url.channe_id);
                         }
                     });
                 }
@@ -257,7 +257,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                                 }
                             });
                             break;
@@ -272,13 +272,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                                 }
                             });
                             threeHolder.miv_twor.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id,data.datass.get(1).url.channe_id);
                                 }
                             });
                             break;
@@ -294,19 +294,19 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                                 }
                             });
                             threeHolder.miv_threem.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id,data.datass.get(1).url.channe_id);
                                 }
                             });
                             threeHolder.miv_threer.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id,data.datass.get(2).url.channe_id);
                                 }
                             });
                             break;
@@ -323,25 +323,25 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                                 }
                             });
                             threeHolder.miv_four2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id,data.datass.get(1).url.channe_id);
                                 }
                             });
                             threeHolder.miv_four3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id,data.datass.get(2).url.channe_id);
                                 }
                             });
                             threeHolder.miv_four4.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id,data.datass.get(3).url.channe_id);
                                 }
                             });
                             break;
@@ -357,19 +357,19 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id,data.datass.get(0).url.channe_id);
                                 }
                             });
                             threeHolder.miv_fivet.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id,data.datass.get(1).url.channe_id);
                                 }
                             });
                             threeHolder.miv_fiveb.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id);
+                                    Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id,data.datass.get(2).url.channe_id);
                                 }
                             });
                             break;
@@ -503,7 +503,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id);
+                            Common.goGoGo(context, data.url.type, data.url.item_id,data.url.channe_id);
                         }
                     });
                 }
@@ -538,7 +538,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id);
+                            Common.goGoGo(context, data.url.type, data.url.item_id,data.url.channe_id);
                         }
                     });
                     if (sixHolder.firstHorizonAdapter == null) {
@@ -743,6 +743,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         TenHolder(View itemView) {
             super(itemView);
+            int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,10);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth/2, picWidth/2);
+            miv_photo.setLayoutParams(params);
         }
     }
 

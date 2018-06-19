@@ -6,12 +6,30 @@
     android:layout_height="match_parent"
     app:mode="follow">
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<android.support.v4.widget.NestedScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_sucaiku"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    <!--</android.support.v4.widget.NestedScrollView>-->
+        <!--</android.support.v4.widget.NestedScrollView>-->
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:paddingBottom="100dp"
+            android:visibility="gone">
+
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v4.widget.NestedScrollView>
+    </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout>

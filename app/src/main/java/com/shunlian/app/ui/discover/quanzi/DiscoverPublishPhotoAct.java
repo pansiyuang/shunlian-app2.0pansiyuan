@@ -104,6 +104,7 @@ public class DiscoverPublishPhotoAct extends BaseActivity implements IExperience
             ArrayList<String> picturePaths = data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT);
             index = 0;
             imgList.clear();
+            LogUtil.augusLogW("ddddddddd3333"+picturePaths);
             compressImgs(index, picturePaths);
         }
     }
@@ -118,6 +119,7 @@ public class DiscoverPublishPhotoAct extends BaseActivity implements IExperience
 
             @Override
             public void onSuccess(File file) {
+                LogUtil.augusLogW("ddddddddd2222");
                 LogUtil.httpLogW("onSuccess:" + file.length());
                 ImageEntity imageEntity = new ImageEntity(list.get(index));
                 imageEntity.file = file;

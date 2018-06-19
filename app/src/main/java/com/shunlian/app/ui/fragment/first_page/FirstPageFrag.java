@@ -1,6 +1,5 @@
 package com.shunlian.app.ui.fragment.first_page;
 
-import android.os.Debug;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -21,11 +20,9 @@ import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
-import com.shunlian.app.ui.plus.MyPlusAct;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -109,9 +106,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onResume() {
-        if (BuildConfig.DEBUG){
-            pFirstPage.getMenuData();
-        }
+//        if (BuildConfig.DEBUG){
+//            pFirstPage.getMenuData();
+//        }
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseContext);
             if (messageCountManager.isLoad()) {
@@ -196,9 +193,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         pFirstPage = new PFirstPage(getContext(), this, null);
-        if (!BuildConfig.DEBUG){
-            pFirstPage.getMenuData();
-        }
+//        if (!BuildConfig.DEBUG){
+//            pFirstPage.getMenuData();
+//        }
+        pFirstPage.getMenuData();
         mainActivity= (MainActivity) getActivity();
     }
 

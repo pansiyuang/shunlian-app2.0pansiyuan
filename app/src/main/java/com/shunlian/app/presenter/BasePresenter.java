@@ -231,8 +231,14 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                     }
                 }else if (body.code != 1000 && interceptApi(call,body)){//目前余额支付失败时code!=100,data不为空
                     callback.onErrorData(body);
+                    if (iView != null) {
+                        iView.showFailureView(failureCode);
+                    }
                 }else {
                     callback.onErrorCode(body.code,body.message);
+                    if (iView != null) {
+                        iView.showFailureView(failureCode);
+                    }
                     //请求错误
                     handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode,isLoading);
                 }

@@ -58,16 +58,16 @@ public class PHelpOne extends BasePresenter<IHelpOneView> {
 
     public void getHelpPhone(){
         Map<String, String> map = new HashMap<>();
-//        map.put("storeId", storeId);
+        map.put("field", "telephone");
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().helpcenterServiceTell(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().getAdminInfo(map);
         getNetData(false,baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
                 CommonEntity data = entity.data;
                 if (data != null) {
-                    iView.setPhoneNum(data.tell);
+                    iView.setPhoneNum(data.telephone);
                 }
             }
         });

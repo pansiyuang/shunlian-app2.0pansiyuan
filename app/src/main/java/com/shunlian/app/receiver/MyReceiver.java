@@ -88,6 +88,11 @@ public class MyReceiver extends BroadcastReceiver {
             String toPage = "";
             String id = "";
             String id1 = "";
+            String id2 = "";
+            String id3 = "";
+            String id4 = "";
+            String id5 = "";
+            String id6 = "";
 
             //适用于IM推送相关
             String to_shop_id = "";
@@ -103,6 +108,12 @@ public class MyReceiver extends BroadcastReceiver {
                 jsonObj = new JSONObject(extVal);
                 toPage = jsonObj.optString("to_page");
                 id = jsonObj.optString("id");
+                id1 = jsonObj.optString("id1");
+                id2 = jsonObj.optString("id2");
+                id3 = jsonObj.optString("id3");
+                id4 = jsonObj.optString("id4");
+                id5 = jsonObj.optString("id5");
+                id6 = jsonObj.optString("id6");
 
                 to_shop_id = jsonObj.optString("to_shop_id");
                 from_shop_id = jsonObj.optString("from_shop_id");
@@ -121,6 +132,11 @@ public class MyReceiver extends BroadcastReceiver {
                 Constant.JPUSH.add(toPage);
                 Constant.JPUSH.add(id);
                 Constant.JPUSH.add(id1);
+                Constant.JPUSH.add(id2);
+                Constant.JPUSH.add(id3);
+                Constant.JPUSH.add(id4);
+                Constant.JPUSH.add(id5);
+                Constant.JPUSH.add(id6);
 
                 //适用于IM
                 Constant.JPUSH.add(to_shop_id);
@@ -131,7 +147,7 @@ public class MyReceiver extends BroadcastReceiver {
                 Constant.JPUSH.add(from_user_id);
                 Constant.JPUSH.add(to_user_id);
 
-                Common.goGoGo(context, toPage, id, id1, to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
+                Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(context, "推送数据异常" + e.getMessage(), Toast.LENGTH_SHORT).show();
