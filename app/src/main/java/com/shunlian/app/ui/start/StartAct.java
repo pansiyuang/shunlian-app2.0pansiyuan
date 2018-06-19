@@ -37,17 +37,9 @@ import butterknife.BindView;
  * Created by Administrator on 2016/4/12 0012.
  */
 public class StartAct extends MBaseActivity implements IMain {
-//    private AnimationDrawable flashAnimation;
     private String localVersion;
     private AdEntity data;
     private boolean isAD=false,isHave=false;
-
-    @BindView(R.id.miv_bg1)
-    MyImageView miv_bg1;
-
-    @BindView(R.id.miv_bg2)
-    MyImageView miv_bg2;
-
 
     @Override
     protected int getLayoutId() {
@@ -92,7 +84,6 @@ public class StartAct extends MBaseActivity implements IMain {
             Log.w("splash","splash----crush");
         }
 
-
 //        animation_view.cancelAnimation();//停止
 //        try {
 //            //此方法用于复用动画比如列表的每个item中或者从网络请求一个JSONObject：
@@ -107,20 +98,12 @@ public class StartAct extends MBaseActivity implements IMain {
 //            e.printStackTrace();
 //        }
 
-//        loadBitmap();
         isHave=true;
         Handler handler = new Handler();
-//      handler.postDelayed(new Runnable() {
-//          @Override
-//          public void run() {
-//              flashAnimation.stop();
-//          }
-//      },1100);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 isHave=false;
-//                flashAnimation.stop();
 //                animation_view.cancelAnimation();
                 isFirstJudge();
             }
@@ -151,11 +134,6 @@ public class StartAct extends MBaseActivity implements IMain {
         sendBroadcast(shortcut);
     }
 
-    @Override
-    protected void onStop() {
-//        tryRecycleAnimationDrawable(flashAnimation);
-        super.onStop();
-    }
 
     //创建桌面快捷方式
     private void createShortCut() {
@@ -277,39 +255,4 @@ public class StartAct extends MBaseActivity implements IMain {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        releaseImageViewResouce(miv_bg1);
-        releaseImageViewResouce(miv_bg2);
-        super.onDestroy();
-    }
-
-    public void releaseImageViewResouce(ImageView imageView) {
-        if (imageView == null) return;
-        Drawable drawable = imageView.getDrawable();
-        if (drawable != null && drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-        }
-    }
-
-//    private void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
-//        if (animationDrawable != null) {
-//            animationDrawable.stop();
-//            for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
-//                Drawable frame = animationDrawable.getFrame(i);
-//                if (frame instanceof BitmapDrawable) {
-//                    ((BitmapDrawable) frame).getBitmap().recycle();
-//                }
-//                frame.setCallback(null);
-//            }
-//            animationDrawable.setCallback(null);
-//            animationDrawable = null;
-//            System.gc();
-//        }
-//    }
 }

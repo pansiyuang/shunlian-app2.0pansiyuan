@@ -192,6 +192,8 @@ public class Common {
                 return "OrderLogisticsActivity";
             case "shop":
                 return "StoreAct";
+            case "plus":
+                return "MainActivity";
             case "plusdetail":
             case "pulsdetail":
                 return "PlusGifDetailAct";
@@ -371,6 +373,9 @@ public class Common {
                 break;
             case "slyoupin"://顺联优品
                 SuperProductsAct.startAct(context);
+                break;
+            case "plus":
+                MainActivity.startAct(context, "myplus");
                 break;
             case "chat"://聊天
 
