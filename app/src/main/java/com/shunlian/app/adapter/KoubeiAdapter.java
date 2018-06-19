@@ -43,8 +43,19 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
         GlideUtils.getInstance().loadImage(context,mHolder.miv_photo,data.thumb);
         mHolder.mtv_title.setText(data.title);
         mHolder.mtv_desc.setText(data.content);
-        mHolder.mtv_fu.setText(String.format(getString(R.string.first_yifukuan),data.sales));
-        mHolder.mtv_hao.setText(String.format(getString(R.string.first_haopinglv),data.views)+"%");
+        if (!isEmpty(data.sales)&&Float.parseFloat(data.sales)>0){
+            mHolder.mtv_fu.setVisibility(View.VISIBLE);
+            mHolder.mtv_fu.setText(String.format(getString(R.string.first_yifukuan),data.sales));
+        }else {
+            mHolder.mtv_fu.setVisibility(View.GONE);
+        }
+        if (!isEmpty(data.views)&&Float.parseFloat(data.views)>0){
+            mHolder.mtv_hao.setVisibility(View.VISIBLE);
+            mHolder.mtv_hao.setText(String.format(getString(R.string.first_haopinglv),data.views)+"%");
+        }else {
+            mHolder.mtv_hao.setVisibility(View.GONE);
+        }
+
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {

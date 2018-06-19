@@ -743,6 +743,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
 
         TenHolder(View itemView) {
             super(itemView);
+            int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,10);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth/2, picWidth/2);
+            miv_photo.setLayoutParams(params);
         }
     }
 

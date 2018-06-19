@@ -1607,8 +1607,8 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("helpcenter/serviceTell")
-    Call<BaseEntity<CommonEntity>> helpcenterServiceTell(@QueryMap Map<String, String> map);
+    @GET("chat/chat/getAdminInfo")
+    Call<BaseEntity<CommonEntity>> getAdminInfo(@QueryMap Map<String, String> map);
 
     /**
      * 新手课堂

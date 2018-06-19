@@ -231,6 +231,7 @@ public class FootprintFrag extends CollectionFrag implements View.OnClickListene
         isSelectAll = false;
         selectStatus = 2;
         toSelectAll(false);
+        if (footprintAdapter!=null)
         footprintAdapter.setEditMode(false);
     }
 

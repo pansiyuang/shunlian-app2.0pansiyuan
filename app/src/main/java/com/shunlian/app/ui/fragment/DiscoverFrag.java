@@ -77,6 +77,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     @BindView(R.id.miv_experience_publish)
     MyImageView miv_experience_publish;
 
+    @BindView(R.id.miv_empty)
+    MyImageView miv_empty;
+
     @BindView(R.id.rv_flash)
     RecyclerView rv_flash;
 
@@ -143,7 +146,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //            }
 //        });
         jingXuanFrag();
-
+        miv_empty.setFocusable(false);
     }
 
     @Override
@@ -301,21 +304,28 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 
     @Override
     public void setNavData(final DiscoveryNavEntity navEntity) {
-        if (flashAdapter == null) {
-            flashAdapter = new DiscoverFlashAdapter(getContext(), false, navEntity.flash_list);
-            LinearLayoutManager flashManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            rv_flash.setLayoutManager(flashManager);
-            rv_flash.setAdapter(flashAdapter);
-            flashAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    ArticleH5Act.startAct(getActivity(), navEntity.flash_list.get(position).id, ArticleH5Act.MODE_SONIC);
-                }
-            });
-        } else {
-            flashAdapter.notifyDataSetChanged();
+        if (isEmpty(navEntity.flash_list)){
+            visible(miv_empty);
+            gone(rv_flash);
+        }else {
+            visible(rv_flash);
+            gone(miv_empty);
+            if (flashAdapter == null) {
+                flashAdapter = new DiscoverFlashAdapter(getContext(), false, navEntity.flash_list);
+                LinearLayoutManager flashManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                rv_flash.setLayoutManager(flashManager);
+                rv_flash.setAdapter(flashAdapter);
+                flashAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        ArticleH5Act.startAct(getActivity(), navEntity.flash_list.get(position).id, ArticleH5Act.MODE_SONIC);
+                    }
+                });
+            } else {
+                flashAdapter.notifyDataSetChanged();
+            }
         }
-        if (navEntity.nav_list != null && navEntity.nav_list.size() > 0) {
+        if (!isEmpty(navEntity.nav_list)) {
             switch (navEntity.nav_list.size()) {
                 case 1:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
