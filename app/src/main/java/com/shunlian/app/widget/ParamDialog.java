@@ -239,16 +239,15 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             case R.id.btn_add:
                 currentCount++;
                 if (currentCount > totalStock) {
+                    Common.staticToast("您选择的数量超出库存");
                     currentCount = totalStock;
-                    return;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_minus:
                 currentCount--;
-                if (currentCount <= 0) {
-                    currentCount = 0;
-                    return;
+                if (currentCount <= 1) {
+                    currentCount = 1;
                 }
                 tv_number.setText(String.valueOf(currentCount));
                 break;
