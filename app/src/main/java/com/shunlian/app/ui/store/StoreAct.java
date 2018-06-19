@@ -226,6 +226,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     public boolean isFocus;
     private ShareInfoParam shareInfoParam;
     public int focusNum=0;
+    private List<GoodsDeatilEntity.Voucher> vouchers;
 
     public static void startAct(Context context, String storeId) {
         Intent intent = new Intent(context, StoreAct.class);
@@ -702,9 +703,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
 
     @Override
-    public void storeVoucher(final List<GoodsDeatilEntity.Voucher> vouchers) {
-        if (vouchers != null && vouchers.size() > 0) {
+    public void storeVoucher( List<GoodsDeatilEntity.Voucher> voucherList) {
+        if (!isEmpty(voucherList)) {
             rv_firstVouch.setVisibility(View.VISIBLE);
+            vouchers=voucherList;
             if (storeVoucherAdapter == null) {
                 storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
                 LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -715,9 +717,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 storeVoucherAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        GoodsDeatilEntity.Voucher voucher = vouchers.get(position);
-                        storePresenter.getVoucher(voucher.voucher_id);
-                        voucher.is_get = "1";
+                        storePresenter.getVoucher(vouchers.get(position).voucher_id);
                         storeVoucherAdapter.detailBottomCouponPosition = position;
                     }
                 });
@@ -764,6 +764,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     public void refreshVoucherState(GoodsDeatilEntity.Voucher voucher) {
         if (storeVoucherAdapter != null) {
             if (storeVoucherAdapter.detailBottomCouponPosition != -1) {
+                vouchers.get(storeVoucherAdapter.detailBottomCouponPosition).is_get = voucher.is_get;
                 storeVoucherAdapter.notifyItemChanged(storeVoucherAdapter.detailBottomCouponPosition);
             }
             storeVoucherAdapter.detailBottomCouponPosition = -1;

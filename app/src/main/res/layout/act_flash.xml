@@ -19,8 +19,8 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         app:lottie_cacheStrategy="none" />
 
     <com.shunlian.app.widget.MyImageView
