@@ -18,7 +18,6 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IGoodsDetailView;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onSuccess(entity);
                 shareInfoParam = new ShareInfoParam();
                 GoodsDeatilEntity data = entity.data;
-                LogUtil.augusLogW("dfdfd---"+data.credit);
+                //LogUtil.augusLogW("dfdfd---"+data.credit);
                 if (!TextUtils.isEmpty(data.credit)&&Integer.parseInt(data.credit)>0){
                     Common.staticToasts(context,String.format(getStringResouce(R.string.common_gongxinin),data.credit),R.mipmap.icon_jifen);
                 }
