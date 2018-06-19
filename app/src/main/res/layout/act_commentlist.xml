@@ -32,6 +32,7 @@
         android:layout_above="@+id/ll_bottom"
         android:layout_below="@+id/llayout_title"
         android:layout_weight="1"
+        android:background="@color/white_ash"
         android:overScrollMode="never" />
 
     <com.shunlian.app.widget.empty.NetAndEmptyInterface

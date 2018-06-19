@@ -315,6 +315,7 @@ public class MyCollectionAct extends BaseActivity {
         collectionFrag.finishManage();
         mtv_manage.setText(getStringResouce(R.string.manage));
         mrlayout_manage.setVisibility(View.GONE);
+        setManageState(2);
     }
 
     /**
