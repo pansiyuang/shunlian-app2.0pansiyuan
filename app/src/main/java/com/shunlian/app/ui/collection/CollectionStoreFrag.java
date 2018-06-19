@@ -253,7 +253,6 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         if (adapter == null) {
             adapter = new CollectionStoresAdapter(baseActivity, stores);
             recy_view.setAdapter(adapter);
-            adapter.setPageLoading(page, allPage);
             adapter.setOnItemClickListener((view, position) -> {
                 CollectionStoresEntity.Store store = stores.get(position);
                 if (adapter.isShowSelect) {
@@ -277,10 +276,9 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 }
             });
         } else {
-            adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
         }
-
+        adapter.setPageLoading(page, allPage);
         showEmptyPage(isEmpty(stores));
     }
 

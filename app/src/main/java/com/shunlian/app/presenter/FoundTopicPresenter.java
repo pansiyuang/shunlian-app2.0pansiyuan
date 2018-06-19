@@ -7,6 +7,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFoundTopicView;
 
 import java.util.HashMap;

@@ -106,9 +106,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onResume() {
-        /*if (BuildConfig.DEBUG){
-            pFirstPage.getMenuData();
-        }*/
+//        if (BuildConfig.DEBUG){
+//            pFirstPage.getMenuData();
+//        }
         if (Common.isAlreadyLogin()) {
             messageCountManager = MessageCountManager.getInstance(baseContext);
             if (messageCountManager.isLoad()) {
@@ -193,9 +193,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         pFirstPage = new PFirstPage(getContext(), this, null);
-        if (BuildConfig.DEBUG){
-            pFirstPage.getMenuData();
-        }
+//        if (!BuildConfig.DEBUG){
+//            pFirstPage.getMenuData();
+//        }
+        pFirstPage.getMenuData();
         mainActivity= (MainActivity) getActivity();
     }
 

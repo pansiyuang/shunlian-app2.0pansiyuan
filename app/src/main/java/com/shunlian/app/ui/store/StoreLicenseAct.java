@@ -2,21 +2,35 @@ package com.shunlian.app.ui.store;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
+import com.shunlian.app.bean.StoreIntroduceEntity;
 import com.shunlian.app.presenter.StoreLicensePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreLicenseView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
+import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.circle.CircleImageView;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 
@@ -28,8 +42,23 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.miv_photo)
     MyImageView miv_photo;
 
+    @BindView(R.id.miv_star)
+    MyImageView miv_star;
+
+    @BindView(R.id.miv_shop_head)
+    MyImageView miv_shop_head;
+
+    @BindView(R.id.miv_code)
+    MyImageView miv_code;
+
     @BindView(R.id.mtv_sure)
     MyTextView mtv_sure;
+
+    @BindView(R.id.mtv_title)
+    MyTextView mtv_title;
+
+    @BindView(R.id.mtv_shop_name)
+    MyTextView mtv_shop_name;
 
     @BindView(R.id.edt_verifi)
     EditText edt_verifi;
@@ -37,13 +66,16 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
     @BindView(R.id.mllayout_one)
     MyLinearLayout mllayout_one;
 
+    @BindView(R.id.mrlayout_content)
+    MyRelativeLayout mrlayout_content;
+
 
     private StoreLicensePresenter storeLicensePresenter;
     private String seller_id;
 
-    public static void startAct(Context context, String seller_id) {
+    public static void startAct(Context context,StoreIntroduceEntity storeIntroduceEntity) {
         Intent intent = new Intent(context, StoreLicenseAct.class);
-        intent.putExtra("seller_id", seller_id);//店铺id
+        intent.putExtra("storeIntroduceEntity", storeIntroduceEntity);
         context.startActivity(intent);
     }
 
@@ -55,11 +87,28 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initData() {
-//        seller_id = getIntent().getStringExtra("seller_id");
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        seller_id = "206";
-        storeLicensePresenter = new StoreLicensePresenter(this, this);
+        StoreIntroduceEntity storeIntroduceEntity= (StoreIntroduceEntity) getIntent().getSerializableExtra("storeIntroduceEntity");
+        if (storeIntroduceEntity.isCode){
+            mtv_title.setText(getStringResouce(R.string.store_dianpuerweima));
+            mrlayout_content.setVisibility(View.VISIBLE);
+            mtv_shop_name.setText(storeIntroduceEntity.store_name);
+            GlideUtils.getInstance().loadImageZheng(this,miv_star,storeIntroduceEntity.storeScore);
+            int i = TransformUtil.countRealWidth(this, 400);
+            Bitmap qrImage=BitmapUtil.createQRImage(storeIntroduceEntity.store_url,null,i);
+            miv_code.setImageBitmap(qrImage);
+            if (TextUtils.isEmpty(storeIntroduceEntity.storeLogo)){
+                miv_shop_head.setVisibility(View.GONE);
+            }else {
+                GlideUtils.getInstance().loadCircleAvar(this,miv_shop_head,storeIntroduceEntity.storeLogo);
+            }
+        }else {
+            seller_id = storeIntroduceEntity.seller_id;
+            storeLicensePresenter = new StoreLicensePresenter(this, this);
+            mllayout_one.setVisibility(View.VISIBLE);
+            mtv_title.setText(getStringResouce(R.string.store_yingyezhizhao));
+        }
     }
 
     @Override
@@ -111,4 +160,5 @@ public class StoreLicenseAct extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
+
 }

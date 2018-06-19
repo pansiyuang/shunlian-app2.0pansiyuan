@@ -2,14 +2,18 @@ package com.shunlian.app.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/11/14.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StoreIntroduceEntity {
+public class StoreIntroduceEntity implements Serializable{
     public String store_id;
+    public boolean isCode;
+    public String storeScore;
+    public String storeLogo;
     public String store_name;
     public String store_type;
     public String seller_id;
@@ -23,6 +27,7 @@ public class StoreIntroduceEntity {
     public String store_collect;
     public Evaluate evaluate;
     public String baseurl;
+    public String store_url;
 
     @Override
     public String toString() {
@@ -45,7 +50,7 @@ public class StoreIntroduceEntity {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Evaluate {
+    public static class Evaluate implements Serializable{
         public String praise_rate;
         public List<Pj> pj;
 
@@ -58,7 +63,7 @@ public class StoreIntroduceEntity {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Pj {
+        public static class Pj implements Serializable{
             public String name;
             public String score;
             public String explain;

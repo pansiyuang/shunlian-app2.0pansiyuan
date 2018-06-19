@@ -193,6 +193,7 @@ public class Common {
     }
 
     public static void goGoGo(Context context, String type, String... params) {
+        //params从第7个参数开始是聊天的参数
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         LogUtil.augusLogW("where---" + type);
         if (type == null) {
@@ -319,7 +320,7 @@ public class Common {
                 }
                 break;
             case "hotpush":
-                HotRecommendAct.startAct(context, params[0]);
+                HotRecommendAct.startAct(context, params[0],params[1]);
                 break;
             case "my":
             case "personCenter"://个人中心
@@ -371,14 +372,14 @@ public class Common {
 
                     ChatMemberEntity.ChatMember chatMember = new ChatMemberEntity.ChatMember();
 
-                    if (!"0".equals(params[2])) {//赋值shopId
-                        chatMember.shop_id = params[2];
-                    } else if (!"0".equals(params[3])) {
-                        chatMember.shop_id = params[3];
+                    if (!"0".equals(params[7])) {//赋值shopId
+                        chatMember.shop_id = params[7];
+                    } else if (!"0".equals(params[8])) {
+                        chatMember.shop_id = params[8];
                     }
-                    chatMember.nickname = params[4];
-                    chatMember.type = params[5];
-                    chatMember.m_user_id = params[7];
+                    chatMember.nickname = params[9];
+                    chatMember.type = params[10];
+                    chatMember.m_user_id = params[12];
 
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("chatMember", chatMember);

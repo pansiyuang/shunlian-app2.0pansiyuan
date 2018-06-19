@@ -172,9 +172,6 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     private boolean isExpand = true; //是否展开
     private ShareInfoParam mShareInfoParam = new ShareInfoParam();
 
-    public static void startAct(Context context) {
-        context.startActivity(new Intent(context, MyPlusAct.class));
-    }
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {

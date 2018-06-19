@@ -14,6 +14,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -121,6 +122,10 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.miv_favorite:
+                if (!Common.isAlreadyLogin()) {
+                    LoginAct.startAct(this);
+                    return;
+                }
                 if (currentFavoriteStatus == 1) {
                     mPresent.unFavoriteArticle(articleId);
                 } else {

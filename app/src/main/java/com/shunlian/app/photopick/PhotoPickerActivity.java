@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.io.File;
@@ -426,6 +427,10 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                     String imageName = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                     String imagePath = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
 
+                    if (!isPicFile(imagePath)) {
+                        continue;
+                    }
+
                     File file = new File(imagePath);
                     if (!file.exists() || file.length() <= 0) {
                         continue;
@@ -535,4 +540,13 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
+    public boolean isPicFile(String file) {
+        if (file.toLowerCase().endsWith(".jpg") || file.toLowerCase().endsWith(".jpeg") || file.toLowerCase().endsWith(".png")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

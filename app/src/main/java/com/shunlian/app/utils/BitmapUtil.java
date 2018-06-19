@@ -148,6 +148,7 @@ public class BitmapUtil {
             }
             return bitmap;
         } catch (Exception e) {
+            LogUtil.augusLogW("createQRImage---"+e);
             return null;
         }
     }

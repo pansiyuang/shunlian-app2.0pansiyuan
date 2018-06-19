@@ -202,7 +202,7 @@
         <!-- augus:4a85a233f140802d8ff97cff   ee43de8743a5ffe348cb1d88 -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="4a85a233f140802d8ff97cff" />
+            android:value="3cbe47ad444ddec83ea45d31" />
         <!--jpush-->
         <!-- 多渠道打包时改成360，因为360市场要上传原apk -->
         <meta-data
@@ -806,10 +806,10 @@
             android:name=".ui.confirm_order.PLUSConfirmOrderAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.plus.MyPlusAct"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".ui.plus.MyPlusAct"-->
+            <!--android:exported="false"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
             android:name=".ui.plus.SuperProductsAct"
             android:exported="false"

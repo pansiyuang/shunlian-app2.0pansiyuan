@@ -83,7 +83,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
 
     private PAishang pAishang;
     private HotPushAdapter hotPushAdapter;
-    private String hotId;
+    private String hotId,channeId;
     private boolean isMore=false;
     private ShareInfoParam shareInfoParam;
 
@@ -141,9 +141,10 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
-    public static void startAct(Context context,String hotId) {
+    public static void startAct(Context context,String hotId,String channeId) {
         Intent intent = new Intent(context, HotRecommendAct.class);
         intent.putExtra("hotId",hotId);
+        intent.putExtra("channeId",channeId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -180,7 +181,7 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
                 if (isScrollBottom){
                     if (pAishang != null) {
-                        pAishang.refreshBaby("push",hotId);
+                        pAishang.refreshBaby("push",hotId,channeId);
                     }
                 }
             }
@@ -193,8 +194,9 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         hotId=getIntent().getStringExtra("hotId");
+        channeId=getIntent().getStringExtra("channeId");
         pAishang = new PAishang(this, this);
-        pAishang.getHotRd(hotId);
+        pAishang.getHotRd(hotId,channeId);
 
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
         nei_empty.setButtonText(null);

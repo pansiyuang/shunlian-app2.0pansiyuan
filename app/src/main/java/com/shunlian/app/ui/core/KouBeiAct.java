@@ -153,7 +153,7 @@ public class KouBeiAct extends BaseActivity implements View.OnClickListener, IAi
                     int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
                         if (pAishang != null) {
-                            pAishang.refreshBaby("hot",cate_id);
+                            pAishang.refreshBaby("hot",cate_id,"");
                         }
                     }
                 }

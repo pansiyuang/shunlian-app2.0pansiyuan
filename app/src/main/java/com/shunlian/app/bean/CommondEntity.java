@@ -12,7 +12,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommondEntity implements Serializable{
     public String type;
+    public String share_code;
     public TypeData type_data;
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TypeData implements Serializable{
         public String id;

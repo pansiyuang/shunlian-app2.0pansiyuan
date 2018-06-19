@@ -119,7 +119,7 @@ public class TopicFragment extends BaseFragment implements IFoundTopicView, Base
         StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
         StoreMsgEntity.Body body = storeMsg.body;
         if (1 == body.expire) {
-            ArticleH5Act.startAct(getActivity(), storeMsg.id, ArticleH5Act.MODE_SONIC);
+            ArticleH5Act.startAct(getActivity(), body.id, ArticleH5Act.MODE_SONIC);
         } else {
             Common.staticToast("该文章已过期");
         }

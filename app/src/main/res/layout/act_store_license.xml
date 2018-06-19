@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +37,8 @@
         android:id="@+id/mllayout_one"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -112,4 +114,94 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:visibility="gone" />
+
+
+    <com.shunlian.app.widget.MyRelativeLayout
+        android:id="@+id/mrlayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_shop_share"
+        android:visibility="gone">
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:ll_control_adapter="true"
+            app:ll_control_width="600"
+            app:ll_margin_bottom="90"
+            app:ll_margin_top="156">
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="37.5dp"
+                android:maxLines="1"
+                android:textColor="@color/new_text"
+                android:textSize="18sp" />
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_star"
+                android:layout_width="67dp"
+                android:layout_height="13dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="16dp"/>
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                app:iv_control_adapter="true"
+                app:iv_control_height="400"
+                app:iv_control_width="400"
+                app:iv_margin_top="80" />
+
+
+            <com.shunlian.app.widget.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="长按或扫一扫，即刻进店购买"
+                android:textColor="@color/my_gray_one"
+                android:textSize="12sp" />
+
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_share_logo"
+                app:iv_control_adapter="true"
+                app:iv_control_height="55"
+                app:iv_control_width="235"
+                app:iv_margin_bottom="100"
+                app:iv_margin_top="90" />
+
+
+        </com.shunlian.app.widget.MyLinearLayout>
+
+        <com.shunlian.app.widget.MyLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/share_circle"
+            android:gravity="center"
+            app:ll_control_adapter="true"
+            app:ll_control_height="120"
+            app:ll_control_width="120"
+            app:ll_margin_top="90">
+
+            <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_shop_head"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="fitXY"/>
+
+        </com.shunlian.app.widget.MyLinearLayout>
+    </com.shunlian.app.widget.MyRelativeLayout>
 </com.shunlian.app.widget.MyLinearLayout>

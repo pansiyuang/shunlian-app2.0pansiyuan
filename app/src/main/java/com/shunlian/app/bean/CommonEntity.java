@@ -24,7 +24,7 @@ public class CommonEntity {
     public List<FootprintEntity.DateInfo> date_info;//足迹时间列表
     public int reception; //客服获取工作状态 1表示工作中，0不在工作中
 
-    public String tell;//帮助中心电话
+    public String telephone;//帮助中心电话
 
     //获取提现账户
     public String account_name;

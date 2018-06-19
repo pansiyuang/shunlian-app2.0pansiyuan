@@ -214,7 +214,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private MessageCountManager messageCountManager;
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew, initFirst;
-    private String storeId = "26", star;
+    private String storeId = "26", star,logo;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
@@ -537,7 +537,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startActForResult(this, storeId, star, isFocus);
+                StoreIntroduceAct.startActForResult(this, storeId, star,logo, isFocus);
                 break;
             case R.id.mllayout_search:
                 StoreSearchAct.startAct(this,storeId,"","","");
@@ -638,7 +638,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
     @Override
     public void storeHeader(StoreIndexEntity.Head head) {
-        GlideUtils.getInstance().loadImage(this, miv_storeLogo, head.decoration_logo);
+        logo = head.decoration_logo;
+        GlideUtils.getInstance().loadImage(this, miv_storeLogo, logo);
         GlideUtils.getInstance().loadBgImage(this, mrlayout_bg, head.decoration_banner);
         if ("false".equals(head.is_mark)) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
