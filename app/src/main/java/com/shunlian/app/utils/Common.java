@@ -56,10 +56,6 @@ import android.widget.Toast;
 
 import com.shunlian.app.App;
 import com.shunlian.app.R;
-import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.CommonEntity;
-import com.shunlian.app.bean.PlusDataEntity;
-import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.ui.MessageActivity;
@@ -96,19 +92,13 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.widget.BoldTextSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.app.wxapi.WXEntryPresenter;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.RequestBody;
-import retrofit2.Call;
 
 /**
  * Created by zhang on 2017/4/14 11 : 42.
@@ -960,6 +950,7 @@ public class Common {
         if (!TextUtils.isEmpty(shareLink)) {
             sb.append(shareLink);
         }
+        sb.append("复制这条信息，打开顺联APP~");
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
         staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);

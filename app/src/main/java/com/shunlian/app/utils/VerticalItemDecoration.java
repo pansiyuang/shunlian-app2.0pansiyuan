@@ -67,6 +67,7 @@ public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
             final int top = child.getBottom() + layoutParams.bottomMargin;
             final int bottom = top + space;
+            if (i + 1 == childSize)break;
             if (mPaint != null) {
                 canvas.drawRect(left, top, right, bottom, mPaint);
             }

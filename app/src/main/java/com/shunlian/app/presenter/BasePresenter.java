@@ -213,7 +213,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         tCall.enqueue(new Callback<BaseEntity<T>>() {
             @Override
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
-                if (httpDialog != null){
+                if (httpDialog != null && isLoading){
                     httpDialog.dismiss();
                 }
                 BaseEntity<T> body = response.body();
@@ -246,7 +246,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
             @Override
             public void onFailure(Call<BaseEntity<T>> call, Throwable t) {
-                if (httpDialog != null){
+                if (httpDialog != null && isLoading){
                     httpDialog.dismiss();
                 }
                 if (t != null)

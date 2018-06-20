@@ -1,7 +1,6 @@
 package com.shunlian.app.utils;
 
 import android.app.Activity;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -638,9 +637,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(getContext(),
-                miv_user_head,mShareInfoParam.userAvatar);
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
+
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
         mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
@@ -671,11 +669,30 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_shop_name.setText(mShareInfoParam.shop_name);
 
         CircleImageView miv_shop_head = (CircleImageView) inflate.findViewById(R.id.civ_shop_head);
-        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
-            miv_shop_head.setVisibility(GONE);
-            savePic(inflate);
-            return;
-        }
+
+        GlideUtils.getInstance().loadBitmapSync(getContext(), mShareInfoParam.userAvatar,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+
+                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
+                            miv_shop_head.setVisibility(GONE);
+                            savePic(inflate);
+                        }else {
+                            shopPic(inflate, miv_shop_head);
+                        }
+                    }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+    private void shopPic(View inflate, CircleImageView miv_shop_head) {
         GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.shop_logo,
                 new SimpleTarget<Bitmap>() {
                     @Override
@@ -709,9 +726,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(getContext(),
-                miv_user_head,mShareInfoParam.userAvatar);
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
+
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
         mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
@@ -763,6 +779,24 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         }
 
         MyImageView miv_goods_pic = (MyImageView) inflate.findViewById(R.id.miv_goods_pic);
+        GlideUtils.getInstance().loadBitmapSync(getContext(), mShareInfoParam.userAvatar,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+
+                        goodsPic(inflate, miv_goods_pic);
+                    }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+    private void goodsPic(View inflate, MyImageView miv_goods_pic) {
         GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
                 new SimpleTarget<Bitmap>() {
                     @Override
@@ -807,8 +841,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(mContext,miv_user_head,mShareInfoParam.userAvatar);
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
+
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
         mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
@@ -837,6 +871,24 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         layoutParams.width = ints[0];
         layoutParams.height = ints[1];
 
+        GlideUtils.getInstance().loadBitmapSync(getContext(), mShareInfoParam.userAvatar,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+
+                        findPic(inflate, miv_bigpic, miv_smallpic);
+                    }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
+    }
+
+    private void findPic(View inflate, RoundRectImageView miv_bigpic, MyImageView miv_smallpic) {
         GlideUtils.getInstance().loadBitmapSync(mContext, mShareInfoParam.img,
                 new SimpleTarget<Bitmap>() {
                     @Override

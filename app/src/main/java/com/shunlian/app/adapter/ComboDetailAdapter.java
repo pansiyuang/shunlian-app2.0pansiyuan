@@ -128,12 +128,9 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 mHolder.view_line.setVisibility(View.VISIBLE);
             }
 
-            adapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    GoodsDeatilEntity.Goods goods = othersCombo.goods.get(position);
-                    ComboDetailAct.startAct(context,othersCombo.combo_id,goods.goods_id);
-                }
+            adapter.setOnItemClickListener((view, position1) -> {
+                GoodsDeatilEntity.Goods goods = othersCombo.goods.get(position1);
+                ComboDetailAct.startAct(context,othersCombo.combo_id,goods.goods_id);
             });
         }
     }
@@ -230,6 +227,8 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
             String has_option = goods.goods_info.has_option;
             if ("0".equals(has_option)){
                 gone(mHolder.mtv_select);
+                priceMap.put(String.valueOf(position - 2),goods.price);
+                marketPriceMap.put(String.valueOf(position - 2),goods.old_price);
             }else {
                 visible(mHolder.mtv_select);
             }
@@ -341,8 +340,10 @@ public class ComboDetailAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 if (sku != null && sku.name != null) {
                     name = sku.name ;
                     priceMap.put(String.valueOf(getAdapterPosition() -2),sku.price);
-                    marketPriceMap.put(String.valueOf(getAdapterPosition() -2),sku.market_price);
-                    notifyItemChanged(1);
+                    marketPriceMap.put(String.valueOf(getAdapterPosition() -2),sku.old_price);
+                    if (priceMap != null && priceMap.size() == mEntity.current_combo.goods.size()){
+                        notifyItemChanged(1);
+                    }
                 }
                 mtv_select.setText("已选择:".concat(name));
                 if (mParamsListener != null){
