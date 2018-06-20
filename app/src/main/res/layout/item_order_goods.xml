@@ -46,7 +46,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mtv_goods_title"
         android:layout_below="@+id/mtv_goods_title"
+        android:layout_toLeftOf="@+id/mtv_goods_count"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@color/share_text"
         android:textSize="12sp" />
 

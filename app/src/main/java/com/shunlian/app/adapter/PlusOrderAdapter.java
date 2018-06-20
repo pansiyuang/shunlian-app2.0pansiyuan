@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.PlusOrderEntity;
+import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.plus.PlusLogisticsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -84,7 +85,7 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
         }
         orderViewHolder.tv_logistics.setOnClickListener(v -> {
             //查看物流信息
-            PlusLogisticsDetailAct.startAct(context, plusOrder.product_id,"4");
+            OrderLogisticsActivity.startAct(context, plusOrder.product_order_id,"4");
         });
     }
 

@@ -67,6 +67,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
     private MessageCountManager messageCountManager;
     private MemberStatus currentMemberStatus = MemberStatus.Member;
+    private OnSwitchStatusListener switchStatusListener;
 
     /**
      * 单例模式获取实例
@@ -93,8 +94,14 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         if (isInit) { //初始化过了就无需初始化了
             return;
         }
-        objectMapper = new ObjectMapper();
-        messageReceiveListeners = new ArrayList<>();
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
+        if (messageReceiveListeners == null) {
+            messageReceiveListeners = new ArrayList<>();
+        } else {
+            messageReceiveListeners.clear();
+        }
         messageCountManager = MessageCountManager.getInstance(mContext);
         buildeWebsocketClient();
     }
@@ -526,6 +533,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                 break;
         }
         SharedPrefUtil.saveSharedPrfString("user_id", mUser.user_id);
+        if (switchStatusListener != null) {
+            switchStatusListener.switchSuccess(roleType);
+        }
     }
 
     public MemberStatus getMemberStatus() {
@@ -720,6 +730,18 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         mHandler.removeCallbacks(mReconnectTask);
     }
 
+    /**
+     * 断开IM链接
+     */
+    public void logout() {
+        isInit = false;
+        mStatus = Status.DISCONNECTED;
+        stopPin();
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
     public void addOnMessageReceiveListener(OnMessageReceiveListener listener) {
         if (messageReceiveListeners == null) {
             return;
@@ -732,6 +754,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             return;
         }
         messageReceiveListeners.remove(listener);
+    }
+
+    public void setOnSwitchStatusListener(OnSwitchStatusListener listener) {
+        switchStatusListener = listener;
     }
 
     public interface OnMessageReceiveListener {
@@ -750,5 +776,11 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         void onLine();
 
         void logout();
+    }
+
+    public interface OnSwitchStatusListener {
+
+        void switchSuccess(String roleType);
+
     }
 }

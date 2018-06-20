@@ -129,6 +129,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("chatMember", chatMember);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -136,6 +137,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("chatMember", chatMember);
         intent.putExtra("goods", goodsDeatilEntity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
