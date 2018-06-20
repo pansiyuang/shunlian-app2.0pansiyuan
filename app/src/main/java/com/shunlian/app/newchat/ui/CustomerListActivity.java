@@ -130,8 +130,8 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
 
     @Override
     public void getUserList(List<ChatMemberEntity.ChatMember> member) {
+        chatMemberList.clear();
         if (!isEmpty(member)) {
-            chatMemberList.clear();
             chatMemberList.addAll(member);
         }
         if (mAdapter == null) {

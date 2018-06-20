@@ -194,7 +194,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         for (MsgInfo info : infos) {
             addMsgInfo(position, info);
         }
-        ((Activity) context).runOnUiThread(() -> notifyItemRangeInserted(position,infos.size()));
+        ((Activity) context).runOnUiThread(() -> notifyItemRangeInserted(position, infos.size()));
     }
 
     public void updateEvaluateStatus(EvaluateEntity evaluateEntity) {
@@ -547,6 +547,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         EvaluateMessage evaluateMessage = (EvaluateMessage) baseMessage;
         EvaluateViewHolder evaluateViewHolder = (EvaluateViewHolder) holder;
         EvaluateMessage.EvaluateMessageBody evaluateMessageBody;
+
+        if (memberStatus == MemberStatus.Admin || memberStatus == MemberStatus.Seller) {//平台和商家不能评星
+            evaluateViewHolder.ratingBar.setEnabled(false);
+            evaluateViewHolder.tv_comment_status.setEnabled(false);
+        }
+
         if (evaluateMessage.msg_body != null) {
             evaluateMessageBody = evaluateMessage.msg_body;
             if (evaluateMessageBody.evaluate != null) {

@@ -2,7 +2,6 @@ package com.shunlian.app.newchat.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -97,9 +96,9 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         if (mClient.getUser() != null) {
             mUser = mClient.getUser();
             if (mClient.getMemberStatus() == MemberStatus.Admin) {
-                mPresenter.getTransferChatUserList("1", "", chatUserId);
+                mPresenter.getTransferChatUserList("1", "", currentUserId);
             } else if (mClient.getMemberStatus() == MemberStatus.Seller) {
-                mPresenter.getTransferChatUserList("2", mUser.shop_id, chatUserId);
+                mPresenter.getTransferChatUserList("2", mUser.shop_id, currentUserId);
             }
         }
 
@@ -126,6 +125,7 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
 
     @Override
     public void getMemberList(List<ChatMemberEntity.ChatMember> memberList, String serviceNum) {
+        chatMemberList.clear();
         if (!isEmpty(memberList)) {
             chatMemberList.addAll(memberList);
         }
@@ -136,6 +136,7 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
             mAdapter.setOnItemClickListener(this);
             recycler_list.setAdapter(mAdapter);
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
