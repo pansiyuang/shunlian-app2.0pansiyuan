@@ -1061,6 +1061,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
         if (goodsDetailPresenter != null){
             quick_actions.shareInfo(goodsDetailPresenter.getShareInfoParam());
+            goodsDetailPresenter.copyText(false);
             quick_actions.saveshareGoodsPic();
         }
     }
@@ -1072,7 +1073,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             return;
         }
         if (goodsDetailPresenter != null){
-            goodsDetailPresenter.copyText();
+            goodsDetailPresenter.copyText(true);
         }
         moreHideAnim();
     }

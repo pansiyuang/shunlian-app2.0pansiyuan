@@ -207,7 +207,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                Common.copyText(PingpaiListAct.this,mShareInfoParam.shareLink,mShareInfoParam.desc);
+                                Common.copyText(PingpaiListAct.this,mShareInfoParam.shareLink,mShareInfoParam.desc,true);
                                 break;
                         }
                     }

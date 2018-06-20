@@ -942,7 +942,7 @@ public class Common {
         return resid;
     }
 
-    public static void copyText(Context context, String shareLink, String shareDesc) {
+    public static void copyText(Context context, String shareLink, String shareDesc,boolean isToast) {
         StringBuffer sb = new StringBuffer();
         sb.setLength(0);
 //        if (!TextUtils.isEmpty(shareTitle)) {
@@ -956,9 +956,11 @@ public class Common {
         if (!TextUtils.isEmpty(shareLink)) {
             sb.append(shareLink);
         }
+        if (!TextUtils.isEmpty(shareLink)&&shareLink.contains("slAppWord"))
         sb.append("复制这条信息，打开顺联APP~");
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
+        if (isToast)
         staticToasts(context, "复制链接成功", R.mipmap.icon_common_duihao);
         Constant.SHARE_LINK = sb.toString();
     }

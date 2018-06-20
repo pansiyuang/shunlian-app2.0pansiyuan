@@ -671,6 +671,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         shareInfoParam.shop_star = head.star;
         shareInfoParam.userName = head.nickname;
         shareInfoParam.userAvatar = head.avatar;
+        shareInfoParam.desc=head.decoration_name;
     }
 
     @Override

@@ -485,7 +485,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                             case 1:
                                 mllayout_content.setVisibility(VISIBLE);
-                                copyText();
+                                copyText(true);
                                 hide();
                                 break;
                         }
@@ -533,6 +533,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 hide();
                                 break;
                             case 1:
+                                copyText(false);
                                 shareType=type;
                                 shareId=id;
                                 mllayout_content.setVisibility(VISIBLE);
@@ -550,7 +551,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                             case 2:
                                 mllayout_content.setVisibility(VISIBLE);
-                                copyText();
+                                copyText(true);
                                 hide();
                                 break;
                         }
@@ -590,6 +591,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 hide();
                                 break;
                             case 1:
+                                copyText(false);
                                 mllayout_content.setVisibility(VISIBLE);
                                 if (textPicState == 1)//店铺分享
                                     saveshareShopPic();
@@ -605,7 +607,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 break;
                             case 2:
                                 mllayout_content.setVisibility(VISIBLE);
-                                copyText();
+                                copyText(true);
                                 hide();
                                 break;
                         }
@@ -944,8 +946,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
     }
 
 
-    private void copyText() {
-        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.desc);
+    public void copyText(boolean isToast) {
+        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.desc,isToast);
     }
 
 

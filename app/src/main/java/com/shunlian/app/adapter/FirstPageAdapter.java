@@ -616,6 +616,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     TenHolder tenHolder = (TenHolder) holder;
                     GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
                     GlideUtils.getInstance().loadImageZheng(context, tenHolder.miv_photo, goods.thumb);
+                    if (tenHolder.mtv_title!=null)
                     tenHolder.mtv_title.setText(goods.title);
                     if (!isEmpty(goods.price)){
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
@@ -677,7 +678,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc);
+                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc,true);
                                 break;
                         }
                     }

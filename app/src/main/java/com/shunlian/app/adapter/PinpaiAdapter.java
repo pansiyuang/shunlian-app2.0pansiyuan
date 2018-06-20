@@ -94,7 +94,7 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
                                         "shareFriend", mShareInfoParam);
                                 break;
                             case 1:
-                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc);
+                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc,true);
                                 break;
                         }
                     }

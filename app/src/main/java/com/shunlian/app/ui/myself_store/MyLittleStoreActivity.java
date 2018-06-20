@@ -130,7 +130,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                             WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
                             break;
                         case 1:
-                            Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc);
+                            Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc,true);
                             break;
                         case 2:
                             GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
