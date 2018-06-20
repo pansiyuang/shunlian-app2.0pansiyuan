@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
 
@@ -72,6 +73,7 @@ public class SwitchHostUtil {
                 Common.clearLoginInfo();
                 JpushUtil.setJPushAlias();
                 Constant.JPUSH = null;
+                EasyWebsocketClient.getInstance(activity).logout();
 //                Common.goGoGo(activity, "");
                 LoginAct.startAct(activity);
                 activity.finish();

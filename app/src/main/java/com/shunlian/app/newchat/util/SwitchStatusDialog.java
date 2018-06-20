@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.widget.MyTextView;
@@ -25,7 +26,7 @@ public class SwitchStatusDialog implements View.OnClickListener {
 
     public SwitchStatusDialog(Context context) {
         mContext = context;
-        dialog = new Dialog(context, R.style.Mydialog);
+        dialog = new Dialog(mContext, R.style.Mydialog);
         dialog.setContentView(R.layout.dialog_common);
         initView(dialog);
         setCancelable(false);

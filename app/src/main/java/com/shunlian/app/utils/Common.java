@@ -59,6 +59,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.ui.MessageActivity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.activity.DayDayAct;
@@ -364,7 +365,7 @@ public class Common {
                 break;
             case "chat"://聊天
 
-//                Common.goGoGo(context, toPage, id, id1, to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
+//               Common.goGoGo(context, toPage, id, id1,id2, id3,id4, id5,id6,to_shop_id, from_shop_id, from_nickname, from_type, to_type, from_user_id, to_user_id);
 
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
@@ -381,10 +382,8 @@ public class Common {
                     chatMember.type = params[10];
                     chatMember.m_user_id = params[12];
 
-                    Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra("chatMember", chatMember);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    //0，普通用户，1平台客服管理员，2平台普通客服，3商家客服管理员，4商家普通客服
+                    ChatManager.getInstance(context).init().switch2jumpChat(params[10], params[11], chatMember);
                 }
                 break;
             default://首页

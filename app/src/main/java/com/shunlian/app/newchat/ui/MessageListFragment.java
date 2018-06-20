@@ -17,6 +17,7 @@ import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
@@ -52,6 +53,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     private MemberStatus mStatus;
     private ObjectMapper mObjectMapper;
     private String currentUserId;
+    private ChatManager chatManager;
 
     public static MessageListFragment getInstance() {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -99,6 +101,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
                 statusDialog.dismiss();
             }
         });
+        chatManager = ChatManager.getInstance(getActivity()).init();
     }
 
     public void resetData() {
@@ -216,6 +219,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void onItemClick(View view, int position) {
+        chatManager.resetPushMode();
         if (!isEmpty(msgs)) {
             if (!mClient.isMember()) {
                 mStatus = MemberStatus.Member;
@@ -241,6 +245,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void OnSellerClick() {
+        chatManager.resetPushMode();
         if (!mClient.isSeller()) {
             mStatus = MemberStatus.Seller;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Member, MemberStatus.Seller).show();
@@ -251,6 +256,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
 
     @Override
     public void OnAdminClick() {
+        chatManager.resetPushMode();
         if (!mClient.isAdmin()) {
             mStatus = MemberStatus.Admin;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Member, MemberStatus.Admin).show();

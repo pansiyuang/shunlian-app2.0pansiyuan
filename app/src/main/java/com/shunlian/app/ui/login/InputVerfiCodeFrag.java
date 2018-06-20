@@ -17,6 +17,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseFragment;
@@ -213,6 +214,9 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
             ,Constant.JPUSH.get(3),Constant.JPUSH.get(4),Constant.JPUSH.get(5),Constant.JPUSH.get(6),Constant.JPUSH.get(7)
             ,Constant.JPUSH.get(8),Constant.JPUSH.get(9),Constant.JPUSH.get(10),Constant.JPUSH.get(11),Constant.JPUSH.get(12));
         }
+
+        EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
+
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
         }
