@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.DiscoveryCircleEntity;
 import com.shunlian.app.bean.DiscoveryCommentListEntity;
 import com.shunlian.app.presenter.PADiscoverSucaiku;
 import com.shunlian.app.utils.GlideUtils;
@@ -16,7 +15,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IADiscoverSucaiku;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -73,8 +71,8 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
         viewHolder.mtv_name.setText(content.nickname);
         viewHolder.mtv_zan_count.setText(content.likes);
         viewHolder.mtv_time.setText(content.add_time);
-        viewHolder.mtv_content.setText(content.content);;
-        GlideUtils.getInstance().loadCircleImage(context,viewHolder.civ_head,content.avatar);
+        viewHolder.mtv_content.setText(content.content);
+        GlideUtils.getInstance().loadCircleHeadImage(context,viewHolder.civ_head,content.avatar);
     }
 
     @Override
@@ -129,7 +127,7 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
         MyTextView mtv_content;
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.miv_vip)
         MyImageView miv_vip;
