@@ -3,15 +3,13 @@
     android:id="@+id/ll_rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_onel"
         android:layout_width="match_parent"
         android:layout_height="185dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/icon_login_logo" />
+        android:scaleType="centerCrop"/>
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_descl"
@@ -22,7 +20,6 @@
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:lines="2"
-        android:text="第三方的身份是"
         android:textColor="@color/my_gray_three"
         android:textSize="12sp" />
 
@@ -49,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/mtv_yuanl"
-            android:text="9999"
             android:textColor="@color/pink_color"
             android:textSize="15sp" />
 
@@ -59,7 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"
             android:layout_toRightOf="@id/mtv_pricel"
-            android:text="9999"
             android:textColor="@color/share_text"
             android:textSize="11sp" />
 

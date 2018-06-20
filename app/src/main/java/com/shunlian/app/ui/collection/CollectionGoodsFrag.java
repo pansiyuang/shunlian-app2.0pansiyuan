@@ -141,7 +141,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                     goods.isSelect = false;
                 }
             }
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0,goodsLists.size(),goodsLists);
             isAllSelect = !isAllSelect;
         }
     }
@@ -154,7 +154,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         for (CollectionGoodsEntity.Goods goods : goodsLists) {
             goods.isSelect = false;
         }
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemRangeChanged(0,goodsLists.size(),goodsLists);
         isAllSelect = false;
         gone(flayout_category);
     }
@@ -166,7 +166,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
     public void finishManage() {
         if (adapter != null){
             adapter.isShowSelect = false;
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0,goodsLists.size(),goodsLists);
             isAllSelect = false;
         }
     }
@@ -236,6 +236,8 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         gone(flayout_category);
         mPresenter.setCateOrIscut(null,"1");
         mPresenter.sort();
+        isAllSelect = false;
+        ((MyCollectionAct) baseActivity).recoveryManage(this);
     }
 
     /**
@@ -267,7 +269,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                 CollectionGoodsEntity.Goods goods = goodsLists.get(position);
                 if (adapter.isShowSelect) {
                     goods.isSelect = !goods.isSelect;
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemChanged(position,goods);
                     ((MyCollectionAct) baseActivity).setManageState(selectState());
                 }else {
                     GoodsDetailAct.startAct(baseActivity,goods.goods_id);
@@ -342,6 +344,7 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
                 background.setColor(getColorResouce(R.color.white));
                 mtv_cut_price.setTextColor(getColorResouce(R.color.new_text));
                 isAllSelect = false;
+                ((MyCollectionAct) baseActivity).recoveryManage(this);
             });
         }
     }

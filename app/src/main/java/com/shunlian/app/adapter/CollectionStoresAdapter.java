@@ -57,6 +57,28 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
         baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads) && holder instanceof CollectionStoresHolder){
+            CollectionStoresHolder mHolder = (CollectionStoresHolder) holder;
+            CollectionStoresEntity.Store store = null;
+            if (payloads.get(0) instanceof CollectionStoresEntity.Store){
+                store = (CollectionStoresEntity.Store) payloads.get(0);
+            }else {
+                List<CollectionStoresEntity.Store>
+                        goodsList = (List<CollectionStoresEntity.Store>) payloads.get(0);
+                store = goodsList.get(position);
+            }
+            if (store.isSelect){
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            }else {
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            }
+        }else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
     /**
      * 处理列表
      *
@@ -68,7 +90,8 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
         if (holder instanceof CollectionStoresHolder) {
             CollectionStoresHolder mHolder = (CollectionStoresHolder) holder;
             CollectionStoresEntity.Store store = lists.get(position);
-            GlideUtils.getInstance().loadImage(context, mHolder.miv_goods_pic, store.store_avatar);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHolder.miv_goods_pic, store.store_avatar,100,100);
             GlideUtils.getInstance().loadImage(context, mHolder.miv_star, store.star);
             mHolder.mtv_title.setText(store.store_name);
             mHolder.mtv_nice.setText(getString(R.string.collection_haopinglv)+store.nice_rate);
@@ -105,8 +128,10 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
             if (Integer.parseInt(store.new_count)>9){
                 mHolder.mtv_new.setText(getString(R.string.collection_shangxin)+" 9");
                 mHolder.mtv_add.setVisibility(View.VISIBLE);
-                StoreGoodsAdapter storeGoodsAdapter=new StoreGoodsAdapter(context,false,store.new_goods,store.store_id,true);
-                mHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+                StoreGoodsAdapter storeGoodsAdapter=new StoreGoodsAdapter(context,
+                        false,store.new_goods,store.store_id,true);
+                mHolder.rv_goods.setLayoutManager(new LinearLayoutManager
+                        (context,LinearLayoutManager.HORIZONTAL,false));
                 mHolder.rv_goods.setAdapter(storeGoodsAdapter);
                 storeGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -119,8 +144,10 @@ public class CollectionStoresAdapter extends BaseRecyclerAdapter<CollectionStore
                 mHolder.miv_arrow.setVisibility(View.GONE);
             }else {
                 mHolder.mtv_new.setText(getString(R.string.collection_shangxin)+" "+store.new_count);
-                StoreGoodsAdapter storeGoodsAdapter=new StoreGoodsAdapter(context,false,store.new_goods,store.store_id,false);
-                mHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+                StoreGoodsAdapter storeGoodsAdapter=new StoreGoodsAdapter
+                        (context,false,store.new_goods,store.store_id,false);
+                mHolder.rv_goods.setLayoutManager(new LinearLayoutManager
+                        (context,LinearLayoutManager.HORIZONTAL,false));
                 mHolder.rv_goods.setAdapter(storeGoodsAdapter);
                 storeGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override

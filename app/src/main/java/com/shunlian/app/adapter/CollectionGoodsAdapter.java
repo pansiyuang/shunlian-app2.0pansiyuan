@@ -62,6 +62,28 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
         baseFooterHolder.mtv_loading.setTextSize(12);
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads) && holder instanceof CollectionGoodsHolder){
+            CollectionGoodsHolder mHolder = (CollectionGoodsHolder) holder;
+            CollectionGoodsEntity.Goods goods = null;
+            if (payloads.get(0) instanceof CollectionGoodsEntity.Goods){
+                goods = (CollectionGoodsEntity.Goods) payloads.get(0);
+            }else {
+                List<CollectionGoodsEntity.Goods>
+                        goodsList = (List<CollectionGoodsEntity.Goods>) payloads.get(0);
+                goods = goodsList.get(position);
+            }
+            if (goods.isSelect){
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
+            }else {
+                mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
+            }
+        }else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
     /**
      * 处理列表
      *
@@ -73,7 +95,8 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
         if (holder instanceof CollectionGoodsHolder) {
             CollectionGoodsHolder mHolder = (CollectionGoodsHolder) holder;
             CollectionGoodsEntity.Goods goods = lists.get(position);
-            GlideUtils.getInstance().loadImage(context, mHolder.miv_goods_pic, goods.thumb);
+            GlideUtils.getInstance().loadOverrideImage(context,
+                    mHolder.miv_goods_pic, goods.thumb,220,220);
             mHolder.mtv_title.setText(goods.title);
             String source = getString(R.string.rmb).concat(goods.price);
             mHolder.mtv_price.setText(Common.changeTextSize(source, getString(R.string.rmb), 12));
@@ -122,11 +145,11 @@ public class CollectionGoodsAdapter extends BaseRecyclerAdapter<CollectionGoodsE
                 mHolder.swipeMenuLayout.setSwipeEnable(true);
                 mHolder.miv_select.setVisibility(View.GONE);
             }
-            if (goods.isSelect){
+            /*if (goods.isSelect){
                 mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
             }else {
                 mHolder.miv_select.setImageResource(R.mipmap.img_shoppingcar_selected_n);
-            }
+            }*/
         }
     }
 

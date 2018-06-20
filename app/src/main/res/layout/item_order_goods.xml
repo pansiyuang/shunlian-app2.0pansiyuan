@@ -23,6 +23,7 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="11sp"
+        android:visibility="gone"
         app:tv_control_adapter="true"
         app:tv_control_height="40"
         app:tv_control_width="140" />
