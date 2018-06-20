@@ -1,12 +1,17 @@
 package com.shunlian.app.newchat.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 
+import com.shunlian.app.App;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
+import com.shunlian.app.newchat.websocket.Status;
+import com.shunlian.app.utils.LogUtil;
 
 /**
  * Created by Administrator on 2018/5/7.
@@ -19,11 +24,13 @@ public class ChatManager {
     private SwitchStatusDialog statusDialog;
     private EasyWebsocketClient mClient;
     private MemberStatus mStatus;
+    private ChatMemberEntity.ChatMember currentChatMember;
+    private boolean isPush = false;
 
     public static ChatManager getInstance(Context context) {
         mContext = context;
         if (chatManager == null) {
-            synchronized (MessageCountManager.class) {
+            synchronized (ChatManager.class) {
                 if (chatManager == null) {
                     chatManager = new ChatManager();
                 }
@@ -34,7 +41,6 @@ public class ChatManager {
 
     public ChatManager init() {
         mClient = EasyWebsocketClient.getInstance(mContext);
-
         statusDialog = new SwitchStatusDialog(mContext).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
             public void OnClickSure() {
@@ -47,7 +53,16 @@ public class ChatManager {
                 statusDialog.dismiss();
             }
         });
+        mClient.setOnSwitchStatusListener(roleType -> {
+            if (isPush) {
+                ChatActivity.startAct(mContext, currentChatMember);
+            }
+        });
         return this;
+    }
+
+    public void resetPushMode() {
+        isPush = false;
     }
 
     /**
@@ -61,6 +76,7 @@ public class ChatManager {
      * 用户和商家聊天
      */
     public void MemberChatToStore(ChatMemberEntity.ChatMember chatMember, GoodsDeatilEntity goodsDeatilEntity) {
+        isPush = false;
         if (!mClient.isMember()) {
             mStatus = MemberStatus.Member;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
@@ -97,11 +113,59 @@ public class ChatManager {
      * 用户和平台聊天
      */
     public void MemberChat2Platform(ChatMemberEntity.ChatMember chatMember) {
+        isPush = false;
         if (!mClient.isMember()) {
             mStatus = MemberStatus.Seller;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Admin, MemberStatus.Member).show();
         } else {
             ChatActivity.startAct(mContext, chatMember);
+        }
+    }
+
+
+    public void switch2jumpChat(String fromType, String toType, ChatMemberEntity.ChatMember chatMember) {
+        if (TextUtils.isEmpty(fromType) || TextUtils.isEmpty(toType) || chatMember == null) {
+            return;
+        }
+        isPush = true;
+        currentChatMember = chatMember;
+        switch (fromType) {
+            case "0":
+                switch (toType) {
+                    case "1":
+                    case "2":
+                        if (!mClient.isAdmin()) {
+                            mClient.switchStatus(MemberStatus.Admin);
+                        } else {
+                            ChatActivity.startAct(mContext, currentChatMember);
+                        }
+                        break;
+                    case "3":
+                    case "4":
+                        if (!mClient.isSeller()) {
+                            mClient.switchStatus(MemberStatus.Seller);
+                        } else {
+                            ChatActivity.startAct(mContext, currentChatMember);
+                        }
+                        break;
+                }
+                break;
+            case "1":
+            case "2":
+                if (!mClient.isMember()) {
+                    mClient.switchStatus(MemberStatus.Member);
+                } else {
+                    ChatActivity.startAct(mContext, currentChatMember);
+                }
+                break;
+            case "3":
+            case "4":
+                if (!mClient.isMember()) {
+                    mClient.switchStatus(MemberStatus.Member);
+                } else {
+                    ChatActivity.startAct(mContext, currentChatMember);
+                }
+                break;
         }
     }
 }
