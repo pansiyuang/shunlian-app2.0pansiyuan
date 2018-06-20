@@ -95,9 +95,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (!(this instanceof ConfirmOrderAct) &&
                 !(this instanceof PayListActivity) &&
                 !(this instanceof SearchGoodsActivity)) {
-            if (commondDialog==null)
-                commondDialog=new CommondDialog(this);
-            commondDialog.parseCommond();
+            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            if (!isEmpty(cm.getText())) {
+                if (commondDialog == null)
+                    commondDialog = new CommondDialog(this);
+                commondDialog.parseCommond();
+            }
         }
         super.onRestart();
     }
@@ -228,6 +231,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     public void showPopup(boolean isShow){
+        if (!isShow && dialogLists.size() == 0)return;
         boolean b = dialogLists.containsKey(this.hashCode());
         if (!b){
             NetDialog netDialog = new NetDialog(this);
