@@ -1,6 +1,7 @@
 package com.shunlian.app.newchat.websocket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -16,11 +17,10 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.StatusEntity;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
-import com.shunlian.app.newchat.util.ChatToast;
+import com.shunlian.app.newchat.util.ChatDialog;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -109,6 +109,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void buildeWebsocketClient() {
         try {
             mClient = null;
+            LogUtil.httpLogW("HTTPADDR_IM:" + InterentTools.HTTPADDR_IM);
             mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086
             mClient.setOnClientConnetListener(this);
             mClient.connect();
@@ -205,7 +206,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 //                        new Thread() {
 //                            public void run() {
 //                                Looper.prepare();
-//                                ChatToast.MakeText(App.getContext(), "", true).show();
+//                                Intent intent = new Intent(App.getContext(), ChatDialog.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                App.getContext().startActivity(intent);
 //                                Looper.loop();// 进入loop中的循环，查看消息队列
 //                            }
 //                        }.start();

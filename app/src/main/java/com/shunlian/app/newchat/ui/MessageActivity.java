@@ -129,15 +129,14 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         tv_sys_title.setSelected(true);
         tv_store_title.setSelected(false);
 
-        tv_sys_count.setVisibility(View.GONE);
-        tv_store_count.setVisibility(View.VISIBLE);
-
-        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
-            tv_store_count.setVisibility(View.GONE);
+        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+            tv_sys_count.setVisibility(View.GONE);
         } else {
-            tv_store_count.setVisibility(View.VISIBLE);
-            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+            tv_sys_count.setVisibility(View.VISIBLE);
         }
+
+        tv_store_count.setVisibility(View.GONE);
 
         line_sys.setBackgroundColor(getColorResouce(R.color.pink_color));
         line_store.setBackgroundColor(getColorResouce(R.color.light_gray_two));
@@ -147,15 +146,14 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         tv_sys_title.setSelected(false);
         tv_store_title.setSelected(true);
 
-        tv_sys_count.setVisibility(View.VISIBLE);
-        tv_store_count.setVisibility(View.GONE);
-
-        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-            tv_sys_count.setVisibility(View.GONE);
+        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
+            tv_store_count.setVisibility(View.GONE);
         } else {
-            tv_sys_count.setVisibility(View.VISIBLE);
-            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+            tv_store_count.setVisibility(View.VISIBLE);
         }
+
+        tv_sys_count.setVisibility(View.GONE);
 
         line_sys.setBackgroundColor(getColorResouce(R.color.light_gray_two));
         line_store.setBackgroundColor(getColorResouce(R.color.pink_color));
