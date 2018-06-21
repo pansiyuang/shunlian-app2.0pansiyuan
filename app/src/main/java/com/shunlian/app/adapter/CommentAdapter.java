@@ -24,7 +24,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.flowlayout.FlowLayout;
 import com.shunlian.app.widget.flowlayout.TagAdapter;
@@ -184,7 +183,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.mtv_content.setText(data.content);
             }
 
-            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,data.avatar);
+            GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,data.avatar);
             Bitmap bitmap = TransformUtil.convertNewVIP(context, data.level);
             mHolder.miv_vip.setImageBitmap(bitmap);
             if ("1".equals(data.member_role)){//精英
@@ -295,7 +294,7 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
     public class CommentHolder extends BaseRecyclerViewHolder{
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_nickname)
         MyTextView mtv_nickname;

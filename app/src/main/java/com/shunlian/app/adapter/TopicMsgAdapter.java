@@ -55,7 +55,7 @@ public class TopicMsgAdapter extends BaseRecyclerAdapter<StoreMsgEntity.StoreMsg
                 TopicMsgViewHolder topicMsgViewHolder = (TopicMsgViewHolder) holder;
                 StoreMsgEntity.StoreMsg storeMsg = lists.get(0);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) topicMsgViewHolder.tv_date.getLayoutParams();
-                if (storeMsg.is_read == 1) { //已读
+                if (1==storeMsg.is_read ) { //已读
                     topicMsgViewHolder.miv_point.setVisibility(View.GONE);
                     layoutParams.setMargins(0, TransformUtil.dip2px(context, 6), 0, 0);
                 } else {

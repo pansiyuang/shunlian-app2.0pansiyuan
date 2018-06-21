@@ -17,7 +17,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -114,7 +113,7 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
                 cardViewHolder.mtv_num.setVisibility(View.GONE);
             }
 
-            GlideUtils.getInstance().loadImage(context,
+            GlideUtils.getInstance().loadCircleHeadImage(context,
                     cardViewHolder.civ_head,comments.avatar);
 
             cardViewHolder.mtv_content.setText(comments.content);
@@ -176,7 +175,7 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
         MyTextView mtv_nickname;
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.miv_vip)
         MyImageView miv_vip;

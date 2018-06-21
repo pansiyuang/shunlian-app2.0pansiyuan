@@ -110,16 +110,20 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
                 copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
                 oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
-                oneHolder.seekbar_grow.setProgress(data.percent);
-                oneHolder.mtv_desc.setText(data.str_surplus_stock);
-                oneHolder.seekbar_grow.setVisibility(View.VISIBLE);
+                if (data.percent>0){
+                    oneHolder.seekbar_grow.setProgress(data.percent);
+                    oneHolder.mtv_desc.setText(data.str_surplus_stock);
+                    oneHolder.mrlayout_progress.setVisibility(View.VISIBLE);
 //                startDownTimer(data.percent/8,oneHolder.seekbar_grow);
-                oneHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        return true;
-                    }
-                });
+                    oneHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            return true;
+                        }
+                    });
+                }else {
+                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
+                }
                 oneHolder.mtv_number.setVisibility(View.INVISIBLE);
             } else {
                 if ("1".equals(data.remind_status)) {
@@ -183,6 +187,9 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 
         @BindView(R.id.mrlayout_time)
         MyRelativeLayout mrlayout_time;
+
+        @BindView(R.id.mrlayout_progress)
+        MyRelativeLayout mrlayout_progress;
 
         @BindView(R.id.ddp_downTime)
         DDPDownTimerView ddp_downTime;

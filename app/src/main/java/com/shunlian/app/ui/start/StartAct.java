@@ -3,15 +3,12 @@ package com.shunlian.app.ui.start;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
@@ -21,9 +18,7 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
@@ -31,23 +26,13 @@ import com.shunlian.app.widget.MyImageView;
 import java.io.InputStream;
 import java.util.HashSet;
 
-import butterknife.BindView;
-
 /**
  * Created by Administrator on 2016/4/12 0012.
  */
 public class StartAct extends MBaseActivity implements IMain {
-//    private AnimationDrawable flashAnimation;
     private String localVersion;
     private AdEntity data;
     private boolean isAD=false,isHave=false;
-
-    @BindView(R.id.miv_bg1)
-    MyImageView miv_bg1;
-
-    @BindView(R.id.miv_bg2)
-    MyImageView miv_bg2;
-
 
     @Override
     protected int getLayoutId() {
@@ -83,15 +68,18 @@ public class StartAct extends MBaseActivity implements IMain {
                 animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
                 animation_view.playAnimation();//播放动画
             }else {
-                InputStream is=getAssets().open("images/img_1.png");
+                AssetManager assets = getAssets();
+                InputStream is=assets.open("images/img_1.png");
                 Bitmap bitmap= BitmapFactory.decodeStream(is);
                 MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
                 miv_anim.setImageBitmap(bitmap);
+                bitmap.recycle();
+                is.close();
+                assets.close();
             }
         }catch(Exception e){
             Log.w("splash","splash----crush");
         }
-
 
 //        animation_view.cancelAnimation();//停止
 //        try {
@@ -107,20 +95,12 @@ public class StartAct extends MBaseActivity implements IMain {
 //            e.printStackTrace();
 //        }
 
-//        loadBitmap();
         isHave=true;
         Handler handler = new Handler();
-//      handler.postDelayed(new Runnable() {
-//          @Override
-//          public void run() {
-//              flashAnimation.stop();
-//          }
-//      },1100);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 isHave=false;
-//                flashAnimation.stop();
 //                animation_view.cancelAnimation();
                 isFirstJudge();
             }
@@ -151,11 +131,6 @@ public class StartAct extends MBaseActivity implements IMain {
         sendBroadcast(shortcut);
     }
 
-    @Override
-    protected void onStop() {
-//        tryRecycleAnimationDrawable(flashAnimation);
-        super.onStop();
-    }
 
     //创建桌面快捷方式
     private void createShortCut() {
@@ -277,39 +252,4 @@ public class StartAct extends MBaseActivity implements IMain {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        releaseImageViewResouce(miv_bg1);
-        releaseImageViewResouce(miv_bg2);
-        super.onDestroy();
-    }
-
-    public void releaseImageViewResouce(ImageView imageView) {
-        if (imageView == null) return;
-        Drawable drawable = imageView.getDrawable();
-        if (drawable != null && drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-        }
-    }
-
-//    private void tryRecycleAnimationDrawable(AnimationDrawable animationDrawable) {
-//        if (animationDrawable != null) {
-//            animationDrawable.stop();
-//            for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
-//                Drawable frame = animationDrawable.getFrame(i);
-//                if (frame instanceof BitmapDrawable) {
-//                    ((BitmapDrawable) frame).getBitmap().recycle();
-//                }
-//                frame.setCallback(null);
-//            }
-//            animationDrawable.setCallback(null);
-//            animationDrawable = null;
-//            System.gc();
-//        }
-//    }
 }

@@ -22,7 +22,9 @@ import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -141,6 +143,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
+                    if (!Constant.IS_FIRST_SHARE)
                     ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
                             .statusBarColor(R.color.pink_color)
                             .statusBarDarkFont(false, 0)

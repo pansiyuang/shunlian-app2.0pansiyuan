@@ -13,10 +13,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -113,7 +111,7 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         if (holder instanceof HeadHolderView) {
             HeadHolderView headHolderView = (HeadHolderView) holder;
             headHolderView.tv_store_name.setText(mName);
-            GlideUtils.getInstance().loadImage(context, headHolderView.miv_circle_icon, mAvatar);
+            GlideUtils.getInstance().loadCircleImage(context, headHolderView.miv_circle_icon, mAvatar);
             setMiv_level(mLevel, headHolderView.miv_level);
             setMivHonour(mRole, headHolderView.miv_honour);
         }
@@ -183,7 +181,7 @@ public class QrcodeStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
     public class HeadHolderView extends BaseRecyclerViewHolder {
 
         @BindView(R.id.miv_circle_icon)
-        CircleImageView miv_circle_icon;
+        MyImageView miv_circle_icon;
 
         @BindView(R.id.miv_level)
         MyImageView miv_level;

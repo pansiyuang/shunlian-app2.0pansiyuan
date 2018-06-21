@@ -557,8 +557,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     /**
      * 复制链接
      */
-    public void copyText() {
-        Common.copyText(context,shareLink,goodsTitle);
+    public void copyText(boolean isToast) {
+        Common.copyText(context,shareLink,goodsTitle,isToast);
     }
 
     /**

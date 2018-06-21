@@ -127,6 +127,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     public void setUser(UserInfoEntity.Info.User user) {
         this.mUser = user;
+        if (mUser!=null)
         currentUserId = mUser.user_id;
     }
 

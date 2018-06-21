@@ -42,16 +42,14 @@ public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.
         GlideUtils.getInstance().loadImage(context, mHolder.miv_onel, mayBuyList.thumb);
         mHolder.mtv_descl.setText(mayBuyList.title);
         mHolder.mtv_pricel.setText(mayBuyList.price);
-        mHolder.mrlayout_plus.setVisibility(View.GONE);
-        mHolder.mtv_pricer.setVisibility(View.GONE);
+        gone(mHolder.mrlayout_plus,mHolder.mtv_pricer);
         if (!isPlus) {
             mHolder.mtv_pricer.setStrikethrough()//市场价
                     .setText(getString(R.string.rmb) + mayBuyList.market_price);
-            mHolder.mtv_pricer.setVisibility(View.VISIBLE);
-
+            visible(mHolder.mtv_pricer);
         } else if (!isEmpty(mayBuyList.self_buy_earn)) {
             mHolder.mtv_plus_prefPrice.setText(getString(R.string.common_yuan) + mayBuyList.self_buy_earn);
-            mHolder.mrlayout_plus.setVisibility(View.VISIBLE);
+            visible(mHolder.mrlayout_plus);
         }
 
     }

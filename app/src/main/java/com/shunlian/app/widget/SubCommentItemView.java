@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 /**
  * Created by Administrator on 2018/3/14.
@@ -18,7 +17,7 @@ import com.shunlian.app.widget.circle.CircleImageView;
 
 public class SubCommentItemView extends FrameLayout {
 
-    private CircleImageView civ_head;
+    private MyImageView civ_head;
     private MyTextView mtv_name;
     private MyTextView mtv_content;
     private MyTextView mtv_time;
@@ -40,7 +39,7 @@ public class SubCommentItemView extends FrameLayout {
     private void init() {
         View view = inflate(getContext(), R.layout.item_comment_sub, null);
         addView(view);
-        civ_head = (CircleImageView) view.findViewById(R.id.civ_head);
+        civ_head = (MyImageView) view.findViewById(R.id.civ_head);
         mtv_name = (MyTextView) view.findViewById(R.id.mtv_name);
         mtv_time = (MyTextView) view.findViewById(R.id.mtv_time);
         mtv_content = (MyTextView) view.findViewById(R.id.mtv_content);
@@ -71,7 +70,7 @@ public class SubCommentItemView extends FrameLayout {
 
     public SubCommentItemView setHeadPic(String sequence){
         if (civ_head != null){
-            GlideUtils.getInstance().loadImage(getContext(),civ_head,sequence);
+            GlideUtils.getInstance().loadCircleHeadImage(getContext(),civ_head,sequence);
         }
         return this;
     }

@@ -924,7 +924,7 @@ public class ImmersionBar {
      */
     public ImmersionBar shareSever(@FloatRange(from = 0f, to = 1f) float statusAlpha) {
         mBarParams.statusBarAlpha = statusAlpha;
-        mBarParams.darkFont = true;
+        mBarParams.darkFont = false;
         return this;
     }
 

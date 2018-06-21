@@ -43,9 +43,6 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
     @BindView(R.id.recycle_category)
     RecyclerView recycle_category;
 
-    @BindView(R.id.mtv_in_cate)
-    MyTextView mtv_in_cate;
-
     @BindView(R.id.mtv_cate)
     MyTextView mtv_cate;
 
@@ -147,7 +144,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                     store.isSelect = false;
                 }
             }
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0,stores.size(),stores);
             isAllSelect = !isAllSelect;
         }
     }
@@ -161,7 +158,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
         for (CollectionStoresEntity.Store goods : stores) {
             goods.isSelect = false;
         }
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemRangeChanged(0,stores.size(),stores);
         isAllSelect = false;
         gone(flayout_category);
     }
@@ -257,7 +254,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 CollectionStoresEntity.Store store = stores.get(position);
                 if (adapter.isShowSelect) {
                     store.isSelect = !store.isSelect;
-                    adapter.notifyItemChanged(position);
+                    adapter.notifyItemChanged(position,stores);
                     ((MyCollectionAct) baseActivity).setManageState(selectState());
                 } else if ("1".equals(store.status)){
                     StoreAct.startAct(baseActivity, store.store_id);
@@ -360,6 +357,7 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
                 gone(flayout_category);
                 mPresenter.sort();
                 isAllSelect = false;
+                ((MyCollectionAct) baseActivity).recoveryManage(this);
             });
         }
     }
