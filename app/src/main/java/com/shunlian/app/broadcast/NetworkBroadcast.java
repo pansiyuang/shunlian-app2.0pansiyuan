@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 
@@ -59,7 +58,7 @@ public class NetworkBroadcast extends BroadcastReceiver {
             }
             EasyWebsocketClient client = EasyWebsocketClient.getInstance(context);
             if (client.getClient() != null) {
-                LogUtil.httpLogW("网络发生了改变,Websocket是否断开：" + client.getClient().isClosed() + " 状态为：" + client.getStatus());
+                //LogUtil.httpLogW("网络发生了改变,Websocket是否断开：" + client.getClient().isClosed() + " 状态为：" + client.getStatus());
                 if (client.getClient().isClosed()) {
                     client.resetSocket();
                 }

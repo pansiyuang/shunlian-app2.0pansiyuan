@@ -8,10 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
 
-    <com.shunlian.app.widget.circle.CircleImageView
+    <com.shunlian.app.widget.MyImageView
         android:id="@+id/civ_head"
         android:layout_below="@+id/view_line"
         android:src="@mipmap/icon_login_logo"
+        android:scaleType="fitXY"
         android:layout_width="20dp"
         android:layout_height="20dp" />
 

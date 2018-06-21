@@ -110,8 +110,8 @@ public class DetailOrderRecordAct extends BaseActivity implements IDetailOrderRe
         if (request_code == 100){
             gone(recy_view);
             visible(nei_empty);
-            nei_empty.setText("没人下单，是不是你太懒了？")
-                    .setImageResource(R.mipmap.img_plus_dingdan)
+            nei_empty.setText("您还没有详细订单记录")
+                    .setImageResource(R.mipmap.img_empty_dingdan)
                     .setButtonText(null);
         }else {
             gone(nei_empty);

@@ -16,10 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="15dp" />
 
-        <com.shunlian.app.widget.circle.CircleImageView
+        <com.shunlian.app.widget.MyImageView
             android:id="@+id/civ_head"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:scaleType="fitXY"
             android:layout_below="@+id/view_line"
             android:layout_marginLeft="10dp"/>
 

@@ -11,7 +11,6 @@ import com.shunlian.app.bean.FindSelectShopEntity;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -35,10 +34,26 @@ public class FindSelectShopAdapter extends BaseRecyclerAdapter<FindSelectShopEnt
     }
 
     @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads)){
+            FindSelectShopHolder mHolder = (FindSelectShopHolder) holder;
+            FindSelectShopEntity.StoreList
+                    storeList = (FindSelectShopEntity.StoreList) payloads.get(0);
+            if (storeList.isSelect){
+                mHolder.miv_select.setImageResource(R.mipmap.img_found_choiceshop_h);
+            }else {
+                mHolder.miv_select.setImageResource(R.mipmap.img_found_choiceshop_n);
+            }
+        }else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
+    @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         FindSelectShopHolder mHolder = (FindSelectShopHolder) holder;
         FindSelectShopEntity.StoreList storeList = lists.get(position);
-        GlideUtils.getInstance().loadImage(context,mHolder.civ_head,storeList.logo);
+        GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,storeList.logo);
         mHolder.mtv_shop_name.setText(storeList.name);
         mHolder.mtv_desc.setText(storeList.desc);
         if (storeList.isSelect){
@@ -51,7 +66,7 @@ public class FindSelectShopAdapter extends BaseRecyclerAdapter<FindSelectShopEnt
     public class FindSelectShopHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_shop_name)
         MyTextView mtv_shop_name;

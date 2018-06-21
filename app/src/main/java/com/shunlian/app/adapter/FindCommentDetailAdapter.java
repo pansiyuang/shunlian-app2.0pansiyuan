@@ -17,7 +17,6 @@ import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             FindCommentDetailHolder mHolder = (FindCommentDetailHolder) holder;
             FindCommentListEntity.ItemComment lastLikesBean = lists.get(position);
 
-            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,lastLikesBean.avatar);
+            GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,lastLikesBean.avatar);
 
             mHolder.mtv_name.setText(lastLikesBean.nickname);
 
@@ -116,7 +115,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
             public void convert(SimpleViewHolder holder,
                                 FindCommentListEntity.LastLikesBean lastLikesBean,
                                 int position) {
-                CircleImageView miv_pic = holder.getView(R.id.civ_pic);
+                MyImageView miv_pic = holder.getView(R.id.civ_pic);
                 int w = TransformUtil.dip2px(context, 25);
                 int m = TransformUtil.dip2px(context, 2);
                 RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) miv_pic.getLayoutParams();
@@ -124,7 +123,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
                 layoutParams.height = w;
                 layoutParams.rightMargin = m;
                 miv_pic.setLayoutParams(layoutParams);
-                GlideUtils.getInstance().loadImage(context,miv_pic,lastLikesBean.avatar);
+                GlideUtils.getInstance().loadCircleHeadImage(context,miv_pic,lastLikesBean.avatar);
             }
         };
         mHolder.recy_view.setAdapter(adapter);
@@ -143,7 +142,7 @@ public class FindCommentDetailAdapter extends BaseRecyclerAdapter<FindCommentLis
     public class FindCommentDetailHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;

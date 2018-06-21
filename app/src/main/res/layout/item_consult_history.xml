@@ -48,11 +48,11 @@
         app:rl_margin_left="20"
         app:rl_margin_right="20">
 
-        <com.shunlian.app.widget.circle.CircleImageView
+        <com.shunlian.app.widget.MyImageView
             android:id="@+id/civ_head"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@mipmap/icon_login_logo" />
 
         <com.shunlian.app.widget.MyTextView

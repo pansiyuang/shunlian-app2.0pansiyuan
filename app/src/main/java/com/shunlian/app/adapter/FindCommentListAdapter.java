@@ -19,7 +19,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.SubCommentItemView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -130,7 +129,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
 
         FindCommentListEntity.ItemComment itemComment = lists.get(position);
 
-        GlideUtils.getInstance().loadImage(context,mHolder.civ_head,itemComment.avatar);
+        GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,itemComment.avatar);
 
         mHolder.mtv_name.setText(itemComment.nickname);
 
@@ -216,7 +215,7 @@ public class FindCommentListAdapter extends BaseRecyclerAdapter<FindCommentListE
     public class FindCommentListHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;

@@ -98,9 +98,11 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
             }else {
                 miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
             }
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemChanged(position,storeList);
         });
-        selectAll();
+        mtv_count.setText(String.format(format, String.valueOf(mStoreLists.size()),
+                String.valueOf(mStoreLists.size())));
+        miv_all_select.setImageResource(R.mipmap.img_shoppingcar_selected_h);
     }
 
     /**
@@ -138,9 +140,9 @@ public class FindSelectShopAct extends BaseActivity implements IFindSelectShopVi
             }
         }
     }
-/*
-取消全选
- */
+    /*
+    取消全选
+     */
     private void cancelSelectAll() {
         for (int i = 0; i < mStoreLists.size(); i++) {
             FindSelectShopEntity.StoreList storeList = mStoreLists.get(i);

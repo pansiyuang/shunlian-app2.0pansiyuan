@@ -15,7 +15,6 @@ import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
 import com.shunlian.app.eventbus_bean.CommentEvent;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
@@ -26,7 +25,6 @@ import com.shunlian.app.widget.CommentRank;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,7 +95,7 @@ public class CommentDetailAct extends BaseActivity {
     MyRelativeLayout mrl_reply_content;
 
     @BindView(R.id.civ_head)
-    CircleImageView civ_head;
+    MyImageView civ_head;
 
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
@@ -153,7 +151,7 @@ public class CommentDetailAct extends BaseActivity {
         String avatar = intent.getStringExtra("avatar");
 
         mtv_nickname.setText(nickname);
-        GlideUtils.getInstance().loadImage(this,civ_head,avatar);
+        GlideUtils.getInstance().loadCircleHeadImage(this,civ_head,avatar);
 
         mtv_append_comment_staus.setVisibility(View.GONE);
 

@@ -3,15 +3,12 @@ package com.shunlian.app.ui.start;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
@@ -21,17 +18,13 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
 
 import java.io.InputStream;
 import java.util.HashSet;
-
-import butterknife.BindView;
 
 /**
  * Created by Administrator on 2016/4/12 0012.
@@ -75,10 +68,14 @@ public class StartAct extends MBaseActivity implements IMain {
                 animation_view.setImageAssetsFolder("images/");//assets目录下的子目录，存放动画所需的图片
                 animation_view.playAnimation();//播放动画
             }else {
-                InputStream is=getAssets().open("images/img_1.png");
+                AssetManager assets = getAssets();
+                InputStream is=assets.open("images/img_1.png");
                 Bitmap bitmap= BitmapFactory.decodeStream(is);
                 MyImageView miv_anim= (MyImageView) findViewById(R.id.miv_anim);
                 miv_anim.setImageBitmap(bitmap);
+                bitmap.recycle();
+                is.close();
+                assets.close();
             }
         }catch(Exception e){
             Log.w("splash","splash----crush");
