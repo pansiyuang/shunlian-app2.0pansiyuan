@@ -110,6 +110,7 @@
         </com.shunlian.app.widget.MyLinearLayout>
 
         <com.shunlian.app.widget.MyRelativeLayout
+            android:id="@+id/mrlayout_progress"
             android:layout_width="match_parent"
             android:layout_height="13dp"
             android:layout_alignParentBottom="true"

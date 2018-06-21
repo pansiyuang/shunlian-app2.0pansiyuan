@@ -70,13 +70,14 @@ public class PopMenu {
     private double mFriction;
     private int mHorizontalPadding;
     private int mVerticalPadding;
-    private PopMenuItemListener mPopMenuItemListener;
+    private PopMenuItemCallback popMenuItemCallback;
+    private boolean isFull;
 
     private int mScreenWidth;
     private int mScreenHeight;
 
     private boolean isShowing = false;
-    private Handler mHander;
+//    private Handler mHander;
 
     private PopMenu(Builder builder) {
         this.mActivity = builder.activity;
@@ -89,7 +90,8 @@ public class PopMenu {
         this.mFriction = builder.friction;
         this.mHorizontalPadding = builder.horizontalPadding;
         this.mVerticalPadding = builder.verticalPadding;
-        this.mPopMenuItemListener = builder.popMenuItemListener;
+        this.popMenuItemCallback = builder.popMenuItemCallback;
+        this.isFull = builder.isfull;
 
         mScreenWidth = mActivity.getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = mActivity.getResources().getDisplayMetrics().heightPixels;
@@ -115,6 +117,7 @@ public class PopMenu {
         showSubMenus(mGridLayout);
 
         isShowing = true;
+        if (!isFull)
         ImmersionBar.with(mActivity).shareSever(0.8f).init();
     }
 
@@ -133,16 +136,15 @@ public class PopMenu {
                 }
             });
             isShowing = false;
-            if (mHander==null)
-                mHander=new Handler();
-            mHander.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ImmersionBar.with(mActivity).statusBarColor(R.color.white).
-                    statusBarDarkFont(true, 0.2f).init();
-                    mPopMenuItemListener.onHideCallback();
-                }
-            },300);
+            popMenuItemCallback.onHideCallback(mActivity);
+//            if (mHander==null)
+//                mHander=new Handler();
+//            mHander.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    popMenuItemCallback.onHideCallback(mActivity);
+//                }
+//            },60);
         }
 
     }
@@ -160,8 +162,8 @@ public class PopMenu {
         mAnimateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mPopMenuItemListener != null){
-                    mPopMenuItemListener.onClickClose(view);
+                if (popMenuItemCallback != null){
+                    popMenuItemCallback.onClickClose(view);
                 }
                 hide();
             }
@@ -192,8 +194,8 @@ public class PopMenu {
             subView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mPopMenuItemListener != null) {
-                        mPopMenuItemListener.onItemClick(PopMenu.this, position);
+                    if (popMenuItemCallback != null) {
+                        popMenuItemCallback.onItemClick(PopMenu.this, position);
                     }
                     hide();
                 }
@@ -232,8 +234,8 @@ public class PopMenu {
         mCloseIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPopMenuItemListener != null){
-                    mPopMenuItemListener.onClickClose(v);
+                if (popMenuItemCallback != null){
+                    popMenuItemCallback.onClickClose(v);
                 }
                 hide();
             }
@@ -359,7 +361,13 @@ public class PopMenu {
         private double friction = DEFAULT_FRICTION;
         private int horizontalPadding = DEFAULT_HORIZONTAL_PADDING;
         private int verticalPadding = DEFAULT_VERTICAL_PADDING;
-        private PopMenuItemListener popMenuItemListener;
+        private PopMenuItemCallback popMenuItemCallback;
+        private boolean isfull=false;
+
+        public Builder setIsfull(boolean isfull) {
+            this.isfull = isfull;
+            return this;
+        }
 
         public Builder attachToActivity(Activity activity) {
             this.activity = activity;
@@ -401,8 +409,8 @@ public class PopMenu {
             return this;
         }
 
-        public Builder setOnItemClickListener(PopMenuItemListener listener) {
-            this.popMenuItemListener = listener;
+        public Builder setOnItemClickListener(PopMenuItemCallback listener) {
+            this.popMenuItemCallback = listener;
             return this;
         }
 

@@ -31,6 +31,7 @@ import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.circle.RoundRectImageView;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -473,7 +474,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mPopMenu = new PopMenu.Builder().attachToActivity((Activity) mContext)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemListener() {
+                .setOnItemClickListener(new PopMenuItemCallback() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
@@ -496,10 +497,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         hide();
                     }
 
-//                    @Override
-//                    public void onHideCallback() {
-//                        dealHideBack();
-//                    }
                 }).build();
     }
 
@@ -520,7 +517,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         textPicState==4?getResources().getDrawable(R.mipmap.icon_erweima):
                                 getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemListener() {
+                .setIsfull(textPicState == 1)
+                .setOnItemClickListener(new PopMenuItemCallback() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
@@ -561,6 +559,15 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         mllayout_content.setVisibility(VISIBLE);
                         hide();
                     }
+
+                    @Override
+                    public void onHideCallback(Activity mActivity) {
+                        if (textPicState == 1){
+                            ImmersionBar.with(mActivity).shareSever(0.0f).init();
+                        }else {
+                            super.onHideCallback(mActivity);
+                        }
+                    }
                 }).build();
         if (isShow){
             removeAllViews();
@@ -580,7 +587,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                         textPicState==4?getResources().getDrawable(R.mipmap.icon_erweima):
                                 getResources().getDrawable(R.mipmap.img_tuwenfenxiang)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemListener() {
+                .setIsfull(textPicState == 1)
+                .setOnItemClickListener(new PopMenuItemCallback() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
@@ -616,6 +624,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onClickClose(View view) {
                         mllayout_content.setVisibility(VISIBLE);
                         hide();
+                    }
+                    @Override
+                    public void onHideCallback(Activity mActivity) {
+                        if (textPicState == 1){
+                            ImmersionBar.with(mActivity).shareSever(0.0f).init();
+                        }else {
+                            super.onHideCallback(mActivity);
+                        }
                     }
                 }).build();
         if (isShow){

@@ -191,6 +191,8 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             TimeHolder mHolder = (TimeHolder) holder;
             if (timeShowPosition.contains(position)) {
                 final FootprintEntity.DateInfo dateInfo = timeDatas.get(position);
+                if (dateInfo==null)
+                    return;
                 mHolder.tv_date.setText(dateInfo.date);
 
                 if (isEdit) {
@@ -198,6 +200,7 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
                 } else {
                     mHolder.miv_select.setVisibility(View.GONE);
                 }
+
 
                 if (dateInfo.isSelect) {
                     mHolder.miv_select.setImageDrawable(getDrawable(R.mipmap.img_shoppingcar_selected_h));

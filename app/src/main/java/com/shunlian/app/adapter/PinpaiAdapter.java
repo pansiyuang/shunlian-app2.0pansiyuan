@@ -20,6 +20,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
@@ -85,7 +86,7 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
         PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
                 .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemListener() {
+                .setOnItemClickListener(new PopMenuItemCallback() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {

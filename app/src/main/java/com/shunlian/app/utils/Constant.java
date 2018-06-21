@@ -95,6 +95,8 @@ public final class Constant {
     public static final String PLUS_ADD = H5_HOST+"plus";
     public static  String SHARE_LINK = "";
     public static  String ZHIFUBAOURL=H5_HOST+"agreement/5";
+
+    public static  boolean IS_FIRST_SHARE=false;
 //    public static boolean ISWIFI=false;
 
 

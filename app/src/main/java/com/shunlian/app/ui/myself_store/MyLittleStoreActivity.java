@@ -1,17 +1,14 @@
 package com.shunlian.app.ui.myself_store;
 
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -21,11 +18,9 @@ import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PersonStorePresent;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonStoreView;
@@ -33,7 +28,7 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemListener;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.util.ArrayList;
@@ -47,37 +42,27 @@ import butterknife.BindView;
  */
 
 public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreView, View.OnClickListener, BaseRecyclerAdapter.OnItemClickListener {
+    public PersonStorePresent mPresenter;
     @BindView(R.id.recycler_goods)
     RecyclerView recycler_goods;
-
     @BindView(R.id.miv_add)
     MyImageView miv_add;
-
     @BindView(R.id.tv_add_count)
     TextView tv_add_count;
-
     @BindView(R.id.rl_share)
     RelativeLayout rl_share;
-
     @BindView(R.id.tv_del)
     TextView tv_del;
-
     @BindView(R.id.tv_sure)
     TextView tv_sure;
-
     @BindView(R.id.ll_manager)
     LinearLayout ll_manager;
-
     @BindView(R.id.tv_title)
     TextView tv_title;
-
     @BindView(R.id.tv_title_right)
     TextView tv_title_right;
-
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
-
-    public PersonStorePresent mPresenter;
     private LittleStoreAdapter mAdapter;
     private List<GoodsDeatilEntity.Goods> goodsList;
     private List<String> selectList;
@@ -119,22 +104,25 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
                 .addMenuItem(new PopMenuItem("保存二维码", getResources().getDrawable(R.mipmap.icon_erweima)))
-                .setOnItemClickListener((popMenu, position) -> {
-                    switch (position) {
-                        case 0:
-                            ShareInfoParam shareInfoParam = new ShareInfoParam();
-                            shareInfoParam.title = shareTitle;
-                            shareInfoParam.shareLink = shareLink;
-                            shareInfoParam.desc = shareDesc;
-                            shareInfoParam.img = shareImg;
-                            WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
-                            break;
-                        case 1:
-                            Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc,true);
-                            break;
-                        case 2:
-                            GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
-                            break;
+                .setOnItemClickListener(new PopMenuItemCallback() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                ShareInfoParam shareInfoParam = new ShareInfoParam();
+                                shareInfoParam.title = shareTitle;
+                                shareInfoParam.shareLink = shareLink;
+                                shareInfoParam.desc = shareDesc;
+                                shareInfoParam.img = shareImg;
+                                WXEntryActivity.startAct(MyLittleStoreActivity.this, "shareFriend", shareInfoParam);
+                                break;
+                            case 1:
+                                Common.copyText(MyLittleStoreActivity.this, shareLink, shareDesc, true);
+                                break;
+                            case 2:
+                                GlideUtils.getInstance().savePicture(MyLittleStoreActivity.this, shareQrImg);
+                                break;
+                        }
                     }
                 })
                 .build();

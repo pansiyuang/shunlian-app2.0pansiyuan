@@ -238,8 +238,8 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.shop();
         quick_actions.shareInfo(shareInfoParam);
+        quick_actions.shop();
     }
 
     @Override
