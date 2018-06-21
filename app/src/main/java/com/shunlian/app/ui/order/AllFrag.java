@@ -16,7 +16,6 @@ import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -183,13 +182,13 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             adapter.setOnItemClickListener((view, position) -> {
                 MyOrderEntity.Orders orders1 = ordersLists.get(position);
                 OrderDetailAct.startAct(baseActivity, orders1.id);
-                LogUtil.zhLogW("=onItemClick============="+position);
+                //LogUtil.zhLogW("=onItemClick============="+position);
                 refreshPosition = position;
             });
 
             adapter.setRefreshOrderListener(position -> {
                 refreshPosition = position;
-                LogUtil.zhLogW("=onRefreshOrder============="+position);
+                //LogUtil.zhLogW("=onRefreshOrder============="+position);
             });
         } else {
             adapter.setPageLoading(page, allPage);
