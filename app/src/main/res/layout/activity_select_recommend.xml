@@ -94,13 +94,13 @@
             android:background="@drawable/rounded_rectangle_15px"
             android:orientation="vertical">
 
-            <com.shunlian.app.widget.circle.CircleImageView
+            <com.shunlian.app.widget.MyImageView
                 android:id="@+id/miv_icon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitXY" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/tv_nickname"

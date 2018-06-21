@@ -22,8 +22,8 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMyCommentListView;
+import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
@@ -58,7 +58,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
     View view_comment_append;
 
     @BindView(R.id.civ_head)
-    CircleImageView civ_head;
+    MyImageView civ_head;
 
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
@@ -268,7 +268,7 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
     public void setNicknameAndAvatar(String nickname, String avatar) {
         this.nickname = nickname;
         this.avatar = avatar;
-        GlideUtils.getInstance().loadImage(this, civ_head, avatar);
+        GlideUtils.getInstance().loadCircleHeadImage(this, civ_head, avatar);
         mtv_nickname.setText(nickname);
     }
 

@@ -28,7 +28,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectRecommendView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,7 +53,7 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
     LinearLayout ll_detail_content;
 
     @BindView(R.id.miv_icon)
-    CircleImageView miv_icon;
+    MyImageView miv_icon;
 
     @BindView(R.id.tv_select)
     MyTextView tv_select;
@@ -270,7 +269,8 @@ public class SelectRecommendAct extends BaseActivity implements View.OnClickList
             selelctPosi = position;
 
             MemberCodeListEntity.ListBean listBean = listBeens.get(position);
-            GlideUtils.getInstance().loadImage(SelectRecommendAct.this, miv_icon,listBean.avatar);
+            GlideUtils.getInstance()
+                    .loadCircleHeadImage(SelectRecommendAct.this, miv_icon,listBean.avatar);
             tv_nickname.setText(listBean.nickname);
 
             nickname = listBean.nickname;

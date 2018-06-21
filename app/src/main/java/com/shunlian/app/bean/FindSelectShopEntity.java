@@ -19,6 +19,6 @@ public class FindSelectShopEntity {
         public String name;
         public String logo;
         public String desc;
-        public boolean isSelect;
+        public boolean isSelect = true;
     }
 }

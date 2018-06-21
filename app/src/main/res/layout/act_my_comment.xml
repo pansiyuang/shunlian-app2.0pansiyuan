@@ -83,8 +83,9 @@
         android:paddingLeft="10dp"
         android:paddingTop="12dp">
 
-        <com.shunlian.app.widget.circle.CircleImageView
+        <com.shunlian.app.widget.MyImageView
             android:id="@+id/civ_head"
+            android:scaleType="fitXY"
             android:layout_width="29dp"
             android:layout_height="29dp" />
 

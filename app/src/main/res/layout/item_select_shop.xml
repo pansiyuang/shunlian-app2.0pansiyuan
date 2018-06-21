@@ -4,10 +4,11 @@
     android:layout_height="wrap_content">
 
 
-    <com.shunlian.app.widget.circle.CircleImageView
+    <com.shunlian.app.widget.MyImageView
         android:id="@+id/civ_head"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:scaleType="fitXY"
         android:layout_centerHorizontal="true"/>
 
     <com.shunlian.app.widget.MyTextView
@@ -19,7 +20,6 @@
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="中国杭州森马旗舰.."
         android:textColor="@color/new_text"
         android:textSize="12sp" />
 
@@ -32,7 +32,6 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="曾经购买过"
         android:textColor="@color/color_value_6c"
         android:textSize="10sp" />
 
@@ -43,5 +42,5 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/civ_head"
         android:layout_alignTop="@+id/civ_head"
-        android:src="@mipmap/img_found_choiceshop_n" />
+        android:src="@mipmap/img_found_choiceshop_h" />
 </RelativeLayout>

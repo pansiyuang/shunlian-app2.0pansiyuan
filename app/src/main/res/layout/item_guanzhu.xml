@@ -16,8 +16,9 @@
         android:orientation="horizontal">
 
 
-        <com.shunlian.app.widget.circle.CircleImageView
+        <com.shunlian.app.widget.MyImageView
             android:id="@+id/civ_head"
+            android:scaleType="fitXY"
             android:layout_width="32dp"
             android:layout_height="32dp" />
 

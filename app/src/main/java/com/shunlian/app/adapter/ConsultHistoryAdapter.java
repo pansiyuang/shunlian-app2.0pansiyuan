@@ -21,7 +21,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
 
             final ConsultHistoryEntity.HistoryList historyList = lists.get(position);
 
-            GlideUtils.getInstance().loadImage(context,mHolder.civ_head,historyList.user_thumb);
+            GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,historyList.user_thumb);
             mHolder.mtv_name.setText(historyList.username);
             mHolder.mtv_label.setText(historyList.status_msg);
             mHolder.mtv_time.setText(historyList.time);
@@ -147,7 +146,7 @@ public class ConsultHistoryAdapter extends BaseRecyclerAdapter<ConsultHistoryEnt
         MyImageView miv_logistics;
 
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;

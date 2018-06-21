@@ -24,7 +24,6 @@ import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.ClickableColorSpan;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.circle.CircleImageView;
 
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
         if (holder instanceof GuanzhuHolder) {
             GuanzhuEntity.DynamicListBean dy = lists.get(position);
             GuanzhuHolder mHolder = (GuanzhuHolder) holder;
-            GlideUtils.getInstance().loadImage(context, mHolder.civ_head, dy.store_logo);
+            GlideUtils.getInstance().loadCircleHeadImage(context, mHolder.civ_head, dy.store_logo);
             mHolder.mtv_name.setText(dy.store_name);
             String full_title = "";
             if ("new_sales".equals(dy.type)) {//上新
@@ -194,7 +193,7 @@ public class GuanzhuAdapter extends BaseRecyclerAdapter<GuanzhuEntity.DynamicLis
 
     public class GuanzhuHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.civ_head)
-        CircleImageView civ_head;
+        MyImageView civ_head;
 
         @BindView(R.id.mtv_name)
         MyTextView mtv_name;
