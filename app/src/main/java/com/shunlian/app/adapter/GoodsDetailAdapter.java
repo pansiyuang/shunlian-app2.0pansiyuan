@@ -102,6 +102,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
     private long day = 0l;
     private final int mDeviceWidth;
     private String mRichText = null;//富文本内容
+    private long act_start;//活动开始显示的时间
 
     public GoodsDetailAdapter(Context context, GoodsDeatilEntity entity, List<String> lists) {
         super(context, false, lists);
@@ -111,6 +112,7 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         paramDialog = new ParamDialog(context,mGoodsEntity);
         paramDialog.setOnSelectCallBack(this);
         mDeviceWidth = DeviceInfoUtil.getDeviceWidth(context);
+        act_start = System.currentTimeMillis();
 
         GoodsDeatilEntity.Detail detail = mGoodsEntity.detail;
         if (detail != null){
@@ -698,14 +700,15 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mHolder.ddp_special_before_downTime.setTimeUnitTextSize(11);
                     mHolder.ddp_special_before_downTime.setTimeUnitPadding(0);
 
-                    if (!isStartDownTime) {
-                        String time = isEmpty(common_activity.start_remain_seconds) ? "0" :
-                                common_activity.start_remain_seconds;
-                        //time = "10";
-                        mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time));
-                        mHolder.ddp_special_before_downTime.startDownTimer();
-                        isStartDownTime = true;
-                    }
+                    mHolder.ddp_special_before_downTime.cancelDownTimer();
+                    String time = isEmpty(common_activity.start_remain_seconds) ? "0" :
+                            common_activity.start_remain_seconds;
+                    //time = "10";
+                    int runTime = (int) ((System.currentTimeMillis() - act_start) / 1000);
+                    mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time) - runTime);
+                    mHolder.ddp_special_before_downTime.startDownTimer();
+
+                    if (!isStartDownTime)
                     mHolder.ddp_special_before_downTime.setDownTimerListener(() -> {
                         isStartDownTime = false;
                         if (context instanceof GoodsDetailAct) {
@@ -826,13 +829,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     .setText(getString(R.string.rmb).concat(tt_act.market_price));
             mHolder.mtv_act_title.setText(tt_act.content);
 
-            if (!isStartDownTime) {
-                String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
-                //time = "10";
-                mHolder.ddp_downTime.setDownTime(Integer.parseInt(time));
-                mHolder.ddp_downTime.startDownTimer();
-                isStartDownTime = true;
-            }
+            mHolder.ddp_downTime.cancelDownTimer();
+            String time = isEmpty(tt_act.time) ? "0" : tt_act.time;
+            //time = "10";
+            int runTime = (int) ((System.currentTimeMillis() - act_start) / 1000);
+            mHolder.ddp_downTime.setDownTime(Integer.parseInt(time) - runTime);
+            mHolder.ddp_downTime.startDownTimer();
+
+            if (!isStartDownTime)
             mHolder.ddp_downTime.setDownTimerListener(()-> {
                 isStartDownTime = false;
                 if (context instanceof GoodsDetailAct){
