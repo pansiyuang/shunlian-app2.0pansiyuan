@@ -21,6 +21,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IPersonalDataView;
 import com.shunlian.app.widget.AvatarDialog;
@@ -352,6 +353,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
         if (presenter != null){
             presenter.setInfo("avatar",pic);
             GlideUtils.getInstance().loadCircleImage(this,miv_avatar,domain+pic);
+            SharedPrefUtil.saveSharedPrfString("avatar", domain+pic);
         }
     }
 
@@ -388,12 +390,6 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
             compressImgs(picturePath);
         }else if (resultCode == RESULT_OK //拍照
                 && requestCode == ImageCaptureManager.REQUEST_TAKE_PHOTO) {
-//            switch (requestCode) {
-//                // 相机拍照完成后，返回图片路径
-//                case ImageCaptureManager.REQUEST_TAKE_PHOTO:
-//
-//                    break;
-//            }
             if (captureManager.getCurrentPhotoPath() != null) {
                 captureManager.galleryAddPic();
                 compressImgs(captureManager.getCurrentPhotoPath());

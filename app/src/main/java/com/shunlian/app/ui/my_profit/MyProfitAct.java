@@ -367,24 +367,28 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
 
         if (weekReward > 0) {//周补贴
             miv_week.setImageResource(R.mipmap.zhoubutie);
+            visible(llayout_week_reward);
         } else {
             gone(llayout_week_reward);
         }
 
         if (monthReward > 0) {//推广补贴
             miv_month.setImageResource(R.mipmap.tuiguangbutie);
+            visible(llayout_month_reward);
         } else {
             gone(llayout_month_reward);
         }
 
         if (orderProfit > 0) {//订单收益
             miv_order_profit.setImageResource(R.mipmap.dingdan_n);
+            visible(llayout_order_profit);
         } else {
             gone(llayout_order_profit);
         }
 
         if (llayout_week_reward.getVisibility() == View.GONE &&
-                llayout_month_reward.getVisibility() == View.GONE) {
+                llayout_month_reward.getVisibility() == View.GONE &&
+                llayout_order_profit.getVisibility() == View.GONE) {
             gone(llayout_reward);
         }else {
             visible(llayout_reward);
