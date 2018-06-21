@@ -534,8 +534,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_jingli);
             }
         }
-        if (miv_avar.getDrawable() == null)
-            GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
+
+        GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
         mtv_dianpu.setText(personalcenterEntity.store_fav_num);
         mtv_neirong.setText(personalcenterEntity.article_fav_num);
