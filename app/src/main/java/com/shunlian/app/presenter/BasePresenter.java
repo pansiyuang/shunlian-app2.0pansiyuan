@@ -37,6 +37,7 @@ import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
@@ -292,6 +293,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         Common.clearLoginInfo();
         JpushUtil.setJPushAlias();
         Constant.JPUSH=null;
+        EasyWebsocketClient.getInstance(context).logout();
         LoginAct.startAct(context);
     }
 

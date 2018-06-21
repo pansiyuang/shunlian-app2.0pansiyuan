@@ -317,6 +317,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             return;
         }
         String token = SharedPrefUtil.getSharedPrfString("token", "");
+        LogUtil.httpLogW("token:" + token);
         String roleType = SharedPrefUtil.getSharedPrfString("role_type", "member");
         if (TextUtils.isEmpty(token)) {
             return;

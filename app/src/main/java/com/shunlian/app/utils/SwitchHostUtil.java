@@ -73,7 +73,6 @@ public class SwitchHostUtil {
                 Common.clearLoginInfo();
                 JpushUtil.setJPushAlias();
                 Constant.JPUSH = null;
-                EasyWebsocketClient.getInstance(activity).logout();
 //                Common.goGoGo(activity, "");
                 LoginAct.startAct(activity);
                 activity.finish();

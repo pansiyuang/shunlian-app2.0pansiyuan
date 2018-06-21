@@ -127,8 +127,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
     public void setUser(UserInfoEntity.Info.User user) {
         this.mUser = user;
-        if (mUser!=null)
-        currentUserId = mUser.user_id;
+        if (mUser != null)
+            currentUserId = mUser.user_id;
     }
 
     public void setCurrentStatus(MemberStatus status) {
@@ -670,9 +670,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
 
             transferViewHolder.tv_content.setText(styledText + "处理");
             transferViewHolder.tv_reason.setText("备注：" + transferMessageBody.item);
-            if (!isEmpty(transferMessageBody.create_time)) {
+            try {
                 Long time = Long.valueOf(transferMessageBody.create_time) * 1000;
                 transferViewHolder.tv_date.setText(TimeUtil.getTime(time, "yyyy/MM/dd HH:mm"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -681,8 +683,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         SysMsgViewHolder sysMsgViewHolder = (SysMsgViewHolder) holder;
         TextMessage msgText = (TextMessage) baseMessage;
         TextMessage.TextMessageBody messageBody = msgText.msg_body;
-        long currentTime = Long.valueOf(messageBody.text);
-        sysMsgViewHolder.tv_systemMessage.setText(getNewChatTime(currentTime));
+        try {
+            long currentTime = Long.valueOf(messageBody.text);
+            sysMsgViewHolder.tv_systemMessage.setText(getNewChatTime(currentTime));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void handHelp(RecyclerView.ViewHolder holder, BaseMessage baseMessage, boolean isSeller, boolean isSelf) {
