@@ -34,6 +34,7 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
 import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
@@ -198,7 +199,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
         PopMenu mPopMenu = new PopMenu.Builder().attachToActivity(this)
                 .addMenuItem(new PopMenuItem("微信", getResources().getDrawable(R.mipmap.icon_weixin)))
                 .addMenuItem(new PopMenuItem("复制链接", getResources().getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemListener() {
+                .setOnItemClickListener(new PopMenuItemCallback() {
                     @Override
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
