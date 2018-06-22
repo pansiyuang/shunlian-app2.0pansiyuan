@@ -102,6 +102,9 @@ public class SwitchHostUtil {
 //                Constant.IM_XIAOMI_BUSID = 431;
 //                Constant.IM_HUAWEI_BUSID = 432;
             }
+        }else {
+            //此句话保证开发环境没有切换环境的情况下也能选择帐号
+            SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
         }
     }
 }

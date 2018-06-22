@@ -160,7 +160,7 @@
                 app:iv_control_adapter="true"
                 app:iv_control_height="400"
                 app:iv_control_width="400"
-                app:iv_margin_top="80" />
+                app:iv_margin_top="50" />
 
 
             <com.shunlian.app.widget.MyTextView
@@ -179,8 +179,7 @@
                 app:iv_control_adapter="true"
                 app:iv_control_height="55"
                 app:iv_control_width="235"
-                app:iv_margin_bottom="100"
-                app:iv_margin_top="90" />
+                app:iv_margin_top="30" />
 
 
         </com.shunlian.app.widget.MyLinearLayout>
