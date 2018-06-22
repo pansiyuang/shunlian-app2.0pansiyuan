@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.fragment.first_page;
 
+import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -276,6 +277,9 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
      * 对PagerSlidingTabStrip的各项属性进行赋值。
      */
     private void setTabsValue() {
+        //设置加粗
+        tabs.setTypeface(null, Typeface.BOLD);
+
         // 设置Tab是自动填充满屏幕的
         tabs.setShouldExpand(true);
 

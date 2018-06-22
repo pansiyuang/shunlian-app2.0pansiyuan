@@ -38,20 +38,18 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 
 public final class InterentTools {
-//    public static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
-//    public  static String HTTPADDR_IM = "ws://123.207.107.21:8086";//测试聊天的域名
-    public  static String HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";//预发布聊天的域名
-    public  static String HTTPADDR = "http://api-front.v2.shunliandongli.com/";//预发布接口
+    public static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
+    public  static String HTTPADDR_IM = "ws://123.207.107.21:8086";//测试聊天的域名
+//    public  static String HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";//预发布聊天的域名
+//    public  static String HTTPADDR = "http://api-front.v2.shunliandongli.com/";//预发布接口
     public final static String USER_PROTOCOL_FIELD = "http://v20-wx.shunliandongli.com/";//用户协议域名
-//    public static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名测试
-    public static String DOMAIN = "front.v2.shunliandongli.com";//webView的cookie中的domain，即h5的域名预发布
+    public static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名测试
+//    public static String DOMAIN = "front.v2.shunliandongli.com";//webView的cookie中的domain，即h5的域名预发布
 
-//    public static String IM_SOCKET_TEST_ADDRESS = "ws://123.207.107.21:8086";   //测试 IM地址
-//    public static String IM_SOCKET_PRE_ADDRESS = "ws://ws.v2.shunliandongli.com";  //预发布 IM地址
 
     /**********h5域名******************/
-//    public  static String H5_HOST = "http://v20-wx.shunliandongli.com/";//测试
-    public  static String H5_HOST = "http://front.v2.shunliandongli.com/";//预发布
+    public  static String H5_HOST = "http://v20-wx.shunliandongli.com/";//测试
+//    public  static String H5_HOST = "http://front.v2.shunliandongli.com/";//预发布
 
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit retrofit;
