@@ -32,7 +32,6 @@ import com.shunlian.app.widget.circle.RoundRectImageView;
 import com.shunlian.app.widget.popmenu.PopMenu;
 import com.shunlian.app.widget.popmenu.PopMenuItem;
 import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
-import com.shunlian.app.widget.popmenu.PopMenuItemListener;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -947,9 +946,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         addView(inflate);
 
-        MyImageView miv_user_head = (MyImageView) inflate.findViewById(R.id.miv_user_head);
-        GlideUtils.getInstance().loadCircleImage(getContext(),
-                miv_user_head,mShareInfoParam.userAvatar);
+        CircleImageView miv_user_head = (CircleImageView) inflate.findViewById(R.id.miv_user_head);
         MyTextView mtv_nickname = (MyTextView) inflate.findViewById(R.id.mtv_nickname);
         mtv_nickname.setText(mShareInfoParam.userName);
 
@@ -958,7 +955,23 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         Bitmap bitmap_logo = BitmapFactory.decodeResource(getResources(), R.mipmap.img_plus_logo);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, bitmap_logo, i);
         miv_code.setImageBitmap(qrImage);
-        inflate.postDelayed(()->savePic(inflate),200);
+
+        GlideUtils.getInstance().loadBitmapSync(getContext(), mShareInfoParam.userAvatar,
+                new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        miv_user_head.setImageBitmap(resource);
+
+                        inflate.postDelayed(() -> savePic(inflate), 200);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Common.staticToast("分享失败");
+                    }
+                });
     }
 
 
