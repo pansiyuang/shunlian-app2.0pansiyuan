@@ -5,10 +5,13 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
+import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.ImageEntity;
 import com.shunlian.app.bean.RefundDetailEntity;
 import com.shunlian.app.bean.UploadPicEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.upload.ProgressListener;
 import com.shunlian.app.utils.upload.UploadFileRequestBody;
@@ -49,6 +52,24 @@ public class ReturnRequestPresenter extends BasePresenter<IReturnRequestView> {
     protected void initApi() {
 
     }
+
+
+    public void getRefundReason(String orderId, String type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("order_id", orderId);
+        map.put("type", type);
+        sortAndMD5(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().getRefundReason(map);
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                List<RefundDetailEntity.RefundDetail.Edit.Reason> reasonList = entity.data.reason_list;
+                iView.getReasonList(reasonList);
+            }
+        });
+    }
+
 
     public void applyRefund(String refundId, String ogId, String qty, String amount,
                             String type, String reasonId, String remark,

@@ -44,7 +44,7 @@ public class ShareBigGifPresenter extends BasePresenter<IShareBifGifView> {
         sortAndMD5(map);
 
         Call<BaseEntity<PlusDataEntity>> baseEntityCall = getAddCookieApiService().getPlusData(map);
-        getNetData(isFirst, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PlusDataEntity>>() {
+        getNetData(true, baseEntityCall, new SimpleNetDataCallback<BaseEntity<PlusDataEntity>>() {
             @Override
             public void onSuccess(BaseEntity<PlusDataEntity> entity) {
                 super.onSuccess(entity);

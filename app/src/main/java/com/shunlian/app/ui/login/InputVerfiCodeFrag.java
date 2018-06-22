@@ -198,6 +198,7 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
     public void login(LoginFinishEntity content) {
         //登陆成功啦
         SharedPrefUtil.saveSharedPrfString("token", content.token);
+        SharedPrefUtil.saveSharedPrfString("avatar", content.avatar);
         SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
         SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
         SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);

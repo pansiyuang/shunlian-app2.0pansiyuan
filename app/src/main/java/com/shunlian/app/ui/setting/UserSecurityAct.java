@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.ChangeUserPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.setting.change_user.ModifyAct;
@@ -86,6 +87,7 @@ public class UserSecurityAct extends BaseActivity implements IChangeUserView{
                     Common.clearLoginInfo();
                     JpushUtil.setJPushAlias();
                     Constant.JPUSH = null;
+                    EasyWebsocketClient.getInstance(this).logout();
                     Common.goGoGo(this, "");
                     promptDialog.dismiss();
                 }, "取消", (v) -> promptDialog.dismiss()).show();

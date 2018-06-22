@@ -543,8 +543,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_levels.setImageResource(R.mipmap.img_plus_phb_jingli);
             }
         }
-        if (miv_avar.getDrawable() == null)
+        String avatar = SharedPrefUtil.getSharedPrfString("personal_avatar", "null");
+        if (!equals(avatar,personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
+            SharedPrefUtil.saveSharedPrfString("personal_avatar",personalcenterEntity.avatar);
             GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
+        }
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
         mtv_dianpu.setText(personalcenterEntity.store_fav_num);
         mtv_neirong.setText(personalcenterEntity.article_fav_num);
@@ -645,6 +648,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             helpArticleAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    private boolean equals(String avatar, String avatar1) {
+        if (!isEmpty(avatar) && avatar.equals(avatar1)){
+            return true;
+        }
+        return false;
     }
 
 

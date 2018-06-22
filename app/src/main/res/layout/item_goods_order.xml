@@ -56,13 +56,15 @@
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_attribute"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mtv_title"
         android:layout_below="@+id/mtv_title"
         android:textColor="@color/new_gray"
         android:textSize="12sp"
+        android:layout_toLeftOf="@+id/mtv_count"
         app:tv_control_adapter="true"
+        app:tv_margin_right="20"
         app:tv_margin_top="10" />
 
     <com.shunlian.app.widget.MyTextView

@@ -22,6 +22,7 @@ package com.shunlian.app.presenter;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -37,6 +38,7 @@ import com.shunlian.app.bean.RefreshTokenEntity;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.listener.SimpleNetDataCallback;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.ApiService;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
@@ -206,6 +208,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         /*if (!NetworkUtils.isNetworkAvailable((Activity) context)){//断网提示
             return;
         }*/
+
         if (isLoading) {
             if (httpDialog != null && !httpDialog.isShowing())
                 httpDialog.show();
@@ -215,6 +218,9 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
             public void onResponse(Call<BaseEntity<T>> call, Response<BaseEntity<T>> response) {
                 if (httpDialog != null && isLoading){
                     httpDialog.dismiss();
+                }
+                if (context instanceof Activity){
+                    if (((Activity) context).isFinishing())return;
                 }
                 BaseEntity<T> body = response.body();
                 //LogUtil.longW("onResponse============" + body.toString());
@@ -246,11 +252,14 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
             @Override
             public void onFailure(Call<BaseEntity<T>> call, Throwable t) {
+                if (t != null)
+                    t.printStackTrace();
                 if (httpDialog != null && isLoading){
                     httpDialog.dismiss();
                 }
-                if (t != null)
-                    t.printStackTrace();
+                if (context instanceof Activity){
+                    if (((Activity) context).isFinishing())return;
+                }
                 callback.onFailure();
                 if (iView != null) {
                     iView.showFailureView(failureCode);
@@ -292,6 +301,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         Common.clearLoginInfo();
         JpushUtil.setJPushAlias();
         Constant.JPUSH=null;
+        EasyWebsocketClient.getInstance(context).logout();
         LoginAct.startAct(context);
     }
 

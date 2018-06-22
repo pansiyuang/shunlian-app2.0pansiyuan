@@ -22,6 +22,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.ShareBigGifPresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -442,7 +443,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             tv_member_count.setVisibility(View.GONE);
         }
 
-        tv_group_money.setText(achievement.total_sales);
+        tv_group_money.setText(Common.formatFloat(achievement.total_sales));
         tv_group_count.setText(achievement.plus_num);
 
         showTabOneButton(tabOneMode);

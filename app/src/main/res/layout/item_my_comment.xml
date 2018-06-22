@@ -101,6 +101,7 @@
    <include layout="@layout/item_goods_info"/>
 
     <com.shunlian.app.widget.MyLinearLayout
+        android:id="@+id/llayout_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

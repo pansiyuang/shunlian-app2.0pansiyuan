@@ -52,6 +52,7 @@ public class RefundDetailEntity implements Serializable{
         public static class Edit implements Serializable{
             public String og_id;
             public String og_Id;
+            public String order_id;
             public String store_name;
             public String refund_type;
             public String edit_apply_type;

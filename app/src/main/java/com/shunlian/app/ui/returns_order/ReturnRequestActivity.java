@@ -124,6 +124,7 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     private boolean isEdit; //是否是编辑
     private int index;
     private float totalPrice;
+    private List<RefundDetailEntity.RefundDetail.Edit.Reason> currentReasonList;
     private MessageCountManager messageCountManager;
 
     @Override
@@ -147,6 +148,8 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
         EventBus.getDefault().register(this);
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
+
+        currentReasonList = new ArrayList<>();
 
         currentInfoEntity = (RefundDetailEntity.RefundDetail.Edit) getIntent().getSerializableExtra("infoEntity");
         isEdit = getIntent().getBooleanExtra("isEdit", false);
@@ -192,7 +195,6 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     public void initViews(String type) {
         goodsDialog = new ReturnGoodsDialog(this);
-        goodsDialog.setRefundReason(currentInfoEntity.reason, currentReasonId);
         goodsDialog.setSelectListener(this);
         switch (type) {
             case "1": //仅退款
@@ -410,11 +412,11 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
 
     @Override
     public void onSelect(int position) {
-        if (position < 0) {
+        if (position < 0 || isEmpty(currentReasonList)) {
             return;
         }
-        currentReasonId = currentInfoEntity.reason.get(position).reason_id;
-        String reason = currentInfoEntity.reason.get(position).reason_info;
+        currentReasonId = currentReasonList.get(position).reason_id;
+        String reason = currentReasonList.get(position).reason_info;
         tv_return_reason.setText(reason);
         tv_return_reason.setTextColor(getColorResouce(R.color.new_text));
     }
@@ -423,8 +425,13 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_return_reason:
-                if (goodsDialog != null && !goodsDialog.isShowing()) {
-                    goodsDialog.show();
+                if (isEmpty(currentReasonList)) {
+                    presenter.getRefundReason(currentInfoEntity.order_id, currentServiceType);
+                } else {
+                    goodsDialog.setRefundReason(currentReasonList, currentReasonId);
+                    if (goodsDialog != null && !goodsDialog.isShowing()) {
+                        goodsDialog.show();
+                    }
                 }
                 break;
             case R.id.tv_request_complete:
@@ -455,6 +462,20 @@ public class ReturnRequestActivity extends BaseActivity implements CustomerGoods
     public void applyRefundSuccess(String refundId) {
         finish();
         ExchangeDetailAct.startAct(this, refundId);
+    }
+
+    @Override
+    public void getReasonList(List<RefundDetailEntity.RefundDetail.Edit.Reason> reasonList) {
+        if (isEmpty(reasonList)) {
+            return;
+        }
+        currentReasonList.clear();
+        currentReasonList.addAll(reasonList);
+        goodsDialog.setRefundReason(currentReasonList, currentReasonId);
+
+        if (goodsDialog != null && !goodsDialog.isShowing()) {
+            goodsDialog.show();
+        }
     }
 
     @Override

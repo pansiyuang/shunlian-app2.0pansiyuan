@@ -23,6 +23,7 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.CommentRank;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
@@ -100,6 +101,9 @@ public class CommentDetailAct extends BaseActivity {
     @BindView(R.id.mtv_nickname)
     MyTextView mtv_nickname;
 
+    @BindView(R.id.llayout_time)
+    MyLinearLayout llayout_time;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
@@ -143,6 +147,7 @@ public class CommentDetailAct extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        gone(llayout_time);
         EventBus.getDefault().register(this);
 
         Intent intent = getIntent();
