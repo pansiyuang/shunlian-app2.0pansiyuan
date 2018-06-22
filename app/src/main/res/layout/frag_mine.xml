@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
 
-    <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout
         android:id="@+id/lay_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -299,6 +299,16 @@
                             android:scaleType="fitXY" />
                     </com.shunlian.app.widget.MyRelativeLayout>
 
+                    <com.shunlian.app.widget.MyTextView
+                        android:id="@+id/mtv_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:background="@color/value_FFF7CC"
+                        android:textColor="@color/new_text"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"/>
                     <com.shunlian.app.widget.MyLinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="90dp"

@@ -103,8 +103,6 @@ public class SwitchHostUtil {
 //                Constant.IM_XIAOMI_BUSID = 431;
 //                Constant.IM_HUAWEI_BUSID = 432;
             }
-        } else {
-            SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
         }
     }
 }

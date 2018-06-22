@@ -187,6 +187,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyTextView mtv_sendNum;
     @BindView(R.id.mtv_receiveNum)
     MyTextView mtv_receiveNum;
+    @BindView(R.id.mtv_hint)
+    MyTextView mtv_hint;
     //    @BindView(R.id.seekbar_grow)
 //    SeekBar seekbar_grow;
     @BindView(R.id.mtv_payNum)
@@ -394,6 +396,13 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
+        if (isEmpty(personalcenterEntity.note)){
+            gone(mtv_hint);
+        }else {
+            visible(mtv_hint);
+            LogUtil.augusLogW("yxftest---"+personalcenterEntity.note);
+            mtv_hint.setText(personalcenterEntity.note);
+        }
         if (!isEmpty(personalcenterEntity.balance) && Float.parseFloat(personalcenterEntity.balance) > 0) {
             mllayout_yue.setVisibility(View.VISIBLE);
         } else {
