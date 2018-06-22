@@ -30,6 +30,7 @@ import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.utils.Common;
 
 import java.util.List;
 import java.util.Map;
@@ -792,6 +793,14 @@ public interface ApiService {
      */
     @GET("member/refund/applyList")
     Call<BaseEntity<RefundListEntity>> refundList(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取用户可选原因列表
+     *
+     * @return
+     */
+    @GET("/member/refund/getrefundreason")
+    Call<BaseEntity<CommonEntity>> getRefundReason(@QueryMap Map<String, String> map);
 
     /**
      * 申请退款
