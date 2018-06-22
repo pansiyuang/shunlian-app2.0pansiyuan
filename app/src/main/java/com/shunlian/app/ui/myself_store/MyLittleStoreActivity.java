@@ -18,6 +18,7 @@ import com.shunlian.app.bean.PersonShopEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PersonStorePresent;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -295,10 +296,11 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
 
     @Override
     public void onItemClick(View view, int position) {
+        GoodsDeatilEntity.Goods goods = goodsList.get(position);
         if (!isEdit) {
+            GoodsDetailAct.startAct(this, goods.goods_id);
             return;
         }
-        GoodsDeatilEntity.Goods goods = goodsList.get(position);
         int currentIndex = goods.index;
         if (goods.isSelect) {
             if (selectList.contains(goods.goods_id)) {
@@ -316,7 +318,7 @@ public class MyLittleStoreActivity extends BaseActivity implements IPersonStoreV
             selectList.add(goods.goods_id);
             goods.index = selectList.size();
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRangeChanged(0, goodsList.size(), goodsList);
     }
 
     public void delGoods() {
