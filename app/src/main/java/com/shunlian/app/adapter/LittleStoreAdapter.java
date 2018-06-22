@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.CollectionStoresEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -40,6 +41,34 @@ public class LittleStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
         isEditMode = isEdit;
         notifyDataSetChanged();
     }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (!isEmpty(payloads) && holder instanceof LittleStoreHolderView) {
+            LittleStoreHolderView littleHolderView = (LittleStoreHolderView) holder;
+            GoodsDeatilEntity.Goods goods = null;
+            if (payloads.get(0) instanceof GoodsDeatilEntity.Goods) {
+                goods = (GoodsDeatilEntity.Goods) payloads.get(0);
+            } else {
+                List<GoodsDeatilEntity.Goods> goodsList = (List<GoodsDeatilEntity.Goods>) payloads.get(0);
+                goods = goodsList.get(position);
+            }
+            if (goods.isSelect) {
+                littleHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_soild_pink));
+            } else {
+                littleHolderView.tv_select.setBackgroundDrawable(getDrawable(R.drawable.oval_stroke_pink));
+            }
+
+            if (goods.index > 0) {
+                littleHolderView.tv_select.setText(String.valueOf(goods.index));
+            } else {
+                littleHolderView.tv_select.setText("");
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {

@@ -35,15 +35,20 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="2.5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/ll_right"
             android:layout_toRightOf="@+id/miv_store_select"
             android:drawableLeft="@mipmap/img_shoppingcar_shop"
             android:drawablePadding="4dp"
             android:drawableRight="@mipmap/img_common_viewarrow_1"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textColor="@color/new_text"
             android:textSize="14sp" />
 
         <LinearLayout
+            android:id="@+id/ll_right"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
