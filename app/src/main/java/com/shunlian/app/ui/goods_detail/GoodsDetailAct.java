@@ -266,9 +266,16 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         toolbarHeight = toolbarParams.height;
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setToolbar();
+    }
+
     /*
-    商品
-     */
+        商品
+         */
     public void goodsFrag(){
         if (goodsDeatilFrag == null) {
             goodsDeatilFrag = new GoodsDeatilFrag();
