@@ -345,9 +345,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view.addItemDecoration(new HorItemDecoration(space,0,0));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, storeItems);
             recy_view.setAdapter(goodsDetailShopAdapter);
-            goodsDetailShopAdapter.setOnItemClickListener((v,position)-> {
-                GoodsDeatilEntity.StoreInfo.Item i1 = storeItems.get(position);
-                GoodsDetailAct.startAct(context,i1.id);});
+            goodsDetailShopAdapter.setOnItemClickListener((v,position)->
+                GoodsDetailAct.startAct(context,storeItems.get(position).id));
         }else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
