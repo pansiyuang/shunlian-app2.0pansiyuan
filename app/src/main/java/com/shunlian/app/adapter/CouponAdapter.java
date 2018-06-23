@@ -46,8 +46,8 @@ public class CouponAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MDa
         VouchercenterplEntity.MData data = lists.get(position);
         GlideUtils.getInstance().loadImage(context, mHolder.miv_photo, data.thumb);
         mHolder.mtv_title.setText(data.title);
-        mHolder.mtv_desc.setText(data.valid_date);
-        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan)+data.denomination+data.use_condition
+        mHolder.mtv_desc.setText(getString(R.string.coupon_youxiaoqi)+data.valid_date);
+        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan)+data.denomination+" "+data.use_condition
                 , data.denomination, 21);
         mHolder.mtv_price.setText(spannableStringBuilder);
         if ("0".equals(data.if_get)) {

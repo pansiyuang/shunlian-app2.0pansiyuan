@@ -116,6 +116,9 @@
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>
 
+    <!--优惠券-->
+    <string name="coupon_youxiaoqi">有效期：</string>
+
     <!--店铺-->
     <string name="store_search">搜索店铺内商品</string>
     <string name="store_sort">分类</string>

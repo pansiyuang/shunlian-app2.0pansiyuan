@@ -400,7 +400,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             gone(mtv_hint);
         }else {
             visible(mtv_hint);
-            LogUtil.augusLogW("yxftest---"+personalcenterEntity.note);
             mtv_hint.setText(personalcenterEntity.note);
         }
         if (!isEmpty(personalcenterEntity.balance) && Float.parseFloat(personalcenterEntity.balance) > 0) {

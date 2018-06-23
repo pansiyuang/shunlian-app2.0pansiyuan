@@ -29,6 +29,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
@@ -586,9 +587,13 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                         eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
-                                eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                                cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
+                                if (cateGoryFrag!=null&&cateGoryFrag.rv_view!=null&&cateGoryFrag.rv_view.getScrollState() == 0){
+                                    eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
+                                    eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+                                    cateGoryFrag.cate_id=data.get(position).id;
+                                    if (cateGoryFrag.pFirstPage!=null)
+                                    cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
+                                }
                             }
                         });
                         eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
