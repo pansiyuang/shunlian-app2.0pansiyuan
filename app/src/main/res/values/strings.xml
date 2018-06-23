@@ -2,6 +2,8 @@
     <!--<string name="app_name">顺联动力</string>-->
     <string name="app_name">顺联2.0</string>
     <string name="common_yuan">￥</string>
+    <string name="common_yuans">元</string>
+    <string name="common_wan">万</string>
     <string name="common_go_shop">去逛逛</string>
     <string name="common_chakanxiangqing">查看详情</string>
 

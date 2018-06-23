@@ -216,6 +216,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private PersonalcenterEntity personalcenterEntity;
     private PromptDialog promptDialog;
     private MainActivity mainActivity;
+    private String one, two, three, four;
+    private int flag = 0;
 
     //    private Timer outTimer;
     @Override
@@ -293,10 +295,55 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private void changeState() {
         miv_isShow_data.setImageResource(!isShowData ? R.mipmap.img_plus_guanbi_n : R.mipmap.img_guanbi_h);
         if (personalcenterEntity != null) {
-            mtv_yue.setText(!isShowData ? ASTERISK : personalcenterEntity.balance);
-            mtv_youhuiquan.setText(!isShowData ? ASTERISK : personalcenterEntity.coupon_num);
-            mtv_donglizhishu.setText(!isShowData ? ASTERISK : personalcenterEntity.all_sl_income);
-            mtv_xiaoshou.setText(!isShowData ? ASTERISK : personalcenterEntity.team_sales);
+//            mtv_yue.setText(!isShowData ? ASTERISK :formatNumber(personalcenterEntity.balance));
+//            mtv_youhuiquan.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.coupon_num));
+//            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.all_sl_income));
+//            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.team_sales));
+
+            mtv_yue.setText(!isShowData ? ASTERISK : formatNumber(one));
+            mtv_youhuiquan.setText(!isShowData ? ASTERISK : formatNumber(two));
+            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(three));
+            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(four));
+        }
+    }
+
+    public SpannableStringBuilder formatNumber(String number) {
+        if (isEmpty(number)) {
+            return Common.changeTextSize(
+                    "数据异常", "数据", 11);
+        }
+        try {
+            double sale = Double.parseDouble(number);
+            if (sale < 10000) {
+                if (number.contains(".")) {
+                    if (sale < 100 && number.length() - number.indexOf(".") > 2) {
+                        number = number.substring(0, number.indexOf(".") + 3);
+                    } else if (sale < 1000 && number.length() - number.indexOf(".") > 1) {
+                        number = number.substring(0, number.indexOf(".") + 2);
+                    } else {
+                        number = number.substring(0, number.indexOf("."));
+                    }
+                }
+                return Common.changeTextSize(
+                        number + getStringResouce(R.string.common_yuans), getStringResouce(R.string.common_yuans), 11);
+            } else {
+                double sales = sale * 0.0001;
+                String numbers = String.valueOf(sales);
+                if (numbers.contains(".")) {
+                    if (sales < 100 && numbers.length() - numbers.indexOf(".") > 2) {
+                        number = numbers.substring(0, numbers.indexOf(".") + 3);
+                    } else if (sales < 1000 && numbers.length() - numbers.indexOf(".") > 1) {
+                        number = numbers.substring(0, numbers.indexOf(".") + 2);
+                    } else {
+                        number = numbers.substring(0, numbers.indexOf("."));
+                    }
+                }
+                return Common.changeTextSize(
+                        number + getStringResouce(R.string.common_wan), getStringResouce(R.string.common_wan), 11);
+            }
+        } catch (Exception e) {
+            return Common.changeTextSize(
+                    "数据异常", "数据", 11);
         }
     }
 
@@ -363,6 +410,42 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
+                switch (flag) {
+                    case 0:
+                        one = "0.99";
+                        two = "1";
+                        three = "99.99";
+                        four = "199.";
+                        break;
+                    case 1:
+                        one = "999.9";
+                        two = "999.999";
+                        three = "9999.55";
+                        four = "99999.999";
+                        break;
+                    case 2:
+                        one = "10000";
+                        two = "100";
+                        three = "1000";
+                        four = "99999999";
+                        break;
+                    case 3:
+                        one = "999999.999";
+                        two = "9999999.555";
+                        three = "99999999";
+                        four = "9999999";
+                        break;
+                    case 4:
+                        one = "999999.";
+                        two = "9999999.";
+                        three = "99999999.";
+                        four = "9999999..";
+                        break;
+                    default:
+                        flag = -1;
+                        break;
+                }
+                flag++;
                 personalcenterPresenter.getApiData();
             }
         });
@@ -396,9 +479,9 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     public void getApiData(PersonalcenterEntity personalcenterEntity) {
         SharedPrefUtil.saveSharedPrfString("plus_role", personalcenterEntity.plus_role);
         this.personalcenterEntity = personalcenterEntity;
-        if (isEmpty(personalcenterEntity.note)){
+        if (isEmpty(personalcenterEntity.note)) {
             gone(mtv_hint);
-        }else {
+        } else {
             visible(mtv_hint);
             mtv_hint.setText(personalcenterEntity.note);
         }
@@ -543,8 +626,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             }
         }
         String avatar = SharedPrefUtil.getSharedPrfString("personal_avatar", "null");
-        if (!equals(avatar,personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
-            SharedPrefUtil.saveSharedPrfString("personal_avatar",personalcenterEntity.avatar);
+        if (!equals(avatar, personalcenterEntity.avatar) || miv_avar.getDrawable() == null) {
+            SharedPrefUtil.saveSharedPrfString("personal_avatar", personalcenterEntity.avatar);
             GlideUtils.getInstance().loadCircleAvar(baseContext, miv_avar, personalcenterEntity.avatar);
         }
         mtv_shangping.setText(personalcenterEntity.goods_fav_num);
@@ -650,7 +733,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     }
 
     private boolean equals(String avatar, String avatar1) {
-        if (!isEmpty(avatar) && avatar.equals(avatar1)){
+        if (!isEmpty(avatar) && avatar.equals(avatar1)) {
             return true;
         }
         return false;
