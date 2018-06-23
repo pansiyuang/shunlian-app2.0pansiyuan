@@ -30,6 +30,7 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentAdapter;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.presenter.GoodsDetailPresenter;
@@ -53,6 +54,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.RollNumView;
 import com.shunlian.app.wxapi.WXEntryActivity;
 import com.shunlian.mylibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -195,6 +200,13 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         return R.layout.act_goods_detail;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && goodsDetailPresenter != null){
+            goodsDetailPresenter.refreshDetail();
+        }
+    }
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -229,7 +241,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 (TransformUtil.dip2px(this, 5), false));
         ViewGroup.LayoutParams recyLayoutParams = recy_view.getLayoutParams();
         recyLayoutParams.height = TransformUtil.countRealHeight(this,678);
-
+        EventBus.getDefault().register(this);
     }
     /*
     初始化常量
@@ -1092,6 +1104,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
                 (view) -> {
                     Common.goGoGo(this,"login");
+                    moreHideAnim();
                     promptDialog.dismiss();
                 }, "取消", (view) -> promptDialog.dismiss()).show();
     }
@@ -1145,5 +1158,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
         super.onDestroy();
         goodsDetailPresenter = null;
+        EventBus.getDefault().unregister(this);
     }
 }

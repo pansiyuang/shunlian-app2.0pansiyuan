@@ -153,6 +153,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
                             (view) -> {
                                 Common.goGoGo(mContext,"login");
+                                reset();
                                 promptDialog.dismiss();
                             }, "取消", (view) -> promptDialog.dismiss()).show();
                     return;
