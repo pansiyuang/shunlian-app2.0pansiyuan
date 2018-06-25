@@ -19,9 +19,11 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.JpushUtil;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IMain;
 import com.shunlian.app.widget.MyImageView;
+import com.shunlian.app.widget.UpdateDialog;
 
 import java.io.InputStream;
 import java.util.HashSet;
@@ -32,8 +34,9 @@ import java.util.HashSet;
 public class StartAct extends MBaseActivity implements IMain {
     private String localVersion;
     private AdEntity data;
-    private boolean isAD=false,isHave=false;
-
+    private boolean isAD=false,isHave=false,isUpdate=false;
+    private UpdateDialog updateDialogV;//判断是否需要跟新
+    private PMain pMain;
     @Override
     protected int getLayoutId() {
         return R.layout.act_flash;
@@ -94,20 +97,20 @@ public class StartAct extends MBaseActivity implements IMain {
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-
         isHave=true;
+        pMain = new PMain(this, this);
+        pMain.getUpdateInfo("Android", SharedPrefUtil.getSharedPrfString("localVersion", "2.0.0"));
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 isHave=false;
 //                animation_view.cancelAnimation();
+                if (!isUpdate)
                 isFirstJudge();
             }
         }, 3 * 1000);
-        PMain pMain = new PMain(this, this);
-        pMain.getSplashAD();
-
     }
 
     /**
@@ -227,13 +230,35 @@ public class StartAct extends MBaseActivity implements IMain {
     }
 
     @Override
+    protected void onDestroy() {
+        if (updateDialogV != null) {
+            if (updateDialogV.updateDialog != null) {
+                updateDialogV.updateDialog.dismiss();
+            }
+            PromptDialog promptDialog = updateDialogV.getPromptDialog();
+            if (promptDialog != null) {
+                promptDialog.dismiss();
+                promptDialog = null;
+            }
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void setCommond(CommondEntity data) {
 
     }
 
     @Override
     public void setUpdateInfo(UpdateEntity data) {
-
+        if (isHave){
+            if ("yes".equals(data.needUpdate)&&"force".equals(data.updateType)) {
+                isUpdate=true;
+                updateDialogV = new UpdateDialog(this,data);
+            }else {
+                pMain.getSplashAD();
+            }
+        }
     }
 
     @Override
@@ -243,12 +268,6 @@ public class StartAct extends MBaseActivity implements IMain {
 
     @Override
     public void showDataEmptyView(int request_code) {
-
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
 
     }
 

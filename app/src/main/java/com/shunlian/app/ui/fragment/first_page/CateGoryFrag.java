@@ -14,6 +14,7 @@ import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -30,6 +31,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public String cate_id;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
+    public List<GetDataEntity.MData> mDatassss = new ArrayList<>();
     @BindView(R.id.rv_view)
     public RecyclerView rv_view;
     @BindView(R.id.lay_refresh)
@@ -77,7 +79,6 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         rv_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
                 if (gridLayoutManager != null) {
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
@@ -142,13 +143,16 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         firstPageAdapter = new FirstPageAdapter(baseActivity, true, mDatass, isFirst, this, size);
         gridLayoutManager = new GridLayoutManager(baseActivity, 2);
 
-        if (rv_view==null)
-            rv_view= (RecyclerView) rootView.findViewById(R.id.rv_view);
+        if (rv_view == null)
+            rv_view = (RecyclerView) rootView.findViewById(R.id.rv_view);
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
 
-        if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates))
-            pFirstPage.resetBaby(mDatass.get(mDatass.size() - 1).cates.get(0).id);
+        if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)){
+            cate_id=mDatass.get(mDatass.size() - 1).cates.get(0).id;
+            pFirstPage.resetBaby(cate_id);
+        }
+
 //        }else {
 ////            mtv_empty.setVisibility(View.VISIBLE);
 ////            rv_view.setVisibility(View.GONE);
@@ -164,22 +168,24 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
     @Override
     public void setGoods(List<GoodsDeatilEntity.Goods> mDatas, int page, int allPage) {
-        if (rv_view != null && rv_view.getScrollState() == 0) {
-            firstPageAdapter.setPageLoading(page, allPage);
+        firstPageAdapter.setPageLoading(page, allPage);
+        if (mDatas.size() <= 0) {
+            pFirstPage.babyIsLoading = false;
+            firstPageAdapter.notifyDataSetChanged();
+        } else {
             for (int i = 0; i < mDatas.size(); i++) {
                 GetDataEntity.MData mData = new GetDataEntity.MData();
                 mData.module = "moreGoods";
                 mData.moreGoods = mDatas.get(i);
-                mDatasss.add(mData);
+                mDatassss.add(mData);
                 if (i >= mDatas.size() - 1) {
-                    mDatass.addAll(mDatasss);
+                    mDatasss.addAll(mDatassss);
+                    mDatass.addAll(mDatassss);
                     firstPageAdapter.notifyDataSetChanged();
+                    mDatassss.clear();
+                    pFirstPage.babyIsLoading = false;
                 }
             }
-            if (mDatas.size() <= 0) {
-                firstPageAdapter.notifyDataSetChanged();
-            }
         }
-
     }
 }

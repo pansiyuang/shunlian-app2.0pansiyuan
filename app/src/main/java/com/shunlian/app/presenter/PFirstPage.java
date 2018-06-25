@@ -8,7 +8,10 @@ import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IFirstPage;
 
 import java.util.HashMap;
@@ -24,7 +27,7 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
     private int pageSize = 20;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
-    private boolean babyIsLoading,isRest=false;
+    public boolean babyIsLoading,isRest=false;
     private CateGoryFrag cateGoryFrag;
 
     public PFirstPage(Context context, IFirstPage iView, CateGoryFrag cateGoryFrag) {
@@ -64,7 +67,7 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
     public void getSearchGoods(String cate_id) {
         Map<String, String> map = new HashMap<>();
         map.put("cid", cate_id);
-        map.put("page", String.valueOf(currentPage));
+        map.put("page", String.valueOf(babyPage));
         map.put("page_size", String.valueOf(pageSize));
         sortAndMD5(map);
 
@@ -74,7 +77,6 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
             public void onSuccess(BaseEntity<SearchGoodsEntity> entity) {
                 super.onSuccess(entity);
                 SearchGoodsEntity searchGoodsEntity = entity.data;
-                babyIsLoading = false;
                 babyPage++;
                 babyAllPage = Integer.parseInt(searchGoodsEntity.total_page);
                 if (isRest){

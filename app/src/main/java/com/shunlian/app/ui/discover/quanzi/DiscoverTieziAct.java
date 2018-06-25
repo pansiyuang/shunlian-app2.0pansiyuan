@@ -64,6 +64,18 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @BindView(R.id.mtv_attend)
     MyTextView mtv_attend;
 
+    @BindView(R.id.mtv_remen)
+    MyTextView mtv_remen;
+
+    @BindView(R.id.mtv_zuixin)
+    MyTextView mtv_zuixin;
+
+    @BindView(R.id.view_remen)
+    View view_remen;
+
+    @BindView(R.id.view_zuixin)
+    View view_zuixin;
+
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
@@ -79,6 +91,12 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     private LinearLayoutManager linearLayoutManager;
     private DiscoverHotAdapter newAdapter;
     private String circle_id;
+
+    public static void startAct(Context context, String circle_id) {
+        Intent intent = new Intent(context, DiscoverTieziAct.class);
+        intent.putExtra("circle_id", circle_id);
+        context.startActivity(intent);
+    }
 
     @OnClick(R.id.rl_more)
     public void more() {
@@ -121,12 +139,6 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @Override
     public void OnLoadFail() {
 
-    }
-
-    public static void startAct(Context context, String circle_id) {
-        Intent intent = new Intent(context, DiscoverTieziAct.class);
-        intent.putExtra("circle_id", circle_id);
-        context.startActivity(intent);
     }
 
     @Override
@@ -211,17 +223,32 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     public void setApiData(final DiscoveryTieziEntity.Mdata data, final List<DiscoveryTieziEntity.Mdata.Hot> mdatas) {
+        if (isEmpty(mdatas)) {
+            gone(view_zuixin, rv_new,mtv_zuixin);
+        } else {
+            visible(view_zuixin, rv_new,mtv_zuixin);
+        }
+        if (isEmpty(data.hot_inv)) {
+            gone(view_remen, rv_hot,mtv_remen);
+        } else {
+            visible(view_remen, rv_hot,mtv_remen);
+        }
+        if (isEmpty(mdatas) && isEmpty(data.hot_inv)) {
+            gone(view_remen, rv_hot,mtv_remen);
+            visible(view_zuixin, rv_new,mtv_zuixin);
+        }
         if (newAdapter == null) {
             mtv_title.setText(data.topicDetail.title);
             mtv_titles.setText(data.topicDetail.title);
             mtv_desc.setText(data.topicDetail.content);
             GlideUtils.getInstance().loadImage(getBaseContext(), miv_photo, data.topicDetail.img);
-            newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas,this);
+            newAdapter = new DiscoverHotAdapter(getBaseContext(), true, mdatas, this);
             linearLayoutManager = new LinearLayoutManager(getBaseContext());
+
             rv_new.setLayoutManager(linearLayoutManager);
             rv_new.setNestedScrollingEnabled(false);
             rv_new.setAdapter(newAdapter);
-            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(getBaseContext(), false, data.hot_inv,this);
+            DiscoverHotAdapter hotAdapter = new DiscoverHotAdapter(getBaseContext(), false, data.hot_inv, this);
             LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(getBaseContext());
             rv_hot.setLayoutManager(mlinearLayoutManager);
             rv_hot.setNestedScrollingEnabled(false);

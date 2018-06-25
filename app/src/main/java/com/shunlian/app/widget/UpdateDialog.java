@@ -61,6 +61,10 @@ public class UpdateDialog implements IMain {
 
     }
 
+    public UpdateDialog(Activity activity, UpdateEntity data) {
+        this.activity = activity;
+        setUpdateData(data);
+    }
     private void initForceDialog() {
         if (forceDialog == null) {
             forceDialog = new Dialog(activity, R.style.popAd);
@@ -153,6 +157,7 @@ public class UpdateDialog implements IMain {
         Constant.IS_DOWNLOAD = true;
         Intent intent = new Intent(activity, DownloadService.class);
         intent.putExtra("url", updateUrl);
+//        intent.putExtra("url", "https:\\/\\/down.sldlcdn.com\\/app\\/Android_1.8.6.apk");
         intent.putExtra("fileMd5", fileMd5);
         activity.startService(intent);
 //                    if (!"force".equals(updateType)) {
@@ -233,8 +238,7 @@ public class UpdateDialog implements IMain {
 
     }
 
-    @Override
-    public void setUpdateInfo(UpdateEntity data) {
+    private void setUpdateData(UpdateEntity data){
         updateLog = data.changeLog;
         String needUpdate = data.needUpdate;
         updateType = data.updateType;
@@ -257,6 +261,10 @@ public class UpdateDialog implements IMain {
 //                        enter();
         }
         initDialogFinish();
+    }
+    @Override
+    public void setUpdateInfo(UpdateEntity data) {
+        setUpdateData(data);
     }
 
     @Override

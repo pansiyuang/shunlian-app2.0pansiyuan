@@ -2,6 +2,8 @@
     <!--<string name="app_name">顺联动力</string>-->
     <string name="app_name">顺联2.0</string>
     <string name="common_yuan">￥</string>
+    <string name="common_yuans">元</string>
+    <string name="common_wan">万</string>
     <string name="common_go_shop">去逛逛</string>
     <string name="common_chakanxiangqing">查看详情</string>
 
@@ -115,6 +117,9 @@
 
     <!--找回密码-->
     <string name="FindPsw_zhmm">找回密码</string>
+
+    <!--优惠券-->
+    <string name="coupon_youxiaoqi">有效期：</string>
 
     <!--店铺-->
     <string name="store_search">搜索店铺内商品</string>

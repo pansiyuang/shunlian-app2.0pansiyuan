@@ -38,7 +38,8 @@
 
                     <com.shunlian.app.widget.MyRelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="180dp">
+                        android:layout_height="180dp"
+                        android:background="@color/white">
 
                         <com.shunlian.app.widget.MyTextView
                             android:id="@+id/mtv_name"
@@ -94,7 +95,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
+                            android:layout_height="1dp"
                             android:layout_below="@id/mrlayout_level"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="12dp"
@@ -105,7 +106,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="68dp"
                             android:layout_below="@id/mrlayout_level"
-                            android:background="@color/white">
+                            android:background="@color/white"
+                            android:layout_marginTop="1dp">
 
                             <com.shunlian.app.widget.MyLinearLayout
                                 android:id="@+id/mllayout_yue"
