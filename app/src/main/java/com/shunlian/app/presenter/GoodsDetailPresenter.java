@@ -104,18 +104,22 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     if (common_activity != null){
                         iView.specailAct();
                     }
+
+                    /**************分享****************/
+                    goodsTitle = data.title;
+                    shareInfoParam.title = data.title;
+                    shareInfoParam.img = data.pics.get(0);
+                    shareInfoParam.goodsPrice = data.price;
+                    shareInfoParam.desc = data.introduction;
+                    shareInfoParam.downloadPic = data.pics;
                     if (data.user_info != null){
                         shareLink = data.user_info.share_url;
-                        goodsTitle = data.title;
                         shareInfoParam.userAvatar = data.user_info.avatar;
                         shareInfoParam.userName = data.user_info.nickname;
-                        shareInfoParam.title = data.title;
-                        shareInfoParam.img = data.pics.get(0);
-                        shareInfoParam.goodsPrice = data.price;
-                        shareInfoParam.desc = data.introduction;
-                        shareInfoParam.downloadPic = data.pics;
                         shareInfoParam.shareLink = shareLink;
                     }
+                    /**************分享****************/
+
                     if (data.common_activity != null){
                         shareInfoParam.start_time = data.common_activity.start_time;
                         shareInfoParam.act_label = data.is_preferential;
