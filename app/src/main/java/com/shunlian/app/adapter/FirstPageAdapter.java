@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
@@ -29,7 +30,6 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.HourRedDownTimerView;
@@ -493,8 +493,17 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             mShareInfoParam.title = data.share.title;
                             mShareInfoParam.desc = data.share.content;
                             mShareInfoParam.img = data.share.logo;
-                            mShareInfoParam.shareLink = data.share.share_url;
-                            shareStyle2Dialog();
+
+                            if (!Common.isAlreadyLogin()){
+                                Common.goGoGo(context,"login");
+                                return;
+                            }
+                            if (!isEmpty(data.share.share_url) && data.share.share_url.contains("member_id")){
+                                mShareInfoParam.shareLink = data.share.share_url;
+                                shareStyle2Dialog();
+                            }else {
+                                cateGoryFrag.getShareInfo(data.url.type,data.url.item_id);
+                            }
                         }
                     });
                     fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
@@ -659,6 +668,11 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                 }
                 break;
         }
+    }
+
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam = baseEntity.data;
+        shareStyle2Dialog();
     }
 
     /**

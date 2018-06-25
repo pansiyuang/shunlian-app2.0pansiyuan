@@ -7,17 +7,17 @@ import android.view.View;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.ArticleDetailEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IArticleDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,6 +139,21 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
                 break;
         }
         super.onClick(view);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && mPresent != null){
+            mPresent.getShareInfo(mPresent.article,articleId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam.shareLink = baseEntity.data.shareLink;
+        shareInfoParam.userName = baseEntity.data.userName;
+        shareInfoParam.userAvatar = baseEntity.data.userAvatar;
     }
 
     @Override

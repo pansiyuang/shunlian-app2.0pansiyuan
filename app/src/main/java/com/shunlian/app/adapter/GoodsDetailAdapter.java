@@ -561,9 +561,11 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             final TitleHolder mHolder = (TitleHolder) holder;
 
             int pref_length = 0;
+            String title = mGoodsEntity.title;
             final String is_preferential = mGoodsEntity.is_preferential;
             if (mGoodsEntity.tt_act != null){
                 pref_length = 5;//显示天天特惠标题
+                title = mGoodsEntity.tt_act.title;
                 visible(mHolder.miv_pref);
             }else {
                 gone(mHolder.miv_pref);
@@ -580,9 +582,9 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
 
             if (pref_length != 0){
-                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length).concat(mGoodsEntity.title));
+                mHolder.mtv_title.setText(Common.getPlaceholder(pref_length)+title);
             }else {
-                mHolder.mtv_title.setText(mGoodsEntity.title);
+                mHolder.mtv_title.setText(title);
             }
 
             mHolder.mtv_price.setText(mGoodsEntity.price);

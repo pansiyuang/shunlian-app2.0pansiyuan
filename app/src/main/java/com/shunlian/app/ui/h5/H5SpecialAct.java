@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.view.View;
 
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.bean.ShareEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PH5;
@@ -27,6 +29,8 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
 
     private ShareInfoParam shareInfoParam;
     private MessageCountManager messageCountManager;
+    private PH5 ph5;
+    private String specialId;
 
     public static void startAct(Context context, String url, int mode) {
         Intent intentH5 = new Intent(context, H5SpecialAct.class);
@@ -88,8 +92,9 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
         if (!isEmpty(h5Url)) {
             visible(rl_title_more);
             if (h5Url.startsWith(InterentTools.H5_HOST + "special")) {
-                PH5 ph5=new PH5(this,this);
-                ph5.getShareInfo(h5Url.substring(h5Url.indexOf("special/")+"special/".length()));
+                ph5 = new PH5(this,this);
+                specialId = h5Url.substring(h5Url.indexOf("special/") + "special/".length());
+                ph5.getShareInfo(specialId);
             } else if (h5Url.startsWith(InterentTools.H5_HOST + "activity")) {
                 rl_title_more.setOnClickListener(v -> {
                     quick_actions.setVisibility(View.VISIBLE);
@@ -98,6 +103,18 @@ public class H5SpecialAct extends H5Act implements IH5View, MessageCountManager.
             }
         }
         super.loadUrl();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && ph5 != null){
+            ph5.getShareInfo(ph5.special,specialId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam = baseEntity.data;
     }
 
     @Override

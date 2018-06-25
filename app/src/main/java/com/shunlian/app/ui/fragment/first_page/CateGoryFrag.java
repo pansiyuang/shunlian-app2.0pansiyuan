@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.FirstPageAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GetDataEntity;
 import com.shunlian.app.bean.GetMenuEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
@@ -186,6 +187,17 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                     pFirstPage.babyIsLoading = false;
                 }
             }
+        }
+    }
+
+    public void getShareInfo(String type, String id){
+        if (pFirstPage != null)pFirstPage.getShareInfo(type,id,channel_id);
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if (firstPageAdapter != null){
+            firstPageAdapter.shareInfo(baseEntity);
         }
     }
 }
