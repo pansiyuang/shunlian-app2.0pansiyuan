@@ -808,7 +808,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
         if (quick_actions != null){
-            quick_actions.shareInfo(baseEntity.data);
+            shareInfoParam.shareLink = baseEntity.data.shareLink;
+            shareInfoParam.userName = baseEntity.data.userName;
+            shareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            shareInfoParam.desc = baseEntity.data.desc;
         }
     }
 }

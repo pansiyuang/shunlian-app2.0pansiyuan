@@ -11,11 +11,13 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.ArticleAdapter;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.ArticleEvent;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
-import com.shunlian.app.utils.Constant;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -49,6 +51,8 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     private int mIndex = 1;
     private LinearLayoutManager articleManager;
     private QuickActions quick_actions;
+    private ShareInfoParam mShareInfoParam;
+    private String mArticleId;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -177,21 +181,48 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
     }
     //分享文章方法
     public void shareArticle(int position){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(baseActivity,"login");
+            return;
+        }
         ArticleEntity.Article article = mArticleList.get(position - 1);
         if (mPresenter != null){
-            ShareInfoParam shareInfoParam = mPresenter.getShareInfoParam();
-            shareInfoParam.title = article.title;
-            shareInfoParam.desc = article.full_title;
-            shareInfoParam.img = article.thumb;
-            shareInfoParam.shareLink = article.share_url;
-            shareInfoParam.thumb_type = article.thumb_type;
-            if (quick_actions != null){
-                visible(quick_actions);
-                quick_actions.shareInfo(shareInfoParam);
-                quick_actions.shareStyle2Dialog(true,2,"article",article.id);
+            mShareInfoParam = mPresenter.getShareInfoParam();
+            mShareInfoParam.title = article.title;
+            mShareInfoParam.desc = article.full_title;
+            mShareInfoParam.img = article.thumb;
+            mShareInfoParam.thumb_type = article.thumb_type;
+            mArticleId = article.id;
+            if (!isEmpty(article.share_url)) {
+                mShareInfoParam.shareLink = article.share_url;
+                share();
+            }else {
+                mPresenter.getShareInfo(mPresenter.nice,article.id);
             }
         }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && mPresenter != null){
+            mPresenter.getShareInfo(mPresenter.nice,mArticleId);
+        }
+    }
+
+    private void share() {
+        if (quick_actions != null) {
+            visible(quick_actions);
+            quick_actions.shareInfo(mShareInfoParam);
+            quick_actions.shareStyle2Dialog(true, 2, "article",mArticleId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+        mShareInfoParam.userName = baseEntity.data.userName;
+        share();
     }
 
     public void toLikeArticle(String articleId) {

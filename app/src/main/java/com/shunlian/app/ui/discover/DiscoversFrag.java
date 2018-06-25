@@ -14,4 +14,5 @@ public abstract class DiscoversFrag extends BaseFragment {
      */
     public abstract boolean isClickManage();
 
+
 }

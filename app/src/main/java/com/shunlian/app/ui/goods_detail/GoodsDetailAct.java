@@ -28,8 +28,10 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.CommentAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.util.ChatManager;
@@ -187,6 +189,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     public int bottomListHeight;//底部导航高度
     private int num;//加入购物车的商品数量
     private int currentQuickAction = -1;//当前快速点击位置
+    private ShareInfoParam mShareInfoParam;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -198,13 +201,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected int getLayoutId() {
         return R.layout.act_goods_detail;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && goodsDetailPresenter != null){
-            goodsDetailPresenter.refreshDetail();
-        }
     }
 
     @Override
@@ -471,6 +467,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (store_info != null){
             store_id = store_info.store_id;
         }
+        mShareInfoParam = goodsDetailPresenter.getShareInfoParam();
     }
 
 
@@ -1079,7 +1076,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             return;
         }
         if (goodsDetailPresenter != null){
-            quick_actions.shareInfo(goodsDetailPresenter.getShareInfoParam());
+            quick_actions.shareInfo(mShareInfoParam);
             goodsDetailPresenter.copyText(false);
             quick_actions.saveshareGoodsPic();
         }
@@ -1159,5 +1156,22 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         super.onDestroy();
         goodsDetailPresenter = null;
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && goodsDetailPresenter != null){
+            goodsDetailPresenter.getShareInfo(goodsDetailPresenter.goods,goodsId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if (quick_actions != null){
+            mShareInfoParam.userName = baseEntity.data.userName;
+            mShareInfoParam.userAvatar = baseEntity.data.userAvatar;
+            mShareInfoParam.shareLink = baseEntity.data.shareLink;
+            mShareInfoParam.desc = baseEntity.data.desc;
+        }
     }
 }
