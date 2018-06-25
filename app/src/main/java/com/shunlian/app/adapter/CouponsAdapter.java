@@ -45,7 +45,7 @@ public class CouponsAdapter extends BaseRecyclerAdapter<VouchercenterplEntity.MD
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
         VouchercenterplEntity.MData data = lists.get(position);
         mHolder.mtv_title.setText(data.title);
-        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.denomination + data.use_condition
+        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.denomination +" "+data.use_condition
                 , data.denomination, 21);
         mHolder.mtv_price.setText(spannableStringBuilder);
         switch (data.new_or_old){

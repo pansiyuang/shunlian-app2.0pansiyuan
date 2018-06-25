@@ -48,12 +48,15 @@
                 android:textSize="16sp" />
 
             <View
+                android:id="@+id/view_remen"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="24dp"
+                android:visibility="gone"
                 android:background="@color/white_ash" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_remen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -61,7 +64,8 @@
                 android:layout_marginTop="17dp"
                 android:text="@string/discover_remen"
                 android:textColor="@color/value_B3B2B8"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_hot"
@@ -69,14 +73,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" />
+                android:paddingRight="20dp"
+                android:visibility="gone"/>
 
             <View
+                android:id="@+id/view_zuixin"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
+                android:visibility="gone"
                 android:background="@color/white_ash" />
 
             <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_zuixin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -84,7 +92,8 @@
                 android:layout_marginTop="17dp"
                 android:text="@string/discover_zuixin"
                 android:textColor="@color/value_B3B2B8"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_new"
@@ -92,7 +101,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" />
+                android:paddingRight="20dp"
+                android:visibility="gone"/>
 
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyScrollView>

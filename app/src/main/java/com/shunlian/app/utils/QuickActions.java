@@ -153,6 +153,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
                             (view) -> {
                                 Common.goGoGo(mContext,"login");
+                                reset();
                                 promptDialog.dismiss();
                             }, "取消", (view) -> promptDialog.dismiss()).show();
                     return;
@@ -704,7 +705,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+
+                        if (TextUtils.isEmpty(mShareInfoParam.shop_logo)){
+                            miv_shop_head.setVisibility(GONE);
+                            savePic(inflate);
+                        }else {
+                            shopPic(inflate, miv_shop_head);
+                        }
                     }
                 });
     }
@@ -724,6 +732,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         Common.staticToast("分享失败");
+                        reset();
                     }
                 });
     }
@@ -802,13 +811,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_user_head.setImageBitmap(resource);
-
                         goodsPic(inflate, miv_goods_pic);
                     }
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                        goodsPic(inflate, miv_goods_pic);
                     }
                 });
     }
@@ -839,6 +848,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         Common.staticToast("分享失败");
+                        reset();
                     }
                 });
     }
@@ -894,13 +904,13 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_user_head.setImageBitmap(resource);
-
                         findPic(inflate, miv_bigpic, miv_smallpic);
                     }
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                        findPic(inflate, miv_bigpic, miv_smallpic);
                     }
                 });
     }
@@ -927,6 +937,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         Common.staticToast("分享失败");
+                        reset();
                     }
                 });
     }
@@ -962,14 +973,14 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                     public void onResourceReady(Bitmap resource,
                                                 GlideAnimation<? super Bitmap> glideAnimation) {
                         miv_user_head.setImageBitmap(resource);
-
                         inflate.postDelayed(() -> savePic(inflate), 200);
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Common.staticToast("分享失败");
+                        miv_user_head.setImageResource(R.mipmap.img_set_defaulthead);
+                        inflate.postDelayed(() -> savePic(inflate), 200);
                     }
                 });
     }

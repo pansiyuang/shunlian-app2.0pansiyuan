@@ -35,6 +35,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.PayOrderEntity;
 import com.shunlian.app.bean.RefreshTokenEntity;
+import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.listener.BaseContract;
 import com.shunlian.app.listener.INetDataCallback;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -475,5 +476,56 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      */
     protected Drawable getDrawableResouce(int drawableResouce) {
         return resources.getDrawable(drawableResouce);
+    }
+
+
+
+    /************分享type*********************/
+    /*分享类型 首页->home、频道页->channel、个人中心->person、Plus->plus、
+    优品列表(商品)->plusGoods、专题->special、发现关注注列表->focus、
+    发现精选列表->nice、发现精选标签->tag、文章详情->article、发现圈子详情->circle、
+    我的小店->myshop、商品详情->goods、品质热推->hotpush、品牌热卖->sale、
+    大牌详情->specialList、口碑热销->praise、爱上新品->loveyoupin、
+    帮助中心 解决问题->help、店铺->store、商学院->class*/
+    public final String home = "home";
+    public final String channel = "channel";
+    public final String person = "person";
+    public final String plus = "plus";
+    public final String plusGoods = "plusGoods";
+    public final String special = "special";
+    public final String focus = "focus";
+    public final String nice = "nice";
+    public final String tag = "tag";
+    public final String article = "article";
+    public final String circle = "circle";
+    public final String myshop = "myshop";
+    public final String goods = "goods";
+    public final String hotpush = "hotpush";
+    public final String sale = "sale";
+    public final String specialList = "specialList";
+    public final String praise = "praise";
+    public final String loveyoupin = "loveyoupin";
+    public final String help = "help";
+    public final String store = "store";
+    public final String clazz = "class";
+    /**
+     * 获取分享信息
+     * @param type
+     * @param item_id
+     */
+    public void getShareInfo(String type,String item_id){
+        Map<String,String> map = new HashMap<>();
+        map.put("type",type);
+        map.put("item_id",item_id);
+        sortAndMD5(map);
+
+        Call<BaseEntity<ShareInfoParam>> baseEntityCall = getAddCookieApiService().shareInfo(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<ShareInfoParam>>(){
+                    @Override
+                    public void onSuccess(BaseEntity<ShareInfoParam> entity) {
+                        super.onSuccess(entity);
+                        iView.shareInfo(entity);
+                    }
+                });
     }
 }

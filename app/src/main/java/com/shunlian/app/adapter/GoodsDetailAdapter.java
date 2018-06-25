@@ -345,9 +345,8 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             recy_view.addItemDecoration(new HorItemDecoration(space,0,0));
             goodsDetailShopAdapter = new GoodsDetailShopAdapter(context, false, storeItems);
             recy_view.setAdapter(goodsDetailShopAdapter);
-            goodsDetailShopAdapter.setOnItemClickListener((v,position)-> {
-                GoodsDeatilEntity.StoreInfo.Item i1 = storeItems.get(position);
-                GoodsDetailAct.startAct(context,i1.id);});
+            goodsDetailShopAdapter.setOnItemClickListener((v,position)->
+                GoodsDetailAct.startAct(context,storeItems.get(position).id));
         }else {
             goodsDetailShopAdapter.notifyDataSetChanged();
         }
@@ -708,18 +707,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                     mHolder.ddp_special_before_downTime.setDownTime(Integer.parseInt(time) - runTime);
                     mHolder.ddp_special_before_downTime.startDownTimer();
 
-                    if (!isStartDownTime)
-                    mHolder.ddp_special_before_downTime.setDownTimerListener(() -> {
-                        isStartDownTime = false;
-                        if (context instanceof GoodsDetailAct) {
-                            GoodsDetailAct act = (GoodsDetailAct) context;
-                            if (act.isFinishing()) {
-                                mHolder.ddp_special_before_downTime.cancelDownTimer();
-                                return;
+                    if (!isStartDownTime) {
+                        isStartDownTime = true;
+                        mHolder.ddp_special_before_downTime.setDownTimerListener(() -> {
+                            isStartDownTime = false;
+                            if (context instanceof GoodsDetailAct) {
+                                GoodsDetailAct act = (GoodsDetailAct) context;
+                                if (act.isFinishing()) {
+                                    mHolder.ddp_special_before_downTime.cancelDownTimer();
+                                    return;
+                                }
+                                act.refreshDetail();
                             }
-                            act.refreshDetail();
-                        }
-                    });
+                        });
+                    }
                 }else {
                     gone(mHolder.mllayout_specail_before_downtime);
                 }
@@ -747,46 +748,49 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_special_downTime.setTimeTextColor(getColor(R.color.pink_color));
                 String format = "距结束仅剩%d天";
 
-                if (!isStartDownTime) {
-                    String time = isEmpty(common_activity.end_remain_seconds) ? "0" :
-                            common_activity.end_remain_seconds;
 
-//                    time = "10";
-                    long down_time = Long.parseLong(time);
-                    day = down_time / (3600 * 24);
-                    if (day > 0){
-                        mHolder.mtv_special_title.setText(String.format(format,day));
-                    }else {
-                        mHolder.mtv_special_title.setText("距结束");
-                    }
-                    long inner_day = down_time % (3600 * 24);
-                    mHolder.ddp_special_downTime.setDownTime((int) inner_day);
-                    mHolder.ddp_special_downTime.startDownTimer();
-                    isStartDownTime = true;
+                String time = isEmpty(common_activity.end_remain_seconds) ? "0" :
+                        common_activity.end_remain_seconds;
+                //time = "10";
+                int runTime = (int) ((System.currentTimeMillis() - act_start) / 1000);
+                long down_time = Long.parseLong(time)-runTime;
+                day = down_time / (3600 * 24);
+                if (day > 0){
+                    mHolder.mtv_special_title.setText(String.format(format,day));
+                }else {
+                    mHolder.mtv_special_title.setText("距结束");
                 }
-                mHolder.ddp_special_downTime.setDownTimerListener(()-> {
-                    if (day > 0){
-                        day = day - 1;
-                        if (day > 0){
-                            mHolder.mtv_special_title.setText(String.format(format,day));
-                        }else {
-                            mHolder.mtv_special_title.setText("距结束");
-                        }
-                        mHolder.ddp_special_downTime.cancelDownTimer();
-                        mHolder.ddp_special_downTime.setDownTime(3600);
-                        mHolder.ddp_special_downTime.startDownTimer();
-                    }else {
-                        isStartDownTime = false;
-                        if (context instanceof GoodsDetailAct) {
-                            GoodsDetailAct act = (GoodsDetailAct) context;
-                            if (act.isFinishing()) {
-                                mHolder.ddp_special_downTime.cancelDownTimer();
-                                return;
+                long inner_day = down_time % (3600 * 24);
+                mHolder.ddp_special_downTime.cancelDownTimer();
+                mHolder.ddp_special_downTime.setDownTime((int) inner_day);
+                mHolder.ddp_special_downTime.startDownTimer();
+
+                if (!isStartDownTime) {
+                    isStartDownTime = true;
+                    mHolder.ddp_special_downTime.setDownTimerListener(() -> {
+                        if (day > 0) {
+                            day = day - 1;
+                            if (day > 0) {
+                                mHolder.mtv_special_title.setText(String.format(format, day));
+                            } else {
+                                mHolder.mtv_special_title.setText("距结束");
                             }
-                            act.refreshDetail();
+                            mHolder.ddp_special_downTime.cancelDownTimer();
+                            mHolder.ddp_special_downTime.setDownTime(3600);
+                            mHolder.ddp_special_downTime.startDownTimer();
+                        } else {
+                            isStartDownTime = false;
+                            if (context instanceof GoodsDetailAct) {
+                                GoodsDetailAct act = (GoodsDetailAct) context;
+                                if (act.isFinishing()) {
+                                    mHolder.ddp_special_downTime.cancelDownTimer();
+                                    return;
+                                }
+                                act.refreshDetail();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -836,18 +840,20 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             mHolder.ddp_downTime.setDownTime(Integer.parseInt(time) - runTime);
             mHolder.ddp_downTime.startDownTimer();
 
-            if (!isStartDownTime)
-            mHolder.ddp_downTime.setDownTimerListener(()-> {
-                isStartDownTime = false;
-                if (context instanceof GoodsDetailAct){
-                    GoodsDetailAct act = (GoodsDetailAct) context;
-                    if (act.isFinishing()){
-                        mHolder.ddp_downTime.cancelDownTimer();
-                        return;
+            if (!isStartDownTime) {
+                isStartDownTime = true;
+                mHolder.ddp_downTime.setDownTimerListener(() -> {
+                    isStartDownTime = false;
+                    if (context instanceof GoodsDetailAct) {
+                        GoodsDetailAct act = (GoodsDetailAct) context;
+                        if (act.isFinishing()) {
+                            mHolder.ddp_downTime.cancelDownTimer();
+                            return;
+                        }
+                        act.refreshDetail();
                     }
-                    act.refreshDetail();
-                }
-            });
+                });
+            }
         }else {
             visible(mHolder.mtv_sales,mHolder.mllayout_common_price);
             gone(mHolder.mllayout_preferential);
