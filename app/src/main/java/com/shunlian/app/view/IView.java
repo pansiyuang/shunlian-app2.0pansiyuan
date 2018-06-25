@@ -22,6 +22,9 @@ package com.shunlian.app.view;
 //         .............................................
 //                佛祖保佑                 永无BUG
 
+import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+
 /**
  * Created by zhang on 2017/6/21 14 : 28.
  */
@@ -39,4 +42,9 @@ public interface IView {
      */
     void showDataEmptyView(int request_code);
 
+    /**
+     * 分享信息
+     * @param baseEntity
+     */
+    default void shareInfo(BaseEntity<ShareInfoParam> baseEntity){}
 }

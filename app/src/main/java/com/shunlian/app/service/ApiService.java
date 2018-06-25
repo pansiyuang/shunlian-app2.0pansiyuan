@@ -30,7 +30,6 @@ import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
-import com.shunlian.app.utils.Common;
 
 import java.util.List;
 import java.util.Map;
@@ -2309,4 +2308,12 @@ public interface ApiService {
      */
     @POST("share/parseUrlForApp")
     Call<BaseEntity<ScanCodeEntity>> scanCodeParseUrl(@Body RequestBody body);
+
+    /**
+     * 分享信息
+     * @param map
+     * @return
+     */
+    @GET("channel/share")
+    Call<BaseEntity<ShareInfoParam>> shareInfo(@QueryMap Map<String, String> map);
 }

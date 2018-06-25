@@ -295,20 +295,20 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private void changeState() {
         miv_isShow_data.setImageResource(!isShowData ? R.mipmap.img_plus_guanbi_n : R.mipmap.img_guanbi_h);
         if (personalcenterEntity != null) {
-//            mtv_yue.setText(!isShowData ? ASTERISK :formatNumber(personalcenterEntity.balance));
-//            mtv_youhuiquan.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.coupon_num));
-//            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.all_sl_income));
-//            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.team_sales));
+            mtv_yue.setText(!isShowData ? ASTERISK :formatNumber(personalcenterEntity.balance));
+            mtv_youhuiquan.setText(!isShowData ? ASTERISK : personalcenterEntity.coupon_num);
+            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.all_sl_income));
+            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(personalcenterEntity.team_sales));
 
-            mtv_yue.setText(!isShowData ? ASTERISK : formatNumber(one));
-            mtv_youhuiquan.setText(!isShowData ? ASTERISK : formatNumber(two));
-            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(three));
-            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(four));
+//            mtv_yue.setText(!isShowData ? ASTERISK : formatNumber(one));
+//            mtv_youhuiquan.setText(!isShowData ? ASTERISK : two);
+//            mtv_donglizhishu.setText(!isShowData ? ASTERISK : formatNumber(three));
+//            mtv_xiaoshou.setText(!isShowData ? ASTERISK : formatNumber(four));
         }
     }
 
     public SpannableStringBuilder formatNumber(String number) {
-        if (isEmpty(number)) {
+        /*if (isEmpty(number)) {
             return Common.changeTextSize(
                     "数据异常", "数据", 11);
         }
@@ -344,7 +344,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         } catch (Exception e) {
             return Common.changeTextSize(
                     "数据异常", "数据", 11);
-        }
+        }*/
+        if (isEmpty(number))return new SpannableStringBuilder("");
+        char[] chars = number.toCharArray();
+        return Common.changeTextSize(number, String.valueOf(chars[chars.length-1]), 11);
     }
 
     @Override
@@ -410,7 +413,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
         lay_refresh.setOnRefreshListener(new onRefreshListener() {
             @Override
             public void onRefresh() {
-                switch (flag) {
+                /*switch (flag) {
                     case 0:
                         one = "0.99";
                         two = "1";
@@ -445,7 +448,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         flag = -1;
                         break;
                 }
-                flag++;
+                flag++;*/
                 personalcenterPresenter.getApiData();
             }
         });

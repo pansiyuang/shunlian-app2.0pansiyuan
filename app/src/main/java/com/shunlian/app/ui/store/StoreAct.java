@@ -22,6 +22,7 @@ import com.shunlian.app.adapter.StoreFirstAdapter;
 import com.shunlian.app.adapter.StoreNewAdapter;
 import com.shunlian.app.adapter.StoreVoucherAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.StoreGoodsListEntity;
@@ -41,6 +42,7 @@ import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GrideItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.StoreView;
@@ -262,13 +264,6 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         String s = messageCountManager.setTextCount(tv_msg_count);
         if (quick_actions != null)
             quick_actions.setMessageCount(s);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && storePresenter != null){
-            storePresenter.initFirst(storeId);
-        }
     }
 
     @Override
@@ -804,4 +799,17 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && storePresenter != null){
+            storePresenter.getShareInfo(storePresenter.store,storeId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        if (quick_actions != null){
+            quick_actions.shareInfo(baseEntity.data);
+        }
+    }
 }
