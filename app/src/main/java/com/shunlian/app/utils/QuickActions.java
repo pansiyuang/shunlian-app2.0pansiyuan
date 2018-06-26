@@ -382,7 +382,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 消息界面
      */
     public void message() {
-        setShowItem(3,4,6,7);
+        setShowItem(2,3,4,6,7);
     }
 
     /**

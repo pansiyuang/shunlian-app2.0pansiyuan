@@ -164,7 +164,9 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
         adapter.setOnItemClickListener((view, position) -> {
             if (adapter.counts.contains(position)) {
                 SortFragEntity.SubList subList = adapter.titleData.get(position);
-                RankingListAct.startAct(this, subList.id, toplist.name, subList.name);
+                if ("1".equalsIgnoreCase(subList.on_ranking)) {
+                    RankingListAct.startAct(this, subList.id, toplist.name, subList.name);
+                }
             } else {
                 int i = adapter.computeCount(position);
                 SortFragEntity.ItemList itemList = itemLists.get(position - i);

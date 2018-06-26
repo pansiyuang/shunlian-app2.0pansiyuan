@@ -11,12 +11,14 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HotPushAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
@@ -92,6 +94,18 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
         quick_actions.setVisibility(View.VISIBLE);
         quick_actions.special();
         quick_actions.shareInfo(shareInfoParam);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && pAishang != null){
+            pAishang.getShareInfo(pAishang.hotpush,hotId,channeId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        shareInfoParam = baseEntity.data;
     }
 
     @Override
@@ -220,14 +234,15 @@ public class HotRecommendAct extends BaseActivity implements View.OnClickListene
             mtv_title.setText(data.name);
             mtv_desc.setText(data.content);
             GlideUtils.getInstance().loadImage(getBaseContext(),miv_bg,data.pic);
-            downTime_firsts.setDownTime(Integer.parseInt(data.count_down));
+            downTime_firsts.cancelDownTimer();
+            downTime_firsts.setTimeTextColor(getColorResouce(R.color.white));
+            downTime_firsts.setDownTime(Long.parseLong(data.count_down));
             downTime_firsts.setDownTimerListener(new OnCountDownTimerListener() {
                 @Override
                 public void onFinish() {
                     if (downTime_firsts!=null)
                     downTime_firsts.cancelDownTimer();
                 }
-
             });
             downTime_firsts.startDownTimer();
             hotPushAdapter=new HotPushAdapter(getBaseContext(),mData);
