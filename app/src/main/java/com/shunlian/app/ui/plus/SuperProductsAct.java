@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SuperProductAdapter;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.presenter.SuperproductPresenter;
@@ -42,6 +43,7 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
     private SuperproductPresenter mPresenter;
     private LinearLayoutManager manager;
     private SuperProductAdapter mAdapter;
+    private ShareInfoParam mInfoParam;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, SuperProductsAct.class);
@@ -102,11 +104,32 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
     }
 
     @Override
-    public void onShare(ShareInfoParam infoParam) {
+    public void onShare(ShareInfoParam infoParam,String id) {
+        mInfoParam = infoParam;
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(this,"login");
+            return;
+        }
+        if (isEmpty(infoParam.shareLink) && mPresenter != null){
+            mPresenter.getShareInfo(mPresenter.goods,id);
+            return;
+        }
+        share(infoParam);
+    }
+
+    private void share(ShareInfoParam infoParam) {
         if (quick_actions != null) {
             visible(quick_actions);
             quick_actions.shareInfo(infoParam);
             quick_actions.shareStyle2Dialog(true, 3);
         }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mInfoParam.shareLink = baseEntity.data.shareLink;
+        mInfoParam.userName = baseEntity.data.userName;
+        mInfoParam.userAvatar = baseEntity.data.userAvatar;
+        share(mInfoParam);
     }
 }

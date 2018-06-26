@@ -17,7 +17,6 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
-import com.shunlian.app.widget.banner.Kanner;
 import com.shunlian.app.widget.banner.MyKanner;
 
 import java.util.ArrayList;
@@ -160,7 +159,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 mShareInfoParam.userAvatar = share.portrait;
                 mShareInfoParam.shareLink = share.share_url;
                 mShareInfoParam.goodsPrice = superProduct.price;
-                mShareLinstener.onShare(mShareInfoParam);
+                mShareLinstener.onShare(mShareInfoParam,superProduct.url.item_id);
             }
         });
     }
@@ -231,6 +230,6 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     }
 
     public interface OnShareClickListener {
-        void onShare(ShareInfoParam infoParam);
+        void onShare(ShareInfoParam infoParam,String id);
     }
 }
