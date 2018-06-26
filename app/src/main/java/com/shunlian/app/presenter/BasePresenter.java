@@ -513,10 +513,13 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
      * @param type
      * @param item_id
      */
-    public void getShareInfo(String type,String item_id){
+    public void getShareInfo(String type,String... item_id){
         Map<String,String> map = new HashMap<>();
         map.put("type",type);
-        map.put("item_id",item_id);
+        if (item_id.length >= 1)
+        map.put("item_id",item_id[0]);
+        if (item_id.length >= 2)
+        map.put("channel_id",item_id[1]);
         sortAndMD5(map);
 
         Call<BaseEntity<ShareInfoParam>> baseEntityCall = getAddCookieApiService().shareInfo(map);

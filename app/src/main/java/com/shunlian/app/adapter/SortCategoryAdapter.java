@@ -53,16 +53,24 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
 
 
     private SortFragEntity.Toplist mToplist;
-    public List<Integer> counts;
+    public List<Integer> counts = new ArrayList<>();//二级分类显示条目位置
     private int titleCount = 1;
     //二级分类显示条目位置对应的k:V
     public Map<Integer,SortFragEntity.SubList> titleData = new HashMap<>();
+    private final LayoutInflater mInflater;
 
     public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children,
                                SortFragEntity.Toplist toplist) {
         super(context, false, children);
+        mInflater = LayoutInflater.from(context);
+        filterData(toplist,false);
+    }
+
+    public void filterData(SortFragEntity.Toplist toplist, boolean b) {
+        counts.clear();
+        titleData.clear();
+        titleCount = 1;
         mToplist = toplist;
-        counts = new ArrayList<>();//二级分类显示条目位置
         counts.add(0);
         List<SortFragEntity.SubList> subLists = mToplist.children;//二级分类
         if (!isEmpty(subLists)) {//统计title位置
@@ -72,14 +80,15 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
                 if (i + 1 != subLists.size()) {//非最后一个列表
                     //counts最后一次了的位置加上 上一个二级类目下的数量再加1 = 当前二级类目的位置
                     int count = 0;
-                    if (!isEmpty(subList.children)){
+                    if (!isEmpty(subList.children))
                         count = subList.children.size();
-                    }
-                    counts.add(counts.get(counts.size() - 1) + count+1);
+
+                    counts.add(counts.get(counts.size() - 1) + count + 1);
                     titleData.put(counts.get(counts.size() - 1), subLists.get(i + 1));
                 }
             }
         }
+        if (b)notifyDataSetChanged();
     }
 
 
@@ -112,7 +121,7 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             case 1:
                 return super.onCreateViewHolder(parent, viewType);
             case 2:
-                View inflate = LayoutInflater.from(context).inflate(R.layout.sort_sub_title, parent, false);
+                View inflate = mInflater.inflate(R.layout.sort_sub_title, parent, false);
                 return new TitleHolder(inflate);
         }
         return null;
@@ -199,7 +208,8 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
                 if (!TextUtils.isEmpty(name)) {
                     mHolder.tv_name.setVisibility(View.VISIBLE);
                     mHolder.iv_thumb.setVisibility(View.VISIBLE);
-                    GlideUtils.getInstance().loadImage(context,mHolder.iv_thumb,lists.get(index).thumb);
+                    GlideUtils.getInstance().loadOverrideImage(context,
+                            mHolder.iv_thumb,lists.get(index).thumb,115,115);
                     mHolder.tv_name.setText(name);
                 } else {
                     mHolder.tv_name.setVisibility(View.GONE);

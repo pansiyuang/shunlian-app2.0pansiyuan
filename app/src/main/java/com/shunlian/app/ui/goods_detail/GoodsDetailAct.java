@@ -190,6 +190,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     private int num;//加入购物车的商品数量
     private int currentQuickAction = -1;//当前快速点击位置
     private ShareInfoParam mShareInfoParam;
+    private float mStatusBarAlpha;
 
     public static void startAct(Context context,String goodsId){
         Intent intent = new Intent(context,GoodsDetailAct.class);
@@ -220,7 +221,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-
     protected void initData() {
         goodsId = getIntent().getStringExtra("goodsId");
 
@@ -278,7 +278,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void onStart() {
         super.onStart();
-        setToolbar();
+        immersionBar.statusBarAlpha(mStatusBarAlpha)
+                .addTag(GoodsDetailAct.class.getName())
+                .init();
     }
 
     /*
@@ -981,8 +983,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (myImageView != null){
             myImageView.clearAnimation();
         }
@@ -990,6 +992,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         if (rnview != null){
             rnview.clearAnimation();
         }
+        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
     }
 
     /**

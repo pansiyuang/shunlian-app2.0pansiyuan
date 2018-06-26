@@ -26,7 +26,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
 
     private OnCountDownTimerListener OnCountDownTimerListener;
 
-    private int mSeconds;
+    private long mSeconds;
 
     /**
      * 天
@@ -386,7 +386,7 @@ public abstract class ItemCountDownTimerView extends LinearLayout {
      *
      * @param seconds
      */
-    public void setDownTime(int seconds) {
+    public void setDownTime(long seconds) {
         this.mSeconds = seconds;
     }
 

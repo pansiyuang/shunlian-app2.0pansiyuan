@@ -324,7 +324,11 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 发现详情页
      */
     public void findDetail(String articleId) {
-        topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        if (!TextUtils.isEmpty(articleId)){
+            topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext);
+        }else {
+            topMargin = ImmersionBar.getStatusBarHeight((Activity) mContext) + px ;
+        }
         rightMargin = px / 6;
         setShowItem(1, 2, 3, 6, 7, 8);
         if (TextUtils.isEmpty(articleId)){
@@ -378,7 +382,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
      * 消息界面
      */
     public void message() {
-        setShowItem(3,4,6,7);
+        setShowItem(2,3,4,6,7);
     }
 
     /**

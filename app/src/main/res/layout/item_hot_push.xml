@@ -2,8 +2,8 @@
 <com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mllayout_root"
     android:background="@color/white"
-    android:layout_width="168dp"
-    android:layout_height="245dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="2.5dp"
     android:layout_marginRight="2.5dp"
     android:layout_marginBottom="5dp"
@@ -11,7 +11,7 @@
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_photo"
-        android:layout_width="168dp"
+        android:layout_width="match_parent"
         android:layout_height="168dp"
         android:scaleType="fitXY" />
 

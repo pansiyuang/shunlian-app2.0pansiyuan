@@ -73,6 +73,7 @@ public class ZXingPresenter extends BasePresenter<IZXingView>{
                 }else {
                     Common.goGoGo(context,mUrl.type);
                 }
+                ((Activity) context).finish();
             }
 
             @Override

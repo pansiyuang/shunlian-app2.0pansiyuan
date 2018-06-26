@@ -110,6 +110,11 @@ public class CommentListAct extends BaseActivity implements IFindCommentListView
                     gone(mtv_send);
                     visible(miv_icon,mtv_msg_count);
                 }
+                if (s.length() > 140){
+                    met_text.setText(s.subSequence(0,140));
+                    met_text.setSelection(140);
+                    Common.staticToast("字数不能超过140");
+                }
             }
         });
     }

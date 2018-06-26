@@ -93,7 +93,7 @@
                 android:ellipsize="end"
                 android:hint="请输入您的电话号码"
                 android:singleLine="true"
-                android:inputType="phone"
+                android:inputType="number"
                 android:textCursorDrawable="@drawable/edit_cursor"
                 android:textColorHint="#919191"
                 android:textSize="13sp" />

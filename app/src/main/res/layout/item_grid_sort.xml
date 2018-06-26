@@ -16,7 +16,7 @@
         android:id="@+id/iv_thumb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:iv_control_adapter="true"
         app:iv_control_height="115"
         app:iv_control_width="115" />
