@@ -59,6 +59,9 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
 
     private SortFragPresenter presenter;
     private MessageCountManager messageCountManager;
+    private List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
+    private SortCategoryAdapter adapter;
+    private GoodsSearchParam mParam;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,SortAct.class));
@@ -148,7 +151,9 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
      * @param toplist
      */
     public void subRightList(final SortFragEntity.Toplist toplist) {
-        final List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
+        if (itemLists == null)
+            itemLists = new ArrayList<>();
+        itemLists.clear();
         List<SortFragEntity.SubList> children = toplist.children;
         if (!isEmpty(children)) {
             for (int i = 0; i < children.size(); i++) {//遍历二级分类
@@ -158,26 +163,31 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 }
             }
         }
-        final SortCategoryAdapter adapter = new SortCategoryAdapter(this, itemLists, toplist);
-        recycler_sort.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new SortCategoryAdapter(this, itemLists, toplist);
+            recycler_sort.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((view, position) -> {
-            if (adapter.counts.contains(position)) {
-                SortFragEntity.SubList subList = adapter.titleData.get(position);
-                if ("1".equalsIgnoreCase(subList.on_ranking)) {
-                    RankingListAct.startAct(this, subList.id, toplist.name, subList.name);
+            adapter.setOnItemClickListener((view, position) -> {
+                if (adapter.counts.contains(position)) {
+                    SortFragEntity.SubList subList = adapter.titleData.get(position);
+                    if ("1".equalsIgnoreCase(subList.on_ranking)) {
+                        RankingListAct.startAct(this, subList.id, toplist.name, subList.name);
+                    }
+                } else {
+                    int i = adapter.computeCount(position);
+                    SortFragEntity.ItemList itemList = itemLists.get(position - i);
+                    if (mParam == null)
+                        mParam = new GoodsSearchParam();
+                    mParam.cid = itemList.g_cid;
+                    mParam.attr_data = itemList.attrs;
+                    mParam.keyword = itemList.keyword;
+                    mParam.name = itemList.name;
+                    CategoryAct.startAct(this, mParam);
                 }
-            } else {
-                int i = adapter.computeCount(position);
-                SortFragEntity.ItemList itemList = itemLists.get(position - i);
-                GoodsSearchParam param = new GoodsSearchParam();
-                param.cid = itemList.g_cid;
-                param.attr_data = itemList.attrs;
-                param.keyword = itemList.keyword;
-                param.name = itemList.name;
-                CategoryAct.startAct(this, param);
-            }
-        });
+            });
+        }else {
+            adapter.filterData(toplist, true);
+        }
     }
 
 
