@@ -546,8 +546,9 @@ public class CategoryAct extends SideslipBaseActivity implements ICategoryView, 
                 setSalesMode(false);
                 tv_filter.setTextColor(getColorResouce(R.color.new_text));
                 tv_filter.setCompoundDrawables(null, null, getRightDrawable(R.mipmap.img_saixuan), null);
-//                searchParam = new GoodsSearchParam();
-//                initFiltrate();
+
+                searchParam = new GoodsSearchParam();
+                initFiltrate();
 
                 searchParam.keyword = keyword;
                 tv_keyword.setText(keyword);

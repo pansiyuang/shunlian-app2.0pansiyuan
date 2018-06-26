@@ -145,6 +145,9 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
             goodsViewHolder.ll_tags.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), goodsViewHolder));
         }
 
+        //返回键扩大点击范围
+        int i = TransformUtil.dip2px(context, 10);
+        TransformUtil.expandViewTouchDelegate(goodsViewHolder.miv_share,i,i,i,i);
 
         goodsViewHolder.miv_share.setOnClickListener(v -> {
             //分享
