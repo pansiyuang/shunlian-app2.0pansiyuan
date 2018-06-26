@@ -14,14 +14,17 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PingListAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PPingList;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
@@ -102,7 +105,7 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     MyTextView tv_msg_count;
 
     private MessageCountManager messageCountManager;
-
+    private String currentId;
     private PPingList pPingList;
     private PingListAdapter pingListAdapter;
     private boolean isMore=false;
@@ -183,13 +186,39 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.miv_share:
-                mShareInfoParam.title=share.title;
-                mShareInfoParam.desc=share.content;
-                mShareInfoParam.img=share.logo;
-                mShareInfoParam.shareLink=share.share_url;
-                shareStyle2Dialog();
+                if (!Common.isAlreadyLogin()) {
+                    LoginAct.startAct(this);
+                    return;
+                }
+
+                if (isEmpty(mShareInfoParam.shareLink) && pPingList != null) {
+                    pPingList.getShareInfo(pPingList.sale, currentId);
+                } else {
+                    mShareInfoParam.title = share.title;
+                    mShareInfoParam.desc = share.content;
+                    mShareInfoParam.img = share.logo;
+                    mShareInfoParam.shareLink = share.share_url;
+                    shareStyle2Dialog();
+                }
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginRefresh(DefMessageEvent event){
+        if (event.loginSuccess && pPingList != null){
+            pPingList.getShareInfo(pPingList.sale,currentId);
+        }
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam.desc = baseEntity.data.desc;
+        mShareInfoParam.img = baseEntity.data.userAvatar;
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.title = baseEntity.data.title;
+
+        shareStyle2Dialog();
     }
 
     /**
@@ -271,7 +300,8 @@ public class PingpaiListAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        pPingList = new PPingList(this, this, getIntent().getStringExtra("id"));
+        currentId = getIntent().getStringExtra("id");
+        pPingList = new PPingList(this, this, currentId);
 //        pPingList = new PPingList(this, this, "1");
         pPingList.getApiData();
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));

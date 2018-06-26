@@ -63,7 +63,7 @@ public class PlusOrderAdapter extends BaseRecyclerAdapter<PlusOrderEntity.PlusOr
         orderViewHolder.tv_total_count.setText("共计" + plusOrder.qty + "件商品");
 
         if ("0".equals(plusOrder.shipping_fee)) {
-            orderViewHolder.tv_total_price.setText("合计:" + price + "(包邮)");
+            orderViewHolder.tv_total_price.setText("合计:" + price + "  (包邮)");
         } else {
             orderViewHolder.tv_total_price.setText("合计:" + price);
         }

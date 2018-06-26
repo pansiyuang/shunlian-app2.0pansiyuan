@@ -1,33 +1,25 @@
 package com.shunlian.app.adapter;
 
-import android.app.Activity;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CorePingEntity;
-import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.ui.core.PingpaiAct;
+import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.timer.DayNoBlackDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
-import com.shunlian.app.widget.popmenu.PopMenu;
-import com.shunlian.app.widget.popmenu.PopMenuItem;
-import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
-import com.shunlian.app.widget.popmenu.PopMenuItemListener;
-import com.shunlian.app.wxapi.WXEntryActivity;
 
 import java.util.List;
 
 import butterknife.BindView;
-import pay.PayResult;
 
 /**
  * Created by Administrator on 2017/11/23.
@@ -35,7 +27,6 @@ import pay.PayResult;
 
 public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
     private int second=(int)(System.currentTimeMillis()/1000);
-    private ShareInfoParam mShareInfoParam=new ShareInfoParam();
     public PinpaiAdapter(Context context, boolean isShowFooter,
                          List<CorePingEntity.MData> lists) {
         super(context, isShowFooter, lists);
@@ -79,31 +70,6 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
     }
 
 
-    /**
-     * 分享微信和复制链接
-     */
-    public void shareStyle2Dialog(){
-        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity((Activity) context)
-                .addMenuItem(new PopMenuItem("微信", getDrawable(R.mipmap.icon_weixin)))
-                .addMenuItem(new PopMenuItem("复制链接", getDrawable(R.mipmap.icon_lianjie)))
-                .setOnItemClickListener(new PopMenuItemCallback() {
-                    @Override
-                    public void onItemClick(PopMenu popMenu, int position) {
-                        switch (position) {
-                            case 0:
-                                WXEntryActivity.startAct(context,
-                                        "shareFriend", mShareInfoParam);
-                                break;
-                            case 1:
-                                Common.copyText(context,mShareInfoParam.shareLink,mShareInfoParam.desc,true);
-                                break;
-                        }
-                    }
-                }).build();
-        if (!mPopMenu.isShowing()) {
-            mPopMenu.show();
-        }
-    }
     public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
@@ -138,11 +104,11 @@ public class PinpaiAdapter extends BaseRecyclerAdapter<CorePingEntity.MData> {
             miv_share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mShareInfoParam.shareLink=data.share.share_url;
-                    mShareInfoParam.title=data.share.title;
-                    mShareInfoParam.desc=data.share.content;
-                    mShareInfoParam.img=data.share.logo;
-                    shareStyle2Dialog();
+                    if (!Common.isAlreadyLogin()) {
+                        LoginAct.startAct(context);
+                        return;
+                    }
+                    ((PingpaiAct)context).share(data.id, data.share);
                 }
             });
         }

@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -434,12 +435,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 
     @Override
     public void OnEmojiDel() {
-        int index = editText.getSelectionStart();
-        if (index == 0) {
-            return;
-        }
-        Editable editable = editText.getText();
-        editable.delete(index - 1, index);
+        //调用系统删除键事件
+        int  keyCode = KeyEvent.KEYCODE_DEL;
+        KeyEvent keyEventDown = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+        KeyEvent keyEventUp = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
+        editText.onKeyDown(keyCode, keyEventDown);
+        editText.onKeyUp(keyCode, keyEventUp);
     }
 
 

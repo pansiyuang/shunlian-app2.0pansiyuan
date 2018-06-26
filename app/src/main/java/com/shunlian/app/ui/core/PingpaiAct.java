@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +12,14 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PinpaiAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CoreHotEntity;
 import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
 import com.shunlian.app.bean.CorePingEntity;
 import com.shunlian.app.bean.HotRdEntity;
+import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
@@ -27,6 +31,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.MyKanner;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
+import com.shunlian.app.widget.popmenu.PopMenu;
+import com.shunlian.app.widget.popmenu.PopMenuItem;
+import com.shunlian.app.widget.popmenu.PopMenuItemCallback;
+import com.shunlian.app.wxapi.WXEntryActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,9 +74,10 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
     MyTextView tv_msg_count;
 
     private MessageCountManager messageCountManager;
-
+    private ShareInfoParam mShareInfoParam = new ShareInfoParam();
     private PAishang pAishang;
     private PinpaiAdapter pinpaiAdapter;
+    private List<CorePingEntity.MData> pingList;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, PingpaiAct.class);
@@ -214,6 +223,7 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
             gone(nei_empty);
             visible(rv_list);
         }
+        pingList = corePingEntity.brand_list;
         rv_list.setNestedScrollingEnabled(false);
         rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
         pinpaiAdapter = new PinpaiAdapter(this, true, corePingEntity.brand_list);
@@ -224,5 +234,52 @@ public class PingpaiAct extends BaseActivity implements View.OnClickListener, IA
                 PingpaiListAct.startAct(getBaseContext(), corePingEntity.brand_list.get(position).id);
             }
         });
+    }
+
+    @Override
+    public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
+        mShareInfoParam.desc = baseEntity.data.desc;
+        mShareInfoParam.img = baseEntity.data.userAvatar;
+        mShareInfoParam.shareLink = baseEntity.data.shareLink;
+        mShareInfoParam.title = baseEntity.data.title;
+
+        shareStyle2Dialog();
+    }
+
+    public void share(String id, CorePingEntity.Share param) {
+        if (isEmpty(param.share_url)) {
+            pAishang.getShareInfo(pAishang.sale, id);
+        } else {
+            mShareInfoParam.desc = param.content;
+            mShareInfoParam.img = param.logo;
+            mShareInfoParam.shareLink = param.share_url;
+            mShareInfoParam.title = param.title;
+            shareStyle2Dialog();
+        }
+    }
+
+    /**
+     * 分享微信和复制链接
+     */
+    public void shareStyle2Dialog() {
+        PopMenu mPopMenu = new PopMenu.Builder().attachToActivity(this)
+                .addMenuItem(new PopMenuItem("微信", getDrawableResouce(R.mipmap.icon_weixin)))
+                .addMenuItem(new PopMenuItem("复制链接", getDrawableResouce(R.mipmap.icon_lianjie)))
+                .setOnItemClickListener(new PopMenuItemCallback() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                WXEntryActivity.startAct(PingpaiAct.this, "shareFriend", mShareInfoParam);
+                                break;
+                            case 1:
+                                Common.copyText(PingpaiAct.this, mShareInfoParam.shareLink, mShareInfoParam.desc, true);
+                                break;
+                        }
+                    }
+                }).build();
+        if (!mPopMenu.isShowing()) {
+            mPopMenu.show();
+        }
     }
 }

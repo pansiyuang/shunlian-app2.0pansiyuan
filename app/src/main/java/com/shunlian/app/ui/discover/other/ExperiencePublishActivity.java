@@ -271,10 +271,6 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                     Common.staticToast("请添加图片");
                     return;
                 }
-                if (currentGoods == null || isEmpty(currentGoods.goods_id)) {
-                    Common.staticToast("请添加商品");
-                    return;
-                }
                 mPresenter.createExperience(content, picstr.toString(), currentGoods.goods_id);
                 break;
         }
