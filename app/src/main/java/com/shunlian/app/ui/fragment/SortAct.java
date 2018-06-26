@@ -62,6 +62,8 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
     private List<SortFragEntity.ItemList> itemLists = new ArrayList<>();
     private SortCategoryAdapter adapter;
     private GoodsSearchParam mParam;
+    private GridLayoutManager manager;
+    private int lvTotalHeight;//listview总高度
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,SortAct.class));
@@ -91,8 +93,10 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 .init();
         presenter = new SortFragPresenter(this, this);
 
-        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        manager = new GridLayoutManager(this, 3);
         recycler_sort.setLayoutManager(manager);
+
+        listView.post(() -> lvTotalHeight = listView.getMeasuredHeight());
     }
 
     @Override
@@ -163,6 +167,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
                 }
             }
         }
+        manager.scrollToPosition(0);
         if (adapter == null) {
             adapter = new SortCategoryAdapter(this, itemLists, toplist);
             recycler_sort.setAdapter(adapter);
@@ -212,6 +217,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
             adapter.currentPosition = position;
             adapter.notifyDataSetChanged();
             subRightList(toplist1);
+            listView.smoothScrollToPositionFromTop(position, lvTotalHeight / 2, 300);//把当前点击position的view移到顶部
         });
     }
 
