@@ -18,6 +18,7 @@ import com.shunlian.app.bean.GoodsSearchParam;
 import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.presenter.CategoryFiltratePresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.CategoryFiltrateView;
@@ -393,6 +394,16 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 goodsSearchParam.keyword = keyword;
                 goodsSearchParam.min_price = edt_min.getText().toString();
                 goodsSearchParam.max_price = edt_max.getText().toString();
+
+                if (!isEmpty(goodsSearchParam.min_price) && !isEmpty(goodsSearchParam.max_price)) {
+                    int min = Integer.valueOf(goodsSearchParam.min_price);
+                    int max = Integer.valueOf(goodsSearchParam.max_price);
+                    if (min > max) {
+                        Common.staticToast("最低价格不能大于最高价格");
+                        return;
+                    }
+                }
+
                 if (isBao) {
                     goodsSearchParam.is_free_ship = "Y";
                 }
