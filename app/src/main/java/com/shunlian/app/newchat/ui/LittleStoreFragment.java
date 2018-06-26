@@ -34,6 +34,7 @@ public class LittleStoreFragment extends BaseLazyFragment implements IStoreMsgVi
     private List<MessageListEntity.Msg> msgList;
     private TopMessageAdapter mAdapter;
     private StoreMsgPresenter storeMsgPresenter;
+    private String memberH5Url;
 
     public static LittleStoreFragment getInstance() {
         LittleStoreFragment littleStoreFragment = new LittleStoreFragment();
@@ -77,6 +78,8 @@ public class LittleStoreFragment extends BaseLazyFragment implements IStoreMsgVi
             msgList.add(msg);
         }
         mAdapter.notifyDataSetChanged();
+
+        memberH5Url = storeMessageEntity.memberListH5Url;
     }
 
     @Override
@@ -111,12 +114,12 @@ public class LittleStoreFragment extends BaseLazyFragment implements IStoreMsgVi
 
     @Override
     public void OnOrderMsgClick() {
-        StoreMsgActivity.startAct(getActivity(), false);
+        StoreMsgActivity.startAct(getActivity(),memberH5Url, false);
     }
 
     @Override
     public void OnStoreMsgClick() {
-        StoreMsgActivity.startAct(getActivity(), true);
+        StoreMsgActivity.startAct(getActivity(),memberH5Url, true);
     }
 
 }

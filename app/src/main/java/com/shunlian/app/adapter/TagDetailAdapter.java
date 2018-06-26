@@ -119,8 +119,8 @@ public class TagDetailAdapter extends BaseRecyclerAdapter<ArticleEntity.Article>
     public void handleTop(RecyclerView.ViewHolder holder) {
         if (holder instanceof DetailTopHolderView) {
             final DetailTopHolderView topHolderView = (DetailTopHolderView) holder;
-            GlideUtils.getInstance().loadCircleImage(context, topHolderView.miv_icon, mTag.bg_img);
-            GlideUtils.getInstance().loadImage(context, topHolderView.miv_bg, mTag.head_img);
+            GlideUtils.getInstance().loadCircleImage(context, topHolderView.miv_icon, mTag.head_img);
+            GlideUtils.getInstance().loadImage(context, topHolderView.miv_bg, mTag.bg_img);
             topHolderView.tv_title.setText(mTag.name);
             topHolderView.tv_content.setText(mTag.description);
 

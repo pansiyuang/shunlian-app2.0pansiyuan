@@ -95,7 +95,7 @@ public class TopMessageAdapter extends BaseRecyclerAdapter<MessageListEntity.Msg
                 viewHolder.tv_name.setText(getString(R.string.topic));
                 viewHolder.tv_official.setVisibility(View.VISIBLE);
                 if (isLoad) {
-                    String discover_topic_msg = Common.formatBadgeNumber(manager.getDiscover_topic_msg());
+                    String discover_topic_msg = Common.formatBadgeNumber(manager.getDiscover_msg());
                     if (isEmpty(discover_topic_msg)) {
                         viewHolder.tv_count.setVisibility(View.GONE);
                     } else {

@@ -21,7 +21,7 @@ import retrofit2.Call;
  */
 
 public class ChosenPresenter extends BasePresenter<IChosenView> {
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 10;
     public static final int MODE_ARTICLE = 10001;
     public static final int MODE_TAG_DETAIL = 10002;
     private int currentMode;

@@ -63,7 +63,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
     @Override
     public int getItemCount() {
-        return lists.size() + 1;
+        return lists.size() + 2;
     }
 
     @Override

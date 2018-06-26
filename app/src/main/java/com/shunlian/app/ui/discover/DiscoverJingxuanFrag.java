@@ -18,6 +18,7 @@ import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.presenter.ChosenPresenter;
 import com.shunlian.app.ui.discover.jingxuan.ArticleH5Act;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IChosenView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -165,28 +166,31 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
                 articleEntity.article_list.get(index).topic_list = topicList;
                 lay_refresh.setVisibility(View.VISIBLE);
                 nei_empty.setVisibility(View.GONE);
-            }else{
+            } else {
                 lay_refresh.setVisibility(View.GONE);
                 nei_empty.setVisibility(View.VISIBLE);
             }
-
+        }
+        if (!isEmpty(articleEntity.article_list)) {
+            mArticleList.addAll(articleEntity.article_list);
+        }
+        if (mArticleAdapter == null) {
             mArticleAdapter = new ArticleAdapter(getActivity(), mArticleList, this, mTags);
             mArticleAdapter.setOnItemClickListener(this);
             recycler_article.setAdapter(mArticleAdapter);
         }
-        if (!isEmpty(articleEntity.article_list)) {
-            mArticleList.addAll(articleEntity.article_list);
-            mArticleAdapter.notifyDataSetChanged();
-        }
+
+        mArticleAdapter.notifyDataSetChanged();
     }
+
     //分享文章方法
-    public void shareArticle(int position){
-        if (!Common.isAlreadyLogin()){
-            Common.goGoGo(baseActivity,"login");
+    public void shareArticle(int position) {
+        if (!Common.isAlreadyLogin()) {
+            Common.goGoGo(baseActivity, "login");
             return;
         }
         ArticleEntity.Article article = mArticleList.get(position - 1);
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mShareInfoParam = mPresenter.getShareInfoParam();
             mShareInfoParam.title = article.title;
             mShareInfoParam.desc = article.full_title;
@@ -196,16 +200,16 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
             if (!isEmpty(article.share_url)) {
                 mShareInfoParam.shareLink = article.share_url;
                 share();
-            }else {
-                mPresenter.getShareInfo(mPresenter.nice,article.id);
+            } else {
+                mPresenter.getShareInfo(mPresenter.nice, article.id);
             }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && mPresenter != null){
-            mPresenter.getShareInfo(mPresenter.nice,mArticleId);
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && mPresenter != null) {
+            mPresenter.getShareInfo(mPresenter.nice, mArticleId);
         }
     }
 
@@ -213,7 +217,7 @@ public class DiscoverJingxuanFrag extends DiscoversFrag implements IChosenView, 
         if (quick_actions != null) {
             visible(quick_actions);
             quick_actions.shareInfo(mShareInfoParam);
-            quick_actions.shareStyle2Dialog(true, 2, "article",mArticleId);
+            quick_actions.shareStyle2Dialog(true, 2, "article", mArticleId);
         }
     }
 

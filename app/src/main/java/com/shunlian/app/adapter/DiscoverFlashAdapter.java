@@ -41,15 +41,12 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
 //            StorePromotionGoodsListEntity.Lable data = lists.get(position);
             twoHolder.mtv_title.setText(data.title);
             twoHolder.mtv_desc.setText(data.full_title);
-            if (position==0){
+            if (position == 0) {
                 twoHolder.view_left.setVisibility(View.VISIBLE);
                 twoHolder.view_right.setVisibility(View.GONE);
-            }else if (position==lists.size()-1){
+            } else if (position == lists.size() - 1) {
                 twoHolder.view_left.setVisibility(View.GONE);
                 twoHolder.view_right.setVisibility(View.VISIBLE);
-            }else {
-                twoHolder.view_left.setVisibility(View.GONE);
-                twoHolder.view_right.setVisibility(View.GONE);
             }
             GlideUtils.getInstance().communityTopPic(context,twoHolder.miv_photo,data.thumb,4);
         }

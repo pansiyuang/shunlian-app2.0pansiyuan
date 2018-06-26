@@ -255,7 +255,6 @@ public class ImageGridAdapter extends BaseAdapter {
             } else {
                 indicator.setVisibility(View.GONE);
             }
-            LogUtil.httpLogW("data.path:" + data.path);
             File imageFile = new File(data.path);
 
             if (mItemSize > 0) {

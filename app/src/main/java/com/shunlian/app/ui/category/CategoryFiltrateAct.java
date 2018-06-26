@@ -410,6 +410,7 @@ public class CategoryFiltrateAct extends BaseActivity implements CategoryFiltrat
                 goodsSearchParam.cid = cid;
                 if (isDing) {
                     goodsSearchParam.send_area = mtv_address.getText().toString();
+
                 } else if (isZhe) {
                     goodsSearchParam.send_area = "江浙沪";
                 } else if (isZhu) {
