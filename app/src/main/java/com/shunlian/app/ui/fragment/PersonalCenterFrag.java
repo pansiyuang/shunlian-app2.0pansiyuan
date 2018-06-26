@@ -488,7 +488,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             visible(mtv_hint);
             mtv_hint.setText(personalcenterEntity.note);
         }
-        if (!isEmpty(personalcenterEntity.balance) && Float.parseFloat(personalcenterEntity.balance) > 0) {
+        if (!isEmpty(personalcenterEntity.balance)) {
             mllayout_yue.setVisibility(View.VISIBLE);
         } else {
             mllayout_yue.setVisibility(View.GONE);

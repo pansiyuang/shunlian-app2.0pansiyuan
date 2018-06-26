@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
@@ -13,6 +14,7 @@ import com.shunlian.app.presenter.ExperienceDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceDetailView;
@@ -65,6 +67,18 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
                     if (lastPosition + 1 == manager.getItemCount()){
                         presenter.onRefresh();
                     }
+                }
+            }
+        });
+
+        met_text.addTextChangedListener(new SimpleTextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (s.length() > 140){
+                    met_text.setText(s.subSequence(0,140));
+                    met_text.setSelection(140);
+                    Common.staticToast("字数不能超过140");
                 }
             }
         });
