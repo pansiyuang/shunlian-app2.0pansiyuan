@@ -430,8 +430,8 @@ public class PhotoPickerActivity extends BaseActivity implements View.OnClickLis
                     if (!isPicFile(imagePath)) {
                         continue;
                     }
-
                     File file = new File(imagePath);
+                    LogUtil.httpLogW("imagePath:" + imagePath  +"    length:"+file.length());
                     if (!file.exists() || file.length() <= 0) {
                         continue;
                     }

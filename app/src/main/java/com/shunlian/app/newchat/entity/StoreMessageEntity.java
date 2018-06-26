@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class StoreMessageEntity {
     public MemberAddMsg memberAdd;
     public ShoppingMsg shopping;
+    public String memberListH5Url;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MemberAddMsg {

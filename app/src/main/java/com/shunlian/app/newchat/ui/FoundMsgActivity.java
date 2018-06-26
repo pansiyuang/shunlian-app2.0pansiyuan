@@ -136,14 +136,18 @@ public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageCh
         tv_topic_title.setSelected(true);
         tv_comment_title.setSelected(false);
 
-        tv_topic_count.setVisibility(View.GONE);
-        tv_comment_count.setVisibility(View.VISIBLE);
-
         if (isEmpty(Common.formatBadgeNumber(commentCount))) {
             tv_comment_count.setVisibility(View.GONE);
         } else {
             tv_comment_count.setVisibility(View.VISIBLE);
             tv_comment_count.setText(Common.formatBadgeNumber(commentCount));
+        }
+
+        if (isEmpty(Common.formatBadgeNumber(topicCount))) {
+            tv_topic_count.setVisibility(View.GONE);
+        } else {
+            tv_topic_count.setVisibility(View.VISIBLE);
+            tv_topic_count.setText(Common.formatBadgeNumber(topicCount));
         }
 
         line_topic.setBackgroundColor(getColorResouce(R.color.pink_color));
@@ -154,14 +158,18 @@ public class FoundMsgActivity extends BaseActivity implements ViewPager.OnPageCh
         tv_topic_title.setSelected(false);
         tv_comment_title.setSelected(true);
 
-        tv_topic_count.setVisibility(View.VISIBLE);
-        tv_comment_count.setVisibility(View.GONE);
-
         if (isEmpty(Common.formatBadgeNumber(topicCount))) {
             tv_topic_count.setVisibility(View.GONE);
         } else {
             tv_topic_count.setVisibility(View.VISIBLE);
             tv_topic_count.setText(Common.formatBadgeNumber(topicCount));
+        }
+
+        if (isEmpty(Common.formatBadgeNumber(commentCount))) {
+            tv_comment_count.setVisibility(View.GONE);
+        } else {
+            tv_comment_count.setVisibility(View.VISIBLE);
+            tv_comment_count.setText(Common.formatBadgeNumber(commentCount));
         }
 
         line_topic.setBackgroundColor(getColorResouce(R.color.light_gray_two));

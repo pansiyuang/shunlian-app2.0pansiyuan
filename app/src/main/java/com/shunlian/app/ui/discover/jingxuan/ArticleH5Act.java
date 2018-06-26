@@ -123,7 +123,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         switch (view.getId()){
             case R.id.miv_favorite:
                 if (!Common.isAlreadyLogin()) {
-                    LoginAct.startAct(this);
+                    Common.goGoGo(this,"login");
                     return;
                 }
                 if (currentFavoriteStatus == 1) {

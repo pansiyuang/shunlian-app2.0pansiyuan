@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
@@ -11,7 +13,11 @@ import com.shunlian.app.newchat.adapter.StoreMsgAdapter;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.VipMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IVipMsgView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.refresh.turkey.SlRefreshView;
 import com.shunlian.app.widget.refreshlayout.OnRefreshListener;
 
@@ -35,20 +41,34 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
     @BindView(R.id.recycler_list)
     RecyclerView recycler_list;
 
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
+
+    @BindView(R.id.rl_title_more)
+    RelativeLayout rl_title_more;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
+    @BindView(R.id.tv_vip_list)
+    TextView tv_vip_list;
+
     private VipMsgPresenter vipMsgPresenter;
     private StoreMsgAdapter msgAdapter;
     private List<StoreMsgEntity.StoreMsg> storeMsgList;
     private boolean isGetVip;
     private int currentDelType;
+    private String h5Url;
 
     @Override
     protected int getLayoutId() {
         return R.layout.act_store_msg;
     }
 
-    public static void startAct(Context context, boolean isVip) {
+    public static void startAct(Context context, String h5Url, boolean isVip) {
         Intent intent = new Intent(context, StoreMsgActivity.class);
         intent.putExtra("isVip", isVip);
+        intent.putExtra("url", h5Url);
         context.startActivity(intent);
     }
 
@@ -58,14 +78,17 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
         setStatusBarFontDark();
 
         isGetVip = getIntent().getBooleanExtra("isVip", false);
+        h5Url = getIntent().getStringExtra("url");
 
         vipMsgPresenter = new VipMsgPresenter(this, this);
         if (isGetVip) {
             tv_title.setText(getStringResouce(R.string.vip_msg));
             vipMsgPresenter.getVipMessageList(true);
+            tv_vip_list.setVisibility(View.VISIBLE);
         } else {
             tv_title.setText(getStringResouce(R.string.order_msg));
             vipMsgPresenter.getOrderMessageList(true);
+            tv_vip_list.setVisibility(View.GONE);
         }
         storeMsgList = new ArrayList<>();
 
@@ -73,6 +96,10 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
         refreshview.setCanLoad(false);
 
         recycler_list.setLayoutManager(new LinearLayoutManager(this));
+
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText("暂无数据")
+                .setButtonText(null);
     }
 
     @Override
@@ -93,6 +120,17 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             @Override
             public void onLoadMore() {
 
+            }
+        });
+
+        rl_title_more.setOnClickListener(v -> {
+            quick_actions.setVisibility(View.VISIBLE);
+            quick_actions.channel();
+        });
+
+        tv_vip_list.setOnClickListener(v -> {
+            if (!isEmpty(h5Url)) {
+                H5Act.startAct(this, h5Url, H5Act.MODE_SONIC);
             }
         });
         super.initListener();
@@ -125,6 +163,14 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             recycler_list.setAdapter(msgAdapter);
         }
         msgAdapter.notifyDataSetChanged();
+
+        if (page == 1 && isEmpty(storeMsgList)) {
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_list.setVisibility(View.GONE);
+        } else {
+            nei_empty.setVisibility(View.GONE);
+            recycler_list.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -145,6 +191,14 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
             recycler_list.setAdapter(msgAdapter);
         }
         msgAdapter.notifyDataSetChanged();
+
+        if (page == 1 && isEmpty(storeMsgList)) {
+            nei_empty.setVisibility(View.VISIBLE);
+            recycler_list.setVisibility(View.GONE);
+        } else {
+            nei_empty.setVisibility(View.GONE);
+            recycler_list.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -162,5 +216,12 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
     public void onDel(int position) {
         StoreMsgEntity.StoreMsg storeMsg = storeMsgList.get(position);
         vipMsgPresenter.deleteMessage(String.valueOf(currentDelType), storeMsg.id);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
+        super.onDestroy();
     }
 }
