@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/mrlayout_title"
-        android:layout_marginBottom="57.5dp"
         android:overScrollMode="never"/>
 
     <com.shunlian.app.utils.QuickActions
