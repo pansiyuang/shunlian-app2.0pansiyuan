@@ -180,20 +180,20 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 dia_tv_price.setText("¥" + goodsDeatilEntity.price);
             }
             totalStock = Integer.valueOf(goodsDeatilEntity.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, goodsDeatilEntity.thumb);
         }
         if (mGoods != null) {
             dia_tv_price.setText("¥" + mGoods.price);
             totalStock = Integer.valueOf(mGoods.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, mGoods.thumb);
         }
 
         if (productDetailEntity != null) {
             dia_tv_price.setText("¥" + productDetailEntity.price);
             totalStock = Integer.valueOf(productDetailEntity.stock);
-            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), totalStock));
+            tv_count.setText(String.format(mContext.getResources().getString(R.string.goods_stock), String.valueOf(totalStock)));
             GlideUtils.getInstance().loadImage(mContext, iv_dialogPhoto, productDetailEntity.thumb);
         }
 
