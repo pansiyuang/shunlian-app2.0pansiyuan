@@ -18,6 +18,16 @@ public class DiscoveryNavEntity {
         public String title;
         public String full_title;
         public String thumb;
+
+        @Override
+        public String toString() {
+            return "Flash{" +
+                    "id='" + id + '\'' +
+                    ", title='" + title + '\'' +
+                    ", full_title='" + full_title + '\'' +
+                    ", thumb='" + thumb + '\'' +
+                    '}';
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

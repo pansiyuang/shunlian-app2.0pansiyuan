@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.HelpClasAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpClassEntity;
@@ -28,8 +27,6 @@ import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
-import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,11 +45,11 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.rv_qCate)
     RecyclerView rv_qCate;
 
-    @BindView(R.id.mllayout_dianhua)
-    MyLinearLayout mllayout_dianhua;
+    /*@BindView(R.id.mllayout_dianhua)
+    MyLinearLayout mllayout_dianhua;*/
 
-    @BindView(R.id.mllayout_kefu)
-    MyLinearLayout mllayout_kefu;
+    /*@BindView(R.id.mllayout_kefu)
+    MyLinearLayout mllayout_kefu;*/
 
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
@@ -148,7 +145,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         return R.layout.act_help_two;
     }
 
-    @Override
+    /*@Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mllayout_dianhua:
@@ -162,12 +159,12 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
                 pHelpTwo.getUserId();
                 break;
         }
-    }
+    }*/
 
     @Override
     protected void initListener() {
         super.initListener();
-        mllayout_kefu.setOnClickListener(this);
+        /*mllayout_kefu.setOnClickListener(this);
         mllayout_dianhua.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -182,7 +179,7 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
                     }
                 }
             }
-        });
+        });*/
     }
 
     public void initDialog() {

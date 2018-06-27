@@ -66,7 +66,7 @@ public class TieziCommentAdapter extends BaseRecyclerAdapter<DiscoveryCommentLis
                 }
             }
         });
-        Bitmap bitmap = TransformUtil.convertVIP(context, content.level);
+        Bitmap bitmap = TransformUtil.convertNewVIP(context, content.level);
         viewHolder.miv_vip.setImageBitmap(bitmap);
         viewHolder.mtv_name.setText(content.nickname);
         viewHolder.mtv_zan_count.setText(content.likes);

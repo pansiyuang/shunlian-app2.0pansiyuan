@@ -1,7 +1,6 @@
 package com.shunlian.app.ui.fragment;
 
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.DiscoverFlashAdapter;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.presenter.PDiscover;
@@ -28,7 +26,6 @@ import com.shunlian.app.ui.discover.other.SearchArticleActivity;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IDiscover;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -315,16 +312,14 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
             visible(rv_flash);
             gone(miv_empty);
             if (flashAdapter == null) {
-                flashAdapter = new DiscoverFlashAdapter(getContext(), false, navEntity.flash_list);
-                LinearLayoutManager flashManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                flashAdapter = new DiscoverFlashAdapter(baseActivity,navEntity.flash_list);
+                LinearLayoutManager flashManager = new LinearLayoutManager(baseActivity,
+                        LinearLayoutManager.HORIZONTAL, false);
                 rv_flash.setLayoutManager(flashManager);
                 rv_flash.setAdapter(flashAdapter);
-                flashAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        ArticleH5Act.startAct(getActivity(), navEntity.flash_list.get(position).id, ArticleH5Act.MODE_SONIC);
-                    }
-                });
+                flashAdapter.setOnItemClickListener((view, position) ->
+                        ArticleH5Act.startAct(baseActivity, navEntity.flash_list.get(position).id,
+                                ArticleH5Act.MODE_SONIC));
             } else {
                 flashAdapter.notifyDataSetChanged();
             }

@@ -216,29 +216,6 @@ public class TransformUtil {
         return msize;
     }*/
 
-    public static Bitmap convertVIP(Context context,String vip){
-        Bitmap bitmap = null;
-        if (TextUtils.isEmpty(vip)){
-            return bitmap;
-        }
-        if (vip.equalsIgnoreCase("v0") || "0".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v0);
-        }else if (vip.equalsIgnoreCase("v1") || "1".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v1);
-        }else if (vip.equalsIgnoreCase("v2") || "2".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v2);
-        }else if (vip.equalsIgnoreCase("v3") || "3".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v3);
-        }else if (vip.equalsIgnoreCase("v4") || "4".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v4);
-        }else if (vip.equalsIgnoreCase("v5") || "5".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v5);
-        }else if (vip.equalsIgnoreCase("v6") || "6".equals(vip)){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.img_login_v6);
-        }
-        return bitmap;
-    }
-
     public static Bitmap convertNewVIP(Context context,String vip){
         Bitmap bitmap = null;
         if (TextUtils.isEmpty(vip)){

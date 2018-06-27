@@ -14,11 +14,13 @@ import com.shunlian.app.presenter.ExperienceDetailPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.PromptDialog;
+import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IExperienceDetailView;
 import com.shunlian.app.widget.MyEditText;
+import com.shunlian.app.widget.MyTextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +36,12 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
 
     @BindView(R.id.met_text)
     MyEditText met_text;
+
+    @BindView(R.id.mtv_toolbar_title)
+    MyTextView mtv_toolbar_title;
+
+    @BindView(R.id.quick_actions)
+    QuickActions quick_actions;
 
     private ExperienceDetailPresenter presenter;
     private LinearLayoutManager manager;
@@ -94,6 +102,8 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
                 .keyboardEnable(true)
                 .init();
 
+        mtv_toolbar_title.setText("心得详情");
+
         String experience_id = getIntent().getStringExtra("experience_id");
         presenter = new ExperienceDetailPresenter(this,this,experience_id);
 
@@ -105,6 +115,12 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
 
         GradientDrawable textBG = (GradientDrawable) met_text.getBackground();
         textBG.setColor(getColorResouce(R.color.value_F2F6F9));
+    }
+
+    @OnClick(R.id.mrlayout_toolbar_more)
+    public void more(){
+        visible(quick_actions);
+        quick_actions.findCommentList();
     }
 
     /**
@@ -192,6 +208,8 @@ public class ExperienceDetailAct extends BaseActivity implements IExperienceDeta
 
     @Override
     protected void onDestroy() {
+        if (quick_actions != null)
+            quick_actions.destoryQuickActions();
         super.onDestroy();
         if (presenter != null){
             presenter.detachView();

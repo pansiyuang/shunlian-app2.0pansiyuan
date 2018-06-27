@@ -16,11 +16,9 @@ import com.shunlian.app.bean.DiscoveryMaterialEntity;
 import com.shunlian.app.presenter.PADiscoverSucaiku;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IADiscoverSucaiku;
@@ -59,11 +57,11 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         viewHolder.mtv_zan.setText(content.praise_num);
         if ("1".equals(content.praise)) {
             viewHolder.isZan=true;
-            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
+            viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_h);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.pink_color));
         } else {
             viewHolder.isZan=false;
-            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_pinglun_zan_n);
+            viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_n);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         }
         viewHolder.miv_zan.setOnClickListener(new View.OnClickListener() {
@@ -161,12 +159,12 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         if (viewHolder.isZan){
             viewHolder.isZan=false;
             viewHolder.zan= viewHolder.zan-1;
-            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_n);
+            viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_n);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         } else {
             viewHolder.isZan=true;
             viewHolder.zan= viewHolder.zan+1;
-            viewHolder.miv_zan.setImageResource(R.mipmap.icon_found_zan_h);
+            viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_h);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.pink_color));
         }
         viewHolder.mtv_zan.setText(String.valueOf(viewHolder.zan));

@@ -118,7 +118,7 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
 
             cardViewHolder.mtv_content.setText(comments.content);
             cardViewHolder.mtv_nickname.setText(comments.nickname);
-            Bitmap bitmap = TransformUtil.convertVIP(context, comments.vip_level);
+            Bitmap bitmap = TransformUtil.convertNewVIP(context, comments.vip_level);
             if (bitmap != null) {
                 cardViewHolder.miv_vip.setVisibility(View.VISIBLE);
                 cardViewHolder.miv_vip.setImageBitmap(bitmap);

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -23,13 +24,15 @@ import butterknife.BindView;
 public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity.Flash> {
 
 
-    public DiscoverFlashAdapter(Context context, boolean isShowFooter, List<DiscoveryNavEntity.Flash> datas) {
-        super(context, isShowFooter, datas);
+    public DiscoverFlashAdapter(Context context, List<DiscoveryNavEntity.Flash> datas) {
+        super(context, false, datas);
+
     }
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new TwoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_discover_flash, parent, false));
+        return new TwoHolder(LayoutInflater.from(context)
+                .inflate(R.layout.item_discover_flash, parent, false));
     }
 
     @Override
@@ -38,15 +41,18 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
             TwoHolder twoHolder = (TwoHolder) holder;
 
             DiscoveryNavEntity.Flash data = lists.get(position);
+            LogUtil.zhLogW(data.toString());
 //            StorePromotionGoodsListEntity.Lable data = lists.get(position);
             twoHolder.mtv_title.setText(data.title);
             twoHolder.mtv_desc.setText(data.full_title);
             if (position == 0) {
                 twoHolder.view_left.setVisibility(View.VISIBLE);
                 twoHolder.view_right.setVisibility(View.GONE);
-            } else if (position == lists.size() - 1) {
+            } else if (position == getItemCount() - 1) {
                 twoHolder.view_left.setVisibility(View.GONE);
                 twoHolder.view_right.setVisibility(View.VISIBLE);
+            }else {
+                gone(twoHolder.view_left,twoHolder.view_right);
             }
             GlideUtils.getInstance().communityTopPic(context,twoHolder.miv_photo,data.thumb,4);
         }
@@ -69,12 +75,9 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
         @BindView(R.id.view_right)
         View view_right;
 
-        private View view;
-
         TwoHolder(View itemView) {
             super(itemView);
-            view=itemView;
-            view.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
         @Override
         public void onClick(View v) {

@@ -14,7 +14,6 @@ import com.shunlian.app.newchat.entity.StoreMsgEntity;
 import com.shunlian.app.presenter.VipMsgPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IVipMsgView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
@@ -88,7 +87,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
         } else {
             tv_title.setText(getStringResouce(R.string.order_msg));
             vipMsgPresenter.getOrderMessageList(true);
-            tv_vip_list.setVisibility(View.GONE);
+            tv_vip_list.setVisibility(View.VISIBLE);
         }
         storeMsgList = new ArrayList<>();
 
@@ -125,7 +124,7 @@ public class StoreMsgActivity extends BaseActivity implements IVipMsgView, Store
 
         rl_title_more.setOnClickListener(v -> {
             quick_actions.setVisibility(View.VISIBLE);
-            quick_actions.channel();
+            quick_actions.message();
         });
 
         tv_vip_list.setOnClickListener(v -> {

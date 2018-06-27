@@ -5,7 +5,7 @@
     android:background="@color/value_EFEEEE">
 
     <include layout="@layout/block_title_whitebg" />
-    <include layout="@layout/block_help_bottom" />
+    <!--<include layout="@layout/block_help_bottom" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_qCate"

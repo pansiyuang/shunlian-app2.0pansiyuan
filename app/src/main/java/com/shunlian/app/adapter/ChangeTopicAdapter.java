@@ -41,6 +41,7 @@ public class ChangeTopicAdapter extends BaseRecyclerAdapter<ArticleEntity.Topic>
         final ArticleEntity.Topic topic = mTopics.get(position);
         GlideUtils.getInstance().loadImage(context, topicHolderView.miv_icon, topic.thumb);
         topicHolderView.tv_title.setText(topic.subject);
+        topicHolderView.tv_attention.setTextSize(12);
         topicHolderView.tv_attention.setText(topic.join_in_num + "人关注");
         topicHolderView.rl_rootView.setOnClickListener(new View.OnClickListener() {
             @Override

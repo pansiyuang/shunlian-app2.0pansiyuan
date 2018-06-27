@@ -60,8 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="8dp"
+            android:scaleType="fitXY"
             android:layout_toLeftOf="@id/mtv_zan"
-            android:src="@mipmap/icon_found_pinglun_zan_n" />
+            android:src="@mipmap/icon_sucai_zan_n" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_share"
