@@ -392,7 +392,7 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.llayout_agreement:
-                H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+                H5Act.startAct(baseActivity, InterentTools.H5_HOST
                         +RegisterAct.REGISTRATION_AGREEMENT,H5Act.MODE_SONIC);
                 break;
         }

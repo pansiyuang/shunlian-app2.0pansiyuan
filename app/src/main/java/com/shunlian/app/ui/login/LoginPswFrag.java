@@ -237,7 +237,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
 
     @OnClick(R.id.llayout_clause)
     public void showClause(){
-        H5Act.startAct(baseActivity, InterentTools.USER_PROTOCOL_FIELD
+        H5Act.startAct(baseActivity, InterentTools.H5_HOST
                 +LoginAct.TERMS_OF_SERVICE,H5Act.MODE_SONIC);
     }
 
