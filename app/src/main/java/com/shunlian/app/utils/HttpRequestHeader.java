@@ -45,6 +45,7 @@ public class HttpRequestHeader implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder()
+                .removeHeader("User-Agent")
                 .addHeader("Client-Type", "Android")
                 .addHeader("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 5.1.1/1.0.0"))
                 .addHeader("X-Device-ID", SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"))
@@ -56,9 +57,10 @@ public class HttpRequestHeader implements Interceptor {
         if (isRemoveContentType) {
             builder.removeHeader("Content-Type");
         }
+        Response proceed = chain.proceed(builder.build());
         Headers headers = chain.request().headers();
         String s = headers.toString();
         LogUtil.testLogW("okhttp",s);
-        return chain.proceed(builder.build());
+        return proceed;
     }
 }

@@ -188,7 +188,7 @@ public interface ApiService {
      * @param requestBody
      * @return
      */
-    @POST("/member/common/sendSmsCode")
+    @POST("member/common/sendSmsCode")
     Call<ResponseBody> sendSms(@Body RequestBody requestBody);
 
     /**
@@ -197,7 +197,7 @@ public interface ApiService {
      * @param requestBody
      * @return
      */
-    @POST("/member/login/index")
+    @POST("member/login/index")
     Call<BaseEntity<LoginFinishEntity>> login(@Body RequestBody requestBody);
 
     /**
@@ -206,7 +206,7 @@ public interface ApiService {
      * @param requestBody
      * @return
      */
-    @POST("/member/Common/checkCode")
+    @POST("member/Common/checkCode")
     Call<ResponseBody> checkCode(@Body RequestBody requestBody);
 
     /**
@@ -248,7 +248,7 @@ public interface ApiService {
     /**
      * 找回密码
      */
-    @POST("/member/userinfo/findPwd")
+    @POST("member/userinfo/findPwd")
     Call<BaseEntity<RegisterFinishEntity>> findPsw(@Body RequestBody requestBody);
 
     /**
@@ -383,7 +383,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/edit")
+    @POST("cart/edit")
     Call<BaseEntity<ShoppingCarEntity>> carEdit(@Body RequestBody body);
 
     /**
@@ -392,7 +392,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/checkcartgoods")
+    @POST("cart/checkcartgoods")
     Call<BaseEntity<ShoppingCarEntity>> checkCartGoods(@Body RequestBody body);
 
     /**
@@ -401,7 +401,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/voucher/getVoucher")
+    @POST("voucher/getVoucher")
     Call<BaseEntity<GoodsDeatilEntity.Voucher>> getVoucher(@Body RequestBody body);
 
 
@@ -411,7 +411,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/removetofav")
+    @POST("cart/removetofav")
     Call<BaseEntity<ShoppingCarEntity>> removetofav(@Body RequestBody body);
 
     /**
@@ -420,7 +420,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/remove")
+    @POST("cart/remove")
     Call<BaseEntity<ShoppingCarEntity>> cartRemove(@Body RequestBody body);
 
 
@@ -430,7 +430,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/multyremove")
+    @POST("cart/multyremove")
     Call<BaseEntity<ShoppingCarEntity>> multyremove(@Body RequestBody body);
 
     /**
@@ -512,7 +512,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/address/all")
+    @POST("member/address/all")
     Call<BaseEntity<AddressDataEntity>> allAddress(@Body RequestBody body);
 
     /**
@@ -521,7 +521,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/address/remove")
+    @POST("member/address/remove")
     Call<BaseEntity<EmptyEntity>> delAddress(@Body RequestBody body);
 
     /**
@@ -530,7 +530,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/getjoingoodsstorecates")
+    @POST("cart/getjoingoodsstorecates")
     Call<BaseEntity<CateEntity>> megerGoodsCates(@Body RequestBody body);
 
     /**
@@ -539,7 +539,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/cart/joingoods")
+    @POST("cart/joingoods")
     Call<BaseEntity<JoinGoodsEntity>> getRecommmendGoods(@Body RequestBody body);
 
     /**
@@ -548,7 +548,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/goods/getgoodssku")
+    @POST("goods/getgoodssku")
     Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> getGoodsSku(@Body RequestBody body);
 
     /**
@@ -584,7 +584,7 @@ public interface ApiService {
      * 上传图片 单张图片+多个参数
      */
     @Multipart
-    @POST("/uploads/uploadotherimage")
+    @POST("uploads/uploadotherimage")
     Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
 
 
@@ -592,7 +592,7 @@ public interface ApiService {
      * 上传图片 多张图片+多个参数
      */
     @Multipart
-    @POST("/uploads/uploadotherimage")
+    @POST("uploads/uploadotherimage")
     Call<BaseEntity<UploadPicEntity>> uploadPic(@Part() List<MultipartBody.Part> parts, @QueryMap Map<String, String> maps);
 
     /**
@@ -601,7 +601,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/comment/add")
+    @POST("member/comment/add")
     Call<BaseEntity<EmptyEntity>> addComment(@Body RequestBody body);
 
     /**
@@ -610,7 +610,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/comment/batch_append")
+    @POST("member/comment/batch_append")
     Call<BaseEntity<EmptyEntity>> appendComment(@Body RequestBody body);
 
     /**
@@ -619,7 +619,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/comment/change")
+    @POST("member/comment/change")
     Call<BaseEntity<EmptyEntity>> changeComment(@Body RequestBody body);
 
     /**
@@ -628,7 +628,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/comment/getorderinfo")
+    @POST("member/comment/getorderinfo")
     Call<BaseEntity<CreatCommentEntity>> getOrderInfo(@Body RequestBody body);
 
     /**
@@ -636,7 +636,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/personalcenter/traces")
+    @GET("personalcenter/traces")
     Call<BaseEntity<OrderLogisticsEntity>> orderLogistics(@QueryMap Map<String, String> map);
 
     /**
@@ -644,7 +644,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/personalcenter/searchhistory")
+    @GET("personalcenter/searchhistory")
     Call<BaseEntity<TagEntity>> searchHistory(@QueryMap Map<String, String> map);
 
     /**
@@ -652,7 +652,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/personalcenter/delhistory")
+    @GET("personalcenter/delhistory")
     Call<BaseEntity<EmptyEntity>> delHistory(@QueryMap Map<String, String> map);
 
     /**
@@ -781,7 +781,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/refund/getrefundinfo")
+    @POST("member/refund/getrefundinfo")
     Call<BaseEntity<RefundDetailEntity.RefundDetail.Edit>> getrefundinfo(@Body RequestBody body);
 
     /**
@@ -798,7 +798,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/member/refund/getrefundreason")
+    @GET("member/refund/getrefundreason")
     Call<BaseEntity<CommonEntity>> getRefundReason(@QueryMap Map<String, String> map);
 
     /**
@@ -807,7 +807,7 @@ public interface ApiService {
      * @param body
      * @return
      */
-    @POST("/member/refund/applyRefund")
+    @POST("member/refund/applyRefund")
     Call<BaseEntity<RefundDetailEntity.RefundDetail>> applyRefund(@Body RequestBody body);
 
     /**
@@ -931,7 +931,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/goods/hotSearch")
+    @GET("goods/hotSearch")
     Call<BaseEntity<HotSearchEntity>> hotSearch(@QueryMap Map<String, String> map);
 
     /**
@@ -939,7 +939,7 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("/goods/keywordSuggest")
+    @POST("goods/keywordSuggest")
     Call<BaseEntity<CommonEntity>> keywordSuggest(@Body RequestBody body);
 
     /**
@@ -947,7 +947,7 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("/goods/clearSearchHistory")
+    @POST("goods/clearSearchHistory")
     Call<BaseEntity<EmptyEntity>> clearSearchHistory(@QueryMap Map<String, String> map);
 
     /**
@@ -1053,7 +1053,7 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @GET("/personalcenter/home")
+    @GET("personalcenter/home")
     Call<BaseEntity<PersonalcenterEntity>> personalcenter(@QueryMap Map<String, String> map);
 
     /**
