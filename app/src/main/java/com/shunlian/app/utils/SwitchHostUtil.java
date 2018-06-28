@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
-import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
 
@@ -25,7 +24,7 @@ public class SwitchHostUtil {
         builder.setIcon(R.mipmap.icon_login_logo);
         builder.setTitle("选择一个主机");
         //    指定下拉列表的显示数据
-        final String[] cities = {"测试接口", "预发布接口"};
+        final String[] cities = {"测试接口", "预发布接口","正式"};
 //        final String[] cities = { "测试接口", "预发布接口","正式接口"};
         //    设置一个下拉的列表选择项
         builder.setItems(cities, new DialogInterface.OnClickListener() {
@@ -55,14 +54,10 @@ public class SwitchHostUtil {
 //                    Constant.IM_HUAWEI_BUSID = 406;
                 } else {
                     //正式
-
-//                    MyHttpUtil.HTTPADDR = "https://api.shunliandongli.com/v1/";
-//                    MyHttpUtil.HTTPADDR_IM = "https://im.api.shunliandongli.com/";
-//                    Constant.IM_SDK_APPID = 1400008795;
-//                    Constant.IM_ACCOUNT_TYPE = 3425;
-//                    Constant.IM_XIAOMI_BUSID = 431;
-//                    Constant.IM_HUAWEI_BUSID = 432;
-//                    MyHttpUtil.H5_HOST = Constant.RELEASE_HOST;
+                    InterentTools.HTTPADDR = "https://api.shunliandongli.com/v2/front/";
+                    InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
+                    InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
+                    InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im/";
                 }
 
 //                App myApp = (App) activity.getApplication();
