@@ -113,10 +113,13 @@ public class ChatPresenter extends BasePresenter<IChatView> {
         return getStringMD5(sign.toString());
     }
 
-    public void getChatHistoryMessage(boolean isLoad, String userId, String platform_type, String shopId, String sendTime) {
+    public void getChatHistoryMessage(boolean isLoad, String userId, String platform_type,String m_user_id, String shopId, String sendTime) {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
         map.put("platform_type", platform_type);
+        if(!isEmpty(m_user_id)){
+            map.put("m_user_id", m_user_id);
+        }
         if (!isEmpty(shopId)) {
             map.put("shop_id", shopId);
         }
