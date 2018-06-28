@@ -26,11 +26,18 @@ import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
+import org.java_websocket.drafts.Draft_76;
+import org.java_websocket.exceptions.InvalidHandshakeException;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.handshake.ClientHandshakeBuilder;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;

@@ -41,7 +41,7 @@ public final class InterentTools {
 
     //public  static String HTTPADDR_IM = "ws://123.207.107.21:8086";//测试聊天的域名
     //public  static String HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";//预发布聊天的域名
-    public  static String HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im/";//正式聊天的域名
+    public  static String HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";//正式聊天的域名
 
     //public static String HTTPADDR = "http://v20-front-api.shunliandongli.com/";//测试接口
     //public  static String HTTPADDR = "http://api-front.v2.shunliandongli.com/";//预发布接口

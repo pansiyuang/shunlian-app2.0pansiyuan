@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.shunlian.app.R;
+import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.login.LoginAct;
 
@@ -44,10 +45,11 @@ public class SwitchHostUtil {
                 InterentTools.HTTPADDR = "https://api.shunliandongli.com/v2/front/";
                 InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
                 InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
-                InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im/";
+                InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
 
             SharedPrefUtil.saveCacheSharedPrf("netState", InterentTools.HTTPADDR);
+            EasyWebsocketClient.getInstance(activity).logout();
             Common.clearLoginInfo();
             JpushUtil.setJPushAlias();
             Constant.JPUSH = null;
@@ -75,7 +77,7 @@ public class SwitchHostUtil {
 
                 InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
                 InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
-                InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im/";
+                InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
         }else {
             //此句话保证开发环境没有切换环境的情况下也能选择帐号
