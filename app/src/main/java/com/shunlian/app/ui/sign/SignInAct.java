@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.GrideItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISignInView;
@@ -176,7 +177,7 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
             GridLayoutManager babyManager = new GridLayoutManager(this, 2);
             rv_goods.setLayoutManager(babyManager);
             rv_goods.setNestedScrollingEnabled(false);
-//            rv_goods.addItemDecoration(new GrideItemDecoration(0, 0, TransformUtil.dip2px(this, 5), TransformUtil.dip2px(this, 5), true));
+            rv_goods.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(this,5),false));
             rv_goods.setAdapter(signGoodsAdapter);
             signGoodsAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
