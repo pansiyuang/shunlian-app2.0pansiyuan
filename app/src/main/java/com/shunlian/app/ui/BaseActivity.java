@@ -29,6 +29,7 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -491,6 +492,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (immersionBar != null){
             immersionBar.destroy();
         }
+        GlideUtils.getInstance().clearMemory();
     }
 
     private void dismissDialog(boolean isClearAll) {
@@ -544,5 +546,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             MainActivity.startAct(getBaseContext(),"");
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        GlideUtils.getInstance().clearMemory();
     }
 }
