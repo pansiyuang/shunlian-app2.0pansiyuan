@@ -233,7 +233,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
         } else {
             visible(view_remen, rv_hot,mtv_remen);
         }
-        if (isEmpty(mdatas) && !isEmpty(data.hot_inv)) {
+        if (isEmpty(mdatas) && isEmpty(data.hot_inv)) {
             gone(view_remen, rv_hot,mtv_remen);
             visible(view_zuixin, rv_new,mtv_zuixin);
         }
