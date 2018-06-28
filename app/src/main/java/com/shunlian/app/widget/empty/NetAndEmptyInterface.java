@@ -105,6 +105,7 @@ public class NetAndEmptyInterface extends LinearLayout {
         if (TextUtils.isEmpty(text)) {
             textView.setVisibility(GONE);
         } else {
+            textView.setVisibility(VISIBLE);
             textView.setText(text);
         }
         return this;
@@ -120,6 +121,7 @@ public class NetAndEmptyInterface extends LinearLayout {
         if (TextUtils.isEmpty(text)) {
             button.setVisibility(GONE);
         } else {
+            button.setVisibility(VISIBLE);
             button.setText(text);
         }
         return button;

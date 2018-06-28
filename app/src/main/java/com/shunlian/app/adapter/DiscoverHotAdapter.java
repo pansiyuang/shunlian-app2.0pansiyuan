@@ -14,7 +14,6 @@ import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -64,7 +63,7 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
             if (hot.imgs.size() == 1) {
                 viewHolder.rv_pics.setVisibility(View.GONE);
                 viewHolder.miv_pic.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadImage(context,viewHolder.miv_pic,hot.imgs.get(0));
+                GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,hot.imgs.get(0));
                 viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -84,19 +83,21 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
                     viewHolder.rv_pics.setNestedScrollingEnabled(false);
                     viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
-                    viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            //点击查看大图
-                            BigImgEntity bigImgEntity = new BigImgEntity();
-                            bigImgEntity.itemList = (ArrayList<String>)  hot.imgs;
-                            bigImgEntity.index = position;
-                            LookBigImgAct.startAct(context, bigImgEntity);
-                        }
-                    });
                 }else {
-                    viewHolder.picAdapter.notifyDataSetChanged();
+                    viewHolder.picAdapter  = new SinglePicAdapter(context, false, hot.imgs);
+                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
+                    //viewHolder.picAdapter.notifyDataSetChanged();
                 }
+                viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        //点击查看大图
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList<String>)  hot.imgs;
+                        bigImgEntity.index = position;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    }
+                });
             }
         }
 
