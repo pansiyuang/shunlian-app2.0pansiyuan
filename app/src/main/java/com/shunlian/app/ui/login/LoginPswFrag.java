@@ -151,10 +151,10 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
                         Common.staticToast("密码不能为空喔~");
                         return;
                     }
-//                    if (edt_psw.getText().length() < 8) {
-//                        Common.staticToast("密码输入太短~");
-//                        return;
-//                    }
+                    /*if (edt_psw.getText().length() < 8) {
+                        Common.staticToast("密码输入太短~");
+                        return;
+                    }*/
                     loginPresenter.LoginUserName(currentAccount, currentPsw);
                 }
                 break;

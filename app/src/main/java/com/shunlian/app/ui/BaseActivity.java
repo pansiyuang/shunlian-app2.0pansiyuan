@@ -29,6 +29,7 @@ import com.shunlian.app.ui.goods_detail.SearchGoodsActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
+import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -295,7 +296,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     //设置https请求头
     public void setHeader() {
-        SharedPrefUtil.saveSharedPrfString("User-Agent", "Shunlian Android " + Build.VERSION.RELEASE + "/" + SharedPrefUtil.getSharedPrfString("localVersion", "1.0.0"));
+        SharedPrefUtil.saveSharedPrfString("User-Agent", "ShunLian Android " + Build.VERSION.RELEASE + "/" + SharedPrefUtil.getSharedPrfString("localVersion", "1.0.0"));
         SharedPrefUtil.saveSharedPrfString("X-Device-ID", UUID.nameUUIDFromBytes(Build.SERIAL.getBytes()).toString().toUpperCase());
         SharedPrefUtil.saveSharedPrfString("resolution", DeviceInfoUtil.getDeviceRatio(this));
         SharedPrefUtil.saveSharedPrfString("deviceWidth", String.valueOf(DeviceInfoUtil.getDeviceWidth(this)));
@@ -307,7 +308,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     public Map<String, String> setWebviewHeader(){
         Map<String, String> extraHeaders = new HashMap<String, String>();
-        extraHeaders.put("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 5.1.1/1.0.0"));
+        extraHeaders.put("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 5.1.1/1.0.0"));
         extraHeaders.put("X-Device-ID", SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
         extraHeaders.put("resolution", SharedPrefUtil.getSharedPrfString("resolution", "720x1184"));
         extraHeaders.put("DeviceIp", SharedPrefUtil.getSharedPrfString("DeviceIp", "192.168.1.1"));
@@ -315,6 +316,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         extraHeaders.put("Content-Type", "application/json");
         extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
         extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
+        extraHeaders.put("Token", SharedPrefUtil.getSharedPrfString("token", ""));
         return extraHeaders;
     }
     /**
@@ -491,6 +493,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (immersionBar != null){
             immersionBar.destroy();
         }
+        GlideUtils.getInstance().clearMemory();
     }
 
     private void dismissDialog(boolean isClearAll) {
@@ -544,5 +547,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             MainActivity.startAct(getBaseContext(),"");
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        GlideUtils.getInstance().clearMemory();
     }
 }

@@ -362,7 +362,7 @@ public class BarChart extends AxesChart {
 					currentY = sub(plotArea.getBottom(), mul(i,YSteps));
 					
 					// 从左到右的横向网格线
-					System.out.println("-=========="+TAG);
+					//System.out.println("-=========="+TAG);
 					drawHorizontalGridLines(canvas,plotArea.getLeft(),plotArea.getRight(),
 																i,tickCount,YSteps,currentY);
 																			
@@ -460,7 +460,7 @@ public class BarChart extends AxesChart {
 					currentY = sub(axisY, mul((i + 1) , YSteps));		
 										
 					// 从左到右的横向网格线
-					System.out.println("==========="+TAG);
+					//System.out.println("==========="+TAG);
 					drawHorizontalGridLines(canvas,plotArea.getLeft(),plotArea.getRight(),
 																i,tickCount,YSteps,currentY);
 					

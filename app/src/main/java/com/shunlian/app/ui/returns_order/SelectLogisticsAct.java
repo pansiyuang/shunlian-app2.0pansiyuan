@@ -113,7 +113,7 @@ public class SelectLogisticsAct extends BaseActivity implements ISelectLogistics
 
         for(LogisticsNameEntity.LogisticsName nameItem : logistics){
             for(String name : nameItem.item_list){
-                System.out.println("name=========="+name);
+                //System.out.println("name=========="+name);
                 Contact contact = new Contact(nameItem.first_letter,name);
                 mLogisticsName.add(contact);
             }

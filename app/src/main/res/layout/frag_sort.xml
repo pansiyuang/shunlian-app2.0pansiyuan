@@ -114,6 +114,7 @@
             android:background="@color/white"
             android:paddingLeft="7.5dp"
             android:paddingRight="7.5dp"
+            android:paddingBottom="7.5dp"
             android:overScrollMode="never"/>
 
     </LinearLayout>

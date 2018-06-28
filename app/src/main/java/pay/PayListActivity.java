@@ -328,8 +328,10 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      * @param unionpay
      */
     private void callbackH5Pay(final String unionpay,boolean isAli) {
-        if (!isAli){
+        if (isAli){
             h5_pay.setVisibility(View.INVISIBLE);
+        }else {
+            visible(h5_pay);
         }
         lLayout_pay.setVisibility(View.GONE);
         final HttpDialog httpDialog = new HttpDialog(this);
@@ -340,12 +342,13 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                LogUtil.zhLogW("=url==="+url);
                 httpDialog.show();
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.augusLogW("====h5---"+url);
+                LogUtil.zhLogW("====h5---"+url);
                 if (url.startsWith("slmall://")) {
                     if (url.contains("success")) {
                         paySuccess();
@@ -353,7 +356,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                         payFail();
                     }
                 } else if (!(url.startsWith("http") || url.startsWith("https"))) {
-                    return true;
+                    return super.shouldOverrideUrlLoading(view,url);
                 }  else {
                     final PayTask task = new PayTask(PayListActivity.this);
                     boolean isIntercepted = task.payInterceptorWithUrl(url, true, new H5PayCallback() {

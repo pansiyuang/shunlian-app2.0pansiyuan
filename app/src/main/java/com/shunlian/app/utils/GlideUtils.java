@@ -625,4 +625,8 @@ public class GlideUtils {
                 .bitmapTransform(new GlideCircleTransform(context))
                 .into(imageView);
     }
+
+    public void clearMemory(){
+        Glide.get(Common.getApplicationContext()).clearMemory();
+    }
 }
