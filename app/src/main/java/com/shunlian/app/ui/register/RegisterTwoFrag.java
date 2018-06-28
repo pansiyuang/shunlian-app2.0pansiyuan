@@ -427,23 +427,29 @@ public class RegisterTwoFrag extends BaseFragment implements View.OnClickListene
         if (TYPE_FIND_PSW.equals(currentType)){//找回密码
             LoginAct.startAct(baseActivity);
         }else if (TYPE_REGIST.equals(currentType)){//注册
-            Common.staticToast(entity.message);
-            RegisterFinishEntity content = entity.data;
-            SharedPrefUtil.saveSharedPrfString("token", content.token);
-            SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
-            SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
-            SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
-
-            EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
-            JpushUtil.setJPushAlias();
-
-            if (!"1".equals(content.is_tag)){
-                SexSelectAct.startAct(baseActivity);
-            }else {
-                Common.goGoGo(baseActivity,"mainPage");
-            }
+            saveUserInfo(entity);
+        }else {//绑定
+            saveUserInfo(entity);
         }
         baseActivity.finish();
+    }
+
+    private void saveUserInfo(BaseEntity<RegisterFinishEntity> entity) {
+        Common.staticToast(entity.message);
+        RegisterFinishEntity content = entity.data;
+        SharedPrefUtil.saveSharedPrfString("token", content.token);
+        SharedPrefUtil.saveSharedPrfString("refresh_token", content.refresh_token);
+        SharedPrefUtil.saveSharedPrfString("member_id", content.member_id);
+        SharedPrefUtil.saveSharedPrfString("plus_role", content.plus_role);
+
+        EasyWebsocketClient.getInstance(baseActivity).initChat(); //初始化聊天
+        JpushUtil.setJPushAlias();
+
+        if (!"1".equals(content.is_tag)){
+            SexSelectAct.startAct(baseActivity);
+        }else {
+            Common.goGoGo(baseActivity,"mainPage");
+        }
     }
 
     @Override
