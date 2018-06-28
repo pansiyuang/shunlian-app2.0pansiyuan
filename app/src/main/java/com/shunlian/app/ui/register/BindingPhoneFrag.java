@@ -18,6 +18,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
@@ -120,6 +121,11 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
         });
 
         et_phone.setOnTouchListener((v, event) -> {
+            if (rl_id.getVisibility() == View.GONE){
+                Common.showKeyboard(et_phone);
+                setEdittextFocusable(true,et_phone);
+                return true;
+            }
             if (isEtIdEmpty()) {
                 return false;
             } else {
@@ -163,6 +169,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
         Bundle arguments = getArguments();
         state = arguments.getInt("state", -1);
         unique_sign = arguments.getString("unique_sign");
+        LogUtil.zhLogW("=state========="+state);
         if (state == USER_STATES || state == USER_STATES_OLD) {
             gone(rl_id);
             setEdittextFocusable(true,et_phone);
