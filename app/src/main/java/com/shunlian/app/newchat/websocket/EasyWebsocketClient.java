@@ -1,14 +1,12 @@
 package com.shunlian.app.newchat.websocket;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shunlian.app.App;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.BaseEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
@@ -17,7 +15,6 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.StatusEntity;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
-import com.shunlian.app.newchat.util.ChatDialog;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.utils.Common;
@@ -174,6 +171,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         LogUtil.longW("Websocket 接收到消息:" + message);
         try {
             BaseEntity baseEntity = objectMapper.readValue(message, BaseEntity.class);
+            if (!TextUtils.isEmpty(baseEntity.message_type))
             switch (baseEntity.message_type) {
                 case "init":
                     if (!isEmpty(messageReceiveListeners)) {
@@ -181,6 +179,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             listener.initMessage();
                         }
                     }
+                    LogUtil.zhLogW("===message=========="+message);
                     setUserInfoEntity(message);
                     break;
                 case "receive_message":
