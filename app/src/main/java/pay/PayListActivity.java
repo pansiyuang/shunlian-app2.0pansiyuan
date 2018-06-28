@@ -294,7 +294,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }
         switch (currentPayType) {
             case "pay_url":
-                callbackH5Pay(entity.pay_url,true);
+                callbackH5Pay(entity.pay_url,false);
                 break;
             case "alipay":
                 alipay(entity.alipay);
@@ -302,7 +302,7 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             case "wechat":
                 break;
             case "unionpay":
-                callbackH5Pay(entity.unionpay,false);
+                callbackH5Pay(entity.unionpay,true);
 //                callbackH5Pay("http://pay-test.shunliandongli.com/app_jump_test.php");
                 break;
             case "credit":
@@ -327,10 +327,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      *
      * @param unionpay
      */
-    private void callbackH5Pay(final String unionpay,boolean isAli) {
-        if (isAli){
-            h5_pay.setVisibility(View.INVISIBLE);
-        }else {
+    private void callbackH5Pay(final String unionpay,boolean is_unionpay) {
+        if (is_unionpay){
             visible(h5_pay);
         }
         lLayout_pay.setVisibility(View.GONE);
