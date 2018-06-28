@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,7 +33,6 @@ import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -309,12 +309,20 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             discoverFrag = (DiscoverFrag) fragmentMap.get(flags[2]);
             if (discoverFrag == null) {
                 discoverFrag = new DiscoverFrag();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag",flag);
+                discoverFrag.setArguments(bundle);
                 fragmentMap.put(flags[2], discoverFrag);
             }
+        }else {
+            discoverFrag.setArgument(flag);
         }
         switchContent(discoverFrag);
         pageIndex = 2;
         chageTabItem(pageIndex);
+        /*if ("follow".equals(flag)){
+            discoverFrag.guanZhu();
+        }*/
     }
 
     public void shoppingCarClick() {
@@ -442,6 +450,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             case "myplus":
                 myPlusClick();
                 break;
+            case "focus":
             case "discover":
                 discoverClick();
                 break;

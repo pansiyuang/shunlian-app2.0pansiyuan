@@ -24,6 +24,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PAishang;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.MHorItemDecoration;
@@ -91,6 +92,7 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
     private GridLayoutManager gridLayoutManager;
     private String cate_id;
     private MessageCountManager messageCountManager;
+    private String cate_name;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, AishangAct.class);
@@ -151,8 +153,6 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
         mtv_title.setText(getStringResouce(R.string.first_aishangxin));
         pAishang = new PAishang(this, this);
         pAishang.getCoreNew();
-        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
-        nei_empty.setButtonText(null);
         messageCountManager = MessageCountManager.getInstance(this);
         messageCountManager.setOnGetMessageListener(this);
     }
@@ -212,16 +212,19 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
 
         CoreNewMenuAdapter coreNewMenuAdapter = new CoreNewMenuAdapter(getBaseContext(), false, coreNewEntity.cate_name);
         cate_id = coreNewEntity.cate_name.get(0).cate_id;
+        cate_name = coreNewEntity.cate_name.get(0).cate_name;
         pAishang.resetBaby("new", cate_id);
         coreNewMenuAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 coreNewMenuAdapter.selectedPosition = position;
                 coreNewMenuAdapter.notifyDataSetChanged();
+                cate_name = coreNewEntity.cate_name.get(position).cate_name;
                 cate_id = coreNewEntity.cate_name.get(position).cate_id;
                 if (rv_category.getScrollState() == 0) {
                     pAishang.resetBaby("new", cate_id);
                 }
+
             }
         });
         rv_categoryMenu.setAdapter(coreNewMenuAdapter);
@@ -266,6 +269,18 @@ public class AishangAct extends BaseActivity implements View.OnClickListener, IA
             aiMoreAdapter.notifyDataSetChanged();
         }
         aiMoreAdapter.setPageLoading(Integer.parseInt(page), Integer.parseInt(total));
+        if (isEmpty(mData)){
+            if ("关注上新".equals(cate_name)){
+                nei_empty.setImageResource(R.mipmap.img_empty_common)
+                        .setText("你还没有关注店铺，马上去发现关注店铺~")
+                        .setButtonText("前往发现")
+                        .setOnClickListener(v ->
+                            MainActivity.startAct(this, "focus"));
+            }else {
+                nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.first_shangping));
+                nei_empty.setButtonText(null);
+            }
+        }
     }
 
     @Override

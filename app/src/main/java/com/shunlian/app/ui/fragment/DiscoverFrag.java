@@ -101,7 +101,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     @BindView(R.id.mAppbar)
     AppBarLayout mAppbar;
 
-    private Map<String, DiscoversFrag> fragments;
+    private Map<String, DiscoversFrag> fragments = new HashMap<>();
     private DiscoverGuanzhuFrag guanzhuFrag;
     private DiscoverJingxuanFrag jingxuanFrag;
     private DiscoverSucaikuFrag sucaikuFrag;
@@ -109,7 +109,8 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     private DiscoverQuanZiFrag quanZiFrag;
     private DiscoverFlashAdapter flashAdapter;
     private PDiscover pDiscover;
-    private String flag_jingxuan, flag_guanzhu, flag_xinde, flag_quanzi, flag_sucaiku;
+    private String flag_jingxuan = "nice", flag_guanzhu = "focus",
+            flag_xinde = "experience", flag_quanzi = "circle", flag_sucaiku = "material";
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -134,7 +135,6 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
-        fragments = new HashMap<>();
         pDiscover = new PDiscover(getContext(), this);
 
 //        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -145,7 +145,12 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
 //                LogUtil.augusLogW("yxf---"+verticalOffset);
 //            }
 //        });
-        jingXuanFrag();
+        String flag = getArguments().getString("flag");
+        if (!isEmpty(flag)){
+            setArgument(flag);
+        }else {
+            jingXuanFrag();
+        }
         miv_empty.setFocusable(false);
     }
 
@@ -329,15 +334,15 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 case 1:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
-                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    /*flag_jingxuan = navEntity.nav_list.get(0).code;*/
                     break;
                 case 2:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    flag_jingxuan = navEntity.nav_list.get(0).code;
-                    flag_guanzhu = navEntity.nav_list.get(1).code;
+                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;*/
                     break;
                 case 3:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
@@ -346,9 +351,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
-                    flag_xinde = navEntity.nav_list.get(2).code;
+                    flag_xinde = navEntity.nav_list.get(2).code;*/
                     break;
                 case 4:
                     mtv_quanzi.setText(navEntity.nav_list.get(3).name);
@@ -359,10 +364,10 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
-                    flag_quanzi = navEntity.nav_list.get(3).code;
+                    flag_quanzi = navEntity.nav_list.get(3).code;*/
                     break;
                 case 5:
                     mtv_sucaiku.setText(navEntity.nav_list.get(4).name);
@@ -375,11 +380,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
-                    flag_sucaiku = navEntity.nav_list.get(4).code;
+                    flag_sucaiku = navEntity.nav_list.get(4).code;*/
                     break;
             }
         }
@@ -407,6 +412,26 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     return;
                 }
                 ExperiencePublishActivity.startAct(getActivity());
+                break;
+        }
+    }
+
+    public void setArgument(String flag) {
+        switch (flag) {
+            case "nice":
+                jingXuan();
+                break;
+            case "focus":
+                guanZhu();
+                break;
+            case "experience":
+                xinde();
+                break;
+            case "circle":
+                quanzi();
+                break;
+            case "material":
+                sucaiku();
                 break;
         }
     }
