@@ -43,8 +43,8 @@ public class SwitchHostUtil {
             } else {
                 //正式
                 InterentTools.HTTPADDR = "https://api.shunliandongli.com/v2/front/";
-                InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
-                InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
+                InterentTools.H5_HOST ="http://wx.shunliandongli.com/";
+                InterentTools.DOMAIN ="wx.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
 
@@ -75,8 +75,8 @@ public class SwitchHostUtil {
                 InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
             }else{//正式
 
-                InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
-                InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
+                InterentTools.H5_HOST ="http://wx.shunliandongli.com/";
+                InterentTools.DOMAIN ="wx.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
         }else {
