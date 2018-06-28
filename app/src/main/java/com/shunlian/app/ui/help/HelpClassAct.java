@@ -27,6 +27,7 @@ import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpTwoView;
+import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,17 +46,14 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.rv_qCate)
     RecyclerView rv_qCate;
 
-    /*@BindView(R.id.mllayout_dianhua)
-    MyLinearLayout mllayout_dianhua;*/
-
-    /*@BindView(R.id.mllayout_kefu)
-    MyLinearLayout mllayout_kefu;*/
-
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.bottom_layout)
+    View bottom_layout;
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
@@ -131,6 +129,8 @@ public class HelpClassAct extends BaseActivity implements View.OnClickListener, 
         pHelpTwo.getHelpPhone();
 //        pHelpTwo.resetBabys("3");
         pHelpTwo.resetBabys(cate_id);
+
+        bottom_layout.setVisibility(View.GONE);
     }
 
     public static void startAct(Context context,String cate_id) {

@@ -55,8 +55,8 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     @BindView(R.id.rv_qCate)
     RecyclerView rv_qCate;
 
-    @BindView(R.id.mllayout_dianhua)
-    MyLinearLayout mllayout_dianhua;
+//    @BindView(R.id.mllayout_dianhua)
+//    MyLinearLayout mllayout_dianhua;
 
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
@@ -168,13 +168,13 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
                     finish();
                 }
                 break;
-            case R.id.mllayout_dianhua:
-                if (promptDialog == null) {
-                    initDialog();
-                } else {
-                    promptDialog.show();
-                }
-                break;
+//            case R.id.mllayout_dianhua:
+//                if (promptDialog == null) {
+//                    initDialog();
+//                } else {
+//                    promptDialog.show();
+//                }
+//                break;
             case R.id.mllayout_kefu:
                 pHelpTwo.getUserId();
                 break;
@@ -185,7 +185,7 @@ public class HelpTwoAct extends BaseActivity implements View.OnClickListener, IH
     protected void initListener() {
         super.initListener();
         mllayout_kefu.setOnClickListener(this);
-        mllayout_dianhua.setOnClickListener(this);
+//        mllayout_dianhua.setOnClickListener(this);
         miv_close.setOnClickListener(this);
         rv_qCate.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
