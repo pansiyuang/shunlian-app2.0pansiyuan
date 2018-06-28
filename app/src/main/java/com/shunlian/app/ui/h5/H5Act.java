@@ -470,7 +470,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public void addCookie() {
         //add
         String token = SharedPrefUtil.getSharedPrfString("token", "");
-        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "Shunlian Android 4.0.0/1.0.0");
+        String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
         CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
@@ -479,7 +479,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=Shunlian" + ua);
+        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
         cookieSyncManager.sync();
         //end
     }
