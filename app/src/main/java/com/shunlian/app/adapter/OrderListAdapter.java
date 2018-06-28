@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.bean.ReleaseCommentEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.confirm_order.SearchOrderResultActivity;
 import com.shunlian.app.ui.my_comment.CreatCommentActivity;
@@ -110,7 +109,7 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
         MyOrderEntity.Orders orders = lists.get(position);
         mHolder.mtv_storeName.setText(orders.store_name);
         mHolder.mtv_status.setText(orders.status_text);
-        String format = getString(R.string.all_goods);
+        String format = "共%s件商品";
         mHolder.mtv_goods_count.setText(String.format(format, orders.qty));
         SpannableStringBuilder ssb = Common.dotAfterSmall(getString(R.string.rmb) + orders.total_amount, 11);
         mHolder.mtv_total_price.setText(ssb);

@@ -320,9 +320,6 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         switchContent(discoverFrag);
         pageIndex = 2;
         chageTabItem(pageIndex);
-        /*if ("follow".equals(flag)){
-            discoverFrag.guanZhu();
-        }*/
     }
 
     public void shoppingCarClick() {
@@ -476,8 +473,21 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             }
         }
         super.onDestroy();
+        if (fragmentMap != null)
+            fragmentMap.clear();
+
+        mainPageFrag = null;
+        myPlusFrag = null;
+        discoverFrag = null;
+        cateGoryFrag = null;
+        personalCenterFrag = null;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //防止app崩溃后造成fragment重叠
+        //super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {

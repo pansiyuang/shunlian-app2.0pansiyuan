@@ -242,6 +242,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void judge(String flag) {
+        if (!isEmpty(flag))
         switch (flag) {
             case "nice":
                 jingXuanFrag();
@@ -334,15 +335,15 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                 case 1:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
-                    /*flag_jingxuan = navEntity.nav_list.get(0).code;*/
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
                     break;
                 case 2:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
                     mrlayout_jingxuan.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
-                    flag_guanzhu = navEntity.nav_list.get(1).code;*/
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_guanzhu = navEntity.nav_list.get(1).code;
                     break;
                 case 3:
                     mtv_jingxuan.setText(navEntity.nav_list.get(0).name);
@@ -351,9 +352,9 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
-                    flag_xinde = navEntity.nav_list.get(2).code;*/
+                    flag_xinde = navEntity.nav_list.get(2).code;
                     break;
                 case 4:
                     mtv_quanzi.setText(navEntity.nav_list.get(3).name);
@@ -364,10 +365,10 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
-                    flag_quanzi = navEntity.nav_list.get(3).code;*/
+                    flag_quanzi = navEntity.nav_list.get(3).code;
                     break;
                 case 5:
                     mtv_sucaiku.setText(navEntity.nav_list.get(4).name);
@@ -380,11 +381,11 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
                     mrlayout_goumaixinde.setVisibility(View.VISIBLE);
                     mtv_guanzhu.setText(navEntity.nav_list.get(1).name);
                     mrlayout_guanzhu.setVisibility(View.VISIBLE);
-                    /*flag_jingxuan = navEntity.nav_list.get(0).code;
+                    flag_jingxuan = navEntity.nav_list.get(0).code;
                     flag_guanzhu = navEntity.nav_list.get(1).code;
                     flag_xinde = navEntity.nav_list.get(2).code;
                     flag_quanzi = navEntity.nav_list.get(3).code;
-                    flag_sucaiku = navEntity.nav_list.get(4).code;*/
+                    flag_sucaiku = navEntity.nav_list.get(4).code;
                     break;
             }
         }
@@ -417,6 +418,7 @@ public class DiscoverFrag extends BaseFragment implements IDiscover, View.OnClic
     }
 
     public void setArgument(String flag) {
+        if (!isEmpty(flag))
         switch (flag) {
             case "nice":
                 jingXuan();
