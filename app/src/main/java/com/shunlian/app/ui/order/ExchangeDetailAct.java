@@ -392,11 +392,11 @@ public class ExchangeDetailAct extends BaseActivity implements View.OnClickListe
             mtv_reason.setText(key + "原因：" + refundDetail.buyer_message);
             mtv_reason.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(refundDetail.refund_amount)) {
-            mtv_money.setVisibility(View.GONE);
-        } else {
+        if (!TextUtils.isEmpty(refundDetail.refund_amount)&&Float.parseFloat(refundDetail.refund_amount)>0&&!"4".equals(refundDetail.refund_type)) {
             mtv_money.setText("退款金额：" + getStringResouce(R.string.common_yuan) + refundDetail.refund_amount);
             mtv_money.setVisibility(View.VISIBLE);
+        } else {
+            mtv_money.setVisibility(View.GONE);
         }
         if (TextUtils.isEmpty(refundDetail.goods_num)) {
             mtv_amount.setVisibility(View.GONE);

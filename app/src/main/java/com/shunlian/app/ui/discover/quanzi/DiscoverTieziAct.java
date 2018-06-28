@@ -16,6 +16,7 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PDiscoverTiezi;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
@@ -23,6 +24,7 @@ import com.shunlian.app.view.IDiscoverTiezi;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -84,6 +86,9 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private MessageCountManager messageCountManager;
 
@@ -160,17 +165,17 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     protected void initListener() {
         super.initListener();
         mtv_attend.setOnClickListener(this);
-        rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (linearLayoutManager != null) {
-                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
-                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
-
-                    }
-                }
-            }
-        });
+//        rv_new.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                if (linearLayoutManager != null) {
+//                    int lastPosition = linearLayoutManager.findLastVisibleItemPosition();
+//                    if (lastPosition + 1 == linearLayoutManager.getItemCount()) {
+//
+//                    }
+//                }
+//            }
+//        });
         msv_out.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void scrollCallBack(boolean isScrollBottom, int height, int y, int oldy) {
@@ -207,6 +212,9 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
         pDiscoverTiezi = new PDiscoverTiezi(this, this, circle_id);
         view_bg.setAlpha(0);
         mtv_titles.setAlpha(0);
+        nei_empty.setImageResource(R.mipmap.img_empty_common)
+                .setText(getString(R.string.discover_wolaishuo))
+                .setButtonText(null);
     }
 
 
@@ -223,6 +231,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
 
     @Override
     public void setApiData(final DiscoveryTieziEntity.Mdata data, final List<DiscoveryTieziEntity.Mdata.Hot> mdatas) {
+        gone(nei_empty);
         if (isEmpty(mdatas)) {
             gone(view_zuixin, rv_new,mtv_zuixin);
         } else {
@@ -234,8 +243,8 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
             visible(view_remen, rv_hot,mtv_remen);
         }
         if (isEmpty(mdatas) && isEmpty(data.hot_inv)) {
-            gone(view_remen, rv_hot,mtv_remen);
-            visible(view_zuixin, rv_new,mtv_zuixin);
+            gone(view_remen, rv_hot,rv_new,mtv_remen);
+            visible(view_zuixin,mtv_zuixin,nei_empty);
         }
         if (newAdapter == null) {
             mtv_title.setText(data.topicDetail.title);

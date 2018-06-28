@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="62dp"
         android:overScrollMode="never"
+        android:fillViewport="true"
         android:scrollbars="none">
 
         <com.shunlian.app.widget.MyLinearLayout
@@ -103,7 +104,11 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="gone"/>
-
+            <com.shunlian.app.widget.empty.NetAndEmptyInterface
+                android:id="@+id/nei_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
         </com.shunlian.app.widget.MyLinearLayout>
     </com.shunlian.app.widget.MyScrollView>
 
