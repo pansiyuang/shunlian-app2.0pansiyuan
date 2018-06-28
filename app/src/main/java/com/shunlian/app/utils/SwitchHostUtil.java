@@ -88,7 +88,7 @@ public class SwitchHostUtil {
 //                Constant.IM_ACCOUNT_TYPE = 3415;
 //                Constant.IM_XIAOMI_BUSID = 405;
 //                Constant.IM_HUAWEI_BUSID = 406;
-            } else {
+            } else if (netState.contains("api-front.v2")) {
                 InterentTools.H5_HOST ="http://front.v2.shunliandongli.com/";
                 InterentTools.DOMAIN ="front.v2.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
@@ -96,6 +96,10 @@ public class SwitchHostUtil {
 //                Constant.IM_ACCOUNT_TYPE = 3425;
 //                Constant.IM_XIAOMI_BUSID = 431;
 //                Constant.IM_HUAWEI_BUSID = 432;
+            }else{
+                InterentTools.H5_HOST ="http://wx-tmp.shunliandongli.com/";
+                InterentTools.DOMAIN ="wx-tmp.shunliandongli.com";
+                InterentTools.HTTPADDR_IM = "wss://api.shunliandongli.com/v2/im/";
             }
         }else {
             //此句话保证开发环境没有切换环境的情况下也能选择帐号

@@ -68,7 +68,7 @@ public class ChatPresenter extends BasePresenter<IChatView> {
         map.put("path_name", uploadPath);
         sortAndMD5(map);
 
-        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().uploadPic(files, map);
+        Call<BaseEntity<UploadPicEntity>> call = getAddCookieApiService().chatupload(files, map);
         getNetData(false, call, new SimpleNetDataCallback<BaseEntity<UploadPicEntity>>() {
             @Override
             public void onSuccess(BaseEntity<UploadPicEntity> entity) {
