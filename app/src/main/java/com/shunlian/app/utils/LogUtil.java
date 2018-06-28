@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by MBENBEN on 2016/7/15 09 : 59.
  */
 public class LogUtil {
-    private static boolean isOpenLog = true;
+    private static final boolean isOpenLog = true;
 
     public static void augusLogW(String msg) {
         if (isOpenLog) {

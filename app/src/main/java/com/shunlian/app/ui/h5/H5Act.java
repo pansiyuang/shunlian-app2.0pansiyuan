@@ -479,7 +479,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
+        cookieManager.setCookie(DOMAIN, "User-Agent=Shunlian" + ua);
         cookieSyncManager.sync();
         //end
     }
