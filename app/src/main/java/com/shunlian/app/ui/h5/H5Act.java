@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -28,24 +27,12 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alipay.sdk.app.H5PayCallback;
-import com.alipay.sdk.app.PayTask;
-import com.alipay.sdk.util.H5PayResultModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
-import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.H5CallEntity;
-import com.shunlian.app.bean.ShareEntity;
-import com.shunlian.app.bean.ShareInfoParam;
-import com.shunlian.app.eventbus_bean.NewMessageEvent;
-import com.shunlian.app.newchat.util.MessageCountManager;
-import com.shunlian.app.presenter.PH5;
-import com.shunlian.app.service.InterentTools;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
@@ -53,8 +40,6 @@ import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.NetworkUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.SharedPrefUtil;
-import com.shunlian.app.view.IH5View;
-import com.shunlian.app.widget.HttpDialog;
 import com.shunlian.app.widget.MarqueeTextView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -70,10 +55,6 @@ import com.tencent.sonic.sdk.SonicSessionConfig;
 import com.tencent.sonic.sdk.SonicSessionConnection;
 import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,7 +64,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import pay.PayListActivity;
 
 import static com.shunlian.app.service.InterentTools.DOMAIN;
 
@@ -499,7 +479,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
         cookieManager.setCookie(DOMAIN, "Client-Type=Android");
         cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=ShunLian" + ua);
+        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
         cookieSyncManager.sync();
         //end
     }
