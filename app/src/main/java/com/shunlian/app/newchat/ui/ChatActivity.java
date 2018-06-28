@@ -215,8 +215,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     public void initPrf() {
-        refreshview.setCanRefresh(true);
-        refreshview.setCanLoad(false);
 
         ((SimpleItemAnimator) recycler_chat.getItemAnimator()).setSupportsChangeAnimations(false);//取消刷新动画
         recycler_chat.setNestedScrollingEnabled(false);
@@ -247,9 +245,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         }
         mWebsocketClient = EasyWebsocketClient.getInstance(this);
         if (mWebsocketClient.getUserInfoEntity() == null) {
+            refreshview.setCanRefresh(false);
+            refreshview.setCanLoad(false);
             Common.staticToast("初始化聊天失败");
             return;
         } else {
+            refreshview.setCanRefresh(true);
+            refreshview.setCanLoad(false);
+
             mCurrentUser = mWebsocketClient.getUser();
             initUser(mCurrentUser);
             mAdapter.setUser(mCurrentUser);
@@ -304,11 +307,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 break;
             case "1":
             case "2":
-                mPresenter.getChatHistoryMessage(b, currentUserId, "1", currentChatMember.m_user_id,"" ,lastMessageSendTime);
+                mPresenter.getChatHistoryMessage(b, currentUserId, "1", currentChatMember.m_user_id, "", lastMessageSendTime);
                 break;
             case "3":
             case "4":
-                mPresenter.getChatHistoryMessage(b, currentUserId, "2","", chatShopId, lastMessageSendTime);
+                mPresenter.getChatHistoryMessage(b, currentUserId, "2", "", chatShopId, lastMessageSendTime);
                 break;
         }
     }
