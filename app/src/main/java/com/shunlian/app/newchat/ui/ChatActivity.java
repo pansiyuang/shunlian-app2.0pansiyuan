@@ -304,11 +304,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 break;
             case "1":
             case "2":
-                mPresenter.getChatHistoryMessage(b, currentUserId, "1", "", lastMessageSendTime);
+                mPresenter.getChatHistoryMessage(b, currentUserId, "1", currentChatMember.m_user_id,"" ,lastMessageSendTime);
                 break;
             case "3":
             case "4":
-                mPresenter.getChatHistoryMessage(b, currentUserId, "2", chatShopId, lastMessageSendTime);
+                mPresenter.getChatHistoryMessage(b, currentUserId, "2","", chatShopId, lastMessageSendTime);
                 break;
         }
     }
