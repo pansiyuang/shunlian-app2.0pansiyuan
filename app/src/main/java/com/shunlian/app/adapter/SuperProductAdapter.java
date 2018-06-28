@@ -91,9 +91,14 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
             viewHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
             viewHolder.kanner.setBanner(banners);
 
-            ViewGroup.LayoutParams frameLayout = viewHolder.kanner.getLayoutParams();
-            frameLayout.height = TransformUtil.dip2px(context, 192);
-            viewHolder.kanner.setLayoutParams(frameLayout);
+            ViewGroup.LayoutParams params = viewHolder.kanner.getLayoutParams();
+
+            ViewGroup.MarginLayoutParams vmlp = (ViewGroup.MarginLayoutParams) viewHolder.kanner.getLayoutParams();
+            if (position != 0) {
+                vmlp.setMargins(0, TransformUtil.dip2px(context, 10), 0, 0);
+            }
+            params.height = TransformUtil.dip2px(context, 192);
+            viewHolder.kanner.setLayoutParams(params);
 
             viewHolder.kanner.setOnItemClickL(pos -> {
                 SuperProductEntity.BannerEntity bannerEntity = bannerEntityList.get(pos);
@@ -146,7 +151,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
 
         //返回键扩大点击范围
         int i = TransformUtil.dip2px(context, 10);
-        TransformUtil.expandViewTouchDelegate(goodsViewHolder.miv_share,i,i,i,i);
+        TransformUtil.expandViewTouchDelegate(goodsViewHolder.miv_share, i, i, i, i);
 
         goodsViewHolder.miv_share.setOnClickListener(v -> {
             //分享
@@ -159,7 +164,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
                 mShareInfoParam.userAvatar = share.portrait;
                 mShareInfoParam.shareLink = share.share_url;
                 mShareInfoParam.goodsPrice = superProduct.price;
-                mShareLinstener.onShare(mShareInfoParam,superProduct.url.item_id);
+                mShareLinstener.onShare(mShareInfoParam, superProduct.url.item_id);
             }
         });
     }
@@ -230,6 +235,6 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     }
 
     public interface OnShareClickListener {
-        void onShare(ShareInfoParam infoParam,String id);
+        void onShare(ShareInfoParam infoParam, String id);
     }
 }
