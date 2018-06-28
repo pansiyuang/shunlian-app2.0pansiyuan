@@ -115,7 +115,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             mClient.connect();
             isInit = true;
         } catch (java.net.URISyntaxException e) {
-            isInit = false;
             e.printStackTrace();
         }
     }
@@ -295,13 +294,11 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     @Override
     public void onTimeOut() {
-        isInit = false;
         LogUtil.httpLogW("Websocket 连接超时");
     }
 
     @Override
     public void onError(Exception ex) {
-        isInit = false;
         LogUtil.httpLogW("Websocket 连接错误:" + ex.getMessage());
         if (reconnectCount < 3) {
             mStatus = Status.CONNECTING;
@@ -320,7 +317,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             return;
         }
         String token = SharedPrefUtil.getSharedPrfString("token", "");
-        LogUtil.httpLogW("连接token:" + token);
+        LogUtil.httpLogW("token:" + token);
         String roleType = SharedPrefUtil.getSharedPrfString("role_type", "member");
         if (TextUtils.isEmpty(token)) {
             return;
@@ -332,10 +329,11 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             jsonObject.put("token", token);
             jsonObject.put("role_type", "member");
             jsonObject.put("client", "android");
-            LogUtil.httpLogW("连接:" + jsonObject.toString());
-            mClient.send(jsonObject.toString());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (mClient != null && mStatus == Status.CONNECTED) {
+            mClient.send(jsonObject.toString());
         }
     }
 
