@@ -124,8 +124,8 @@ public class App extends Application {
             DOWNLOAD_PATH = this.getCacheDir().getPath();
         }
         initJPush();
-        if (BuildConfig.DEBUG){
+        /*if (BuildConfig.DEBUG){
             SwitchHostUtil.setHostMethod();
-        }
+        }*/
     }
 }
