@@ -225,7 +225,7 @@ public class FootprintAdapter extends BaseRecyclerAdapter<FootprintEntity.MarkDa
             int index = position - titleCount - 1;
             if (index < mList.size()) {
                 final FootprintEntity.MarkData markData = mList.get(index);
-                GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, markData.thumb,false);
+                GlideUtils.getInstance().loadImage(context, mHolder.miv_icon, markData.thumb);
                 mHolder.tv_price.setText(getString(R.string.common_yuan) + markData.price);
 
                 if (isEdit) {

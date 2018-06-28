@@ -109,8 +109,8 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void buildeWebsocketClient() {
         try {
             mClient = null;
-            LogUtil.httpLogW("HTTPADDR_IM:" + InterentTools.HTTPADDR_IM);
-            mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086
+            LogUtil.httpLogW("初始化IM地址:" + InterentTools.HTTPADDR_IM);
+            mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
             isInit = true;
@@ -333,6 +333,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             e.printStackTrace();
         }
         if (mClient != null && mStatus == Status.CONNECTED) {
+            LogUtil.httpLogW("connetService:" + jsonObject.toString());
             mClient.send(jsonObject.toString());
         }
     }

@@ -14,6 +14,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.service.InterentTools;
@@ -199,6 +200,7 @@ public class LoginPswFrag extends BaseFragment implements View.OnClickListener, 
         event.loginSuccess = true;
         EventBus.getDefault().post(event);
 
+        MessageCountManager.getInstance(getActivity()).initData();
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
         if (Constant.JPUSH != null && !"login".equals(Constant.JPUSH.get(0))) {
             Common.goGoGo(baseActivity, Constant.JPUSH.get(0), Constant.JPUSH.get(1), Constant.JPUSH.get(2)

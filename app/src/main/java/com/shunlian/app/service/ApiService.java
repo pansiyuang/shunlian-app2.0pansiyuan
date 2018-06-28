@@ -584,6 +584,13 @@ public interface ApiService {
      * 上传图片 单张图片+多个参数
      */
     @Multipart
+    @POST("uploads/chatupload")
+    Call<BaseEntity<UploadPicEntity>> chatupload(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
+
+    /**
+     * 上传图片 单张图片+多个参数
+     */
+    @Multipart
     @POST("uploads/uploadotherimage")
     Call<BaseEntity<UploadPicEntity>> uploadPic(@Part MultipartBody.Part[] parts,@QueryMap Map<String, String> maps);
 

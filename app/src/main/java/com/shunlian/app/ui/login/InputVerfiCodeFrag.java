@@ -17,6 +17,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.LoginFinishEntity;
 import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.eventbus_bean.DispachJump;
+import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.presenter.LoginPresenter;
 import com.shunlian.app.service.InterentTools;
@@ -217,6 +218,7 @@ public class InputVerfiCodeFrag extends BaseFragment implements View.OnClickList
         }
 
         EasyWebsocketClient.getInstance(getActivity()).initChat(); //初始化聊天
+        MessageCountManager.getInstance(getActivity()).initData();
 
         if (!isEmpty(jumpType)){
             Common.goGoGo(baseActivity,jumpType);
