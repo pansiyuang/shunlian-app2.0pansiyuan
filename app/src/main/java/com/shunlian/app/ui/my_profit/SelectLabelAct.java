@@ -2,14 +2,13 @@ package com.shunlian.app.ui.my_profit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.presenter.SelectLabelPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.MainActivity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISelectLabelView;
@@ -86,6 +85,9 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
         miv_pic.setImageResource(picId);
         mtv_sex_set.setText(text);
         presenter = new SelectLabelPresenter(this,this);
+
+        GradientDrawable background = (GradientDrawable) mbtn_sure.getBackground();
+        background.setColor(getColorResouce(R.color.pink_color));
     }
 
     /**
@@ -116,7 +118,6 @@ public class SelectLabelAct extends BaseActivity implements ISelectLabelView{
     @Override
     public void success() {
         setResult(Activity.RESULT_OK);
-        MainActivity.startAct(this,"personCenter");
         finish();
     }
 

@@ -114,7 +114,7 @@
 
         </com.shunlian.app.widget.MyRelativeLayout>
         <!--其他-->
-        <com.shunlian.app.widget.MyRelativeLayout
+       <!-- <com.shunlian.app.widget.MyRelativeLayout
             android:id="@+id/mrlayout_private"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                 app:tv_control_adapter="true"
                 app:tv_margin_right="185" />
 
-        </com.shunlian.app.widget.MyRelativeLayout>
+        </com.shunlian.app.widget.MyRelativeLayout>-->
 
     </com.shunlian.app.widget.MyLinearLayout>
 

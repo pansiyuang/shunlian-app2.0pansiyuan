@@ -225,9 +225,9 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
     @Override
     public void smsCode(String smsCode) {
         if (!TextUtils.isEmpty(smsCode) && isCheckCode) {
-            if (!isCheckMobile){
+            /*if (!isCheckMobile){//检验手机号
                 return;
-            }
+            }*/
             id = et_id.getText().toString();
             //Common.staticToast(smsCode);
             String phone = et_phone.getText().toString();
