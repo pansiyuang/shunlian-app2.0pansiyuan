@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.CommonLazyPagerAdapter;
+import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.CustomViewPager;
 import com.shunlian.app.widget.MyImageView;
 
@@ -25,7 +27,7 @@ import butterknife.BindView;
  * Created by Administrator on 2018/4/3.
  */
 
-public class MessageActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class MessageActivity extends BaseActivity implements ViewPager.OnPageChangeListener, MessageCountManager.OnGetMessageListener {
 
     public static final String[] tabTitle = new String[]{"系统消息", "小店消息"};
 
@@ -87,16 +89,14 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         setStatusBarFontDark();
 
         messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.setOnGetMessageListener(this);
 
         tv_title.setText(getStringResouce(R.string.message));
         miv_title_right.setVisibility(View.VISIBLE);
         miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
         line_title.setVisibility(View.GONE);
 
-        if (messageCountManager.isLoad()) {
-            sysCount = messageCountManager.getSys_msg();
-            storeCount = messageCountManager.getStore_msg();
-        }
+        messageCountManager.initData();
 
         messageListFragment = MessageListFragment.getInstance();
         mFrags.add(messageListFragment);
@@ -204,5 +204,37 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
+        LogUtil.httpLogW("OnLoadSuccess()");
+        sysCount = messageCountEntity.sys_msg;
+        storeCount = messageCountEntity.store_msg;
+
+        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
+            tv_store_count.setVisibility(View.GONE);
+        } else {
+            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+            tv_store_count.setVisibility(View.VISIBLE);
+        }
+
+        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+            tv_sys_count.setVisibility(View.GONE);
+        } else {
+            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+            tv_sys_count.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void OnLoadFail() {
+
+    }
+
+    public void updateMsgCount() {
+        sysCount++;
+        tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+        tv_sys_count.setVisibility(View.VISIBLE);
     }
 }

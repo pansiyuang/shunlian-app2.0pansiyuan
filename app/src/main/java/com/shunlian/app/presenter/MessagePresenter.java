@@ -81,7 +81,7 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                 super.onSuccess(entity);
                 ChatMemberEntity chatMemberEntity = entity.data;
                 List<ChatMemberEntity.ChatMember> members = chatMemberEntity.list;
-                iView.getMessageList(members);
+                iView.getMessageList(members,chatMemberEntity.unread_total);
             }
 
             @Override

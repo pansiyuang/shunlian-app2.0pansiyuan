@@ -177,7 +177,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         tv_title_right.setOnClickListener(this);
         recycler_chat.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_UP:
                     et_input.setInputMode(ChatInput.InputMode.NONE, false);
                     break;
             }
@@ -1023,7 +1023,9 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                             baseMessage.setStatus(MessageStatus.SendSucc);
                             msgInfo.message = mAdapter.msg2Str(baseMessage);
                         } else {
-                            mAdapter.addMsgInfo(msgInfo);
+                            if (msgInfo.m_user_id.equals(chat_m_user_Id)) { //判断服务Id是否一致
+                                mAdapter.addMsgInfo(msgInfo);
+                            }
                         }
                     }
                 }

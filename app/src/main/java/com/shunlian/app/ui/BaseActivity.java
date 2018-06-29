@@ -123,11 +123,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             immersionBar = ImmersionBar.with(this);
             immersionBar.init();
             setContentView(getLayoutId());
+            resources = getResources();
+            unbinder = ButterKnife.bind(this);
         }catch (Exception e){
             e.printStackTrace();
         }
-        resources = getResources();
-        unbinder = ButterKnife.bind(this);
         finishAct();
         initListener();
         initData();

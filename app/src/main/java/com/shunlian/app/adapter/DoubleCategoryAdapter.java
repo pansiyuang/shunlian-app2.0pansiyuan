@@ -210,7 +210,16 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                 viewHolder.miv_product.setVisibility(View.GONE);
             }
 
-            viewHolder.tv_comment.setText(String.format(getString(R.string.sort_comment), goods.comment_num, goods.comment_rate));
+            if ("0".equals(goods.comment_num)) {
+                viewHolder.tv_comment.setText("暂无评论");
+            } else {
+                if ("0".equals(goods.comment_rate)) {
+                    viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+                } else {
+                    viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                }
+            }
+
             viewHolder.tv_address.setText(goods.send_area);
         }
     }
