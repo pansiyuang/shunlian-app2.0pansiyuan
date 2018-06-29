@@ -110,7 +110,7 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
                 copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
                 oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
-                if (data.percent>0){
+//                if (data.percent>0){
                     oneHolder.seekbar_grow.setProgress(data.percent);
                     oneHolder.mtv_desc.setText(data.str_surplus_stock);
                     oneHolder.mrlayout_progress.setVisibility(View.VISIBLE);
@@ -121,9 +121,9 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                             return true;
                         }
                     });
-                }else {
-                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
-                }
+//                }else {
+//                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
+//                }
                 oneHolder.mtv_number.setVisibility(View.INVISIBLE);
             } else {
                 if ("1".equals(data.remind_status)) {
@@ -139,7 +139,8 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 }
                 oneHolder.mtv_priceA.setTextColor(getColor(R.color.value_2096F2));
                 oneHolder.seekbar_grow.setVisibility(View.GONE);
-                if (!isEmpty(data.remind_count)&&Float.parseFloat(data.remind_count)>0){
+//                if (!isEmpty(data.remind_count)&&Float.parseFloat(data.remind_count)>0){
+                if (!isEmpty(data.remind_count)){
                     oneHolder.mtv_number.setVisibility(View.VISIBLE);
                     oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
                 }

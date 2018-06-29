@@ -84,7 +84,7 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
                     viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
                 }else {
-                    viewHolder.picAdapter  = new SinglePicAdapter(context, false, hot.imgs);
+                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false, hot.imgs);
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
                     //viewHolder.picAdapter.notifyDataSetChanged();
                 }

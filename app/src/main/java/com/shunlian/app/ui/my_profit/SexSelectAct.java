@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
@@ -22,8 +23,8 @@ import butterknife.OnClick;
 
 public class SexSelectAct extends BaseActivity {
 
-    @BindView(R.id.mrlayout_private)
-    MyRelativeLayout mrlayout_private;
+    /*@BindView(R.id.mrlayout_private)
+    MyRelativeLayout mrlayout_private;*/
 
     @BindView(R.id.mrlayout_woman)
     MyRelativeLayout mrlayout_woman;
@@ -37,8 +38,8 @@ public class SexSelectAct extends BaseActivity {
     @BindView(R.id.miv_woman)
     MyImageView miv_woman;
 
-    @BindView(R.id.miv_private)
-    MyImageView miv_private;
+    /*@BindView(R.id.miv_private)
+    MyImageView miv_private;*/
 
     @BindView(R.id.mbt_next)
     MyButton mbt_next;
@@ -67,6 +68,7 @@ public class SexSelectAct extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
 
+        closeSideslip();
         GradientDrawable background = (GradientDrawable) mbt_next.getBackground();
         background.setColor(getColorResouce(R.color.pink_color));
     }
@@ -84,19 +86,19 @@ public class SexSelectAct extends BaseActivity {
 
     }
 
-    @OnClick(R.id.mrlayout_private)
+    /*@OnClick(R.id.mrlayout_private)
     public void clickPrivate(){
         change(3);
         sexSelect = 3;
 
-    }
+    }*/
 
     private void change(int state){
         int tixian = R.mipmap.img_balance_tixian;
         int img_kong = R.mipmap.img_kong;
         miv_man.setImageResource(state == 1?tixian:img_kong);
         miv_woman.setImageResource(state == 2?tixian:img_kong);
-        miv_private.setImageResource(state == 3?tixian:img_kong);
+        //miv_private.setImageResource(state == 3?tixian:img_kong);
     }
 
     @OnClick(R.id.mbt_next)
@@ -113,6 +115,7 @@ public class SexSelectAct extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == Activity.RESULT_OK){
             finish();
+            MainActivity.startAct(this,"personCenter");
         }
     }
 

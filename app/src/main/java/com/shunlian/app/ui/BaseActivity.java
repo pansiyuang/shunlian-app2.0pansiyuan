@@ -113,13 +113,21 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 !(this instanceof ConfirmOrderAct) &&
                 !(this instanceof PayListActivity) &&
                 !(this instanceof SearchGoodsActivity)) {
-            openSideslipCallback();
+            try{
+                openSideslipCallback();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        immersionBar = ImmersionBar.with(this);
-        immersionBar.init();
-        setContentView(getLayoutId());
-        resources = getResources();
-        unbinder = ButterKnife.bind(this);
+        try {
+            immersionBar = ImmersionBar.with(this);
+            immersionBar.init();
+            setContentView(getLayoutId());
+            resources = getResources();
+            unbinder = ButterKnife.bind(this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         finishAct();
         initListener();
         initData();

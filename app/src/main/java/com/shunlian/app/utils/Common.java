@@ -228,26 +228,26 @@ public class Common {
                     GetCouponAct.startAct(context);
                 }
                 break;
-            case "voucher":
-                //todo
-                Common.staticToast("优惠券");
-                break;
-            case "gift":
-                //todo
-                Common.staticToast("买赠");
-                break;
-            case "discount":
-                //todo
-                Common.staticToast("满额");
-                break;
-            case "combo":
-                //todo
-                Common.staticToast("套餐");
-                break;
-            case "pingtuan":
-                //todo
-                Common.staticToast("优惠拼单");
-                break;
+//            case "voucher":
+//                //todo
+//                Common.staticToast("优惠券");
+//                break;
+//            case "gift":
+//                //todo
+//                Common.staticToast("买赠");
+//                break;
+//            case "discount":
+//                //todo
+//                Common.staticToast("满额");
+//                break;
+//            case "combo":
+//                //todo
+//                Common.staticToast("套餐");
+//                break;
+//            case "pingtuan":
+//                //todo
+//                Common.staticToast("优惠拼单");
+//                break;
             case "praise":
                 KouBeiAct.startAct(context);
                 break;
@@ -273,14 +273,14 @@ public class Common {
             case "home":
                 MainActivity.startAct(context, "");
                 break;
-            case "fanslist":
-                //todo
-                Common.staticToast("粉丝列表");
-                break;
-            case "popshare":
-                //todo
-                Common.staticToast("弹出分享");
-                break;
+//            case "fanslist":
+//                //todo
+//                Common.staticToast("粉丝列表");
+//                break;
+//            case "popshare":
+//                //todo
+//                Common.staticToast("弹出分享");
+//                break;
             case "commission":
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
@@ -288,10 +288,10 @@ public class Common {
                     MyProfitAct.startAct(context, false);
                 }
                 break;
-            case "myvoucherlist":
-                //todo
-                Common.staticToast("我的优惠券");
-                break;
+//            case "myvoucherlist":
+//                //todo
+//                Common.staticToast("我的优惠券");
+//                break;
             case "voucherlist":
                 if (TextUtils.isEmpty(token)) {
                     LoginAct.startAct(context);
