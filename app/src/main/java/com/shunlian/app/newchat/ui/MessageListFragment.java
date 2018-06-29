@@ -54,6 +54,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     private ObjectMapper mObjectMapper;
     private String currentUserId;
     private ChatManager chatManager;
+    private int total_Unread;
 
     public static MessageListFragment getInstance() {
         MessageListFragment messageListFragment = new MessageListFragment();
@@ -157,8 +158,9 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
     }
 
     @Override
-    public void getMessageList(List<ChatMemberEntity.ChatMember> members) {
+    public void getMessageList(List<ChatMemberEntity.ChatMember> members, int count) {
         memberList.clear();
+        total_Unread = count;
         if (!isEmpty(members)) {
             memberList.addAll(members);
         }
@@ -189,6 +191,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
             e.printStackTrace();
         }
         int unReadNum;
+        boolean isUpdate = false;
         if (!isEmpty(memberList)) {
             for (int i = 0; i < memberList.size(); i++) {
                 //好友发给自己的消息
@@ -196,13 +199,17 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
                     unReadNum = memberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     memberList.get(i).unread_count = unReadNum;
-                    LogUtil.httpLogW("msgInfo.sendTime:" + msgInfo.send_time);
                     memberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
+                    isUpdate = true;
                     break;
                 }
             }
         }
+        boolean finalIsUpdate = isUpdate;
         getActivity().runOnUiThread(() -> {
+            if (finalIsUpdate) {
+                ((MessageActivity) getActivity()).updateMsgCount();
+            }
             mAdapter.notifyDataSetChanged();
         });
     }

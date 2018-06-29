@@ -135,7 +135,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
-    public void getMessageList(List<ChatMemberEntity.ChatMember> members) {
+    public void getMessageList(List<ChatMemberEntity.ChatMember> members,int count) {
         if (!isEmpty(members)) {
             chatMemberList.clear();
             chatMemberList.addAll(members);

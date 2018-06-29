@@ -11,6 +11,7 @@ public class MsgInfo {
     public int uid;
     public int kid;
     public int user_id;
+    public String sid;
     public int type;
     public int is_read;
     public String message;

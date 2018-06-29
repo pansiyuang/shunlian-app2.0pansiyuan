@@ -271,7 +271,11 @@ public class ExperiencePublishActivity extends BaseActivity implements IExperien
                     Common.staticToast("请添加图片");
                     return;
                 }
-                mPresenter.createExperience(content, picstr.toString(), currentGoods.goods_id);
+                if (currentGoods == null) {
+                    mPresenter.createExperience(content, picstr.toString(), "");
+                } else {
+                    mPresenter.createExperience(content, picstr.toString(), currentGoods.goods_id);
+                }
                 break;
         }
         super.onClick(view);

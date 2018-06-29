@@ -11,6 +11,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChatMemberEntity {
     public List<ChatMember> list;
+    public int unread_total;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ChatMember implements Serializable {
