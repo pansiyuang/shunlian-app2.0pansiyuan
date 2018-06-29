@@ -329,6 +329,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String unique_sign = wxLoginEntity.unique_sign;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
+                finish();
                 RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
             } else if ("1".equals(status)) {
                 Common.staticToast(entity.message);
@@ -358,10 +359,11 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
                 }
+                finish();
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
+                finish();
                 RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
             }
-            finish();
         } else {
             finish();
         }
