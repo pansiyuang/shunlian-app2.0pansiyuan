@@ -112,6 +112,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
     @Override
     public void showFailureView(int request_code) {
+        if (lay_refresh!=null)
         lay_refresh.setRefreshing(false);
     }
 

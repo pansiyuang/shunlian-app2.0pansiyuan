@@ -456,8 +456,10 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     int height = picWidth * 158 / 340;
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
                     params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
-                    fiveHolder.miv_photo.setLayoutParams(params);
-                    GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
+                    if (fiveHolder.miv_photo!=null){
+                        fiveHolder.miv_photo.setLayoutParams(params);
+                        GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
+                    }
                     fiveHolder.mtv_topic.setVisibility(View.GONE);
 //                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
                     fiveHolder.view_line.setVisibility(View.GONE);
@@ -626,7 +628,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     GlideUtils.getInstance().loadImageZheng(context, tenHolder.miv_photo, goods.thumb);
                     if (tenHolder.mtv_title != null)
                         tenHolder.mtv_title.setText(goods.title);
-                    if (!isEmpty(goods.price)) {
+                    if (!isEmpty(goods.price)&&tenHolder.mtv_price!=null) {
                         SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                         tenHolder.mtv_price.setText(spannableStringBuilder);
                     }

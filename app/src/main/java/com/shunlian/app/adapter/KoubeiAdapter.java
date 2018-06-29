@@ -41,7 +41,9 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
         CoreHotEntity.Hot.Goods data = lists.get(position);
         GlideUtils.getInstance().loadImage(context,mHolder.miv_photo,data.thumb);
+        if (mHolder.mtv_title!=null)
         mHolder.mtv_title.setText(data.title);
+        if (mHolder.mtv_desc!=null)
         mHolder.mtv_desc.setText(data.content);
         if (!isEmpty(data.sales)&&Float.parseFloat(data.sales)>0){
             mHolder.mtv_fu.setVisibility(View.VISIBLE);
