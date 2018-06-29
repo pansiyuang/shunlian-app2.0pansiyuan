@@ -53,6 +53,7 @@ public class UpdateDialog implements IMain {
     private CBProgressBar cbProgressBar;
     private PromptDialog promptDialog;
     private String cancelState;
+    private boolean isStart=false;
 
     public UpdateDialog(Activity activity) {
         this.activity = activity;
@@ -81,6 +82,7 @@ public class UpdateDialog implements IMain {
         if (!activity.isFinishing()) {
             forceDialog.show();
         }
+        isStart=true;
     }
 
     private void initUpdateDialog() {
@@ -175,11 +177,13 @@ public class UpdateDialog implements IMain {
 
                 @Override
                 public void maxProgress(float max) {
+                    if (isStart)
                     cbProgressBar.setMax(max);
                 }
 
                 @Override
                 public void progress(float progress) {
+                    if (isStart)
                     cbProgressBar.setProgress(progress);
                 }
 
@@ -187,8 +191,10 @@ public class UpdateDialog implements IMain {
                 public void downloadSuccess() {
                     LogUtil.httpLogW("----updateUtil----downloadSuccess-------");
                     tv_checkUpdate.setText("请先升级到最新版本");
-                    cbProgressBar.setMax(100);
-                    cbProgressBar.setProgress(100);
+                    if (isStart){
+                        cbProgressBar.setMax(100);
+                        cbProgressBar.setProgress(100);
+                    }
                 }
 
                 @Override
@@ -206,8 +212,10 @@ public class UpdateDialog implements IMain {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            forceDialog.dismiss();
-                            cbProgressBar.setProgress(0);
+                            if (isStart){
+                                forceDialog.dismiss();
+                                cbProgressBar.setProgress(0);
+                            }
                             updateDialog.show();
                         }
                     }, 2000);
@@ -216,8 +224,10 @@ public class UpdateDialog implements IMain {
 
                 @Override
                 public void onError() {
-                    forceDialog.dismiss();
-                    cbProgressBar.setProgress(0);
+                    if (isStart){
+                        forceDialog.dismiss();
+                        cbProgressBar.setProgress(0);
+                    }
                     updateDialog.show();
                 }
             });

@@ -22,7 +22,7 @@ import retrofit2.Call;
  */
 
 public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
-    private int pageSize=20;
+    private int pageSize=2;
     private boolean isFirst=true;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
@@ -52,11 +52,7 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
 
     }
     public void refreshBaby() {
-        LogUtil.augusLogW("yxf--"+babyAllPage);
-        LogUtil.augusLogW("yxf--"+babyPage);
-        LogUtil.augusLogW("yxf--"+babyIsLoading);
         if (!babyIsLoading && babyPage <= babyAllPage) {
-            LogUtil.augusLogW("yxf--8958");
             babyIsLoading = true;
             getApiData(babyPage,circle_id);
         }
@@ -77,7 +73,6 @@ public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
                 DiscoveryTieziEntity data =entity.data;
                 babyIsLoading = false;
                 babyPage++;
-                LogUtil.augusLogW("yxf---sdfsdfs");
                 babyAllPage = Integer.parseInt(data.list.total_page);
                 mDatas.addAll(data.list.new_inv);
                 iView.setApiData(data.list,mDatas);

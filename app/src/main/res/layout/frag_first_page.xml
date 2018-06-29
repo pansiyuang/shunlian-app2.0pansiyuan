@@ -9,7 +9,7 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_title"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="50dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -17,9 +17,10 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_scan"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|bottom"
             android:orientation="vertical"
+            android:paddingBottom="5dp"
             app:ll_control_adapter="true"
             app:ll_margin_left="20">
 
@@ -30,8 +31,8 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/icon_home_saoyisao"
                 app:iv_control_adapter="true"
-                app:iv_control_height="36"
-                app:iv_control_width="36" />
+                app:iv_control_height="40"
+                app:iv_control_width="40" />
 
 
             <com.shunlian.app.widget.MyTextView
@@ -56,7 +57,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:ll_control_adapter="true"
-            app:ll_control_height="63"
+            app:ll_control_height="68"
             app:ll_margin_left="20">
 
             <com.shunlian.app.widget.MyImageView
@@ -86,7 +87,8 @@
             android:id="@+id/mll_message"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center_horizontal|bottom"
+            android:paddingBottom="5dp"
             android:orientation="vertical">
 
             <com.shunlian.app.widget.MyRelativeLayout
@@ -95,9 +97,9 @@
                 android:layout_height="wrap_content">
 
                 <com.shunlian.app.widget.MyImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="3dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="9.5dp"
                     android:id="@+id/miv_news"
@@ -112,6 +114,7 @@
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
                     android:textColor="@color/white"
+                    android:text="9+"
                     android:textSize="8.5sp"
                     android:visibility="gone" />
             </com.shunlian.app.widget.MyRelativeLayout>

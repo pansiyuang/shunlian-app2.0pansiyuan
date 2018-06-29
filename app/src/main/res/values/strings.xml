@@ -568,6 +568,7 @@
 
     <!-- 发现 -->
     <string name="discover_faxian">发现</string>
+    <string name="discover_wolaishuo">我来说两句</string>
     <string name="article">文章</string>
     <string name="search_article">搜索文章</string>
     <string name="discover_weifaxianxin">未发现新动态</string>
