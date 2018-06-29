@@ -393,10 +393,12 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_four,
                             data.kbrx.thumb, R.mipmap.img_default_home_xinpin);
                     int seconds = (int) (System.currentTimeMillis() / 1000) - second;
-                    fourHolder.downTime_first.cancelDownTimer();
-                    fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
+                    if (fourHolder.downTime_first!=null){
+                        fourHolder.downTime_first.cancelDownTimer();
+                        fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
 //                    fourHolder.downTime_first.setDownTime(10);
-                    fourHolder.downTime_first.startDownTimer();
+                        fourHolder.downTime_first.startDownTimer();
+                    }
                     if (Common.isColor(data.ttth.t_color)) {
                         fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
                     }
