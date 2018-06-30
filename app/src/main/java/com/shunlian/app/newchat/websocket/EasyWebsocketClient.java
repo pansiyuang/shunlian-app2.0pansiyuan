@@ -711,6 +711,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     }
 
     public void resetSocket() {
+        messageReceiveListeners.clear();
         if (!NetworkUtils.isNetworkOpen(mContext)) {
             reconnectCount = 0;
             LogUtil.httpLogW("Websocket 重连失败网络不可用");

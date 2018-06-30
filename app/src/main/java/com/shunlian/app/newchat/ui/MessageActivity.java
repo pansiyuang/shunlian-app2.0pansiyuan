@@ -89,14 +89,13 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
         setStatusBarFontDark();
 
         messageCountManager = MessageCountManager.getInstance(this);
+        messageCountManager.initData();
         messageCountManager.setOnGetMessageListener(this);
 
         tv_title.setText(getStringResouce(R.string.message));
         miv_title_right.setVisibility(View.VISIBLE);
         miv_title_right.setImageResource(R.mipmap.icon_found_sousuo);
         line_title.setVisibility(View.GONE);
-
-        messageCountManager.initData();
 
         messageListFragment = MessageListFragment.getInstance();
         mFrags.add(messageListFragment);
