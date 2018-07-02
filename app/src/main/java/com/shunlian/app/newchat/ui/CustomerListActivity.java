@@ -20,6 +20,7 @@ import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.SwitchStatusEntity;
 import com.shunlian.app.newchat.entity.TransferMemberEntity;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.TimeUtil;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
@@ -182,7 +183,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
     @Override
     public void onItemClick(View view, int position) {
         ChatMemberEntity.ChatMember chatMember = chatMemberList.get(position);
-        ChatActivity.startAct(this, chatMember);
+        ChatManager.getInstance(this).init().StoreChatToMember(chatMember);
     }
 
     public void resetData() {

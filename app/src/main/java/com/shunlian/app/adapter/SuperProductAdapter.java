@@ -116,57 +116,61 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
     }
 
     public void handleGoods(RecyclerView.ViewHolder holder, int position) {
-        GoodsViewHolder goodsViewHolder = (GoodsViewHolder) holder;
-        SuperProductEntity.SuperProduct superProduct = lists.get(position);
-        GlideUtils.getInstance().loadImage(context, goodsViewHolder.miv_icon, superProduct.thumb);
-        goodsViewHolder.tv_products_title.setText(superProduct.title);
-        if (superProduct.is_new == 1) {
-            goodsViewHolder.tv_products_isNew.setVisibility(View.VISIBLE);
-        }
-        goodsViewHolder.tv_products_price.setText(getString(R.string.common_yuan) + superProduct.price);
-
-        if (isEmpty(superProduct.earned)) {
-            goodsViewHolder.ll_earn.setVisibility(View.GONE);
-        } else {
-            goodsViewHolder.ll_earn.setVisibility(View.VISIBLE);
-            goodsViewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + superProduct.earned);
-        }
-
-        goodsViewHolder.ll_tags.removeAllViews();
-        if (1 == superProduct.is_new) {
-            goodsViewHolder.ll_tags.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), goodsViewHolder));
-        }
-
-        if (1 == superProduct.is_hot) {
-            goodsViewHolder.ll_tags.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), goodsViewHolder));
-        }
-
-        if (1 == superProduct.is_explosion) {
-            goodsViewHolder.ll_tags.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), goodsViewHolder));
-        }
-
-        if (1 == superProduct.is_recommend) {
-            goodsViewHolder.ll_tags.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), goodsViewHolder));
-        }
-
-        //返回键扩大点击范围
-        int i = TransformUtil.dip2px(context, 10);
-        TransformUtil.expandViewTouchDelegate(goodsViewHolder.miv_share, i, i, i, i);
-
-        goodsViewHolder.miv_share.setOnClickListener(v -> {
-            //分享
-            if (mShareLinstener != null) {
-                SuperProductEntity.Share share = superProduct.share;
-                mShareInfoParam.title = share.title;
-                mShareInfoParam.desc = share.content;
-                mShareInfoParam.img = share.pic;
-                mShareInfoParam.userName = share.nick_name;
-                mShareInfoParam.userAvatar = share.portrait;
-                mShareInfoParam.shareLink = share.share_url;
-                mShareInfoParam.goodsPrice = superProduct.price;
-                mShareLinstener.onShare(mShareInfoParam, superProduct.url.item_id);
+        try {
+            GoodsViewHolder goodsViewHolder = (GoodsViewHolder) holder;
+            SuperProductEntity.SuperProduct superProduct = lists.get(position);
+            GlideUtils.getInstance().loadImage(context, goodsViewHolder.miv_icon, superProduct.thumb);
+            goodsViewHolder.tv_products_title.setText(superProduct.title);
+            if (superProduct.is_new == 1) {
+                goodsViewHolder.tv_products_isNew.setVisibility(View.VISIBLE);
             }
-        });
+            goodsViewHolder.tv_products_price.setText(getString(R.string.common_yuan) + superProduct.price);
+
+            if (isEmpty(superProduct.earned)) {
+                goodsViewHolder.ll_earn.setVisibility(View.GONE);
+            } else {
+                goodsViewHolder.ll_earn.setVisibility(View.VISIBLE);
+                goodsViewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + superProduct.earned);
+            }
+
+            goodsViewHolder.ll_tags.removeAllViews();
+            if (1 == superProduct.is_new) {
+                goodsViewHolder.ll_tags.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), goodsViewHolder));
+            }
+
+            if (1 == superProduct.is_hot) {
+                goodsViewHolder.ll_tags.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), goodsViewHolder));
+            }
+
+            if (1 == superProduct.is_explosion) {
+                goodsViewHolder.ll_tags.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), goodsViewHolder));
+            }
+
+            if (1 == superProduct.is_recommend) {
+                goodsViewHolder.ll_tags.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), goodsViewHolder));
+            }
+
+            //返回键扩大点击范围
+            int i = TransformUtil.dip2px(context, 10);
+            TransformUtil.expandViewTouchDelegate(goodsViewHolder.miv_share, i, i, i, i);
+
+            goodsViewHolder.miv_share.setOnClickListener(v -> {
+                //分享
+                if (mShareLinstener != null) {
+                    SuperProductEntity.Share share = superProduct.share;
+                    mShareInfoParam.title = share.title;
+                    mShareInfoParam.desc = share.content;
+                    mShareInfoParam.img = share.pic;
+                    mShareInfoParam.userName = share.nick_name;
+                    mShareInfoParam.userAvatar = share.portrait;
+                    mShareInfoParam.shareLink = share.share_url;
+                    mShareInfoParam.goodsPrice = superProduct.price;
+                    mShareLinstener.onShare(mShareInfoParam, superProduct.url.item_id);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -233,7 +233,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
                 statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
             } else {
                 ChatMemberEntity.ChatMember member = memberList.get(position - 1);
-                ChatActivity.startAct(getActivity(), member);
+                ChatManager.getInstance(getActivity()).init().MemberChatToStore(member);
             }
         }
     }

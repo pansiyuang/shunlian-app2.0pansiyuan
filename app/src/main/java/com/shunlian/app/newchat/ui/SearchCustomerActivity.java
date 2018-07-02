@@ -20,6 +20,7 @@ import com.shunlian.app.newchat.entity.MessageEntity;
 import com.shunlian.app.newchat.entity.MessageListEntity;
 import com.shunlian.app.newchat.entity.MsgInfo;
 import com.shunlian.app.newchat.entity.SystemMessageEntity;
+import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.newchat.util.SwitchStatusDialog;
 import com.shunlian.app.newchat.util.TimeUtil;
@@ -239,13 +240,13 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
         } else {
             ChatMemberEntity.ChatMember chatMember = chatMemberList.get(position);
-            ChatActivity.startAct(this, chatMember);
+            ChatManager.getInstance(this).MemberChatToStore(chatMember);
         }
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         mClient.removeOnMessageReceiveListener(this);
-        super.onDestroy();
+        super.onStop();
     }
 }

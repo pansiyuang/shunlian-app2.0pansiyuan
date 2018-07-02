@@ -197,9 +197,9 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         mClient.removeOnMessageReceiveListener(this);
-        super.onDestroy();
+        super.onStop();
     }
 
     @Override

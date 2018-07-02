@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
@@ -18,8 +19,6 @@ import com.shunlian.app.widget.MyImageView;
 import java.util.List;
 
 import butterknife.BindView;
-
-import static com.shunlian.app.utils.Common.firstSmallText;
 
 /**
  * Created by Administrator on 2017/12/11.
@@ -53,7 +52,7 @@ public class RecommmendAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Goo
         viewHolder.tv_meger_title.setText(goods.goods_title);
 
         String price = getString(R.string.common_yuan) + goods.price;
-        firstSmallText(viewHolder.tv_meger_price, price, TransformUtil.sp2px(context, 5));
+        viewHolder.tv_meger_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 5));
 
         viewHolder.tv_meger_sell.setText("已售：" + goods.sales);
         viewHolder.miv_meger_buy.setOnClickListener(new View.OnClickListener() {

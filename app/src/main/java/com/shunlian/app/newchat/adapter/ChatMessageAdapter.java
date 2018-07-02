@@ -52,6 +52,7 @@ import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.ui.help.HelpSolutionAct;
 import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.CenterAlignImageSpan;
@@ -81,7 +82,6 @@ import static com.shunlian.app.utils.BitmapUtil.MAX_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MAX_WIDTH;
 import static com.shunlian.app.utils.BitmapUtil.MIN_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MIN_WIDTH;
-import static com.shunlian.app.utils.Common.firstSmallText;
 
 /**
  * Created by Administrator on 2018/4/10.
@@ -635,7 +635,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             linkViewHolder.tv_goods_title.setText(msg_body.title);
 
             String price = getString(R.string.rmb) + msg_body.price;
-            firstSmallText(linkViewHolder.tv_goods_price, price, 11);
+            linkViewHolder.tv_goods_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
 
             linkViewHolder.tv_send_goods.setOnClickListener(v -> {
                 GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();
@@ -719,7 +719,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                             if (isSeller) {
                                 ((ChatActivity) context).getHelpContent(helpEntity.id, helpMessage.sid);
                             } else {
-                                HelpTwoAct.startAct(context, helpEntity.id, helpEntity.item);
+                                HelpSolutionAct.startAct(context, helpEntity.id);
                             }
                         });
                     }

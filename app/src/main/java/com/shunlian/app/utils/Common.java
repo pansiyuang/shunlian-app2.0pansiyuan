@@ -631,25 +631,13 @@ public class Common {
     }
 
     /**
-     * 首个文字大写
-     */
-    public static void firstSmallText(TextView tv, String str, int size) {
-        if (TextUtils.isEmpty(str)) {
-            return;
-        }
-        SpannableString sp = new SpannableString(str);
-        sp.setSpan(new AbsoluteSizeSpan(size, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv.setText(sp, TextView.BufferType.SPANNABLE);
-    }
-
-    /**
      * 格式化float 四舍五入保留两位小数
      *
      * @param f
      * @return
      */
     public static String formatFloat(float f) {
-        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         String format = decimalFormat.format(f);
         return format;
     }

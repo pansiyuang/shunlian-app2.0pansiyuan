@@ -150,7 +150,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             if (viewHolder.tv_title!=null)
             viewHolder.tv_title.setText(goods.title);
             String price = getString(R.string.common_yuan) + goods.price;
-            Common.firstSmallText(viewHolder.tv_price, price, 11);
+            viewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
 
             if ("1".equals(goods.free_ship)) {
                 viewHolder.tv_free.setVisibility(View.VISIBLE);
