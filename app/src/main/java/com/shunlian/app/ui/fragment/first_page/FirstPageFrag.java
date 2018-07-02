@@ -2,6 +2,7 @@ package com.shunlian.app.ui.fragment.first_page;
 
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.slide_tab.PagerSlidingTabStrip;
 import com.shunlian.mylibrary.ImmersionBar;
 
@@ -71,6 +73,10 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     AppBarLayout mAppbar;
     @BindView(R.id.mllayout_title)
     MyLinearLayout mllayout_title;
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+    @BindView(R.id.data_coorLayout)
+    CoordinatorLayout data_coorLayout;
     private PFirstPage pFirstPage;
     private String logoType,logoId;
     @BindView(R.id.tv_msg_count)
@@ -202,6 +208,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 //        }
         pFirstPage.getMenuData();
         mainActivity= (MainActivity) getActivity();
+        nei_empty.setImageResource(R.mipmap.img_empty_wuwangluo)
+                .setText(getString(R.string.common_wangluozhuangkuang))
+                .setButtonText(getStringResouce(R.string.common_dianjichongshi))
+                .setOnClickListener((view) -> {
+                    pFirstPage.getMenuData();
+                });
     }
 
     @OnClick(R.id.mllayout_scan)
@@ -234,6 +246,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
         if (getMenuEntiy == null){
             return;
         }
+        visible(data_coorLayout);
+        gone(nei_empty);
         if (getMenuEntiy.logo!=null){
             logoType=getMenuEntiy.logo.type;
             logoId=getMenuEntiy.logo.item_id;
@@ -265,12 +279,14 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void showFailureView(int request_code) {
-
+        visible(nei_empty);
+        gone(data_coorLayout);
     }
 
     @Override
     public void showDataEmptyView(int request_code) {
-
+        visible(nei_empty);
+        gone(data_coorLayout);
     }
 
     /**

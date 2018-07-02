@@ -88,8 +88,8 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|bottom"
-            android:paddingBottom="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
 
             <com.shunlian.app.widget.MyRelativeLayout
                 android:id="@+id/rl_more"
@@ -97,12 +97,12 @@
                 android:layout_height="wrap_content">
 
                 <com.shunlian.app.widget.MyImageView
+                    android:id="@+id/miv_news"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginTop="3dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="9.5dp"
-                    android:id="@+id/miv_news"
+                    android:layout_marginTop="3dp"
                     android:src="@mipmap/icon_home_message" />
 
                 <com.shunlian.app.widget.MyTextView
@@ -113,11 +113,12 @@
                     android:background="@drawable/rounded_corner_pink_100"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:textColor="@color/white"
                     android:text="9+"
+                    android:textColor="@color/white"
                     android:textSize="8.5sp"
                     android:visibility="gone" />
             </com.shunlian.app.widget.MyRelativeLayout>
+
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_news"
                 android:layout_width="wrap_content"
@@ -132,7 +133,7 @@
     </com.shunlian.app.widget.MyLinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/store_coorLayout"
+        android:id="@+id/data_coorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/mllayout_title">
@@ -190,6 +191,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </com.shunlian.app.widget.MyLinearLayout>
 
 

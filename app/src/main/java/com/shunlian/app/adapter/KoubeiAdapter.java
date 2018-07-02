@@ -2,15 +2,12 @@ package com.shunlian.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CoreHotEntity;
-import com.shunlian.app.bean.VouchercenterplEntity;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -39,23 +36,28 @@ public class KoubeiAdapter extends BaseRecyclerAdapter<CoreHotEntity.Hot.Goods> 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
-        CoreHotEntity.Hot.Goods data = lists.get(position);
-        GlideUtils.getInstance().loadImage(context,mHolder.miv_photo,data.thumb);
-        mHolder.mtv_title.setText(data.title);
-        mHolder.mtv_desc.setText(data.content);
-        if (!isEmpty(data.sales)&&Float.parseFloat(data.sales)>0){
-            mHolder.mtv_fu.setVisibility(View.VISIBLE);
-            mHolder.mtv_fu.setText(String.format(getString(R.string.first_yifukuan),data.sales));
-        }else {
-            mHolder.mtv_fu.setVisibility(View.GONE);
+        try {
+            CoreHotEntity.Hot.Goods data = lists.get(position);
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_photo, data.thumb);
+            if (mHolder.mtv_title != null)
+                mHolder.mtv_title.setText(data.title);
+            if (mHolder.mtv_desc != null)
+                mHolder.mtv_desc.setText(data.content);
+            if (!isEmpty(data.sales) && Float.parseFloat(data.sales) > 0) {
+                mHolder.mtv_fu.setVisibility(View.VISIBLE);
+                mHolder.mtv_fu.setText(String.format(getString(R.string.first_yifukuan), data.sales));
+            } else {
+                mHolder.mtv_fu.setVisibility(View.GONE);
+            }
+            if (!isEmpty(data.views) && Float.parseFloat(data.views) > 0) {
+                mHolder.mtv_hao.setVisibility(View.VISIBLE);
+                mHolder.mtv_hao.setText(String.format(getString(R.string.first_haopinglv), data.views) + "%");
+            } else {
+                mHolder.mtv_hao.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (!isEmpty(data.views)&&Float.parseFloat(data.views)>0){
-            mHolder.mtv_hao.setVisibility(View.VISIBLE);
-            mHolder.mtv_hao.setText(String.format(getString(R.string.first_haopinglv),data.views)+"%");
-        }else {
-            mHolder.mtv_hao.setVisibility(View.GONE);
-        }
-
     }
 
     public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {

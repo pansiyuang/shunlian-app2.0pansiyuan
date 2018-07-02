@@ -17,6 +17,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.view.IFirstPage;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -112,6 +113,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
     @Override
     public void showFailureView(int request_code) {
+        if (lay_refresh!=null)
         lay_refresh.setRefreshing(false);
     }
 

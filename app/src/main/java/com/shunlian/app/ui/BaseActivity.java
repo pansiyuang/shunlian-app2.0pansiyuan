@@ -81,7 +81,7 @@ import pay.PayListActivity;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Unbinder unbinder;
+    protected Unbinder unbinder;
     public ImmersionBar immersionBar;
     private NetworkBroadcast networkBroadcast;
     private Resources resources;
@@ -124,13 +124,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             immersionBar.init();
             setContentView(getLayoutId());
             resources = getResources();
+            ButterKnife.setDebug(true);
             unbinder = ButterKnife.bind(this);
+            finishAct();
+            initListener();
+            initData();
         }catch (Exception e){
             e.printStackTrace();
         }
-        finishAct();
-        initListener();
-        initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
 
     }
@@ -254,7 +255,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void finishAct() {
-        View byId = ButterKnife.findById(this, R.id.miv_close);
+        View byId = findViewById(R.id.miv_close);
         if (byId != null) {
             TransformUtil.expandViewTouchDelegate(byId, 50, 50, 50, 50);
             byId.setOnClickListener(v ->  {

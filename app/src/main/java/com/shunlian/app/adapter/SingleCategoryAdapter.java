@@ -147,6 +147,7 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             }
             SingleViewHolder viewHolder = (SingleViewHolder) holder;
             GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
+            if (viewHolder.tv_title!=null)
             viewHolder.tv_title.setText(goods.title);
             String price = getString(R.string.common_yuan) + goods.price;
             viewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));

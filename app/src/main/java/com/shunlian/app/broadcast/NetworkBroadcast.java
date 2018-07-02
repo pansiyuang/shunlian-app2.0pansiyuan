@@ -25,7 +25,7 @@ public class NetworkBroadcast extends BroadcastReceiver {
     //保存网络状态的key
     private final String networkKey = "network_state";
     //网络提示
-    private final String networkTip = "已切换到4G/3G/2G";
+    private final String networkTip = "已切换到移动网络";
 
     @Override
     public void onReceive(Context context, Intent intent) {

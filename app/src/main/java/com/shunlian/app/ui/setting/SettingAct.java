@@ -281,11 +281,11 @@ public class SettingAct extends BaseActivity implements ISettingView {
                     String s = Formatter.formatFileSize(SettingAct.this, t);
                     return s;
                 }
-                return null;
+                return "";
             } else {
                 file.mkdirs();
             }
-            return null;
+            return "";
         }
 
         // 递归方式 计算文件的大小
