@@ -637,7 +637,7 @@ public class Common {
      * @return
      */
     public static String formatFloat(float f) {
-        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         String format = decimalFormat.format(f);
         return format;
     }

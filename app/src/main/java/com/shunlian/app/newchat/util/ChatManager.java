@@ -1,17 +1,15 @@
 package com.shunlian.app.newchat.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 
-import com.shunlian.app.App;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.Status;
-import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.widget.HttpDialog;
 
 /**
  * Created by Administrator on 2018/5/7.
@@ -26,6 +24,7 @@ public class ChatManager {
     private MemberStatus mStatus;
     private ChatMemberEntity.ChatMember currentChatMember;
     private boolean isPush = false;
+    private HttpDialog httpDialog;
 
     public static ChatManager getInstance(Context context) {
         mContext = context;
@@ -41,6 +40,7 @@ public class ChatManager {
 
     public ChatManager init() {
         mClient = EasyWebsocketClient.getInstance(mContext);
+        httpDialog = new HttpDialog(mContext);
         statusDialog = new SwitchStatusDialog(mContext).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
             public void OnClickSure() {
@@ -55,7 +55,7 @@ public class ChatManager {
         });
         mClient.setOnSwitchStatusListener(roleType -> {
             if (isPush) {
-                ChatActivity.startAct(mContext, currentChatMember);
+                startToChat(currentChatMember);
             }
         });
         return this;
@@ -81,7 +81,7 @@ public class ChatManager {
             mStatus = MemberStatus.Member;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
         } else {
-            ChatActivity.startAct(mContext, chatMember, goodsDeatilEntity);
+            startToChat(chatMember, goodsDeatilEntity);
         }
     }
 
@@ -93,7 +93,7 @@ public class ChatManager {
             mStatus = MemberStatus.Admin;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Member, MemberStatus.Admin).show();
         } else {
-            ChatActivity.startAct(mContext, chatMember);
+            startToChat(chatMember);
         }
     }
 
@@ -105,7 +105,7 @@ public class ChatManager {
             mStatus = MemberStatus.Seller;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Member, MemberStatus.Seller).show();
         } else {
-            ChatActivity.startAct(mContext, chatMember);
+            startToChat(chatMember);
         }
     }
 
@@ -118,7 +118,7 @@ public class ChatManager {
             mStatus = MemberStatus.Seller;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Admin, MemberStatus.Member).show();
         } else {
-            ChatActivity.startAct(mContext, chatMember);
+            startToChat(chatMember);
         }
     }
 
@@ -137,7 +137,7 @@ public class ChatManager {
                         if (!mClient.isAdmin()) {
                             mClient.switchStatus(MemberStatus.Admin);
                         } else {
-                            ChatActivity.startAct(mContext, currentChatMember);
+                            startToChat(currentChatMember);
                         }
                         break;
                     case "3":
@@ -145,7 +145,7 @@ public class ChatManager {
                         if (!mClient.isSeller()) {
                             mClient.switchStatus(MemberStatus.Seller);
                         } else {
-                            ChatActivity.startAct(mContext, currentChatMember);
+                            startToChat(currentChatMember);
                         }
                         break;
                 }
@@ -155,7 +155,7 @@ public class ChatManager {
                 if (!mClient.isMember()) {
                     mClient.switchStatus(MemberStatus.Member);
                 } else {
-                    ChatActivity.startAct(mContext, currentChatMember);
+                    startToChat(currentChatMember);
                 }
                 break;
             case "3":
@@ -163,9 +163,41 @@ public class ChatManager {
                 if (!mClient.isMember()) {
                     mClient.switchStatus(MemberStatus.Member);
                 } else {
-                    ChatActivity.startAct(mContext, currentChatMember);
+                    startToChat(currentChatMember);
                 }
                 break;
+        }
+    }
+
+    public void startToChat(ChatMemberEntity.ChatMember chatMember, GoodsDeatilEntity goodsDeatilEntity) {
+        if (mClient.getStatus() == Status.CONNECTED) {
+            ChatActivity.startAct(mContext, chatMember);
+        } else {
+            if (httpDialog.isShowing()) {
+                return;
+            }
+            httpDialog.show();
+            mClient.buildeWebsocketClient();
+            mClient.setOnConnetListener(() -> {
+                httpDialog.dismiss();
+                ChatActivity.startAct(mContext, chatMember, goodsDeatilEntity);
+            });
+        }
+    }
+
+    public void startToChat(ChatMemberEntity.ChatMember chatMember) {
+        if (mClient.getStatus() == Status.CONNECTED) {
+            ChatActivity.startAct(mContext, chatMember);
+        } else {
+            if (httpDialog.isShowing()) {
+                return;
+            }
+            httpDialog.show();
+            mClient.buildeWebsocketClient();
+            mClient.setOnConnetListener(() -> {
+                httpDialog.dismiss();
+                ChatActivity.startAct(mContext, chatMember);
+            });
         }
     }
 }

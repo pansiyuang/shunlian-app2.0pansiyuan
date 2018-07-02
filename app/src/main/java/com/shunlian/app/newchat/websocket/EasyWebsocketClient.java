@@ -72,6 +72,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private MessageCountManager messageCountManager;
     private MemberStatus currentMemberStatus = MemberStatus.Member;
     private OnSwitchStatusListener switchStatusListener;
+    private OnConnetListener onConnetListener;
 
     /**
      * 单例模式获取实例
@@ -117,7 +118,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
-            isInit = true;
         } catch (java.net.URISyntaxException e) {
             e.printStackTrace();
         }
@@ -167,10 +167,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     @Override
     public void onOpen() {
         LogUtil.httpLogW("Websocket onOpen()");
-        mStatus = Status.CONNECTED;
         connetService();
-        startHeartPin();
-        cancelReconnect();
     }
 
     @Override
@@ -179,36 +176,50 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         try {
             BaseEntity baseEntity = objectMapper.readValue(message, BaseEntity.class);
             if (!TextUtils.isEmpty(baseEntity.message_type))
-            switch (baseEntity.message_type) {
-                case "init":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.initMessage();
-                        }
-                    }
-                    LogUtil.zhLogW("===message=========="+message);
-                    setUserInfoEntity(message);
-                    break;
-                case "receive_message":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.receiveMessage(message);
-                        }
-                    }
-                    MessageEntity messageEntity = objectMapper.readValue(message, MessageEntity.class);
-                    MsgInfo msgInfo = messageEntity.msg_info;
-                    String msg = msgInfo.message;
-                    BaseMessage baseMessage = objectMapper.readValue(msg, BaseMessage.class);
-                    baseMessage.setSendTime(msgInfo.send_time);
+                switch (baseEntity.message_type) {
+                    case "init":
+                        if (baseEntity.state == 0) {
+                            if (!isEmpty(messageReceiveListeners)) {
+                                for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                    listener.initMessage();
+                                }
+                            }
 
-                    if (!getIsChating()) {
-                        if (messageCountManager.isLoad()) {
-                            int count = messageCountManager.getAll_msg();
-                            messageCountManager.setAll_msg(count + 1);
-                        }
-                        EventBus.getDefault().post(new NewMessageEvent(1));
+                            if (onConnetListener != null) {
+                                onConnetListener.onConneted();
+                            }
 
-                        // TODO: 2018/6/15  新增新消息全局弹框
+                            isInit = true;
+                            mStatus = Status.CONNECTED;
+                            setUserInfoEntity(message);
+                            startHeartPin();
+                            cancelReconnect();
+                        } else {
+                            if (mClient != null) {
+                                mClient.close();
+                            }
+                        }
+                        break;
+                    case "receive_message":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.receiveMessage(message);
+                            }
+                        }
+                        MessageEntity messageEntity = objectMapper.readValue(message, MessageEntity.class);
+                        MsgInfo msgInfo = messageEntity.msg_info;
+                        String msg = msgInfo.message;
+                        BaseMessage baseMessage = objectMapper.readValue(msg, BaseMessage.class);
+                        baseMessage.setSendTime(msgInfo.send_time);
+
+                        if (!getIsChating()) {
+                            if (messageCountManager.isLoad()) {
+                                int count = messageCountManager.getAll_msg();
+                                messageCountManager.setAll_msg(count + 1);
+                            }
+                            EventBus.getDefault().post(new NewMessageEvent(1));
+
+                            // TODO: 2018/6/15  新增新消息全局弹框
 //                        new Thread() {
 //                            public void run() {
 //                                Looper.prepare();
@@ -218,64 +229,64 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 //                                Looper.loop();// 进入loop中的循环，查看消息队列
 //                            }
 //                        }.start();
-                    }
-                    break;
-                case "pingjia":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.evaluateMessage(message);
                         }
-                    }
-                    break;
-                case "role_switch":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.roleSwitchMessage(message);
+                        break;
+                    case "pingjia":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.evaluateMessage(message);
+                            }
                         }
-                    }
-                    SwitchStatusEntity switchStatusEntity = objectMapper.readValue(message, SwitchStatusEntity.class);
-                    if (switchStatusEntity.status.equals("0")) {
-                        updateRoleType(switchStatusEntity.to_role);
-                    }
-                    new Thread() {
-                        public void run() {
-                            Looper.prepare();
-                            Toast.makeText(mContext, switchStatusEntity.msg, Toast.LENGTH_SHORT).show();
-                            Looper.loop();// 进入loop中的循环，查看消息队列
+                        break;
+                    case "role_switch":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.roleSwitchMessage(message);
+                            }
                         }
-                    }.start();
-                    break;
-                case "zhuanjie_service":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.transferMessage(message);
+                        SwitchStatusEntity switchStatusEntity = objectMapper.readValue(message, SwitchStatusEntity.class);
+                        if (switchStatusEntity.status.equals("0")) {
+                            updateRoleType(switchStatusEntity.to_role);
                         }
-                    }
-                    break;
-                case "service_user_add":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.transferMemberAdd(message);
+                        new Thread() {
+                            public void run() {
+                                Looper.prepare();
+                                Toast.makeText(mContext, switchStatusEntity.msg, Toast.LENGTH_SHORT).show();
+                                Looper.loop();// 进入loop中的循环，查看消息队列
+                            }
+                        }.start();
+                        break;
+                    case "zhuanjie_service":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.transferMessage(message);
+                            }
                         }
-                    }
-                    break;
-                case "online":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.onLine();
+                        break;
+                    case "service_user_add":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.transferMemberAdd(message);
+                            }
                         }
-                    }
-                    StatusEntity online = objectMapper.readValue(message, StatusEntity.class);
-                    break;
-                case "logout":
-                    if (!isEmpty(messageReceiveListeners)) {
-                        for (OnMessageReceiveListener listener : messageReceiveListeners) {
-                            listener.logout();
+                        break;
+                    case "online":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.onLine();
+                            }
                         }
-                    }
-                    StatusEntity logout = objectMapper.readValue(message, StatusEntity.class);
-                    break;
-            }
+                        StatusEntity online = objectMapper.readValue(message, StatusEntity.class);
+                        break;
+                    case "logout":
+                        if (!isEmpty(messageReceiveListeners)) {
+                            for (OnMessageReceiveListener listener : messageReceiveListeners) {
+                                listener.logout();
+                            }
+                        }
+                        StatusEntity logout = objectMapper.readValue(message, StatusEntity.class);
+                        break;
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -338,7 +349,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mClient != null && mStatus == Status.CONNECTED) {
+        if (mClient != null && mClient.isOpen()) {
             LogUtil.httpLogW("connetService:" + jsonObject.toString());
             mClient.send(jsonObject.toString());
         }
@@ -768,6 +779,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         messageReceiveListeners.remove(listener);
     }
 
+    public void setOnConnetListener(OnConnetListener listener) {
+        this.onConnetListener = listener;
+    }
+
     public void setOnSwitchStatusListener(OnSwitchStatusListener listener) {
         switchStatusListener = listener;
     }
@@ -791,8 +806,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     }
 
     public interface OnSwitchStatusListener {
-
         void switchSuccess(String roleType);
+    }
 
+    public interface OnConnetListener {
+        void onConneted();
     }
 }

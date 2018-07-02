@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:gravity="center"
     android:includeFontPadding="false"
     android:textColor="@color/value_40A5FF"
     android:textSize="15sp">
