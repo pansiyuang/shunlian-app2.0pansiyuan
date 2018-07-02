@@ -171,7 +171,7 @@ public class ChatManager {
 
     public void startToChat(ChatMemberEntity.ChatMember chatMember, GoodsDeatilEntity goodsDeatilEntity) {
         if (mClient.getStatus() == Status.CONNECTED) {
-            ChatActivity.startAct(mContext, chatMember);
+            ChatActivity.startAct(mContext, chatMember, goodsDeatilEntity);
         } else {
             if (httpDialog.isShowing()) {
                 return;
