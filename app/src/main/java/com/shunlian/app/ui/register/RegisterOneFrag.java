@@ -93,6 +93,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
             } else {
                 id = et_id.getText().toString();
                 onePresenter.checkCode(id);
+                setEdittextFocusable(true, et_phone);
             }
             return false;
         });

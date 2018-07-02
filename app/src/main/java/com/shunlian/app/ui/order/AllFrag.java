@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2017/12/14.
@@ -171,6 +172,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         }
         if (adapter == null) {
             adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
+            if (recy_view == null)
+            recy_view = ButterKnife.findById(getView(),R.id.recy_view);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
             adapter.setOnReloadListener(() -> {

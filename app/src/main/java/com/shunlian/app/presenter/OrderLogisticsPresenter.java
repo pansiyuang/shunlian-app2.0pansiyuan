@@ -3,8 +3,6 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 
 import com.shunlian.app.bean.BaseEntity;
-import com.shunlian.app.bean.CateEntity;
-import com.shunlian.app.bean.MyCommentListEntity;
 import com.shunlian.app.bean.OrderLogisticsEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
@@ -13,7 +11,6 @@ import com.shunlian.app.view.ITraceView;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -62,10 +59,12 @@ public class OrderLogisticsPresenter extends BasePresenter<ITraceView> {
                 super.onSuccess(entity);
                 isLoading = false;
                 OrderLogisticsEntity.History history = entity.data.history;
-                iView.getLogistics(entity.data, history.page, history.total_page);
-                currentPage = history.page;
-                allPage = history.total_page;
-                currentPage++;
+                if (history != null) {
+                    iView.getLogistics(entity.data, history.page, history.total_page);
+                    currentPage = history.page;
+                    allPage = history.total_page;
+                    currentPage++;
+                }
             }
 
             @Override

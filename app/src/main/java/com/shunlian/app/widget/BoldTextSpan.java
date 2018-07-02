@@ -1,19 +1,18 @@
 package com.shunlian.app.widget;
 
 import android.os.Parcel;
-import android.text.ParcelableSpan;
 import android.text.TextPaint;
-import android.text.style.MetricAffectingSpan;
+import android.text.style.UnderlineSpan;
 
 /**
  * Created by Administrator on 2018/3/17.
  */
 
-public class BoldTextSpan extends MetricAffectingSpan implements ParcelableSpan {
+public class BoldTextSpan extends UnderlineSpan {
 
 
 
-    @Override
+
     public void updateMeasureState(TextPaint p) {
         p.setFakeBoldText(true);
     }
