@@ -81,7 +81,6 @@ import static com.shunlian.app.utils.BitmapUtil.MAX_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MAX_WIDTH;
 import static com.shunlian.app.utils.BitmapUtil.MIN_HEIGHT;
 import static com.shunlian.app.utils.BitmapUtil.MIN_WIDTH;
-import static com.shunlian.app.utils.Common.firstSmallText;
 
 /**
  * Created by Administrator on 2018/4/10.
@@ -635,7 +634,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             linkViewHolder.tv_goods_title.setText(msg_body.title);
 
             String price = getString(R.string.rmb) + msg_body.price;
-            firstSmallText(linkViewHolder.tv_goods_price, price, 11);
+            linkViewHolder.tv_goods_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
 
             linkViewHolder.tv_send_goods.setOnClickListener(v -> {
                 GoodsMessage.GoodsBody goodsBody = new GoodsMessage.GoodsBody();

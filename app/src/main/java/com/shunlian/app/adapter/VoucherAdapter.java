@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
 
 import java.util.List;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.utils.Common.firstSmallText;
 
 /**
  * Created by Administrator on 2017/11/16.
@@ -73,7 +73,7 @@ public class VoucherAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Vouche
         final GoodsDeatilEntity.Voucher voucher = mData.get(position);
         final VoucherViewHolder voucherViewHolder = (VoucherViewHolder) holder;
         String price = mContext.getResources().getString(R.string.rmb) + voucher.denomination;
-        firstSmallText(voucherViewHolder.tv_voucher_price, price, 13);
+        voucherViewHolder.tv_voucher_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 13));
 
         if (!isEmpty(voucher.use_condition) && Float.parseFloat(voucher.use_condition) == 0) {
             voucherViewHolder.tv_voucher_title.setText(getString(R.string.no_doorsill_voucher));

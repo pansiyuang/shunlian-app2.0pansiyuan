@@ -160,7 +160,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
             viewHolder.tv_title.setText(goods.title);
             viewHolder.tv_price.setText(goods.price);
             String price = getString(R.string.common_yuan) + goods.price;
-            Common.firstSmallText(viewHolder.tv_price, price, 12);
+            viewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
 
             if ("1".equals(goods.free_ship)) {
                 viewHolder.tv_free.setVisibility(View.VISIBLE);

@@ -92,23 +92,27 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        ProbabyLikeGoodsEntity.Goods goods = lists.get(position);
-        ChildrenViewHolder childrenViewHolder = (ChildrenViewHolder) holder;
-        GlideUtils.getInstance().loadImage(context, childrenViewHolder.miv_onel, goods.thumb);
-        childrenViewHolder.mtv_descl.setText(goods.title);
-        childrenViewHolder.mtv_pricel.setText(goods.price);
-        childrenViewHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-        childrenViewHolder.mtv_pricer.setText(getString(R.string.common_yuan) + goods.market_price);
-        GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) childrenViewHolder.ll_rootView.getLayoutParams();
+        try {
+            ProbabyLikeGoodsEntity.Goods goods = lists.get(position);
+            ChildrenViewHolder childrenViewHolder = (ChildrenViewHolder) holder;
+            GlideUtils.getInstance().loadImage(context, childrenViewHolder.miv_onel, goods.thumb);
+            childrenViewHolder.mtv_descl.setText(goods.title);
+            childrenViewHolder.mtv_pricel.setText(goods.price);
+            childrenViewHolder.mtv_pricer.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+            childrenViewHolder.mtv_pricer.setText(getString(R.string.common_yuan) + goods.market_price);
+            GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) childrenViewHolder.ll_rootView.getLayoutParams();
 
-        int margin = TransformUtil.dip2px(context, 5);
-        if (goods.index % 2 == 0) {//左边
-            layoutParams.setMargins(0, margin, margin, 0);
-        } else { //右边
-            layoutParams.setMargins(0, margin, 0, 0);
+            int margin = TransformUtil.dip2px(context, 5);
+            if (goods.index % 2 == 0) {//左边
+                layoutParams.setMargins(0, margin, margin, 0);
+            } else { //右边
+                layoutParams.setMargins(0, margin, 0, 0);
+            }
+            childrenViewHolder.mrlayout_plus.setVisibility(View.GONE);
+            childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        childrenViewHolder.mrlayout_plus.setVisibility(View.GONE);
-        childrenViewHolder.ll_rootView.setOnClickListener(v -> GoodsDetailAct.startAct(context, goods.id));
     }
 
     public void handleParent(RecyclerView.ViewHolder holder, int position) {

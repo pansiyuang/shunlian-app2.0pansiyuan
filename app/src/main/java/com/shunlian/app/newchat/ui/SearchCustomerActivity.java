@@ -244,8 +244,8 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         mClient.removeOnMessageReceiveListener(this);
-        super.onDestroy();
+        super.onStop();
     }
 }

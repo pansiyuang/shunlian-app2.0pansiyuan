@@ -124,7 +124,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
                     iView.delPrompt();
                 } else {
                     if (getIsAllType())
-                        iView.showorhideKeyboard("@".concat(itemComment.nickname));
+                    iView.showorhideKeyboard("@".concat(itemComment.nickname));
                 }
             });
 
