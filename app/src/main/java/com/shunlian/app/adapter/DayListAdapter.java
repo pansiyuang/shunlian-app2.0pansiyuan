@@ -3,7 +3,6 @@ package com.shunlian.app.adapter;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,8 +24,6 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -55,20 +52,21 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof OneHolder) {
-            final OneHolder oneHolder = (OneHolder) holder;
-            ActivityListEntity.MData.Good.MList data = lists.get(position);
-            oneHolder.mtv_title.setText(data.title);
-            oneHolder.mtv_priceM.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
-            oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-            oneHolder.mtv_priceA.setText(context.getResources().getString(R.string.common_yuan) + data.act_price);
-            oneHolder.goods_id = data.goods_id;
-            oneHolder.position = position;
-            if (position == 0) {
-                oneHolder.mrlayout_time.setVisibility(View.VISIBLE);
-                oneHolder.view_title.setVisibility(View.VISIBLE);
-                oneHolder.mtv_titles.setText(title);
-                oneHolder.mtv_content.setText(content);
+        try {
+            if (holder instanceof OneHolder) {
+                OneHolder oneHolder = (OneHolder) holder;
+                ActivityListEntity.MData.Good.MList data = lists.get(position);
+                oneHolder.mtv_title.setText(data.title);
+                oneHolder.mtv_priceM.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
+                oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
+                oneHolder.mtv_priceA.setText(context.getResources().getString(R.string.common_yuan) + data.act_price);
+                oneHolder.goods_id = data.goods_id;
+                oneHolder.position = position;
+                if (position == 0) {
+                    oneHolder.mrlayout_time.setVisibility(View.VISIBLE);
+                    oneHolder.view_title.setVisibility(View.VISIBLE);
+                    oneHolder.mtv_titles.setText(title);
+                    oneHolder.mtv_content.setText(content);
 //                if ("1".equals(isStart)) {//1：活动进行中   0：活动未开始
 //                    oneHolder.ddp_downTime.setLabelBackgroundColor(getColor(R.color.new_text));
 //                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
@@ -77,39 +75,39 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 //                    oneHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
 //                }
 
-                if (!oneHolder.isStartDownTime) {
-                    String times = isEmpty(time) ? "0" : time;
-                    oneHolder.ddp_downTime.setDownTime(Integer.parseInt(times));
-                    oneHolder.ddp_downTime.startDownTimer();
-                    oneHolder.isStartDownTime = true;
-                    oneHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
-                        @Override
-                        public void onFinish() {
-                            if (oneHolder!=null){
-                                oneHolder.isStartDownTime = false;
-                                if (context instanceof DayDayAct) {
-                                    DayDayAct act = (DayDayAct) context;
-                                    if (act.isFinishing()) {
-                                        oneHolder.ddp_downTime.cancelDownTimer();
-                                        return;
+                    if (!oneHolder.isStartDownTime) {
+                        String times = isEmpty(time) ? "0" : time;
+                        oneHolder.ddp_downTime.setDownTime(Integer.parseInt(times));
+                        oneHolder.ddp_downTime.startDownTimer();
+                        oneHolder.isStartDownTime = true;
+                        oneHolder.ddp_downTime.setDownTimerListener(new OnCountDownTimerListener() {
+                            @Override
+                            public void onFinish() {
+                                if (oneHolder != null) {
+                                    oneHolder.isStartDownTime = false;
+                                    if (context instanceof DayDayAct) {
+                                        DayDayAct act = (DayDayAct) context;
+                                        if (act.isFinishing()) {
+                                            oneHolder.ddp_downTime.cancelDownTimer();
+                                            return;
+                                        }
+                                        act.minitData();
                                     }
-                                    act.minitData();
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
+                } else {
+                    oneHolder.mrlayout_time.setVisibility(View.GONE);
+                    oneHolder.view_title.setVisibility(View.GONE);
                 }
-            } else {
-                oneHolder.mrlayout_time.setVisibility(View.GONE);
-                oneHolder.view_title.setVisibility(View.GONE);
-            }
-            GradientDrawable copyBackground = (GradientDrawable) oneHolder.mllayout_remind.getBackground();
-            if ("1".equals(isStart)) {
-                //设置圆角背景
-                oneHolder.miv_clock.setVisibility(View.GONE);
-                oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
-                copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
-                oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
+                GradientDrawable copyBackground = (GradientDrawable) oneHolder.mllayout_remind.getBackground();
+                if ("1".equals(isStart)) {
+                    //设置圆角背景
+                    oneHolder.miv_clock.setVisibility(View.GONE);
+                    oneHolder.mtv_quxiao.setText(R.string.day_lijiqianggou);
+                    copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
+                    oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
 //                if (data.percent>0){
                     oneHolder.seekbar_grow.setProgress(data.percent);
                     oneHolder.mtv_desc.setText(data.str_surplus_stock);
@@ -124,28 +122,31 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
 //                }else {
 //                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
 //                }
-                oneHolder.mtv_number.setVisibility(View.INVISIBLE);
-            } else {
-                if ("1".equals(data.remind_status)) {
-                    oneHolder.isRemind = true;
-                    oneHolder.miv_clock.setVisibility(View.GONE);
-                    oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
-                    copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
+                    oneHolder.mtv_number.setVisibility(View.INVISIBLE);
                 } else {
-                    oneHolder.isRemind = false;
-                    oneHolder.miv_clock.setVisibility(View.VISIBLE);
-                    oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
-                    copyBackground.setColor(getColor(R.color.value_2096F2));//设置填充色
-                }
-                oneHolder.mtv_priceA.setTextColor(getColor(R.color.value_2096F2));
-                oneHolder.seekbar_grow.setVisibility(View.GONE);
+                    if ("1".equals(data.remind_status)) {
+                        oneHolder.isRemind = true;
+                        oneHolder.miv_clock.setVisibility(View.GONE);
+                        oneHolder.mtv_quxiao.setText(getString(R.string.day_quxiaotixing));
+                        copyBackground.setColor(getColor(R.color.color_value_6c));//设置填充色
+                    } else {
+                        oneHolder.isRemind = false;
+                        oneHolder.miv_clock.setVisibility(View.VISIBLE);
+                        oneHolder.mtv_quxiao.setText(getString(R.string.day_tixinwo));
+                        copyBackground.setColor(getColor(R.color.value_2096F2));//设置填充色
+                    }
+                    oneHolder.mtv_priceA.setTextColor(getColor(R.color.value_2096F2));
+                    oneHolder.seekbar_grow.setVisibility(View.GONE);
 //                if (!isEmpty(data.remind_count)&&Float.parseFloat(data.remind_count)>0){
-                if (!isEmpty(data.remind_count)){
-                    oneHolder.mtv_number.setVisibility(View.VISIBLE);
-                    oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+                    if (!isEmpty(data.remind_count)) {
+                        oneHolder.mtv_number.setVisibility(View.VISIBLE);
+                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+                    }
                 }
+                GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
             }
-            GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

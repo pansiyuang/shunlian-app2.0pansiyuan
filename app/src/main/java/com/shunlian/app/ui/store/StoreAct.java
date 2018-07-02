@@ -148,7 +148,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyImageView miv_storeLogo;
 
     @BindView(R.id.mtv_attention)
-    public MyTextView mtv_attention;
+    MyTextView mtv_attention;
 
     @BindView(R.id.mtv_storeName)
     MyTextView mtv_storeName;
@@ -157,7 +157,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     MyImageView miv_star;
 
     @BindView(R.id.mtv_number)
-    public MyTextView mtv_number;
+    MyTextView mtv_number;
 
     @BindView(R.id.mtv_babyNum)
     MyTextView mtv_babyNum;

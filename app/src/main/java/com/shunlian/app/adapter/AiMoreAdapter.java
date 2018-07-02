@@ -65,44 +65,48 @@ public class AiMoreAdapter extends BaseRecyclerAdapter<CoreNewsEntity.Goods> {
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof SingleViewHolder) {
-            SingleViewHolder viewHolder = (SingleViewHolder) holder;
-            CoreNewsEntity.Goods goods=lists.get(position);
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_photo, goods.thumb);
-            viewHolder.mtv_title.setText(goods.title);
-            SpannableStringBuilder spannableStringBuilder=Common.changeTextSize(getString(R.string.common_yuan)+goods.price,getString(R.string.common_yuan),12);
-            viewHolder.mtv_price.setText(spannableStringBuilder);
+        try {
+            if (holder instanceof SingleViewHolder) {
+                SingleViewHolder viewHolder = (SingleViewHolder) holder;
+                CoreNewsEntity.Goods goods = lists.get(position);
+                GlideUtils.getInstance().loadImage(context, viewHolder.miv_photo, goods.thumb);
+                viewHolder.mtv_title.setText(goods.title);
+                SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
+                viewHolder.mtv_price.setText(spannableStringBuilder);
 
-            viewHolder.mllayout_tag.removeAllViews();
+                viewHolder.mllayout_tag.removeAllViews();
 
-            if ("1".equals(goods.is_new)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
+                if ("1".equals(goods.is_new)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_hot)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_explosion)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_recommend)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_coupon)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_discount)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_gift)) {
+                    viewHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
             }
-
-            if ("1".equals(goods.is_hot)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.is_explosion)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.is_recommend)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_coupon)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_discount)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_gift)) {
-                viewHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
