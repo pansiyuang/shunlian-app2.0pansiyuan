@@ -467,6 +467,8 @@
 
     <!--天天特惠-->
     <string name="day_tixinwo">提醒我</string>
+    <string name="day_zanwupingjia">暂无评价</string>
+    <string name="day_yiyourenpingjia">已有%s人评价</string>
     <string name="day_quxiaotixing">取消提醒</string>
     <string name="day_yiyoutixing">已有%s人设置提醒</string>
     <string name="day_lijiqianggou">立即抢购</string>
