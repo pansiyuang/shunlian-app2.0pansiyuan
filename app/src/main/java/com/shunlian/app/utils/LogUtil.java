@@ -2,11 +2,13 @@ package com.shunlian.app.utils;
 
 import android.util.Log;
 
+import com.shunlian.app.BuildConfig;
+
 /**
  * Created by MBENBEN on 2016/7/15 09 : 59.
  */
 public class LogUtil {
-    private static final boolean isOpenLog = true;
+    private static final boolean isOpenLog = BuildConfig.DEBUG;
 
     public static void augusLogW(String msg) {
         if (isOpenLog) {

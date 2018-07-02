@@ -71,6 +71,13 @@ public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
             public void onSuccess(BaseEntity<PersonalDataEntity> entity) {
                 super.onSuccess(entity);
                 mTagLists = entity.data.list;
+                if (!isEmpty(mTagLists)){
+                    selectTag();
+                    for (int i = 0; i < mTagLists.size(); i++) {
+                        if ("1".equals(mTagLists.get(i).active))
+                            currentCount++;
+                    }
+                }
                 setAdapter(mTagLists);
             }
         });
