@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.shunlian.app.bean.ActivityListEntity;
 import com.shunlian.app.presenter.DayDayPresenter;
 import com.shunlian.app.ui.activity.DayDayAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.utils.timer.OnCountDownTimerListener;
@@ -59,7 +61,8 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                 oneHolder.mtv_title.setText(data.title);
                 oneHolder.mtv_priceM.setText(context.getResources().getString(R.string.common_yuan) + data.market_price);
                 oneHolder.mtv_priceM.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线 市场价
-                oneHolder.mtv_priceA.setText(context.getResources().getString(R.string.common_yuan) + data.act_price);
+                SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.act_price, getString(R.string.common_yuan), 12);
+                oneHolder.mtv_priceA.setText(spannableStringBuilder);
                 oneHolder.goods_id = data.goods_id;
                 oneHolder.position = position;
                 if (position == 0) {
@@ -109,20 +112,25 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                     copyBackground.setColor(getColor(R.color.pink_color));//设置填充色
                     oneHolder.mtv_priceA.setTextColor(getColor(R.color.pink_color));
 //                if (data.percent>0){
-                    oneHolder.seekbar_grow.setProgress(data.percent);
-                    oneHolder.mtv_desc.setText(data.str_surplus_stock);
-                    oneHolder.mrlayout_progress.setVisibility(View.VISIBLE);
+//                    oneHolder.seekbar_grow.setProgress(data.percent);
+//                    oneHolder.mtv_desc.setText(data.str_surplus_stock);
+//                    oneHolder.mrlayout_progress.setVisibility(View.VISIBLE);
 //                startDownTimer(data.percent/8,oneHolder.seekbar_grow);
-                    oneHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            return true;
-                        }
-                    });
+//                    oneHolder.seekbar_grow.setOnTouchListener(new View.OnTouchListener() {
+//                        @Override
+//                        public boolean onTouch(View view, MotionEvent motionEvent) {
+//                            return true;
+//                        }
+//                    });
 //                }else {
 //                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
 //                }
-                    oneHolder.mtv_number.setVisibility(View.INVISIBLE);
+                    oneHolder.mtv_number.setVisibility(View.VISIBLE);
+                    if (!isEmpty(data.evaluate_num)&&Float.parseFloat(data.evaluate_num)>0){
+                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyourenpingjia),data.evaluate_num));
+                    }else {
+                        oneHolder.mtv_number.setText(getString(R.string.day_zanwupingjia));
+                    }
                 } else {
                     if ("1".equals(data.remind_status)) {
                         oneHolder.isRemind = true;
@@ -136,12 +144,13 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
                         copyBackground.setColor(getColor(R.color.value_2096F2));//设置填充色
                     }
                     oneHolder.mtv_priceA.setTextColor(getColor(R.color.value_2096F2));
-                    oneHolder.seekbar_grow.setVisibility(View.GONE);
+//                    oneHolder.mrlayout_progress.setVisibility(View.GONE);
 //                if (!isEmpty(data.remind_count)&&Float.parseFloat(data.remind_count)>0){
-                    if (!isEmpty(data.remind_count)) {
-                        oneHolder.mtv_number.setVisibility(View.VISIBLE);
-                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
-                    }
+//                    if (!isEmpty(data.remind_count)) {
+//                        oneHolder.mtv_number.setVisibility(View.VISIBLE);
+//                        oneHolder.mtv_number.setText(String.format(getString(R.string.day_yiyoutixing), data.remind_count));
+//                    }
+                    oneHolder.mtv_number.setVisibility(View.INVISIBLE);
                 }
                 GlideUtils.getInstance().loadImage(context, oneHolder.miv_img, data.goods_pic);
             }
@@ -169,8 +178,8 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
         @BindView(R.id.mtv_number)
         MyTextView mtv_number;
 
-        @BindView(R.id.mtv_desc)
-        MyTextView mtv_desc;
+//        @BindView(R.id.mtv_desc)
+//        MyTextView mtv_desc;
 
         @BindView(R.id.mtv_titles)
         MyTextView mtv_titles;
@@ -190,14 +199,14 @@ public class DayListAdapter extends BaseRecyclerAdapter<ActivityListEntity.MData
         @BindView(R.id.mrlayout_time)
         MyRelativeLayout mrlayout_time;
 
-        @BindView(R.id.mrlayout_progress)
-        MyRelativeLayout mrlayout_progress;
+//        @BindView(R.id.mrlayout_progress)
+//        MyRelativeLayout mrlayout_progress;
 
         @BindView(R.id.ddp_downTime)
         DDPDownTimerView ddp_downTime;
 
-        @BindView(R.id.seekbar_grow)
-        SeekBar seekbar_grow;
+//        @BindView(R.id.seekbar_grow)
+//        SeekBar seekbar_grow;
 
         private boolean isRemind = false, isStartDownTime = false;
         private String goods_id;

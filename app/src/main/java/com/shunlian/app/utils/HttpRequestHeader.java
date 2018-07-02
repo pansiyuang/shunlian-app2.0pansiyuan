@@ -57,10 +57,9 @@ public class HttpRequestHeader implements Interceptor {
         if (isRemoveContentType) {
             builder.removeHeader("Content-Type");
         }
-        Response proceed = chain.proceed(builder.build());
         Headers headers = chain.request().headers();
         String s = headers.toString();
         LogUtil.testLogW("okhttp",s);
-        return proceed;
+        return chain.proceed(builder.build());
     }
 }

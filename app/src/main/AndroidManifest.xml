@@ -252,11 +252,11 @@
             android:name=".ui.register.SelectRecommendAct"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.start.GuideAct"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />
+        <!--<activity-->
+            <!--android:name=".ui.start.GuideAct"-->
+            <!--android:exported="false"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/android:Theme.NoTitleBar.Fullscreen" />-->
         <activity
             android:name=".ui.register.TestAct"
             android:exported="false"
