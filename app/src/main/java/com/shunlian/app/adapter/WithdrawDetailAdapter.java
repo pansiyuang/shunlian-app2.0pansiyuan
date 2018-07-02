@@ -45,10 +45,10 @@ public class WithdrawDetailAdapter extends BaseRecyclerAdapter<WithdrawListEntit
         if (ad.is_fail){
             mHolder.mtv_amount.setTextColor(getColor(R.color.pink_color));
             mHolder.mtv_title.setTextColor(getColor(R.color.pink_color));
-            mHolder.mtv_title.setText(getString(R.string.balance_tixianshibai));
+            mHolder.mtv_title.setText(ad.title);
         }else {
             mHolder.mtv_title.setTextColor(getColor(R.color.new_text));
-            mHolder.mtv_title.setText(getString(R.string.balance_tixianchenggong));
+            mHolder.mtv_title.setText(ad.title);
             mHolder.mtv_amount.setTextColor(getColor(R.color.new_text));
         }
         mHolder.mtv_amount.setText(ad.amount);

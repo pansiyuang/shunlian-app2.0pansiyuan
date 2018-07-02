@@ -116,7 +116,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="16dp"
             android:layout_toLeftOf="@id/mllayout_remind"
-            android:layout_toRightOf="@id/miv_img">
+            android:layout_toRightOf="@id/miv_img"
+            android:visibility="gone">
 
             <SeekBar
                 android:id="@+id/seekbar_grow"
@@ -149,7 +150,7 @@
             android:layout_toRightOf="@id/miv_img"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/value_2096F2"
+            android:textColor="@color/share_text"
             android:textSize="11sp" />
 
         <com.shunlian.app.widget.MyTextView
@@ -157,13 +158,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mtv_number"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/miv_img"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/value_2096F2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <com.shunlian.app.widget.MyTextView
@@ -176,7 +176,7 @@
             android:layout_toRightOf="@id/mtv_priceA"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/new_text"
+            android:textColor="@color/share_text"
             android:textSize="11sp" />
     </com.shunlian.app.widget.MyRelativeLayout>
 

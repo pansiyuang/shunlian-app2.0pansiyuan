@@ -81,6 +81,7 @@ public class ActivityListEntity {
                 public String surplus_stock;
                 public String remind_status;
                 public String remind_count;
+                public String evaluate_num;
                 public int percent;
                 public String str_surplus_stock;
                 public String sale;
