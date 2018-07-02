@@ -57,7 +57,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:ll_control_adapter="true"
-            app:ll_control_height="68"
+            app:ll_control_height="60"
             app:ll_margin_left="20">
 
             <com.shunlian.app.widget.MyImageView
