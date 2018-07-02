@@ -207,6 +207,10 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
             recycler_param.setAdapter(paramItemAdapter);
             tv_param.setVisibility(View.VISIBLE);
         }
+        if (totalStock == 0) {
+            currentCount = 0;
+            tv_number.setText(String.valueOf(0));
+        }
     }
 
 
@@ -245,6 +249,9 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_minus:
+                if (totalStock == 0) {
+                    return;
+                }
                 currentCount--;
                 if (currentCount <= 1) {
                     currentCount = 1;
@@ -252,7 +259,7 @@ public class ParamDialog extends Dialog implements View.OnClickListener {
                 tv_number.setText(String.valueOf(currentCount));
                 break;
             case R.id.btn_complete:
-                if (currentCount > totalStock) {
+                if (currentCount == 0) {
                     Common.staticToast("库存不足");
                     return;
                 }
