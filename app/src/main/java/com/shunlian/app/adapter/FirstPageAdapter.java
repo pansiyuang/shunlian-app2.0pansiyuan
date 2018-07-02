@@ -503,7 +503,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     Common.goGoGo(context, "login");
                                     return;
                                 }
-                                if (!isEmpty(data.share.share_url) && data.share.share_url.contains("member_id")) {
+                                if (!isEmpty(data.share.share_url)) {
                                     mShareInfoParam.shareLink = data.share.share_url;
                                     shareStyle2Dialog();
                                 } else {

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
@@ -813,10 +812,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.new_text));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.pink_color));
                 mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_BF012A));
-                gone(mHolder.mtv_follow_count);
-                visible(mHolder.mtv_desc,mHolder.seekbar_grow);
-                mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
-                mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
+                //gone(mHolder.mtv_follow_count);
+                //visible(mHolder.seekbar_grow,mHolder.mtv_desc);
+                //mHolder.seekbar_grow.setProgress(Integer.parseInt(tt_act.percent));
+                //mHolder.mtv_desc.setText(tt_act.str_surplus_stock);
             }else {
                 mHolder.mrlayout_preBgL.setBackgroundColor(getColor(R.color.value_2096F2));
                 mHolder.mrlayout_preBgR.setBackgroundColor(getColor(R.color.value_DBEFFF));
@@ -824,10 +823,10 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
                 mHolder.ddp_downTime.setTimeUnitTextColor(getColor(R.color.value_2096F2));
                 mHolder.mtv_act_title.setTextColor(getColor(R.color.new_text));
                 mHolder.mtv_pmarketPrice.setTextColor(getColor(R.color.value_1B78C1));
-                String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
-                mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
-                visible(mHolder.mtv_follow_count);
-                gone(mHolder.seekbar_grow,mHolder.mtv_desc);
+                //String remind_count = isEmpty(tt_act.remind_count) ? "0" : tt_act.remind_count;
+                //mHolder.mtv_follow_count.setText(remind_count.concat("人关注"));
+                //visible(mHolder.mtv_follow_count);
+                //gone(mHolder.seekbar_grow,mHolder.mtv_desc);
             }
 
             mHolder.mtv_pPrice.setText(tt_act.act_price);
@@ -1061,14 +1060,14 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
         @BindView(R.id.mrlayout_preBgR)
         MyRelativeLayout mrlayout_preBgR;
 
-        @BindView(R.id.mtv_follow_count)
-        MyTextView mtv_follow_count;
+        /*@BindView(R.id.mtv_follow_count)
+        MyTextView mtv_follow_count;*/
 
-        @BindView(R.id.seekbar_grow)
-        ProgressBar seekbar_grow;
+        /*@BindView(R.id.seekbar_grow)
+        ProgressBar seekbar_grow;*/
 
-        @BindView(R.id.mtv_desc)
-        MyTextView mtv_desc;
+        /*@BindView(R.id.mtv_desc)
+        MyTextView mtv_desc;*/
 
         @BindView(R.id.mtv_act)
         MyTextView mtv_act;

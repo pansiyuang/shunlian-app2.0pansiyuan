@@ -3,7 +3,6 @@ package com.shunlian.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -13,10 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.bean.CoreNewEntity;
 import com.shunlian.app.bean.CoreNewsEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
-import com.shunlian.app.bean.SearchGoodsEntity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;

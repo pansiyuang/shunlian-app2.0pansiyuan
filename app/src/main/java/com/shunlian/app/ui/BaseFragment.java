@@ -50,7 +50,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected Activity baseActivity;
     protected Context baseContext;
-    private Unbinder bind;
+    protected Unbinder bind;
     private Resources resources;
     @Nullable
     @Override
