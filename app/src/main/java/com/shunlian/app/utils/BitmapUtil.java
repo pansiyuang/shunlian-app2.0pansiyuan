@@ -241,7 +241,7 @@ public class BitmapUtil {
             boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            if (isSuccess) {
+            if (isSuccess&&!TextUtils.isEmpty(MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null))) {
                 // 其次把文件插入到系统图库
                 String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
                 // 最后通知图库更新

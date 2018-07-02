@@ -6,6 +6,8 @@
     <string name="common_wan">万</string>
     <string name="common_go_shop">去逛逛</string>
     <string name="common_chakanxiangqing">查看详情</string>
+    <string name="common_wangluozhuangkuang">网络状况待提升</string>
+    <string name="common_dianjichongshi">点击重试</string>
 
     <!-- IM -->
     <string name="year">年</string>

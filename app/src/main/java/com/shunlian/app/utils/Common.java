@@ -955,8 +955,10 @@ public class Common {
         if (!TextUtils.isEmpty(shareLink)) {
             sb.append(shareLink);
         }
-        if (!TextUtils.isEmpty(shareLink)&&shareLink.contains("slAppWord"))
-        sb.append("复制这条信息，打开顺联APP~");
+        if (!TextUtils.isEmpty(shareLink)&&shareLink.contains("slAppWord")) {
+            sb.append("\n");
+            sb.append("复制这条信息，打开顺联APP~");
+        }
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(sb.toString());
         if (isToast)

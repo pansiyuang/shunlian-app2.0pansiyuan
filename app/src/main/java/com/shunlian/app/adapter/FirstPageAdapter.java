@@ -162,515 +162,519 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
-        switch (itemViewType) {
-            case TYPE9:
-                if (holder instanceof NineHolder) {
-                    NineHolder nineHolder = (NineHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    if (data.datass != null && data.datass.size() > 0) {
-                        List<String> strings = new ArrayList<>();
-                        for (int i = 0; i < data.datass.size(); i++) {
-                            strings.add(data.datass.get(i).thumb);
-                            if (i >= data.datass.size() - 1) {
-                                nineHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
-                                nineHolder.kanner.setBanner(strings);
-                                nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                                    @Override
-                                    public void onItemClick(int position) {
-                                        Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-                break;
-            case TYPE2:
-                if (holder instanceof TwoHolder) {
-                    TwoHolder twoHolder = (TwoHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb, R.mipmap.img_default_home_nav);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb, R.mipmap.img_default_home_nav);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb, R.mipmap.img_default_home_nav);
-                    GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb, R.mipmap.img_default_home_nav);
-                    twoHolder.mtv_nav1.setText(data.datass.get(0).title);
-                    twoHolder.mtv_nav2.setText(data.datass.get(1).title);
-                    twoHolder.mtv_nav3.setText(data.datass.get(2).title);
-                    twoHolder.mtv_nav4.setText(data.datass.get(3).title);
-                    if (Common.isColor(data.text_color)) {
-                        twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
-                        twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
-                        twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
-                        twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
-                    }
-                    if (!TextUtils.isEmpty(data.bg_pic)) {
-                        GlideUtils.getInstance().loadBgImage(context, twoHolder.mllayout_nav, data.bg_pic);
-                    } else if (Common.isColor(data.bg_color)) {
-                        twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
-                    }
-                    twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                        }
-                    });
-                    twoHolder.mllayout_nav2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                        }
-                    });
-                    twoHolder.mllayout_nav3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
-                        }
-                    });
-                    twoHolder.mllayout_nav4.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-//                            GetCouponAct.startAct(context);
-                            Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
-                        }
-                    });
-                }
-                break;
-            case TYPE3:
-                if (holder instanceof ThreeHolder) {
-                    ThreeHolder threeHolder = (ThreeHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    if (Common.isColor(data.bg_color))
-                        threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
-                    if (!isEmpty(data.number))
-                        switch (data.number) {
-                            case "1":
-                                threeHolder.miv_one.setVisibility(View.VISIBLE);
-                                threeHolder.mllayout_two.setVisibility(View.GONE);
-                                threeHolder.mllayout_three.setVisibility(View.GONE);
-                                threeHolder.mllayout_four.setVisibility(View.GONE);
-                                threeHolder.mllayout_five.setVisibility(View.GONE);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb, R.mipmap.img_default_home_retui);
-                                if (!isEmpty(data.datass.get(0).width)) {
-                                    int picWidth = Common.getScreenWidth((Activity) context);
-                                    int height = picWidth * Integer.parseInt(data.datass.get(0).height) / Integer.parseInt(data.datass.get(0).width);
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth, height);
-                                    threeHolder.miv_one.setLayoutParams(params);
+        try {
+            switch (itemViewType) {
+                case TYPE9:
+                    if (holder instanceof NineHolder) {
+                        NineHolder nineHolder = (NineHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        if (data.datass != null && data.datass.size() > 0) {
+                            List<String> strings = new ArrayList<>();
+                            for (int i = 0; i < data.datass.size(); i++) {
+                                strings.add(data.datass.get(i).thumb);
+                                if (i >= data.datass.size() - 1) {
+                                    nineHolder.kanner.layoutRes = R.layout.layout_kanner_rectangle_indicator;
+                                    nineHolder.kanner.setBanner(strings);
+                                    nineHolder.kanner.setOnItemClickL(new BaseBanner.OnItemClickL() {
+                                        @Override
+                                        public void onItemClick(int position) {
+                                            Common.goGoGo(context, data.datass.get(position).url.type, data.datass.get(position).url.item_id, data.datass.get(position).url.channe_id);
+                                        }
+                                    });
                                 }
-                                threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                                    }
-                                });
-                                break;
-                            case "2":
-                                threeHolder.miv_one.setVisibility(View.GONE);
-                                threeHolder.mllayout_two.setVisibility(View.VISIBLE);
-                                threeHolder.mllayout_three.setVisibility(View.GONE);
-                                threeHolder.mllayout_four.setVisibility(View.GONE);
-                                threeHolder.mllayout_five.setVisibility(View.GONE);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_twol, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion2);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_twor, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion2);
-                                threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_twor.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                                    }
-                                });
-                                break;
-                            case "3":
-                                threeHolder.miv_one.setVisibility(View.GONE);
-                                threeHolder.mllayout_two.setVisibility(View.GONE);
-                                threeHolder.mllayout_three.setVisibility(View.VISIBLE);
-                                threeHolder.mllayout_four.setVisibility(View.GONE);
-                                threeHolder.mllayout_five.setVisibility(View.GONE);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_threel, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion3);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_threem, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion3);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_threer, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion3);
-                                threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_threem.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_threer.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
-                                    }
-                                });
-                                break;
-                            case "4":
-                                threeHolder.miv_one.setVisibility(View.GONE);
-                                threeHolder.mllayout_two.setVisibility(View.GONE);
-                                threeHolder.mllayout_three.setVisibility(View.GONE);
-                                threeHolder.mllayout_four.setVisibility(View.VISIBLE);
-                                threeHolder.mllayout_five.setVisibility(View.GONE);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_four1, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion4);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_four2, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion4);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_four3, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion4);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_four4, data.datass.get(3).thumb, R.mipmap.img_default_home_promotion4);
-                                threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_four2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_four3.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_four4.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
-                                    }
-                                });
-                                break;
-                            case "5":
-                                threeHolder.miv_one.setVisibility(View.GONE);
-                                threeHolder.mllayout_two.setVisibility(View.GONE);
-                                threeHolder.mllayout_three.setVisibility(View.GONE);
-                                threeHolder.mllayout_four.setVisibility(View.GONE);
-                                threeHolder.mllayout_five.setVisibility(View.VISIBLE);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivel, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion3_1);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivet, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion3_2);
-                                GlideUtils.getInstance().loadImage(context, threeHolder.miv_fiveb, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion3_2);
-                                threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_fivet.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
-                                    }
-                                });
-                                threeHolder.miv_fiveb.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
-                                    }
-                                });
-                                break;
+                            }
                         }
-                }
-                break;
-            case TYPE4:
-                if (holder instanceof FourHolder) {
-                    FourHolder fourHolder = (FourHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    if (Common.isColor(data.bg_color))
-                        fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
-                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_one,
-                            data.ttth.thumb, R.mipmap.img_default_home_ttth);
-                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_two,
-                            data.pptm.thumb, R.mipmap.img_default_home_pinpai);
-                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_three,
-                            data.asxp.thumb, R.mipmap.img_default_home_xinpin);
-                    GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_four,
-                            data.kbrx.thumb, R.mipmap.img_default_home_xinpin);
-                    int seconds = (int) (System.currentTimeMillis() / 1000) - second;
-                    if (fourHolder.downTime_first!=null){
-                        fourHolder.downTime_first.cancelDownTimer();
-                        fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
+                    }
+                    break;
+                case TYPE2:
+                    if (holder instanceof TwoHolder) {
+                        TwoHolder twoHolder = (TwoHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav1, data.datass.get(0).thumb, R.mipmap.img_default_home_nav);
+                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav2, data.datass.get(1).thumb, R.mipmap.img_default_home_nav);
+                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav3, data.datass.get(2).thumb, R.mipmap.img_default_home_nav);
+                        GlideUtils.getInstance().loadImage(context, twoHolder.miv_nav4, data.datass.get(3).thumb, R.mipmap.img_default_home_nav);
+                        twoHolder.mtv_nav1.setText(data.datass.get(0).title);
+                        twoHolder.mtv_nav2.setText(data.datass.get(1).title);
+                        twoHolder.mtv_nav3.setText(data.datass.get(2).title);
+                        twoHolder.mtv_nav4.setText(data.datass.get(3).title);
+                        if (Common.isColor(data.text_color)) {
+                            twoHolder.mtv_nav1.setTextColor(Color.parseColor(data.text_color));
+                            twoHolder.mtv_nav2.setTextColor(Color.parseColor(data.text_color));
+                            twoHolder.mtv_nav3.setTextColor(Color.parseColor(data.text_color));
+                            twoHolder.mtv_nav4.setTextColor(Color.parseColor(data.text_color));
+                        }
+                        if (!TextUtils.isEmpty(data.bg_pic)) {
+                            GlideUtils.getInstance().loadBgImage(context, twoHolder.mllayout_nav, data.bg_pic);
+                        } else if (Common.isColor(data.bg_color)) {
+                            twoHolder.mllayout_nav.setBackgroundColor(Color.parseColor(data.bg_color));
+                        }
+                        twoHolder.mllayout_nav1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                            }
+                        });
+                        twoHolder.mllayout_nav2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                            }
+                        });
+                        twoHolder.mllayout_nav3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                            }
+                        });
+                        twoHolder.mllayout_nav4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                            GetCouponAct.startAct(context);
+                                Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
+                            }
+                        });
+                    }
+                    break;
+                case TYPE3:
+                    if (holder instanceof ThreeHolder) {
+                        ThreeHolder threeHolder = (ThreeHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        if (Common.isColor(data.bg_color))
+                            threeHolder.mrlayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                        if (!isEmpty(data.number))
+                            switch (data.number) {
+                                case "1":
+                                    threeHolder.miv_one.setVisibility(View.VISIBLE);
+                                    threeHolder.mllayout_two.setVisibility(View.GONE);
+                                    threeHolder.mllayout_three.setVisibility(View.GONE);
+                                    threeHolder.mllayout_four.setVisibility(View.GONE);
+                                    threeHolder.mllayout_five.setVisibility(View.GONE);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_one, data.datass.get(0).thumb, R.mipmap.img_default_home_retui);
+                                    if (!isEmpty(data.datass.get(0).width)) {
+                                        int picWidth = Common.getScreenWidth((Activity) context);
+                                        int height = picWidth * Integer.parseInt(data.datass.get(0).height) / Integer.parseInt(data.datass.get(0).width);
+                                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(picWidth, height);
+                                        threeHolder.miv_one.setLayoutParams(params);
+                                    }
+                                    threeHolder.miv_one.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        }
+                                    });
+                                    break;
+                                case "2":
+                                    threeHolder.miv_one.setVisibility(View.GONE);
+                                    threeHolder.mllayout_two.setVisibility(View.VISIBLE);
+                                    threeHolder.mllayout_three.setVisibility(View.GONE);
+                                    threeHolder.mllayout_four.setVisibility(View.GONE);
+                                    threeHolder.mllayout_five.setVisibility(View.GONE);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_twol, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion2);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_twor, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion2);
+                                    threeHolder.miv_twol.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_twor.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        }
+                                    });
+                                    break;
+                                case "3":
+                                    threeHolder.miv_one.setVisibility(View.GONE);
+                                    threeHolder.mllayout_two.setVisibility(View.GONE);
+                                    threeHolder.mllayout_three.setVisibility(View.VISIBLE);
+                                    threeHolder.mllayout_four.setVisibility(View.GONE);
+                                    threeHolder.mllayout_five.setVisibility(View.GONE);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_threel, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion3);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_threem, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion3);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_threer, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion3);
+                                    threeHolder.miv_threel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_threem.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_threer.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        }
+                                    });
+                                    break;
+                                case "4":
+                                    threeHolder.miv_one.setVisibility(View.GONE);
+                                    threeHolder.mllayout_two.setVisibility(View.GONE);
+                                    threeHolder.mllayout_three.setVisibility(View.GONE);
+                                    threeHolder.mllayout_four.setVisibility(View.VISIBLE);
+                                    threeHolder.mllayout_five.setVisibility(View.GONE);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_four1, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion4);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_four2, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion4);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_four3, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion4);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_four4, data.datass.get(3).thumb, R.mipmap.img_default_home_promotion4);
+                                    threeHolder.miv_four1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_four2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_four3.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_four4.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(3).url.type, data.datass.get(3).url.item_id, data.datass.get(3).url.channe_id);
+                                        }
+                                    });
+                                    break;
+                                case "5":
+                                    threeHolder.miv_one.setVisibility(View.GONE);
+                                    threeHolder.mllayout_two.setVisibility(View.GONE);
+                                    threeHolder.mllayout_three.setVisibility(View.GONE);
+                                    threeHolder.mllayout_four.setVisibility(View.GONE);
+                                    threeHolder.mllayout_five.setVisibility(View.VISIBLE);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivel, data.datass.get(0).thumb, R.mipmap.img_default_home_promotion3_1);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_fivet, data.datass.get(1).thumb, R.mipmap.img_default_home_promotion3_2);
+                                    GlideUtils.getInstance().loadImage(context, threeHolder.miv_fiveb, data.datass.get(2).thumb, R.mipmap.img_default_home_promotion3_2);
+                                    threeHolder.miv_fivel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(0).url.type, data.datass.get(0).url.item_id, data.datass.get(0).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_fivet.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(1).url.type, data.datass.get(1).url.item_id, data.datass.get(1).url.channe_id);
+                                        }
+                                    });
+                                    threeHolder.miv_fiveb.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Common.goGoGo(context, data.datass.get(2).url.type, data.datass.get(2).url.item_id, data.datass.get(2).url.channe_id);
+                                        }
+                                    });
+                                    break;
+                            }
+                    }
+                    break;
+                case TYPE4:
+                    if (holder instanceof FourHolder) {
+                        FourHolder fourHolder = (FourHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        if (Common.isColor(data.bg_color))
+                            fourHolder.mllayout_root.setBackgroundColor(Color.parseColor(data.bg_color));
+                        GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_one,
+                                data.ttth.thumb, R.mipmap.img_default_home_ttth);
+                        GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_two,
+                                data.pptm.thumb, R.mipmap.img_default_home_pinpai);
+                        GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_three,
+                                data.asxp.thumb, R.mipmap.img_default_home_xinpin);
+                        GlideUtils.getInstance().loadBgImage(context, fourHolder.mllayout_four,
+                                data.kbrx.thumb, R.mipmap.img_default_home_xinpin);
+                        int seconds = (int) (System.currentTimeMillis() / 1000) - second;
+                        if (fourHolder.downTime_first != null) {
+                            fourHolder.downTime_first.cancelDownTimer();
+                            fourHolder.downTime_first.setDownTime(Integer.parseInt(data.ttth.count_down) - seconds);
 //                    fourHolder.downTime_first.setDownTime(10);
-                        fourHolder.downTime_first.startDownTimer();
+                            fourHolder.downTime_first.startDownTimer();
+                        }
+                        if (Common.isColor(data.ttth.t_color)) {
+                            fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
+                        }
+                        if (Common.isColor(data.ttth.c_color))
+                            fourHolder.mtv_one2.setTextColor(Color.parseColor(data.ttth.c_color));
+                        if (Common.isColor(data.pptm.t_color))
+                            fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.t_color));
+                        if (Common.isColor(data.pptm.c_color))
+                            fourHolder.mtv_two2.setTextColor(Color.parseColor(data.pptm.c_color));
+                        if (Common.isColor(data.asxp.t_color))
+                            fourHolder.mtv_three1.setTextColor(Color.parseColor(data.asxp.t_color));
+                        if (Common.isColor(data.asxp.c_color))
+                            fourHolder.mtv_three2.setTextColor(Color.parseColor(data.asxp.c_color));
+                        if (Common.isColor(data.kbrx.t_color))
+                            fourHolder.mtv_four1.setTextColor(Color.parseColor(data.kbrx.t_color));
+                        if (Common.isColor(data.kbrx.c_color))
+                            fourHolder.mtv_four2.setTextColor(Color.parseColor(data.kbrx.c_color));
+                        fourHolder.mtv_one1.setText(data.ttth.title);
+                        fourHolder.mtv_two1.setText(data.pptm.title);
+                        fourHolder.mtv_three1.setText(data.asxp.title);
+                        fourHolder.mtv_four1.setText(data.kbrx.title);
+                        fourHolder.mtv_one2.setText(data.ttth.content);
+                        fourHolder.mtv_two2.setText(data.pptm.content);
+                        fourHolder.mtv_three2.setText(data.asxp.content);
+                        fourHolder.mtv_four2.setText(data.kbrx.content);
+                        fourHolder.mllayout_one.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DayDayAct.startAct(context);
+                            }
+                        });
+                        fourHolder.mllayout_two.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                PingpaiAct.startAct(context);
+                            }
+                        });
+                        fourHolder.mllayout_three.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AishangAct.startAct(context);
+                            }
+                        });
+                        fourHolder.mllayout_four.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                KouBeiAct.startAct(context);
+                            }
+                        });
                     }
-                    if (Common.isColor(data.ttth.t_color)) {
-                        fourHolder.mtv_one1.setTextColor(Color.parseColor(data.ttth.t_color));
-                    }
-                    if (Common.isColor(data.ttth.c_color))
-                        fourHolder.mtv_one2.setTextColor(Color.parseColor(data.ttth.c_color));
-                    if (Common.isColor(data.pptm.t_color))
-                        fourHolder.mtv_two1.setTextColor(Color.parseColor(data.pptm.t_color));
-                    if (Common.isColor(data.pptm.c_color))
-                        fourHolder.mtv_two2.setTextColor(Color.parseColor(data.pptm.c_color));
-                    if (Common.isColor(data.asxp.t_color))
-                        fourHolder.mtv_three1.setTextColor(Color.parseColor(data.asxp.t_color));
-                    if (Common.isColor(data.asxp.c_color))
-                        fourHolder.mtv_three2.setTextColor(Color.parseColor(data.asxp.c_color));
-                    if (Common.isColor(data.kbrx.t_color))
-                        fourHolder.mtv_four1.setTextColor(Color.parseColor(data.kbrx.t_color));
-                    if (Common.isColor(data.kbrx.c_color))
-                        fourHolder.mtv_four2.setTextColor(Color.parseColor(data.kbrx.c_color));
-                    fourHolder.mtv_one1.setText(data.ttth.title);
-                    fourHolder.mtv_two1.setText(data.pptm.title);
-                    fourHolder.mtv_three1.setText(data.asxp.title);
-                    fourHolder.mtv_four1.setText(data.kbrx.title);
-                    fourHolder.mtv_one2.setText(data.ttth.content);
-                    fourHolder.mtv_two2.setText(data.pptm.content);
-                    fourHolder.mtv_three2.setText(data.asxp.content);
-                    fourHolder.mtv_four2.setText(data.kbrx.content);
-                    fourHolder.mllayout_one.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            DayDayAct.startAct(context);
+                    break;
+                case TYPE5:
+                    if (holder instanceof FiveHolder) {
+                        FiveHolder fiveHolder = (FiveHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
+                        int height = picWidth * 158 / 340;
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+                        params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
+                        if (fiveHolder.miv_photo != null) {
+                            fiveHolder.miv_photo.setLayoutParams(params);
+                            GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
                         }
-                    });
-                    fourHolder.mllayout_two.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            PingpaiAct.startAct(context);
-                        }
-                    });
-                    fourHolder.mllayout_three.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            AishangAct.startAct(context);
-                        }
-                    });
-                    fourHolder.mllayout_four.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            KouBeiAct.startAct(context);
-                        }
-                    });
-                }
-                break;
-            case TYPE5:
-                if (holder instanceof FiveHolder) {
-                    FiveHolder fiveHolder = (FiveHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
-                    int height = picWidth * 158 / 340;
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
-                    if (fiveHolder.miv_photo!=null){
-                        fiveHolder.miv_photo.setLayoutParams(params);
-                        GlideUtils.getInstance().loadBgImageChang(context, fiveHolder.miv_photo, data.pic);
-                    }
-                    fiveHolder.mtv_topic.setVisibility(View.GONE);
+                        fiveHolder.mtv_topic.setVisibility(View.GONE);
 //                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
-                    fiveHolder.view_line.setVisibility(View.GONE);
-                    fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
-                    if (!isEmpty(data.content)) {
-                        fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
-                        fiveHolder.mtv_desc.setText(data.content);
-                    }
-                    fiveHolder.mtv_title.setText(data.title);
-                    if (hotPosition == -1)
-                        hotPosition = position;
-                    if (position==hotPosition){
-                        if (isFirst){
-                            fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
-                        }else {
-                            fiveHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
-                            fiveHolder.mtv_topic.setVisibility(View.VISIBLE);
+                        fiveHolder.view_line.setVisibility(View.GONE);
+                        fiveHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                        if (!isEmpty(data.content)) {
+                            fiveHolder.mtv_desc.setVisibility(View.VISIBLE);
+                            fiveHolder.mtv_desc.setText(data.content);
+                        }
+                        fiveHolder.mtv_title.setText(data.title);
+                        if (hotPosition == -1)
+                            hotPosition = position;
+                        if (position == hotPosition) {
+                            if (isFirst) {
+                                fiveHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                            } else {
+                                fiveHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
+                                fiveHolder.mtv_topic.setVisibility(View.VISIBLE);
 //                            fiveHolder.view_line.setBackgroundColor(getColor(R.color.value_F7F7F7));
-                            fiveHolder.view_line.setVisibility(View.VISIBLE);
+                                fiveHolder.view_line.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                    if (!TextUtils.isEmpty(data.price)) {
-                        SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
-                                getString(R.string.common_yuan), 11);
-                        fiveHolder.mtv_price.setText(priceBuilder);
-                        fiveHolder.mtv_price.setVisibility(View.VISIBLE);
-                    } else {
-                        fiveHolder.mtv_price.setVisibility(View.GONE);
-                    }
-                    fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mShareInfoParam.title = data.share.title;
-                            mShareInfoParam.desc = data.share.content;
-                            mShareInfoParam.img = data.share.logo;
+                        if (!TextUtils.isEmpty(data.price)) {
+                            SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
+                                    getString(R.string.common_yuan), 11);
+                            fiveHolder.mtv_price.setText(priceBuilder);
+                            fiveHolder.mtv_price.setVisibility(View.VISIBLE);
+                        } else {
+                            fiveHolder.mtv_price.setVisibility(View.GONE);
+                        }
+                        fiveHolder.miv_share.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mShareInfoParam.title = data.share.title;
+                                mShareInfoParam.desc = data.share.content;
+                                mShareInfoParam.img = data.share.logo;
 
-                            if (!Common.isAlreadyLogin()){
-                                Common.goGoGo(context,"login");
-                                return;
+                                if (!Common.isAlreadyLogin()) {
+                                    Common.goGoGo(context, "login");
+                                    return;
+                                }
+                                if (!isEmpty(data.share.share_url) && data.share.share_url.contains("member_id")) {
+                                    mShareInfoParam.shareLink = data.share.share_url;
+                                    shareStyle2Dialog();
+                                } else {
+                                    cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
+                                }
                             }
-                            if (!isEmpty(data.share.share_url) && data.share.share_url.contains("member_id")){
-                                mShareInfoParam.shareLink = data.share.share_url;
-                                shareStyle2Dialog();
-                            }else {
-                                cateGoryFrag.getShareInfo(data.url.type,data.url.item_id);
+                        });
+                        fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                             }
-                        }
-                    });
-                    fiveHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
-                        }
-                    });
-                }
-                break;
-            case TYPE6:
-                if (holder instanceof SixHolder) {
-                    SixHolder sixHolder = (SixHolder) holder;
-                    sixHolder.mtv_topic.setVisibility(View.GONE);
+                        });
+                    }
+                    break;
+                case TYPE6:
+                    if (holder instanceof SixHolder) {
+                        SixHolder sixHolder = (SixHolder) holder;
+                        sixHolder.mtv_topic.setVisibility(View.GONE);
 //                    fiveHolder.view_line.setBackgroundColor(getColor(R.color.white));
-                    sixHolder.view_line.setVisibility(View.GONE);
-                    sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
-                    if (hotPosition == -1)
-                        hotPosition = position;
-                    if (position == hotPosition){
-                        if (isFirst){
-                            sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
-                        }else {
-                            sixHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
-                            sixHolder.mtv_topic.setVisibility(View.VISIBLE);
-                            sixHolder.view_line.setVisibility(View.VISIBLE);
+                        sixHolder.view_line.setVisibility(View.GONE);
+                        sixHolder.mllayout_pingzhi.setVisibility(View.GONE);
+                        if (hotPosition == -1)
+                            hotPosition = position;
+                        if (position == hotPosition) {
+                            if (isFirst) {
+                                sixHolder.mllayout_pingzhi.setVisibility(View.VISIBLE);
+                            } else {
+                                sixHolder.mtv_topic.setText(getString(R.string.first_jingxuan));
+                                sixHolder.mtv_topic.setVisibility(View.VISIBLE);
+                                sixHolder.view_line.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                    GetDataEntity.MData data = lists.get(position);
-                    int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
-                    int height = picWidth * 158 / 340;
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
-                    params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
-                    sixHolder.miv_photo.setLayoutParams(params);
-                    GlideUtils.getInstance().loadBgImageChang(context, sixHolder.miv_photo, data.pic);
-                    sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
-                        }
-                    });
-                    if (sixHolder.firstHorizonAdapter == null) {
-                        sixHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, false);
-                        sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
-                        sixHolder.rv_goods.setNestedScrollingEnabled(false);
-                        sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                        sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
+                        GetDataEntity.MData data = lists.get(position);
+                        int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 20);
+                        int height = picWidth * 158 / 340;
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth, height);
+                        params.setMargins(TransformUtil.dip2px(context, 10), 0, TransformUtil.dip2px(context, 10), 0);
+                        sixHolder.miv_photo.setLayoutParams(params);
+                        GlideUtils.getInstance().loadBgImageChang(context, sixHolder.miv_photo, data.pic);
+                        sixHolder.miv_photo.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onItemClick(View view, int position) {
-                                GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                            public void onClick(View view) {
+                                Common.goGoGo(context, data.url.type, data.url.item_id, data.url.channe_id);
                             }
                         });
+                        if (sixHolder.firstHorizonAdapter == null) {
+                            sixHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, false);
+                            sixHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                            sixHolder.rv_goods.setAdapter(sixHolder.firstHorizonAdapter);
+                            sixHolder.rv_goods.setNestedScrollingEnabled(false);
+                            sixHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
+                            sixHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                                }
+                            });
+                        }
+                        sixHolder.firstHorizonAdapter.notifyDataSetChanged();
+                        sixHolder.rv_goods.setFocusable(false);
                     }
-                    sixHolder.firstHorizonAdapter.notifyDataSetChanged();
-                    sixHolder.rv_goods.setFocusable(false);
-                }
-                break;
-            case TYPE7:
-                if (holder instanceof SevenHolder) {
-                    SevenHolder sevenHolder = (SevenHolder) holder;
-                    GetDataEntity.MData data = lists.get(position);
-                    if (sevenHolder.firstHorizonAdapter == null) {
-                        sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
-                        sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
-                        sevenHolder.rv_goods.setNestedScrollingEnabled(false);
-                        sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                        sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
-                            }
-                        });
+                    break;
+                case TYPE7:
+                    if (holder instanceof SevenHolder) {
+                        SevenHolder sevenHolder = (SevenHolder) holder;
+                        GetDataEntity.MData data = lists.get(position);
+                        if (sevenHolder.firstHorizonAdapter == null) {
+                            sevenHolder.firstHorizonAdapter = new FirstHorizonAdapter(context, false, data.datass, true);
+                            sevenHolder.rv_goods.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                            sevenHolder.rv_goods.setAdapter(sevenHolder.firstHorizonAdapter);
+                            sevenHolder.rv_goods.setNestedScrollingEnabled(false);
+                            sevenHolder.rv_goods.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
+                            sevenHolder.firstHorizonAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    GoodsDetailAct.startAct(context, data.datass.get(position).url.item_id);
+                                }
+                            });
+                        }
+                        sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
+                        sevenHolder.rv_goods.setFocusable(false);
                     }
-                    sevenHolder.firstHorizonAdapter.notifyDataSetChanged();
-                    sevenHolder.rv_goods.setFocusable(false);
-                }
-                break;
-            case TYPE8:
-                if (holder instanceof EightHolder) {
-                    EightHolder eightHolder = (EightHolder) holder;
-                    List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
-                    if (eightHolder.firstCategoryMenuAdapter == null) {
+                    break;
+                case TYPE8:
+                    if (holder instanceof EightHolder) {
+                        EightHolder eightHolder = (EightHolder) holder;
+                        List<GetDataEntity.MData.Cate> data = lists.get(position).cates;
+                        if (eightHolder.firstCategoryMenuAdapter == null) {
 //                        cateGoryFrag.cate_id = data.get(0).id;
 //                        cateGoryFrag.pFirstPage.resetBaby(cateGoryFrag.cate_id);
-                        eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
-                        if (isFirst)
-                            eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
-                        eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                if (cateGoryFrag!=null&&cateGoryFrag.rv_view!=null&&cateGoryFrag.rv_view.getScrollState() == 0){
-                                    eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
-                                    eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                                    cateGoryFrag.cate_id=data.get(position).id;
-                                    if (cateGoryFrag.pFirstPage!=null)
-                                    cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
+                            eightHolder.firstCategoryMenuAdapter = new FirstCategoryMenuAdapter(context, false, data, isFirst);
+                            if (isFirst)
+                                eightHolder.rv_categoryMenu.addItemDecoration(new MHorItemDecoration(context, 10, 10, 10));
+                            eightHolder.firstCategoryMenuAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    if (cateGoryFrag != null && cateGoryFrag.rv_view != null && cateGoryFrag.rv_view.getScrollState() == 0) {
+                                        eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
+                                        eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+                                        cateGoryFrag.cate_id = data.get(position).id;
+                                        if (cateGoryFrag.pFirstPage != null)
+                                            cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
+                                    }
                                 }
+                            });
+                            eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
+                            eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                        } else {
+                            eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
+                        }
+                        if (isFirst) {
+                            eightHolder.mtv_meiri.setVisibility(View.GONE);
+                            eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.white));
+                        } else {
+                            eightHolder.mtv_meiri.setVisibility(View.VISIBLE);
+                            eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.light_gray_three));
+                        }
+                    }
+                    break;
+                case TYPE10:
+                    if (holder instanceof TenHolder) {
+                        TenHolder tenHolder = (TenHolder) holder;
+                        GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
+                        GlideUtils.getInstance().loadImageZheng(context, tenHolder.miv_photo, goods.thumb);
+                        if (tenHolder.mtv_title != null)
+                            tenHolder.mtv_title.setText(goods.title);
+                        if (!isEmpty(goods.price) && tenHolder.mtv_price != null) {
+                            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
+                            tenHolder.mtv_price.setText(spannableStringBuilder);
+                        }
+                        tenHolder.mllayout_tag.removeAllViews();
+                        tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                GoodsDetailAct.startAct(context, goods.id);
                             }
                         });
-                        eightHolder.rv_categoryMenu.setAdapter(eightHolder.firstCategoryMenuAdapter);
-                        eightHolder.rv_categoryMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                    } else {
-                        eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
-                    }
-                    if (isFirst) {
-                        eightHolder.mtv_meiri.setVisibility(View.GONE);
-                        eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.white));
-                    } else {
-                        eightHolder.mtv_meiri.setVisibility(View.VISIBLE);
-                        eightHolder.rv_categoryMenu.setBackgroundColor(getColor(R.color.light_gray_three));
-                    }
-                }
-                break;
-            case TYPE10:
-                if (holder instanceof TenHolder) {
-                    TenHolder tenHolder = (TenHolder) holder;
-                    GoodsDeatilEntity.Goods goods = lists.get(position).moreGoods;
-                    GlideUtils.getInstance().loadImageZheng(context, tenHolder.miv_photo, goods.thumb);
-                    if (tenHolder.mtv_title != null)
-                        tenHolder.mtv_title.setText(goods.title);
-                    if (!isEmpty(goods.price)&&tenHolder.mtv_price!=null) {
-                        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
-                        tenHolder.mtv_price.setText(spannableStringBuilder);
-                    }
-                    tenHolder.mllayout_tag.removeAllViews();
-                    tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            GoodsDetailAct.startAct(context, goods.id);
+                        if ("1".equals(goods.is_new)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), tenHolder));
                         }
-                    });
-                    if ("1".equals(goods.is_new)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), tenHolder));
-                    }
 
-                    if ("1".equals(goods.is_hot)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.is_hot)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), tenHolder));
+                        }
 
-                    if ("1".equals(goods.is_explosion)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.is_explosion)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), tenHolder));
+                        }
 
-                    if ("1".equals(goods.is_recommend)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.is_recommend)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), tenHolder));
+                        }
 
-                    if ("1".equals(goods.has_coupon)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.has_coupon)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                        }
 
-                    if ("1".equals(goods.has_discount)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.has_discount)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                        }
 
-                    if ("1".equals(goods.has_gift)) {
-                        tenHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
-                    }
+                        if ("1".equals(goods.has_gift)) {
+                            tenHolder.mllayout_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), tenHolder));
+                        }
 
-                }
-                break;
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
