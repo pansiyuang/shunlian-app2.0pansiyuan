@@ -102,7 +102,6 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     private SelectDateDialog dateDialog;
     private ImageCaptureManager captureManager;
     private AvatarDialog avatarDialog;
-    private String mInterestTag;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,PersonalDataAct.class));
@@ -172,10 +171,7 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
                 }
                 break;
             case R.id.llayout_interest:
-                if (isEmpty(mInterestTag)){
-                    mInterestTag = "请选择";
-                }
-                SelectLikeAct.startAct(this,mInterestTag);
+                SelectLikeAct.startAct(this);
                 break;
             case R.id.llayout_avatar:
                 if (avatarDialog == null) {
@@ -338,7 +334,6 @@ public class PersonalDataAct extends BaseActivity implements IPersonalDataView{
     @Override
     public void setTag(String tag) {
         if (!isEmpty(tag)){
-            mInterestTag = tag;
             mtv_interest.setText(formInterest(tag));
         }
     }

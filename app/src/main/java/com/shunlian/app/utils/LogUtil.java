@@ -8,46 +8,46 @@ import com.shunlian.app.BuildConfig;
  * Created by MBENBEN on 2016/7/15 09 : 59.
  */
 public class LogUtil {
-//    private static final boolean isOpenLog = false;
+    private static final boolean isOpenLog = BuildConfig.DEBUG;
 
     public static void augusLogW(String msg) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.w("augus", msg);
         }
     }
 
     public static void zhLogW(String msg) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.d("zhang", msg);
         }
     }
 
     public static void httpLogW(String msg) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.w("http", msg);
         }
     }
 
     public static void httpLogW(Throwable tr) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.w("http", tr);
         }
     }
 
     public static void httpLogW(String msg, Throwable tr) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.w("http", msg, tr);
         }
     }
 
     public static void testLogW(String tag, String msg) {
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.w(tag, msg);
         }
     }
 
     public static void logError(String msg){
-        if (BuildConfig.DEBUG) {
+        if (isOpenLog) {
             Log.e("error", msg);
         }
     }
@@ -58,7 +58,7 @@ public class LogUtil {
      * @param msg
      */
     public static void longW(String msg) {
-        if (!BuildConfig.DEBUG || msg == null || msg.length() == 0)
+        if (!isOpenLog || msg == null || msg.length() == 0)
             return;
         int segmentSize = 3 * 1024;
         long length = msg.length();
