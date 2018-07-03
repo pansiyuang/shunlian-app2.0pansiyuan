@@ -266,6 +266,7 @@
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_punish_msg_time"
+                android:layout_alignParentRight="true"
                 style="@style/TV_SystemMsg2"/>
 
         </RelativeLayout>
