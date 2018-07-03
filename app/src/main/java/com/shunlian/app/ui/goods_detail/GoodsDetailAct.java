@@ -278,6 +278,8 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void onStart() {
         super.onStart();
+        if (immersionBar == null)
+            immersionBar = ImmersionBar.with(this);
         immersionBar.statusBarAlpha(mStatusBarAlpha)
                 .addTag(GoodsDetailAct.class.getName())
                 .init();
