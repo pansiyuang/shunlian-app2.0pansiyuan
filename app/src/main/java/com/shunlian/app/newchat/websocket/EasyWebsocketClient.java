@@ -67,12 +67,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     private UserInfoEntity userInfoEntity;
     private UserInfoEntity.Info.User mUser;
     private ObjectMapper objectMapper;
-    private String currentPageType = "nomal";
     private List<EasyWebsocketClient.OnMessageReceiveListener> messageReceiveListeners;
     private MessageCountManager messageCountManager;
     private MemberStatus currentMemberStatus = MemberStatus.Member;
     private OnSwitchStatusListener switchStatusListener;
     private OnConnetListener onConnetListener;
+    private JSONObject pinJson;
 
     /**
      * 单例模式获取实例
@@ -385,68 +385,16 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
     }
 
-//    public void sendGoodsPin(GoodsItemEntity.Data.Item goodsItem) {
-//        currentPageType = "goods";
-//        this.goodsItem = goodsItem;
-//        startHeartPin();
-//    }
-//
-//    public void sendShopPin(ShopHomeEntity.Data.ShopInfo shopInfo) {
-//        currentPageType = "shop";
-//        this.shopInfo = shopInfo;
-//        startHeartPin();
-//    }
-//
-//    public void sendOrderItemPin(OrderItemEntity.Data orderItemEntity) {
-//        currentPageType = "order";
-//        this.orderItemEntity = orderItemEntity;
-//        startHeartPin();
-//    }
-
-    public void sendNomalPin() {
-        currentPageType = "nomal";
-        startHeartPin();
-    }
 
     public void sendPin() {
         try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("type", "ping");
-            JSONObject dataJson = new JSONObject();
-            dataJson.put("pageType", currentPageType);
-            switch (currentPageType) {
-                case "goods":
-//                    dataJson.put("goodsImage", goodsItem.getThumb());
-//                    dataJson.put("title", goodsItem.getTitle());
-//                    dataJson.put("price", goodsItem.getMarketprice());
-//                    dataJson.put("goodsId", goodsItem.getGoodsId());
-//                    jsonObject.put("data", dataJson);
-                    LogUtil.httpLogW("浏览商品中...");
-                    break;
-                case "order":
-//                    dataJson.put("address", orderItemEntity.getAddress());
-//                    dataJson.put("mobile", orderItemEntity.getMobile());
-//                    dataJson.put("price", orderItemEntity.getPrice());
-//                    dataJson.put("realname", orderItemEntity.getRealname());
-//                    dataJson.put("status", orderItemEntity.getStatus());
-//                    dataJson.put("ordersn", orderItemEntity.getOrdersn());
-                    jsonObject.put("data", dataJson);
-                    LogUtil.httpLogW("查看订单中...");
-                    break;
-                case "shop":
-//                    dataJson.put("sellerid", shopInfo.getShopId());
-//                    dataJson.put("seller_name", shopInfo.getShop_name());
-//                    dataJson.put("img", shopInfo.getBanner());
-                    jsonObject.put("data", dataJson);
-                    LogUtil.httpLogW("浏览店铺中...");
-                    break;
-                case "nomal":
-                    LogUtil.httpLogW("Websocket 心跳包发送:" + getStatus());
-                    break;
+            if (pinJson == null) {
+                pinJson = new JSONObject();
+                pinJson.put("type", "ping");
             }
             if (mClient != null && mStatus == Status.CONNECTED) {
-                LogUtil.httpLogW("Websocket 发送的json：" + jsonObject.toString());
-                mClient.send(jsonObject.toString());
+                LogUtil.httpLogW("Websocket 心跳包发送:" + getStatus());
+                mClient.send(pinJson.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
