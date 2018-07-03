@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.MemberAdapter;
 import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
@@ -23,6 +26,8 @@ import com.shunlian.app.view.ISaleDataView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -174,18 +179,6 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.rlayout_vip)
     RelativeLayout rlayout_vip;
 
-    @BindView(R.id.mtv_total_sum)
-    MyTextView mtv_total_sum;
-
-    @BindView(R.id.mtv_total_month)
-    MyTextView mtv_total_month;
-
-    @BindView(R.id.mtv_cStore_total_sum)
-    MyTextView mtv_cStore_total_sum;
-
-    @BindView(R.id.mtv_gStore_total_sum)
-    MyTextView mtv_gStore_total_sum;
-
     @BindView(R.id.miv_isShow_data)
     MyImageView miv_isShow_data;
 
@@ -206,6 +199,10 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
     @BindView(R.id.view_line2)
     View member_role_line;
+
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
+
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
     private boolean isShowData = true;
@@ -240,7 +237,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        mtv_toolbar_title.setText("销售数据");
+        mtv_toolbar_title.setText(getStringResouce(R.string.sale_data));
         gone(mrlayout_toolbar_more);
         int deviceWidth = DeviceInfoUtil.getDeviceWidth(this);
         if (deviceWidth >= Constant.DRAWING_WIDTH) {
@@ -337,8 +334,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setGrowthValue_RequestCode(String growth_value, String request_code) {
-        mtv_growth_value.setText("成长值：".concat(growth_value));
-        mtv_request_code.setText("邀请码：".concat(request_code));
+        mtv_growth_value.setText(String.format(getStringResouce(R.string.growth_value),growth_value));
+        mtv_request_code.setText(String.format(getStringResouce(R.string.invitation_code),request_code));
     }
 
     /**
@@ -436,26 +433,29 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     /**
      * 设置精英导师数据
      *
-     * @param masterInfo
+     * @param master_info_new
      */
     @Override
-    public void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo,String member_role_code) {
+    public void setEliteTutorData(List<SaleDataEntity.NewMemberInfo> master_info_new, String member_role_code) {
         //member_role_code = "2";
         if ("1".equals(member_role_code)){
-            mtv_name.setText("精英导师");
+            mtv_name.setText(getStringResouce(R.string.elite_tutor));
             miv_jingying.setImageResource(R.mipmap.img_jingyingdaoshi);
             visible(mtv_name,miv_jingying,member_role_line);
         }else if ("2".equals(member_role_code)){
-            mtv_name.setText("创客精英");
+            mtv_name.setText(getStringResouce(R.string.gen_guest_elite));
             miv_jingying.setImageResource(R.mipmap.img_chuangkejingying);
             visible(mtv_name,miv_jingying,member_role_line);
         }else {
             gone(mtv_name,miv_jingying,member_role_line);
         }
-        mtv_total_sum.setText(masterInfo.total_num);
-        mtv_total_month.setText(masterInfo.continue_active);
-        mtv_cStore_total_sum.setText(masterInfo.level1_active_num);
-        mtv_gStore_total_sum.setText(masterInfo.level2_active_num);
+
+        if (!isEmpty(master_info_new)) {
+            LinearLayoutManager manager = new LinearLayoutManager(this);
+            recy_view.setLayoutManager(manager);
+            recy_view.setNestedScrollingEnabled(false);
+            recy_view.setAdapter(new MemberAdapter(this, master_info_new));
+        }
     }
 
     /**

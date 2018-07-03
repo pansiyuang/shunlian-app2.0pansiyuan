@@ -776,4 +776,17 @@
     <string name="plus_open_up">您的ID为%s，购买后将为此ID开通plus权益，确定为此ID账号开通么？</string>
     <string name="plus_ninhaimei">您还没有邀请记录~</string>
     <string name="seller_out">已售完</string>
+
+    <!--销售数据-->
+    <string name="sale_data">销售数据</string>
+    <string name="invitation_code">邀请码：%s</string>
+    <string name="growth_value">成长值：%s</string>
+    <string name="elite_tutor">精英导师</string>
+    <string name="gen_guest_elite">创客精英</string>
+    <string name="monthly_sales">本月销售额</string>
+    <string name="today_the_member">今日会员</string>
+    <string name="today_sales_order">今日销售订单</string>
+    <string name="sales">销售</string>
+    <string name="order">订单</string>
+    <string name="member">会员</string>
 </resources>

@@ -3,6 +3,8 @@ package com.shunlian.app.view;
 import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/4/12.
  */
@@ -52,9 +54,9 @@ public interface ISaleDataView extends IView {
 
     /**
      * 设置精英导师数据
-     * @param masterInfo
+     * @param master_info_new
      */
-    void setEliteTutorData(SaleDataEntity.MasterInfo masterInfo,String code);
+    void setEliteTutorData(List<SaleDataEntity.NewMemberInfo> master_info_new, String code);
 
     /**
      * 销售数据说明
