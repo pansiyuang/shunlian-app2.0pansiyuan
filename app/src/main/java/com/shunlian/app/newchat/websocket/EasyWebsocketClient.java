@@ -698,7 +698,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     private void cancelReconnect() {
         reconnectCount = 0;
-        mHandler.removeCallbacks(mReconnectTask);
+        if (mReconnectTask != null && mHandler != null) {
+            mHandler.removeCallbacks(mReconnectTask);
+        }
     }
 
     /**
@@ -710,6 +712,13 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         stopPin();
         if (timer != null) {
             timer.cancel();
+        }
+        cancelReconnect();
+        if (mHandler != null) {
+            mHandler = null;
+        }
+        if (mClient != null) {
+            mClient = null;
         }
     }
 
