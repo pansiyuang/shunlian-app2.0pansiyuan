@@ -41,7 +41,7 @@ public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Me
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TwoHolder) {
             TwoHolder twoHolder = (TwoHolder) holder;
-
+            try{
             ActivityListEntity.Menu data = datas.get(position);
 //            StorePromotionGoodsListEntity.Lable data = lists.get(position);
             twoHolder.mtv_time.setText(data.time);
@@ -53,6 +53,9 @@ public class DayDayMenuAdapter extends BaseRecyclerAdapter<ActivityListEntity.Me
             }else {
                 twoHolder.mrlayout_rootView.setBackgroundResource(0);
                 twoHolder.mllayout_tv.setBackgroundColor(getColor(R.color.new_text));
+            }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

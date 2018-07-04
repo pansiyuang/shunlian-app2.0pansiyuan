@@ -51,7 +51,7 @@ public final class InterentTools {
     /**********h5域名******************/
     //public  static String H5_HOST = "http://v20-wx.shunliandongli.com/";//测试
     //public  static String H5_HOST = "http://front.v2.shunliandongli.com/";//预发布
-    public  static String H5_HOST = "http://wx.shunliandongli.com/";//正式
+    public  static String H5_HOST = "https://wx.shunliandongli.com/";//正式
 
 
     //public static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名测试

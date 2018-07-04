@@ -15,6 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+#混淆开启时需要下面这句话
+#-ignorewarnings -keep class * { public private *; }
 -keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
