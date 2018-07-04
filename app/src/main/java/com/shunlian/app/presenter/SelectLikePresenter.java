@@ -73,10 +73,6 @@ public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
                 mTagLists = entity.data.list;
                 if (!isEmpty(mTagLists)){
                     selectTag();
-                    for (int i = 0; i < mTagLists.size(); i++) {
-                        if ("1".equals(mTagLists.get(i).active))
-                            currentCount++;
-                    }
                 }
                 setAdapter(mTagLists);
             }
@@ -117,13 +113,11 @@ public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
             PersonalDataEntity.TagList tagList = mTagLists.get(p);
             if ("1".equals(tagList.active)){
                 tagList.active = "0";
-                currentCount--;
             }else {
                 if (currentCount >= maxCount){
                     Common.staticToast("最多选择"+maxCount+"个");
                 }else {
                     tagList.active = "1";
-                    currentCount++;
                 }
             }
             adapter.notifyDataSetChanged();
@@ -153,11 +147,13 @@ public class SelectLikePresenter extends BasePresenter<ISelectLikeView> {
 
     private void selectTag(){
         sb_tag.delete(0,sb_tag.length());
+        currentCount = 0;
         for (int i = 0; i < mTagLists.size(); i++) {
             PersonalDataEntity.TagList tagList = mTagLists.get(i);
             if ("1".equals(tagList.active)){
                 sb_tag.append(tagList.name);
                 sb_tag.append("/");
+                currentCount++;
             }
         }
         if (sb_tag.length() > 0) {

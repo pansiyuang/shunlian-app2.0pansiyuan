@@ -109,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!(this instanceof MainActivity) &&
+        /*if (!(this instanceof MainActivity) &&
                 !(this instanceof ConfirmOrderAct) &&
                 !(this instanceof PayListActivity) &&
                 !(this instanceof SearchGoodsActivity)) {
@@ -118,20 +118,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             }catch (Exception e){
                 e.printStackTrace();
             }
-        }
-        try {
-            immersionBar = ImmersionBar.with(this);
-            immersionBar.init();
-            setContentView(getLayoutId());
-            resources = getResources();
-            ButterKnife.setDebug(true);
-            unbinder = ButterKnife.bind(this);
-            finishAct();
-            initListener();
-            initData();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        }*/
+
+        immersionBar = ImmersionBar.with(this);
+        immersionBar.init();
+        setContentView(getLayoutId());
+        resources = getResources();
+        unbinder = ButterKnife.bind(this);
+        finishAct();
+        initListener();
+        initData();
         SharedPrefUtil.saveSharedPrfString("localVersion", getVersionName());
 
     }
