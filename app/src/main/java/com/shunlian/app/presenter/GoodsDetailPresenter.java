@@ -60,6 +60,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     private CommentAdapter mCommentAdapter;
     private boolean isClickHead = false;//是否点击头部
     private int praisePosition;//点赞位置
+    private ProbablyLikeAdapter mLikeAdapter;
 
     public GoodsDetailPresenter(Context context, IGoodsDetailView iView, String goods_id) {
         super(context, iView);
@@ -440,6 +441,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             mCommentAdapter.unbind();
             mCommentAdapter = null;
         }
+        if (mLikeAdapter != null){
+            mLikeAdapter.unbind();
+            mLikeAdapter = null;
+        }
     }
 
     /**
@@ -542,10 +547,10 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     public void onSuccess(BaseEntity<ProbablyLikeEntity> entity) {
                         super.onSuccess(entity);
                         if (!isEmpty(entity.data.may_be_buy_list)){
-                            ProbablyLikeAdapter adapter = new ProbablyLikeAdapter
+                            mLikeAdapter = new ProbablyLikeAdapter
                                     (context,entity.data.may_be_buy_list,false);
-                            iView.setAdapter(adapter);
-                            adapter.setOnItemClickListener((v,p)->{
+                            iView.setAdapter(mLikeAdapter);
+                            mLikeAdapter.setOnItemClickListener((v, p)->{
                                 mDetailAct.moreHideAnim();
                                 ProbablyLikeEntity.MayBuyList mayBuyList = entity.
                                         data.may_be_buy_list.get(p);

@@ -194,6 +194,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
     public void onDestroyView() {
         if (goodsDetailAdapter != null){
             goodsDetailAdapter.onDetachedFromRecyclerView(recy_view_root);
+            goodsDetailAdapter.unbind();
             goodsDetailAdapter = null;
         }
         super.onDestroyView();
