@@ -51,7 +51,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="邀请码：132130"
                     android:textSize="13sp" />
 
             </LinearLayout>
@@ -121,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:paddingTop="20dp"
-                    android:text="本月销售额"
+                    android:text="@string/monthly_sales"
                     android:textColor="@color/new_text"
                     android:textSize="14sp" />
 
@@ -169,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="今日会员"
+                            android:text="@string/today_the_member"
                             android:textColor="@color/value_43D060"
                             android:textSize="14sp" />
 
@@ -206,7 +205,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:maxLines="1"
-                            android:text="今日销售订单"
+                            android:text="@string/today_sales_order"
                             android:textColor="@color/value_F9A31C"
                             android:textSize="14sp" />
 
@@ -239,7 +238,7 @@
                         android:layout_height="40dp"
                         android:background="@color/pink_color"
                         android:gravity="center"
-                        android:text="销售"
+                        android:text="@string/sales"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
@@ -267,7 +266,7 @@
                         android:layout_height="40dp"
                         android:background="@color/value_F1F0F0"
                         android:gravity="center"
-                        android:text="订单"
+                        android:text="@string/order"
                         android:textColor="@color/share_text"
                         android:textSize="15sp" />
 
@@ -295,7 +294,7 @@
                         android:layout_height="40dp"
                         android:background="@color/value_F1F0F0"
                         android:gravity="center"
-                        android:text="会员"
+                        android:text="@string/member"
                         android:textColor="@color/share_text"
                         android:textSize="15sp" />
 
@@ -675,90 +674,12 @@
                     android:layout_marginTop="15dp"
                     android:background="@color/light_gray_three"/>
 
-                <com.shunlian.app.widget.MyTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="小店精英和导师总数"
-                    android:textColor="@color/new_text"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_below="@+id/view_line2"
-                    android:layout_marginTop="16dp"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_total_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/new_text"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_below="@+id/view_line2"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="连续成为精英的月数"
-                    android:textColor="@color/new_text"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_below="@+id/mtv_total_sum"
-                    android:layout_marginTop="16dp"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_total_month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/new_text"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_below="@+id/mtv_total_sum"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="小店直推精英累计数"
-                    android:textColor="@color/new_text"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_below="@+id/mtv_total_month"
-                    android:layout_marginTop="16dp"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_cStore_total_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/new_text"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_below="@+id/mtv_total_month"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="分店直推精英累计数"
-                    android:textColor="@color/new_text"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_below="@+id/mtv_cStore_total_sum"
-                    android:layout_marginTop="16dp"/>
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_gStore_total_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/new_text"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_below="@+id/mtv_cStore_total_sum"/>
-
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recy_view"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

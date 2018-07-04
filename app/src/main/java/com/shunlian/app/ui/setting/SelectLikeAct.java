@@ -46,9 +46,8 @@ public class SelectLikeAct extends BaseActivity implements ISelectLikeView{
     private final String format = "%d/%d";
     private SelectLikePresenter presenter;
 
-    public static void startAct(Activity activity,String tag){
+    public static void startAct(Activity activity){
         Intent intent = new Intent(activity, SelectLikeAct.class);
-        intent.putExtra("tag",tag);
         activity.startActivityForResult(intent,REQUEST_CODE);
     }
     /**

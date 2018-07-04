@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_weight="1"
+        android:text="分店直推精英累计数"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="19dp"
+        android:text="10"
+        android:textColor="@color/new_text"
+        android:textSize="15sp" />
+</LinearLayout>
