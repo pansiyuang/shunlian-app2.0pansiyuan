@@ -122,10 +122,10 @@ public class PLUSConfirmOrderAct extends BaseActivity implements IPLUSConfirmVie
      */
     @Override
     public void goodsTotalPrice(String price,String addressId) {
-        mTotalPrice = price;
+        mTotalPrice = Common.formatFloat(price);
         this.addressId = addressId;
-        mtv_total_price.setText(Common.dotAfterSmall(getResources()
-                .getString(R.string.rmb).concat(price),11));
+        mtv_total_price.setText(Common.dotAfterSmall(
+                getStringResouce(R.string.rmb)+(mTotalPrice),11));
     }
 
     @Override

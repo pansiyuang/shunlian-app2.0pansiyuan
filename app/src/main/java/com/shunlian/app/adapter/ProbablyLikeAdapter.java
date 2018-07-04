@@ -37,21 +37,24 @@ public class ProbablyLikeAdapter extends BaseRecyclerAdapter<ProbablyLikeEntity.
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
-        ProbablyLikeEntity.MayBuyList mayBuyList = lists.get(position);
-        ProbablyLikeHolder mHolder = (ProbablyLikeHolder) holder;
-        GlideUtils.getInstance().loadImage(context, mHolder.miv_onel, mayBuyList.thumb);
-        mHolder.mtv_descl.setText(mayBuyList.title);
-        mHolder.mtv_pricel.setText(mayBuyList.price);
-        gone(mHolder.mrlayout_plus,mHolder.mtv_pricer);
-        if (!isPlus) {
-            mHolder.mtv_pricer.setStrikethrough()//市场价
-                    .setText(getString(R.string.rmb) + mayBuyList.market_price);
-            visible(mHolder.mtv_pricer);
-        } else if (!isEmpty(mayBuyList.self_buy_earn)) {
-            mHolder.mtv_plus_prefPrice.setText(getString(R.string.common_yuan) + mayBuyList.self_buy_earn);
-            visible(mHolder.mrlayout_plus);
+        try {
+            ProbablyLikeEntity.MayBuyList mayBuyList = lists.get(position);
+            ProbablyLikeHolder mHolder = (ProbablyLikeHolder) holder;
+            GlideUtils.getInstance().loadImage(context, mHolder.miv_onel, mayBuyList.thumb);
+            mHolder.mtv_descl.setText(mayBuyList.title);
+            mHolder.mtv_pricel.setText(mayBuyList.price);
+            gone(mHolder.mrlayout_plus, mHolder.mtv_pricer);
+            if (!isPlus) {
+                mHolder.mtv_pricer.setStrikethrough()//市场价
+                        .setText(getString(R.string.rmb) + mayBuyList.market_price);
+                visible(mHolder.mtv_pricer);
+            } else if (!isEmpty(mayBuyList.self_buy_earn)) {
+                mHolder.mtv_plus_prefPrice.setText(getString(R.string.common_yuan) + mayBuyList.self_buy_earn);
+                visible(mHolder.mrlayout_plus);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     public class ProbablyLikeHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
