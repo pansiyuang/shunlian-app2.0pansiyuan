@@ -135,80 +135,84 @@ public class SingleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
     }
 
     public void handleItem(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof SingleViewHolder) {
-            GoodsDeatilEntity.Goods goods;
-            if (mStore != null) {
-                goods = lists.get(position - 1);
-            } else {
-                goods = lists.get(position);
-            }
-            if (goods == null) {
-                return;
-            }
-            SingleViewHolder viewHolder = (SingleViewHolder) holder;
-            GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
-            if (viewHolder.tv_title!=null)
-            viewHolder.tv_title.setText(goods.title);
-            String price = getString(R.string.common_yuan) + goods.price;
-            viewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
-
-            if ("1".equals(goods.free_ship)) {
-                viewHolder.tv_free.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.tv_free.setVisibility(View.GONE);
-            }
-
-            viewHolder.ll_tag.removeAllViews();
-
-            if ("1".equals(goods.is_new)) {
-                viewHolder.ll_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.is_hot)) {
-                viewHolder.ll_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.is_explosion)) {
-                viewHolder.ll_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.is_recommend)) {
-                viewHolder.ll_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_coupon)) {
-                viewHolder.ll_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_discount)) {
-                viewHolder.ll_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
-            if ("1".equals(goods.has_gift)) {
-                viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
-            }
-
-            if ("0".equals(goods.comment_num)) {
-                viewHolder.tv_comment.setText("暂无评论");
-            } else {
-                if ("0".equals(goods.comment_rate)) {
-                    viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+        try {
+            if (holder instanceof SingleViewHolder) {
+                GoodsDeatilEntity.Goods goods;
+                if (mStore != null) {
+                    goods = lists.get(position - 1);
                 } else {
-                    viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                    goods = lists.get(position);
+                }
+                if (goods == null) {
+                    return;
+                }
+                SingleViewHolder viewHolder = (SingleViewHolder) holder;
+                GlideUtils.getInstance().loadImage(context, viewHolder.miv_icon, goods.thumb);
+                if (viewHolder.tv_title != null)
+                    viewHolder.tv_title.setText(goods.title);
+                String price = getString(R.string.common_yuan) + goods.price;
+                viewHolder.tv_price.setText(Common.changeTextSize(price, getString(R.string.common_yuan), 11));
+
+                if ("1".equals(goods.free_ship)) {
+                    viewHolder.tv_free.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.tv_free.setVisibility(View.GONE);
+                }
+
+                viewHolder.ll_tag.removeAllViews();
+
+                if ("1".equals(goods.is_new)) {
+                    viewHolder.ll_tag.addView(creatTextTag("新品", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fbd500_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_hot)) {
+                    viewHolder.ll_tag.addView(creatTextTag("热卖", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb9f00_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_explosion)) {
+                    viewHolder.ll_tag.addView(creatTextTag("爆款", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_fb6400_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.is_recommend)) {
+                    viewHolder.ll_tag.addView(creatTextTag("推荐", getColor(R.color.white), getDrawable(R.drawable.rounded_corner_7898da_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_coupon)) {
+                    viewHolder.ll_tag.addView(creatTextTag("劵", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_discount)) {
+                    viewHolder.ll_tag.addView(creatTextTag("折", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
+                if ("1".equals(goods.has_gift)) {
+                    viewHolder.ll_tag.addView(creatTextTag("赠", getColor(R.color.value_f46c6f), getDrawable(R.drawable.rounded_corner_f46c6f_2px), viewHolder));
+                }
+
+                if ("0".equals(goods.comment_num)) {
+                    viewHolder.tv_comment.setText("暂无评论");
+                } else {
+                    if ("0".equals(goods.comment_rate)) {
+                        viewHolder.tv_comment.setText(goods.comment_num + "条评论");
+                    } else {
+                        viewHolder.tv_comment.setText(goods.comment_num + "条评论  " + goods.comment_rate + "%好评");
+                    }
+                }
+                viewHolder.tv_address.setText(goods.send_area);
+                if (goods.type == 1) { //是优品
+                    viewHolder.miv_product.setVisibility(View.VISIBLE);
+                    if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局
+                        viewHolder.ll_earn.setVisibility(View.VISIBLE);
+                        viewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + goods.self_buy_earn);
+                    } else {
+                        viewHolder.ll_earn.setVisibility(View.GONE);
+                    }
+                } else {
+                    viewHolder.miv_product.setVisibility(View.GONE);
                 }
             }
-            viewHolder.tv_address.setText(goods.send_area);
-            if (goods.type == 1) { //是优品
-                viewHolder.miv_product.setVisibility(View.VISIBLE);
-                if (!isEmpty(goods.self_buy_earn)) { //有字段才显示布局
-                    viewHolder.ll_earn.setVisibility(View.VISIBLE);
-                    viewHolder.tv_earn_money.setText(getString(R.string.common_yuan) + goods.self_buy_earn);
-                } else {
-                    viewHolder.ll_earn.setVisibility(View.GONE);
-                }
-            } else {
-                viewHolder.miv_product.setVisibility(View.GONE);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
