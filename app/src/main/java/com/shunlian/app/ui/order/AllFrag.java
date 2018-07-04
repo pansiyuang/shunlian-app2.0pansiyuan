@@ -16,6 +16,7 @@ import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -116,7 +117,10 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     }
 
     public void fetchNewData() {
-        adapter = null;
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
         recy_view.postDelayed(()->recy_view.scrollToPosition(0),100);
         if (ordersLists != null) {
             ordersLists.clear();
