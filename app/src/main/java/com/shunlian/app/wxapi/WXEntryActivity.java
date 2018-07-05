@@ -332,6 +332,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
                 RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
+                mYFinish();
             } else if ("1".equals(status)) {
                 Common.staticToast(entity.message);
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
@@ -360,10 +361,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
                 }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+                    finishAndRemoveTask();
+                }else {
+                    finish();
+                }
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
                 RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
+                mYFinish();
             }
-            mYFinish();
         } else {
             mYFinish();
         }
@@ -406,12 +412,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     }
 
     private void mYFinish(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
             finishAndRemoveTask();
         }else {
             finish();
-        }
-        //finish();
+        }*/
+        finish();
     }
 
     protected boolean isEmpty(CharSequence sequence){
