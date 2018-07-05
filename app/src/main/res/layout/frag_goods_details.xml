@@ -37,4 +37,10 @@
         app:iv_margin_right="23"
         />
 
+    <com.shunlian.app.widget.empty.NetAndEmptyInterface
+        android:id="@+id/nei_empty"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </com.shunlian.app.widget.MyRelativeLayout>

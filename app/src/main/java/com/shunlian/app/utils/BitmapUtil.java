@@ -241,12 +241,16 @@ public class BitmapUtil {
             boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            if (isSuccess&&!TextUtils.isEmpty(MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null))) {
+            if (isSuccess) {
                 // 其次把文件插入到系统图库
-                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+                String path = MediaStore.Images.Media
+                        .insertImage(context.getContentResolver(),
+                                file.getAbsolutePath(), fileName, null);
+                if (TextUtils.isEmpty(path))return false;
                 // 最后通知图库更新
                 fileUri = new File(path);
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
+                context.sendBroadcast(new
+                        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileUri)));
                 return true;
             } else {
                 return false;
@@ -260,6 +264,8 @@ public class BitmapUtil {
             file = null;
             fileUri = null;
             fos = null;
+            if (bmp != null)
+                bmp.recycle();
         }
         return false;
     }

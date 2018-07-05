@@ -14,6 +14,7 @@ import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.banner.Kanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,10 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
 
     @BindView(R.id.miv_top)
     MyImageView miv_top;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
+
     private LinearLayoutManager manager;
     private int totalDy;
     private int screenWidth;
@@ -133,8 +138,7 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
      * 商品详情数据
      */
     public void setGoodsDetailData(GoodsDeatilEntity goodsDeatilEntity) {
-
-
+        gone(nei_empty);
         manager = new LinearLayoutManager(baseActivity);
         recy_view_root.setLayoutManager(manager);
         recy_view_root.setNestedScrollingEnabled(false);
@@ -198,5 +202,13 @@ public class GoodsDeatilFrag extends BaseFragment implements View.OnClickListene
             goodsDetailAdapter = null;
         }
         super.onDestroyView();
+    }
+
+    public void onFailure(){
+        if (nei_empty != null){
+            visible(nei_empty);
+            nei_empty.setNetExecption().setOnClickListener(v ->
+                ((GoodsDetailAct)baseActivity).refreshDetail());
+        }
     }
 }

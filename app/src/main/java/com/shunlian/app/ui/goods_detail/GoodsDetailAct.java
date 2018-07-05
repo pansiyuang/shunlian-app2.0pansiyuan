@@ -428,7 +428,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
 
     @Override
-    public void showFailureView(int rquest_code) {}
+    public void showFailureView(int rquest_code) {
+        if (goodsDeatilFrag != null)
+            goodsDeatilFrag.onFailure();
+    }
 
     @Override
     public void showDataEmptyView(int rquest_code) {}
