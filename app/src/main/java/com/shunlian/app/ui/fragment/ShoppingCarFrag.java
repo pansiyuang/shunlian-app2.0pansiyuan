@@ -121,6 +121,9 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
     private RecyclerDialog recyclerDialog;
     private List<ProbabyLikeGoodsEntity.Goods> probabyGoods;
 
+    private int scrollPos;
+    private int scrollTop;
+
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.frag_shoppingcar, container, false);
@@ -153,11 +156,6 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         probabyHolderView = new ProbabyFooterHolderView(probabyView);
 
         probabyGoods = new ArrayList<>();
-        GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
-        goodsAdapter = new ProbabyLikeGoodsAdapter(getActivity(), probabyGoods);
-        probabyHolderView.recycler_list.setNestedScrollingEnabled(false);
-        probabyHolderView.recycler_list.setLayoutManager(manager);
-        probabyHolderView.recycler_list.setAdapter(goodsAdapter);
 
         footView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
         probabyTitleView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT)); //添加这句话 防止报错
@@ -187,6 +185,23 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
         miv_total_select.setOnClickListener(this);
         tv_toal_favorite.setOnClickListener(this);
         tv_toal_del.setOnClickListener(this);
+        expand_shoppingcar.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    // scrollPos记录当前可见的List顶端的一行的位置
+                    scrollPos = expand_shoppingcar.getFirstVisiblePosition();
+                }
+                if (!isEmpty(mCarEntity.enabled)) {
+                    View v = expand_shoppingcar.getChildAt(0);
+                    scrollTop = (v == null) ? 0 : v.getTop();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+        });
     }
 
     public void getShoppingCarData() {
@@ -255,6 +270,10 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
             showEmptyView(true);
         } else {
             showEmptyView(false);
+        }
+
+        if (!isEmpty(mCarEntity.enabled)) {
+            expand_shoppingcar.setSelectionFromTop(scrollPos, scrollTop);
         }
     }
 
@@ -438,11 +457,19 @@ public class ShoppingCarFrag extends BaseFragment implements IShoppingCarView, V
 
     @Override
     public void OnGetProbabyGoods(List<ProbabyLikeGoodsEntity.Goods> goodsList) {
+        probabyGoods.clear();
         if (!isEmpty(goodsList)) {
-            probabyTitleView.setVisibility(View.VISIBLE);
-            probabyGoods.clear();
             probabyGoods.addAll(goodsList);
-            goodsAdapter.notifyDataSetChanged();
+            if (goodsAdapter == null) {
+                GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+                goodsAdapter = new ProbabyLikeGoodsAdapter(getActivity(), probabyGoods);
+                probabyHolderView.recycler_list.setNestedScrollingEnabled(false);
+                probabyHolderView.recycler_list.setLayoutManager(manager);
+                probabyHolderView.recycler_list.setAdapter(goodsAdapter);
+            } else {
+                goodsAdapter.notifyItemChanged(0, probabyGoods.size());
+            }
+            probabyTitleView.setVisibility(View.VISIBLE);
         } else {
             probabyTitleView.setVisibility(View.GONE);
         }

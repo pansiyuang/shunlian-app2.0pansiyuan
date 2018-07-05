@@ -192,7 +192,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             isInit = true;
                             mStatus = Status.CONNECTED;
                             setUserInfoEntity(message);
-                            startHeartPin();
+//                            startHeartPin();
                             cancelReconnect();
                         } else {
                             if (mClient != null) {
@@ -294,7 +294,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     @Override
     public void onClose(int code, String errorStr) {
-        LogUtil.httpLogW("Websocket 连接关闭:" + code + "," + errorStr);
+        LogUtil.httpLogW("Websocket onClose():" + code + "," + errorStr);
         if (reconnectCount < 3) {
             mStatus = Status.CONNECTING;
             resetSocket();
@@ -316,7 +316,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
 
     @Override
     public void onError(Exception ex) {
-        LogUtil.httpLogW("Websocket 连接错误:" + ex.getMessage());
+        LogUtil.httpLogW("Websocket onError():" + ex.getMessage());
         if (reconnectCount < 3) {
             mStatus = Status.CONNECTING;
             resetSocket();
@@ -670,6 +670,9 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     }
 
     public void resetSocket() {
+        if (mClient != null) {
+            mClient = null;
+        }
         messageReceiveListeners.clear();
         if (!NetworkUtils.isNetworkOpen(mContext)) {
             reconnectCount = 0;
@@ -679,11 +682,12 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         }
 
         if (reconnectCount > 3) {
-            LogUtil.httpLogW(String.format("Websocket 准备开始第%d次重连,重连间隔%d", reconnectCount, 1000));
+            LogUtil.httpLogW("取消重连");
             cancelReconnect();
             return;
         }
-        LogUtil.httpLogW("Websocket resetSocket()");
+        reconnectCount++;
+        LogUtil.httpLogW(String.format("Websocket 准备开始第%d次重连", reconnectCount));
         mHandler.postDelayed(mReconnectTask, 1000);
     }
 
@@ -692,7 +696,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         if (mStatus != Status.CONNECTING) {//不是正在重连状态
             mStatus = Status.CONNECTING;
         }
-        reconnectCount++;
         buildeWebsocketClient();
     };
 
