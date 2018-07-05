@@ -137,6 +137,12 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 super.onErrorCode(code, message);
                 ((GoodsDetailAct)context).finish();
             }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                iView.showFailureView(0);
+            }
         });
     }
 

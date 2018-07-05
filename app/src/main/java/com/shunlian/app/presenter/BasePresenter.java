@@ -48,7 +48,6 @@ import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.HttpDialog;
@@ -248,7 +247,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         iView.showFailureView(failureCode);
                     }
                     //请求错误
-                    handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode,isLoading);
+                    //handlerCode(body.code, body.message,tCall.clone(),emptyCode,failureCode,isLoading);
+                    handlerCode(body.code, body.message,tCall.clone(),callback,emptyCode,failureCode,isLoading);
                 }
             }
 
@@ -271,7 +271,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     }
 
     private <T> void handlerCode(Integer code, String message, Call<BaseEntity<T>> clone,
-                                 final int emptyCode,final int failureCode,final boolean isLoading) {
+                                 INetDataCallback<BaseEntity<T>> callback, int emptyCode,
+                                 int failureCode, boolean isLoading) {
         if (code != Code.CODE_REFRESH_TOKEN_VALIDE) {
             Common.staticToast(message);
         }
@@ -289,7 +290,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                         requestCount = 0;
                         return;
                     }
-                    refreshToken(clone,emptyCode,failureCode,isLoading);
+                    refreshToken(clone,callback,emptyCode,failureCode,isLoading);
                 }
                 break;
             case Code.CODE_REFRESH_TOKEN_VALIDE://刷新token过期,让用户登录
@@ -299,16 +300,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
         }
     }
 
-    private void goLogin() {
-        Common.clearLoginInfo();
-        JpushUtil.setJPushAlias();
-        Constant.JPUSH=null;
-        EasyWebsocketClient.getInstance(context).logout();
-        LoginAct.startAct(context);
-    }
-
-
-    private <T> void refreshToken(final Call<BaseEntity<T>> clone,final int emptyCode,final int failureCode,final boolean isLoading){
+    private <T> void refreshToken(Call<BaseEntity<T>> clone, INetDataCallback<BaseEntity<T>> callback,
+                                  int emptyCode, int failureCode, boolean isLoading) {
         String refresh_token = SharedPrefUtil.getSharedPrfString("refresh_token", "");
         String member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
         Map<String,String> map = new HashMap<>();
@@ -329,14 +322,34 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 super.onSuccess(entity);
                 RefreshTokenEntity data = entity.data;
                 if (data != null) {
-                    LogUtil.httpLogW("刷新token");
+                    //LogUtil.zhLogW("刷新token");
                     SharedPrefUtil.saveSharedPrfString("token", data.token);
                     SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
                     SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
-                    getNetData(emptyCode,failureCode,isLoading,clone,new SimpleNetDataCallback<BaseEntity<T>>());
+                    getNetData(emptyCode,failureCode,isLoading,clone,callback);
                 }
             }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                goLogin();
+            }
+
+            @Override
+            public void onFailure() {
+                super.onFailure();
+                goLogin();
+            }
         });
+    }
+
+    private void goLogin() {
+        Common.clearLoginInfo();
+        JpushUtil.setJPushAlias();
+        Constant.JPUSH=null;
+        EasyWebsocketClient.getInstance(context).logout();
+        LoginAct.startAct(context);
     }
 
     /**
@@ -418,7 +431,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
 
     private <T> boolean interceptApi(Call call, BaseEntity<T> body){
         String url = call.request().url().toString();
-        LogUtil.longW("interceptApi=============url=".concat(url));
+        //LogUtil.longW("interceptApi=============url=".concat(url));
         if (!TextUtils.isEmpty(url) && (url.contains("order/checkout") || url.contains("order/payinorderlist"))){
             T data = body.data;
             if (data != null && data instanceof PayOrderEntity){

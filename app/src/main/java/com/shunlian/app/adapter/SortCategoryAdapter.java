@@ -206,14 +206,12 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             if (index < lists.size()) {
                 String name = lists.get(index).name;
                 if (!TextUtils.isEmpty(name)) {
-                    mHolder.tv_name.setVisibility(View.VISIBLE);
-                    mHolder.iv_thumb.setVisibility(View.VISIBLE);
+                    visible(mHolder.tv_name,mHolder.iv_thumb);
                     GlideUtils.getInstance().loadOverrideImage(context,
                             mHolder.iv_thumb,lists.get(index).thumb,115,115);
                     mHolder.tv_name.setText(name);
                 } else {
-                    mHolder.tv_name.setVisibility(View.GONE);
-                    mHolder.iv_thumb.setVisibility(View.GONE);
+                    gone(mHolder.tv_name,mHolder.iv_thumb);
                 }
             }
         }
