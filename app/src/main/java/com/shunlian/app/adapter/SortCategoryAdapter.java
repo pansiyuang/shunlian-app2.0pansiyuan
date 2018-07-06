@@ -297,4 +297,16 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             }
         }
     }
+
+    public void detachView() {
+        if (counts != null){
+            counts.clear();
+            counts = null;
+        }
+        if (titleData != null){
+            titleData.clear();
+            titleData = null;
+        }
+        unbind();
+    }
 }
