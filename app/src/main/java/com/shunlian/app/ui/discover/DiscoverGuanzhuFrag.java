@@ -119,6 +119,15 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
         if (lay_refresh != null) {
             lay_refresh.setRefreshing(false);
         }
+        if (request_code == 0) {//无网络页面
+            visible(nestedScrollView);
+            gone(recy_view);
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (presenter != null) {
+                    presenter.initApi();
+                }
+            });
+        }
     }
 
     @Override
@@ -160,6 +169,8 @@ public class DiscoverGuanzhuFrag extends DiscoversFrag implements IGuanzhuView {
      */
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
+        gone(nestedScrollView);
+        visible(recy_view);
         recy_view.setAdapter(adapter);
     }
 
