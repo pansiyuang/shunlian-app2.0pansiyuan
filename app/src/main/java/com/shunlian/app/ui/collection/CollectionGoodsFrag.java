@@ -436,4 +436,26 @@ public class CollectionGoodsFrag extends CollectionFrag implements ICollectionGo
         }
         return -1;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mPresenter != null)
+            mPresenter.detachView();
+        if (goodsLists != null){
+            goodsLists.clear();
+            goodsLists = null;
+        }
+        if (delLists != null){
+            delLists.clear();
+            delLists = null;
+        }
+        if (cateAdapter != null){
+            cateAdapter = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+    }
 }

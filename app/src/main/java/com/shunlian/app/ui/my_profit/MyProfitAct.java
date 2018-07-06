@@ -257,7 +257,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         isBack = getIntent().getBooleanExtra("isBack", false);
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        mtv_toolbar_title.setText("我的收益");
+        mtv_toolbar_title.setText(getStringResouce(R.string.my_profit));
         gone(mrlayout_toolbar_more);
         visible(miv_toolbar_help);
 
@@ -316,8 +316,10 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
      */
     @Override
     public void setUserInfo(MyProfitEntity.UserInfo userInfo) {
-        mtv_growth_value.setText("成长值：" + userInfo.grow_num);
-        mtv_request_code.setText("邀请码：" + userInfo.invite_code);
+        mtv_growth_value.setText(String.format
+                (getStringResouce(R.string.growth_value),userInfo.grow_num));
+        mtv_request_code.setText(String.format
+                (getStringResouce(R.string.invitation_code),userInfo.invite_code));
         int plus_role_code = Integer.parseInt(userInfo.plus_role_code);
         //plus_role_code = "3";
         if (plus_role_code == 1) {//店主 1=plus店主，2=销售主管，>=3 销售经理
@@ -666,6 +668,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
         miv_week.clearAnimation();
         miv_month.clearAnimation();
         miv_order_profit.clearAnimation();
+        if (chart_view != null)chart_view.destroyDrawingCache();
         super.onDestroy();
         if (presenter != null) {
             presenter.detachView();

@@ -25,6 +25,7 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
     public static final int PAGE_SIZE = 10;
     private RefundAfterSaleAdapter afterSaleAdapter;
     private List<RefundListEntity.RefundList> refundLists = new ArrayList<>();
+    private Call<BaseEntity<RefundListEntity>> refundlistCall;
 
 
     public RefundListPresent(Context context, IRefundListView iView) {
@@ -45,7 +46,15 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
      */
     @Override
     public void detachView() {
-
+        if (refundlistCall != null)refundlistCall.cancel();
+        if (afterSaleAdapter != null){
+            afterSaleAdapter.unbind();
+            afterSaleAdapter = null;
+        }
+        if (refundLists != null){
+            refundLists.clear();
+            refundLists = null;
+        }
     }
 
     /**
@@ -61,8 +70,8 @@ public class RefundListPresent extends BasePresenter<IRefundListView> {
         map.put("page",String.valueOf(currentPage));
         map.put("page_size",String.valueOf(PAGE_SIZE));
         sortAndMD5(map);
-        Call<BaseEntity<RefundListEntity>> baseEntityCall = getApiService().refundList(map);
-        getNetData(isShowLoading,baseEntityCall,new SimpleNetDataCallback<BaseEntity<RefundListEntity>>(){
+        refundlistCall = getApiService().refundList(map);
+        getNetData(isShowLoading, refundlistCall,new SimpleNetDataCallback<BaseEntity<RefundListEntity>>(){
             @Override
             public void onSuccess(BaseEntity<RefundListEntity> entity) {
                 super.onSuccess(entity);

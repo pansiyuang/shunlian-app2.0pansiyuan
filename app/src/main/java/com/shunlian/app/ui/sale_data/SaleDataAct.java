@@ -596,4 +596,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         mtv_grand_child_store.setText(!isShowData?ASTERISK:mFendian);
         mtv_total_consume.setText(!isShowData?ASTERISK:mXiaofei);
     }
+
+    @Override
+    protected void onDestroy() {
+        if (chart_view != null)chart_view.destroyDrawingCache();
+        super.onDestroy();
+        if (presenter != null)
+            presenter.detachView();
+    }
 }

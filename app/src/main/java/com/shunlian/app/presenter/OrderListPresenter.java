@@ -106,8 +106,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
                 currentPage = Integer.parseInt(data.page);
 
                 iView.orderList(data.orders,currentPage,allPage);
-                /*LogUtil.zhLogW(String.format("staus: %s=====currentPage=%s======allPage=%s",
-                        data.status,data.page,data.total_page));*/
+                currentPage ++;
             }
 
             @Override
@@ -129,8 +128,7 @@ public class OrderListPresenter extends BasePresenter<IOrderListView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (currentPage < allPage){
-                currentPage ++;
+            if (currentPage <= allPage){
                 orderList(LOAD_CODE,LOAD_CODE,false,status,currentPage);
             }
         }

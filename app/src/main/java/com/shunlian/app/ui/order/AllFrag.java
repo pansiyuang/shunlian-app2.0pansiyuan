@@ -16,7 +16,6 @@ import com.shunlian.app.presenter.OrderListPresenter;
 import com.shunlian.app.ui.LazyFragment;
 import com.shunlian.app.ui.my_comment.SuccessfulTradeAct;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IOrderListView;
 import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
@@ -373,6 +372,17 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     public void confirmreceipt(String order_id){
         if (mPresenter != null){
             mPresenter.confirmreceipt(order_id);
+        }
+    }
+
+    public void detachView() {
+        if (ordersLists != null){
+            ordersLists.clear();
+            ordersLists = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
         }
     }
 }

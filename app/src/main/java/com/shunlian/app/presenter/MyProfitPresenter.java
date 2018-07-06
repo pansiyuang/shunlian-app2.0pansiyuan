@@ -23,6 +23,9 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
     public final String _7day = "7";
     public final String _30day = "30";
     public final String _60day = "60";
+    private Call<BaseEntity<MyProfitEntity>> generalprofit;
+    private Call<BaseEntity<SalesChartEntity>> profitCharts;
+    private Call<BaseEntity<EmptyEntity>> receiveReward;
 
     public MyProfitPresenter(Context context, IMyProfitView iView) {
         super(context, iView);
@@ -43,7 +46,12 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
      */
     @Override
     public void detachView() {
-
+        if (generalprofit != null)
+            generalprofit.cancel();
+        if (profitCharts != null)
+            profitCharts.cancel();
+        if (receiveReward != null)
+            receiveReward.cancel();
     }
 
     /**
@@ -54,10 +62,10 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<MyProfitEntity>> generalprofit = getAddCookieApiService()
+        generalprofit = getAddCookieApiService()
                 .generalprofit(getRequestBody(map));
 
-        getNetData(true,generalprofit,new SimpleNetDataCallback<BaseEntity<MyProfitEntity>>(){
+        getNetData(true, generalprofit,new SimpleNetDataCallback<BaseEntity<MyProfitEntity>>(){
             @Override
             public void onSuccess(BaseEntity<MyProfitEntity> entity) {
                 super.onSuccess(entity);
@@ -74,10 +82,10 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
         map.put("block",block);
         sortAndMD5(map);
 
-        Call<BaseEntity<SalesChartEntity>> baseEntityCall = getAddCookieApiService()
+        profitCharts = getAddCookieApiService()
                 .profitChart(getRequestBody(map));
 
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<SalesChartEntity>>(){
+        getNetData(profitCharts,new SimpleNetDataCallback<BaseEntity<SalesChartEntity>>(){
             @Override
             public void onSuccess(BaseEntity<SalesChartEntity> entity) {
                 super.onSuccess(entity);
@@ -91,8 +99,8 @@ public class MyProfitPresenter extends BasePresenter<IMyProfitView> {
         map.put("type",type);
         sortAndMD5(map);
 
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().receiveReward(map);
-        getNetData(true,baseEntityCall,new
+        receiveReward = getApiService().receiveReward(map);
+        getNetData(true, receiveReward,new
                 SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
