@@ -96,11 +96,15 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
     }
 
     public void handlerTop(RecyclerView.ViewHolder holder) {
-        if (!isEmpty(msgList)) {
-            TopViewHolder topViewHolder = (TopViewHolder) holder;
-            TopMessageAdapter messageAdapter = new TopMessageAdapter(context, msgList);
-            messageAdapter.setOnMessageClickListener(this);
-            topViewHolder.recycler_list.setAdapter(messageAdapter);
+        try {
+            if (!isEmpty(msgList)) {
+                TopViewHolder topViewHolder = (TopViewHolder) holder;
+                TopMessageAdapter messageAdapter = new TopMessageAdapter(context, msgList);
+                messageAdapter.setOnMessageClickListener(this);
+                topViewHolder.recycler_list.setAdapter(messageAdapter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

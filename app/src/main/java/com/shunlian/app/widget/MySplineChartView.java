@@ -150,7 +150,7 @@ public class MySplineChartView extends ChartView {
             chart.getCategoryAxis().setAxisSteps(10d);
             chart.setCategoryAxisCustomLines(mXCustomLineDataset); //x轴
             chart.getCategoryAxis().getTickLabelPaint().setColor(getResources().getColor(R.color.value_7C1212));
-            chart.getDataAxis().getTickLabelPaint().setTextSize(TransformUtil.sp2px(getContext(), 11));
+            chart.getDataAxis().getTickLabelPaint().setTextSize(TransformUtil.sp2px(getContext(), 8));
 
             //设置图的背景色
 //            chart.setApplyBackgroundColor(true);
@@ -228,7 +228,7 @@ public class MySplineChartView extends ChartView {
             lnChart.getPlotLegend().hideBackground();
             lnChart.getDataAxis().getAxisPaint().setStrokeWidth(lnChart.getPlotGrid().getHorizontalLinePaint().getStrokeWidth());//y轴线宽
             lnChart.getDataAxis().getTickMarksPaint().setStrokeWidth(lnChart.getPlotGrid().getHorizontalLinePaint().getStrokeWidth());
-            lnChart.getDataAxis().getTickLabelPaint().setTextSize(TransformUtil.sp2px(getContext(), 11));
+            lnChart.getDataAxis().getTickLabelPaint().setTextSize(TransformUtil.sp2px(getContext(), 8));
 
             lnChart.disableScale();//禁止缩放
             lnChart.disablePanMode();//禁止滑动

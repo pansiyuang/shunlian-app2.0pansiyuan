@@ -1013,6 +1013,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                     readedMsg(chat_m_user_Id);
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
+                LogUtil.httpLogW("from_user_id:" + baseMessage.from_user_id + " currentUserId:" + currentUserId);
                 if (baseMessage.from_user_id.equals(currentUserId)) {
                     if (baseMessage.msg_type.equals("evaluate") && mWebsocketClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
                         finish();

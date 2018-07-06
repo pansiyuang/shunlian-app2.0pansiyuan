@@ -107,14 +107,15 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         } else {
             messageReceiveListeners.clear();
         }
+
         messageCountManager = MessageCountManager.getInstance(mContext);
         buildeWebsocketClient();
     }
 
     public void buildeWebsocketClient() {
         try {
-            mClient = null;
             LogUtil.httpLogW("初始化IM地址:" + InterentTools.HTTPADDR_IM);
+            mClient = null;
             mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
@@ -192,7 +193,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             isInit = true;
                             mStatus = Status.CONNECTED;
                             setUserInfoEntity(message);
-//                            startHeartPin();
+                            startHeartPin();
                             cancelReconnect();
                         } else {
                             if (mClient != null) {
@@ -295,9 +296,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     @Override
     public void onClose(int code, String errorStr) {
         LogUtil.httpLogW("Websocket onClose():" + code + "," + errorStr);
+
         if (reconnectCount < 3) {
             mStatus = Status.CONNECTING;
-            resetSocket();
+            mHandler.postDelayed(mReconnectTask, 1000);
         } else {
             if (mStatus != Status.TIMEOUT) {
                 mStatus = Status.DISCONNECTED;
@@ -312,19 +314,16 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     @Override
     public void onTimeOut() {
         LogUtil.httpLogW("Websocket 连接超时");
+        if (mClient != null) {
+            mClient.close();
+        }
     }
 
     @Override
     public void onError(Exception ex) {
         LogUtil.httpLogW("Websocket onError():" + ex.getMessage());
-        if (reconnectCount < 3) {
-            mStatus = Status.CONNECTING;
-            resetSocket();
-        } else {
-            if (mStatus != Status.TIMEOUT) {
-                ex.printStackTrace();
-                mStatus = Status.ERROR;
-            }
+        if (mClient != null) {
+            mClient.close();
         }
     }
 
@@ -405,9 +404,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         try {
             userInfoEntity = objectMapper.readValue(str, UserInfoEntity.class);
 
-            LogUtil.httpLogW("setUserInfoEntity:" + currentMemberStatus);
             if (currentMemberStatus != MemberStatus.Member) {
-                switchStatus(currentMemberStatus);
+                if (isBindSeller() || isBindAdmin()) {
+                    switchStatus(currentMemberStatus);
+                }
             } else {
                 switch (userInfoEntity.info.role_type) {
                     case "seller":
@@ -670,9 +670,6 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     }
 
     public void resetSocket() {
-        if (mClient != null) {
-            mClient = null;
-        }
         messageReceiveListeners.clear();
         if (!NetworkUtils.isNetworkOpen(mContext)) {
             reconnectCount = 0;
@@ -687,8 +684,8 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
             return;
         }
         reconnectCount++;
-        LogUtil.httpLogW(String.format("Websocket 准备开始第%d次重连", reconnectCount));
-        mHandler.postDelayed(mReconnectTask, 1000);
+        LogUtil.httpLogW("Websocket 尝试第" + reconnectCount + "次重连...");
+        buildeWebsocketClient();
     }
 
     private Runnable mReconnectTask = () -> {
@@ -696,7 +693,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         if (mStatus != Status.CONNECTING) {//不是正在重连状态
             mStatus = Status.CONNECTING;
         }
-        buildeWebsocketClient();
+        resetSocket();
     };
 
     private void cancelReconnect() {
@@ -710,6 +707,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void logout() {
         isInit = false;
         mStatus = Status.DISCONNECTED;
+        currentMemberStatus = MemberStatus.Member;
         stopPin();
         if (timer != null) {
             timer.cancel();
