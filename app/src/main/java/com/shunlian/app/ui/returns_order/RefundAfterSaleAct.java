@@ -157,6 +157,7 @@ public class RefundAfterSaleAct extends BaseActivity implements IRefundListView,
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        if (refundListPresent != null)refundListPresent.detachView();
     }
 
     @Override

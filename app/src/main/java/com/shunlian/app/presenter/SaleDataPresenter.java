@@ -24,6 +24,8 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
     public final String _7day = "7";
     public final String _30day = "30";
     public final String _60day = "60";
+    private Call<BaseEntity<SaleDataEntity>> salesdata;
+    private Call<BaseEntity<SalesChartEntity>> salesChartCall;
 
     public SaleDataPresenter(Context context, ISaleDataView iView) {
         super(context, iView);
@@ -44,7 +46,8 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
      */
     @Override
     public void detachView() {
-
+        if (salesdata != null)salesdata.cancel();
+        if (salesChartCall != null)salesChartCall.cancel();
     }
 
     /**
@@ -55,8 +58,8 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
 
-        Call<BaseEntity<SaleDataEntity>> salesdata = getApiService().salesdata(map);
-        getNetData(true,salesdata,new SimpleNetDataCallback<BaseEntity<SaleDataEntity>>(){
+        salesdata = getApiService().salesdata(map);
+        getNetData(true, salesdata,new SimpleNetDataCallback<BaseEntity<SaleDataEntity>>(){
             @Override
             public void onSuccess(BaseEntity<SaleDataEntity> entity) {
                 super.onSuccess(entity);
@@ -79,10 +82,10 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
         map.put("block",block);
         sortAndMD5(map);
 
-        Call<BaseEntity<SalesChartEntity>> baseEntityCall = getAddCookieApiService()
+        salesChartCall = getAddCookieApiService()
                 .salesChart(path_name,getRequestBody(map));
 
-        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<SalesChartEntity>>(){
+        getNetData(salesChartCall,new SimpleNetDataCallback<BaseEntity<SalesChartEntity>>(){
             @Override
             public void onSuccess(BaseEntity<SalesChartEntity> entity) {
                 super.onSuccess(entity);

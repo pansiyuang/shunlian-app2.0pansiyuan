@@ -789,4 +789,14 @@
     <string name="sales">销售</string>
     <string name="order">订单</string>
     <string name="member">会员</string>
+
+    <!--我的收益-->
+    <string name="my_profit">我的收益</string>
+    <string name="have_withdrawal">已提现</string>
+    <string name="the_withdrawal_of_subsidiary">提现明细</string>
+    <string name="can_carry">可提现</string>
+    <string name="immediate_withdrawal">立即提现</string>
+    <string name="forecast_earnings">预估收益</string>
+    <string name="today_earnings">今日收益</string>
+    <string name="month_earnings">本月收益</string>
 </resources>
