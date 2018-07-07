@@ -209,6 +209,7 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
                 String name = lists.get(index).name;
                 if (!TextUtils.isEmpty(name)) {
                     visible(mHolder.tv_name,mHolder.iv_thumb);
+                    if (mHolder.tv_name == null || mHolder.iv_thumb == null)mHolder.againBind();
                     GlideUtils.getInstance().loadOverrideImage(context,
                             mHolder.iv_thumb,lists.get(index).thumb,115,115);
                     mHolder.tv_name.setText(name);
