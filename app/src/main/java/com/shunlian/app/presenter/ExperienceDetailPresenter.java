@@ -67,9 +67,11 @@ public class ExperienceDetailPresenter extends BasePresenter<IExperienceDetailVi
         isLoading = true;
         currentPosition = -1;
         if (adapter != null){
-            mCommentLists.clear();
-//            adapter.unbind();
+            adapter.unbind();
             adapter=null;
+        }
+        if (mCommentLists != null){
+            mCommentLists.clear();
             mCommentLists=null;
         }
         EventBus.getDefault().unregister(this);

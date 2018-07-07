@@ -32,6 +32,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
     private int currentTouchItem = -1;
     private FindCommentListEntity.ItemComment itemComment;
     private String comment_type;
+    private Call<BaseEntity<FindCommentListEntity>> baseEntityCall;
 
     public FindCommentListPresenter(Context context, IFindCommentListView iView, String article_id) {
         super(context, iView);
@@ -49,10 +50,13 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         currentPage = 1;
         allPage = 1;
         isLoading = false;
-        mItemComments.clear();
+        if (baseEntityCall != null)baseEntityCall.cancel();
         if (adapter != null){
-            //adapter.unbind();
+            adapter.unbind();
             adapter = null;
+        }
+        if (mItemComments != null){
+            mItemComments.clear();
             mItemComments = null;
         }
     }
@@ -72,7 +76,7 @@ public class FindCommentListPresenter extends FindCommentPresenter<IFindCommentL
         map.put("page_size", String.valueOf(page_size));
         map.put("article_id", mArticle_id);
         sortAndMD5(map);
-        Call<BaseEntity<FindCommentListEntity>> baseEntityCall = getApiService().findcommentList(map);
+        baseEntityCall = getApiService().findcommentList(map);
         getNetData(0, failureCode, isShow, baseEntityCall,
                 new SimpleNetDataCallback<BaseEntity<FindCommentListEntity>>() {
             @Override
