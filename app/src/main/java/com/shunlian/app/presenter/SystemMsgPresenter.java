@@ -35,6 +35,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
     public final String page_size = "10";
     private List<SystemMsgEntity.MsgType> msgTypes = new ArrayList<>();
     private SysMsgAdapter adapter;
+    private Call<BaseEntity<SystemMsgEntity>> sysmessageCall;
 
     public SystemMsgPresenter(Context context, ISystemMsgView iView) {
         super(context, iView);
@@ -54,7 +55,15 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
      */
     @Override
     public void detachView() {
-
+        if (sysmessageCall != null)sysmessageCall.cancel();
+        if (msgTypes != null){
+            msgTypes.clear();
+            msgTypes = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
     }
 
     /**
@@ -74,8 +83,8 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         map.put("page_size", page_size);
         sortAndMD5(map);
 
-        Call<BaseEntity<SystemMsgEntity>> sysmessage = getApiService().sysmessage(map);
-        getNetData(empty, empty, isShow, sysmessage,
+        sysmessageCall = getApiService().sysmessage(map);
+        getNetData(empty, empty, isShow, sysmessageCall,
                 new SimpleNetDataCallback<BaseEntity<SystemMsgEntity>>() {
                     @Override
                     public void onSuccess(BaseEntity<SystemMsgEntity> entity) {
@@ -107,7 +116,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         if (adapter == null) {
             adapter = new SysMsgAdapter(context, msgTypes);
             iView.setAdapter(adapter);
-
+            adapter.setOnReloadListener(() -> onRefresh());
             adapter.setOnItemClickListener((v, position) -> {
                 SystemMsgEntity.MsgType msgType = msgTypes.get(position);
                 handlerType(msgType,position);
@@ -116,6 +125,11 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
             adapter.notifyDataSetChanged();
         }
         adapter.setPageLoading(currentPage, allPage);
+        if (!isEmpty(msgTypes)){
+            iView.showDataEmptyView(100);
+        }else {
+            iView.showDataEmptyView(0);
+        }
     }
 
     private void handlerType(SystemMsgEntity.MsgType msgType, int position) {
@@ -179,7 +193,7 @@ public class SystemMsgPresenter extends BasePresenter<ISystemMsgView> {
         if (!isLoading) {
             if (currentPage <= allPage) {
                 isLoading = true;
-                paging(false, 0);
+                paging(false, 100);
             }
         }
     }

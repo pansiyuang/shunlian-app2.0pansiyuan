@@ -127,7 +127,15 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
      */
     @Override
     public void showFailureView(int request_code) {
-
+        if (request_code == 0) {
+            gone(recy_view);
+            visible(nei_empty);
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (presenter != null) {
+                    presenter.initApi();
+                }
+            });
+        }
     }
 
     /**
@@ -158,6 +166,8 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
      */
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
+        gone(nei_empty);
+        visible(recy_view);
         recy_view.setAdapter(adapter);
     }
 
@@ -217,6 +227,15 @@ public class CouponListAct extends BaseActivity implements ICouponListView{
             case R.id.mtv_rule:
                 HelpSolutionAct.startAct(this,helpId);
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
         }
     }
 }
