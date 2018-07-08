@@ -162,7 +162,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
-        try {
+//        try {
             switch (itemViewType) {
                 case TYPE9:
                     if (holder instanceof NineHolder) {
@@ -507,6 +507,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                     mShareInfoParam.shareLink = data.share.share_url;
                                     shareStyle2Dialog();
                                 } else {
+
                                     cateGoryFrag.getShareInfo(data.url.type, data.url.item_id);
                                 }
                             }
@@ -635,6 +636,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                             SpannableStringBuilder spannableStringBuilder = Common.changeTextSize(getString(R.string.common_yuan) + goods.price, getString(R.string.common_yuan), 12);
                             tenHolder.mtv_price.setText(spannableStringBuilder);
                         }
+                        if (tenHolder.mllayout_tag!=null)
                         tenHolder.mllayout_tag.removeAllViews();
                         tenHolder.mllayout_root.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -673,9 +675,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                     }
                     break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
@@ -740,7 +742,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
     }
 
 
-    class NineHolder extends BaseRecyclerViewHolder {
+    class NineHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.kanner)
         MyKanner kanner;
 
@@ -749,31 +751,36 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class TenHolder extends BaseRecyclerViewHolder {
-        @BindView(R.id.miv_photo)
+    class TenHolder extends BaseRecyclerViewHolders {
+//        @BindView(R.id.miv_photo)
         MyImageView miv_photo;
 
-        @BindView(R.id.mllayout_root)
+//        @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
 
-        @BindView(R.id.mtv_title)
+//        @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
-        @BindView(R.id.mllayout_tag)
+//        @BindView(R.id.mllayout_tag)
         MyLinearLayout mllayout_tag;
 
-        @BindView(R.id.mtv_price)
+//        @BindView(R.id.mtv_price)
         MyTextView mtv_price;
 
         TenHolder(View itemView) {
             super(itemView);
+            mllayout_root= (MyLinearLayout) itemView.findViewById(R.id.mllayout_root);
+            miv_photo= (MyImageView) itemView.findViewById(R.id.miv_photo);
+            mtv_title= (MyTextView) itemView.findViewById(R.id.mtv_title);
+            mllayout_tag= (MyLinearLayout) itemView.findViewById(R.id.mllayout_tag);
+            mtv_price= (MyTextView) itemView.findViewById(R.id.mtv_price);
             int picWidth = Common.getScreenWidth((Activity) context) - TransformUtil.dip2px(context, 10);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth / 2, picWidth / 2);
             miv_photo.setLayoutParams(params);
         }
     }
 
-    class TwoHolder extends BaseRecyclerViewHolder {
+    class TwoHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.mllayout_nav1)
         MyLinearLayout mllayout_nav1;
 
@@ -823,7 +830,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class ThreeHolder extends BaseRecyclerViewHolder {
+    class ThreeHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_one)
         MyImageView miv_one;
         @BindView(R.id.miv_twol)
@@ -869,7 +876,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class FourHolder extends BaseRecyclerViewHolder {
+    class FourHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.mllayout_root)
         MyLinearLayout mllayout_root;
         @BindView(R.id.mllayout_one)
@@ -914,7 +921,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class FiveHolder extends BaseRecyclerViewHolder {
+    class FiveHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
         @BindView(R.id.miv_share)
@@ -939,7 +946,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class SixHolder extends BaseRecyclerViewHolder {
+    class SixHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.miv_photo)
         MyImageView miv_photo;
         @BindView(R.id.rv_goods)
@@ -957,7 +964,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class SevenHolder extends BaseRecyclerViewHolder {
+    class SevenHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.rv_goods)
         RecyclerView rv_goods;
         private FirstHorizonAdapter firstHorizonAdapter;
@@ -967,7 +974,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class EightHolder extends BaseRecyclerViewHolder {
+    class EightHolder extends BaseRecyclerViewHolders {
         @BindView(R.id.mtv_meiri)
         MyTextView mtv_meiri;
         @BindView(R.id.rv_categoryMenu)
@@ -979,7 +986,7 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
         }
     }
 
-    class DefaultHolder extends BaseRecyclerViewHolder {
+    class DefaultHolder extends BaseRecyclerViewHolders {
 
         DefaultHolder(View itemView) {
             super(itemView);

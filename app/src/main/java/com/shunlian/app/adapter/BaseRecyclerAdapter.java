@@ -55,7 +55,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     private static final int ITEM_LIST = 0;
     private static final int ITEM_FOOTER = 1;
-    public static List<Unbinder> unbinders = new ArrayList<>();
+    public  List<Unbinder> unbinders = new ArrayList<>();
     protected Context context;
     protected final List<T> lists;
     private final boolean isShowFooter;//是否显示脚布局
@@ -363,6 +363,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
         public BaseRecyclerViewHolder(View itemView) {
             super(itemView);
+//            ButterKnife.bind(this, itemView);
             Unbinder bind = ButterKnife.bind(this, itemView);
             unbinders.add(bind);
             itemView.setOnClickListener(this);
@@ -376,6 +377,23 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
 
+    public class BaseRecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public BaseRecyclerViewHolders(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+//            Unbinder bind = ButterKnife.bind(this, itemView);
+//            unbinders.add(bind);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.onItemClick(view,getAdapterPosition());
+            }
+        }
+    }
     /**
      * 显示view
      *

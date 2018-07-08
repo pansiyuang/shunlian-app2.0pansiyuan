@@ -9,15 +9,15 @@ android {
         abortOnError false
     }
     signingConfigs {
-//        ShunLianPower {
-//            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
-//            String alias = lists.get(0)
-//            String pwd = lists.get(1)
-//            storeFile file('C:/Augus/file/ShunLianPower.jks')
-//            storePassword pwd
-//            keyAlias alias
-//            keyPassword pwd
-//        }
+        ShunLianPower {
+            List<String> lists = file('C:/Augus/file/signState.txt').readLines()
+            String alias = lists.get(0)
+            String pwd = lists.get(1)
+            storeFile file('C:/Augus/file/ShunLianPower.jks')
+            storePassword pwd
+            keyAlias alias
+            keyPassword pwd
+        }
     }
     compileSdkVersion 25
     buildToolsVersion '27.0.1'
@@ -126,5 +126,4 @@ bugly {
     appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
     appPackage='com.shunlian.app'
     appVersion='2.0.2'
-    appChannel='ShunLianPower'
 }

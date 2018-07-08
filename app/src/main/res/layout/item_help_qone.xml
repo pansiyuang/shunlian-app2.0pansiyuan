@@ -2,7 +2,7 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="16dp">
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
     <View
         android:id="@+id/view_line"
         android:layout_width="1dp"
-        android:layout_height="53dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@color/value_EFEEEE" />

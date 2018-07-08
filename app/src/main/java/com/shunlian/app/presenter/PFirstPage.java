@@ -80,9 +80,10 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
                 babyPage++;
                 babyAllPage = Integer.parseInt(searchGoodsEntity.total_page);
                 if (isRest){
-                    if (cateGoryFrag.mDatasss != null && cateGoryFrag.mDatasss.size() > 0)
+                    if (cateGoryFrag.mDatasss != null && cateGoryFrag.mDatasss.size() > 0){
                         cateGoryFrag.mDatass.removeAll(cateGoryFrag.mDatasss);
-                    cateGoryFrag.mDatasss.clear();
+                        cateGoryFrag.mDatasss.clear();
+                    }
                     isRest=false;
                 }
                 iView.setGoods(searchGoodsEntity.goods_list, babyPage, babyAllPage);
