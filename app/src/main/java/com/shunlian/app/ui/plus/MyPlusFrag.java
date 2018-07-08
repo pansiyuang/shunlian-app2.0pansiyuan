@@ -182,7 +182,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     }
 
     public void getPlusData() {
-        if (mPresenter != null&& !MyOnClickListener.isFastRequest()) {
+        if (mPresenter != null && !MyOnClickListener.isFastRequest()) {
             mPresenter.getPlusData(tabOneMode, false);
             showTabTwoButton(2);
             if (invitationRecordFrag != null) {
@@ -429,7 +429,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             SharedPrefUtil.saveSharedPrfString("plus_role", String.valueOf(baseInfo.role));
             H5Act.startAct(baseActivity, Constant.PLUS_ADD, H5Act.MODE_SONIC);
         }
-        if (baseInfo.role >= 3) {  //经理及以上身份才显示数据和表格
+        if (baseInfo.role >= 2) {  //销售主管及以上身份才显示数据和表格
             rl_tab_one.setVisibility(View.VISIBLE);
         } else {
             rl_tab_one.setVisibility(View.GONE);

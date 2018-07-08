@@ -17,7 +17,6 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.presenter.PFirstPage;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.view.IFirstPage;
-import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 import com.shunlian.app.widget.nestedrefresh.NestedRefreshLoadMoreLayout;
 import com.shunlian.app.widget.nestedrefresh.NestedSlHeader;
 import com.shunlian.app.widget.nestedrefresh.interf.onRefreshListener;
@@ -46,6 +45,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
     private boolean isFirst = false, isShow = true;
     private View rootView;
 
+
     public static BaseFragment getInstance(String channel_id) {
         CateGoryFrag fragment = new CateGoryFrag();
 
@@ -66,6 +66,12 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         pFirstPage.getContentData(channel_id, isShow);
         isShow = true;
     }
+    public int getScollYDistance() {
+        int position = gridLayoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = gridLayoutManager.findViewByPosition(position);
+        int itemHeight = firstVisiableChildView.getHeight();
+        return (position) * itemHeight - firstVisiableChildView.getTop();
+    }
 
     @Override
     protected void initListener() {
@@ -78,9 +84,12 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
             }
         });
 
+
         rv_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (!FirstPageFrag.isExpand&&0>=getScollYDistance())
+                    FirstPageFrag.mAppbar.setExpanded(true);
                 if (gridLayoutManager != null) {
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
@@ -113,8 +122,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
     @Override
     public void showFailureView(int request_code) {
-        if (lay_refresh!=null)
-        lay_refresh.setRefreshing(false);
+        if (lay_refresh != null)
+            lay_refresh.setRefreshing(false);
     }
 
     @Override
@@ -151,8 +160,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         rv_view.setLayoutManager(gridLayoutManager);
         rv_view.setAdapter(firstPageAdapter);
 
-        if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)){
-            cate_id=mDatass.get(mDatass.size() - 1).cates.get(0).id;
+        if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)) {
+            cate_id = mDatass.get(mDatass.size() - 1).cates.get(0).id;
             pFirstPage.resetBaby(cate_id);
         }
 
@@ -192,13 +201,13 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
         }
     }
 
-    public void getShareInfo(String type, String id){
-        if (pFirstPage != null)pFirstPage.getShareInfo(type,id,channel_id);
+    public void getShareInfo(String type, String id) {
+        if (pFirstPage != null) pFirstPage.getShareInfo(type, id, channel_id);
     }
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if (firstPageAdapter != null){
+        if (firstPageAdapter != null) {
             firstPageAdapter.shareInfo(baseEntity);
         }
     }

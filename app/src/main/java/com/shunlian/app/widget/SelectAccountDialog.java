@@ -60,6 +60,7 @@ public class SelectAccountDialog extends Dialog  {
             commonEntities.add(addAccount("15058113375","a1234567890"));
             commonEntities.add(addAccount("17601357886","aini1314"));
             commonEntities.add(addAccount("15883829691","tl123456"));
+            commonEntities.add(addAccount("13097200676","aini1314"));
         }
         setCancelable(true);
         AccountAdapter accountAdapter=new AccountAdapter(fragment.getContext(),false,commonEntities);

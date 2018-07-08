@@ -23,12 +23,12 @@ import butterknife.BindView;
  */
 
 public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData.MMData> {
-    private boolean isNew=false;
+    private boolean isNew = false;
 
     public FirstHorizonAdapter(Context context, boolean isShowFooter,
-                               List<GetDataEntity.MData.MMData> lists,boolean isNew) {
+                               List<GetDataEntity.MData.MMData> lists, boolean isNew) {
         super(context, isShowFooter, lists);
-        this.isNew=isNew;
+        this.isNew = isNew;
     }
 
     @Override
@@ -40,20 +40,24 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
         ActivityMoreHolder mHolder = (ActivityMoreHolder) holder;
-        GetDataEntity.MData.MMData data = lists.get(position);
-        SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
-                getString(R.string.common_yuan), 11);
-        mHolder.mtv_price.setText(priceBuilder);
-        if (isNew){
-            mHolder.mtv_title.setText(data.title);
-            mHolder.mtv_title.setVisibility(View.VISIBLE);
-        }else {
-            mHolder.mtv_title.setVisibility(View.GONE);
+        try {
+            GetDataEntity.MData.MMData data = lists.get(position);
+            SpannableStringBuilder priceBuilder = Common.changeTextSize(getString(R.string.common_yuan) + data.price,
+                    getString(R.string.common_yuan), 11);
+            mHolder.mtv_price.setText(priceBuilder);
+            if (isNew) {
+                mHolder.mtv_title.setText(data.title);
+                mHolder.mtv_title.setVisibility(View.VISIBLE);
+            } else {
+                mHolder.mtv_title.setVisibility(View.GONE);
+            }
+            GlideUtils.getInstance().loadImageZheng(context, mHolder.miv_photo, data.thumb);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        GlideUtils.getInstance().loadImageZheng(context,mHolder.miv_photo,data.thumb);
     }
 
-    public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class ActivityMoreHolder extends BaseRecyclerViewHolders implements View.OnClickListener {
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 
@@ -70,8 +74,8 @@ public class FirstHorizonAdapter extends BaseRecyclerAdapter<GetDataEntity.MData
 
         @Override
         public void onClick(View v) {
-            if (listener != null){
-                listener.onItemClick(v,getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(v, getAdapterPosition());
             }
         }
     }

@@ -242,9 +242,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                     case R.id.ll_tab_main_page:
                         if (isFirst && !isEmpty(mainPageFrag.fragments) && mainPageFrag.fragments.get(position) != null) {
                             cateGoryFrag = (CateGoryFrag) mainPageFrag.fragments.get(position);
-                            if (cateGoryFrag.rv_view != null)
+                            if (cateGoryFrag.rv_view != null){
                                 cateGoryFrag.rv_view.scrollToPosition(0);
-                        }else {
+                                FirstPageFrag.mAppbar.setExpanded(true);
+                            }
+                        } else {
                             mainPageClick();
                         }
                         break;
@@ -310,11 +312,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             if (discoverFrag == null) {
                 discoverFrag = new DiscoverFrag();
                 Bundle bundle = new Bundle();
-                bundle.putString("flag",flag);
+                bundle.putString("flag", flag);
                 discoverFrag.setArguments(bundle);
                 fragmentMap.put(flags[2], discoverFrag);
             }
-        }else {
+        } else {
             discoverFrag.setArgument(flag);
         }
         switchContent(discoverFrag);

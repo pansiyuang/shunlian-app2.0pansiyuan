@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.shunlian.app.BuildConfig;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.GetDataEntity;
@@ -26,7 +25,6 @@ import com.shunlian.app.ui.zxing_code.ZXingDemoAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IFirstPage;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -53,6 +51,7 @@ import butterknife.OnClick;
 
 public class FirstPageFrag extends BaseFragment implements View.OnClickListener, IFirstPage, MessageCountManager.OnGetMessageListener {
     public static String firstId = "";
+    public static boolean isExpand=false;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
     @BindView(R.id.miv_photo)
@@ -69,8 +68,8 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     PagerSlidingTabStrip tabs;
     @BindView(R.id.pager)
     ViewPager pager;
-    @BindView(R.id.mAppbar)
-    AppBarLayout mAppbar;
+//    @BindView(R.id.mAppbar)
+    public static AppBarLayout mAppbar;
     @BindView(R.id.mllayout_title)
     MyLinearLayout mllayout_title;
     @BindView(R.id.nei_empty)
@@ -88,6 +87,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
+        mAppbar= (AppBarLayout) rootView.findViewById(R.id.mAppbar);
         return rootView;
     }
 
@@ -150,6 +150,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
+                    isExpand=false;
                     if (!Constant.IS_FIRST_SHARE)
                     ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
                             .statusBarColor(R.color.pink_color)
@@ -163,6 +164,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     mtv_scan.setTextColor(getColorResouce(R.color.white));
                     mtv_news.setTextColor(getColorResouce(R.color.white));
                 } else {
+                    isExpand=true;
                     ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
                             .statusBarColor(R.color.white)
                             .statusBarDarkFont(true, 0.2f)

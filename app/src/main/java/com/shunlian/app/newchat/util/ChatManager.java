@@ -9,6 +9,7 @@ import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.websocket.EasyWebsocketClient;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.Status;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.HttpDialog;
 
 /**
@@ -127,6 +128,7 @@ public class ChatManager {
         if (TextUtils.isEmpty(fromType) || TextUtils.isEmpty(toType) || chatMember == null) {
             return;
         }
+        LogUtil.httpLogW("switch2jumpChat");
         isPush = true;
         currentChatMember = chatMember;
         switch (fromType) {

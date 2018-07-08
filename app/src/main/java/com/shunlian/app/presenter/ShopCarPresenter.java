@@ -50,7 +50,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
         getProbablyLikeList();
     }
 
-    public void getApiData(){
+    public void getApiData() {
         Map<String, String> map = new HashMap<>();
         sortAndMD5(map);
         try {
@@ -76,6 +76,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
             e.printStackTrace();
         }
     }
+
     @Override
     protected void initApi() {
 
@@ -216,9 +217,7 @@ public class ShopCarPresenter extends BasePresenter<IShoppingCarView> {
                 @Override
                 public void onSuccess(BaseEntity<ShoppingCarEntity> entity) {
                     ShoppingCarEntity shoppingCarEntity = entity.data;
-                    if (shoppingCarEntity != null) {
-                        iView.OnEditEntity(shoppingCarEntity);
-                    }
+                    iView.OnEditEntity(shoppingCarEntity);
                     super.onSuccess(entity);
                 }
 

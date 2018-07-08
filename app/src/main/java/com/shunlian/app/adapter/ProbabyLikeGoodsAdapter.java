@@ -13,6 +13,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.bean.ProbabyLikeGoodsEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -29,6 +30,7 @@ import butterknife.BindView;
 public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGoodsEntity.Goods> {
 
     public static final int PARENT_LAYOUT = 100001;
+    public static final int CHILD_LAYOUT = 100002;
 
     public ProbabyLikeGoodsAdapter(Context context, List<ProbabyLikeGoodsEntity.Goods> lists) {
         super(context, false, lists);
@@ -39,7 +41,7 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
         if (lists.get(position).isParent) {
             return PARENT_LAYOUT;
         }
-        return super.getItemViewType(position);
+        return CHILD_LAYOUT;
     }
 
     @Override
@@ -68,6 +70,8 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
         switch (viewType) {
             case PARENT_LAYOUT:
                 return new ParentViewHolder(LayoutInflater.from(context).inflate(R.layout.item_probaby_like, parent, false));
+            case CHILD_LAYOUT:
+                return new ChildrenViewHolder(LayoutInflater.from(context).inflate(R.layout.item_store_baby, parent, false));
             default:
                 return super.onCreateViewHolder(parent, viewType);
         }
@@ -79,6 +83,9 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
             case PARENT_LAYOUT:
                 handleParent(holder, position);
                 break;
+            case CHILD_LAYOUT:
+                handlerChild(holder, position);
+                break;
             default:
                 super.onBindViewHolder(holder, position);
                 break;
@@ -87,11 +94,20 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        return new ChildrenViewHolder(LayoutInflater.from(context).inflate(R.layout.item_store_baby, parent, false));
+        return null;
     }
 
     @Override
     public void handleList(RecyclerView.ViewHolder holder, int position) {
+    }
+
+    public void handleParent(RecyclerView.ViewHolder holder, int position) {
+        ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
+        ProbabyLikeGoodsEntity.Goods goods = lists.get(position);
+        GlideUtils.getInstance().loadImage(context, parentViewHolder.miv_icon, goods.thumb);
+    }
+
+    public void handlerChild(RecyclerView.ViewHolder holder, int position) {
         try {
             ProbabyLikeGoodsEntity.Goods goods = lists.get(position);
             ChildrenViewHolder childrenViewHolder = (ChildrenViewHolder) holder;
@@ -113,12 +129,6 @@ public class ProbabyLikeGoodsAdapter extends BaseRecyclerAdapter<ProbabyLikeGood
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void handleParent(RecyclerView.ViewHolder holder, int position) {
-        ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-        ProbabyLikeGoodsEntity.Goods goods = lists.get(position);
-        GlideUtils.getInstance().loadImage(context, parentViewHolder.miv_icon, goods.thumb);
     }
 
     public class ParentViewHolder extends BaseRecyclerViewHolder {

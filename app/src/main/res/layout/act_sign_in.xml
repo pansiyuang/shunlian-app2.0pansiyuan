@@ -2,6 +2,7 @@
 <com.shunlian.app.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_ash"
     android:orientation="vertical">
 
@@ -29,8 +30,30 @@
                     android:id="@+id/miv_sign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+
+                <com.shunlian.app.widget.MyRelativeLayout
+                    android:id="@+id/mrlayout_qian"
+                    android:layout_width="154dp"
+                    android:layout_height="154dp"
                     android:layout_centerHorizontal="true"
-                    android:background="@mipmap/img_1" />
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+                    <!--建议使用centercorp-->
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view"
+                        android:layout_width="154dp"
+                        android:layout_height="154dp"
+                        app:lottie_cacheStrategy="none"
+                        android:scaleType="centerCrop" />
+                    <com.shunlian.app.widget.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        android:text="@string/personal_qiandao"
+                        android:textColor="@color/value_FC4735"/>
+                </com.shunlian.app.widget.MyRelativeLayout>
 
                 <com.shunlian.app.widget.MyTextView
                     android:id="@+id/mtv_scores"
