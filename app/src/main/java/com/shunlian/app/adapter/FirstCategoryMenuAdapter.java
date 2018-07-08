@@ -69,7 +69,7 @@ public class FirstCategoryMenuAdapter extends BaseRecyclerAdapter<GetDataEntity.
 
     }
 
-    public class ActivityMoreHolder extends BaseRecyclerViewHolder implements View.OnClickListener {
+    public class ActivityMoreHolder extends BaseRecyclerViewHolders implements View.OnClickListener {
         @BindView(R.id.mtv_title)
         MyTextView mtv_title;
 

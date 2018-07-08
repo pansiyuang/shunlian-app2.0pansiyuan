@@ -34,7 +34,8 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/new_text"
-                android:textSize="19sp" />
+                android:textSize="19sp"
+                android:layout_marginBottom="24dp"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_desc"
@@ -42,17 +43,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="23dp"
                 android:ellipsize="end"
                 android:maxLines="6"
                 android:textColor="@color/new_text"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_marginBottom="24dp"/>
 
             <View
                 android:id="@+id/view_remen"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_marginTop="24dp"
                 android:visibility="gone"
                 android:background="@color/white_ash" />
 

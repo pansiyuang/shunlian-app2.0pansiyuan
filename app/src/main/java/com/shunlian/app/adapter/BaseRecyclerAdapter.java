@@ -384,6 +384,23 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         }
     }
 
+    public class BaseRecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public BaseRecyclerViewHolders(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+//            Unbinder bind = ButterKnife.bind(this, itemView);
+//            unbinders.add(bind);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.onItemClick(view,getAdapterPosition());
+            }
+        }
+    }
     /**
      * 显示view
      *
