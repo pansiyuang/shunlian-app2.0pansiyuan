@@ -393,4 +393,26 @@ public class CollectionStoreFrag extends CollectionFrag implements ICollectionSt
             ((MyCollectionAct) baseActivity).recoveryManage(this);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mPresenter != null)
+            mPresenter.detachView();
+        if (stores != null){
+            stores.clear();
+            stores = null;
+        }
+        if (delLists != null){
+            delLists.clear();
+            delLists = null;
+        }
+        if (cateAdapter != null){
+            cateAdapter = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+    }
 }

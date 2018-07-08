@@ -58,6 +58,7 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
     //二级分类显示条目位置对应的k:V
     public Map<Integer,SortFragEntity.SubList> titleData = new HashMap<>();
     private final LayoutInflater mInflater;
+    private ViewGroup parent;
 
     public SortCategoryAdapter(Context context, List<SortFragEntity.ItemList> children,
                                SortFragEntity.Toplist toplist) {
@@ -186,6 +187,7 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
      */
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+        this.parent = parent;
         View view = LayoutInflater.from(context).inflate(R.layout.item_grid_sort, parent, false);
         return new SortCategoryHolder(view);
     }
@@ -206,14 +208,12 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
             if (index < lists.size()) {
                 String name = lists.get(index).name;
                 if (!TextUtils.isEmpty(name)) {
-                    mHolder.tv_name.setVisibility(View.VISIBLE);
-                    mHolder.iv_thumb.setVisibility(View.VISIBLE);
+                    visible(mHolder.tv_name,mHolder.iv_thumb);
                     GlideUtils.getInstance().loadOverrideImage(context,
                             mHolder.iv_thumb,lists.get(index).thumb,115,115);
                     mHolder.tv_name.setText(name);
                 } else {
-                    mHolder.tv_name.setVisibility(View.GONE);
-                    mHolder.iv_thumb.setVisibility(View.GONE);
+                    gone(mHolder.tv_name,mHolder.iv_thumb);
                 }
             }
         }
@@ -298,5 +298,17 @@ public class SortCategoryAdapter extends BaseRecyclerAdapter<SortFragEntity.Item
                 listener.onItemClick(v, getAdapterPosition());
             }
         }
+    }
+
+    public void detachView() {
+        if (counts != null){
+            counts.clear();
+            counts = null;
+        }
+        if (titleData != null){
+            titleData.clear();
+            titleData = null;
+        }
+        unbind();
     }
 }

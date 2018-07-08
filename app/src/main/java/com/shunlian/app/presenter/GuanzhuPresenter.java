@@ -34,6 +34,11 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
     private final String page_size = "10";
     private int currentPosition;
     private ShareInfoParam shareInfoParam;
+    private Call<BaseEntity<GuanzhuEntity>> baseEntityCall;
+    private Call<BaseEntity<EmptyEntity>> followStoreCall;
+    private Call<BaseEntity<EmptyEntity>> delFollowStoreCall;
+    private Call<BaseEntity<CommonEntity>> articleLikeCall;
+    private Call<BaseEntity<CommonEntity>> articleUnLikeCall;
 
     public GuanzhuPresenter(Context context, IGuanzhuView iView) {
         super(context, iView);
@@ -51,11 +56,18 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         currentPage = 1;
         allPage = 1;
         isLoading = false;
-        mListBeans.clear();
-        if (adapter != null){
-//            adapter.unbind();
-            adapter = null;
+        if (baseEntityCall != null)baseEntityCall.cancel();
+        if (followStoreCall != null)followStoreCall.cancel();
+        if (delFollowStoreCall != null)delFollowStoreCall.cancel();
+        if (articleLikeCall != null)articleLikeCall.cancel();
+        if (articleUnLikeCall != null)articleUnLikeCall.cancel();
+        if (mListBeans != null){
+            mListBeans.clear();
             mListBeans = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
         }
     }
 
@@ -72,8 +84,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         map.put("page",String.valueOf(currentPage));
         map.put("page_size",page_size);
         sortAndMD5(map);
-        Call<BaseEntity<GuanzhuEntity>> baseEntityCall = getApiService().foucsHome(map);
-        getNetData(0,0,isShow,baseEntityCall,
+        baseEntityCall = getApiService().foucsHome(map);
+        getNetData(0,failure,isShow, baseEntityCall,
                 new SimpleNetDataCallback<BaseEntity<GuanzhuEntity>>(){
             @Override
             public void onSuccess(BaseEntity<GuanzhuEntity> entity) {
@@ -101,6 +113,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
             public void onFailure() {
                 super.onFailure();
                 isLoading = false;
+                if (adapter != null)
+                    adapter.loadFailure();
             }
 
             @Override
@@ -115,6 +129,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         if (adapter == null) {
             adapter = new GuanzhuAdapter(context, mListBeans);
             iView.setAdapter(adapter);
+            adapter.setOnReloadListener(() -> onRefresh());
             adapter.setOnFollowShopListener((position)-> {
                 currentPosition = position;
                 //是否关注，1是，0否
@@ -170,7 +185,7 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         if (!isLoading){
             if (currentPage <= allPage){
                 isLoading = true;
-                request(false,0);
+                request(false,10);
             }
         }
     }
@@ -186,8 +201,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         map.put("storeId",storeId);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().addMark(requestBody);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        followStoreCall = getAddCookieApiService().addMark(requestBody);
+        getNetData(true, followStoreCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -228,8 +243,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         map.put("storeId",storeId);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getAddCookieApiService().delMark(requestBody);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
+        delFollowStoreCall = getAddCookieApiService().delMark(requestBody);
+        getNetData(true, delFollowStoreCall,new SimpleNetDataCallback<BaseEntity<EmptyEntity>>(){
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
@@ -249,8 +264,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         Map<String, String> map = new HashMap<>();
         map.put("id", articleId);
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        articleLikeCall = getApiService().userLike(map);
+        getNetData(false, articleLikeCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);
@@ -276,8 +291,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
         Map<String, String> map = new HashMap<>();
         map.put("id", articleId);
         sortAndMD5(map);
-        Call<BaseEntity<CommonEntity>> baseEntityCall = getApiService().userUnLike(map);
-        getNetData(false, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
+        articleUnLikeCall = getApiService().userUnLike(map);
+        getNetData(false, articleUnLikeCall, new SimpleNetDataCallback<BaseEntity<CommonEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

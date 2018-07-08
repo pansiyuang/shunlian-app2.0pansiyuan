@@ -30,7 +30,7 @@ android {
         versionCode 20
         versionName "2.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        signingConfig signingConfigs.ShunLianPower
+        signingConfig signingConfigs.ShunLianPower
 
         //bugly
         ndk {
@@ -51,10 +51,10 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
         }
         debug {
-//            signingConfig signingConfigs.ShunLianPower
+            signingConfig signingConfigs.ShunLianPower
             debuggable true
             minifyEnabled false
         }

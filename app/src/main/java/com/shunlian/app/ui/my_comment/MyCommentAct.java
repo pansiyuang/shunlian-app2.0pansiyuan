@@ -7,10 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.MyCommentAdapter;
-import com.shunlian.app.adapter.WaitAppendCommentAdapter;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
-import com.shunlian.app.bean.CommentListEntity;
 import com.shunlian.app.eventbus_bean.CommentEvent;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -30,9 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -40,7 +35,8 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/12/11.
  */
 
-public class MyCommentAct extends BaseActivity implements IMyCommentListView, MessageCountManager.OnGetMessageListener {
+public class MyCommentAct extends BaseActivity implements IMyCommentListView,
+        MessageCountManager.OnGetMessageListener {
 
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
@@ -72,18 +68,11 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
-    private MessageCountManager messageCountManager;
-
     private int pink_color;
     private int new_text;
+    private MessageCountManager messageCountManager;
     private MyCommentListPresenter presenter;
-    private int currentPageStatus = MyCommentListPresenter.ALL;
-    private List<CommentListEntity.Data> lists = new ArrayList<>();
-    private MyCommentAdapter allAdapter;
     private LinearLayoutManager manager;
-    private WaitAppendCommentAdapter waitAdapter;
-    private String nickname;
-    private String avatar;
 
     public static void startAct(Context context) {
         Intent intent = new Intent(context, MyCommentAct.class);
@@ -147,7 +136,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
     @Override
     protected void onResume() {
         super.onResume();
-        switch (currentPageStatus) {
+        if (presenter == null)presenter = new MyCommentListPresenter(this, this);
+        switch (presenter.currentPageStatus) {
             case MyCommentListPresenter.ALL:
                 allComment();
                 break;
@@ -171,7 +161,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
 
     @OnClick(R.id.mllayout_all)
     public void allComment() {
-        currentPageStatus = MyCommentListPresenter.ALL;
+        if (presenter == null)presenter = new MyCommentListPresenter(this, this);
+        presenter.currentPageStatus = MyCommentListPresenter.ALL;
         classState(1);
         presenter.myCommentListAll();
     }
@@ -179,7 +170,8 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
 
     @OnClick(R.id.mllayout_append)
     public void appendComment() {
-        currentPageStatus = MyCommentListPresenter.APPEND;
+        if (presenter == null)presenter = new MyCommentListPresenter(this, this);
+        presenter.currentPageStatus = MyCommentListPresenter.APPEND;
         classState(2);
         presenter.myCommentListAppend();
     }
@@ -206,15 +198,18 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
      */
     @Override
     public void showFailureView(int request_code) {
-        if (request_code == MyCommentListPresenter.ALL_COMMENT_CODE) {
-            if (allAdapter != null) {
-                allAdapter.loadFailure();
+        visible(nei_empty);
+        nei_empty.setNetExecption().setOnClickListener(v -> {
+            if (presenter == null)presenter = new MyCommentListPresenter(this, this);
+            switch (presenter.currentPageStatus) {
+                case MyCommentListPresenter.ALL:
+                    allComment();
+                    break;
+                case MyCommentListPresenter.APPEND:
+                    appendComment();
+                    break;
             }
-        } else {
-            if (waitAdapter != null) {
-                waitAdapter.loadFailure();
-            }
-        }
+        });
     }
 
     /**
@@ -224,37 +219,12 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
      */
     @Override
     public void showDataEmptyView(int request_code) {
-
-    }
-
-    /**
-     * 评价列表
-     *
-     * @param lists
-     */
-    @Override
-    public void commentList(List<CommentListEntity.Data> lists, int currentPage, int allPage) {
-        if (currentPage == 1) {
-            this.lists.clear();
-            if (currentPageStatus == MyCommentListPresenter.ALL) {
-                waitAdapter = null;
-            } else {
-                allAdapter = null;
-            }
-        }
-        this.lists.addAll(lists);
-        if (currentPageStatus == MyCommentListPresenter.ALL) {
-            allComment(currentPage, allPage);
-        } else {
-            appendComment(currentPage, allPage);
-        }
-
-        if (isEmpty(this.lists)) {
-            nei_empty.setVisibility(View.VISIBLE);
+        if (request_code == 0) {
+            visible(nei_empty);
             nei_empty.setImageResource(R.mipmap.img_empty_common)
                     .setText("您还没有需要追评的商品").setButtonText("");
         } else {
-            nei_empty.setVisibility(View.GONE);
+            gone(nei_empty);
         }
     }
 
@@ -266,52 +236,19 @@ public class MyCommentAct extends BaseActivity implements IMyCommentListView, Me
      */
     @Override
     public void setNicknameAndAvatar(String nickname, String avatar) {
-        this.nickname = nickname;
-        this.avatar = avatar;
         GlideUtils.getInstance().loadCircleHeadImage(this, civ_head, avatar);
         mtv_nickname.setText(nickname);
     }
 
-    private void appendComment(int currentPage, int allPage) {
-        if (waitAdapter == null) {
-            waitAdapter = new WaitAppendCommentAdapter(this, true, this.lists);
-            waitAdapter.setPageLoading(currentPage, allPage);
-            recy_view.setAdapter(waitAdapter);
-            waitAdapter.setOnReloadListener(() -> {
-                if (presenter != null) {
-                    presenter.onRefresh();
-                }
-            });
-
-            waitAdapter.setOnItemClickListener((view, position) -> {
-                CommentListEntity.Data data = lists.get(position);
-                CommentDetailAct.startAct(MyCommentAct.this, data, nickname, avatar);
-            });
-        } else {
-            waitAdapter.setPageLoading(currentPage, allPage);
-            waitAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void allComment(int currentPage, int allPage) {
-        if (allAdapter == null) {
-            allAdapter = new MyCommentAdapter(this, true, this.lists);
-            allAdapter.setPageLoading(currentPage, allPage);
-            recy_view.setAdapter(allAdapter);
-            allAdapter.setOnReloadListener(() -> {
-                if (presenter != null) {
-                    presenter.onRefresh();
-                }
-            });
-
-            allAdapter.setOnItemClickListener((view, position) -> {
-                CommentListEntity.Data data = lists.get(position);
-                CommentDetailAct.startAct(MyCommentAct.this, data, nickname, avatar);
-            });
-        } else {
-            allAdapter.setPageLoading(currentPage, allPage);
-            allAdapter.notifyDataSetChanged();
-        }
+    /**
+     * 设置adapter
+     *
+     * @param adapter
+     */
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        gone(nei_empty);
+        recy_view.setAdapter(adapter);
     }
 
 

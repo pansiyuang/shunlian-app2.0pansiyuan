@@ -2,13 +2,10 @@ package com.shunlian.app.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.CollectionStoresEntity;
-import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.EmptyEntity;
-import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.LogUtil;
@@ -17,7 +14,6 @@ import com.shunlian.app.view.ICollectionStoresView;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -29,6 +25,8 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
     private String cate_id = "0";
     public static final int DISPLAY_NET_FAIL = 100;//显示网络请求失败
     public static final int NOT_DISPLAY_NET_FAIL = 200;//显示网络请求失败
+    private Call<BaseEntity<CollectionStoresEntity>> baseEntityCall;
+    private Call<BaseEntity<EmptyEntity>> storesFavRemoveCall;
 
     public CollectionStoresPresenter(Context context, ICollectionStoresView iView) {
         super(context, iView);
@@ -48,7 +46,8 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
      */
     @Override
     public void detachView() {
-
+        if (baseEntityCall != null)baseEntityCall.cancel();
+        if (storesFavRemoveCall != null)storesFavRemoveCall.cancel();
     }
 
     /**
@@ -78,7 +77,7 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
         map.put("page_size", String.valueOf(page_size));
         sortAndMD5(map);
 
-        Call<BaseEntity<CollectionStoresEntity>> baseEntityCall = getAddCookieApiService()
+        baseEntityCall = getAddCookieApiService()
                 .favoriteShop(getRequestBody(map));
 
         getNetData(0,netFail,isShowLoading, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CollectionStoresEntity>>() {
@@ -132,8 +131,8 @@ public class CollectionStoresPresenter extends BasePresenter<ICollectionStoresVi
         map.put("ids",ids);
         LogUtil.augusLogW("id--"+ids);
         sortAndMD5(map);
-        Call<BaseEntity<EmptyEntity>> baseEntityCall = getApiService().removeFavoShop(map);
-        getNetData(baseEntityCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
+        storesFavRemoveCall = getApiService().removeFavoShop(map);
+        getNetData(storesFavRemoveCall, new SimpleNetDataCallback<BaseEntity<EmptyEntity>>() {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);

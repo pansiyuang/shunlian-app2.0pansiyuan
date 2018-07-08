@@ -10,7 +10,6 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.ui.confirm_order.SearchOrderActivity;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
@@ -79,7 +78,7 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
 
     private int pink_color;
     private int new_text;
-    private List<BaseFragment> fragments;
+    private List<AllFrag> fragments;
     private int pageItem;
     private MessageCountManager messageCountManager;
 
@@ -256,6 +255,16 @@ public class MyOrderAct extends BaseActivity implements MessageCountManager.OnGe
         EventBus.getDefault().unregister(this);
         pageItem = 0;
         super.onDestroy();
+        if (!isEmpty(fragments)){
+            for (AllFrag allFrag : fragments){
+                if (allFrag != null){
+                    allFrag.detachView();
+                    allFrag = null;
+                }
+            }
+            fragments.clear();
+            fragments = null;
+        }
     }
 
     @Override

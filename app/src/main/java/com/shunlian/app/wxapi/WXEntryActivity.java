@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.mylibrary.OSUtils;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -95,10 +97,10 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             initGet();
         } else if (wxSdkVersion == 0) {
             Common.staticToast("请先安装微信");
-            finish();
+            mYFinish();
         } else {
             Common.staticToast("当前微信版本过低，请更新后再试");
-            finish();
+            mYFinish();
         }
     }
 
@@ -214,7 +216,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         req.message = msg;
         req.scene = shareType;
         api.sendReq(req);
-        finish();
+        mYFinish();
     }
 
     /**
@@ -241,7 +243,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         req.message = msg;
         req.scene = type;
         api.sendReq(req);
-        finish();
+        mYFinish();
     }
 
     @Override
@@ -257,7 +259,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
         req.scope = "snsapi_userinfo";
         req.state = deviceId;
         api.sendReq(req);
-        finish();
+        mYFinish();
     }
 
     @Override
@@ -282,7 +284,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     if (!isEmpty(Constant.SHARE_TYPE)){
                         wxEntryPresenter.notifyShare(Constant.SHARE_TYPE,Constant.SHARE_ID);
                     }else {
-                        finish();
+                        mYFinish();
                     }
                     Common.staticToast("分享成功");
                 }
@@ -300,7 +302,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
         if (baseResp.errCode != BaseResp.ErrCode.ERR_OK) {
             Common.staticToast(getString(result));
-            finish();
+            mYFinish();
         }
     }
 
@@ -329,8 +331,8 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
             String unique_sign = wxLoginEntity.unique_sign;
             String status = wxLoginEntity.status;
             if ("2".equals(status)) {//绑定手机号不需要推荐人
-                finish();
                 RegisterAct.startAct(this,RegisterAct.UNBIND_SUPERIOR_USER,unique_sign);
+                mYFinish();
             } else if ("1".equals(status)) {
                 Common.staticToast(entity.message);
                 SharedPrefUtil.saveSharedPrfString("token", wxLoginEntity.token);
@@ -359,20 +361,24 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                 if (!"1".equals(wxLoginEntity.is_tag)){
                     SexSelectAct.startAct(this);
                 }
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+                    finishAndRemoveTask();
+                }else {
+                    finish();
+                }
             } else if ("0".equals(status) || "3".equals(status)){//绑定手机号 需要推荐人
-                finish();
                 RegisterAct.startAct(this,RegisterAct.UNBIND_NEW_USER,unique_sign);
+                mYFinish();
             }
         } else {
-            finish();
+            mYFinish();
         }
-        finish();
+        mYFinish();
     }
 
     @Override
     public void notifyCallback(CommonEntity commonEntity) {
-        finish();
+        mYFinish();
     }
 
     private class MyHandler extends Handler {
@@ -384,15 +390,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
                     break;
                 case 2:
                     Common.staticToast("保存图片失败,请重试");
-                    finish();
+                    mYFinish();
                     break;
                 case 3:
                     Common.staticToast("分享失败,请重试");
-                    finish();
+                    mYFinish();
                     break;
                 case 4:
                     Common.staticToast("手机内存不足");
-                    finish();
+                    mYFinish();
                     break;
             }
             super.handleMessage(msg);
@@ -403,6 +409,15 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void mYFinish(){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && OSUtils.isMIUI()){
+            finishAndRemoveTask();
+        }else {
+            finish();
+        }*/
+        finish();
     }
 
     protected boolean isEmpty(CharSequence sequence){

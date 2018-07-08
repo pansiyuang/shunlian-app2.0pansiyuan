@@ -29,6 +29,9 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
     private String is_cut = "0";
     public static final int DISPLAY_NET_FAIL = 100;//显示网络请求失败
     public static final int NOT_DISPLAY_NET_FAIL = 200;//显示网络请求失败
+    private Call<BaseEntity<CollectionGoodsEntity>> collectionGoodsListCall;
+    private Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> goodsSkuCall;
+    private Call<BaseEntity<CommonEntity>> goodsfavoriteCall;
 
     public CollectionGoodsPresenter(Context context, ICollectionGoodsView iView) {
         super(context, iView);
@@ -48,7 +51,9 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
      */
     @Override
     public void detachView() {
-
+        if (collectionGoodsListCall != null)collectionGoodsListCall.cancel();
+        if (goodsfavoriteCall != null)goodsfavoriteCall.cancel();
+        if (goodsSkuCall != null)goodsSkuCall.cancel();
     }
 
     /**
@@ -82,10 +87,10 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
         map.put("is_cut", is_cut);
         sortAndMD5(map);
 
-        Call<BaseEntity<CollectionGoodsEntity>> baseEntityCall = getAddCookieApiService()
+        collectionGoodsListCall = getAddCookieApiService()
                 .favoriteGoods(getRequestBody(map));
 
-        getNetData(0,netFail,isShowLoading, baseEntityCall, new SimpleNetDataCallback<BaseEntity<CollectionGoodsEntity>>() {
+        getNetData(0,netFail,isShowLoading, collectionGoodsListCall, new SimpleNetDataCallback<BaseEntity<CollectionGoodsEntity>>() {
             @Override
             public void onSuccess(BaseEntity<CollectionGoodsEntity> entity) {
                 super.onSuccess(entity);
@@ -123,9 +128,9 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
         map.put("goods_id", goods_id);
         sortAndMD5(map);
 
-        Call<BaseEntity<GoodsDeatilEntity.GoodsInfo>> goodsSku = getAddCookieApiService()
+        goodsSkuCall = getAddCookieApiService()
                 .getGoodsSku(getRequestBody(map));
-        getNetData(true, goodsSku, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.GoodsInfo>>() {
+        getNetData(true, goodsSkuCall, new SimpleNetDataCallback<BaseEntity<GoodsDeatilEntity.GoodsInfo>>() {
             @Override
             public void onSuccess(BaseEntity<GoodsDeatilEntity.GoodsInfo> entity) {
                 super.onSuccess(entity);
@@ -163,8 +168,8 @@ public class CollectionGoodsPresenter extends BasePresenter<ICollectionGoodsView
         map.put("ids",ids);
         sortAndMD5(map);
         RequestBody requestBody = getRequestBody(map);
-        Call<BaseEntity<CommonEntity>> goodsfavorite = getAddCookieApiService().goodsfavoriteRemove(requestBody);
-        getNetData(goodsfavorite,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+        goodsfavoriteCall = getAddCookieApiService().goodsfavoriteRemove(requestBody);
+        getNetData(goodsfavoriteCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommonEntity> entity) {
                 super.onSuccess(entity);

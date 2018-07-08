@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -119,7 +118,7 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
 
     @OnClick(R.id.rl_more)
     public void more() {
-        quick_actions.setVisibility(View.VISIBLE);
+        visible(quick_actions);
         quick_actions.category();
     }
 
@@ -237,6 +236,15 @@ public class SortAct extends BaseActivity implements ISortFragView, MessageCount
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        if (presenter != null)presenter.detachView();
+        if (itemLists != null){
+            itemLists.clear();
+            itemLists = null;
+        }
+        if (adapter != null){
+            adapter.detachView();
+            adapter = null;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -55,7 +55,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     private static final int ITEM_LIST = 0;
     private static final int ITEM_FOOTER = 1;
-    public  List<Unbinder> unbinders = new ArrayList<>();
+    public List<Unbinder> unbinders = new ArrayList<>();
     protected Context context;
     protected final List<T> lists;
     private final boolean isShowFooter;//是否显示脚布局
@@ -258,13 +258,14 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     }
 
     public void unbind() {
-        if (unbinders != null && unbinders.size() > 0) {
+        if (!isEmpty(unbinders)) {
             for (Unbinder bind : unbinders) {
                 if (bind != null) {
                     bind.unbind();
                 }
             }
             unbinders.clear();
+            unbinders = null;
         }
     }
 
@@ -321,27 +322,21 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public final MyTextView layout_no_more;
         public final MyTextView mtv_loading;
         public final ProgressView spinKitView;
-//        public final Circle circle;
 
         public BaseFooterHolder(View itemView) {
             super(itemView);
             spinKitView = (ProgressView) itemView.findViewById(R.id.progressBar);
-//            circle = new Circle();
-//            spinKitView.setIndeterminateDrawable(circle);
             layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
             layout_load_error = (MyTextView) itemView.findViewById(R.id.layout_load_error);
             layout_load_error.setVisibility(View.GONE);
             layout_no_more = (MyTextView) itemView.findViewById(R.id.layout_no_more);
             mtv_loading = (MyTextView) itemView.findViewById(R.id.mtv_loading);
 
-            layout_load_error.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (reloadListener != null) {
-                        reloadListener.onReload();
-                        isLoadFailure = false;
-                        againLoading();
-                    }
+            layout_load_error.setOnClickListener(v -> {
+                if (reloadListener != null) {
+                    reloadListener.onReload();
+                    isLoadFailure = false;
+                    againLoading();
                 }
             });
         }
@@ -349,11 +344,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         public void setNormalVisibility(int visibility) {
             if (visibility == View.GONE) {
                 layout_normal.setVisibility(View.GONE);
-//                spinKitView.unscheduleDrawable(circle);
                 spinKitView.releaseAnimation();
             } else if (visibility == View.VISIBLE) {
                 layout_normal.setVisibility(View.VISIBLE);
-//                spinKitView.onWindowFocusChanged(true);
+                spinKitView.onWindowFocusChanged(true);
                 spinKitView.startAnimation();
             }
         }
@@ -361,12 +355,25 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        private Unbinder baseBind;
+
         public BaseRecyclerViewHolder(View itemView) {
             super(itemView);
-//            ButterKnife.bind(this, itemView);
-            Unbinder bind = ButterKnife.bind(this, itemView);
-            unbinders.add(bind);
+            baseBind = ButterKnife.bind(this, itemView);
+            unbinders.add(baseBind);
             itemView.setOnClickListener(this);
+        }
+
+        /**
+         * 当控件被回收，调用该方法重新绑定控件
+         */
+        public void againBind(){
+            if (unbinders != null)
+                unbinders.add(baseBind = ButterKnife.bind(this,itemView));
+        }
+
+        public Unbinder getBaseBind() {
+            return baseBind;
         }
 
         @Override

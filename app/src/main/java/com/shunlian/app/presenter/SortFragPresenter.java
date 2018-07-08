@@ -18,6 +18,8 @@ import retrofit2.Call;
 
 public class SortFragPresenter extends BasePresenter<ISortFragView> {
 
+    private Call<BaseEntity<SortFragEntity>> baseEntityCall;
+
     public SortFragPresenter(Context context, ISortFragView iView) {
         super(context, iView);
         initApi();
@@ -36,7 +38,7 @@ public class SortFragPresenter extends BasePresenter<ISortFragView> {
      */
     @Override
     public void detachView() {
-
+        if (baseEntityCall != null)baseEntityCall.cancel();
     }
 
     /**
@@ -46,8 +48,8 @@ public class SortFragPresenter extends BasePresenter<ISortFragView> {
     protected void initApi() {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<SortFragEntity>> baseEntityCall = getApiService().categoryAll(map);
-        getNetData(true,baseEntityCall,new SimpleNetDataCallback<BaseEntity<SortFragEntity>>(){
+        baseEntityCall = getApiService().categoryAll(map);
+        getNetData(true, baseEntityCall,new SimpleNetDataCallback<BaseEntity<SortFragEntity>>(){
             @Override
             public void onSuccess(BaseEntity<SortFragEntity> entity) {
                 super.onSuccess(entity);

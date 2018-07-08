@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shunlian.app.ui.BaseFragment;
+import com.shunlian.app.ui.order.AllFrag;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import java.util.List;
 public class MyOrderAdapter extends FragmentPagerAdapter {
 
 
-    private List<BaseFragment> fragments;
+    private List<AllFrag> fragments;
 
-    public MyOrderAdapter(FragmentManager fm, List<BaseFragment> fragments) {
+    public MyOrderAdapter(FragmentManager fm, List<AllFrag> fragments) {
         super(fm);
         this.fragments = fragments;
     }

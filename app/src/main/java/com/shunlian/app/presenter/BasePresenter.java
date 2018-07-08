@@ -48,7 +48,6 @@ import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.view.IView;
 import com.shunlian.app.widget.HttpDialog;
@@ -323,7 +322,7 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
                 super.onSuccess(entity);
                 RefreshTokenEntity data = entity.data;
                 if (data != null) {
-                    LogUtil.zhLogW("刷新token");
+                    //LogUtil.zhLogW("刷新token");
                     SharedPrefUtil.saveSharedPrfString("token", data.token);
                     SharedPrefUtil.saveSharedPrfString("plus_role", data.plus_role);
                     SharedPrefUtil.saveSharedPrfString("refresh_token", data.refresh_token);
