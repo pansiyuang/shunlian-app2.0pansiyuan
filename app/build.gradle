@@ -28,7 +28,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 20
-        versionName "2.0.3"
+        versionName "2.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.ShunLianPower
 

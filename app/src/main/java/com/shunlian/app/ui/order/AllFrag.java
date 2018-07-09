@@ -32,9 +32,12 @@ import butterknife.ButterKnife;
 
 public class AllFrag extends LazyFragment implements IOrderListView {
 
+    /**
+     * 是否刷新条目
+     **/
+    public static boolean isRefreshItem;
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
-
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     private OrderListAdapter adapter;
@@ -43,8 +46,6 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     private OrderListPresenter mPresenter;
     private int id;//页面id
     private int refreshPosition;//刷新位置
-    /**是否刷新条目**/
-    public static boolean isRefreshItem;
     private MyOrderEntity.Orders currentOrder;
 
     public static AllFrag getInstance(int id) {
@@ -106,7 +107,7 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     @Override
     public void onResume() {
         super.onResume();
-        if (isRefreshItem){
+        if (isRefreshItem) {
             if (!isEmpty(ordersLists)) {
                 String id = ordersLists.get(refreshPosition).id;
                 refreshOrder(id);
@@ -116,11 +117,11 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     }
 
     public void fetchNewData() {
-        if (adapter != null){
+        if (adapter != null) {
             adapter.unbind();
             adapter = null;
         }
-        recy_view.postDelayed(()->recy_view.scrollToPosition(0),100);
+        recy_view.postDelayed(() -> recy_view.scrollToPosition(0), 100);
         if (ordersLists != null) {
             ordersLists.clear();
         }
@@ -154,7 +155,7 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         }
     }
 
-    public void getUserId(int position){
+    public void getUserId(int position) {
         if (ordersLists.get(position) != null) {
             currentOrder = ordersLists.get(position);
             mPresenter.getUserId(currentOrder.store_id);
@@ -174,9 +175,10 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             ordersLists.addAll(orders);
         }
         if (adapter == null) {
-            adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
+            adapter = new OrderListAdapter(baseActivity, true, ordersLists, this);
             if (recy_view == null)
-            recy_view = ButterKnife.findById(getView(),R.id.recy_view);
+                if (getView() != null)
+                    recy_view = ButterKnife.findById(getView(), R.id.recy_view);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
             adapter.setOnReloadListener(() -> {
@@ -221,9 +223,9 @@ public class AllFrag extends LazyFragment implements IOrderListView {
     public void notifRefreshList(int status) {
         String id = ordersLists.get(refreshPosition).id;
         refreshOrder(id);
-        if (status == OrderListPresenter.CONFIRM_RECEIPT){
+        if (status == OrderListPresenter.CONFIRM_RECEIPT) {
             String order_sn = ordersLists.get(refreshPosition).order_sn;
-            SuccessfulTradeAct.startAct(baseActivity,order_sn,id);
+            SuccessfulTradeAct.startAct(baseActivity, order_sn, id);
         }
     }
 
@@ -234,9 +236,9 @@ public class AllFrag extends LazyFragment implements IOrderListView {
      */
     @Override
     public void refreshOrder(MyOrderEntity.Orders orders) {
-        if (id == 0){//全部，更新条目
+        if (id == 0) {//全部，更新条目
             refreshItem(orders);
-        }else {//非全部，status状态一样就更新，不一样就删除
+        } else {//非全部，status状态一样就更新，不一样就删除
             String old_status = ordersLists.get(refreshPosition).status;
             String new_status = orders.status;
             if (old_status.equals(new_status)) {//更新
@@ -277,8 +279,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
 
     private void refreshItem(MyOrderEntity.Orders orders) {
         ordersLists.remove(refreshPosition);
-        ordersLists.add(refreshPosition,orders);
-        if (adapter != null){
+        ordersLists.add(refreshPosition, orders);
+        if (adapter != null) {
             adapter.notifyItemChanged(refreshPosition);
         }
     }
@@ -297,10 +299,10 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
             recy_view.setVisibility(View.GONE);
             nei_empty.setVisibility(View.VISIBLE);
-            nei_empty.setNetExecption().setOnClickListener(v ->  {
-                    if (mPresenter != null) {
-                        requestData(id);
-                    }
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (mPresenter != null) {
+                    requestData(id);
+                }
             });
         }
 
@@ -327,60 +329,65 @@ public class AllFrag extends LazyFragment implements IOrderListView {
 
     /**
      * 取消订单
+     *
      * @param order_id
      */
-    public void cancleOrder(String order_id,int reason) {
-        if (mPresenter != null){
-            mPresenter.cancleOrder(order_id,reason);
+    public void cancleOrder(String order_id, int reason) {
+        if (mPresenter != null) {
+            mPresenter.cancleOrder(order_id, reason);
         }
     }
 
     /**
      * 提醒发货
+     *
      * @param order_id
      */
     public void remindseller(String order_id) {
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.remindseller(order_id);
         }
     }
 
     /**
      * 延长收货
+     *
      * @param order_id
      */
     public void postpone(String order_id) {
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.postpone(order_id);
         }
     }
 
     /**
      * 刷新指定订单
+     *
      * @param order_id
      */
-    public void refreshOrder(String order_id){
-        if (mPresenter != null){
+    public void refreshOrder(String order_id) {
+        if (mPresenter != null) {
             mPresenter.refreshOrder(order_id);
         }
     }
 
     /**
      * 确认收货
+     *
      * @param order_id
      */
-    public void confirmreceipt(String order_id){
-        if (mPresenter != null){
+    public void confirmreceipt(String order_id) {
+        if (mPresenter != null) {
             mPresenter.confirmreceipt(order_id);
         }
     }
 
     public void detachView() {
-        if (ordersLists != null){
+        if (ordersLists != null) {
             ordersLists.clear();
             ordersLists = null;
         }
-        if (adapter != null){
+        if (adapter != null) {
             adapter.unbind();
             adapter = null;
         }

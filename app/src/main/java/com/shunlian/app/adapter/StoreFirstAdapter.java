@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +8,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreIndexEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
 import com.shunlian.app.widget.MyTextView;
@@ -396,6 +401,10 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
             mtv_sixr = (MyTextView) itemView.findViewById(R.id.mtv_sixr);
             miv_sixl = (MyImageView) itemView.findViewById(R.id.miv_sixl);
             miv_sixr = (MyImageView) itemView.findViewById(R.id.miv_sixr);
+            int picWidth = Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,5);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth /2, picWidth /2);
+            miv_sixl.setLayoutParams(params);
+            miv_sixr.setLayoutParams(params);
             view_lineOnel = itemView.findViewById(R.id.view_lineOnel);
             view_lineTwol = itemView.findViewById(R.id.view_lineTwol);
             view_lineOner = itemView.findViewById(R.id.view_lineOner);

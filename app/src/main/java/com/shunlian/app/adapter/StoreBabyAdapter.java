@@ -1,5 +1,6 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,10 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.StoreGoodsListEntity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -57,6 +62,9 @@ public class StoreBabyAdapter extends BaseRecyclerAdapter<StoreGoodsListEntity.M
         OneHolder(View itemView) {
             super(itemView);
             miv_onel = (MyImageView) itemView.findViewById(R.id.miv_onel);
+            int picWidth = Common.getScreenWidth((Activity) context)- TransformUtil.dip2px(context,5);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picWidth /2, picWidth /2);
+            miv_onel.setLayoutParams(params);
             mtv_descl = (MyTextView) itemView.findViewById(R.id.mtv_descl);
             mtv_pricel = (MyTextView) itemView.findViewById(R.id.mtv_pricel);
             mtv_pricer = (MyTextView) itemView.findViewById(R.id.mtv_pricer);
