@@ -47,8 +47,8 @@
             android:layout_width="30dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:paddingRight="15dp"
             android:layout_toLeftOf="@+id/mtv_manage"
+            android:paddingRight="15dp"
             android:src="@mipmap/icon_common_search_gray" />
 
     </com.shunlian.app.widget.MyRelativeLayout>
@@ -57,8 +57,8 @@
     <com.shunlian.app.widget.MyLinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:gravity="bottom"
         android:background="@color/white"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <!--商品-->
@@ -171,6 +171,10 @@
 
     </com.shunlian.app.widget.MyLinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray_three" />
 
     <FrameLayout
         android:id="@+id/flayout_content"
@@ -213,8 +217,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/img_shoppingcar_selected_n"
-            android:paddingLeft="12dp"/>
+            android:paddingLeft="12dp"
+            android:src="@mipmap/img_shoppingcar_selected_n" />
 
         <com.shunlian.app.widget.MyTextView
             android:id="@+id/mtv_all_select"
@@ -222,9 +226,9 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/miv_all_select"
+            android:gravity="center"
             android:paddingLeft="10dp"
             android:text="@string/all_select"
-            android:gravity="center"
             android:textColor="@color/new_text"
             android:textSize="15sp" />
     </com.shunlian.app.widget.MyRelativeLayout>

@@ -6,6 +6,7 @@ import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.InvitationEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.view.IInvitationRecordeView;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import retrofit2.Call;
 
 public class InvitationRecordPresenter extends BasePresenter<IInvitationRecordeView> {
     public static final int PAGE_SIZE = 20;
-    public int currentPage=1;
+    public int currentPage = 1;
 
     public InvitationRecordPresenter(Context context, IInvitationRecordeView iView) {
         super(context, iView);
@@ -86,7 +87,8 @@ public class InvitationRecordPresenter extends BasePresenter<IInvitationRecordeV
         super.onRefresh();
         if (!isLoading) {
             isLoading = true;
-            if (currentPage < allPage) {
+            LogUtil.httpLogW("currentPage:" + currentPage + " allPage:" + allPage);
+            if (currentPage <= allPage) {
                 getInviteHistory(false);
             }
         }

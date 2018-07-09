@@ -108,7 +108,10 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void buildeWebsocketClient() {
         try {
             LogUtil.httpLogW("初始化IM地址:" + InterentTools.HTTPADDR_IM);
-            mClient = null;
+            if (mClient != null) {
+                mClient.removeListener();
+                mClient = null;
+            }
             mClient = new Client(new URI(InterentTools.HTTPADDR_IM), new Draft_17());//ws://123.207.107.21:8086.
             mClient.setOnClientConnetListener(this);
             mClient.connect();
@@ -190,6 +193,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             cancelReconnect();
                         } else {
                             if (mClient != null) {
+                                mClient.removeListener();
                                 mClient.close();
                             }
                         }
@@ -308,6 +312,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void onTimeOut() {
         LogUtil.httpLogW("Websocket 连接超时");
         if (mClient != null) {
+            mClient.removeListener();
             mClient.close();
         }
     }
@@ -316,6 +321,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
     public void onError(Exception ex) {
         LogUtil.httpLogW("Websocket onError():" + ex.getMessage());
         if (mClient != null) {
+            mClient.removeListener();
             mClient.close();
         }
     }
@@ -704,6 +710,11 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
         stopPin();
         if (timer != null) {
             timer.cancel();
+        }
+
+        if (mClient != null) {
+            mClient.removeListener();
+            mClient = null;
         }
         cancelReconnect();
     }
