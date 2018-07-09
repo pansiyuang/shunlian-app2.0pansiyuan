@@ -259,8 +259,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             mAdapter.setCurrentStatus(mWebsocketClient.getMemberStatus());
             mAdapter.setChatRole(Integer.valueOf(chatRoleType));
         }
-        mWebsocketClient.addOnMessageReceiveListener(this);
-
         //获取历史消息
         if (NetworkUtils.isNetworkOpen(this)) {
             getChatHistory(isFirst);
@@ -318,8 +316,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected void onResume() {
-        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
-            mWebsocketClient.setChating(true);
+        if (mWebsocketClient != null) {
+            if (mWebsocketClient.getStatus() == Status.CONNECTED) {
+                mWebsocketClient.setChating(true);
+            }
+            mWebsocketClient.addOnMessageReceiveListener(this);
         }
         super.onResume();
     }
@@ -1000,6 +1001,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void receiveMessage(String message) {
+        LogUtil.httpLogW("receiveMessage111");
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
             MsgInfo msgInfo = messageEntity.msg_info;
@@ -1019,7 +1021,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                     } else {
                         //tag_id不为空且deviceId相同 是当前手机发送的消息 不同则是其他端发送的消息
                         if (!isEmpty(splitDeviceId(baseMessage.tag_id)) && currentDeviceId.equals(splitDeviceId(baseMessage.tag_id))) {
-                            LogUtil.httpLogW("刷新消息状态");
                             mAdapter.itemSendComplete(baseMessage.tag_id, MessageStatus.SendSucc);
                             baseMessage.setStatus(MessageStatus.SendSucc);
                             msgInfo.message = mAdapter.msg2Str(baseMessage);

@@ -88,13 +88,19 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
             mUser = mClient.getUser();
             mPresenter.getReception(mUser.user_id);
             mPresenter.getUserList(true, mUser.user_id);
-
-            mClient.addOnMessageReceiveListener(this);
         }
 
         manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
 
+    }
+
+    @Override
+    protected void onResume() {
+        if (mClient != null) {
+            mClient.addOnMessageReceiveListener(this);
+        }
+        super.onResume();
     }
 
     @Override

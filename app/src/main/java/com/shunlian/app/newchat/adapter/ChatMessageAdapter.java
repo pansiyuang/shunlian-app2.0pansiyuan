@@ -1298,10 +1298,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
                         info.message = msg2Str(textMsg);
                         break;
                 }
+                int finalI = i;
+                ((Activity) context).runOnUiThread(() -> notifyItemChanged(finalI)); //解决异常
                 break;
             }
         }
-        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged()); //解决异常
     }
 
     public void setEvaluateMsgSelectScore(int score, MsgInfo msgInfo) {

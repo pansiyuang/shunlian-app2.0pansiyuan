@@ -90,8 +90,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         tv_title_right.setVisibility(View.VISIBLE);
 
         mClient = EasyWebsocketClient.getInstance(this);
-        mClient.addOnMessageReceiveListener(this);
-
         mPresenter = new SwitchOtherPresenter(this, this);
         if (mClient.getUser() != null) {
             mUser = mClient.getUser();
@@ -105,6 +103,14 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         chatMemberList = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
+    }
+
+    @Override
+    protected void onResume() {
+        if (mClient != null) {
+            mClient.addOnMessageReceiveListener(this);
+        }
+        super.onResume();
     }
 
     @Override

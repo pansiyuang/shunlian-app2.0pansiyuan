@@ -78,9 +78,6 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         manager = new LinearLayoutManager(getActivity());
 
         mClient = EasyWebsocketClient.getInstance(getActivity());
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
 
         initSystemMsg();
         mAdapter = new MessageAdapter(getActivity(), msgs, memberList);
@@ -103,6 +100,14 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
             }
         });
         chatManager = ChatManager.getInstance(getActivity()).init();
+    }
+
+    @Override
+    public void onResume() {
+        if (mClient != null) {
+            mClient.addOnMessageReceiveListener(this);
+        }
+        super.onResume();
     }
 
     public void resetData() {

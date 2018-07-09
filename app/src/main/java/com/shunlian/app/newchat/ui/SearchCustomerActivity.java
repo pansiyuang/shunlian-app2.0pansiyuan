@@ -87,10 +87,6 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
 
         mClient = EasyWebsocketClient.getInstance(this);
 
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
-
         statusDialog = new SwitchStatusDialog(this).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
             public void OnClickSure() {
@@ -103,6 +99,14 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
                 statusDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        if (mClient != null) {
+            mClient.addOnMessageReceiveListener(this);
+        }
+        super.onResume();
     }
 
     @Override
@@ -136,7 +140,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
     }
 
     @Override
-    public void getMessageList(List<ChatMemberEntity.ChatMember> members,int count) {
+    public void getMessageList(List<ChatMemberEntity.ChatMember> members, int count) {
         if (!isEmpty(members)) {
             chatMemberList.clear();
             chatMemberList.addAll(members);
