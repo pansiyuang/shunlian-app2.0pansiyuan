@@ -264,8 +264,6 @@ public class BitmapUtil {
             file = null;
             fileUri = null;
             fos = null;
-            if (bmp != null)
-                bmp.recycle();
         }
         return false;
     }
