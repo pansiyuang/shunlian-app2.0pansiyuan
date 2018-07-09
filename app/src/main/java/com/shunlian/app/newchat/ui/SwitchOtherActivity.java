@@ -99,18 +99,10 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
                 mPresenter.getTransferChatUserList("2", mUser.shop_id, currentUserId);
             }
         }
-
+        mClient.addOnMessageReceiveListener(this);
         chatMemberList = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
-    }
-
-    @Override
-    protected void onResume() {
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
-        super.onResume();
     }
 
     @Override
@@ -203,12 +195,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     }
 
     @Override
-    protected void onStop() {
-        mClient.removeOnMessageReceiveListener(this);
-        super.onStop();
-    }
-
-    @Override
     public void initMessage() {
 
     }
@@ -261,5 +247,11 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     @Override
     public void logout() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mClient.removeOnMessageReceiveListener(this);
+        super.onDestroy();
     }
 }
