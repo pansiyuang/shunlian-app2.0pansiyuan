@@ -1,7 +1,9 @@
 package com.shunlian.app.newchat.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.MainThread;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -163,6 +165,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
 
 
     public void updateFriendList(String message) {
+        LogUtil.httpLogW("刷新聊天页面");
         BaseMessage baseMessage = null;
         MsgInfo msgInfo = null;
         try {
@@ -177,16 +180,18 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
         if (!isEmpty(chatMemberList)) {
             for (int i = 0; i < chatMemberList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_user_id.equals(chatMemberList.get(i).m_user_id)) {
+                if (msgInfo.m_user_id.equals(chatMemberList.get(i).m_user_id)) {
+                    LogUtil.httpLogW("m_user_id：" + msgInfo.m_user_id + "  chatMemberList:" + chatMemberList.get(i).m_user_id);
                     unReadNum = chatMemberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     chatMemberList.get(i).unread_count = unReadNum;
                     chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
+                    int finalI = i;
+                    runOnUiThread(() -> mAdapter.notifyItemChanged(finalI));
                     break;
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -235,6 +240,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
             mStatus = MemberStatus.Member;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
         } else {
+            LogUtil.httpLogW("position：" + position);
             ChatMemberEntity.ChatMember chatMember = chatMemberList.get(position);
             ChatManager.getInstance(this).MemberChatToStore(chatMember);
         }
