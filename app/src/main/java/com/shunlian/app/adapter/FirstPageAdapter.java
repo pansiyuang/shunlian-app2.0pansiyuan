@@ -606,8 +606,9 @@ public class FirstPageAdapter extends BaseRecyclerAdapter<GetDataEntity.MData> {
                                         eightHolder.firstCategoryMenuAdapter.selectedPosition = position;
                                         eightHolder.firstCategoryMenuAdapter.notifyDataSetChanged();
                                         cateGoryFrag.cate_id = data.get(position).id;
+                                        cateGoryFrag.sort_type = data.get(position).sort_type;
                                         if (cateGoryFrag.pFirstPage != null)
-                                            cateGoryFrag.pFirstPage.resetBaby(data.get(position).id);
+                                            cateGoryFrag.pFirstPage.resetBaby(data.get(position).id,data.get(position).sort_type);
                                     }
                                 }
                             });

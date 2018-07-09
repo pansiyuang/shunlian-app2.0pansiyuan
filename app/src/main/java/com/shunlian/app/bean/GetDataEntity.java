@@ -48,6 +48,7 @@ public class GetDataEntity {
             public String id;
             public String name;
             public String level;
+            public String sort_type;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)

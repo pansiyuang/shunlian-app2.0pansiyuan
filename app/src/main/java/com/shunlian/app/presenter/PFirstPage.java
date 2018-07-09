@@ -50,23 +50,24 @@ public class PFirstPage extends BasePresenter<IFirstPage> {
     protected void initApi() {
     }
 
-    public void resetBaby(String cate_id) {
+    public void resetBaby(String cate_id,String sort_type) {
         isRest=true;
         babyPage = 1;
         babyIsLoading = true;
-        getSearchGoods(cate_id);
+        getSearchGoods(cate_id,sort_type);
     }
 
-    public void refreshBaby( String cate_id) {
+    public void refreshBaby( String cate_id,String sort_type) {
         if (!babyIsLoading && babyPage <= babyAllPage) {
             babyIsLoading = true;
-            getSearchGoods(cate_id);
+            getSearchGoods(cate_id,sort_type);
         }
     }
 
-    public void getSearchGoods(String cate_id) {
+    public void getSearchGoods(String cate_id,String sort_type) {
         Map<String, String> map = new HashMap<>();
         map.put("cid", cate_id);
+        map.put("sort_type", sort_type);
         map.put("page", String.valueOf(babyPage));
         map.put("page_size", String.valueOf(pageSize));
         sortAndMD5(map);
