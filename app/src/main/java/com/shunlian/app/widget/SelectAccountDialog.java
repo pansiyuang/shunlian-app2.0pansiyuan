@@ -56,7 +56,7 @@ public class SelectAccountDialog extends Dialog  {
         }else {//正式
             commonEntities.add(addAccount("15805729571","123456"));
             commonEntities.add(addAccount("15068713363","123456"));
-            commonEntities.add(addAccount("13007562706","123456"));
+            commonEntities.add(addAccount("13007562706","a12345678"));
             commonEntities.add(addAccount("15058113375","a1234567890"));
             commonEntities.add(addAccount("17601357886","aini1314"));
             commonEntities.add(addAccount("15883829691","tl123456"));

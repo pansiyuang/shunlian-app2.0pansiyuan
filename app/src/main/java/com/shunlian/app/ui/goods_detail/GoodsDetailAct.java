@@ -252,7 +252,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         //底部按钮高
         mll_bottom.post(()-> {
             if (mll_bottom == null){
-                ButterKnife.bind(this);
+                unbinder = ButterKnife.bind(this);
                 bottomListHeight = mll_bottom.getMeasuredHeight();
             }
         });
