@@ -20,6 +20,7 @@ import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.mylibrary.ImmersionBar;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -156,6 +157,7 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate,IZ
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (mQRCodeView == null) unbinder = ButterKnife.bind(this);
         mQRCodeView.showScanRect();
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY) {
@@ -172,6 +174,7 @@ public class ZXingDemoAct extends BaseActivity implements QRCodeView.Delegate,IZ
 
                 @Override
                 protected void onPostExecute(String result) {
+                    if (mQRCodeView == null) unbinder = ButterKnife.bind(ZXingDemoAct.this);
                     mQRCodeView.closeFlashlight();
                     if (TextUtils.isEmpty(result)) {
                         Common.staticToast("未发现二维码");

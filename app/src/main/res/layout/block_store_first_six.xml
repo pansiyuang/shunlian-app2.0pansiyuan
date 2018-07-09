@@ -27,7 +27,7 @@
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_marginRight="2.5dp"
             android:src="@mipmap/icon_login_logo" />
 
@@ -67,7 +67,7 @@
             android:id="@+id/miv_sixr"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_marginLeft="2.5dp"
             android:layout_marginTop="5dp"
             android:src="@mipmap/icon_login_logo" />

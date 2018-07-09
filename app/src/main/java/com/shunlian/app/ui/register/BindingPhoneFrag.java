@@ -204,7 +204,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
 
     @Override
     public void setCode(byte[] bytes) {
-        if (bytes != null) {
+        if (bytes != null&&miv_code!=null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             miv_code.setImageBitmap(bitmap);
         }

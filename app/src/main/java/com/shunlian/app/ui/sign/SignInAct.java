@@ -64,7 +64,7 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
     MyScrollView msv_sign;
 
 //    private AnimationDrawable signAnimation;
-    private boolean isSign, isSigned, isFirst = true;
+    private boolean isSign, isSigned, isFirst = true,isCancel=false,isFinish=false;
     private PSignIn pSignIn;
     private Handler handler;
     private SignGoodsAdapter signGoodsAdapter;
@@ -105,8 +105,11 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            alpha[0] = alpha[0] + 0.06f;
-                            mtv_score.setAlpha(alpha[0]);
+                            if (!isFinish){
+                                alpha[0] = alpha[0] + 0.06f;
+                                if (!isCancel)
+                                    mtv_score.setAlpha(alpha[0]);
+                            }
                         }
                     });
                 }
@@ -114,14 +117,17 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    isSign = false;
-                    isSigned = true;
-                    miv_sign.setImageResource(R.mipmap.img_33);
-                    mrlayout_qian.setVisibility(View.GONE);
+                    if (!isFinish){
+                        isSign = false;
+                        isSigned = true;
+                        miv_sign.setImageResource(R.mipmap.img_33);
+                        mrlayout_qian.setVisibility(View.GONE);
 //                signAnimation.stop();
-                    timeAnim.cancel();
-                    mtv_score.setAlpha(0);
-                    mtv_scores.setText(scores);
+                        isCancel=true;
+                        timeAnim.cancel();
+                        mtv_score.setAlpha(0);
+                        mtv_scores.setText(scores);
+                    }
                 }
             }, 1190);
             isSign = true;
@@ -180,12 +186,19 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
 
     }
 
+    @Override
+    protected void onDestroy() {
+        isFinish=true;
+        super.onDestroy();
+    }
 
     @Override
     public void signCallBack(CheckInRespondEntity checkInRespondEntity) {
-        SpannableStringBuilder spannableStringBuilder = Common.changeTextSize("+" + checkInRespondEntity.credit, checkInRespondEntity.credit, 42);
-        mtv_score.setText(spannableStringBuilder);
-        anim(checkInRespondEntity.total_credit);
+        if (!isFinish){
+            SpannableStringBuilder spannableStringBuilder = Common.changeTextSize("+" + checkInRespondEntity.credit, checkInRespondEntity.credit, 42);
+            mtv_score.setText(spannableStringBuilder);
+            anim(checkInRespondEntity.total_credit);
+        }
     }
 
 
@@ -211,18 +224,20 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
 
     @Override
     public void setApiData(CheckInStateEntity checkInStateEntity, List<CheckInStateEntity.GoodsList.MData> mDataList) {
-        if (isFirst) {
-            if ("yes".equals(checkInStateEntity.today_is_singed)) {
-                isSign = true;
-                miv_sign.setImageResource(R.mipmap.img_33);
-            }else {
-                miv_sign.setImageResource(R.mipmap.img_1);
+        if (!isFinish){
+            if (isFirst) {
+                if ("yes".equals(checkInStateEntity.today_is_singed)) {
+                    isSign = true;
+                    miv_sign.setImageResource(R.mipmap.img_33);
+                }else {
+                    miv_sign.setImageResource(R.mipmap.img_1);
+                }
+                mtv_scores.setText(checkInStateEntity.credit1);
+                mtv_titles.setText(checkInStateEntity.title);
             }
-            mtv_scores.setText(checkInStateEntity.credit1);
-            mtv_titles.setText(checkInStateEntity.title);
+            initRv(mDataList, checkInStateEntity.goodslist.total_page,
+                    checkInStateEntity.goodslist.page);
+            isFirst = false;
         }
-        initRv(mDataList, checkInStateEntity.goodslist.total_page,
-                checkInStateEntity.goodslist.page);
-        isFirst = false;
     }
 }

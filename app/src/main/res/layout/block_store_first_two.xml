@@ -39,7 +39,7 @@
             android:id="@+id/miv_two"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@mipmap/icon_login_logo" />
 
         <com.shunlian.app.widget.MyRelativeLayout
@@ -52,7 +52,7 @@
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_desc"
                 android:layout_width="match_parent"
-                android:layout_height="26.5dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lines="2"
