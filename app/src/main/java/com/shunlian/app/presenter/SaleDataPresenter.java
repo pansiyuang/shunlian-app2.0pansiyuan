@@ -71,7 +71,9 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                         data.sales_info.today_members,data.sales_info.today_orders);
                 iView.setEliteTutorData(data.master_info_new,data.user_info.member_role_code);
                 iView.setplusrole(data.user_info.plus_role_code);
-                iView.setSaleTip(data.tip);
+                iView.setSalePS(data.tip);
+                iView.setSaleTip(data.user_info.grow_info);
+                //iView.setSaleTip("您已连续完成9个月精英,连续10个月达标所有成长值上浮5%");
             }
         });
     }

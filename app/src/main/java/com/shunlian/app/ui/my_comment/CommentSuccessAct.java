@@ -30,6 +30,7 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
     private CommentSuccessPresenter presenter;
     private List<CommentSuccessEntity.Comment> otherComments = new ArrayList<>();
     private int commentSize = 0;
+    private CommentSuccessAdapter adapter;
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,CommentSuccessAct.class));
@@ -76,24 +77,26 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
             otherComments.addAll(append);
         }
 
-        CommentSuccessAdapter adapter = new
-                CommentSuccessAdapter(this,false,otherComments,commentSize);
+        adapter = new CommentSuccessAdapter(this,false,otherComments,commentSize);
         recy_view.setAdapter(adapter);
 
         adapter.setOnItemClickListener((view, position) -> {
-            CommentSuccessEntity.Comment comment1 = otherComments.get(position - 1);
-            if (position < commentSize + 1){
-                ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.order_sn,comment1.thumb,
-                        comment1.title,comment1.price,comment1.goods_id);
+            int p = position - 1;
+            if (p < otherComments.size()) {
+                CommentSuccessEntity.Comment comment1 = otherComments.get(position - 1);
+                if (position < commentSize + 1) {
+                    ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.order_sn, comment1.thumb,
+                            comment1.title, comment1.price, comment1.goods_id);
 
-                CreatCommentActivity.startAct(CommentSuccessAct.this,
-                        entity,CreatCommentActivity.CREAT_COMMENT);
-            }else {
-                ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.thumb,
-                        comment1.title,comment1.price,comment1.comment_id);
-                entity.order = comment1.order_sn;
-                CreatCommentActivity.startAct(CommentSuccessAct.this,
-                        entity,CreatCommentActivity.APPEND_COMMENT);
+                    CreatCommentActivity.startAct(CommentSuccessAct.this,
+                            entity, CreatCommentActivity.CREAT_COMMENT);
+                } else {
+                    ReleaseCommentEntity entity = new ReleaseCommentEntity(comment1.thumb,
+                            comment1.title, comment1.price, comment1.comment_id);
+                    entity.order = comment1.order_sn;
+                    CreatCommentActivity.startAct(CommentSuccessAct.this,
+                            entity, CreatCommentActivity.APPEND_COMMENT);
+                }
             }
         });
     }
@@ -116,5 +119,21 @@ public class CommentSuccessAct extends BaseActivity implements ICommentSuccessVi
     @Override
     public void showDataEmptyView(int request_code) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (otherComments != null){
+            otherComments.clear();
+            otherComments = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+        if (presenter != null){
+            presenter.detachView();
+        }
     }
 }

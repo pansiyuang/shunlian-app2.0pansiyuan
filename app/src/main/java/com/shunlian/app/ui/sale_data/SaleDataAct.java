@@ -203,6 +203,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
+    @BindView(R.id.rlayout_sale_tip)
+    RelativeLayout rlayout_sale_tip;
+
+    @BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;
+
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
     private boolean isShowData = true;
@@ -464,9 +470,17 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      * @param tip
      */
     @Override
-    public void setSaleTip(String tip) {
+    public void setSalePS(String tip) {
         if (mtv_sale_Explain != null)
             mtv_sale_Explain.setText(tip);
+    }
+
+    @Override
+    public void setSaleTip(String tip) {
+        if (!isEmpty(tip)){
+            visible(rlayout_sale_tip);
+            if (mtv_tip != null) mtv_tip.setText(tip);
+        }
     }
 
     @Override

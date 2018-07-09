@@ -30,6 +30,7 @@
                 android:textSize="13sp" />
 
             <LinearLayout
+                android:id="@+id/llayout_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -54,6 +55,31 @@
                     android:textSize="13sp" />
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlayout_sale_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/llayout_request"
+                android:visibility="gone"
+                android:layout_marginTop="7.5dp">
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/img_xiaoshou_tishi" />
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_tip"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="9dp"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+            </RelativeLayout>
 
             <!--头像-->
             <com.shunlian.app.widget.MyImageView
