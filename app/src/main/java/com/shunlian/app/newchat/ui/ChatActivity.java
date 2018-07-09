@@ -253,6 +253,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             refreshview.setCanRefresh(true);
             refreshview.setCanLoad(false);
 
+            mWebsocketClient.addOnMessageReceiveListener(this);
             mCurrentUser = mWebsocketClient.getUser();
             initUser(mCurrentUser);
             mAdapter.setUser(mCurrentUser);
@@ -316,11 +317,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     protected void onResume() {
-        if (mWebsocketClient != null) {
-            if (mWebsocketClient.getStatus() == Status.CONNECTED) {
-                mWebsocketClient.setChating(true);
-            }
-            mWebsocketClient.addOnMessageReceiveListener(this);
+        if (mWebsocketClient.getStatus() == Status.CONNECTED) {
+            mWebsocketClient.setChating(true);
         }
         super.onResume();
     }
@@ -1079,8 +1077,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         mWebsocketClient.removeOnMessageReceiveListener(this);
-        super.onStop();
+        super.onDestroy();
     }
 }

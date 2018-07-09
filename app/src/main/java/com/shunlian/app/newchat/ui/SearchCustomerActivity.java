@@ -1,7 +1,9 @@
 package com.shunlian.app.newchat.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.MainThread;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -86,7 +88,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
         mPresenter = new MessagePresenter(this, this);
 
         mClient = EasyWebsocketClient.getInstance(this);
-
+        mClient.addOnMessageReceiveListener(this);
         statusDialog = new SwitchStatusDialog(this).setOnButtonClickListener(new SwitchStatusDialog.OnButtonClickListener() {
             @Override
             public void OnClickSure() {
@@ -99,14 +101,6 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
                 statusDialog.dismiss();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
-        super.onResume();
     }
 
     @Override
@@ -185,16 +179,17 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
         if (!isEmpty(chatMemberList)) {
             for (int i = 0; i < chatMemberList.size(); i++) {
                 //好友发给自己的消息
-                if (baseMessage.from_user_id.equals(chatMemberList.get(i).m_user_id)) {
+                if (baseMessage.from_user_id.equals(chatMemberList.get(i).friend_user_id)) {
                     unReadNum = chatMemberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     chatMemberList.get(i).unread_count = unReadNum;
                     chatMemberList.get(i).update_time = TimeUtil.getNewChatTime(msgInfo.send_time);
+                    int finalI = i;
+                    runOnUiThread(() -> mAdapter.notifyItemChanged(finalI));
                     break;
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -243,14 +238,15 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
             mStatus = MemberStatus.Member;
             statusDialog.setDialogMessage(mClient.getMemberStatus(), MemberStatus.Seller, MemberStatus.Member).show();
         } else {
+            LogUtil.httpLogW("position：" + position);
             ChatMemberEntity.ChatMember chatMember = chatMemberList.get(position);
             ChatManager.getInstance(this).MemberChatToStore(chatMember);
         }
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         mClient.removeOnMessageReceiveListener(this);
-        super.onStop();
+        super.onDestroy();
     }
 }
