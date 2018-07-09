@@ -165,7 +165,6 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
 
 
     public void updateFriendList(String message) {
-        LogUtil.httpLogW("刷新聊天页面");
         BaseMessage baseMessage = null;
         MsgInfo msgInfo = null;
         try {
@@ -180,8 +179,7 @@ public class SearchCustomerActivity extends BaseActivity implements IMessageView
         if (!isEmpty(chatMemberList)) {
             for (int i = 0; i < chatMemberList.size(); i++) {
                 //好友发给自己的消息
-                if (msgInfo.m_user_id.equals(chatMemberList.get(i).m_user_id)) {
-                    LogUtil.httpLogW("m_user_id：" + msgInfo.m_user_id + "  chatMemberList:" + chatMemberList.get(i).m_user_id);
+                if (baseMessage.from_user_id.equals(chatMemberList.get(i).friend_user_id)) {
                     unReadNum = chatMemberList.get(i).unread_count + 1;
                     baseMessage.setuReadNum(unReadNum);
                     chatMemberList.get(i).unread_count = unReadNum;
