@@ -761,10 +761,10 @@
     <string name="plus_vip_month_performance">当月绩效</string>
     <string name="plus_vip_detail_performance">%d年%d月会员绩效</string>
     <string name="plus_vip_period_performance">往期绩效</string>
-    <string name="plus_group_money">%d年社群销售额</string>
-    <string name="plus_group_count">当前社群Plus数</string>
-    <string name="plus_group_month_money">本月社群销售额</string>
-    <string name="plus_group_month_count">本月社群销新增Plus数</string>
+    <string name="plus_group_money">%d总销售额</string>
+    <string name="plus_group_count">当前总订单数</string>
+    <string name="plus_group_month_money">本月销售额</string>
+    <string name="plus_group_month_count">本月订单数</string>
     <string name="super_product">优品</string>
     <string name="gif_bag_list">礼包列表</string>
     <string name="to_buy">立即购买</string>
