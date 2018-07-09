@@ -66,6 +66,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -249,7 +250,12 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         //偏移量
         offset = (deviceWidth - toolbarHeight - statusBarHeight)/2;
         //底部按钮高
-        mll_bottom.post(()-> bottomListHeight = mll_bottom.getMeasuredHeight());
+        mll_bottom.post(()-> {
+            if (mll_bottom == null){
+                ButterKnife.bind(this);
+                bottomListHeight = mll_bottom.getMeasuredHeight();
+            }
+        });
         RelativeLayout.LayoutParams
                 shareLayoutParams = (RelativeLayout.LayoutParams) mll_share.getLayoutParams();
         shareLayoutParams.topMargin = statusBarHeight;

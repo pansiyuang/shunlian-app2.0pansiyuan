@@ -121,9 +121,7 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
             SuperProductEntity.SuperProduct superProduct = lists.get(position);
             GlideUtils.getInstance().loadImage(context, goodsViewHolder.miv_icon, superProduct.thumb);
             goodsViewHolder.tv_products_title.setText(superProduct.title);
-            if (superProduct.is_new == 1) {
-                goodsViewHolder.tv_products_isNew.setVisibility(View.VISIBLE);
-            }
+            goodsViewHolder.tv_products_isNew.setText(superProduct.desc);
             goodsViewHolder.tv_products_price.setText(getString(R.string.common_yuan) + superProduct.price);
 
             if (isEmpty(superProduct.earned)) {
