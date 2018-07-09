@@ -29,7 +29,7 @@ import butterknife.BindView;
 
 public class CateGoryFrag extends BaseFragment implements IFirstPage {
     public PFirstPage pFirstPage;
-    public String cate_id;
+    public String cate_id,sort_type;
     public List<GetDataEntity.MData> mDatass = new ArrayList<>();
     public List<GetDataEntity.MData> mDatasss = new ArrayList<>();
     public List<GetDataEntity.MData> mDatassss = new ArrayList<>();
@@ -94,7 +94,7 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
                     int lastPosition = gridLayoutManager.findLastVisibleItemPosition();
                     if (lastPosition + 1 == gridLayoutManager.getItemCount()) {
                         if (pFirstPage != null) {
-                            pFirstPage.refreshBaby(cate_id);
+                            pFirstPage.refreshBaby(cate_id,sort_type);
                         }
                     }
                 }
@@ -162,7 +162,8 @@ public class CateGoryFrag extends BaseFragment implements IFirstPage {
 
         if (!isEmpty(mDatass) && !isEmpty(mDatass.get(mDatass.size() - 1).cates)) {
             cate_id = mDatass.get(mDatass.size() - 1).cates.get(0).id;
-            pFirstPage.resetBaby(cate_id);
+            sort_type = mDatass.get(mDatass.size() - 1).cates.get(0).sort_type;
+            pFirstPage.resetBaby(cate_id,sort_type);
         }
 
 //        }else {

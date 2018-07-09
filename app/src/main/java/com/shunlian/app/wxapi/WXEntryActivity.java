@@ -124,15 +124,20 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler,
 
     //分享添加默认数据
     private void defShare(ShareInfoParam shareInfoParam) {
-        if (!isEmpty(shareInfoParam.title)) {
-            currTitle = shareInfoParam.title;
-        } else {
-            currTitle = "顺联动力";
-        }
-        if (!isEmpty(shareInfoParam.desc)) {
-            currentDesc = shareInfoParam.desc;
-        } else {
-            currentDesc = "顺联动力商城";
+        if (!isEmpty(shareInfoParam.shop_name)){
+            currTitle=shareInfoParam.shop_name;
+            shareInfoParam.img=shareInfoParam.shop_logo;
+        }else {
+            if (!isEmpty(shareInfoParam.title)) {
+                currTitle = shareInfoParam.title;
+            } else {
+                currTitle = "顺联动力";
+            }
+            if (!isEmpty(shareInfoParam.desc)) {
+                currentDesc = shareInfoParam.desc;
+            } else {
+                currentDesc = "顺联动力商城";
+            }
         }
         if (!isEmpty(shareInfoParam.shareLink)) {
             shareLink = shareInfoParam.shareLink;
