@@ -230,8 +230,7 @@ public class RegisterOneFrag extends BaseFragment implements View.OnClickListene
                 return;
             }*/
             id = et_id.getText().toString();
-            //Common.staticToast(smsCode);
-            String phone = et_phone.getText().toString();
+            String phone = et_phone.getText().toString().replaceAll(" ", "");
             String code = et_code.getText().toString();
             ((RegisterAct)baseActivity).addRegisterTwo(phone,smsCode,id,code,
                     null,RegisterTwoFrag.TYPE_REGIST);

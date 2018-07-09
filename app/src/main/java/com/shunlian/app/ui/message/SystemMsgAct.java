@@ -12,6 +12,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.ISystemMsgView;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +31,9 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
 
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
+
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private LinearLayoutManager manager;
     private SystemMsgPresenter presenter;
@@ -95,7 +99,13 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
      */
     @Override
     public void showFailureView(int request_code) {
-
+        if (request_code == 0){
+            visible(nei_empty);
+            gone(recy_view);
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (presenter != null)presenter.initApi();
+            });
+        }
     }
 
     /**
@@ -105,11 +115,22 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
      */
     @Override
     public void showDataEmptyView(int request_code) {
-
+        if (request_code == 0){
+            visible(nei_empty);
+            gone(recy_view);
+            nei_empty.setImageResource(R.mipmap.img_empty_common)
+                    .setText("暂无消息")
+                    .setButtonText(null);
+        }else {
+            gone(nei_empty);
+            visible(recy_view);
+        }
     }
 
     @Override
     public void setAdapter(BaseRecyclerAdapter adapter) {
+        gone(nei_empty);
+        visible(recy_view);
         recy_view.setAdapter(adapter);
     }
 
@@ -119,5 +140,9 @@ public class SystemMsgAct extends BaseActivity implements ISystemMsgView{
             quick_actions.destoryQuickActions();
         }
         super.onDestroy();
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
     }
 }

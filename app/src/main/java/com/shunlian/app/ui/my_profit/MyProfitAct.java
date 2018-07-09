@@ -652,6 +652,7 @@ public class MyProfitAct extends BaseActivity implements IMyProfitView {
     }
 
     private void changeState() {
+        if (mProfitInfo == null)return;
         miv_isShow_data.setImageResource(!isShowData ? R.mipmap.img_plus_guanbi_n : R.mipmap.img_guanbi_h);
         mtv_surplus_extract_m.setText(!isShowData ? ASTERISK : mProfitInfo.available_profit);
         mtv_already_extract_m.setText(!isShowData ? ASTERISK : mProfitInfo.withdrawed_profit);

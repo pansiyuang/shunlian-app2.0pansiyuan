@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.OrderListAdapter;
 import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.MyOrderEntity;
@@ -149,30 +148,19 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
             adapter = new OrderListAdapter(this, true, ordersLists,this);
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
-            adapter.setOnReloadListener(new BaseRecyclerAdapter.OnReloadListener() {
-                @Override
-                public void onReload() {
-                    if (mPresenter != null) {
-                        mPresenter.onRefresh();
-                    }
+            adapter.setOnReloadListener(() -> {
+                if (mPresenter != null) {
+                    mPresenter.onRefresh();
                 }
             });
 
-            adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    MyOrderEntity.Orders orders1 = ordersLists.get(position);
-                    OrderDetailAct.startAct(SearchOrderResultActivity.this, orders1.id);
-                    refreshPosition = position;
-                }
+            adapter.setOnItemClickListener((view, position) -> {
+                MyOrderEntity.Orders orders1 = ordersLists.get(position);
+                OrderDetailAct.startAct(SearchOrderResultActivity.this, orders1.id);
+                refreshPosition = position;
             });
 
-            adapter.setRefreshOrderListener(new OrderListAdapter.RefreshOrderListener() {
-                @Override
-                public void onRefreshOrder(int position) {
-                    refreshPosition = position;
-                }
-            });
+            adapter.setRefreshOrderListener(position -> refreshPosition = position);
         } else {
             adapter.setPageLoading(page, allPage);
             adapter.notifyDataSetChanged();
@@ -257,12 +245,9 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
             }
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
             recy_view.setVisibility(View.GONE);
-            nei_empty.setNetExecption().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPresenter != null) {
-                        mPresenter.searchOrder();
-                    }
+            nei_empty.setNetExecption().setOnClickListener(v -> {
+                if (mPresenter != null) {
+                    mPresenter.searchOrder();
                 }
             });
         }
@@ -336,6 +321,14 @@ public class SearchOrderResultActivity extends BaseActivity implements ISearchRe
             quick_actions.destoryQuickActions();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        if (ordersLists != null){
+            ordersLists.clear();
+            ordersLists = null;
+        }
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

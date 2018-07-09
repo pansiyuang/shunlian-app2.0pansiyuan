@@ -267,6 +267,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
             unbinders.clear();
             unbinders = null;
         }
+        if (lists != null){
+            lists.clear();
+        }
     }
 
     protected int getColor(@ColorRes int id) {

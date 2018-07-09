@@ -30,6 +30,7 @@ public class CouponListPresenter extends BasePresenter<ICouponListView> {
     public final String used = "1";
     public final String already_used = "-2";
     public String current_state = no_used;
+    private Call<BaseEntity<CouponListEntity>> baseEntityCall;
 
     //优惠券状态 0未使用1|已使用|-2已过期
     public CouponListPresenter(Context context, ICouponListView iView) {
@@ -49,8 +50,16 @@ public class CouponListPresenter extends BasePresenter<ICouponListView> {
      * 卸载view
      */
     @Override
-    public void detachView() {
-
+    public void  detachView() {
+        if (baseEntityCall != null)baseEntityCall.cancel();
+        if (adapter != null){
+            adapter.unbind();
+            adapter = null;
+        }
+        if (voucherLists != null){
+            voucherLists.clear();
+            voucherLists = null;
+        }
     }
 
     /**
@@ -61,20 +70,20 @@ public class CouponListPresenter extends BasePresenter<ICouponListView> {
         voucherLists.clear();
         currentPage = 1;
         allPage = 1;
-        paging(true);
+        paging(true,0);
     }
 
-    private void paging(boolean isShow) {
+    private void paging(boolean isShow,int failureCode) {
         Map<String, String> map = new HashMap<>();
         map.put("status", current_state);
         map.put("page", String.valueOf(currentPage));
         map.put("page_size", page_size);
         sortAndMD5(map);
 
-        Call<BaseEntity<CouponListEntity>> baseEntityCall = getAddCookieApiService()
+        baseEntityCall = getAddCookieApiService()
                 .voucherList(getRequestBody(map));
 
-        getNetData(isShow, baseEntityCall, new
+        getNetData(0,failureCode,isShow, baseEntityCall, new
                 SimpleNetDataCallback<BaseEntity<CouponListEntity>>() {
                     @Override
                     public void onSuccess(BaseEntity<CouponListEntity> entity) {
@@ -122,7 +131,7 @@ public class CouponListPresenter extends BasePresenter<ICouponListView> {
         if (!isLoading) {
             if (currentPage <= allPage) {
                 isLoading = true;
-                paging(false);
+                paging(false,100);
             }
         }
     }

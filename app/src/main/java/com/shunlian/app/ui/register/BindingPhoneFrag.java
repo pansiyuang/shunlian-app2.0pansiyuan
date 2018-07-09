@@ -112,7 +112,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
                     return;
                 }
                 if (!TextUtils.isEmpty(s) && s.length() >= 4) {
-                    et_code.setSelection(s.length());
+                    et_code.setSelection(4);
                     String code = et_code.getText().toString();
                     onePresenter.sendSmsCode(phone, code);
                 }
@@ -128,10 +128,9 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
             if (isEtIdEmpty()) {
                 return false;
             } else {
-                if (TextUtils.isEmpty(id)) {
-                    id = et_id.getText().toString();
-                }
+                id = et_id.getText().toString();
                 onePresenter.checkCode(id);
+                setEdittextFocusable(true, et_phone);
             }
             return false;
         });
@@ -217,7 +216,7 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
             if (state == USER_STATES_NEW && TextUtils.isEmpty(id)) {
                 id = et_id.getText().toString();
             }
-            String phone = et_phone.getText().toString();
+            String phone = et_phone.getText().toString().replaceAll(" ", "");
             String code = et_code.getText().toString();
             ((RegisterAct)baseActivity).addRegisterTwo(phone,smsCode,id,code,unique_sign,null);
         } else {
@@ -229,6 +228,9 @@ public class BindingPhoneFrag extends BaseFragment implements IRegisterOneView, 
     public void checkCode(boolean isSuccess) {
         if (!isSuccess) {
             setEdittextFocusable(true, et_id);
+        }else {
+            if (isEmpty(et_phone.getText()))
+                setEdittextFocusable(true, et_phone);
         }
     }
 

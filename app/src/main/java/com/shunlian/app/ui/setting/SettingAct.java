@@ -303,7 +303,7 @@ public class SettingAct extends BaseActivity implements ISettingView {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            mtv_count.setText(s);
+            if (mtv_count != null) mtv_count.setText(s==null?"":s);
         }
     }
 }

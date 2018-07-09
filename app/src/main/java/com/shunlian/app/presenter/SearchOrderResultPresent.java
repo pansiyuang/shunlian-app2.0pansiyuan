@@ -70,6 +70,7 @@ public class SearchOrderResultPresent extends BasePresenter<ISearchResultView> {
                 allPage = Integer.parseInt(entity.data.total_page);
                 currentPage = Integer.parseInt(entity.data.page);
                 iView.getSearchResult(entity.data.orders,currentPage,allPage);
+                currentPage ++;
             }
 
             @Override
@@ -91,8 +92,7 @@ public class SearchOrderResultPresent extends BasePresenter<ISearchResultView> {
         super.onRefresh();
         if (!isLoading){
             isLoading = true;
-            if (currentPage < allPage){
-                currentPage ++;
+            if (currentPage <= allPage){
                 searchOrder(LOAD_CODE,LOAD_CODE,false,currentPage);
             }
         }

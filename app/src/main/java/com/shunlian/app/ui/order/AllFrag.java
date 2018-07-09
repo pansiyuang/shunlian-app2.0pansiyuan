@@ -175,8 +175,13 @@ public class AllFrag extends LazyFragment implements IOrderListView {
         }
         if (adapter == null) {
             adapter = new OrderListAdapter(baseActivity, true, ordersLists,this);
-            if (recy_view == null)
-            recy_view = ButterKnife.findById(getView(),R.id.recy_view);
+            if (recy_view == null) {
+                if (getView() != null) {
+                    recy_view = ButterKnife.findById(getView(), R.id.recy_view);
+                }else {
+                    return;
+                }
+            }
             recy_view.setAdapter(adapter);
             adapter.setPageLoading(page, allPage);
             adapter.setOnReloadListener(() -> {
