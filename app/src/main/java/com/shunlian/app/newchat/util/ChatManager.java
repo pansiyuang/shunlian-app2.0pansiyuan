@@ -57,6 +57,7 @@ public class ChatManager {
         mClient.setOnSwitchStatusListener(roleType -> {
             if (isPush) {
                 startToChat(currentChatMember);
+                resetPushMode();
             }
         });
         return this;

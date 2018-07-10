@@ -90,8 +90,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
         tv_title_right.setVisibility(View.VISIBLE);
 
         mClient = EasyWebsocketClient.getInstance(this);
-        mClient.addOnMessageReceiveListener(this);
-
         mPresenter = new SwitchOtherPresenter(this, this);
         if (mClient.getUser() != null) {
             mUser = mClient.getUser();
@@ -101,7 +99,7 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
                 mPresenter.getTransferChatUserList("2", mUser.shop_id, currentUserId);
             }
         }
-
+        mClient.addOnMessageReceiveListener(this);
         chatMemberList = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
@@ -197,12 +195,6 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     }
 
     @Override
-    protected void onStop() {
-        mClient.removeOnMessageReceiveListener(this);
-        super.onStop();
-    }
-
-    @Override
     public void initMessage() {
 
     }
@@ -255,5 +247,11 @@ public class SwitchOtherActivity extends BaseActivity implements ISwitchOtherVie
     @Override
     public void logout() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mClient.removeOnMessageReceiveListener(this);
+        super.onDestroy();
     }
 }

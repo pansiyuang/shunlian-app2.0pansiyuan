@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,6 +146,9 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
     @BindView(R.id.miv_bg_top)
     MyImageView miv_bg_top;
 
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
     QuickActions quick_actions;
     private Unbinder bind;
     private int screenWidth;
@@ -233,6 +237,15 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
         tv_title_right.setOnClickListener(this);
         miv_invite.setOnClickListener(this);
         ll_close_tab1.setOnClickListener(this);
+        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            View view = nestedScrollView.getChildAt(nestedScrollView.getChildCount() - 1);
+            int d = view.getBottom();
+            d -= (nestedScrollView.getHeight() + nestedScrollView.getScrollY());
+            if (d == 0 && invitationRecordFrag != null && invitationRecordFrag.isVisible()) {
+                LogUtil.httpLogW("获取更多的信息");
+                invitationRecordFrag.getMoreInviteHistory();
+            }
+        });
     }
 
     @Override

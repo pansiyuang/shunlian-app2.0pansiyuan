@@ -78,10 +78,7 @@ public class MessageListFragment extends BaseLazyFragment implements IMessageVie
         manager = new LinearLayoutManager(getActivity());
 
         mClient = EasyWebsocketClient.getInstance(getActivity());
-        if (mClient != null) {
-            mClient.addOnMessageReceiveListener(this);
-        }
-
+        mClient.addOnMessageReceiveListener(this);
         initSystemMsg();
         mAdapter = new MessageAdapter(getActivity(), msgs, memberList);
         mAdapter.setDelMode(true);

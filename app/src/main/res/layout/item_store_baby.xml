@@ -3,13 +3,14 @@
     android:id="@+id/ll_rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_onel"
         android:layout_width="match_parent"
         android:layout_height="185dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_descl"
@@ -62,26 +63,27 @@
             android:id="@+id/mrlayout_plus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginLeft="9dp">
+            android:layout_marginLeft="9dp"
+            android:visibility="gone">
+
             <LinearLayout
                 android:id="@+id/llayout_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
                 android:background="@drawable/rounded_corner_1c1b20_2px"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <com.shunlian.app.widget.MyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#F3C262"
                     android:gravity="center"
-                    android:text="赚"
-                    android:paddingRight="2dp"
                     android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="赚"
                     android:textColor="@color/new_text"
                     android:textSize="11sp" />
 
@@ -89,9 +91,9 @@
                     android:id="@+id/mtv_plus_prefPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
 

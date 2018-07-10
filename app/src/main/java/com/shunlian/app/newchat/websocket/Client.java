@@ -56,7 +56,6 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        LogUtil.httpLogW("onOpen111");
         if (mListener != null) {
             mListener.onOpen();
         }
@@ -100,6 +99,11 @@ public class Client extends WebSocketClient {
         this.mListener = listener;
     }
 
+    public void removeListener() {
+        if (mListener != null) {
+            mListener = null;
+        }
+    }
 
     public interface OnClientConnetListener {
 

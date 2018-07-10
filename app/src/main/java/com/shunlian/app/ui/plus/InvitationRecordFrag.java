@@ -33,6 +33,7 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
     private InvitationRecordPresenter mPresenter;
     private InvitationRecordAdapter mAdapter;
     private List<InvitationEntity.Invitation> mList;
+    private LinearLayoutManager manager;
 
     public static InvitationRecordFrag getInstance() {
         InvitationRecordFrag invitationRecordFrag = new InvitationRecordFrag();
@@ -48,7 +49,7 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
 
     @Override
     protected void initData() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        manager = new LinearLayoutManager(getActivity());
         recycler_list.setLayoutManager(manager);
 
         nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.plus_ninhaimei));
@@ -61,8 +62,14 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
 
     public void getInviteHistory() {
         if (mPresenter != null) {
-            mPresenter.currentPage=1;
+            mPresenter.currentPage = 1;
             mPresenter.getInviteHistory(true);
+        }
+    }
+
+    public void getMoreInviteHistory(){
+        if (mPresenter != null) {
+            mPresenter.onRefresh();
         }
     }
 
@@ -82,10 +89,10 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();
-        if (isEmpty(mList)){
+        if (isEmpty(mList)) {
             visible(nei_empty);
             gone(recycler_list);
-        }else {
+        } else {
             visible(recycler_list);
             gone(nei_empty);
         }
@@ -99,7 +106,7 @@ public class InvitationRecordFrag extends BaseFragment implements IInvitationRec
 
     @Override
     public void showDataEmptyView(int request_code) {
-       visible(nei_empty);
-       gone(recycler_list);
+        visible(nei_empty);
+        gone(recycler_list);
     }
 }

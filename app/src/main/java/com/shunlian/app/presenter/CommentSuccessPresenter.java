@@ -18,6 +18,8 @@ import retrofit2.Call;
 
 public class CommentSuccessPresenter extends BasePresenter<ICommentSuccessView> {
 
+    private Call<BaseEntity<CommentSuccessEntity>> baseEntityCall;
+
     public CommentSuccessPresenter(Context context, ICommentSuccessView iView) {
         super(context, iView);
         initApi();
@@ -36,7 +38,7 @@ public class CommentSuccessPresenter extends BasePresenter<ICommentSuccessView> 
      */
     @Override
     public void detachView() {
-
+        if (baseEntityCall != null)baseEntityCall.cancel();
     }
 
     /**
@@ -46,7 +48,7 @@ public class CommentSuccessPresenter extends BasePresenter<ICommentSuccessView> 
     protected void initApi() {
         Map<String,String> map = new HashMap<>();
         sortAndMD5(map);
-        Call<BaseEntity<CommentSuccessEntity>> baseEntityCall = getApiService().mixed_list(map);
+        baseEntityCall = getApiService().mixed_list(map);
         getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommentSuccessEntity>>(){
             @Override
             public void onSuccess(BaseEntity<CommentSuccessEntity> entity) {

@@ -253,14 +253,13 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             refreshview.setCanRefresh(true);
             refreshview.setCanLoad(false);
 
+            mWebsocketClient.addOnMessageReceiveListener(this);
             mCurrentUser = mWebsocketClient.getUser();
             initUser(mCurrentUser);
             mAdapter.setUser(mCurrentUser);
             mAdapter.setCurrentStatus(mWebsocketClient.getMemberStatus());
             mAdapter.setChatRole(Integer.valueOf(chatRoleType));
         }
-        mWebsocketClient.addOnMessageReceiveListener(this);
-
         //获取历史消息
         if (NetworkUtils.isNetworkOpen(this)) {
             getChatHistory(isFirst);
@@ -1000,6 +999,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
 
     @Override
     public void receiveMessage(String message) {
+        LogUtil.httpLogW("receiveMessage111");
         try {
             MessageEntity messageEntity = mObjectMapper.readValue(message, MessageEntity.class);
             MsgInfo msgInfo = messageEntity.msg_info;
@@ -1013,7 +1013,6 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                     readedMsg(chat_m_user_Id);
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
-                LogUtil.httpLogW("from_user_id:" + baseMessage.from_user_id + " currentUserId:" + currentUserId);
                 if (baseMessage.from_user_id.equals(currentUserId)) {
                     if (baseMessage.msg_type.equals("evaluate") && mWebsocketClient.getMemberStatus() != MemberStatus.Member) {//当前身份是客服 邀请评价成功
                         finish();
@@ -1078,8 +1077,8 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         mWebsocketClient.removeOnMessageReceiveListener(this);
-        super.onStop();
+        super.onDestroy();
     }
 }

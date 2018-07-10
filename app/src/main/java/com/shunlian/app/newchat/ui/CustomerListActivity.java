@@ -88,9 +88,9 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
             mUser = mClient.getUser();
             mPresenter.getReception(mUser.user_id);
             mPresenter.getUserList(true, mUser.user_id);
-
-            mClient.addOnMessageReceiveListener(this);
         }
+
+        mClient.addOnMessageReceiveListener(this);
 
         manager = new LinearLayoutManager(this);
         recycler_list.setLayoutManager(manager);
@@ -302,5 +302,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         runOnUiThread(() -> {
             mAdapter.notifyDataSetChanged();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        mClient.removeOnMessageReceiveListener(this);
+        super.onDestroy();
     }
 }
