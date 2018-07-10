@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.AllMessageCountEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.newchat.util.MessageCountManager;
@@ -28,11 +29,13 @@ import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Act;
+import com.shunlian.app.ui.h5.H5Frag;
+import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.login.LoginAct;
-import com.shunlian.app.ui.plus.MyPlusFrag;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -89,7 +92,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     TextView tv_person_center;
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
-    private MyPlusFrag myPlusFrag;
+//    private MyPlusFrag myPlusFrag;
+    private H5PlusFrag h5PlusFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
     private PersonalCenterFrag personalCenterFrag;
@@ -148,6 +152,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             messageCountManager.setOnGetMessageListener(this);
         }
         Common.parseClipboard(this);
+        if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))){
+            ll_tab_sort.setVisibility(View.VISIBLE);
+        }else {
+            ll_tab_sort.setVisibility(View.GONE);
+        }
     }
 
 
@@ -283,26 +292,55 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     public void myPlusClick() {
         isFirst = false;
-        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
-            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
-            return;
-        }
+//        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
+//            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+//            return;
+//        }
         //先判断此碎片是否第一次点击，是的话初始化碎片
-        if (myPlusFrag == null) {
-            myPlusFrag = (MyPlusFrag) fragmentMap.get(flags[1]);
-            if (myPlusFrag == null) {
-                myPlusFrag = new MyPlusFrag();
-                fragmentMap.put(flags[1], myPlusFrag);
+        String url;
+        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
+            url=SharedPrefUtil.getSharedPrfString("plus_url", Constant.PLUS_ADD);
+        }else {
+            url=SharedPrefUtil.getSharedPrfString("plus_index", Constant.PLUS_ADD);
+        }
+        if (h5PlusFrag== null) {
+            h5PlusFrag = (H5PlusFrag) fragmentMap.get(flags[1]);
+            if (h5PlusFrag == null) {
+                h5PlusFrag = (H5PlusFrag) H5PlusFrag.getInstance(url, H5Frag.MODE_SONIC);
+                fragmentMap.put(flags[1], h5PlusFrag);
             }
         } else {
-            myPlusFrag.getPlusData();
+            h5PlusFrag.h5Url=url;
+            h5PlusFrag.reFresh();
         }
 
         //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
-        switchContent(myPlusFrag);
+        switchContent(h5PlusFrag);
         pageIndex = 1;
         chageTabItem(pageIndex);
     }
+//    public void myPlusClick() {
+//        isFirst = false;
+//        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
+//            H5Act.startAct(getBaseContext(), Constant.PLUS_ADD, H5Act.MODE_SONIC);
+//            return;
+//        }
+//        //先判断此碎片是否第一次点击，是的话初始化碎片
+//        if (myPlusFrag == null) {
+//            myPlusFrag = (MyPlusFrag) fragmentMap.get(flags[1]);
+//            if (myPlusFrag == null) {
+//                myPlusFrag = new MyPlusFrag();
+//                fragmentMap.put(flags[1], myPlusFrag);
+//            }
+//        } else {
+//            myPlusFrag.getPlusData();
+//        }
+//
+//        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+//        switchContent(myPlusFrag);
+//        pageIndex = 1;
+//        chageTabItem(pageIndex);
+//    }
 
     public void discoverClick() {
         isFirst = false;
@@ -479,7 +517,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             fragmentMap.clear();
 
         mainPageFrag = null;
-        myPlusFrag = null;
+//        myPlusFrag = null;
+        h5PlusFrag = null;
         discoverFrag = null;
         cateGoryFrag = null;
         personalCenterFrag = null;
@@ -544,6 +583,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     public void setUpdateInfo(UpdateEntity data) {
+    }
+
+    @Override
+    public void entryInfo(CommonEntity data) {
+
     }
 
     @Override

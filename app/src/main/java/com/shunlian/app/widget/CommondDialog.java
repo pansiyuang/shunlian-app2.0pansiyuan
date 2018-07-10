@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.shunlian.app.App;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
@@ -126,6 +127,11 @@ public class CommondDialog implements IMain {
 
     @Override
     public void setUpdateInfo(UpdateEntity data) {
+
+    }
+
+    @Override
+    public void entryInfo(CommonEntity data) {
 
     }
 

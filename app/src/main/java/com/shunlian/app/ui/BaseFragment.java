@@ -13,7 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.shunlian.app.utils.SharedPrefUtil;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -45,7 +49,7 @@ import butterknife.Unbinder;
  * Created by zhang on 2017/6/22 14 : 47.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener{
 
 
     protected Activity baseActivity;
@@ -72,6 +76,11 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.baseActivity = activity;
@@ -82,7 +91,19 @@ public abstract class BaseFragment extends Fragment {
         super.onDetach();
         this.baseActivity = null;
     }
-
+    public Map<String, String> setWebviewHeader(){
+        Map<String, String> extraHeaders = new HashMap<String, String>();
+        extraHeaders.put("User-Agent", SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 5.1.1/1.0.0"));
+        extraHeaders.put("X-Device-ID", SharedPrefUtil.getSharedPrfString("X-Device-ID", "744D9FC3-5DBD-3EDD-A589-56D77BDB0E5D"));
+        extraHeaders.put("resolution", SharedPrefUtil.getSharedPrfString("resolution", "720x1184"));
+        extraHeaders.put("DeviceIp", SharedPrefUtil.getSharedPrfString("DeviceIp", "192.168.1.1"));
+        extraHeaders.put("Accept-Encoding", "gzip,deflate");
+        extraHeaders.put("Content-Type", "application/json");
+        extraHeaders.put("Net-Type", SharedPrefUtil.getSharedPrfString("Net-Type",""));
+        extraHeaders.put("SAFE-TYPE", SharedPrefUtil.getSharedPrfString("SAFE-TYPE", "ON"));
+        extraHeaders.put("Token", SharedPrefUtil.getSharedPrfString("token", ""));
+        return extraHeaders;
+    }
     /**
      * 设置布局id
      *

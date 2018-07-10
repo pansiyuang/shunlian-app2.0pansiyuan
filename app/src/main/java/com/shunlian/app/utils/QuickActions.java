@@ -991,7 +991,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
 
     public void copyText(boolean isToast) {
-        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.desc,isToast);
+        Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.isCopyTitle?mShareInfoParam.title:mShareInfoParam.desc,isToast);
     }
 
 

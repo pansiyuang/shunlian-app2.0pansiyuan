@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--输入法兼容加的view，fragment不需要，所以代码中手动影藏-->
     <View
         android:id="@+id/view_line"
         android:layout_width="match_parent"
@@ -132,4 +133,5 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:layout_below="@+id/view_line"/>
+
 </RelativeLayout>

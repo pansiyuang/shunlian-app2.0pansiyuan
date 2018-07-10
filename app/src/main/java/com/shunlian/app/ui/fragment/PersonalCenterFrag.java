@@ -207,6 +207,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     MyRelativeLayout mrlayout_paihang;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+    @BindView(R.id.mrlayout_plus)
+    MyRelativeLayout mrlayout_plus;
     @BindView(R.id.lay_refresh)
     NestedRefreshLoadMoreLayout lay_refresh;
     private MessageCountManager messageCountManager;
@@ -290,6 +292,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
+        if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))) {
+            mrlayout_plus.setVisibility(View.VISIBLE);
+        } else {
+            mrlayout_plus.setVisibility(View.GONE);
+        }
     }
 
     private void changeState() {
@@ -462,7 +469,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                H5Act.startAct(baseContext, Constant.PLUS_ADD, H5Act.MODE_SONIC);
+                H5Act.startAct(baseContext, SharedPrefUtil.getSharedPrfString("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -817,10 +824,14 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 QrCodeAct.startAct(baseContext, managerUrl);
                 break;
             case R.id.mrlayout_zidingyi:
-                if (Common.isPlus()) {
+                if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))){
+                    if (Common.isPlus()) {
+                        MyLittleStoreActivity.startAct(getActivity());
+                    } else {
+                        initHintDialog();
+                    }
+                }else {
                     MyLittleStoreActivity.startAct(getActivity());
-                } else {
-                    initHintDialog();
                 }
                 break;
             case R.id.rl_more:

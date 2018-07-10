@@ -1,13 +1,10 @@
 package com.shunlian.app.ui.plus;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -357,6 +354,7 @@ public class MyPlusFrag extends BaseFragment implements IShareBifGifView, View.O
             case R.id.miv_invite:
                 visible(quick_actions);
                 quick_actions.shareInfo(mShareInfoParam);
+                mShareInfoParam.isCopyTitle=true;
                 quick_actions.shareStyle2Dialog(true, 4);
                 break;
             case R.id.ll_close_tab1:

@@ -103,8 +103,9 @@ public class HelpSolutionAct extends BaseActivity implements View.OnClickListene
     @OnClick(R.id.rl_more)
     public void more() {
         quick_actions.setVisibility(View.VISIBLE);
-        quick_actions.shareHelp();
+        shareInfoParam.isCopyTitle=true;
         quick_actions.shareInfo(shareInfoParam);
+        quick_actions.shareHelp();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
