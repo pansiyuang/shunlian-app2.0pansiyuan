@@ -104,7 +104,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     @BindView(R.id.view_line)
     public View view_line;
     public Activity activity;
-    public String h5Url = "";
+    public String h5Url = "", beforeUrl = "",member_id="";
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
@@ -114,8 +114,16 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     SonicSessionClientImpl sonicSessionClient = null;
-    private boolean isLogin = false;
     private boolean isContinue = false, isSecond = false;
+
+    public static BaseFragment getInstance(String h5Url, int mode) {
+        H5PlusFrag fragment = new H5PlusFrag();
+        Bundle args = new Bundle();
+        args.putSerializable("h5Url", h5Url);
+        args.putSerializable("mode", mode);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     /**
      * 布局id
@@ -126,14 +134,6 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
     }
 
-    public static BaseFragment getInstance(String h5Url,int mode) {
-        H5PlusFrag fragment = new H5PlusFrag();
-        Bundle args = new Bundle();
-        args.putSerializable("h5Url", h5Url);
-        args.putSerializable("mode", mode);
-        fragment.setArguments(args);
-        return fragment;
-    }
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.act_h5, container, false);
@@ -194,13 +194,12 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         h5Url = (String) getArguments().getSerializable("h5Url");
         mode = (int) getArguments().getSerializable("mode");
+        beforeUrl=h5Url;
         if (!isEmpty(h5Url)) {
             initSonic();
         }
         initWebView();
-        if (!isEmpty(h5Url)) {
-            loadUrl();
-        }
+        loadUrl();
     }
 
     public void initSonic() {
@@ -246,12 +245,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     protected void loadUrl() {
         LogUtil.zhLogW("h5Url=====" + h5Url);
         // webview is ready now, just tell session client to bind
-        if (sonicSessionClient != null) {
-            sonicSessionClient.bindWebView(mwv_h5);
-            sonicSessionClient.clientReady();
-        } else { // default mode
-            if (!isEmpty(h5Url))
+        if (!isEmpty(h5Url)) {
+            if (sonicSessionClient != null) {
+                sonicSessionClient.bindWebView(mwv_h5);
+                sonicSessionClient.clientReady();
+            } else { // default mode
                 mwv_h5.loadUrl(h5Url, setWebviewHeader());
+            }
         }
     }
 
@@ -454,16 +454,25 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
     @Override
     public void onStart() {
+        if (!isHidden()) {
+            reFresh();
+            isSecond = true;
+        }
         super.onStart();
-        reFresh();
-        isSecond = true;
     }
 
-    public void reFresh(){
-        if (isLogin && isSecond) {
+    public void reFresh() {
+        if (!isEmpty(beforeUrl)&&!beforeUrl.equals(h5Url)&&!isEmpty(h5Url)){
+            initSonic();
+            initWebView();
+//            loadUrl();
+            mwv_h5.loadUrl(h5Url, setWebviewHeader());
+            beforeUrl=h5Url;
+        } else if (isSecond&&!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", ""))) {
             addCookie();
             mwv_h5.reload();
         }
+        member_id=SharedPrefUtil.getSharedPrfString("member_id", "");
     }
 
     public void addCookie() {
@@ -555,8 +564,6 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
             if (!TextUtils.isEmpty(type)) {
-                if ("login".equals(type))
-                    isLogin = true;
                 String id = "";
                 String id1 = "";
                 if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))

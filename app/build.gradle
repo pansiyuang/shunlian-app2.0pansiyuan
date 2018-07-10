@@ -125,5 +125,5 @@ bugly {
     appId = '1400008795' // 注册时分配的App ID
     appKey = '8fd19263-5cbe-45ff-be6c-000be537123f' // 注册时分配的App Key5+‘’
     appPackage='com.shunlian.app'
-    appVersion='2.0.3'
+    appVersion='2.0.4'
 }
