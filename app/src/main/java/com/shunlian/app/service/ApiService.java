@@ -2160,6 +2160,15 @@ public interface ApiService {
     Call<BaseEntity<CommondEntity>> parseSecretWord(@Body RequestBody body);
 
     /**
+     * plus入口
+     *
+     * @param body
+     * @return
+     */
+    @POST("product/entryinfo")
+    Call<BaseEntity<CommonEntity>> entryInfo(@Body RequestBody body);
+
+    /**
      * 分享计数
      *
      * @param body

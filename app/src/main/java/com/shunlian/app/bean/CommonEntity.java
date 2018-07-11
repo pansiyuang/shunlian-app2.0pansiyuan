@@ -52,4 +52,9 @@ public class CommonEntity {
     public String share_url;
     public String content;
 
+    //plus入口
+    public String is_open;
+    public String url_index;
+    public String url;
+    public String is_plus;
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import com.airbnb.lottie.LottieAnimationView;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.AdEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
@@ -100,7 +101,6 @@ public class StartAct extends MBaseActivity implements IMain {
         isHave=true;
         pMain = new PMain(this, this);
         pMain.getUpdateInfo("Android", SharedPrefUtil.getSharedPrfString("localVersion", "2.0.0"));
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -257,7 +257,18 @@ public class StartAct extends MBaseActivity implements IMain {
                 updateDialogV = new UpdateDialog(this,data);
             }else {
                 pMain.getSplashAD();
+                pMain.entryInfo();
             }
+        }
+    }
+
+    @Override
+    public void entryInfo(CommonEntity data) {
+        if (isHave){
+            SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
+            SharedPrefUtil.saveSharedPrfString("is_open", data.is_open);
+            SharedPrefUtil.saveSharedPrfString("plus_url", data.url);
+            SharedPrefUtil.saveSharedPrfString("plus_index", data.url_index);
         }
     }
 

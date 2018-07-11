@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.shunlian.app.bean.AdEntity;
 import com.shunlian.app.bean.BaseEntity;
+import com.shunlian.app.bean.CommonEntity;
 import com.shunlian.app.bean.CommondEntity;
 import com.shunlian.app.bean.PunishEntity;
 import com.shunlian.app.bean.UpdateEntity;
@@ -38,6 +39,25 @@ public class PMain extends BasePresenter<IMain> {
     @Override
     protected void initApi() {
 
+    }
+
+    public void entryInfo(){
+        Map<String,String> map = new HashMap<>();
+//        map.put("word",word);
+        sortAndMD5(map);
+        RequestBody requestBody = getRequestBody(map);
+        Call<BaseEntity<CommonEntity>> baseEntityCall = getAddCookieApiService().entryInfo(requestBody);
+
+        getNetData(false,baseEntityCall,new SimpleNetDataCallback<BaseEntity<CommonEntity>>(){
+            @Override
+            public void onSuccess(BaseEntity<CommonEntity> entity) {
+                super.onSuccess(entity);
+                CommonEntity data = entity.data;
+                if (data != null) {
+                    iView.entryInfo(data);
+                }
+            }
+        });
     }
 
     public void getCommond(String word){
