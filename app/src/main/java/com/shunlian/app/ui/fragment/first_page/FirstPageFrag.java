@@ -51,7 +51,10 @@ import butterknife.OnClick;
 
 public class FirstPageFrag extends BaseFragment implements View.OnClickListener, IFirstPage, MessageCountManager.OnGetMessageListener {
     public static String firstId = "";
-    public static boolean isExpand=false;
+    public static boolean isExpand = false;
+    //    @BindView(R.id.mAppbar)
+    public static AppBarLayout mAppbar;
+    public ArrayList<Fragment> fragments;
     @BindView(R.id.mll_message)
     MyLinearLayout mll_message;
     @BindView(R.id.miv_photo)
@@ -68,26 +71,23 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
     PagerSlidingTabStrip tabs;
     @BindView(R.id.pager)
     ViewPager pager;
-//    @BindView(R.id.mAppbar)
-    public static AppBarLayout mAppbar;
     @BindView(R.id.mllayout_title)
     MyLinearLayout mllayout_title;
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
     @BindView(R.id.data_coorLayout)
     CoordinatorLayout data_coorLayout;
-    private PFirstPage pFirstPage;
-    private String logoType,logoId;
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+    private PFirstPage pFirstPage;
+    private String logoType, logoId;
     private MessageCountManager messageCountManager;
-    public ArrayList<Fragment> fragments;
     private MainActivity mainActivity;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
         View rootView = inflater.inflate(R.layout.frag_first_page, container, false);
-        mAppbar= (AppBarLayout) rootView.findViewById(R.id.mAppbar);
+        mAppbar = (AppBarLayout) rootView.findViewById(R.id.mAppbar);
         return rootView;
     }
 
@@ -150,12 +150,12 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (-verticalOffset >= mAppbar.getMeasuredHeight()) {
-                    isExpand=false;
+                    isExpand = false;
                     if (!Constant.IS_FIRST_SHARE)
-                    ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
-                            .statusBarColor(R.color.pink_color)
-                            .statusBarDarkFont(false, 0)
-                            .init();
+                        ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
+                                .statusBarColor(R.color.pink_color)
+                                .statusBarDarkFont(false, 0)
+                                .init();
                     mllayout_title.setBackgroundColor(getColorResouce(R.color.pink_color));
                     miv_scan.setImageResource(R.mipmap.icon_home_saoyisao_w);
                     miv_news.setImageResource(R.mipmap.icon_home_message_w);
@@ -164,7 +164,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                     mtv_scan.setTextColor(getColorResouce(R.color.white));
                     mtv_news.setTextColor(getColorResouce(R.color.white));
                 } else {
-                    isExpand=true;
+                    isExpand = true;
                     ImmersionBar.with(FirstPageFrag.this).fitsSystemWindows(true)
                             .statusBarColor(R.color.white)
                             .statusBarDarkFont(true, 0.2f)
@@ -183,7 +183,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
             @Override
             public void onPageSelected(int arg0) {
                 mAppbar.setExpanded(true);
-                mainActivity.position=arg0;
+                mainActivity.position = arg0;
             }
 
             @Override
@@ -209,7 +209,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 //            pFirstPage.getMenuData();
 //        }
         pFirstPage.getMenuData();
-        mainActivity= (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         nei_empty.setImageResource(R.mipmap.img_empty_wuwangluo)
                 .setText(getString(R.string.common_wangluozhuangkuang))
                 .setButtonText(getStringResouce(R.string.common_dianjichongshi))
@@ -237,7 +237,7 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
                 MessageActivity.startAct(getActivity());
                 break;
             case R.id.miv_photo:
-                Common.goGoGo(getContext(),logoType,logoId);
+                Common.goGoGo(getContext(), logoType, logoId);
                 break;
         }
 
@@ -245,24 +245,24 @@ public class FirstPageFrag extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void setTab(GetMenuEntity getMenuEntiy) {
-        if (getMenuEntiy == null){
+        if (getMenuEntiy == null) {
             return;
         }
         visible(data_coorLayout);
         gone(nei_empty);
-        if (miv_photo!=null){
-            if (getMenuEntiy.logo!=null){
-                logoType=getMenuEntiy.logo.type;
-                logoId=getMenuEntiy.logo.item_id;
-                GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic,R.mipmap.img_default_home_logo);
-            }else {
+        if (miv_photo != null) {
+            if (getMenuEntiy.logo != null) {
+                logoType = getMenuEntiy.logo.type;
+                logoId = getMenuEntiy.logo.item_id;
+                GlideUtils.getInstance().loadImage(getContext(), miv_photo, getMenuEntiy.logo.bg_pic, R.mipmap.img_default_home_logo);
+            } else {
                 miv_photo.setVisibility(View.GONE);
             }
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < getMenuEntiy.datas.size(); i++) {
             fragments.add(CateGoryFrag.getInstance(getMenuEntiy.datas.get(i).id));
-            if (i >= getMenuEntiy.datas.size() - 1) {
+            if (i >= getMenuEntiy.datas.size() - 1 && isAdded()) {
                 firstId = getMenuEntiy.datas.get(0).id;
                 pager.setAdapter(new MyFrPagerAdapter(getChildFragmentManager(), getMenuEntiy.datas, fragments));
                 tabs.setViewPager(pager);
