@@ -415,27 +415,35 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
     public void detachView() {
         if (mGoodsDataCall != null && mGoodsDataCall.isExecuted()){
             mGoodsDataCall.cancel();
+            mGoodsDataCall = null;
         }
         if (mMayBeBuyCall != null && mMayBeBuyCall.isExecuted()){
             mMayBeBuyCall.cancel();
+            mMayBeBuyCall = null;
         }
         if (mAddCarCall != null && mAddCarCall.isExecuted()){
             mAddCarCall.cancel();
+            mAddCarCall = null;
         }
         if (mFootprintCall != null && mFootprintCall.isExecuted()){
             mFootprintCall.cancel();
+            mFootprintCall = null;
         }
         if (mGoodsFavCall != null && mGoodsFavCall.isExecuted()){
             mGoodsFavCall.cancel();
+            mGoodsFavCall = null;
         }
         if (mGoodsFavRemoveCall != null && mGoodsFavRemoveCall.isExecuted()){
             mGoodsFavRemoveCall.cancel();
+            mGoodsFavRemoveCall = null;
         }
         if (mCommentCall != null && mCommentCall.isExecuted()){
             mCommentCall.cancel();
+            mCommentCall = null;
         }
         if (mChatIdCall != null && mChatIdCall.isExecuted()){
             mChatIdCall.cancel();
+            mChatIdCall = null;
         }
 
         if (mCommentLists != null){

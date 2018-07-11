@@ -65,7 +65,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     private int allPage;//总页
     private OnReloadListener reloadListener;
     private boolean isLoadFailure;
-    public final LayoutInflater mInflater;
+    public LayoutInflater mInflater;
 
     public BaseRecyclerAdapter(Context context, boolean isShowFooter, List<T> lists) {
         if (lists == null){
@@ -74,7 +74,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
         this.context = context;
         this.lists = lists;
         this.isShowFooter = isShowFooter;
-        mInflater = LayoutInflater.from(context);
+        if(context != null)
+            mInflater = LayoutInflater.from(context);
     }
 
     @Override
