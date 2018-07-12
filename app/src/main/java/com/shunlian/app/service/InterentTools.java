@@ -54,10 +54,6 @@ public final class InterentTools {
     public  static String H5_HOST = "https://wx.shunliandongli.com/";//正式
 
 
-    //public static String DOMAIN = "v20-wx.shunliandongli.com";//webView的cookie中的domain，即h5的域名测试
-    //public static String DOMAIN = "front.v2.shunliandongli.com";//webView的cookie中的domain，即h5的域名预发布
-    public static String DOMAIN = "wx.shunliandongli.com";//webView的cookie中的domain，即h5的正式域名
-
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit retrofit;
 

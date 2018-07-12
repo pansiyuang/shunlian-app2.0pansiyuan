@@ -238,6 +238,10 @@ public abstract class MBaseActivity extends FragmentActivity implements View.OnC
         if (MyOnClickListener.isFastClick()) {
             return;
         }
+        mOnClick(view);
+    }
+    public void mOnClick(View view){
+
     }
 
     @Override

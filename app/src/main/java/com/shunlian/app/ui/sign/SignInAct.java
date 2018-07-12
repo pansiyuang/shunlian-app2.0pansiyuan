@@ -2,7 +2,6 @@ package com.shunlian.app.ui.sign;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,7 +34,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 
-public class SignInAct extends BaseActivity implements View.OnClickListener, ISignInView {
+public class SignInAct extends BaseActivity implements  ISignInView {
     @BindView(R.id.mtv_title)
     MyTextView mtv_title;
 
@@ -82,8 +81,9 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void mOnClick(View view) {
+        super.mOnClick(view);
+        switch (view.getId()) {
             case R.id.miv_sign:
                 if (!isSigned && !isSign) {
                     pSignIn.sign();
@@ -91,6 +91,7 @@ public class SignInAct extends BaseActivity implements View.OnClickListener, ISi
                 break;
         }
     }
+
 
     public void anim(final String scores) {
         try {

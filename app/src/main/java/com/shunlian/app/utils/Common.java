@@ -853,6 +853,31 @@ public class Common {
     }
 
     /**
+     * 获取url对应的域名
+     *
+     * @param url
+     * @return
+     */
+    public static String getDomain(String url) {
+        if (TextUtils.isEmpty(url))
+            return "";
+        String result = "";
+        int j = 0, startIndex = 0, endIndex = 0;
+        for (int i = 0; i < url.length(); i++) {
+            if (url.charAt(i) == '/') {
+                j++;
+                if (j == 2)
+                    startIndex = i;
+                else if (j == 3)
+                    endIndex = i;
+            }
+
+        }
+        result = url.substring(startIndex + 1, endIndex);
+        return result;
+    }
+
+    /**
      * 如果没有登录提示《请先登录》 并返回true
      *
      * @return

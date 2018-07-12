@@ -70,7 +70,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
-import static com.shunlian.app.service.InterentTools.DOMAIN;
 
 /**
  * Created by Administrator on 2017/12/26.
@@ -142,20 +141,21 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     }
 
     @Override
-    public void onClick(View view) {
-        super.onClick(view);
+    public void mOnClick(View view) {
+        super.mOnClick(view);
         switch (view.getId()) {
             case R.id.miv_close:
+                if (mwv_h5.canGoBack()) {
+                    mwv_h5.goBack();// 返回前一个页面
+                    return;
+                }
                 onBack();
                 break;
         }
     }
 
     public void onBack() {
-        if (mwv_h5.canGoBack()) {
-            mwv_h5.goBack();// 返回前一个页面
-            return;
-        }
+
     }
 
     private void setTitle() {
@@ -194,7 +194,8 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         h5Url = (String) getArguments().getSerializable("h5Url");
         mode = (int) getArguments().getSerializable("mode");
-        beforeUrl=h5Url;
+        if (!isEmpty(h5Url))
+            beforeUrl=h5Url;
         if (!isEmpty(h5Url)) {
             initSonic();
         }
@@ -462,7 +463,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     }
 
     public void reFresh() {
-        if (!isEmpty(beforeUrl)&&!beforeUrl.equals(h5Url)&&!isEmpty(h5Url)){
+        if (!beforeUrl.equals(h5Url)&&!isEmpty(h5Url)){
             initSonic();
             initWebView();
 //            loadUrl();
@@ -485,9 +486,10 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        cookieManager.setCookie(DOMAIN, "Client-Type=Android");
-        cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
+        String domain= Common.getDomain(h5Url);
+        cookieManager.setCookie(domain, "Client-Type=Android");
+        cookieManager.setCookie(domain, "token=" + token);
+        cookieManager.setCookie(domain, "User-Agent=" + ua);
         cookieSyncManager.sync();
         //end
     }

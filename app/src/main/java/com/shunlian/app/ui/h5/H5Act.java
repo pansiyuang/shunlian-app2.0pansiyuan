@@ -34,7 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -65,8 +64,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-
-import static com.shunlian.app.service.InterentTools.DOMAIN;
 
 /**
  * Created by Administrator on 2017/12/26.
@@ -201,6 +198,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         mIntent = getIntent();
         mode = mIntent.getIntExtra("mode", 0);
         h5Url = mIntent.getStringExtra("url");
+        if (!isEmpty(h5Url))
         beforeUrl=h5Url;
         if (!isEmpty(h5Url)) {
             initSonic();
@@ -467,7 +465,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
 
     public void reFresh() {
-        if (!isEmpty(beforeUrl)&&!beforeUrl.equals(h5Url) && !isEmpty(h5Url)) {
+        if (!beforeUrl.equals(h5Url) && !isEmpty(h5Url)) {
             initSonic();
             initWebView();
 //            loadUrl();
@@ -490,9 +488,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        cookieManager.setCookie(DOMAIN, "Client-Type=Android");
-        cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
+        String domain= Common.getDomain(h5Url);
+        cookieManager.setCookie(domain, "Client-Type=Android");
+        cookieManager.setCookie(domain, "token=" + token);
+        cookieManager.setCookie(domain, "User-Agent=" + ua);
         cookieSyncManager.sync();
         //end
     }
