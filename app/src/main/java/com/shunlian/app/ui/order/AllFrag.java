@@ -120,7 +120,12 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             adapter.unbind();
             adapter = null;
         }
-        recy_view.postDelayed(()->recy_view.scrollToPosition(0),100);
+        recy_view.postDelayed(()->{
+            if (recy_view == null) {
+                if (getView() != null)
+                    recy_view = ButterKnife.findById(getView(), R.id.recy_view);
+                else return;}recy_view.scrollToPosition(0);},100);
+
         if (ordersLists != null) {
             ordersLists.clear();
         }
@@ -191,10 +196,12 @@ public class AllFrag extends LazyFragment implements IOrderListView {
             });
 
             adapter.setOnItemClickListener((view, position) -> {
-                MyOrderEntity.Orders orders1 = ordersLists.get(position);
-                OrderDetailAct.startAct(baseActivity, orders1.id);
-                //LogUtil.zhLogW("=onItemClick============="+position);
-                refreshPosition = position;
+                if (position < ordersLists.size()) {
+                    MyOrderEntity.Orders orders1 = ordersLists.get(position);
+                    OrderDetailAct.startAct(baseActivity, orders1.id);
+                    //LogUtil.zhLogW("=onItemClick============="+position);
+                    refreshPosition = position;
+                }
             });
 
             adapter.setRefreshOrderListener(position -> {
@@ -300,8 +307,8 @@ public class AllFrag extends LazyFragment implements IOrderListView {
                 adapter.loadFailure();
             }
         } else if (request_code == OrderListPresenter.OTHER_CODE) {
-            recy_view.setVisibility(View.GONE);
-            nei_empty.setVisibility(View.VISIBLE);
+            visible(nei_empty);
+            gone(recy_view);
             nei_empty.setNetExecption().setOnClickListener(v ->  {
                     if (mPresenter != null) {
                         requestData(id);

@@ -72,8 +72,11 @@ public class SaleDataPresenter extends BasePresenter<ISaleDataView> {
                 iView.setEliteTutorData(data.master_info_new,data.user_info.member_role_code);
                 iView.setplusrole(data.user_info.plus_role_code);
                 iView.setSalePS(data.tip);
-                iView.setSaleTip(data.user_info.grow_info);
-                //iView.setSaleTip("您已连续完成9个月精英,连续10个月达标所有成长值上浮5%");
+                iView.setSaleTip(data.user_info.grow_infos);
+                /*List<String> list = new ArrayList<>();
+                list.add("恭喜您已连续9个月成为精英本月如果再完成精英目标成长值将整体上浮5");
+                list.add("恭喜您已获得本月成长值1.5倍的增长机会，若本月小店销售大于3000即可转获本月成长值2倍的增长机会");
+                iView.setSaleTip(list);*/
             }
         });
     }

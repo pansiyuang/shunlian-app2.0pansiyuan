@@ -64,149 +64,104 @@ import butterknife.OnClick;
  */
 
 public class StoreAct extends BaseActivity implements View.OnClickListener, StoreView, MessageCountManager.OnGetMessageListener {
+    public boolean isFocus;
+    public int focusNum = 0;
     @BindView(R.id.store_ctLayout)
     CollapsingToolbarLayout store_ctLayout;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.mrlayout_stores)
     MyRelativeLayout mrlayout_stores;
-
     @BindView(R.id.store_abLayout)
     AppBarLayout store_abLayout;
-
     @BindView(R.id.miv_store)
     MyImageView miv_store;
-
     @BindView(R.id.mtv_store)
     MyTextView mtv_store;
-
     @BindView(R.id.line_first)
     View line_first;
-
     @BindView(R.id.mtv_baby)
     MyTextView mtv_baby;
-
     @BindView(R.id.mrlayout_baby)
     MyRelativeLayout mrlayout_baby;
-
     @BindView(R.id.mrlayout_discount)
     MyRelativeLayout mrlayout_discount;
-
     @BindView(R.id.mtv_discount)
     MyTextView mtv_discount;
-
     @BindView(R.id.line_baby)
     View line_baby;
-
     @BindView(R.id.line_discount)
     View line_discount;
-
     @BindView(R.id.mrlayout_new)
     MyRelativeLayout mrlayout_new;
-
     @BindView(R.id.mtv_new)
     MyTextView mtv_new;
-
     @BindView(R.id.line_new)
     View line_new;
-
     @BindView(R.id.rv_firstVouch)
     RecyclerView rv_firstVouch;
-
     @BindView(R.id.mrlayout_store)
     MyRelativeLayout mrlayout_store;
-
     @BindView(R.id.mllayout_first)
     MyLinearLayout mllayout_first;
-
     @BindView(R.id.mllayout_baby)
     MyLinearLayout mllayout_baby;
-
     @BindView(R.id.mllayout_discount)
     MyLinearLayout mllayout_discount;
-
     @BindView(R.id.rv_new)
     RecyclerView rv_new;
-
     @BindView(R.id.rv_baby)
     RecyclerView rv_baby;
-
     @BindView(R.id.rv_discount)
     RecyclerView rv_discount;
-
     @BindView(R.id.rv_discounts)
     RecyclerView rv_discounts;
-
     @BindView(R.id.rv_discountMenu)
     RecyclerView rv_discountMenu;
-
     @BindView(R.id.rv_first)
     RecyclerView rv_first;
     @BindView(R.id.miv_storeLogo)
     MyImageView miv_storeLogo;
-
     @BindView(R.id.mtv_attention)
     MyTextView mtv_attention;
-
     @BindView(R.id.mtv_storeName)
     MyTextView mtv_storeName;
-
     @BindView(R.id.miv_star)
     MyImageView miv_star;
-
     @BindView(R.id.mtv_number)
     MyTextView mtv_number;
-
     @BindView(R.id.mtv_babyNum)
     MyTextView mtv_babyNum;
-
     @BindView(R.id.mtv_discountNum)
     MyTextView mtv_discountNum;
-
     @BindView(R.id.mtv_newNum)
     MyTextView mtv_newNum;
-
     @BindView(R.id.mrlayout_bg)
     MyRelativeLayout mrlayout_bg;
-
     @BindView(R.id.tv_zonghe)
     MyTextView tv_zonghe;
-
     @BindView(R.id.tv_xiaoliang)
     MyTextView tv_xiaoliang;
-
     @BindView(R.id.tv_shangxin)
     MyTextView tv_shangxin;
-
     @BindView(R.id.tv_price)
     MyTextView tv_price;
-
     @BindView(R.id.iv_price)
     MyImageView iv_price;
-
     @BindView(R.id.mrLayout_price)
     MyRelativeLayout mrLayout_price;
-
     @BindView(R.id.mrlayout_jianjie)
     MyRelativeLayout mrlayout_jianjie;
-
     @BindView(R.id.mrlayout_sort)
     MyRelativeLayout mrlayout_sort;
-
     @BindView(R.id.mrlayout_sorts)
     MyRelativeLayout mrlayout_sorts;
-
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
-
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
-
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
-
     @BindView(R.id.mllayout_search)
     MyLinearLayout mllayout_search;
     @BindView(R.id.mll_chat)
@@ -214,7 +169,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private MessageCountManager messageCountManager;
     private StorePresenter storePresenter;
     private boolean isPriceUp, initBaby, initDiscount, initNew, initFirst;
-    private String storeId = "26", star,logo;
+    private String storeId = "26", star, logo;
     private StoreFirstAdapter storeFirstAdapter;
     private StoreBabyAdapter storeBabyAdapter;
     private StoreNewAdapter storeNewAdapter;
@@ -223,9 +178,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     private StoreDiscountMenuAdapter storeDiscountMenuAdapter;
     private StoreVoucherAdapter storeVoucherAdapter;
     private GridLayoutManager babyManager, discountManager;
-    public boolean isFocus;
     private ShareInfoParam shareInfoParam;
-    public int focusNum=0;
     private List<GoodsDeatilEntity.Voucher> vouchers;
 
     public static void startAct(Context context, String storeId) {
@@ -399,6 +352,29 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
+    public void newBaby() {
+        miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
+        mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
+        mtv_new.setTextColor(getResources().getColor(R.color.pink_color));
+        mtv_newNum.setTextColor(getResources().getColor(R.color.pink_color));
+        line_first.setVisibility(View.GONE);
+        line_baby.setVisibility(View.GONE);
+        line_discount.setVisibility(View.GONE);
+        line_new.setVisibility(View.VISIBLE);
+        mllayout_first.setVisibility(View.GONE);
+        mllayout_baby.setVisibility(View.GONE);
+        mllayout_discount.setVisibility(View.GONE);
+        rv_new.setVisibility(View.VISIBLE);
+        if (!initNew) {
+            storePresenter.initNew(storeId);
+            initNew = true;
+        }
+    }
+
     public void discountClick() {
         miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
         mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
@@ -453,26 +429,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
                 discountClick();
                 break;
             case R.id.mrlayout_new:
-                miv_store.setImageResource(R.mipmap.icon_shop_shop_n);
-                mtv_store.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_baby.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_babyNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discount.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_discountNum.setTextColor(getResources().getColor(R.color.my_gray_three));
-                mtv_new.setTextColor(getResources().getColor(R.color.pink_color));
-                mtv_newNum.setTextColor(getResources().getColor(R.color.pink_color));
-                line_first.setVisibility(View.GONE);
-                line_baby.setVisibility(View.GONE);
-                line_discount.setVisibility(View.GONE);
-                line_new.setVisibility(View.VISIBLE);
-                mllayout_first.setVisibility(View.GONE);
-                mllayout_baby.setVisibility(View.GONE);
-                mllayout_discount.setVisibility(View.GONE);
-                rv_new.setVisibility(View.VISIBLE);
-                if (!initNew) {
-                    storePresenter.initNew(storeId);
-                    initNew = true;
-                }
+                newBaby();
                 break;
         }
     }
@@ -525,11 +482,14 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==0&&resultCode==1){
-            isFocus(data.getBooleanExtra("isFocus",false),data.getIntExtra("focusNum",0));
+        if (requestCode == 0 && resultCode == 1) {
+            isFocus(data.getBooleanExtra("isFocus", false), data.getIntExtra("focusNum", 0));
         }
     }
 
+    public void goSortAct(){
+        StoreSortAct.startAct(this, storeId, true);
+    }
     @Override
     public void onClick(View v) {
         storeMenu(v);
@@ -538,16 +498,16 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
         switch (v.getId()) {
             case R.id.mrlayout_jianjie:
-                StoreIntroduceAct.startActForResult(this, storeId, star,logo, isFocus);
+                StoreIntroduceAct.startActForResult(this, storeId, star, logo, isFocus);
                 break;
             case R.id.mllayout_search:
-                StoreSearchAct.startAct(this,storeId,"","","");
+                StoreSearchAct.startAct(this, storeId, "", "", "");
                 break;
             case R.id.mrlayout_sort:
-                StoreSortAct.startAct(this, storeId,true);
+                goSortAct();
                 break;
             case R.id.mrlayout_sorts:
-                StoreSortAct.startAct(this, storeId,true);
+                goSortAct();
                 break;
             case R.id.mtv_attention:
                 if (isFocus) {
@@ -622,7 +582,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         }
     }
 
-    public void isFocus(boolean isFocus,int focusNum){
+    public void isFocus(boolean isFocus, int focusNum) {
         if (!isFocus) {
             mtv_attention.setTextColor(getResources().getColor(R.color.white));
             mtv_attention.setText(getStringResouce(R.string.discover_follow));
@@ -634,9 +594,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             mtv_attention.setBackgroundResource(R.mipmap.bg_shop_attention_h);
             this.isFocus = true;
         }
-        this.focusNum=focusNum;
+        this.focusNum = focusNum;
         mtv_number.setText(focusNum + "人");
     }
+
     @Override
     public void storeHeader(StoreIndexEntity.Head head) {
         logo = head.decoration_logo;
@@ -656,10 +617,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         star = head.star;
         mtv_storeName.setText(head.decoration_name);
         GlideUtils.getInstance().loadImage(this, miv_star, star);
-        if ("false".equals(head.is_mark)){
-            isFocus(false,!isEmpty(head.mark_count)?Integer.parseInt(head.mark_count):0);
-        }else {
-            isFocus(true,!isEmpty(head.mark_count)?Integer.parseInt(head.mark_count):0);
+        if ("false".equals(head.is_mark)) {
+            isFocus(false, !isEmpty(head.mark_count) ? Integer.parseInt(head.mark_count) : 0);
+        } else {
+            isFocus(true, !isEmpty(head.mark_count) ? Integer.parseInt(head.mark_count) : 0);
         }
         mtv_babyNum.setText(head.goods_count);
         mtv_discountNum.setText(head.promotion_count);
@@ -671,7 +632,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
         shareInfoParam.shop_star = head.star;
         shareInfoParam.userName = head.nickname;
         shareInfoParam.userAvatar = head.avatar;
-        shareInfoParam.desc=head.decoration_name;
+        shareInfoParam.desc = head.decoration_name;
     }
 
     @Override
@@ -704,10 +665,10 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
 
 
     @Override
-    public void storeVoucher( List<GoodsDeatilEntity.Voucher> voucherList) {
+    public void storeVoucher(List<GoodsDeatilEntity.Voucher> voucherList) {
         if (!isEmpty(voucherList)) {
             rv_firstVouch.setVisibility(View.VISIBLE);
-            vouchers=voucherList;
+            vouchers = voucherList;
             if (storeVoucherAdapter == null) {
                 storeVoucherAdapter = new StoreVoucherAdapter(this, false, vouchers);
                 LinearLayoutManager firstManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -745,7 +706,7 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
             focusNum++;
             isFocus = true;
         }
-        mtv_number.setText(focusNum+ "人");
+        mtv_number.setText(focusNum + "人");
     }
 
     @Override
@@ -799,15 +760,15 @@ public class StoreAct extends BaseActivity implements View.OnClickListener, Stor
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && storePresenter != null){
-            storePresenter.getShareInfo(storePresenter.store,storeId);
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && storePresenter != null) {
+            storePresenter.getShareInfo(storePresenter.store, storeId);
         }
     }
 
     @Override
     public void shareInfo(BaseEntity<ShareInfoParam> baseEntity) {
-        if (quick_actions != null){
+        if (quick_actions != null) {
             shareInfoParam.shareLink = baseEntity.data.shareLink;
             shareInfoParam.userName = baseEntity.data.userName;
             shareInfoParam.userAvatar = baseEntity.data.userAvatar;

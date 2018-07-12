@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
             messageCountManager.setOnGetMessageListener(this);
         }
         Common.parseClipboard(this);
-        if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))){
+        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
             ll_tab_sort.setVisibility(View.VISIBLE);
         }else {
             ll_tab_sort.setVisibility(View.GONE);
@@ -299,9 +299,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         //先判断此碎片是否第一次点击，是的话初始化碎片
         String url;
         if (!Common.isAlreadyLogin() || !Common.isPlus()) {
-            url=SharedPrefUtil.getSharedPrfString("plus_url", Constant.PLUS_ADD);
+            url=SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD);
         }else {
-            url=SharedPrefUtil.getSharedPrfString("plus_index", Constant.PLUS_ADD);
+            url=SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD);
         }
         if (h5PlusFrag== null) {
             h5PlusFrag = (H5PlusFrag) fragmentMap.get(flags[1]);

@@ -95,8 +95,8 @@ public class ADAct extends MBaseActivity {
     }
 
     @Override
-    public void onClick(View view) {
-        super.onClick(view);
+    public void mOnClick(View view) {
+        super.mOnClick(view);
         switch (view.getId()) {
             case R.id.mtv_count:
                 isCancel=true;
@@ -116,6 +116,7 @@ public class ADAct extends MBaseActivity {
                 break;
         }
     }
+
 
     //禁止返回键
     @Override

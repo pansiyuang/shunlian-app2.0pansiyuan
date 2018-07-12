@@ -16,7 +16,6 @@ import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.ArticleDetailPresenter;
 import com.shunlian.app.ui.h5.H5Act;
-import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IArticleDetailView;
 
@@ -42,7 +41,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         Intent intentH5 = new Intent(context, ArticleH5Act.class);
         intentH5.putExtra("articleId", articleId);
         intentH5.putExtra("mode", mode);
-        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intentH5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intentH5);
     }
 
@@ -120,10 +119,10 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.miv_favorite:
                 if (!Common.isAlreadyLogin()) {
-                    Common.goGoGo(this,"login");
+                    Common.goGoGo(this, "login");
                     return;
                 }
                 if (currentFavoriteStatus == 1) {
@@ -143,9 +142,9 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loginRefresh(DefMessageEvent event){
-        if (event.loginSuccess && mPresent != null){
-            mPresent.getShareInfo(mPresent.article,articleId);
+    public void loginRefresh(DefMessageEvent event) {
+        if (event.loginSuccess && mPresent != null) {
+            mPresent.getShareInfo(mPresent.article, articleId);
         }
     }
 
@@ -170,8 +169,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
     public void getArticleDetail(ArticleDetailEntity detailEntity) {
         if (!isEmpty(detailEntity.h5_detail_url)) {
             h5Url = detailEntity.h5_detail_url;
-            initSonic();
-            loadUrl();
+            reFresh();
         }
 
         if ("1".equals(detailEntity.had_favorites)) {
@@ -189,7 +187,7 @@ public class ArticleH5Act extends H5Act implements IArticleDetailView, MessageCo
         shareInfoParam.desc = detailEntity.full_title;
         shareInfoParam.img = detailEntity.thumb;
         shareInfoParam.thumb_type = "1";
-        if (detailEntity.user_info != null){
+        if (detailEntity.user_info != null) {
             shareInfoParam.userName = detailEntity.user_info.nickname;
             shareInfoParam.userAvatar = detailEntity.user_info.avatar;
         }

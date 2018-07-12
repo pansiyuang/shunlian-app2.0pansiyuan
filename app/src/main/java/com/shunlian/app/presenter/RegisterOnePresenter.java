@@ -75,7 +75,9 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
             }
         });
     }
-
+    /**
+     * 注册时检验手机号是否注册
+     */
     public void checkPhone(String mobile){
         Map<String,String> map = new HashMap<>();
         map.put("mobile",mobile);
@@ -133,5 +135,28 @@ public class RegisterOnePresenter extends BasePresenter<IRegisterOneView> {
     @Override
     public void detachView() {
 
+    }
+
+    /**
+     * 登录时检验手机号是否注册，仅用手机验证码登录
+     */
+    public void checkMobile(String mobile){
+        Map<String,String> map = new HashMap<>();
+        map.put("mobile",mobile);
+        map.put("type","1");
+        sortAndMD5(map);
+        Call<BaseEntity<String>> baseEntityCall = getApiService().checkMobile(map);
+        getNetData(baseEntityCall,new SimpleNetDataCallback<BaseEntity<String>>(){
+            @Override
+            public void onSuccess(BaseEntity<String> entity) {
+                super.onSuccess(entity);
+            }
+
+            @Override
+            public void onErrorCode(int code, String message) {
+                super.onErrorCode(code, message);
+                Common.staticToast(message);
+            }
+        });
     }
 }

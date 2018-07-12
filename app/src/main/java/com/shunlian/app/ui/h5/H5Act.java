@@ -27,7 +27,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,7 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.H5CallEntity;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.LogUtil;
@@ -67,8 +65,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 
-import static com.shunlian.app.service.InterentTools.DOMAIN;
-
 /**
  * Created by Administrator on 2017/12/26.
  */
@@ -78,7 +74,27 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
-    protected String h5Url = "";
+    @BindView(R.id.mtv_close)
+    public MyTextView mtv_close;
+    @BindView(R.id.mar_title)
+    public MarqueeTextView mar_title;
+    @BindView(R.id.mtv_title)
+    public MyTextView mtv_title;
+    @BindView(R.id.mwv_h5)
+    public MyWebView mwv_h5;
+    @BindView(R.id.rl_title_more)
+    public RelativeLayout rl_title_more;
+    @BindView(R.id.tv_msg_count)
+    public TextView tv_msg_count;
+    @BindView(R.id.quick_actions)
+    public QuickActions quick_actions;
+    @BindView(R.id.miv_favorite)
+    public MyImageView miv_favorite;
+    @BindView(R.id.miv_close)
+    public MyImageView miv_close;
+    @BindView(R.id.mProgressbar)
+    public WebViewProgressBar mProgressbar;
+    protected String h5Url = "",beforeUrl = "",member_id="";
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
@@ -86,42 +102,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected ValueCallback<Uri> uploadMessage;
     protected ValueCallback<Uri[]> uploadMessageAboveL;
     protected Intent mIntent;
-
-    @BindView(R.id.mtv_close)
-    public MyTextView mtv_close;
-
-    @BindView(R.id.mar_title)
-    public MarqueeTextView mar_title;
-
-    @BindView(R.id.mtv_title)
-    public MyTextView mtv_title;
-
-    @BindView(R.id.mwv_h5)
-    public MyWebView mwv_h5;
-
-    @BindView(R.id.rl_title_more)
-    public RelativeLayout rl_title_more;
-
-    @BindView(R.id.tv_msg_count)
-    public TextView tv_msg_count;
-
-    @BindView(R.id.quick_actions)
-    public QuickActions quick_actions;
-
-    @BindView(R.id.miv_favorite)
-    public MyImageView miv_favorite;
-
-    @BindView(R.id.miv_close)
-    public MyImageView miv_close;
-
-    @BindView(R.id.mProgressbar)
-    public WebViewProgressBar mProgressbar;
-
     @BindView(R.id.nei_empty)
     NetAndEmptyInterface nei_empty;
 
     SonicSessionClientImpl sonicSessionClient = null;
-    private boolean isLogin = false;
     private boolean isContinue = false;
 
     public static void startAct(Context context, String url, int mode) {
@@ -168,27 +152,12 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 if (mwv_h5.canGoBack()) {
                     mwv_h5.goBack();// 返回前一个页面
                 } else {
-                  finish();
+                    finish();
                 }
                 break;
 //            case R.id.layout_backtToUp:
 //                h5_mwb.scrollTo(0, 0);
 //                break;
-            case R.id.ll_tab_main_page:
-                MainActivity.startAct(this,"mainPage");
-                break;
-//            case R.id.ll_tab_sort:
-//                MainActivity.startAct(this,"mainPage");
-//                break;
-            case R.id.ll_tab_discover:
-                MainActivity.startAct(this,"discover");
-                break;
-            case R.id.ll_tab_shopping_car:
-                MainActivity.startAct(this,"shoppingcar");
-                break;
-            case R.id.ll_tab_person_center:
-                MainActivity.startAct(this,"personCenter");
-                break;
         }
     }
 
@@ -211,14 +180,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
      */
     @Override
     protected int getLayoutId() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        mIntent = getIntent();
-        mode = mIntent.getIntExtra("mode", 0);
-        h5Url = mIntent.getStringExtra("url");
-        if (!isEmpty(h5Url)) {
-            initSonic();
-        }
         return R.layout.act_h5;
     }
 
@@ -232,10 +193,18 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 .keyboardEnable(true)
                 .init();
 //        httpDialog = new HttpDialog(this);
-        initWebView();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        mIntent = getIntent();
+        mode = mIntent.getIntExtra("mode", 0);
+        h5Url = mIntent.getStringExtra("url");
+        if (!isEmpty(h5Url))
+        beforeUrl=h5Url;
         if (!isEmpty(h5Url)) {
-            loadUrl();
+            initSonic();
         }
+        initWebView();
+        loadUrl();
     }
 
     public void initSonic() {
@@ -281,12 +250,13 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     protected void loadUrl() {
         LogUtil.zhLogW("h5Url=====" + h5Url);
         // webview is ready now, just tell session client to bind
-        if (sonicSessionClient != null) {
-            sonicSessionClient.bindWebView(mwv_h5);
-            sonicSessionClient.clientReady();
-        } else { // default mode
-            if (!isEmpty(h5Url))
+        if (!isEmpty(h5Url)) {
+            if (sonicSessionClient != null) {
+                sonicSessionClient.bindWebView(mwv_h5);
+                sonicSessionClient.clientReady();
+            } else { // default mode
                 mwv_h5.loadUrl(h5Url, setWebviewHeader());
+            }
         }
     }
 
@@ -310,7 +280,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     protected void initWebView() {
         WebSettings webSetting = mwv_h5.getSettings();
-        webSetting.setAppCacheMaxSize(5*1024*1024);
+        webSetting.setAppCacheMaxSize(5 * 1024 * 1024);
         webSetting.setAppCachePath(Constant.CACHE_PATH_EXTERNAL);
         webSetting.setJavaScriptEnabled(true);   //加上这句话才能使用javascript方法
 //        h5_mwb.removeJavascriptInterface("searchBoxJavaBridge_");
@@ -345,7 +315,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 LogUtil.zhLogW("=onPageFinished=======" + url);
-                if (!isFinishing()){
+                if (!isFinishing()) {
                     title = view.getTitle();
                     setTitle();
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
@@ -489,13 +459,24 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
     @Override
     protected void onRestart() {
+        reFresh();
         super.onRestart();
-        if (isLogin) {
+    }
+
+
+    public void reFresh() {
+        if (!beforeUrl.equals(h5Url) && !isEmpty(h5Url)) {
+            initSonic();
+            initWebView();
+//            loadUrl();
+            mwv_h5.loadUrl(h5Url, setWebviewHeader());
+            beforeUrl = h5Url;
+        } else if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", ""))) {
             addCookie();
             mwv_h5.reload();
         }
+        member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
     }
-
 
     public void addCookie() {
         //add
@@ -507,9 +488,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        cookieManager.setCookie(DOMAIN, "Client-Type=Android");
-        cookieManager.setCookie(DOMAIN, "token=" + token);
-        cookieManager.setCookie(DOMAIN, "User-Agent=" + ua);
+        String domain= Common.getDomain(h5Url);
+        cookieManager.setCookie(domain, "Client-Type=Android");
+        cookieManager.setCookie(domain, "token=" + token);
+        cookieManager.setCookie(domain, "User-Agent=" + ua);
         cookieSyncManager.sync();
         //end
     }
@@ -584,8 +566,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         if (url.startsWith("slmall://")) {
             String type = interceptBody(url);
             if (!TextUtils.isEmpty(type)) {
-                if ("login".equals(type))
-                    isLogin = true;
                 String id = "";
                 String id1 = "";
                 if (!TextUtils.isEmpty(Common.getURLParameterValue(url, "id")))
@@ -641,63 +621,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 //            layout_backtToUp.setVisibility(View.GONE);
 //        }
     }
-
-    private static class OfflinePkgSessionConnection extends SonicSessionConnection {
-
-        private final WeakReference<Context> context;
-
-        public OfflinePkgSessionConnection(Context context, SonicSession session, Intent intent) {
-            super(session, intent);
-            this.context = new WeakReference<Context>(context);
-        }
-
-        @Override
-        protected int internalConnect() {
-            Context ctx = context.get();
-            if (null != ctx) {
-                try {
-                    InputStream offlineHtmlInputStream = ctx.getAssets().open("sonic-demo-index.html");
-                    responseStream = new BufferedInputStream(offlineHtmlInputStream);
-                    return SonicConstants.ERROR_CODE_SUCCESS;
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            return SonicConstants.ERROR_CODE_UNKNOWN;
-        }
-
-        @Override
-        protected BufferedInputStream internalGetResponseStream() {
-            return responseStream;
-        }
-
-        @Override
-        public void disconnect() {
-            if (null != responseStream) {
-                try {
-                    responseStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public int getResponseCode() {
-            return 200;
-        }
-
-        @Override
-        public Map<String, List<String>> getResponseHeaderFields() {
-            return new HashMap<>(0);
-        }
-
-        @Override
-        public String getResponseHeaderField(String key) {
-            return "";
-        }
-    }
-
 
     /**
      * 错误的时候进行的操作
@@ -769,5 +692,61 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         alpha.setDuration(1000);
         dismiss.addAnimation(alpha);
         return dismiss;
+    }
+
+    private static class OfflinePkgSessionConnection extends SonicSessionConnection {
+
+        private final WeakReference<Context> context;
+
+        public OfflinePkgSessionConnection(Context context, SonicSession session, Intent intent) {
+            super(session, intent);
+            this.context = new WeakReference<Context>(context);
+        }
+
+        @Override
+        protected int internalConnect() {
+            Context ctx = context.get();
+            if (null != ctx) {
+                try {
+                    InputStream offlineHtmlInputStream = ctx.getAssets().open("sonic-demo-index.html");
+                    responseStream = new BufferedInputStream(offlineHtmlInputStream);
+                    return SonicConstants.ERROR_CODE_SUCCESS;
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+            return SonicConstants.ERROR_CODE_UNKNOWN;
+        }
+
+        @Override
+        protected BufferedInputStream internalGetResponseStream() {
+            return responseStream;
+        }
+
+        @Override
+        public void disconnect() {
+            if (null != responseStream) {
+                try {
+                    responseStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public int getResponseCode() {
+            return 200;
+        }
+
+        @Override
+        public Map<String, List<String>> getResponseHeaderFields() {
+            return new HashMap<>(0);
+        }
+
+        @Override
+        public String getResponseHeaderField(String key) {
+            return "";
+        }
     }
 }

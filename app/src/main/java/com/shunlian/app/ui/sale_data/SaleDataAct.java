@@ -20,6 +20,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
+import com.shunlian.app.utils.SLHeadDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISaleDataView;
@@ -203,9 +204,6 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.rlayout_sale_tip)
-    RelativeLayout rlayout_sale_tip;
-
     @BindView(R.id.mtv_tip)
     MyTextView mtv_tip;
 
@@ -220,6 +218,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     private String mXiaodian;
     private String mFendian;
     private String mXiaofei;
+    private List<String> mTip;
+    private SLHeadDialog slHeadDialog;
 
 
     public static void startAct(Context context) {
@@ -258,6 +258,9 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         //扩大眼睛点击范围
         int dp = TransformUtil.dip2px(this, 30);
         TransformUtil.expandViewTouchDelegate(miv_isShow_data,dp,dp,dp,dp);
+
+        GradientDrawable mtv_tipBG = (GradientDrawable) mtv_tip.getBackground();
+        mtv_tipBG.setColor(Color.parseColor("#FFCF012D"));
     }
 
     @Override
@@ -273,6 +276,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
         mtv_sale_sum.setOnClickListener(this);
         mtv_this_month.setOnClickListener(this);
+        mtv_tip.setOnClickListener(this);
 
         chart_view.setOnSaleChartListener((data, date) -> {
             if (isEmpty(data)){
@@ -476,10 +480,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     }
 
     @Override
-    public void setSaleTip(String tip) {
+    public void setSaleTip(List<String> tip) {
         if (!isEmpty(tip)){
-            visible(rlayout_sale_tip);
-            if (mtv_tip != null) mtv_tip.setText(tip);
+            visible(mtv_tip);
+            mTip = tip;
+        }else {
+            gone(mtv_tip);
         }
     }
 
@@ -534,6 +540,11 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             case R.id.mtv_sale_sum:
             case R.id.mtv_this_month:
                 SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
+                break;
+            case R.id.mtv_tip:
+                if (slHeadDialog == null)
+                    slHeadDialog = new SLHeadDialog(this,mTip);
+                slHeadDialog.show();
                 break;
         }
     }
@@ -617,5 +628,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         super.onDestroy();
         if (presenter != null)
             presenter.detachView();
+        if (slHeadDialog != null){
+            slHeadDialog.detachView();
+        }
     }
 }

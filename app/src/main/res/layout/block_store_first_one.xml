@@ -28,12 +28,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp">
 
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="0dp"
-            android:layout_height="270dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/mllayout_onel"
             android:orientation="vertical"
@@ -68,6 +69,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/common_yuan"
                     android:textSize="10sp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/pink_color"
                     android:layout_alignParentBottom="true"/>
                 <com.shunlian.app.widget.MyTextView
@@ -93,7 +95,7 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:id="@+id/mllayout_oner"
             android:layout_width="0dp"
-            android:layout_height="270dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:paddingLeft="2.5dp">
@@ -127,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/common_yuan"
                     android:textSize="10sp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/pink_color"
                     android:layout_alignParentBottom="true"/>
                 <com.shunlian.app.widget.MyTextView

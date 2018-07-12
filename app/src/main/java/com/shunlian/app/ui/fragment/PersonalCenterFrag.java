@@ -292,7 +292,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //        refreshview.setCanLoad(false);
         view_bg.setAlpha(0);
         personalcenterPresenter = new PersonalcenterPresenter(baseContext, this);
-        if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))) {
+        if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))) {
             mrlayout_plus.setVisibility(View.VISIBLE);
         } else {
             mrlayout_plus.setVisibility(View.GONE);
@@ -469,7 +469,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
             @Override
             public void onClick(View view) {
                 promptDialog.dismiss();
-                H5Act.startAct(baseContext, SharedPrefUtil.getSharedPrfString("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
             }
         }, getStringResouce(R.string.errcode_cancel), new View.OnClickListener() {
             @Override
@@ -824,7 +824,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 QrCodeAct.startAct(baseContext, managerUrl);
                 break;
             case R.id.mrlayout_zidingyi:
-                if ("1".equals(SharedPrefUtil.getSharedPrfString("is_open", ""))){
+                if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
                     if (Common.isPlus()) {
                         MyLittleStoreActivity.startAct(getActivity());
                     } else {
