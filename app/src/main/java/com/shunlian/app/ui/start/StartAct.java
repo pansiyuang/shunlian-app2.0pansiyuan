@@ -266,9 +266,9 @@ public class StartAct extends MBaseActivity implements IMain {
     public void entryInfo(CommonEntity data) {
         if (isHave){
             SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
-            SharedPrefUtil.saveSharedPrfString("is_open", data.is_open);
-            SharedPrefUtil.saveSharedPrfString("plus_url", data.url);
-            SharedPrefUtil.saveSharedPrfString("plus_index", data.url_index);
+            SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
+            SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);
+            SharedPrefUtil.saveCacheSharedPrf("plus_index", data.url_index);
         }
     }
 

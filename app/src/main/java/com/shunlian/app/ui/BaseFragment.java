@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.SharedPrefUtil;
 
 import java.util.HashMap;
@@ -77,6 +78,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        if (MyOnClickListener.isFastClick()) {
+            return;
+        }
+        mOnClick(view);
+    }
+    public void mOnClick(View view){
 
     }
 

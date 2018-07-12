@@ -33,18 +33,15 @@ public class SwitchHostUtil {
                 InterentTools.HTTPADDR = "http://v20-front-api.shunliandongli.com/";
                 InterentTools.HTTPADDR_IM = "ws://123.207.107.21:8086";
                 InterentTools.H5_HOST = "http://v20-wx.shunliandongli.com/";
-                InterentTools.DOMAIN = "v20-wx.shunliandongli.com";
             } else if (which == 1) {
                 //预发布
                 InterentTools.HTTPADDR = "http://api-front.v2.shunliandongli.com/";
                 InterentTools.H5_HOST ="http://front.v2.shunliandongli.com/";
-                InterentTools.DOMAIN ="front.v2.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
             } else {
                 //正式
                 InterentTools.HTTPADDR = "https://api.shunliandongli.com/v2/front/";
                 InterentTools.H5_HOST ="https://wx.shunliandongli.com/";
-                InterentTools.DOMAIN ="wx.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
 
@@ -67,16 +64,13 @@ public class SwitchHostUtil {
 
                 InterentTools.HTTPADDR_IM = "ws://123.207.107.21:8086";
                 InterentTools.H5_HOST = "http://v20-wx.shunliandongli.com/";
-                InterentTools.DOMAIN = "v20-wx.shunliandongli.com";
             } else if (netState.contains("api-front.v2")) {//预发布
 
                 InterentTools.H5_HOST ="http://front.v2.shunliandongli.com/";
-                InterentTools.DOMAIN ="front.v2.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://ws.v2.shunliandongli.com";
             }else{//正式
 
                 InterentTools.H5_HOST ="https://wx.shunliandongli.com/";
-                InterentTools.DOMAIN ="wx.shunliandongli.com";
                 InterentTools.HTTPADDR_IM = "ws://api.shunliandongli.com/v2/im/";
             }
         }else {

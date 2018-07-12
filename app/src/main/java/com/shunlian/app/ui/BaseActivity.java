@@ -528,8 +528,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (MyOnClickListener.isFastClick()) {
             return;
         }
+        mOnClick(view);
     }
+    public void mOnClick(View view){
 
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (Constant.JPUSH!=null&&Common.isBottomActivity(Common.transClassName(Constant.JPUSH.get(0)))){

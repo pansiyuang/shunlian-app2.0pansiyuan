@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class StoreIntroduceAct extends BaseActivity implements View.OnClickListener, StoreIntroduceView, MessageCountManager.OnGetMessageListener {
+public class StoreIntroduceAct extends BaseActivity implements StoreIntroduceView, MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_storeName)
     TextView mtv_storeName;
 
@@ -175,8 +175,9 @@ public class StoreIntroduceAct extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void mOnClick(View view) {
+        super.mOnClick(view);
+        switch (view.getId()) {
             case R.id.mtv_attention:
                 if (isFocus) {
                     storeIntroducePresenter.delFollowStore(storeId);

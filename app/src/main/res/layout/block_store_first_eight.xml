@@ -9,7 +9,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/mllayout_left">
         <View
             android:id="@+id/view_lineOnel"
             android:layout_width="match_parent"
@@ -36,10 +37,10 @@
             android:id="@+id/mtv_eightl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="18dp"
             android:layout_marginTop="4.5dp"
             android:padding="10dp"
-            android:lines="4"
+            android:maxLines="4"
             android:layout_marginRight="3dp"
             android:text="HSTYLE——韩风快时尚女装品牌:HSTYLE目标客户为18-35岁的都市时尚人群，是韩风快时尚女装第一品牌，以款式多、更新快、性价比高的特色获得了都市时尚人群的青睐。"
             android:textColor="@color/my_gray_three"
@@ -51,6 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:id="@+id/mllayout_mid"
         android:orientation="vertical">
         <View
             android:id="@+id/view_lineOnem"
@@ -78,10 +80,10 @@
             android:id="@+id/mtv_eightm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="18dp"
             android:layout_marginTop="4.5dp"
             android:padding="10dp"
-            android:lines="4"
+            android:maxLines="4"
             android:text="HSTYLE——韩风快时尚女装品牌:HSTYLE目标客户为18-35岁的都市时尚人群，是韩风快时尚女装第一品牌，以款式多、更新快、性价比高的特色获得了都市时尚人群的青睐。"
             android:textColor="@color/my_gray_three"
             android:textSize="12sp" />
@@ -92,6 +94,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:id="@+id/mllayout_right"
         android:orientation="vertical">
         <View
             android:id="@+id/view_lineOner"
@@ -118,10 +121,10 @@
             android:id="@+id/mtv_eightr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="18dp"
             android:layout_marginTop="4.5dp"
             android:padding="10dp"
-            android:lines="4"
+            android:maxLines="4"
             android:layout_marginLeft="3dp"
             android:text="HSTYLE——韩风快时尚女装品牌:HSTYLE目标客户为18-35岁的都市时尚人群，是韩风快时尚女装第一品牌，以款式多、更新快、性价比高的特色获得了都市时尚人群的青睐。"
             android:textColor="@color/my_gray_three"

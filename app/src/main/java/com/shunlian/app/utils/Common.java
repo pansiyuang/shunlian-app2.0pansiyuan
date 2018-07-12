@@ -85,6 +85,7 @@ import com.shunlian.app.ui.myself_store.MyLittleStoreActivity;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.ui.plus.GifBagListAct;
 import com.shunlian.app.ui.plus.PlusGifDetailAct;
+import com.shunlian.app.ui.plus.PlusOrderAct;
 import com.shunlian.app.ui.plus.SuperProductsAct;
 import com.shunlian.app.ui.setting.feed_back.BeforeFeedBackAct;
 import com.shunlian.app.ui.sign.SignInAct;
@@ -185,6 +186,8 @@ public class Common {
                 return "StoreAct";
             case "plus":
                 return "MainActivity";
+            case "plusOrder":
+                return "PlusOrderAct";
             case "plusdetail":
             case "pulsdetail":
                 return "PlusGifDetailAct";
@@ -205,6 +208,9 @@ public class Common {
         switch (type) {
             case "goods":
                 GoodsDetailAct.startAct(context, params[0]);
+                break;
+            case "plusOrder":
+                PlusOrderAct.startAct(context);
                 break;
             case "shop":
                 StoreAct.startAct(context, params[0]);
@@ -844,6 +850,31 @@ public class Common {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取url对应的域名
+     *
+     * @param url
+     * @return
+     */
+    public static String getDomain(String url) {
+        if (TextUtils.isEmpty(url))
+            return "";
+        String result = "";
+        int j = 0, startIndex = 0, endIndex = 0;
+        for (int i = 0; i < url.length(); i++) {
+            if (url.charAt(i) == '/') {
+                j++;
+                if (j == 2)
+                    startIndex = i;
+                else if (j == 3)
+                    endIndex = i;
+            }
+
+        }
+        result = url.substring(startIndex + 1, endIndex);
+        return result;
     }
 
     /**
