@@ -13,7 +13,6 @@ import com.shunlian.app.R;
 import com.shunlian.app.presenter.RegisterOnePresenter;
 import com.shunlian.app.ui.BaseFragment;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.view.IRegisterOneView;
 import com.shunlian.app.widget.ClearableEditText;
@@ -21,8 +20,6 @@ import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.PhoneTextWatcher;
 import com.shunlian.app.wxapi.WXEntryActivity;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,7 +47,6 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
 
     @BindView(R.id.tv_wx_login)
     TextView tv_wx_login;
-    private IWXAPI wxapi;
 
     @Override
     protected View getLayoutId(LayoutInflater inflater, ViewGroup container) {
@@ -69,8 +65,6 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
     protected void initData() {
         setEdittextFocusable(true, edt_verifi, edt_account);
         onePresenter = new RegisterOnePresenter(getActivity(), this);
-        wxapi = WXAPIFactory.createWXAPI(baseActivity, Constant.WX_APP_ID, true);
-        wxapi.registerApp(Constant.WX_APP_ID);
     }
 
     @Override
@@ -96,6 +90,10 @@ public class LoginVerfiFrag extends BaseFragment implements PhoneTextWatcher.OnI
         edt_verifi.setEnabled(true);
         edt_verifi.requestFocus();
         edt_verifi.setSelection(edt_verifi.getText().length());
+        if (onePresenter != null && edt_account != null){
+            onePresenter.checkMobile(edt_account.getText()
+                    .toString().replaceAll(" ", ""));
+        }
         checkData();
     }
 

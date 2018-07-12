@@ -1166,9 +1166,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
             quick_actions.destoryQuickActions();
         if (goodsDetailPresenter != null){
             goodsDetailPresenter.detachView();
+            goodsDetailPresenter = null;
         }
         super.onDestroy();
-        goodsDetailPresenter = null;
         EventBus.getDefault().unregister(this);
     }
 
