@@ -56,30 +56,25 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/rlayout_sale_tip"
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/llayout_request"
-                android:visibility="gone"
-                android:layout_marginTop="7.5dp">
+                android:layout_marginTop="6dp"
+                android:layout_below="@+id/mtv_growth_value"
+                android:layout_marginLeft="10dp"
+                android:text="点击查看"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="@drawable/rounded_corner_pink_26px"
+                android:textColor="#FFFFD9E1"
+                android:textSize="10sp" />
 
-                <com.shunlian.app.widget.MyImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/img_xiaoshou_tishi" />
 
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_tip"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="9dp"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-            </RelativeLayout>
 
             <!--头像-->
             <com.shunlian.app.widget.MyImageView

@@ -64,5 +64,5 @@ public interface ISaleDataView extends IView {
      */
     void setSalePS(String tip);
 
-    default void setSaleTip(String tip){}
+    default void setSaleTip(List<String> tip){}
 }

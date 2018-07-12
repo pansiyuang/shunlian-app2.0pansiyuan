@@ -25,7 +25,7 @@ public class SaleDataEntity {
         public String member_role_code;
         public String plus_role;
         public String plus_role_code;
-        public String grow_info;
+        public List<String> grow_infos;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
