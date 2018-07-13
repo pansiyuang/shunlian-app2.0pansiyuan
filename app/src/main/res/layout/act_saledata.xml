@@ -65,6 +65,7 @@
                 android:layout_below="@+id/mtv_growth_value"
                 android:layout_marginLeft="10dp"
                 android:text="点击查看"
+                android:visibility="gone"
                 android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"

@@ -1,95 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/transparent">
 
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/llayout_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="78dp"
+        android:background="@drawable/rounded_corner_solid_white_16px"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="35dp">
 
 
-        <LinearLayout
-            android:id="@+id/llayout_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="78dp"
-            android:background="@drawable/rounded_corner_solid_white_16px"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:paddingTop="35dp">
-
-
-            <RelativeLayout
-                android:id="@+id/rlayout_tip1"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <com.shunlian.app.widget.MyImageView
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@mipmap/img_bangzhu_dian" />
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_tip1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/my_dark_grey"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/rlayout_tip2"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="11dp">
-
-                <com.shunlian.app.widget.MyImageView
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@mipmap/img_bangzhu_dian" />
-
-                <com.shunlian.app.widget.MyTextView
-                    android:id="@+id/mtv_tip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/my_dark_grey"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
-
-            <com.shunlian.app.widget.MyButton
-                android:id="@+id/mbtn_close"
-                android:layout_width="135dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="27dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/rounded_corner_solid_pink_30px"
-                android:gravity="center"
-                android:text="关闭"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <com.shunlian.app.widget.MyImageView
-            android:id="@+id/miv_head"
+        <RelativeLayout
+            android:id="@+id/rlayout_tip1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/img_tanchuang_ji" />
+            android:visibility="gone">
 
-    </RelativeLayout>
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="6dp"
+                android:src="@mipmap/img_bangzhu_dian" />
 
-</FrameLayout>
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_tip1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/my_dark_grey"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlayout_tip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:visibility="gone">
+
+            <com.shunlian.app.widget.MyImageView
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="6dp"
+                android:src="@mipmap/img_bangzhu_dian" />
+
+            <com.shunlian.app.widget.MyTextView
+                android:id="@+id/mtv_tip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/my_dark_grey"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+        <com.shunlian.app.widget.MyButton
+            android:id="@+id/mbtn_close"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="27dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_corner_solid_pink_30px"
+            android:gravity="center"
+            android:text="关闭"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/img_tanchuang_ji" />
+
+</RelativeLayout>
+
