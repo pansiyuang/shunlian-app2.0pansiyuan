@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.more_credit;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,17 +9,23 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.animation.LinearInterpolator;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
-import com.shunlian.app.adapter.MoreCreditAdapter;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.presenter.MoreCreditPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IMoreCreditView;
+import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.mylibrary.ImmersionBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,7 +34,7 @@ import butterknife.OnClick;
  * Created by zhanghe on 2018/7/13.
  */
 
-public class MoreCreditAct extends BaseActivity {
+public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
 
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
@@ -47,7 +54,14 @@ public class MoreCreditAct extends BaseActivity {
     @BindView(R.id.mtv_toolbar_right)
     MyTextView mtv_toolbar_right;
 
+    @BindView(R.id.mbtn_credit)
+    MyButton mbtn_credit;
+
+    @BindView(R.id.rlayout_input)
+    RelativeLayout rlayout_input;
+
     public final int REQUEST_CODE = 6666;
+    private MoreCreditPresenter presenter;
 
 
     public static void startAct(Context context){
@@ -75,19 +89,42 @@ public class MoreCreditAct extends BaseActivity {
         visible(mtv_toolbar_right);
         mtv_toolbar_right.setText(getStringResouce(R.string.prepaid_phone_records));
         mtv_toolbar_title.setText(getStringResouce(R.string.more_creadit));
+        setEdittextFocusable(true,met_phone);
+
+        presenter = new MoreCreditPresenter(this,this);
 
         GridLayoutManager manager = new GridLayoutManager(this,3);
         recy_view.setLayoutManager(manager);
         int w = TransformUtil.dip2px(this, 15);
         recy_view.addItemDecoration(new GridSpacingItemDecoration(w,false));
-        recy_view.setAdapter(new MoreCreditAdapter(this, DataUtil.getListString(7,"ff")));
+
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+    }
 
     @OnClick(R.id.miv_select_phone)
     public void selectPhone() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    public void inputPhoneAnim(){
+        int[] pos = new int[2];
+        rlayout_input.getLocationInWindow(pos);
+        int statusBarHeight = ImmersionBar.getStatusBarHeight(this);
+        LogUtil.zhLogW(String.format("=statusBarHeight=%d======pos==%d=",statusBarHeight,pos[1]));
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(pos[1],0);
+        valueAnimator.setDuration(500);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            LogUtil.zhLogW("==value======"+value);
+            rlayout_input.setY(value);
+        });
+        valueAnimator.start();
     }
 
 
@@ -118,5 +155,36 @@ public class MoreCreditAct extends BaseActivity {
                 }
             }
         }
+    }
+
+
+    @OnClick(R.id.mbtn_credit)
+    public void credit(){
+
+    }
+
+    /**
+     * 显示网络请求失败的界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    /**
+     * 显示空数据界面
+     *
+     * @param request_code
+     */
+    @Override
+    public void showDataEmptyView(int request_code) {
+
+    }
+
+    @Override
+    public void setAdapter(BaseRecyclerAdapter adapter) {
+        recy_view.setAdapter(adapter);
     }
 }

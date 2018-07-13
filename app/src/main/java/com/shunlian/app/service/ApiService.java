@@ -2332,4 +2332,12 @@ public interface ApiService {
      */
     @GET("channel/share")
     Call<BaseEntity<ShareInfoParam>> shareInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取话费充值面额列表
+     * @param body
+     * @return
+     */
+    @POST("Virtual/getProductList")
+    Call<BaseEntity<MoreCreditEntity>> getCreditProductList(@Body RequestBody body);
 }
