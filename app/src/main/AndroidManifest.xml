@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -850,6 +850,9 @@
             android:exported="false"
             android:theme="@style/chatDialog"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.more_credit.MoreCreditAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -539,7 +540,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
             case R.id.mtv_sale_sum:
             case R.id.mtv_this_month:
-                SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
+                //SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
+                MoreCreditAct.startAct(this);
                 break;
             case R.id.mtv_tip:
                 if (slHeadDialog == null)
