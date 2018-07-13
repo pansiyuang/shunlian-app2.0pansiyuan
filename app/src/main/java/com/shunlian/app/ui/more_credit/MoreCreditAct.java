@@ -44,6 +44,9 @@ public class MoreCreditAct extends BaseActivity {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
+    @BindView(R.id.mtv_toolbar_right)
+    MyTextView mtv_toolbar_right;
+
     public final int REQUEST_CODE = 6666;
 
 
@@ -69,6 +72,8 @@ public class MoreCreditAct extends BaseActivity {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         gone(mrlayout_toolbar_more);
+        visible(mtv_toolbar_right);
+        mtv_toolbar_right.setText(getStringResouce(R.string.prepaid_phone_records));
         mtv_toolbar_title.setText(getStringResouce(R.string.more_creadit));
 
         GridLayoutManager manager = new GridLayoutManager(this,3);

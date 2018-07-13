@@ -802,4 +802,5 @@
 
     <!--话费充值-->
     <string name="more_creadit">话费充值</string>
+    <string name="prepaid_phone_records">充值记录</string>
 </resources>
