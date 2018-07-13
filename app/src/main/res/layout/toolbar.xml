@@ -67,5 +67,18 @@
             android:visibility="gone"
             android:padding="15dp"/>
 
+        <com.shunlian.app.widget.MyTextView
+            android:id="@+id/mtv_toolbar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#FF484848"
+            android:textSize="13sp"
+            android:text="充值记录"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:paddingRight="15dp"
+            android:visibility="gone"
+            />
+
     </com.shunlian.app.widget.MyRelativeLayout>
 </merge>

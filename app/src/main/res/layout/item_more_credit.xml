@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlayout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_solid_gray_8px">
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="20元"
+        android:textColor="@color/value_484848"
+        android:textSize="24dp" />
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_rel_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mtv_price"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="售价：19.98"
+        android:textColor="#FF767676"
+        android:textSize="12sp" />
+
+</RelativeLayout>

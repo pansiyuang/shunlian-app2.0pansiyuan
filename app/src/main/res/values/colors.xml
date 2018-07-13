@@ -251,6 +251,8 @@
     <color name="value_920783">#920783</color>
     <color name="value_F2F6F9">#F2F6F9</color>
 
+    <!--话费充值-->
+    <color name="value_484848">#FF484848</color>
 </resources>
 
 

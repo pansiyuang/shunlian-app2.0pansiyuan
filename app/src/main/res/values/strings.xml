@@ -800,4 +800,8 @@
     <string name="forecast_earnings">预估收益</string>
     <string name="today_earnings">今日收益</string>
     <string name="month_earnings">本月收益</string>
+
+    <!--话费充值-->
+    <string name="more_creadit">话费充值</string>
+    <string name="prepaid_phone_records">充值记录</string>
 </resources>
