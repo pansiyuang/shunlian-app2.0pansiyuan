@@ -35,6 +35,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
     private List<MessageListEntity.Msg> msgList;
     private OnStatusClickListener mListener;
     private boolean canDelItem;
+    private boolean isCustomer;
 
     public MessageAdapter(Context context, List<MessageListEntity.Msg> msgs, List<ChatMemberEntity.ChatMember> memberList) {
         super(context, false, memberList);
@@ -63,6 +64,10 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
 
     public void setDelMode(boolean isCanDel) {
         canDelItem = isCanDel;
+    }
+
+    public void setCustomerMode() {
+        isCustomer = true;
     }
 
     @Override
@@ -142,6 +147,15 @@ public class MessageAdapter extends BaseRecyclerAdapter<ChatMemberEntity.ChatMem
             }
         });
         messageViewHolder.swipe_layout.setSwipeEnable(canDelItem);
+
+        if (isCustomer) {
+            messageViewHolder.tv_official.setVisibility(View.VISIBLE);
+            messageViewHolder.tv_official.setText("在线");
+            messageViewHolder.tv_official.setTextColor(getColor(R.color.pink_color));
+            messageViewHolder.tv_official.setBackgroundResource(R.drawable.rounded_corner_stroke_pink_4px);
+        } else {
+            messageViewHolder.tv_official.setVisibility(View.GONE);
+        }
     }
 
 

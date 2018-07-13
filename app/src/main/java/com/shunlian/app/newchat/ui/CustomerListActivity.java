@@ -139,6 +139,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
         if (mAdapter == null) {
             mAdapter = new MessageAdapter(this, null, chatMemberList);
             mAdapter.setOnItemClickListener(this);
+            mAdapter.setCustomerMode();
             recycler_list.setAdapter(mAdapter);
         }
         mAdapter.notifyDataSetChanged();
@@ -260,7 +261,11 @@ public class CustomerListActivity extends BaseActivity implements ICustomerView,
                 chatMemberList.add(chatMember);
                 LogUtil.httpLogW("列表为空");
             }
-            runOnUiThread(() -> mAdapter.notifyDataSetChanged());
+            runOnUiThread(() -> {
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

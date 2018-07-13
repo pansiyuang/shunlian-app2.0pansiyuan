@@ -39,7 +39,7 @@ public class LittleStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
 
     public void setEditMode(boolean isEdit) {
         isEditMode = isEdit;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, lists.size(), lists);
     }
 
     @Override
@@ -63,6 +63,11 @@ public class LittleStoreAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity.Go
                 littleHolderView.tv_select.setText(String.valueOf(goods.index));
             } else {
                 littleHolderView.tv_select.setText("");
+            }
+            if (isEditMode) {
+                littleHolderView.tv_select.setVisibility(View.VISIBLE);
+            } else {
+                littleHolderView.tv_select.setVisibility(View.GONE);
             }
         } else {
             super.onBindViewHolder(holder, position, payloads);
