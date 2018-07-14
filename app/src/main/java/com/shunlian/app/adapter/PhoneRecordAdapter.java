@@ -34,7 +34,7 @@ public class PhoneRecordAdapter extends BaseRecyclerAdapter<PhoneRecordEntity.MD
 
     @Override
     protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_pay, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_phone_record, parent, false);
         return  new SingleViewHolder(view);
     }
 

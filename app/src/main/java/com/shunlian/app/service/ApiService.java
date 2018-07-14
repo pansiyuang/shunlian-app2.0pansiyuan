@@ -1576,6 +1576,16 @@ public interface ApiService {
     Call<BaseEntity<DetailOrderRecordEntity>> getEstimateDetail(@Body RequestBody body);
 
     /**
+     * 充值订单详情
+     *
+     * @param body
+     * @return
+     */
+    @POST("virtual/orderDetail")
+    Call<BaseEntity<PhoneOrderDetailEntity>> virtualOrderDetail(@Body RequestBody body);
+
+
+    /**
      * 充值记录
      *
      * @param body
