@@ -253,6 +253,11 @@
             android:name=".ui.register.SelectRecommendAct"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.more_credit.PhoneRecordAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <!--<activity-->
             <!--android:name=".ui.start.GuideAct"-->
             <!--android:exported="false"-->

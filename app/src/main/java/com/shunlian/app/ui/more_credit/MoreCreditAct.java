@@ -8,9 +8,11 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.MoreCreditAdapter;
+import com.shunlian.app.adapter.PhoneRecordAdapter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.DataUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
@@ -62,6 +64,22 @@ public class MoreCreditAct extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.act_morecredit;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mtv_toolbar_right.setOnClickListener(this);
+    }
+
+    @Override
+    public void mOnClick(View view) {
+        super.mOnClick(view);
+        switch (view.getId()){
+            case R.id.mtv_toolbar_right:
+                PhoneRecordAct.startAct(this);
+                break;
+        }
     }
 
     /**

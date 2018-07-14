@@ -163,6 +163,11 @@
     <item name="tag_store_discount_menu_id" type="id" />
     <item name="tag_store_discount_menu_type" type="id" />
 
+    <!--话费充值-->
+    <string name="phone_chongzhijilu">充值记录</string>
+    <string name="phone_zanwuchongzhi">暂无充值记录~</string>
+    <string name="phone_lijichongzhi">立即充值</string>
+
     <!--支付成功-->
     <string name="pay_chakandingdan">查看订单</string>
     <string name="pay_dianpushouye">返回首页</string>
