@@ -73,6 +73,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
+    public final static String Add_COOKIE = "addCookie";//解决当前页onStop后cookie失效的问题
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
     @BindView(R.id.mtv_close)
     public MyTextView mtv_close;
@@ -94,7 +95,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public MyImageView miv_close;
     @BindView(R.id.mProgressbar)
     public WebViewProgressBar mProgressbar;
-    protected String h5Url = "",beforeUrl = "",member_id="";
+    protected String h5Url = "", beforeUrl = "", member_id = "";
     protected String title;
     protected int mode;
     protected SonicSession sonicSession;
@@ -199,7 +200,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         mode = mIntent.getIntExtra("mode", 0);
         h5Url = mIntent.getStringExtra("url");
         if (!isEmpty(h5Url))
-        beforeUrl=h5Url;
+            beforeUrl = h5Url;
         if (!isEmpty(h5Url)) {
             initSonic();
         }
@@ -471,9 +472,10 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 //            loadUrl();
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl = h5Url;
-        } else if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", ""))) {
+        } else {
             addCookie();
-            mwv_h5.reload();
+            if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", "")))
+                mwv_h5.reload();
         }
         member_id = SharedPrefUtil.getSharedPrfString("member_id", "");
     }
@@ -483,16 +485,23 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
+        CookieSyncManager.createInstance(this);
+//        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
 
-        String domain= Common.getDomain(h5Url);
+        String domain = Common.getDomain(h5Url);
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
-        cookieSyncManager.sync();
+//        cookieSyncManager.sync();
+
+        if (Build.VERSION.SDK_INT < 21) {
+            CookieSyncManager.getInstance().sync();
+        } else {
+            CookieManager.getInstance().flush();
+        }
         //end
     }
 

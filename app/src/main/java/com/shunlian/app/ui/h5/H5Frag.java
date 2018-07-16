@@ -80,6 +80,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+    public final static String Add_COOKIE = "addCookie";//解决当前页onStop后cookie失效的问题
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
@@ -469,8 +470,9 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 //            loadUrl();
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl=h5Url;
-        } else if (isSecond&&!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", ""))) {
+        } else if (isSecond) {
             addCookie();
+            if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", "")))
             mwv_h5.reload();
         }
         member_id=SharedPrefUtil.getSharedPrfString("member_id", "");
@@ -481,7 +483,9 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
+
+        CookieSyncManager.createInstance(activity);
+//        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
@@ -490,7 +494,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
-        cookieSyncManager.sync();
+//        cookieSyncManager.sync();
+
+        if (Build.VERSION.SDK_INT < 21) {
+            CookieSyncManager.getInstance().sync();
+        } else {
+            CookieManager.getInstance().flush();
+        }
         //end
     }
 
