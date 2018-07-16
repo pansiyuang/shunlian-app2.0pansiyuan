@@ -29,6 +29,7 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PLUSConfirmOrderAct;
 import com.shunlian.app.ui.confirm_order.PaySuccessAct;
+import com.shunlian.app.ui.more_credit.PhonePaySuccessAct;
 import com.shunlian.app.ui.order.MyOrderAct;
 import com.shunlian.app.ui.order.OrderDetailAct;
 import com.shunlian.app.utils.Common;
@@ -73,8 +74,15 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
     private String addressId;
     private String currentPayType;//当前支付方式
     private String pay_sn;
+    /****plus id****/
     private String mProductId;
     private String mSkuId;
+    /**充值手机号**/
+    private String mPhoneNumber;
+    /**充值金额**/
+    private String mTopUpPrice;
+
+
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -110,6 +118,14 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         }
     };
 
+    /**
+     *
+     * @param activity
+     * @param shop_goods
+     * @param addressId
+     * @param order_id
+     * @param price
+     */
     public static void startAct(Activity activity, String shop_goods, String addressId, String order_id, String price) {
         PayListActivity.activity = activity;
         Intent intent = new Intent(activity, PayListActivity.class);
@@ -120,6 +136,15 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         activity.startActivity(intent);
     }
 
+    /**
+     * plus支付
+     * @param activity
+     * @param product_id
+     * @param sku_id
+     * @param addressId
+     * @param price
+     * @param plus
+     */
     public static void startAct(Activity activity, String product_id, String sku_id, String addressId,
                                 String price, String plus) {
         PayListActivity.activity = activity;
@@ -127,6 +152,21 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         intent.putExtra("product_id", product_id);
         intent.putExtra("addressId", addressId);
         intent.putExtra("sku_id", sku_id);
+        intent.putExtra("price", price);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 手机充值
+     * @param activity
+     * @param number
+     * @param face_price
+     */
+    public static void startAct(Activity activity, String number, String face_price,String price){
+        PayListActivity.activity = activity;
+        Intent intent = new Intent(activity, PayListActivity.class);
+        intent.putExtra("number", number);
+        intent.putExtra("face_price", face_price);
         intent.putExtra("price", price);
         activity.startActivity(intent);
     }
@@ -140,7 +180,9 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
             //支付失败不做任何操作
         } else if (isEmpty(order_id)) {
             MyOrderAct.startAct(PayListActivity.this, 2);
-        } else {
+        }else if (!isEmpty(mPhoneNumber)){
+            //支付失败不做任何操作
+        }else {
             OrderDetailAct.startAct(PayListActivity.this, order_id);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
@@ -151,13 +193,15 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
      */
     private void paySuccess() {
         Common.staticToast(getStringResouce(R.string.pay_success));
-        if (isEmpty(mProductId)) {
-            PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
-        } else {
+        if (!isEmpty(mPhoneNumber)){//手机充值成功
+            PhonePaySuccessAct.startAct(this,order_id);
+        }else if (!isEmpty(mProductId)){
             String plus = SharedPrefUtil.getSharedPrfString("plus_role", "");
             if (isEmpty(plus) || Integer.parseInt(plus) <= 1)
                 SharedPrefUtil.saveSharedPrfString("plus_role", "1");
             PaySuccessAct.startAct(this, order_id, price, pay_sn, true);
+        }else {
+            PaySuccessAct.startAct(this, order_id, price, pay_sn, false);
         }
         mHandler.sendEmptyMessageDelayed(FINISH_ACT_WHAT, 100);
     }
@@ -193,6 +237,11 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
         //plus支付
         mProductId = getIntent().getStringExtra("product_id");
         mSkuId = getIntent().getStringExtra("sku_id");
+
+        //手机充值
+        mPhoneNumber = getIntent().getStringExtra("number");
+        mTopUpPrice = getIntent().getStringExtra("face_price");
+
         boolean isPLUS = false;
         if (!isEmpty(mProductId)) isPLUS = true;
         payListPresenter = new PayListPresenter(this, this, isPLUS);
@@ -422,6 +471,8 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
+                }else if (!isEmpty(mPhoneNumber)){//手机充值
+                    payListPresenter.phoneTopUp(mPhoneNumber,mTopUpPrice,pay_types.code);
                 }
 //                else if (!isEmpty(mProductId)){
 //                    payListPresenter.submitPLUSOrder(mProductId,mSkuId,addressId,pay_types.code);
@@ -434,19 +485,24 @@ public class PayListActivity extends BaseActivity implements View.OnClickListene
                     payListPresenter.orderCheckout(shop_goods, addressId, pay_types.code);
                 } else if (!isEmpty(orderId)) {
                     payListPresenter.fromOrderListGoPay(orderId, pay_types.code);
+                }else if (!isEmpty(mPhoneNumber)){//手机充值
+                    payListPresenter.phoneTopUp(mPhoneNumber,mTopUpPrice,pay_types.code);
                 }
                 break;
             case "credit":
                 final PromptDialog promptDialog = new PromptDialog(this);
                 promptDialog.setTvSureIsBold(false).setTvCancleIsBold(false)
-                        .setSureAndCancleListener("确认用余额支付吗？\n￥".concat(price),
+                        .setSureAndCancleListener("确认用余额支付吗？\n￥"+price,
                                 getString(R.string.SelectRecommendAct_sure), (v) -> {
-                                    if (!isEmpty(shop_goods))
+                                    if (!isEmpty(shop_goods)) {
                                         payListPresenter.orderCheckout(shop_goods,
                                                 addressId, pay_types.code);
-                                    else if (!isEmpty(orderId))
+                                    }else if (!isEmpty(orderId)) {
                                         payListPresenter.fromOrderListGoPay(orderId,
                                                 pay_types.code);
+                                    }else if (!isEmpty(mPhoneNumber)){//手机充值
+                                        payListPresenter.phoneTopUp(mPhoneNumber,mTopUpPrice,pay_types.code);
+                                    }
                                     promptDialog.dismiss();
                                 }, getString(R.string.errcode_cancel), (v) -> promptDialog.dismiss()
                         ).show();

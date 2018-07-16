@@ -157,4 +157,35 @@ public class PayListPresenter extends BasePresenter<IPayListView> {
                     }
                 });
     }
+
+    /**
+     * 手机充值
+     * @param phoneNumber
+     * @param topUpPrice
+     * @param paytype
+     */
+    public void phoneTopUp(String phoneNumber,String topUpPrice,String paytype){
+        Map<String,String> map = new HashMap<>();
+        map.put("number",phoneNumber);
+        map.put("face_price",topUpPrice);
+        map.put("paytype",paytype);
+        sortAndMD5(map);
+
+        Call<BaseEntity<PayOrderEntity>> phoneTopUpCall = getAddCookieApiService()
+                .phoneTopUp(getRequestBody(map));
+        getNetData(true, phoneTopUpCall, new
+                SimpleNetDataCallback<BaseEntity<PayOrderEntity>>() {
+                    @Override
+                    public void onSuccess(BaseEntity<PayOrderEntity> entity) {
+                        super.onSuccess(entity);
+                        iView.payOrder(entity.data);
+                    }
+
+                    @Override
+                    public void onErrorData(BaseEntity<PayOrderEntity> payOrderEntityBaseEntity) {
+                        super.onErrorData(payOrderEntityBaseEntity);
+                        iView.payOrderFail(payOrderEntityBaseEntity.data);
+                    }
+                });
+    }
 }
