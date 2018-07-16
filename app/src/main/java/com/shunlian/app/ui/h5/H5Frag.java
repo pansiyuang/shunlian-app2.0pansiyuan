@@ -62,6 +62,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -347,7 +348,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("========h5Url==========" + h5Url);
+                LogUtil.httpLogW("========h5Url==========" + url);
                 if (url.startsWith("alipay")) {
 //                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
                     try {
@@ -382,6 +383,10 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                     return true;
                 } else {
                     return super.shouldOverrideUrlLoading(view, url);
+//                    1、 默认返回：return super.shouldOverrideUrlLoading(view, url); 这个返回的方法会调用父类方法，
+// 也就是跳转至手机浏览器，平时写webview一般都在方法里面写 webView.loadUrl(url);  然后把这个返回值改成下面的false。 搜索
+//                    2、返回: return true;  webview处理url是根据程序来执行的。
+//                    3、返回: return false; webview处理url是在webview内部执行。
                 }
             }
 

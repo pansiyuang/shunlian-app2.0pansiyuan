@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.PhoneRecordAdapter;
 import com.shunlian.app.bean.PhoneRecordEntity;
 import com.shunlian.app.presenter.PPhoneRecord;
@@ -45,11 +47,11 @@ public class PhoneRecordAct extends BaseActivity implements IPhoneRecord {
     protected void initData() {
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
-        pPhoneRecord=new PPhoneRecord(this,this);
+        pPhoneRecord = new PPhoneRecord(this, this);
         nei_empty.setImageResource(R.mipmap.img_empty_common)
                 .setText(getString(R.string.phone_zanwuchongzhi))
                 .setButtonText(getString(R.string.phone_lijichongzhi))
-                .setOnClickListener((view)-> finish());
+                .setOnClickListener((view) -> finish());
     }
 
     @Override
@@ -72,22 +74,28 @@ public class PhoneRecordAct extends BaseActivity implements IPhoneRecord {
 
     @Override
     public void setApiData(PhoneRecordEntity.Pager data, List<PhoneRecordEntity.MData> mdatas) {
-        if (isEmpty(mdatas)){
+        if (isEmpty(mdatas)) {
             visible(nei_empty);
             gone(rv_charge);
-        }else if (phoneRecordAdapter==null){
+        } else if (phoneRecordAdapter == null) {
             visible(rv_charge);
             gone(nei_empty);
             phoneRecordAdapter = new PhoneRecordAdapter(getBaseContext(), mdatas);
-            linearLayoutManager= new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
+            linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rv_charge.setLayoutManager(linearLayoutManager);
             rv_charge.setAdapter(phoneRecordAdapter);
             rv_charge.addItemDecoration(new MVerticalItemDecoration(getBaseContext(), 10, 15, 0));
-        }else {
+            phoneRecordAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    PhoneOrderDetailAct.startAct(getBaseContext(), mdatas.get(position).id);
+                }
+            });
+        } else {
             phoneRecordAdapter.notifyDataSetChanged();
         }
-        if (phoneRecordAdapter!=null)
-        phoneRecordAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
+        if (phoneRecordAdapter != null)
+            phoneRecordAdapter.setPageLoading(Integer.parseInt(data.page), Integer.parseInt(data.total_page));
     }
 
     @Override

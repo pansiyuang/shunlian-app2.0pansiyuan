@@ -351,7 +351,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("========h5Url==========" + h5Url);
+                LogUtil.httpLogW("========h5Url==========" + url);
                 if (url.startsWith("alipay")) {
 //                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
                     try {

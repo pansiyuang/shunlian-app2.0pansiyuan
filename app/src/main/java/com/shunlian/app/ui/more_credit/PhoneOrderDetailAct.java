@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.adapter.PhoneDetailAdapter;
@@ -14,11 +15,13 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.PhoneOrderDetailEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.util.MessageCountManager;
+import com.shunlian.app.presenter.PPhoneOrder;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.view.IPhoneOrder;
 import com.shunlian.app.view.OrderdetailView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyRelativeLayout;
@@ -30,7 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-public class PhoneOrderDetailAct extends BaseActivity implements MessageCountManager.OnGetMessageListener {
+public class PhoneOrderDetailAct extends BaseActivity implements IPhoneOrder,MessageCountManager.OnGetMessageListener {
     @BindView(R.id.mtv_state)
     MyTextView mtv_state;
 
@@ -68,7 +71,7 @@ public class PhoneOrderDetailAct extends BaseActivity implements MessageCountMan
     QuickActions quick_actions;
 
     @BindView(R.id.rl_more)
-    MyRelativeLayout rl_more;
+    RelativeLayout rl_more;
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
@@ -76,9 +79,9 @@ public class PhoneOrderDetailAct extends BaseActivity implements MessageCountMan
     private MessageCountManager messageCountManager;
 
 
-    public static void startAct(Context context, PhoneOrderDetailEntity phoneOrderDetailEntity) {
+    public static void startAct(Context context,String orderId) {
         Intent intent = new Intent(context, PhoneOrderDetailAct.class);
-        intent.putExtra("phoneOrderDetailEntity", phoneOrderDetailEntity);
+        intent.putExtra("orderId", orderId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -94,19 +97,10 @@ public class PhoneOrderDetailAct extends BaseActivity implements MessageCountMan
 //        setStatusBarFontDark();
         EventBus.getDefault().register(this);
 
-        PhoneOrderDetailEntity phoneOrderDetailEntity = (PhoneOrderDetailEntity) getIntent().getSerializableExtra("phoneOrderDetailEntity");
-        mtv_state.setText(phoneOrderDetailEntity.status_name);
-        mtv_number.setText(phoneOrderDetailEntity.order_sn);
-        mtv_storeName.setText(phoneOrderDetailEntity.store_name);
-        GlideUtils.getInstance().loadImageZheng(this, miv_goods_pic, phoneOrderDetailEntity.image);
-        mtv_title.setText(phoneOrderDetailEntity.card_addr);
-        mtv_attribute.setText(phoneOrderDetailEntity.card_number);
-        mtv_attributes.setText(phoneOrderDetailEntity.face_price);
-        mtv_price.setText(phoneOrderDetailEntity.payment_money);
-        mtv_shifu.setText(phoneOrderDetailEntity.payment_money);
+        String orderId = getIntent().getStringExtra("orderId");
+        PPhoneOrder pPhoneOrder = new PPhoneOrder(this, this, orderId);
+        pPhoneOrder.detail();
 
-        rv_trade.setLayoutManager(new LinearLayoutManager(this));
-        rv_trade.setAdapter(new PhoneDetailAdapter(this, phoneOrderDetailEntity.trade));
         //设置圆角背景
         GradientDrawable copyBackground = (GradientDrawable) mtv_copy.getBackground();
         copyBackground.setColor(getColorResouce(R.color.white));//设置填充色
@@ -182,6 +176,32 @@ public class PhoneOrderDetailAct extends BaseActivity implements MessageCountMan
 
     @Override
     public void OnLoadFail() {
+
+    }
+
+    @Override
+    public void setApiData(PhoneOrderDetailEntity phoneOrderDetailEntity) {
+        mtv_state.setText(phoneOrderDetailEntity.status_name);
+        mtv_number.setText(phoneOrderDetailEntity.order_sn);
+        mtv_storeName.setText(phoneOrderDetailEntity.store_name);
+        GlideUtils.getInstance().loadImageZheng(this, miv_goods_pic, phoneOrderDetailEntity.image);
+        mtv_title.setText(phoneOrderDetailEntity.card_addr);
+        mtv_attribute.setText(phoneOrderDetailEntity.card_number);
+        mtv_attributes.setText(phoneOrderDetailEntity.face_price);
+        mtv_price.setText(phoneOrderDetailEntity.payment_money);
+        mtv_shifu.setText(phoneOrderDetailEntity.payment_money);
+
+        rv_trade.setLayoutManager(new LinearLayoutManager(this));
+        rv_trade.setAdapter(new PhoneDetailAdapter(this, phoneOrderDetailEntity.trade));
+    }
+
+    @Override
+    public void showFailureView(int request_code) {
+
+    }
+
+    @Override
+    public void showDataEmptyView(int request_code) {
 
     }
 }

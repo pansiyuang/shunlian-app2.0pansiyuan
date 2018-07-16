@@ -32,8 +32,9 @@ public class PhoneRecordEntity {
         public String face_price;
         public String payment_money;
         public String status_name;
-        public String finish_time;
+        public String store_name;
         public String image;
+        public String id;
 
     }
 }

@@ -71,6 +71,11 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
         context.startActivity(new Intent(context,MoreCreditAct.class));
     }
 
+    @OnClick(R.id.mtv_toolbar_right)
+    public void prepaidPhoneRecords(){
+        PhoneRecordAct.startAct(this);
+    }
+
     /**
      * 布局id
      *

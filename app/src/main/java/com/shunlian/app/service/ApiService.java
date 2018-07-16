@@ -1584,6 +1584,15 @@ public interface ApiService {
     @POST("virtual/orderDetail")
     Call<BaseEntity<PhoneOrderDetailEntity>> virtualOrderDetail(@Body RequestBody body);
 
+     /**
+     * 支付成功查看订单详情
+     *
+     * @param body
+     * @return
+     */
+    @POST("virtual/orderPayResult")
+    Call<BaseEntity<PhoneOrderDetailEntity>> orderPayResult(@Body RequestBody body);
+
 
     /**
      * 充值记录

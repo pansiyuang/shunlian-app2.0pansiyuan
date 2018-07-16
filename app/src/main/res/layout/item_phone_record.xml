@@ -7,11 +7,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/white_ash" />
-
     <com.shunlian.app.widget.MyLinearLayout
         android:id="@+id/mllayout_store"
         android:layout_width="match_parent"
@@ -20,12 +15,13 @@
         android:orientation="horizontal"
         app:ll_control_adapter="true"
         app:ll_margin_left="20"
-        app:ll_margin_right="20"
-        app:ll_margin_top="20">
+        app:ll_margin_top="20"
+        app:ll_margin_right="20">
 
         <com.shunlian.app.widget.MyImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/icon_shop_shop_n" />
 
 
@@ -61,15 +57,13 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="13dp"
-        android:background="@color/light_gray_three" />
+        android:background="@color/white_ash" />
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:rl_control_adapter="true"
-        app:rl_margin_left="20"
-        app:rl_margin_right="20"
-        app:rl_margin_top="15">
+        android:padding="10dp">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_goods_pic"

@@ -43,7 +43,7 @@ public class PhoneRecordAdapter extends BaseRecyclerAdapter<PhoneRecordEntity.MD
         SingleViewHolder viewHolder = (SingleViewHolder) holder;
         PhoneRecordEntity.MData goods = lists.get(position);
         GlideUtils.getInstance().loadImageZheng(context,viewHolder.miv_goods_pic,goods.image);
-        viewHolder.mtv_storeName.setText(goods.finish_time);
+        viewHolder.mtv_storeName.setText(goods.store_name);
         viewHolder.mtv_title.setText(goods.card_addr);
         viewHolder.mtv_attribute.setText(goods.card_number);
         viewHolder.mtv_attributes.setText(goods.face_price);
