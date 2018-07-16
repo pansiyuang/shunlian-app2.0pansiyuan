@@ -1,5 +1,6 @@
 package com.shunlian.app.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.shunlian.app.adapter.MoreCreditAdapter;
@@ -8,10 +9,12 @@ import com.shunlian.app.bean.MoreCreditEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.view.IMoreCreditView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pay.PayListActivity;
 import retrofit2.Call;
 
 /**
@@ -22,6 +25,7 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
 
     public String phoneNumber = "";//手机号
     private MoreCreditAdapter moreCreditAdapter;
+    private List<MoreCreditEntity.ListBean> list = new ArrayList<>();
 
     public MoreCreditPresenter(Context context, IMoreCreditView iView) {
         super(context, iView);
@@ -66,12 +70,26 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
 
     private void setdata(List<MoreCreditEntity.ListBean> list) {
         if (!isEmpty(list)){
+            this.list.clear();
+            this.list.addAll(list);
             if (moreCreditAdapter == null) {
-                moreCreditAdapter = new MoreCreditAdapter(context, list);
+                moreCreditAdapter = new MoreCreditAdapter(context, this.list);
                 iView.setAdapter(moreCreditAdapter);
+                moreCreditAdapter.setOnItemClickListener((view, position) -> {
+                    moreCreditAdapter.currentPos = position;
+                    moreCreditAdapter.notifyDataSetChanged();
+                });
             }else {
                 moreCreditAdapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    public void topUp(String phone) {
+        if (moreCreditAdapter != null && (moreCreditAdapter.currentPos >= 0
+                && moreCreditAdapter.currentPos < list.size())) {
+            MoreCreditEntity.ListBean listBean = list.get(moreCreditAdapter.currentPos);
+            PayListActivity.startAct((Activity) context, phone, listBean.face_price);
         }
     }
 }

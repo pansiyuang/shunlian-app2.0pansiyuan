@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 
@@ -16,8 +17,10 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.MoreCreditPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
+import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IMoreCreditView;
 import com.shunlian.app.widget.MyButton;
@@ -103,6 +106,16 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @Override
     protected void initListener() {
         super.initListener();
+        met_phone.addTextChangedListener(new SimpleTextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (s.length()>=11 && presenter != null){
+                    presenter.phoneNumber = s.toString();
+                    presenter.initApi();
+                }
+            }
+        });
     }
 
     @OnClick(R.id.miv_select_phone)
@@ -160,7 +173,14 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
 
     @OnClick(R.id.mbtn_credit)
     public void credit(){
-
+        if (isEmpty(met_phone.getText())){
+            Common.staticToast("手机号不能为空");
+            return;
+        }
+        String phone = met_phone.getText().toString().replaceAll(" ", "");
+        if (presenter != null){
+            presenter.topUp(phone);
+        }
     }
 
     /**

@@ -24,6 +24,8 @@ import butterknife.BindView;
 
 public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.ListBean> {
 
+    public int currentPos = -1;//当前选中位置
+
     public MoreCreditAdapter(Context context, List<MoreCreditEntity.ListBean> lists) {
         super(context, false, lists);
     }
@@ -58,6 +60,20 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
                 visible(mHolder.mtv_rel_price);
                 mHolder.mtv_rel_price.setText("售价："+listBean.sale_price);
             }
+
+            GradientDrawable rootGB = (GradientDrawable) mHolder.rlayout_root.getBackground();
+            int w = TransformUtil.dip2px(context, 1);
+            if (position == currentPos){
+                rootGB.setColor(getColor(R.color.pink_color));
+                rootGB.setStroke(w,getColor(R.color.pink_color));
+                mHolder.mtv_price.setTextColor(Color.WHITE);
+                mHolder.mtv_rel_price.setTextColor(Color.WHITE);
+            }else {
+                rootGB.setColor(Color.WHITE);
+                rootGB.setStroke(w,getColor(R.color.color_value_6c));
+                mHolder.mtv_price.setTextColor(getColor(R.color.value_484848));
+                mHolder.mtv_rel_price.setTextColor(Color.parseColor("#FF767676"));
+            }
         }
     }
 
@@ -74,10 +90,10 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
 
         public MoreCreditHolder(View itemView) {
             super(itemView);
-            GradientDrawable rootGB = (GradientDrawable) rlayout_root.getBackground();
-            rootGB.setColor(Color.WHITE);
-            int w = TransformUtil.dip2px(context, 1);
-            rootGB.setStroke(w,getColor(R.color.color_value_6c));
+            itemView.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onItemClick(v,getAdapterPosition());
+            });
         }
     }
 }

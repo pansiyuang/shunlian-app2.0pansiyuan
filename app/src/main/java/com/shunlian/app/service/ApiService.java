@@ -2340,4 +2340,12 @@ public interface ApiService {
      */
     @POST("Virtual/getProductList")
     Call<BaseEntity<MoreCreditEntity>> getCreditProductList(@Body RequestBody body);
+
+    /**
+     * 手机充值
+     * @param body
+     * @return
+     */
+    @POST("Virtual/addOrder")
+    Call<BaseEntity<PayOrderEntity>> phoneTopUp(@Body RequestBody body);
 }
