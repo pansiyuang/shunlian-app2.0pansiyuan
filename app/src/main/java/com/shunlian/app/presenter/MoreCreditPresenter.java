@@ -63,7 +63,17 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
                     @Override
                     public void onSuccess(BaseEntity<MoreCreditEntity> entity) {
                         super.onSuccess(entity);
+                        if (!isEmpty(entity.data.card_address))
+                            iView.setBelongingTo(phoneNumber,entity.data.card_address);
                         setdata(entity.data.list);
+                    }
+
+                    @Override
+                    public void onErrorCode(int code, String message) {
+                        super.onErrorCode(code, message);
+                        if (code == 0){
+                            iView.phoneError();
+                        }
                     }
                 });
     }
