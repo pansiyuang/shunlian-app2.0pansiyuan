@@ -89,7 +89,7 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
         if (moreCreditAdapter != null && (moreCreditAdapter.currentPos >= 0
                 && moreCreditAdapter.currentPos < list.size())) {
             MoreCreditEntity.ListBean listBean = list.get(moreCreditAdapter.currentPos);
-            PayListActivity.startAct((Activity) context, phone, listBean.face_price);
+            PayListActivity.startAct((Activity) context, phone, listBean.face_price,listBean.sale_price);
         }
     }
 }
