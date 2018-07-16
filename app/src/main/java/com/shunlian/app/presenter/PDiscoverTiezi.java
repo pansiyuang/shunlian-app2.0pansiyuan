@@ -22,7 +22,7 @@ import retrofit2.Call;
  */
 
 public class PDiscoverTiezi extends BasePresenter<IDiscoverTiezi> {
-    private int pageSize=2;
+    private int pageSize=20;
     private boolean isFirst=true;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;

@@ -81,7 +81,7 @@ public class AddAdressAct extends BaseActivity implements View.OnClickListener, 
             et_mobile.setText(address.mobile);
             et_address.setText(address.address);
 //            mtv_delete.setVisibility(View.VISIBLE);
-            mtv_title.setText("编辑收货地址");
+            mtv_title.setText(getStringResouce(R.string.address_edit));
             if (!"1".equals(address.isdefault)) {
                 miv_default.setImageDrawable(getDrawableResouce(R.mipmap.btn_address_setaddress_n));
                 isDefault = false;
