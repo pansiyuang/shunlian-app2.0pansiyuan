@@ -192,10 +192,7 @@ public class EasyWebsocketClient implements Client.OnClientConnetListener {
                             startHeartPin();
                             cancelReconnect();
                         } else {
-                            if (mClient != null) {
-                                mClient.removeListener();
-                                mClient.close();
-                            }
+                            logout();
                         }
                         break;
                     case "receive_message":

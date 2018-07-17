@@ -207,25 +207,21 @@ public class MessageActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void OnLoadSuccess(AllMessageCountEntity messageCountEntity) {
-        try {
-            sysCount = messageCountEntity.sys_msg;
-            storeCount = messageCountEntity.store_msg;
+        sysCount = messageCountEntity.sys_msg;
+        storeCount = messageCountEntity.store_msg;
 
-            if (isEmpty(Common.formatBadgeNumber(storeCount))) {
-                tv_store_count.setVisibility(View.GONE);
-            } else {
-                tv_store_count.setText(Common.formatBadgeNumber(storeCount));
-                tv_store_count.setVisibility(View.VISIBLE);
-            }
+        if (isEmpty(Common.formatBadgeNumber(sysCount))) {
+            tv_sys_count.setVisibility(View.GONE);
+        } else {
+            tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
+            tv_sys_count.setVisibility(View.VISIBLE);
+        }
 
-            if (isEmpty(Common.formatBadgeNumber(sysCount))) {
-                tv_sys_count.setVisibility(View.GONE);
-            } else {
-                tv_sys_count.setText(Common.formatBadgeNumber(sysCount));
-                tv_sys_count.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (isEmpty(Common.formatBadgeNumber(storeCount))) {
+            tv_store_count.setVisibility(View.GONE);
+        } else {
+            tv_store_count.setText(Common.formatBadgeNumber(storeCount));
+            tv_store_count.setVisibility(View.VISIBLE);
         }
     }
 
