@@ -119,7 +119,7 @@
         <LinearLayout
             android:id="@+id/llayout_input"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingTop="30dp"
@@ -160,7 +160,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recy_view_history"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp" />
 
         </LinearLayout>

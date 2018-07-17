@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,6 +27,7 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
+import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.view.IMoreCreditView;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyEditText;
@@ -90,19 +92,15 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @BindView(R.id.miv_clear)
     MyImageView miv_clear;
 
+    @BindView(R.id.recy_view_history)
+    RecyclerView recy_view_history;
+
     public final int REQUEST_CODE = 6666;
     private MoreCreditPresenter presenter;
-    //是否来自通讯录
-    private boolean is_from_the_address_book = false;
 
 
     public static void startAct(Context context){
         context.startActivity(new Intent(context,MoreCreditAct.class));
-    }
-
-    @OnClick(R.id.mtv_toolbar_right)
-    public void prepaidPhoneRecords(){
-        PhoneRecordAct.startAct(this);
     }
 
     /**
@@ -134,6 +132,12 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
         int w = TransformUtil.dip2px(this, 15);
         recy_view.addItemDecoration(new GridSpacingItemDecoration(w,false));
 
+        LinearLayoutManager manager1 = new LinearLayoutManager(this);
+        recy_view_history.setLayoutManager(manager1);
+        int space = TransformUtil.dip2px(this, 0.5f);
+        recy_view_history.addItemDecoration(new VerticalItemDecoration(space,0,
+                0,getColorResouce(R.color.color_value_6c)));
+
         isPhoneCorrectState(true);
     }
 
@@ -146,11 +150,9 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
                 if (isEmpty(s))return;
-                if (!is_from_the_address_book){
-                    if (s.length() > 11){
-                        CharSequence charSequence = s.subSequence(0, 11);
-                        met_phone.setText(charSequence);
-                    }
+                if (s.length() > 11){
+                    CharSequence charSequence = s.subSequence(0, 11);
+                    met_phone.setText(charSequence);
                 }else {
                     met_phone.setSelection(s.length());
                 }
@@ -169,7 +171,6 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             presenter.phoneNumber = mtv_phone.getText().toString();
             presenter.initApi();
         }else {
-            is_from_the_address_book = false;
             if (!mtv_phone.getText().toString().startsWith("1") || mtv_phone.getText().length() > 11){
                 isPhoneCorrectState(false);
             }else {
@@ -260,7 +261,6 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                         phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     }
                     phones.close();
-                    is_from_the_address_book = true;
                     if (mtv_phone != null) {
                         mtv_phone.setText(phoneNumber.replaceAll(" ", ""));
                         checkPhoneCorrect();
@@ -352,5 +352,20 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @Override
     public void phoneError() {
         isPhoneCorrectState(false);
+    }
+
+    @Override
+    public void setTopUpHistoryAdapter(BaseRecyclerAdapter adapter) {
+        if (adapter == null){
+            gone(recy_view_history);
+        }else {
+            visible(recy_view_history);
+            recy_view_history.setAdapter(adapter);
+        }
+    }
+
+    public void setPhone(String num){
+        if (met_phone != null)
+            met_phone.setText(num);
     }
 }

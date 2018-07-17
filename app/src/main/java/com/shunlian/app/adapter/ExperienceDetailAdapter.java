@@ -447,7 +447,6 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     EventBus.getDefault().post(event);
                     break;
                 case R.id.ll_goods:
-                        break;
                 case R.id.tv_add_car:
                     String id = mExperience_info.goods.id;
                     GoodsDetailAct.startAct(context,id);

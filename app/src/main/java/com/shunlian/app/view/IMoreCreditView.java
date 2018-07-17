@@ -21,4 +21,6 @@ public interface IMoreCreditView extends IView {
      * 手机号码错误
      */
     void phoneError();
+
+    void setTopUpHistoryAdapter(BaseRecyclerAdapter adapter);
 }
