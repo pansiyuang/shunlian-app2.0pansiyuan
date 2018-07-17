@@ -561,7 +561,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 String sub = content.substring(content.indexOf("：") + 1, content.length());
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(sub);
-                Common.staticToast("邀请码复制成功");
+                Common.staticToast("复制成功");
                 break;
         }
     }

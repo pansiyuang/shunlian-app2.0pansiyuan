@@ -147,7 +147,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 break;
             case R.id.mllayout_share:
                 if (!Common.isAlreadyLogin()){
-                    final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
+                    Common.goGoGo(mContext,"login");
+                    reset();
+                    /*final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
                     promptDialog.setTvSureColor(R.color.white);
                     promptDialog.setTvSureBg(R.color.pink_color);
                     promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
@@ -155,7 +157,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 Common.goGoGo(mContext,"login");
                                 reset();
                                 promptDialog.dismiss();
-                            }, "取消", (view) -> promptDialog.dismiss()).show();
+                            }, "取消", (view) -> promptDialog.dismiss()).show();*/
                     return;
                 }
                 mllayout_content.setVisibility(GONE);
