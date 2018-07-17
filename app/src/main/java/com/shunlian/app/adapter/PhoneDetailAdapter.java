@@ -24,7 +24,7 @@ public class PhoneDetailAdapter extends BaseRecyclerAdapter<String> {
 
 
     public PhoneDetailAdapter(Context context, List<String> lists) {
-        super(context, true, lists);
+        super(context, false, lists);
     }
 
 

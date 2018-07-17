@@ -25,6 +25,7 @@ public class PPhoneOrder extends BasePresenter<IPhoneOrder> {
 
     public PPhoneOrder(Context context, IPhoneOrder iView,String id) {
         super(context, iView);
+        this.id=id;
     }
 
     @Override
@@ -48,14 +49,32 @@ public class PPhoneOrder extends BasePresenter<IPhoneOrder> {
 
     }
 
+public void detail(){
+    Map<String, String> map = new HashMap<>();
+    map.put("id",id);
+    sortAndMD5(map);
 
-    public void getApiData() {
+    Call<BaseEntity<PhoneOrderDetailEntity>> estimateDetail = getAddCookieApiService()
+            .virtualOrderDetail(getRequestBody(map));
+
+    getNetData(true, estimateDetail, new SimpleNetDataCallback<BaseEntity<PhoneOrderDetailEntity>>() {
+        @Override
+        public void onSuccess(BaseEntity<PhoneOrderDetailEntity> entity) {
+            super.onSuccess(entity);
+            PhoneOrderDetailEntity data = entity.data;
+            if (data!=null)
+                iView.setApiData(data);
+        }
+    });
+}
+
+    public void result() {
         Map<String, String> map = new HashMap<>();
         map.put("id",id);
         sortAndMD5(map);
 
         Call<BaseEntity<PhoneOrderDetailEntity>> estimateDetail = getAddCookieApiService()
-                .virtualOrderDetail(getRequestBody(map));
+                .orderPayResult(getRequestBody(map));
 
         getNetData(true, estimateDetail, new SimpleNetDataCallback<BaseEntity<PhoneOrderDetailEntity>>() {
             @Override

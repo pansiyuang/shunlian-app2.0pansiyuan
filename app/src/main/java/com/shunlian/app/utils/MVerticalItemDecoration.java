@@ -36,7 +36,7 @@ public class MVerticalItemDecoration extends RecyclerView.ItemDecoration {
     }
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        outRect.bottom = bottomMargin;
+        outRect.bottom = space;
         outRect.top = topMargin;
         if (parent.getChildAdapterPosition(view) + 1 == state.getItemCount()) {
             if (bottomMargin != 0) {

@@ -15,6 +15,8 @@ public class H5PlusFrag extends H5Frag {
     protected void jsCallback(H5CallEntity h5CallEntity) {
 
     }
+
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
