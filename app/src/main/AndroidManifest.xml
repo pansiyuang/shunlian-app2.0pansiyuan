@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-feature android:name="android.hardware.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -207,9 +207,10 @@
             android:value="3cbe47ad444ddec83ea45d31" />
         <!--jpush-->
         <!-- 多渠道打包时改成360，因为360市场要上传原apk -->
+        <!--ShunLianPower-->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
-            android:value="ShunLianPower" />
+            android:value="360" />
         <!-- 配置Bugly调试模式（true或者false） -->
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
@@ -250,6 +251,21 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.register.SelectRecommendAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.more_credit.PhoneRecordAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.more_credit.PhonePaySuccessAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.more_credit.PhoneOrderDetailAct"
             android:exported="false"
             android:screenOrientation="portrait" />
         <!--<activity-->
@@ -850,6 +866,9 @@
             android:exported="false"
             android:theme="@style/chatDialog"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.more_credit.MoreCreditAct"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

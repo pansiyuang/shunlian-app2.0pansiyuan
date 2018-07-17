@@ -82,6 +82,8 @@ public abstract class BasePresenter<IV extends IView> implements BaseContract {
     private HttpDialog httpDialog;
     protected boolean isLoading = false;//是否正在加载
     protected int currentPage = 1;//当前页
+    protected boolean pageIsLoading =false;//分页是否在加载
+    protected String page_size ="20";//分页是否在加载
     protected int allPage;//总页数
     private final Resources resources;
     private final boolean isOpenLog = BuildConfig.DEBUG;//是否打开log日志 默认打开

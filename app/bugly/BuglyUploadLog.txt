@@ -45,3 +45,11 @@ file=C:\Augus\git-shunlian\shunlian-app2.0\app\build\outputs\mapping\release\map
 sha1=7524880cb609c28c66f8928a1c761ec87fadf2f4
 appId=1400008795
 
+file=C:\Augus\git-shunlian\shunlian-app2.0\app\build\outputs\mapping\release\mapping.txt
+sha1=7524880cb609c28c66f8928a1c761ec87fadf2f4
+appId=1400008795
+
+file=C:\Augus\git-shunlian\shunlian-app2.0\app\build\outputs\mapping\release\mapping.txt
+sha1=7524880cb609c28c66f8928a1c761ec87fadf2f4
+appId=1400008795
+

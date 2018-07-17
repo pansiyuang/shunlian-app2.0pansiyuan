@@ -62,6 +62,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+    public final static String Add_COOKIE = "addCookie";//解决当前页onStop后cookie失效的问题
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
@@ -346,7 +348,7 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.httpLogW("========h5Url==========" + h5Url);
+                LogUtil.httpLogW("========h5Url==========" + url);
                 if (url.startsWith("alipay")) {
 //                    Log.i("shouldOverrideUrlLoading", "处理自定义scheme");
                     try {
@@ -381,6 +383,10 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                     return true;
                 } else {
                     return super.shouldOverrideUrlLoading(view, url);
+//                    1、 默认返回：return super.shouldOverrideUrlLoading(view, url); 这个返回的方法会调用父类方法，
+// 也就是跳转至手机浏览器，平时写webview一般都在方法里面写 webView.loadUrl(url);  然后把这个返回值改成下面的false。 搜索
+//                    2、返回: return true;  webview处理url是根据程序来执行的。
+//                    3、返回: return false; webview处理url是在webview内部执行。
                 }
             }
 
@@ -469,8 +475,9 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 //            loadUrl();
             mwv_h5.loadUrl(h5Url, setWebviewHeader());
             beforeUrl=h5Url;
-        } else if (isSecond&&!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", ""))) {
+        } else if (isSecond) {
             addCookie();
+            if (!member_id.equals(SharedPrefUtil.getSharedPrfString("member_id", "")))
             mwv_h5.reload();
         }
         member_id=SharedPrefUtil.getSharedPrfString("member_id", "");
@@ -481,7 +488,9 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         String token = SharedPrefUtil.getSharedPrfString("token", "");
         String ua = SharedPrefUtil.getSharedPrfString("User-Agent", "ShunLian Android 4.0.0/1.0.0");
 
-        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
+
+        CookieSyncManager.createInstance(activity);
+//        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(activity);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookie();
@@ -490,7 +499,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
         cookieManager.setCookie(domain, "Client-Type=Android");
         cookieManager.setCookie(domain, "token=" + token);
         cookieManager.setCookie(domain, "User-Agent=" + ua);
-        cookieSyncManager.sync();
+//        cookieSyncManager.sync();
+
+        if (Build.VERSION.SDK_INT < 21) {
+            CookieSyncManager.getInstance().sync();
+        } else {
+            CookieManager.getInstance().flush();
+        }
         //end
     }
 

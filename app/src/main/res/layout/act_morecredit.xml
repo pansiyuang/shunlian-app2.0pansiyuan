@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rlayout_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <com.shunlian.app.widget.MyEditText
+            android:id="@+id/met_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入电话号码"
+            android:inputType="number"
+            android:gravity="bottom"
+            android:textColor="@color/value_484848"
+            android:textColorHint="@color/color_value_6c"
+            android:textSize="30sp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/met_phone"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_value_6c" />
+
+
+        <com.shunlian.app.widget.MyImageView
+            android:id="@+id/miv_select_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_huafei"
+            android:layout_alignBottom="@+id/met_phone"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16sp"
+        android:overScrollMode="never" />
+
+
+    <com.shunlian.app.widget.MyButton
+        android:id="@+id/mbtn_credit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/rounded_stroke_pink_44px"
+        android:gravity="center"
+        android:text="立即充值"
+        android:textColor="@color/pink_color"
+        android:textSize="15sp" />
+
+</LinearLayout>

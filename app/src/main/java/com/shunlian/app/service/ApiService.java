@@ -1576,6 +1576,34 @@ public interface ApiService {
     Call<BaseEntity<DetailOrderRecordEntity>> getEstimateDetail(@Body RequestBody body);
 
     /**
+     * 充值订单详情
+     *
+     * @param body
+     * @return
+     */
+    @POST("virtual/orderDetail")
+    Call<BaseEntity<PhoneOrderDetailEntity>> virtualOrderDetail(@Body RequestBody body);
+
+     /**
+     * 支付成功查看订单详情
+     *
+     * @param body
+     * @return
+     */
+    @POST("virtual/orderPayResult")
+    Call<BaseEntity<PhoneOrderDetailEntity>> orderPayResult(@Body RequestBody body);
+
+
+    /**
+     * 充值记录
+     *
+     * @param body
+     * @return
+     */
+    @POST("virtual/rechargelist")
+    Call<BaseEntity<PhoneRecordEntity>> rechargelist(@Body RequestBody body);
+
+    /**
      * 领取月奖励和周奖励
      *
      * @param map
@@ -2332,4 +2360,20 @@ public interface ApiService {
      */
     @GET("channel/share")
     Call<BaseEntity<ShareInfoParam>> shareInfo(@QueryMap Map<String, String> map);
+
+    /**
+     * 获取话费充值面额列表
+     * @param body
+     * @return
+     */
+    @POST("Virtual/getProductList")
+    Call<BaseEntity<MoreCreditEntity>> getCreditProductList(@Body RequestBody body);
+
+    /**
+     * 手机充值
+     * @param body
+     * @return
+     */
+    @POST("Virtual/addOrder")
+    Call<BaseEntity<PayOrderEntity>> phoneTopUp(@Body RequestBody body);
 }
