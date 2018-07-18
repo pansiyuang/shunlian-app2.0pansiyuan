@@ -283,6 +283,10 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     protected void onStart() {
         super.onStart();
+        resetStatusBar();
+    }
+
+    private void resetStatusBar() {
         if (immersionBar == null)
             immersionBar = ImmersionBar.with(this);
         immersionBar.statusBarAlpha(mStatusBarAlpha)
@@ -818,6 +822,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.mayBeBuyGoods();
 
+                resetStatusBar();
             }
 
             @Override
@@ -840,6 +845,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 -1,Animation.RELATIVE_TO_SELF,0);
         animation.setDuration(250);
         mll_share.setAnimation(animation);
+        mStatusBarAlpha = immersionBar.getBarParams().statusBarAlpha;
     }
 
     private void addCartAnim() {

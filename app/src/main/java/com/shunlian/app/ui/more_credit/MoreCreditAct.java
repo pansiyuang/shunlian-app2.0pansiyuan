@@ -261,9 +261,14 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                         phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     }
                     phones.close();
-                    if (mtv_phone != null) {
-                        mtv_phone.setText(phoneNumber.replaceAll(" ", ""));
-                        checkPhoneCorrect();
+                    if (!isEmpty(phoneNumber)){
+                        if (phoneNumber.contains("+86")){
+                            phoneNumber = phoneNumber.replace("+86","");
+                        }
+                        if (mtv_phone != null) {
+                            mtv_phone.setText(phoneNumber.replaceAll(" ", ""));
+                            checkPhoneCorrect();
+                        }
                     }
                 }
             }

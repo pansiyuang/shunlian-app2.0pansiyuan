@@ -22,6 +22,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
@@ -750,12 +751,18 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         removeAllViews();
         setVisibility(INVISIBLE);
         final View inflate = LayoutInflater.from(getContext())
-                .inflate(R.layout.share_goods, this, false);
+                .inflate(R.layout.share_goods_copy, this, false);
+        if (mContext instanceof BaseActivity && ImmersionBar.isNavigationAtBottom((BaseActivity) mContext)){
+            ((BaseActivity)mContext).setHideNavigation();
+        }
         ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
+        int deviceWidth = DeviceInfoUtil.getDeviceWidth(getContext());
+        int deviceHeight = DeviceInfoUtil.getDeviceHeight(getContext());
+        LogUtil.zhLogW(deviceWidth+"==w=====h=="+deviceHeight);
         int i1 = TransformUtil.dip2px(mContext, 360);
         int i2 = TransformUtil.dip2px(mContext, 640);
-        layoutParams1.width = i1;
-        layoutParams1.height = i2;
+        layoutParams1.width = 720;
+        layoutParams1.height = 1280;
         inflate.setLayoutParams(layoutParams1);
         removeAllViews();
         addView(inflate);
@@ -766,8 +773,8 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
-        int i = TransformUtil.dip2px(getContext(), 92.5f);
-        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
+        //int i = TransformUtil.dip2px(getContext(), 92.5f);
+        Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, 185);
         miv_code.setImageBitmap(qrImage);
 
 
@@ -846,6 +853,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct){
                                     ((GoodsDetailAct)mContext).moreHideAnim();
+                                    if (mContext instanceof BaseActivity && ImmersionBar.isNavigationAtBottom((BaseActivity) mContext)){
+                                        ((BaseActivity)mContext).setShowStatusAndNavigation();
+                                        ((BaseActivity)mContext).setHideStatus();
+                                    }
                                 }
                                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
                                 dialog.show();
