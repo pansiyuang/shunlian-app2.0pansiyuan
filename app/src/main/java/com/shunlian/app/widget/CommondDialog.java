@@ -111,7 +111,8 @@ public class CommondDialog implements IMain {
     @Override
     public void setCommond(CommondEntity data) {
         SharedPrefUtil.saveSharedPrfString("share_code", data.share_code);
-        initCommodDialog(data);
+        if (data.type_data != null)
+            initCommodDialog(data);
     }
 
     @Override
