@@ -11,6 +11,7 @@ import com.shunlian.app.bean.EmptyEntity;
 import com.shunlian.app.bean.MoreCreditEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
+import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IMoreCreditView;
 
@@ -80,7 +81,7 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
                     @Override
                     public void onErrorCode(int code, String message) {
                         super.onErrorCode(code, message);
-                        if (code == 0){
+                        if (code == Code.CREDIT_PHONE_ERROR){
                             iView.phoneError();
                         }
                     }

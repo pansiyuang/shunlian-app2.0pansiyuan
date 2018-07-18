@@ -43,6 +43,7 @@ public class ShareInfoParam implements Serializable {
 
     //是否是优品  默认不是
     public boolean isSuperiorProduct;
+    public String goods_id;//商品id
 
     @Override
     public String toString() {

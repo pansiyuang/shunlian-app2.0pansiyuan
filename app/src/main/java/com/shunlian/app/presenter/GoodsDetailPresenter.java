@@ -113,6 +113,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     shareInfoParam.goodsPrice = data.price;
                     shareInfoParam.desc = data.introduction;
                     shareInfoParam.downloadPic = data.pics;
+                    shareInfoParam.goods_id = goods_id;
                     if (data.user_info != null){
                         shareLink = data.user_info.share_url;
                         shareInfoParam.userAvatar = data.user_info.avatar;
