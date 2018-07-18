@@ -3,16 +3,19 @@ package com.shunlian.app.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.shunlian.app.R;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.widget.MyButton;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -30,18 +33,6 @@ import butterknife.Unbinder;
 
 public class SLHeadDialog extends Dialog {
 
-    @BindView(R.id.rlayout_tip1)
-    RelativeLayout rlayout_tip1;
-
-    @BindView(R.id.mtv_tip1)
-    MyTextView mtv_tip1;
-
-    @BindView(R.id.rlayout_tip2)
-    RelativeLayout rlayout_tip2;
-
-    @BindView(R.id.mtv_tip2)
-    MyTextView mtv_tip2;
-
     @BindView(R.id.mbtn_close)
     MyButton mbtn_close;
 
@@ -50,6 +41,9 @@ public class SLHeadDialog extends Dialog {
 
     @BindView(R.id.llayout_content)
     LinearLayout llayout_content;
+
+    @BindView(R.id.recy_view)
+    RecyclerView recy_view;
 
     private Unbinder unbinder;
     private List<String> mTips;
@@ -83,21 +77,10 @@ public class SLHeadDialog extends Dialog {
             layoutParams.topMargin = measuredHeight-TransformUtil.dip2px(context,8);
         });
 
-        if (mTips != null && mTips.size() > 0){
-            if (!TextUtils.isEmpty(mTips.get(0))){
-                rlayout_tip1.setVisibility(View.VISIBLE);
-                mtv_tip1.setText(Common.getPlaceholder(2)+mTips.get(0));
-            }else {
-                rlayout_tip1.setVisibility(View.GONE);
-            }
+        LinearLayoutManager manager = new LinearLayoutManager(context);
+        recy_view.setLayoutManager(manager);
 
-            if (mTips.size() == 2 && !TextUtils.isEmpty(mTips.get(1))){
-                rlayout_tip2.setVisibility(View.VISIBLE);
-                mtv_tip2.setText(Common.getPlaceholder(2)+mTips.get(1));
-            }else {
-                rlayout_tip2.setVisibility(View.GONE);
-            }
-        }
+        recy_view.setAdapter(new ContentAdapter(context,mTips));
     }
 
 
@@ -117,4 +100,50 @@ public class SLHeadDialog extends Dialog {
             }
         }
     }
+
+
+    class ContentAdapter extends BaseRecyclerAdapter<String>{
+
+        public ContentAdapter(Context context, List<String> lists) {
+            super(context, false, lists);
+        }
+
+        /**
+         * 子类需要实现的holder
+         *
+         * @param parent
+         * @return
+         */
+        @Override
+        protected RecyclerView.ViewHolder getRecyclerHolder(ViewGroup parent) {
+            View view = mInflater.inflate(R.layout.item_sale_content, parent, false);
+            return new ContentHolder(view);
+        }
+
+        /**
+         * 处理列表
+         *
+         * @param holder
+         * @param position
+         */
+        @Override
+        public void handleList(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof ContentHolder){
+                ContentHolder mHolder = (ContentHolder) holder;
+                mHolder.mtv_tip2.setText(Common.getPlaceholder(2)+lists.get(position));
+            }
+        }
+
+        class ContentHolder extends BaseRecyclerAdapter.BaseRecyclerViewHolder{
+
+            @BindView(R.id.mtv_tip2)
+            MyTextView mtv_tip2;
+
+            public ContentHolder(View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+
 }
