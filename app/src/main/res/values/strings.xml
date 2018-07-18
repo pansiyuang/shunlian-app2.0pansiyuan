@@ -128,6 +128,7 @@
     <string name="store_sort">分类</string>
     <string name="store_first">店铺首页</string>
     <string name="store_baby">店铺宝贝</string>
+    <string name="store_babys">全部宝贝</string>
     <string name="store_discount">促销</string>
     <string name="store_new">新品</string>
     <string name="store_zonghe">综合</string>
@@ -464,12 +465,16 @@
     <item name="tag_category_isclick" type="id" />
     <string name="no_more_goods">您已经没有更多商品了</string>
 
+
     <string name="goods_off_the_shelf">宝贝已下架~去瞧瞧其他商品</string>
     <string name="submit_success">提交成功</string>
     <string name="leave_behind_goods">忍心丢下心仪商品？</string>
     <string name="i_think">我再想想</string>
     <string name="to_resolve">去意已决</string>
     <string name="more_comment">更多评论</string>
+
+    <!--recycleview-->
+    <string name="rv_chakansuoyou">查看所有商品</string>
 
     <!--天天特惠-->
     <string name="day_tixinwo">提醒我</string>
@@ -753,7 +758,7 @@
     <string name="first_dianpumei">店铺美券</string>
     <string name="first_dianpuyouhui">店铺暂无优惠券，敬请期待</string>
     <string name="first_shangping">暂时还没发现商品哦，请耐心等待~</string>
-    <string name="first_yifukuan">%s人已付款</string>
+    <string name="first_yixiadan">%s人已下单</string>
     <string name="first_haopinglv">好评率%s</string>
     <string name="first_yigou">%s人已购</string>
     <string name="first_souni">搜你所想</string>

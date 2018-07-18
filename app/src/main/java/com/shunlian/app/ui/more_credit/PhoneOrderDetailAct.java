@@ -3,6 +3,7 @@ package com.shunlian.app.ui.more_credit;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +76,12 @@ public class PhoneOrderDetailAct extends BaseActivity implements IPhoneOrder,Mes
 
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
+
+    @BindView(R.id.mtv_original)
+    MyTextView mtv_original;
+
+    @BindView(R.id.mtv_count)
+    MyTextView mtv_count;
 
     private MessageCountManager messageCountManager;
 
@@ -190,6 +197,9 @@ public class PhoneOrderDetailAct extends BaseActivity implements IPhoneOrder,Mes
         mtv_attributes.setText(phoneOrderDetailEntity.face_price);
         mtv_price.setText(phoneOrderDetailEntity.payment_money);
         mtv_shifu.setText(phoneOrderDetailEntity.payment_money);
+        mtv_original.setText(phoneOrderDetailEntity.market_price);
+        mtv_count.setText("x"+phoneOrderDetailEntity.count);
+        mtv_original.setPaintFlags(Paint. STRIKE_THRU_TEXT_FLAG);
 
         rv_trade.setLayoutManager(new LinearLayoutManager(this));
         rv_trade.setAdapter(new PhoneDetailAdapter(this, phoneOrderDetailEntity.trade));

@@ -186,7 +186,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginTop="4dp"
-                                android:text="@string/store_baby"
+                                android:text="@string/store_babys"
                                 android:textColor="@color/my_gray_three"
                                 android:textSize="12sp" />
 
