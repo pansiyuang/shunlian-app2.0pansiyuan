@@ -26,6 +26,7 @@ import com.shunlian.app.bean.*;
 import com.shunlian.app.newchat.entity.ChatGoodsEntity;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
 import com.shunlian.app.newchat.entity.HistoryEntity;
+import com.shunlian.app.newchat.entity.ReplysetEntity;
 import com.shunlian.app.newchat.entity.ServiceEntity;
 import com.shunlian.app.newchat.entity.StoreMessageEntity;
 import com.shunlian.app.newchat.entity.StoreMsgEntity;
@@ -2376,4 +2377,13 @@ public interface ApiService {
      */
     @POST("Virtual/addOrder")
     Call<BaseEntity<PayOrderEntity>> phoneTopUp(@Body RequestBody body);
+
+    /**
+     * 客服快捷语列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("chat/chat/quickList")
+    Call<BaseEntity<ReplysetEntity>> replysetList(@QueryMap Map<String, String> map);
 }

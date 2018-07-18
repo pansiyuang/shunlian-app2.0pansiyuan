@@ -275,12 +275,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             case Admin: //
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showCommentBtn();
+                et_input.showFastComment();
                 tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Seller:
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showGoodsBtn();
                 et_input.showCommentBtn();
+                et_input.showFastComment();
                 tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Member:
@@ -367,7 +369,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             from_id = user.join_id;
             from_nickname = user.nickname;
             from_type = user.type;
+
+            et_input.setJoinId(user.join_id);
+            et_input.setRoleType(from_type);
         }
+
     }
 
     @Override
@@ -426,6 +432,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     public void sendComment() {
         sendEvaluteMessage();
+    }
+
+    @Override
+    public void sendFast(String content) {
+        sendTextMessage(content);
     }
 
     /**
