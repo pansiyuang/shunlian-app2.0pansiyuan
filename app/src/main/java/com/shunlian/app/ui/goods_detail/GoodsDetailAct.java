@@ -803,7 +803,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
 
     public void moreHideAnim() {
         immersionBar.getTag(GoodsDetailAct.class.getName()).init();
-        mll_share.setVisibility(View.GONE);
+        gone(mll_share);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,-1);
@@ -821,8 +821,6 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                 quickAction();
                 if (goodsDetailPresenter != null)
                     goodsDetailPresenter.mayBeBuyGoods();
-
-                resetStatusBar();
             }
 
             @Override
@@ -839,7 +837,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         float alpha = mll_item.getAlpha();
         if (alpha < 1 && alpha > 0)return;//导航栏没有全部显示的情况下，显示分享框会有透明条
         immersionBar.statusBarColor(R.color.white).init();
-        mll_share.setVisibility(View.VISIBLE);
+        visible(mll_share);
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,
                 Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,
                 -1,Animation.RELATIVE_TO_SELF,0);

@@ -470,10 +470,13 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         }
 
         if (!isEmpty(master_info_new)) {
+            visible(recy_view);
             LinearLayoutManager manager = new LinearLayoutManager(this);
             recy_view.setLayoutManager(manager);
             recy_view.setNestedScrollingEnabled(false);
             recy_view.setAdapter(new MemberAdapter(this, master_info_new));
+        }else {
+            gone(recy_view);
         }
     }
 
