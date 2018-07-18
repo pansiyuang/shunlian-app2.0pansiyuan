@@ -751,9 +751,16 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         setVisibility(INVISIBLE);
         final View inflate = LayoutInflater.from(getContext())
                 .inflate(R.layout.share_goods, this, false);
+
+        if (mContext instanceof GoodsDetailAct &&
+                ImmersionBar.hasNavigationBar((Activity) mContext)){
+            ((GoodsDetailAct)mContext).setFullScreen(true);
+        }
+
         ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
         layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;
         layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
         inflate.setLayoutParams(layoutParams1);
         removeAllViews();
         addView(inflate);
@@ -844,6 +851,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                             if (isSuccess) {
                                 if (mContext instanceof GoodsDetailAct){
                                     ((GoodsDetailAct)mContext).moreHideAnim();
+                                    if (mContext instanceof GoodsDetailAct &&
+                                            ImmersionBar.hasNavigationBar((Activity) mContext)){
+                                        ((GoodsDetailAct)mContext).setFullScreen(false);
+                                    }
                                 }
                                 SaveAlbumDialog dialog = new SaveAlbumDialog((Activity) mContext,shareType,shareId);
                                 dialog.show();
@@ -997,15 +1008,6 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
     public void copyText(boolean isToast) {
         Common.copyText(getContext(),mShareInfoParam.shareLink,mShareInfoParam.isCopyTitle?mShareInfoParam.title:mShareInfoParam.desc,isToast);
-    }
-
-    public Bitmap getBitmapByView1(View view) {
-        Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(720,
-                1280, Bitmap.Config.RGB_565);
-        final Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-        return bitmap;
     }
 
     public Bitmap getBitmapByView(View view) {
