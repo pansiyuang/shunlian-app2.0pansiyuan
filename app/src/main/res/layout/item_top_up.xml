@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="30dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+
+    <com.shunlian.app.widget.MyTextView
+        android:id="@+id/mtv_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="#FF767676"
+        android:textSize="15sp" />
+
+    <com.shunlian.app.widget.MyImageView
+        android:id="@+id/miv_clear"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@mipmap/icon_common_tanchuang_close" />
+
+</LinearLayout>

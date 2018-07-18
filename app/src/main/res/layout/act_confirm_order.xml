@@ -7,9 +7,9 @@
     <!--title-->
     <com.shunlian.app.widget.MyRelativeLayout
         android:id="@+id/mrl_title"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <com.shunlian.app.widget.MyImageView
             android:id="@+id/miv_close"
@@ -44,9 +44,9 @@
         <com.shunlian.app.widget.MyLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@color/white"
             app:ll_control_adapter="true"
             app:ll_control_height="100"
             app:ll_margin_top="1">
@@ -99,12 +99,116 @@
         android:overScrollMode="never"
         android:scrollbars="none">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recy_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:overScrollMode="never" />
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:overScrollMode="never" />
+
+            <View
+                android:id="@+id/view_line1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white_ash"
+                android:visibility="gone" />
+            <!--平台优惠券-->
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mllayout_discount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="18dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="18dp"
+                android:visibility="gone">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="平台优惠券"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="请选择"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp"
+                    app:tv_control_adapter="true"
+                    app:tv_margin_left="15"
+                    app:tv_margin_right="30" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/img_common_viewarrow_1" />
+            </com.shunlian.app.widget.MyLinearLayout>
+
+            <View
+                android:id="@+id/view_line2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/light_gray_three"
+                android:visibility="gone" />
+            <!--平台促销-->
+            <com.shunlian.app.widget.MyLinearLayout
+                android:id="@+id/mll_promotion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="18dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="18dp"
+                android:visibility="gone">
+
+                <com.shunlian.app.widget.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="平台促销"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp" />
+
+
+                <com.shunlian.app.widget.MyTextView
+                    android:id="@+id/mtv_promotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="请选择"
+                    android:textColor="@color/new_text"
+                    android:textSize="14sp"
+                    app:tv_control_adapter="true"
+                    app:tv_margin_left="15"
+                    app:tv_margin_right="30" />
+
+                <com.shunlian.app.widget.MyImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/img_common_viewarrow_1" />
+            </com.shunlian.app.widget.MyLinearLayout>
+        </LinearLayout>
 
     </com.shunlian.app.widget.MyNestedScrollView>
 

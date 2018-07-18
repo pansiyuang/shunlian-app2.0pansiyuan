@@ -1,5 +1,6 @@
 package com.shunlian.app.ui.sale_data;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.ui.more_credit.MoreCreditAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
@@ -270,6 +272,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         llayout_7day.setOnClickListener(this);
         llayout_30day.setOnClickListener(this);
         llayout_60day.setOnClickListener(this);
+        mtv_request_code.setOnClickListener(this);
 
         llayout_sale.setOnClickListener(this);
         llayout_order.setOnClickListener(this);
@@ -345,7 +348,12 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
      */
     @Override
     public void setGrowthValue_RequestCode(String growth_value, String request_code) {
-        mtv_growth_value.setText(String.format(getStringResouce(R.string.growth_value),growth_value));
+        if (isEmpty(growth_value)){
+            mtv_growth_value.setVisibility(View.INVISIBLE);
+        }else {
+            visible(mtv_growth_value);
+            mtv_growth_value.setText(String.format(getStringResouce(R.string.growth_value),growth_value));
+        }
         mtv_request_code.setText(String.format(getStringResouce(R.string.invitation_code),request_code));
     }
 
@@ -547,6 +555,13 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 if (slHeadDialog == null)
                     slHeadDialog = new SLHeadDialog(this,mTip);
                 slHeadDialog.show();
+                break;
+            case R.id.mtv_request_code:
+                String content = mtv_request_code.getText().toString();
+                String sub = content.substring(content.indexOf("：") + 1, content.length());
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(sub);
+                Common.staticToast("复制成功");
                 break;
         }
     }

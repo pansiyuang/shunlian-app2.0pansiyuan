@@ -147,7 +147,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                 break;
             case R.id.mllayout_share:
                 if (!Common.isAlreadyLogin()){
-                    final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
+                    Common.goGoGo(mContext,"login");
+                    reset();
+                    /*final PromptDialog promptDialog = new PromptDialog((Activity) mContext);
                     promptDialog.setTvSureColor(R.color.white);
                     promptDialog.setTvSureBg(R.color.pink_color);
                     promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
@@ -155,7 +157,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
                                 Common.goGoGo(mContext,"login");
                                 reset();
                                 promptDialog.dismiss();
-                            }, "取消", (view) -> promptDialog.dismiss()).show();
+                            }, "取消", (view) -> promptDialog.dismiss()).show();*/
                     return;
                 }
                 mllayout_content.setVisibility(GONE);
@@ -750,8 +752,10 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         final View inflate = LayoutInflater.from(getContext())
                 .inflate(R.layout.share_goods, this, false);
         ViewGroup.LayoutParams layoutParams1 = inflate.getLayoutParams();
-        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;//
-        layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        int i1 = TransformUtil.dip2px(mContext, 360);
+        int i2 = TransformUtil.dip2px(mContext, 640);
+        layoutParams1.width = i1;
+        layoutParams1.height = i2;
         inflate.setLayoutParams(layoutParams1);
         removeAllViews();
         addView(inflate);
@@ -762,7 +766,7 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
         mtv_nickname.setText("来自"+mShareInfoParam.userName+"的分享");
 
         MyImageView miv_code = (MyImageView) inflate.findViewById(R.id.miv_code);
-        int i = TransformUtil.countRealWidth(getContext(), 185);
+        int i = TransformUtil.dip2px(getContext(), 92.5f);
         Bitmap qrImage = BitmapUtil.createQRImage(mShareInfoParam.shareLink, null, i);
         miv_code.setImageBitmap(qrImage);
 
@@ -784,6 +788,9 @@ public class QuickActions extends RelativeLayout implements View.OnClickListener
 
         MyTextView mtv_time = (MyTextView) inflate.findViewById(R.id.mtv_time);
         MyTextView mtv_act_label = (MyTextView) inflate.findViewById(R.id.mtv_act_label);
+
+        MyTextView mtv_goodsID = (MyTextView) inflate.findViewById(R.id.mtv_goodsID);
+        mtv_goodsID.setText("ID:"+mShareInfoParam.goods_id);
 
         LinearLayout llayout_day = (LinearLayout) inflate.findViewById(R.id.llayout_day);
 

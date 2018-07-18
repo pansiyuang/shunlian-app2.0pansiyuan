@@ -45,7 +45,6 @@ import com.shunlian.app.ui.store.StoreAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.IGoodsDetailView;
@@ -1109,7 +1108,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     }
 
     public void sharePrompt(){
-        final PromptDialog promptDialog = new PromptDialog(this);
+        Common.goGoGo(this,"login");
+        moreHideAnim();
+        /*final PromptDialog promptDialog = new PromptDialog(this);
         promptDialog.setTvSureColor(R.color.white);
         promptDialog.setTvSureBg(R.color.pink_color);
         promptDialog.setSureAndCancleListener("请先登录顺联APP，参与分享呦~", "确定",
@@ -1117,7 +1118,7 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
                     Common.goGoGo(this,"login");
                     moreHideAnim();
                     promptDialog.dismiss();
-                }, "取消", (view) -> promptDialog.dismiss()).show();
+                }, "取消", (view) -> promptDialog.dismiss()).show();*/
     }
 
     private void quickAction(){

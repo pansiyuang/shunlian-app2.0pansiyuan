@@ -21,10 +21,8 @@ import com.shunlian.app.ui.discover.DiscoverXindeFrag;
 import com.shunlian.app.ui.discover.other.ExperienceDetailAct;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
-import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 
@@ -136,7 +134,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_comment_count.setText(experience.comment_num);
             holderView.tv_evaluate_count.setText(experience.praise_num);
 
-            holderView.tv_add_car.setOnClickListener(v -> {
+            holderView.ll_goods.setOnClickListener(v -> {
                 if (!isEmpty(goods.id)) {
                     GoodsDetailAct.startAct(context, goods.id);
                 }

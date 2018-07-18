@@ -2376,4 +2376,20 @@ public interface ApiService {
      */
     @POST("Virtual/addOrder")
     Call<BaseEntity<PayOrderEntity>> phoneTopUp(@Body RequestBody body);
+
+    /**
+     * 充值手机号列表
+     * @param body
+     * @return
+     */
+    @POST("virtual/listCard")
+    Call<BaseEntity<CreditPhoneListEntity>> listCard(@Body RequestBody body);
+
+    /**
+     * 删除手机号
+     * @param body
+     * @return
+     */
+    @POST("virtual/deleteCard")
+    Call<BaseEntity<EmptyEntity>> deleteCard(@Body RequestBody body);
 }

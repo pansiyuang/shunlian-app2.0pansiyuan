@@ -113,6 +113,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                     shareInfoParam.goodsPrice = data.price;
                     shareInfoParam.desc = data.introduction;
                     shareInfoParam.downloadPic = data.pics;
+                    shareInfoParam.goods_id = goods_id;
                     if (data.user_info != null){
                         shareLink = data.user_info.share_url;
                         shareInfoParam.userAvatar = data.user_info.avatar;
@@ -159,7 +160,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void followStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -187,7 +189,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param storeId
      */
     public void delFollowStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -217,7 +220,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param qty
      */
     public void addCart(String goods_id,String sku_id,String qty){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -260,7 +264,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param goods_id
      */
     public void goodsFavAdd(String goods_id){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -283,7 +288,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param ids
      */
     public void goodsFavRemove(String ids){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -484,7 +490,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
      * @param voucherId
      */
     public void getVoucher(String voucherId) {
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String, String> map = new HashMap<>();

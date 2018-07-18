@@ -194,7 +194,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
      * @param storeId
      */
     public void followStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
@@ -236,7 +237,8 @@ public class GuanzhuPresenter extends BasePresenter<IGuanzhuView> {
      * @param storeId
      */
     public void delFollowStore(String storeId){
-        if (Common.loginPrompt()){
+        if (!Common.isAlreadyLogin()){
+            Common.goGoGo(context,"login");
             return;
         }
         Map<String,String> map = new HashMap<>();
