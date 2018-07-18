@@ -37,7 +37,6 @@ import com.shunlian.app.ui.sign.SignInAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
@@ -220,6 +219,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private MainActivity mainActivity;
     private String one, two, three, four;
     private int flag = 0;
+    private String invite_code;
 
     //    private Timer outTimer;
     @Override
@@ -367,6 +367,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     protected void initListener() {
         super.initListener();
         mtv_qiandao.setOnClickListener(this);
+        mtv_yaoqingma.setOnClickListener(this);
         mllayout_quanbu.setOnClickListener(this);
         mllayout_guanfangkefu.setOnClickListener(this);
         mllayout_huiyuanguanli.setOnClickListener(this);
@@ -443,6 +444,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                         one = "999999.999";
                         two = "9999999.555";
                         three = "99999999";
+                        four = "9999999";
                         four = "9999999";
                         break;
                     case 4:
@@ -608,7 +610,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 miv_level.setImageResource(R.mipmap.v6);
                 break;
         }
-        mtv_yaoqingma.setText("邀请码:" + personalcenterEntity.invite_code);
+        invite_code=personalcenterEntity.invite_code;
+        mtv_yaoqingma.setText("邀请码:" + invite_code);
         miv_levels.setVisibility(View.VISIBLE);
 
 //        switch (personalcenterEntity.role) {
@@ -779,7 +782,6 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 
     @Override
     public void onClick(View view) {
-        LogUtil.augusLogW("--" + view.getId());
         switch (view.getId()) {
             case R.id.mllayout_quanbu:
                 MyOrderAct.startAct(baseContext, 1);
@@ -863,6 +865,10 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_chakan:
                 mainActivity.myPlusClick();
+                //点击查看特权
+                break;
+            case R.id.mtv_yaoqingma:
+                Common.copyText(getActivity(),invite_code);
                 //点击查看特权
                 break;
         }

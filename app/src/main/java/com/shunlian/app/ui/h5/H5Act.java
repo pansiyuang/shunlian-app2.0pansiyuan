@@ -315,10 +315,11 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                LogUtil.zhLogW("=onPageFinished=======" + url);
                 if (!isFinishing()) {
-                    title = view.getTitle();
-                    setTitle();
+                    if (!isEmpty(view.getTitle())){
+                        title = view.getTitle();
+                        setTitle();
+                    }
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
 //                }
@@ -389,6 +390,7 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                 }
             }
 
+
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 if (sonicSession != null) {
@@ -423,6 +425,15 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
                     } else {
                         mProgressbar.setNormalProgress(newProgress);
                     }
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String titles) {
+                super.onReceivedTitle(view, titles);
+                if (!isEmpty(titles)){
+                    title=titles;
+                    setTitle();
                 }
             }
 

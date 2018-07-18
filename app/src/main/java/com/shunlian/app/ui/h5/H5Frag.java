@@ -296,7 +296,6 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
 
         mwv_h5.setWebViewClient(new WebViewClient() {
 
-
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -312,10 +311,11 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                LogUtil.zhLogW("=onPageFinished=======" + url);
                 if (!activity.isFinishing()) {
-                    title = view.getTitle();
-                    setTitle();
+                    if (!isEmpty(view.getTitle())){
+                        title = view.getTitle();
+                        setTitle();
+                    }
 //                if (!isFinishing() && httpDialog != null && httpDialog.isShowing()) {
 //                    httpDialog.dismiss();
 //                }
@@ -424,6 +424,15 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
                     } else {
                         mProgressbar.setNormalProgress(newProgress);
                     }
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String titles) {
+                super.onReceivedTitle(view, titles);
+                if (!isEmpty(titles)){
+                    title=titles;
+                    setTitle();
                 }
             }
 

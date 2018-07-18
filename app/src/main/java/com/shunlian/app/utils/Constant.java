@@ -88,6 +88,8 @@ public final class Constant {
 
     public static String BUGLY_ID = "1400008795";//正式
 
+    public static String EMAIL = "tousu@shunliandongli.com";
+
     public static String SHARE_TYPE = "";//分享类型
     public static String SHARE_ID = "";//分享id
     public static boolean ISBALANCE=false;
