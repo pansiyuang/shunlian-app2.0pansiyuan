@@ -3,4 +3,5 @@
     android:layout_width="286dp"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corner_white_8px"
-    android:id="@+id/rv_operate"/>
+    android:id="@+id/rv_operate"
+    android:overScrollMode="never"/>
