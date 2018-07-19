@@ -412,6 +412,7 @@ public class Common {
         return parameterValue;
     }
 
+
     public static long getMemoryFreeSize(Context context) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();

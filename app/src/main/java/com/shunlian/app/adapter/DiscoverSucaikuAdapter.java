@@ -92,9 +92,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                         bigImgEntity.itemList = (ArrayList<String>) content.image;
                         bigImgEntity.index = 0;
                         bigImgEntity.items = new ArrayList<>();
-                        bigImgEntity.items.add(getString(R.string.operate_baocuntupian));
                         bigImgEntity.items.add(getString(R.string.pic_text_share));
-                        bigImgEntity.items.add(getString(R.string.errcode_cancel));
                         LookBigImgAct.startAct(context, bigImgEntity, new LookBigImgAct.MyCallBack() {
 
                             @Override

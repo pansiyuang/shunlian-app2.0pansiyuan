@@ -2,7 +2,7 @@
 <com.shunlian.app.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_parent"
     android:layout_width="match_parent"
-    android:layout_height="128dp"
+    android:layout_height="98dp"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -10,14 +10,14 @@
 
     <com.shunlian.app.widget.MyImageView
         android:id="@+id/miv_photo"
-        android:layout_width="163dp"
-        android:layout_height="98dp"
+        android:layout_width="120dp"
+        android:layout_height="68dp"
         android:scaleType="fitXY"
         android:layout_centerVertical="true"/>
 
     <com.shunlian.app.widget.MyRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="98dp"
+        android:layout_height="68dp"
         android:orientation="vertical"
         android:layout_toRightOf="@id/miv_photo"
         android:layout_centerVertical="true">
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:lines="2"
+            android:lines="1"
             android:layout_marginLeft="12dp"
             android:textColor="@color/new_text"
             android:textSize="16sp"
@@ -41,7 +41,7 @@
             android:layout_below="@id/mtv_title"
             android:lines="1"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="6dp"
             android:textColor="@color/share_text"
             android:textSize="12sp" />
 

@@ -31,6 +31,7 @@ import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,7 +58,8 @@ public class LookBigImgAct extends BaseActivity {
     private BigImgEntity entity;
     private Dialog dialog_operate;
     private Activity activity;
-    private String imgUrl = "";
+    private int pos = 0;
+
 
     public static void startAct(Context context, BigImgEntity entity) {
         Intent intent = new Intent(context, LookBigImgAct.class);
@@ -91,11 +93,16 @@ public class LookBigImgAct extends BaseActivity {
     protected void initData() {
         activity = this;
         entity = getIntent().getParcelableExtra("data");
+        if (entity != null) {
+            if (isEmpty(entity.items))
+                entity.items = new ArrayList<>();
+            entity.items.add(0, getString(R.string.operate_baocuntupian));
+            entity.items.add(entity.items.size(), getString(R.string.errcode_cancel));
+        }
         SamplePagerAdapter adapter = new SamplePagerAdapter(entity.itemList);
         view_pager.setAdapter(adapter);
 
         view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private int pos = 0;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -187,7 +194,7 @@ public class LookBigImgAct extends BaseActivity {
                         switch (entity.items.get(position)) {
                             case "保存图片":
                                 DownLoadImageThread thread = new DownLoadImageThread(activity,
-                                        imgUrl, new DownLoadImageThread.MyCallBack() {
+                                        entity.itemList.get(pos), new DownLoadImageThread.MyCallBack() {
                                     @Override
                                     public void successBack() {
                                         runOnUiThread(new Runnable() {
@@ -230,8 +237,7 @@ public class LookBigImgAct extends BaseActivity {
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if (entity != null && !isEmpty(entity.items))
-                        initDialog(entity);
+                    initDialog(entity);
                     return true;
                 }
             });
@@ -255,7 +261,6 @@ public class LookBigImgAct extends BaseActivity {
 
             try {
                 final String url = list.get(position);
-                imgUrl = url;
                 loadImg(url, imageView, spinner, layout_error);
                 layout_error.setOnClickListener(v -> loadImg(url, imageView, spinner, layout_error));
             } catch (Exception e) {
