@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10px"
             android:textColor="@color/new_text"
-            android:textSize="12sp" />
+            android:textSize="24px" />
     </com.shunlian.app.widget.MyLinearLayout>
 
     <View
@@ -44,7 +44,7 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:textColor="@color/new_text"
-        android:textSize="18sp" />
+        android:textSize="36px" />
 
     <com.shunlian.app.widget.MyTextView
         android:id="@+id/mtv_desc"
@@ -57,7 +57,7 @@
         android:ellipsize="end"
         android:paddingTop="15px"
         android:textColor="@color/share_text"
-        android:textSize="12sp" />
+        android:textSize="24px" />
 
 
     <com.shunlian.app.widget.MyImageView
@@ -95,12 +95,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/pink_color"
-                android:textSize="21sp"/>
+                android:textSize="42px"/>
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_goodsID"
                 android:textColor="@color/new_text"
-                android:textSize="14sp"
+                android:textSize="28px"
                 android:layout_marginLeft="8px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -127,7 +127,7 @@
                 android:paddingLeft="8px"
                 android:paddingRight="8px"
                 android:textColor="@color/pink_color"
-                android:textSize="12sp" />
+                android:textSize="24px" />
 
             <com.shunlian.app.widget.MyTextView
                 android:id="@+id/mtv_act_label"
@@ -137,7 +137,7 @@
                 android:paddingLeft="8px"
                 android:paddingRight="8px"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="24px"
                 android:textStyle="bold" />
 
 
@@ -162,7 +162,7 @@
             android:layout_toRightOf="@+id/miv_code"
             android:text="长按图片识别二维码"
             android:textColor="@color/my_gray_one"
-            android:textSize="12sp"
+            android:textSize="24px"
             android:layout_marginBottom="10px"
             android:layout_marginLeft="30px"
             android:layout_marginTop="10px"/>

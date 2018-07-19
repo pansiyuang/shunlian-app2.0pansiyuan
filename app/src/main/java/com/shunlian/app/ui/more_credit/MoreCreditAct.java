@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.MoreCreditPresenter;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -139,6 +140,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                 0,getColorResouce(R.color.color_value_6c)));
 
         isPhoneCorrectState(true);
+        visible(frame_mask1);
     }
 
     @Override
@@ -165,6 +167,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     }
 
     private void checkPhoneCorrect(){
+        LogUtil.zhLogW("checkPhoneCorrect========="+mtv_phone.getText());
         if (mtv_phone.getText().length()==11 && presenter != null && mtv_phone.
                 getText().toString().startsWith("1")){
             isPhoneCorrectState(true);
@@ -261,12 +264,15 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                         phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     }
                     phones.close();
+                    LogUtil.zhLogW("phoneNumber========="+phoneNumber);
                     if (!isEmpty(phoneNumber)){
                         if (phoneNumber.contains("+86")){
                             phoneNumber = phoneNumber.replace("+86","");
                         }
+                        phoneNumber = phoneNumber.replaceAll("-", "");
                         if (mtv_phone != null) {
                             mtv_phone.setText(phoneNumber.replaceAll(" ", ""));
+                            met_phone.setText(mtv_phone.getText());
                             checkPhoneCorrect();
                         }
                     }

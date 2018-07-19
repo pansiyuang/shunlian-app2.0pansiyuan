@@ -177,9 +177,9 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             final CommentListEntity.Data data = lists.get(position - 1);
 
             if (isEmpty(data.content)){
-                mHolder.mtv_content.setVisibility(View.GONE);
+                gone(mHolder.mtv_content);
             }else {
-                mHolder.mtv_content.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_content);
                 mHolder.mtv_content.setText(data.content);
             }
 
@@ -208,60 +208,88 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
                 mHolder.mtv_zan_count.setTextColor(getColor(R.color.line_btn));
             }
             if (!isEmpty(data.append)){
-                mHolder.mtv_content1.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_content1);
                 mHolder.mtv_content1.setText(data.append);
             }else {
-                mHolder.mtv_content1.setVisibility(View.GONE);
+                gone(mHolder.mtv_content1);
             }
 
             if (isEmpty(data.reply)){
-                mHolder.mrl_reply.setVisibility(View.GONE);
+                gone(mHolder.mrl_reply);
             }else {
-                mHolder.mrl_reply.setVisibility(View.VISIBLE);
+                visible(mHolder.mrl_reply);
                 SpannableStringBuilder spannableStringBuilder = Common.changeColor("商家回复: "
                         + data.reply, "商家回复: ", getColor(R.color.pink_color));
                 mHolder.mtv_reply.setText(spannableStringBuilder);
             }
 
             if (isEmpty(data.append_time)){
-                mHolder.mtv_append_comment.setVisibility(View.GONE);
+                gone(mHolder.mtv_append_comment);
             }else {
-                mHolder.mtv_append_comment.setVisibility(View.VISIBLE);
+                visible(mHolder.mtv_append_comment);
                 mHolder.mtv_append_comment.setText(data.append_time);
             }
 
 
             final List<String> pics = data.pics;
             if (isEmpty(pics)){
-                mHolder.recy_view.setVisibility(View.GONE);
+                gone(mHolder.recy_view,mHolder.miv_pic);
             }else {
-                mHolder.recy_view.setVisibility(View.VISIBLE);
-                PicAdapter picAdapter = new PicAdapter(context,false,pics);
-                mHolder.recy_view.setAdapter(picAdapter);
-                picAdapter.setOnItemClickListener((v,pos)-> {
-                    BigImgEntity bigImgEntity = new BigImgEntity();
-                    bigImgEntity.itemList = (ArrayList) pics;
-                    bigImgEntity.index = pos;
-                    bigImgEntity.desc = data.content;
-                    LookBigImgAct.startAct(context, bigImgEntity);
-                });
+                if (pics.size() == 1){
+                    gone(mHolder.recy_view);
+                    visible(mHolder.miv_pic);
+                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic,pics.get(0));
+                    mHolder.miv_pic.setOnClickListener(v -> {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) pics;
+                        bigImgEntity.index = 0;
+                        bigImgEntity.desc = data.append;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }else {
+                    visible(mHolder.recy_view);
+                    gone(mHolder.miv_pic);
+                    PicAdapter picAdapter = new PicAdapter(context, false, pics);
+                    mHolder.recy_view.setAdapter(picAdapter);
+                    picAdapter.setOnItemClickListener((v, pos) -> {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) pics;
+                        bigImgEntity.index = pos;
+                        bigImgEntity.desc = data.content;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }
             }
 
 
             final List<String> append_pics = data.append_pics;
             if (isEmpty(append_pics)){
-                mHolder.recy_view1.setVisibility(View.GONE);
+                gone(mHolder.recy_view1,mHolder.miv_pic1);
             }else {
-                mHolder.recy_view1.setVisibility(View.VISIBLE);
-                PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
-                mHolder.recy_view1.setAdapter(picAdapter);
-                picAdapter.setOnItemClickListener((v,pos)-> {
-                    BigImgEntity bigImgEntity = new BigImgEntity();
-                    bigImgEntity.itemList = (ArrayList) append_pics;
-                    bigImgEntity.index = pos;
-                    bigImgEntity.desc = data.append;
-                    LookBigImgAct.startAct(context, bigImgEntity);
-                });
+                if (append_pics.size() == 1){
+                    gone(mHolder.recy_view1);
+                    visible(mHolder.miv_pic1);
+                    GlideUtils.getInstance().loadImageShu(context,mHolder.miv_pic1,append_pics.get(0));
+                    mHolder.miv_pic1.setOnClickListener(v -> {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) append_pics;
+                        bigImgEntity.index = 0;
+                        bigImgEntity.desc = data.append;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }else {
+                    visible(mHolder.recy_view1);
+                    gone(mHolder.miv_pic1);
+                    PicAdapter picAdapter = new PicAdapter(context,false,append_pics);
+                    mHolder.recy_view1.setAdapter(picAdapter);
+                    picAdapter.setOnItemClickListener((v,pos)-> {
+                        BigImgEntity bigImgEntity = new BigImgEntity();
+                        bigImgEntity.itemList = (ArrayList) append_pics;
+                        bigImgEntity.index = pos;
+                        bigImgEntity.desc = data.append;
+                        LookBigImgAct.startAct(context, bigImgEntity);
+                    });
+                }
             }
 
             visible(mHolder.mtv_comment_state);
@@ -349,6 +377,12 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
 
         @BindView(R.id.mtv_comment_state)
         MyTextView mtv_comment_state;
+
+        @BindView(R.id.miv_pic1)
+        MyImageView miv_pic1;
+
+        @BindView(R.id.miv_pic)
+        MyImageView miv_pic;
 
         public CommentHolder(View itemView) {
             super(itemView);
