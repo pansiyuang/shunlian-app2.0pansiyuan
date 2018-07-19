@@ -83,6 +83,9 @@ public class PhoneOrderDetailAct extends BaseActivity implements IPhoneOrder,Mes
     @BindView(R.id.mtv_count)
     MyTextView mtv_count;
 
+    @BindView(R.id.mtv_states)
+    MyTextView mtv_states;
+
     private MessageCountManager messageCountManager;
 
 
@@ -189,6 +192,7 @@ public class PhoneOrderDetailAct extends BaseActivity implements IPhoneOrder,Mes
     @Override
     public void setApiData(PhoneOrderDetailEntity phoneOrderDetailEntity) {
         mtv_state.setText(phoneOrderDetailEntity.status_name);
+        mtv_states.setText(phoneOrderDetailEntity.desc_name);
         mtv_number.setText(phoneOrderDetailEntity.order_sn);
         mtv_storeName.setText(phoneOrderDetailEntity.store_name);
         GlideUtils.getInstance().loadImageZheng(this, miv_goods_pic, phoneOrderDetailEntity.image);

@@ -397,9 +397,13 @@
     <string name="platform_intervention_request">申请平台介入</string>
 
 
+
     <!--选择图片-->
 
     <string name="all_image">所有图片</string>
+    <string name="operate_baocuntupian">保存图片</string>
+    <string name="operate_tupianyibaocun">图片已保存，请在手机相册中查看</string>
+    <string name="operate_tupianbaocunshibai">图片保存失败</string>
     <string name="preview">预览</string>
     <string name="msg_no_camera">无法启用系统相机</string>
     <string name="deleted_a_photo">删除了一张图片</string>

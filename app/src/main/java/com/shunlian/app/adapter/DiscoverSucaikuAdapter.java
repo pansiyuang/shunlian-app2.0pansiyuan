@@ -46,28 +46,27 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         return new SucaikuHolder(LayoutInflater.from(context).inflate(R.layout.item_discover_sucaiku, parent, false));
     }
 
-
     @Override
     public void handleList(RecyclerView.ViewHolder holder, final int position) {
         final SucaikuHolder viewHolder = (SucaikuHolder) holder;
         final DiscoveryMaterialEntity.Content content = lists.get(position);
         SpannableStringBuilder titleBuilder = Common.changeColor(content.add_time + content.content, content.add_time, getColor(R.color.value_299FFA));
         viewHolder.mtv_find_title.setText(titleBuilder);
-        viewHolder.zan=Integer.parseInt(content.praise_num);
+        viewHolder.zan = Integer.parseInt(content.praise_num);
         viewHolder.mtv_zan.setText(content.praise_num);
         if ("1".equals(content.praise)) {
-            viewHolder.isZan=true;
+            viewHolder.isZan = true;
             viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_h);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.pink_color));
         } else {
-            viewHolder.isZan=false;
+            viewHolder.isZan = false;
             viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_n);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         }
         viewHolder.miv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (paDiscoverSucaiku==null)
+                if (paDiscoverSucaiku == null)
                     paDiscoverSucaiku = new PADiscoverSucaiku(context, DiscoverSucaikuAdapter.this);
                 if (viewHolder.isZan) {
                     paDiscoverSucaiku.dianZan(content.id, "2", viewHolder);
@@ -84,7 +83,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             if (content.image.size() == 1) {
                 viewHolder.rv_pics.setVisibility(View.GONE);
                 viewHolder.miv_pic.setVisibility(View.VISIBLE);
-                GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,content.image.get(0));
+                GlideUtils.getInstance().loadImageShu(context, viewHolder.miv_pic, content.image.get(0));
                 viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -92,20 +91,54 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                         BigImgEntity bigImgEntity = new BigImgEntity();
                         bigImgEntity.itemList = (ArrayList<String>) content.image;
                         bigImgEntity.index = 0;
-                        LookBigImgAct.startAct(context, bigImgEntity);
+                        bigImgEntity.items = new ArrayList<>();
+                        bigImgEntity.items.add(getString(R.string.operate_baocuntupian));
+                        bigImgEntity.items.add(getString(R.string.pic_text_share));
+                        bigImgEntity.items.add(getString(R.string.errcode_cancel));
+                        LookBigImgAct.startAct(context, bigImgEntity, new LookBigImgAct.MyCallBack() {
+
+                            @Override
+                            public void share(Context context) {
+                                super.share(context);
+                                DownLoadImageThread thread = new DownLoadImageThread(context,
+                                        (ArrayList<String>) content.image);
+                                thread.start();
+                                ClipboardManager cm = (ClipboardManager) context
+                                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                                cm.setText(content.content);
+
+                                if (viewHolder.promptDialogs == null) {
+                                    viewHolder.promptDialogs = new PromptDialog((Activity) context);
+                                    viewHolder.promptDialogs.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
+                                            getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Common.openWeiXin(context, "material", content.id);
+                                                    viewHolder.promptDialogs.dismiss();
+                                                }
+                                            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    viewHolder.promptDialogs.dismiss();
+                                                }
+                                            }).show();
+                                } else {
+                                    viewHolder.promptDialogs.show();
+                                }                            }
+                        });
                     }
                 });
             } else {
                 viewHolder.miv_pic.setVisibility(View.GONE);
                 viewHolder.rv_pics.setVisibility(View.VISIBLE);
-                if (viewHolder.picAdapter==null){//此处不能复用，不能用notify，因为content.image复用导致布局混乱
-                    viewHolder.picAdapter  = new SinglePicAdapter(context, false, content.image);
+                if (viewHolder.picAdapter == null) {//此处不能复用，不能用notify，因为content.image复用导致布局混乱
+                    viewHolder.picAdapter = new SinglePicAdapter(context, false, content.image);
                     viewHolder.rv_pics.setLayoutManager(new GridLayoutManager(context, 3));
                     viewHolder.rv_pics.setNestedScrollingEnabled(false);
-                    viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false,0,false));
+                    viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context, 9), false, 0, false));
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
-                }else {
-                    viewHolder.picAdapter  = new SinglePicAdapter(context, false, content.image);
+                } else {
+                    viewHolder.picAdapter = new SinglePicAdapter(context, false, content.image);
                     viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
 //                    viewHolder.picAdapter.notifyDataSetChanged();
                 }
@@ -131,39 +164,38 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                         .getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(content.content);
 
-                if (viewHolder.promptDialog==null){
+                if (viewHolder.promptDialog == null) {
                     viewHolder.promptDialog = new PromptDialog((Activity) context);
                     viewHolder.promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
                             getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Common.openWeiXin(context,"material",content.id);
-                            viewHolder.promptDialog.dismiss();
-                        }
-                    }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            viewHolder.promptDialog.dismiss();
-                        }
-                    }).show();
-                }else {
+                                @Override
+                                public void onClick(View v) {
+                                    Common.openWeiXin(context, "material", content.id);
+                                    viewHolder.promptDialog.dismiss();
+                                }
+                            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    viewHolder.promptDialog.dismiss();
+                                }
+                            }).show();
+                } else {
                     viewHolder.promptDialog.show();
                 }
-
             }
         });
     }
 
     @Override
     public void dianZan(SucaikuHolder viewHolder) {
-        if (viewHolder.isZan){
-            viewHolder.isZan=false;
-            viewHolder.zan= viewHolder.zan-1;
+        if (viewHolder.isZan) {
+            viewHolder.isZan = false;
+            viewHolder.zan = viewHolder.zan - 1;
             viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_n);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.value_BDBDBD));
         } else {
-            viewHolder.isZan=true;
-            viewHolder.zan= viewHolder.zan+1;
+            viewHolder.isZan = true;
+            viewHolder.zan = viewHolder.zan + 1;
             viewHolder.miv_zan.setImageResource(R.mipmap.icon_sucai_zan_h);
             viewHolder.mtv_zan.setTextColor(getColor(R.color.pink_color));
         }
@@ -212,9 +244,10 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         RecyclerView rv_pics;
 
         private SinglePicAdapter picAdapter;
-        private boolean isZan=false;
-        private int zan=0;
-        private PromptDialog promptDialog;
+        private boolean isZan = false;
+        private int zan = 0;
+        private PromptDialog promptDialog,promptDialogs;
+
         public SucaikuHolder(View itemView) {
             super(itemView);
         }
