@@ -74,6 +74,7 @@ public class CommentListEntity {
         public String nickname;
         public String level;
         public String member_role;
+        public String plus_role; //PLUS店主等级，小于等于0非plus，大于0为plus以上等级，1PLUS店主，2主管，>=3经理
         public String add_time;
         public String append_time;
         public String buy_time;

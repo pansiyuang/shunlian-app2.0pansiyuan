@@ -137,6 +137,9 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                 0,getColorResouce(R.color.color_value_6c)));
 
         mtv_tip.setVisibility(View.INVISIBLE);
+        TransformUtil.expandViewTouchDelegate(miv_select_phone,w*2,w*2,w*2,w*2);
+        TransformUtil.expandViewTouchDelegate(miv_clear1,w*2,w*2,w*2,w*2);
+        TransformUtil.expandViewTouchDelegate(miv_clear,w*2,w*2,w*2,w*2);
     }
 
     @Override
@@ -165,6 +168,8 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             mtv_phone.setText("");
             mtv_tip.setText("");
             met_phone.setText("");
+            gone(miv_clear1);
+            visible(miv_select_phone);
         });
     }
 
@@ -292,7 +297,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             handleTip(Code.CREDIT_PHONE_ERROR,"请输入正确手机号");
             return;
         }
-        mtv_tip.setVisibility(View.INVISIBLE);
+        //mtv_tip.setVisibility(View.INVISIBLE);
         String phone = mtv_phone.getText().toString().replaceAll(" ", "");
         if (presenter != null){
             presenter.topUp(phone);
@@ -392,5 +397,14 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     public void setPhone(String num){
         if (met_phone != null)
             met_phone.setText(num);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (presenter != null){
+            presenter.detachView();
+            presenter = null;
+        }
+        super.onDestroy();
     }
 }

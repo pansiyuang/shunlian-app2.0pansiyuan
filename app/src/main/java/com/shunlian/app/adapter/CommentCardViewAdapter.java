@@ -125,6 +125,22 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
             }else {
                 cardViewHolder.miv_vip.setVisibility(View.GONE);
             }
+
+            if (!isEmpty(comments.plus_role)){//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
+                visible(cardViewHolder.miv_medal);
+                int plusRole = Integer.parseInt(comments.plus_role);
+                if (plusRole == 1){
+                    cardViewHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                }else if (plusRole == 2){
+                    cardViewHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                }else if (plusRole >= 3){
+                    cardViewHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
+                }else {
+                    gone(cardViewHolder.miv_medal);
+                }
+            }else {
+                gone(cardViewHolder.miv_medal);
+            }
         }
     }
 
@@ -188,6 +204,9 @@ public class CommentCardViewAdapter extends BaseRecyclerAdapter<GoodsDeatilEntit
 
         @BindView(R.id.mrlayout_pic)
         MyRelativeLayout mrlayout_pic;
+
+        @BindView(R.id.miv_medal)
+        MyImageView miv_medal;
 
         public CommentCardViewHolder(View itemView) {
             super(itemView);

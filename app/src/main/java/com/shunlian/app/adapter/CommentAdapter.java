@@ -186,12 +186,18 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentListEntity.Data> 
             GlideUtils.getInstance().loadCircleHeadImage(context,mHolder.civ_head,data.avatar);
             Bitmap bitmap = TransformUtil.convertNewVIP(context, data.level);
             mHolder.miv_vip.setImageBitmap(bitmap);
-            if ("1".equals(data.member_role)){//精英
+            if (!isEmpty(data.plus_role)){//大于0为plus以上等级，1PLUS店主，2主管，>=3经理
                 visible(mHolder.miv_medal);
-                mHolder.miv_medal.setImageResource(R.mipmap.img_jingyingdaoshi);
-            }else if ("2".equals(data.member_role)){//导师
-                visible(mHolder.miv_medal);
-                mHolder.miv_medal.setImageResource(R.mipmap.img_chuangkejingying);
+                int plusRole = Integer.parseInt(data.plus_role);
+                if (plusRole == 1){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_dianzhu);
+                }else if (plusRole == 2){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_zhuguan);
+                }else if (plusRole >= 3){
+                    mHolder.miv_medal.setImageResource(R.mipmap.img_plus_phb_jingli);
+                }else {
+                    gone(mHolder.miv_medal);
+                }
             }else {
                 gone(mHolder.miv_medal);
             }

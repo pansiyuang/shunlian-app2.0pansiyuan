@@ -54,7 +54,24 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
      */
     @Override
     public void detachView() {
+        if (moreCreditAdapter != null){
+            moreCreditAdapter.unbind();
+            moreCreditAdapter = null;
+        }
 
+        if (historyAdapter != null){
+            historyAdapter.unbind();
+            historyAdapter = null;
+        }
+        if (list != null){
+            list.clear();
+            list = null;
+        }
+
+        if (historyLists != null){
+            historyLists.clear();
+            historyLists = null;
+        }
     }
 
     /**
@@ -92,11 +109,13 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
             if (moreCreditAdapter == null) {
                 moreCreditAdapter = new MoreCreditAdapter(context, this.list);
                 iView.setAdapter(moreCreditAdapter);
+                moreCreditAdapter.currentPos = -1;
                 moreCreditAdapter.setOnItemClickListener((view, position) -> {
                     moreCreditAdapter.currentPos = position;
                     moreCreditAdapter.notifyDataSetChanged();
                 });
             }else {
+                moreCreditAdapter.currentPos = -1;
                 moreCreditAdapter.notifyDataSetChanged();
             }
         }
@@ -108,7 +127,7 @@ public class MoreCreditPresenter extends BasePresenter<IMoreCreditView> {
             MoreCreditEntity.ListBean listBean = list.get(moreCreditAdapter.currentPos);
             PayListActivity.startAct((Activity) context, phone, listBean.face_price,listBean.sale_price);
         }else {
-            Common.staticToast("请选择充值面额");
+            //Common.staticToast("请选择充值面额");
         }
     }
 

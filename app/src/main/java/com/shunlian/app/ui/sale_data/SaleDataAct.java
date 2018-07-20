@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,7 +24,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.SLHeadDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.view.ISaleDataView;
@@ -207,8 +207,14 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.recy_view)
     RecyclerView recy_view;
 
-    @BindView(R.id.mtv_tip)
-    MyTextView mtv_tip;
+    /*@BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;*/
+
+    @BindView(R.id.llayout_suspension)
+    LinearLayout llayout_suspension;
+
+    @BindView(R.id.view_perch)
+    View view_perch;
 
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
@@ -222,7 +228,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     private String mFendian;
     private String mXiaofei;
     private List<String> mTip;
-    private SLHeadDialog slHeadDialog;
+    //private SLHeadDialog slHeadDialog;
 
 
     public static void startAct(Context context) {
@@ -262,8 +268,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         int dp = TransformUtil.dip2px(this, 30);
         TransformUtil.expandViewTouchDelegate(miv_isShow_data,dp,dp,dp,dp);
 
-        GradientDrawable mtv_tipBG = (GradientDrawable) mtv_tip.getBackground();
-        mtv_tipBG.setColor(Color.parseColor("#FFCF012D"));
+        /*GradientDrawable mtv_tipBG = (GradientDrawable) mtv_tip.getBackground();
+        mtv_tipBG.setColor(Color.parseColor("#FFCF012D"));*/
     }
 
     @Override
@@ -280,7 +286,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
         mtv_sale_sum.setOnClickListener(this);
         mtv_this_month.setOnClickListener(this);
-        mtv_tip.setOnClickListener(this);
+        //mtv_tip.setOnClickListener(this);
 
         chart_view.setOnSaleChartListener((data, date) -> {
             if (isEmpty(data)){
@@ -494,10 +500,27 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @Override
     public void setSaleTip(List<String> tip) {
         if (!isEmpty(tip)){
-            visible(mtv_tip);
+            //visible(mtv_tip);
             mTip = tip;
+
+            llayout_suspension.removeAllViews();
+            visible(llayout_suspension);
+
+            LayoutInflater from = LayoutInflater.from(this);
+            for (int i = 0; i < tip.size(); i++) {
+                View view = from.inflate(R.layout.item_suspension, null);
+                ((MyTextView)view.findViewById(R.id.mtv_tip)).setText(tip.get(i));
+                llayout_suspension.addView(view);
+            }
+
+            llayout_suspension.postDelayed(()->{
+                int measuredHeight = llayout_suspension.getMeasuredHeight();
+                ViewGroup.LayoutParams layoutParams = view_perch.getLayoutParams();
+                layoutParams.height = measuredHeight+TransformUtil.dip2px(this,18);
+                view_perch.setLayoutParams(layoutParams);
+            },200);
         }else {
-            gone(mtv_tip);
+            gone(/*mtv_tip,*/llayout_suspension);
         }
     }
 
@@ -554,11 +577,11 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 //SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
                 MoreCreditAct.startAct(this);
                 break;
-            case R.id.mtv_tip:
+            /*case R.id.mtv_tip:
                 if (slHeadDialog == null)
                     slHeadDialog = new SLHeadDialog(this,mTip);
                 slHeadDialog.show();
-                break;
+                break;*/
             case R.id.mtv_request_code:
                 String content = mtv_request_code.getText().toString();
                 String sub = content.substring(content.indexOf("：") + 1, content.length());
@@ -648,8 +671,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         super.onDestroy();
         if (presenter != null)
             presenter.detachView();
-        if (slHeadDialog != null){
+        /*if (slHeadDialog != null){
             slHeadDialog.detachView();
-        }
+        }*/
     }
 }

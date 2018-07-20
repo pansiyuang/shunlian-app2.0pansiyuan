@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.CreditPhoneListEntity;
+import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -65,6 +66,8 @@ public class TopUpHistoryAdapter extends BaseRecyclerAdapter<CreditPhoneListEnti
 
         public TopUpHistoryHolder(View itemView) {
             super(itemView);
+            int i = TransformUtil.dip2px(context, 30);
+            TransformUtil.expandViewTouchDelegate(miv_clear,i,i,i,i);
             miv_clear.setOnClickListener(v -> {
                 if (mDelPhoneListener != null){
                     CreditPhoneListEntity.ListBean listBean = lists.get(getAdapterPosition());
