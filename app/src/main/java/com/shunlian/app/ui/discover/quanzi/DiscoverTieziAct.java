@@ -208,6 +208,7 @@ public class DiscoverTieziAct extends BaseActivity implements View.OnClickListen
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
+        setStatusBarFontDark();
         circle_id = getIntent().getStringExtra("circle_id");
         pDiscoverTiezi = new PDiscoverTiezi(this, this, circle_id);
         view_bg.setAlpha(0);

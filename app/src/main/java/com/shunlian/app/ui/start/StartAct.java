@@ -19,6 +19,7 @@ import com.shunlian.app.bean.UpdateEntity;
 import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.MBaseActivity;
 import com.shunlian.app.ui.MainActivity;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.JpushUtil;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -265,6 +266,7 @@ public class StartAct extends MBaseActivity implements IMain {
     @Override
     public void entryInfo(CommonEntity data) {
         if (isHave){
+            Constant.EMAIL=data.ducha_email;
             SharedPrefUtil.saveSharedPrfString("plus_role", data.is_plus);
             SharedPrefUtil.saveCacheSharedPrf("is_open", data.is_open);
             SharedPrefUtil.saveCacheSharedPrf("plus_url", data.url);

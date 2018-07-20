@@ -4,16 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.DiscoveryTieziEntity;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.utils.BitmapUtil;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
+import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
@@ -56,13 +62,25 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
             viewHolder.mtv_like.setTextColor(getColor(R.color.value_878B8A));
         }
         GlideUtils.getInstance().loadCircleImage(context,viewHolder.miv_avar,hot.avatar);
-        if (hot.imgs == null || hot.imgs.size() == 0) {
+        if (isEmpty(hot.imgs)) {
             viewHolder.rv_pics.setVisibility(View.GONE);
             viewHolder.miv_pic.setVisibility(View.GONE);
         } else {
-            if (hot.imgs.size() == 1) {
+            if (hot.imgs.size() == 1&&!isEmpty(hot.imgs.get(0))) {
                 viewHolder.rv_pics.setVisibility(View.GONE);
                 viewHolder.miv_pic.setVisibility(View.VISIBLE);
+                int[] params=BitmapUtil.imgParam(Common.getURLParameterValue(hot.imgs.get(0), "w"),Common.getURLParameterValue(hot.imgs.get(0), "h"));
+                LinearLayout.LayoutParams param;
+                if (params!=null){
+                    viewHolder.miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
+                    param=new LinearLayout.LayoutParams(TransformUtil.dip2px(context,params[0]),TransformUtil.dip2px(context,params[1]));
+                    viewHolder.miv_pic.setAdjustViewBounds(false);
+                }else {
+                    viewHolder.miv_pic.setAdjustViewBounds(true);
+                    param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                }
+                param.setMargins(0,TransformUtil.dip2px(context,12),0,0);
+                viewHolder.miv_pic.setLayoutParams(param);
                 GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,hot.imgs.get(0));
                 viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override

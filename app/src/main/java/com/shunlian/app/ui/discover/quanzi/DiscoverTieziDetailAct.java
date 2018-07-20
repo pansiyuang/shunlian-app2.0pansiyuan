@@ -31,6 +31,7 @@ import com.shunlian.app.widget.MyScrollView;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.banner.BaseBanner;
 import com.shunlian.app.widget.banner.TieziKanner;
+import com.shunlian.app.widget.empty.NetAndEmptyInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClickListener, IDiscoverTieziDetail , IFindCommentListView {
-    @BindView(R.id.kanner_tiezi)
-    TieziKanner kanner_tiezi;
+//    @BindView(R.id.kanner_tiezi)
+//    TieziKanner kanner_tiezi;
 
     @BindView(R.id.miv_avar)
     MyImageView miv_avar;
@@ -59,18 +60,6 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @BindView(R.id.mtv_desc)
     MyTextView mtv_desc;
-
-    @BindView(R.id.miv_more)
-    MyImageView miv_more;
-
-    @BindView(R.id.miv_close)
-    MyImageView miv_close;
-
-    @BindView(R.id.mtv_titles)
-    MyTextView mtv_titles;
-
-    @BindView(R.id.view_bg)
-    View view_bg;
 
     @BindView(R.id.msv_out)
     MyScrollView msv_out;
@@ -93,6 +82,8 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
     @BindView(R.id.miv_icon)
     MyImageView miv_icon;
 
+    @BindView(R.id.nei_empty)
+    NetAndEmptyInterface nei_empty;
 
     private PDiscoverTieziDetail pDiscoverTieziDetail;
     private LinearLayoutManager linearLayoutManager;
@@ -213,37 +204,19 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
                 if (isScrollBottom && pDiscoverTieziDetail != null) {
                     pDiscoverTieziDetail.refreshBaby();
                 }
-                float alpha = ((float) y) / 250;
-                if (y > 250) {
-                    mtv_titles.setAlpha(1);
-                    view_bg.setAlpha(1);
-                } else if (y > 150) {
-                    view_bg.setAlpha(alpha);
-                    mtv_titles.setAlpha(alpha);
-                    miv_close.setImageResource(R.mipmap.img_more_fanhui_n);
-                    miv_more.setImageResource(R.mipmap.icon_more_n);
-                    miv_close.setAlpha(alpha);
-                    miv_more.setAlpha(alpha);
-                } else if (y > 0) {
-                    view_bg.setAlpha(0);
-                    mtv_titles.setAlpha(0);
-                    miv_close.setAlpha(1 - alpha);
-                    miv_more.setAlpha(1 - alpha);
-                    miv_close.setImageResource(R.mipmap.icon_more_fanhui);
-                    miv_more.setImageResource(R.mipmap.icon_more_gengduo);
-                }
             }
         });
     }
 
     @Override
     protected void initData() {
+        setStatusBarColor(R.color.white);
+        setStatusBarFontDark();
         circle_id = getIntent().getStringExtra("circle_id");
         inv_id = getIntent().getStringExtra("inv_id");
         pDiscoverTieziDetail = new PDiscoverTieziDetail(this, this, circle_id, inv_id);
-        view_bg.setAlpha(0);
-        mtv_titles.setAlpha(0);
-        mtv_titles.setText(getStringResouce(R.string.detail));
+        nei_empty.setImageResource(R.mipmap.img_empty_common).setText(getString(R.string.discover_wolaishuo));
+        nei_empty.setButtonText(null);
     }
 
     @Override
@@ -259,6 +232,13 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
 
     @Override
     public void setApiData(DiscoveryCommentListEntity.Mdata data, List<DiscoveryCommentListEntity.Mdata.Commentlist> mdatas) {
+        if (isEmpty(mdatas)){
+            visible(nei_empty);
+            gone(rv_remark);
+        }else {
+            gone(nei_empty);
+            visible(rv_remark);
+        }
         if (commentAdapter == null) {
             avars = new ArrayList<>();
             num=Integer.parseInt(data.commentcounts);
@@ -267,17 +247,17 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             rv_avar.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
             rv_avar.addItemDecoration(new HorizonItemDecoration(TransformUtil.dip2px(getBaseContext(), -12)));
             rv_avar.setAdapter(avarAdapter);
-            if (data.inv_info != null && data.inv_info.img != null) {
-                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
-                kanner_tiezi.setBanner(data.inv_info.img);
-                kanner_tiezi.setOnItemClickL(new BaseBanner.OnItemClickL() {
-                    @Override
-                    public void onItemClick(int position) {
-
-                    }
-                });
-
-            }
+//            if (data.inv_info != null && data.inv_info.img != null) {
+//                kanner_tiezi.layoutRes=R.layout.layout_kanner_rectangle_indicator;
+//                kanner_tiezi.setBanner(data.inv_info.img);
+//                kanner_tiezi.setOnItemClickL(new BaseBanner.OnItemClickL() {
+//                    @Override
+//                    public void onItemClick(int position) {
+//
+//                    }
+//                });
+//
+//            }
             GlideUtils.getInstance().loadCircleImage(getBaseContext(), miv_avar, data.inv_info.author_info.avatar);
             mtv_name.setText(data.inv_info.author_info.nickname);
             mtv_time.setText(data.inv_info.create_time);
@@ -298,6 +278,7 @@ public class DiscoverTieziDetailAct extends BaseActivity implements View.OnClick
             rv_remark.setNestedScrollingEnabled(false);
             rv_remark.addItemDecoration(new VerticalItemDecoration(28, 0, 0));
             rv_remark.setAdapter(commentAdapter);
+
         } else {
             commentAdapter.notifyDataSetChanged();
         }

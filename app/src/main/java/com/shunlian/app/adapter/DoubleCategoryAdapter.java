@@ -208,6 +208,7 @@ public class DoubleCategoryAdapter extends BaseRecyclerAdapter<GoodsDeatilEntity
                         viewHolder.ll_earn.setVisibility(View.GONE);
                     }
                 } else {
+                    viewHolder.ll_earn.setVisibility(View.GONE);
                     viewHolder.miv_product.setVisibility(View.GONE);
                 }
 

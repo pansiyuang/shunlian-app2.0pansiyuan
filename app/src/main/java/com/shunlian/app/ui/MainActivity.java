@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     private FragmentManager fragmentManager;
     private int pageIndex;
     private String flag;
-    private Dialog dialog_ad, dialog_commond;
+    private Dialog dialog_ad;
     private MessageCountManager messageCountManager;
     private PMain pMain;
     private UpdateDialog updateDialogV;//判断是否需要跟新

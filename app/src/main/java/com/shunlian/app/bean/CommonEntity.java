@@ -57,4 +57,5 @@ public class CommonEntity {
     public String url_index;
     public String url;
     public String is_plus;
+    public String ducha_email;
 }

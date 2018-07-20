@@ -29,6 +29,7 @@ public class CoreHotEntity {
             public String thumb;
             public String price;
             public String sales;
+            public String userName;
             public String views;
             public String content;
         }

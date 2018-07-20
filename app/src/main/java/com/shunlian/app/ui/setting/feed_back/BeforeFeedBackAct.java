@@ -8,8 +8,10 @@ import android.widget.RelativeLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
+import com.shunlian.app.utils.Constant;
 import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
+import com.shunlian.app.widget.NewTextView;
 
 import butterknife.BindView;
 
@@ -22,6 +24,9 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
     @BindView(R.id.mtv_toolbar_title)
     MyTextView mtv_toolbar_title;
 
+    @BindView(R.id.ntv_email)
+    NewTextView ntv_email;
+
     @BindView(R.id.mrlayout_toolbar_more)
     MyRelativeLayout mrlayout_toolbar_more;
 
@@ -33,9 +38,9 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
 
     private String goodsid;
 
-    public static void startAct(Context context,String goodsid){
+    public static void startAct(Context context, String goodsid) {
         Intent intent = new Intent(context, BeforeFeedBackAct.class);
-        intent.putExtra("goodsid",goodsid);
+        intent.putExtra("goodsid", goodsid);
         context.startActivity(intent);
     }
 
@@ -59,6 +64,7 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
         gone(mrlayout_toolbar_more);
         mtv_toolbar_title.setText("我要反馈");
         goodsid = getIntent().getStringExtra("goodsid");
+        ntv_email.setText(getStringResouce(R.string.help_fanfuducha) + Constant.EMAIL);
     }
 
     @Override
@@ -66,18 +72,22 @@ public class BeforeFeedBackAct extends BaseActivity implements View.OnClickListe
         super.initListener();
         rLayout_more.setOnClickListener(this);
         rLayout_mores.setOnClickListener(this);
+        ntv_email.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
+            case R.id.ntv_email:
+                Common.copyText(this,Constant.EMAIL);
+                break;
             case R.id.rLayout_more:
                 /*Intent intent = new Intent(this, NewFeedBackAct.class);
                 intent.putExtra("goodsid", goodsid);
                 intent.putExtra("type", "1");
                 startActivity(intent);*/
-                Common.goGoGo(this,"help");
+                Common.goGoGo(this, "help");
                 break;
             case R.id.rLayout_mores:
                 Intent intents = new Intent(this, NewFeedBackAct.class);

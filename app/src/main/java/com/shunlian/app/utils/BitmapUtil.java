@@ -148,7 +148,7 @@ public class BitmapUtil {
             }
             return bitmap;
         } catch (Exception e) {
-            LogUtil.augusLogW("createQRImage---"+e);
+            LogUtil.augusLogW("createQRImage---" + e);
             return null;
         }
     }
@@ -170,6 +170,26 @@ public class BitmapUtil {
             }
         }
         return resMatrix;
+    }
+
+    //    发现中的图片宽高换算
+    public static int[] imgParam(String width, String height) {
+        try {
+            if (!TextUtils.isEmpty(width) && !TextUtils.isEmpty(height)) {
+                int mWidth = Integer.parseInt(width);
+                int mHeight = Integer.parseInt(height);
+                if (mWidth >= mHeight) {
+                    return new int[]{190, 190 * mHeight / mWidth};
+                } else {
+//                    mWidth / mHeight * 192
+//                    如果像上面一样写计算结果为0，先算的乘法
+                    return new int[]{mWidth*192 / mHeight, 192};
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -224,7 +244,7 @@ public class BitmapUtil {
         }
         LogUtil.httpLogW("剩余内存:" + Common.getSDFreeSize());
         if (Common.getSDFreeSize() < 1024 * 5) {
-            Common.staticToast( "内存不足");
+            Common.staticToast("内存不足");
             return false;
         }
         // 首先保存图片
@@ -235,7 +255,7 @@ public class BitmapUtil {
         String fileName = System.currentTimeMillis() + ".jpg";
         File file = new File(appDir, fileName);
         FileOutputStream fos = null;
-        File fileUri= null;
+        File fileUri = null;
         try {
             fos = new FileOutputStream(file);
             boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -246,7 +266,7 @@ public class BitmapUtil {
                 String path = MediaStore.Images.Media
                         .insertImage(context.getContentResolver(),
                                 file.getAbsolutePath(), fileName, null);
-                if (TextUtils.isEmpty(path))return false;
+                if (TextUtils.isEmpty(path)) return false;
                 // 最后通知图库更新
                 fileUri = new File(path);
                 context.sendBroadcast(new
@@ -259,7 +279,7 @@ public class BitmapUtil {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             appDir = null;
             file = null;
             fileUri = null;
@@ -287,7 +307,7 @@ public class BitmapUtil {
         }
         String fileName = photoName + ".png";
         File file = new File(appDir, fileName);
-        SAVE_PIC_PATH=file.getAbsolutePath();
+        SAVE_PIC_PATH = file.getAbsolutePath();
         try {
             FileOutputStream fos = new FileOutputStream(file);
             boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -351,6 +371,7 @@ public class BitmapUtil {
         }
         return result;
     }
+
     public static String getFileFromMediaUri(Context context, Uri imageUri) {
         if (context == null || imageUri == null)
             return null;
@@ -379,7 +400,7 @@ public class BitmapUtil {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 String selection = MediaStore.Images.Media._ID + "=?";
-                String[] selectionArgs = new String[] { split[1] };
+                String[] selectionArgs = new String[]{split[1]};
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         } // MediaStore (and general)
@@ -399,7 +420,7 @@ public class BitmapUtil {
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         Cursor cursor = null;
         String column = MediaStore.Images.Media.DATA;
-        String[] projection = { column };
+        String[] projection = {column};
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {

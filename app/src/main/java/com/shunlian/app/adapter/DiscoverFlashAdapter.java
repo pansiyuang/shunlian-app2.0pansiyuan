@@ -41,7 +41,6 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
             TwoHolder twoHolder = (TwoHolder) holder;
 
             DiscoveryNavEntity.Flash data = lists.get(position);
-            LogUtil.zhLogW(data.toString());
 //            StorePromotionGoodsListEntity.Lable data = lists.get(position);
             twoHolder.mtv_title.setText(data.title);
             twoHolder.mtv_desc.setText(data.full_title);
