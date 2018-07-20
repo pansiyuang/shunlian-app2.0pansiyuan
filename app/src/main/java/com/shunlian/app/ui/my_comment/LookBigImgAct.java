@@ -33,7 +33,6 @@ import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/15.
  */
 
-public class LookBigImgAct extends BaseActivity implements Serializable {
+public class LookBigImgAct extends BaseActivity{
 
     @BindView(R.id.leftNo)
     MyTextView leftNo;
@@ -155,7 +154,7 @@ public class LookBigImgAct extends BaseActivity implements Serializable {
     }
 
 
-    private class SamplePagerAdapter extends PagerAdapter implements Serializable {
+    private class SamplePagerAdapter extends PagerAdapter {
         private List<String> list;
         private LayoutInflater inflater;
 
