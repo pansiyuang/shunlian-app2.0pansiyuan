@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +22,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.presenter.MoreCreditPresenter;
 import com.shunlian.app.ui.BaseActivity;
+import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
 import com.shunlian.app.utils.LogUtil;
@@ -72,20 +72,14 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
     @BindView(R.id.rlayout_input)
     RelativeLayout rlayout_input;
 
-    @BindView(R.id.mtv_BelongingTo)
-    MyTextView mtv_BelongingTo;
-
     @BindView(R.id.view_line)
     View view_line;
 
-    @BindView(R.id.mtv_error_tip)
-    MyTextView mtv_error_tip;
+    @BindView(R.id.mtv_tip)
+    MyTextView mtv_tip;
 
     @BindView(R.id.frame_mask)
     FrameLayout frame_mask;
-
-    @BindView(R.id.frame_mask1)
-    FrameLayout frame_mask1;
 
     @BindView(R.id.llayout_input)
     LinearLayout llayout_input;
@@ -95,6 +89,9 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
 
     @BindView(R.id.recy_view_history)
     RecyclerView recy_view_history;
+
+    @BindView(R.id.miv_clear1)
+    MyImageView miv_clear1;
 
     public final int REQUEST_CODE = 6666;
     private MoreCreditPresenter presenter;
@@ -123,6 +120,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
         setStatusBarFontDark();
         gone(mrlayout_toolbar_more);
         visible(mtv_toolbar_right);
+        mtv_toolbar_right.setTextColor(Color.parseColor("#FF007AFF"));
         mtv_toolbar_right.setText(getStringResouce(R.string.prepaid_phone_records));
         mtv_toolbar_title.setText(getStringResouce(R.string.more_creadit));
 
@@ -139,8 +137,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
         recy_view_history.addItemDecoration(new VerticalItemDecoration(space,0,
                 0,getColorResouce(R.color.color_value_6c)));
 
-        isPhoneCorrectState(true);
-        visible(frame_mask1);
+        mtv_tip.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -164,22 +161,27 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                 }
             }
         });
+
+        miv_clear1.setOnClickListener(v -> {
+            mtv_phone.setText("");
+            mtv_tip.setText("");
+            met_phone.setText("");
+        });
     }
 
     private void checkPhoneCorrect(){
-        LogUtil.zhLogW("checkPhoneCorrect========="+mtv_phone.getText());
+        //LogUtil.zhLogW("checkPhoneCorrect========="+mtv_phone.getText());
         if (mtv_phone.getText().length()==11 && presenter != null && mtv_phone.
                 getText().toString().startsWith("1")){
-            isPhoneCorrectState(true);
+            mtv_tip.setVisibility(View.INVISIBLE);
             presenter.phoneNumber = mtv_phone.getText().toString();
             presenter.initApi();
         }else {
             if (!mtv_phone.getText().toString().startsWith("1") || mtv_phone.getText().length() > 11){
-                isPhoneCorrectState(false);
+                handleTip(Code.CREDIT_PHONE_ERROR,"请输入正确手机号");
             }else {
-                isPhoneCorrectState(true);
+                mtv_tip.setVisibility(View.INVISIBLE);
             }
-            mtv_BelongingTo.setText("");
         }
     }
 
@@ -289,30 +291,13 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             return;
         }
         if (mtv_phone.getText().length() < 11 || !mtv_phone.getText().toString().startsWith("1")){
-            isPhoneCorrectState(false);
+            handleTip(Code.CREDIT_PHONE_ERROR,"请输入正确手机号");
             return;
         }
-        isPhoneCorrectState(true);
+        mtv_tip.setVisibility(View.INVISIBLE);
         String phone = mtv_phone.getText().toString().replaceAll(" ", "");
         if (presenter != null){
             presenter.topUp(phone);
-        }
-    }
-
-    private void isPhoneCorrectState(boolean correct){
-        GradientDrawable inputGB = (GradientDrawable) rlayout_input.getBackground();
-        if (!correct){
-            inputGB.setColor(Color.WHITE);
-            inputGB.setStroke(TransformUtil.dip2px(this,1)
-                    ,getColorResouce(R.color.pink_color));
-            gone(view_line);
-            visible(mtv_error_tip,frame_mask1);
-        }else {
-            visible(view_line);
-            gone(frame_mask1);
-            mtv_error_tip.setVisibility(View.INVISIBLE);
-            inputGB.setColor(Color.WHITE);
-            inputGB.setStroke(TransformUtil.dip2px(this,1),Color.WHITE);
         }
     }
 
@@ -354,15 +339,46 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
      */
     @Override
     public void setBelongingTo(String phone, String card_address) {
-        mtv_BelongingTo.setText(String.format("(%s)",card_address));
+        handleTip(1,String.format("号码归属地(%s)",card_address));
+    }
+
+
+    /**
+     * 1 提示归属地
+     * 2 提示手机号错误
+     * 3 提示暂不支持港澳台
+     * @param code
+     */
+    private void handleTip(int code,String tip){
+        visible(mtv_tip);
+        switch (code){
+            case 1:
+                gone(miv_clear1);
+                visible(miv_select_phone);
+                mtv_tip.setTextColor(getColorResouce(R.color.text_gray2));
+                mtv_tip.setText(tip);
+                break;
+            case Code.CREDIT_PHONE_ERROR:
+            case Code.CREDIT_NO_SUPPORT:
+            case Code.CREDIT_NO_BELONGING:
+                visible(miv_clear1);
+                gone(miv_select_phone);
+                mtv_tip.setTextColor(getColorResouce(R.color.pink_color));
+                mtv_tip.setText(tip);
+                break;
+            default:
+                mtv_tip.setTextColor(getColorResouce(R.color.pink_color));
+                mtv_tip.setText(tip);
+                break;
+        }
     }
 
     /**
      * 手机号码错误
      */
     @Override
-    public void phoneError() {
-        isPhoneCorrectState(false);
+    public void phoneError(int code,String msg) {
+        handleTip(code,msg);
     }
 
     @Override
