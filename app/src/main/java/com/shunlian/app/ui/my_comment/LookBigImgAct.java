@@ -2,6 +2,7 @@ package com.shunlian.app.ui.my_comment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,11 +27,13 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DownLoadImageThread;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.MVerticalItemDecoration;
+import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.photoview.HackyViewPager;
 import com.shunlian.app.widget.photoview.PhotoView;
 import com.shunlian.app.widget.photoview.PhotoViewAttacher;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +43,8 @@ import butterknife.BindView;
  * Created by Administrator on 2017/12/15.
  */
 
-public class LookBigImgAct extends BaseActivity {
+public class LookBigImgAct extends BaseActivity implements Serializable {
 
-    private static MyCallBack myCallBack;
     @BindView(R.id.leftNo)
     MyTextView leftNo;
     @BindView(R.id.rightNo)
@@ -59,6 +61,7 @@ public class LookBigImgAct extends BaseActivity {
     private Dialog dialog_operate;
     private Activity activity;
     private int pos = 0;
+    private PromptDialog promptDialog;
 
 
     public static void startAct(Context context, BigImgEntity entity) {
@@ -68,13 +71,6 @@ public class LookBigImgAct extends BaseActivity {
         context.startActivity(intent);
     }
 
-    public static void startAct(Context context, BigImgEntity entity, MyCallBack callBack) {
-        myCallBack = callBack;
-        Intent intent = new Intent(context, LookBigImgAct.class);
-        intent.putExtra("data", entity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 
     /**
      * 布局id
@@ -158,13 +154,8 @@ public class LookBigImgAct extends BaseActivity {
         }
     }
 
-    public static class MyCallBack {
-        //图文分享这里子类复写的时候一般需要同时另写一个分享的dialog，因为两次上下文不一致
-        public void share(Context context) {
-        }
-    }
 
-    private class SamplePagerAdapter extends PagerAdapter {
+    private class SamplePagerAdapter extends PagerAdapter implements Serializable {
         private List<String> list;
         private LayoutInflater inflater;
 
@@ -218,7 +209,29 @@ public class LookBigImgAct extends BaseActivity {
                                 thread.start();
                                 break;
                             case "图文分享":
-                                myCallBack.share(activity);
+                                DownLoadImageThread threads = new DownLoadImageThread(activity,
+                                        entity.itemList);
+                                threads.start();
+                                ClipboardManager cm = (ClipboardManager) activity
+                                        .getSystemService(Context.CLIPBOARD_SERVICE);
+                                cm.setText(entity.content);
+                                if (promptDialog == null) {
+                                    promptDialog = new PromptDialog((Activity) activity);
+                                    promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
+                                            getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Common.openWeiXin(activity, "material", entity.id);
+                                                    promptDialog.dismiss();
+                                                }
+                                            }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    promptDialog.dismiss();
+                                                }
+                                            });
+                                }
+                                promptDialog.show();
                                 break;
                         }
                         dialog_operate.dismiss();

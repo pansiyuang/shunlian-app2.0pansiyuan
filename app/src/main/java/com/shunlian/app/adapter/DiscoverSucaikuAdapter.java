@@ -71,6 +71,8 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                 BigImgEntity bigImgEntity = new BigImgEntity();
                 bigImgEntity.itemList = (ArrayList<String>) viewHolder.content.image;
                 bigImgEntity.index = position;
+                bigImgEntity.content = viewHolder.content.content;
+                bigImgEntity.id = viewHolder.content.id;
                 bigImgEntity.items = new ArrayList<>();
                 bigImgEntity.items.add(getString(R.string.pic_text_share));
                 LookBigImgAct.startAct(context, bigImgEntity);
@@ -214,9 +216,34 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
         private SinglePicAdapter picAdapter;
         private boolean isZan = false;
         private int zan = 0;
-        private PromptDialog promptDialog, promptDialogs;
         private DiscoveryMaterialEntity.Content content;
+        private PromptDialog  promptDialog;
 
+          void share(Context context){
+            DownLoadImageThread thread = new DownLoadImageThread(context,
+                    (ArrayList<String>) content.image);
+            thread.start();
+            ClipboardManager cm = (ClipboardManager) context
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setText(content.content);
+            if (promptDialog==null){
+                promptDialog = new PromptDialog((Activity) context);
+                promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
+                        getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Common.openWeiXin(context, "material", content.id);
+                                promptDialog.dismiss();
+                            }
+                        }, getString(R.string.errcode_cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                promptDialog.dismiss();
+                            }
+                        });
+            }
+            promptDialog.show();
+        }
         public SucaikuHolder(View itemView) {
             super(itemView);
             miv_zan.setOnClickListener(new View.OnClickListener() {
@@ -234,31 +261,7 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
             mtv_share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DownLoadImageThread thread = new DownLoadImageThread(context,
-                            (ArrayList<String>) content.image);
-                    thread.start();
-                    ClipboardManager cm = (ClipboardManager) context
-                            .getSystemService(Context.CLIPBOARD_SERVICE);
-                    cm.setText(content.content);
-
-                    if (promptDialog == null) {
-                        promptDialog = new PromptDialog((Activity) context);
-                        promptDialog.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
-                                getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Common.openWeiXin(context, "material", content.id);
-                                        promptDialog.dismiss();
-                                    }
-                                }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        promptDialog.dismiss();
-                                    }
-                                }).show();
-                    } else {
-                        promptDialog.show();
-                    }
+                   share(context);
                 }
             });
             miv_pic.setOnClickListener(new View.OnClickListener() {
@@ -268,40 +271,11 @@ public class DiscoverSucaikuAdapter extends BaseRecyclerAdapter<DiscoveryMateria
                     BigImgEntity bigImgEntity = new BigImgEntity();
                     bigImgEntity.itemList = (ArrayList<String>) content.image;
                     bigImgEntity.index = 0;
+                    bigImgEntity.content = content.content;
+                    bigImgEntity.id = content.id;
                     bigImgEntity.items = new ArrayList<>();
                     bigImgEntity.items.add(getString(R.string.pic_text_share));
-                    LookBigImgAct.startAct(context, bigImgEntity, new LookBigImgAct.MyCallBack() {
-
-                        @Override
-                        public void share(Context context) {
-                            super.share(context);
-                            DownLoadImageThread thread = new DownLoadImageThread(context,
-                                    (ArrayList<String>) content.image);
-                            thread.start();
-                            ClipboardManager cm = (ClipboardManager) context
-                                    .getSystemService(Context.CLIPBOARD_SERVICE);
-                            cm.setText(content.content);
-
-                            if (promptDialogs == null) {
-                                promptDialogs = new PromptDialog((Activity) context);
-                                promptDialogs.setSureAndCancleListener(getString(R.string.discover_wenzifuzhi),
-                                        getString(R.string.discover_tupianbaocun), "", getString(R.string.discover_quweixinfenxiang), new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                Common.openWeiXin(context, "material", content.id);
-                                                promptDialogs.dismiss();
-                                            }
-                                        }, getString(R.string.errcode_cancel), new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                promptDialogs.dismiss();
-                                            }
-                                        }).show();
-                            } else {
-                                promptDialogs.show();
-                            }
-                        }
-                    });
+                    LookBigImgAct.startAct(context, bigImgEntity);
                 }
             });
         }

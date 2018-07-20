@@ -21,7 +21,7 @@ import retrofit2.Call;
  */
 
 public class PDiscoverQuanzi extends BasePresenter<IDiscoverQuanzi> {
-    private int pageSize=20;
+    private int pageSize=10;
     private boolean isFirst=true;
     private int babyPage = 1;//当前页数
     private int babyAllPage = 0;
