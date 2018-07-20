@@ -25,7 +25,6 @@ import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Code;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GridSpacingItemDecoration;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
@@ -171,13 +170,12 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
 
     private void checkPhoneCorrect(){
         //LogUtil.zhLogW("checkPhoneCorrect========="+mtv_phone.getText());
-        if (mtv_phone.getText().length()==11 && presenter != null && mtv_phone.
-                getText().toString().startsWith("1")){
+        if (mtv_phone.getText().length()==11 && presenter != null){
             mtv_tip.setVisibility(View.INVISIBLE);
             presenter.phoneNumber = mtv_phone.getText().toString();
             presenter.initApi();
         }else {
-            if (!mtv_phone.getText().toString().startsWith("1") || mtv_phone.getText().length() > 11){
+            if (mtv_phone.getText().length() != 11){
                 handleTip(Code.CREDIT_PHONE_ERROR,"请输入正确手机号");
             }else {
                 mtv_tip.setVisibility(View.INVISIBLE);
@@ -266,7 +264,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
                         phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     }
                     phones.close();
-                    LogUtil.zhLogW("phoneNumber========="+phoneNumber);
+                    //LogUtil.zhLogW("phoneNumber========="+phoneNumber);
                     if (!isEmpty(phoneNumber)){
                         if (phoneNumber.contains("+86")){
                             phoneNumber = phoneNumber.replace("+86","");
@@ -290,7 +288,7 @@ public class MoreCreditAct extends BaseActivity implements IMoreCreditView {
             Common.staticToast("手机号不能为空");
             return;
         }
-        if (mtv_phone.getText().length() < 11 || !mtv_phone.getText().toString().startsWith("1")){
+        if (mtv_phone.getText().length() != 11){
             handleTip(Code.CREDIT_PHONE_ERROR,"请输入正确手机号");
             return;
         }
