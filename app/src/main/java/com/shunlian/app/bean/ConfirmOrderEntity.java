@@ -13,6 +13,8 @@ public class ConfirmOrderEntity {
 
     public List<Enabled> enabled;
     public List<GoodsDeatilEntity.Goods> disabled;
+    public String user_stage_voucher;//1表示平台最优，应该默认选择平台优惠券
+    public List<Voucher> stage_voucher;//平台优惠券
     public String disabled_ids;
     public String total_shipping_fee;
     public String total_amount;//商品总额

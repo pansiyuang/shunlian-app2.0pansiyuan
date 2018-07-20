@@ -163,6 +163,9 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
 
+    @BindView(R.id.mtv_want)
+    MyTextView mtv_want;
+
 
     private MyImageView myImageView;
     private GoodsDetailPresenter goodsDetailPresenter;
@@ -564,15 +567,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsOffShelf(String status) {
         if ("0".equals(status)){//下架
-            mtv_off_shelf.setVisibility(View.VISIBLE);
-            mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
+            visible(mtv_off_shelf,mtv_want);
+            gone(mtv_add_car,mtv_buy_immediately);
+            /*mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
             mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
             mtv_add_car.setEnabled(false);
             mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_CACACA));
             mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
-            mtv_buy_immediately.setEnabled(false);
+            mtv_buy_immediately.setEnabled(false);*/
         }else {
-            mtv_off_shelf.setVisibility(View.GONE);
+            gone(mtv_off_shelf);
+            visible(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
             mtv_add_car.setTextColor(getColorResouce(R.color.white));
             mtv_add_car.setEnabled(true);

@@ -19,50 +19,10 @@
         android:paddingRight="24dp"
         android:paddingTop="35dp">
 
-
-        <RelativeLayout
-            android:id="@+id/rlayout_tip1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <com.shunlian.app.widget.MyImageView
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:layout_marginTop="6dp"
-                android:src="@mipmap/img_bangzhu_dian" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_tip1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/my_dark_grey"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/rlayout_tip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
-            android:visibility="gone">
-
-            <com.shunlian.app.widget.MyImageView
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:layout_marginTop="6dp"
-                android:src="@mipmap/img_bangzhu_dian" />
-
-            <com.shunlian.app.widget.MyTextView
-                android:id="@+id/mtv_tip2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/my_dark_grey"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
         <com.shunlian.app.widget.MyButton

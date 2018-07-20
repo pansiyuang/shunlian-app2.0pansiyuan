@@ -340,11 +340,11 @@ public class OrderListAdapter extends BaseRecyclerAdapter<MyOrderEntity.Orders> 
                     if (getString(R.string.order_fukuan).equals(text)) {//付款
                         if (mAllFrag != null) {
                             PayListActivity.startAct(mAllFrag.getActivity(),
-                                    null, null,orders.id,orders.total_amount);
+                                    null, null,orders.id,orders.total_amount,"");
                             AllFrag.isRefreshItem = true;
                         }else if (mSearchOrderAct != null){
                             PayListActivity.startAct(mSearchOrderAct,
-                                    null, null,orders.id,orders.total_amount);
+                                    null, null,orders.id,orders.total_amount,"");
                             SearchOrderResultActivity.isRefreshItem = true;
                         }
 

@@ -3,6 +3,7 @@ package com.shunlian.app.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.shunlian.app.R;
 import com.shunlian.app.bean.BaseEntity;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.listener.SimpleNetDataCallback;
@@ -21,7 +22,10 @@ import retrofit2.Call;
  */
 
 public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
-
+    /******是否选择平台优惠券********/
+    public static boolean isSelectStageVoucher = false;
+    /******是否选择店铺优惠券********/
+    public static boolean isSelectStoreVoucher = true;
 
     public ConfirmOrderPresenter(Context context, IConfirmOrderView iView) {
         super(context, iView);
@@ -65,7 +69,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                ConfirmOrderEntity data = entity.data;
+                /*ConfirmOrderEntity data = entity.data;
                 iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
                 float total_amount = 0;
                 if (data.enabled != null && data.enabled.size() > 0){
@@ -75,7 +79,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                         total_amount += Float.parseFloat(sub_total);
                     }
                 }
-                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
+                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));*/
+                setDate(entity);
             }
         });
     }
@@ -99,19 +104,54 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                ConfirmOrderEntity data = entity.data;
-                iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
-                float total_amount = 0;
-                if (data.enabled != null && data.enabled.size() > 0){
-                    List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
-                    for (int i = 0; i < enabled.size(); i++) {
-                        String sub_total = enabled.get(i).sub_total;
-                        total_amount += Float.parseFloat(sub_total);
-                    }
-                }
-                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
+                setDate(entity);
             }
         });
+    }
+
+    private void setDate(BaseEntity<ConfirmOrderEntity> entity) {
+        ConfirmOrderEntity data = entity.data;
+
+        float total_amount = 0;
+        if (data.enabled != null && data.enabled.size() > 0){
+            List<ConfirmOrderEntity.Enabled> enabled = data.enabled;
+            for (int i = 0; i < enabled.size(); i++) {
+                ConfirmOrderEntity.Enabled enabled1 = enabled.get(i);
+                String sub_total = enabled1.sub_total;
+                total_amount += Float.parseFloat(sub_total);
+                if ("1".equals(data.user_stage_voucher)){
+                    enabled1.selectVoucherId = enabled1.voucher.size();
+                }
+                if (!isEmpty(enabled1.voucher)){
+                    ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
+                    voucher.title = getStringResouce(R.string.not_use_voucher);
+                    voucher.voucher_hint = getStringResouce(R.string.not_use_voucher);
+                    voucher.voucher_id = "";
+                    voucher.denomination = "0";
+                    enabled1.voucher.add(voucher);
+                }
+            }
+        }
+
+        iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
+        iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
+
+        if (!isEmpty(data.stage_voucher)){
+            ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
+            voucher.title = getStringResouce(R.string.not_use_voucher);
+            voucher.voucher_hint = getStringResouce(R.string.not_use_voucher);
+            voucher.voucher_id = "";
+            voucher.denomination = "0";
+            data.stage_voucher.add(voucher);
+        }
+        if ("1".equals(data.user_stage_voucher)){
+            isSelectStageVoucher = true;
+            isSelectStoreVoucher = false;
+        }else {
+            isSelectStageVoucher = false;
+            isSelectStoreVoucher = true;
+        }
+        iView.stageVoucher(data.user_stage_voucher,data.stage_voucher);
     }
 
     /**
@@ -129,7 +169,7 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
             @Override
             public void onSuccess(BaseEntity<ConfirmOrderEntity> entity) {
                 super.onSuccess(entity);
-                ConfirmOrderEntity data = entity.data;
+                /*ConfirmOrderEntity data = entity.data;
                 iView.confirmOrderAllGoods(data.enabled,data.disabled,data.address);
                 float total_amount = 0;
                 if (data.enabled != null && data.enabled.size() > 0){
@@ -139,7 +179,8 @@ public class ConfirmOrderPresenter extends BasePresenter<IConfirmOrderView> {
                         total_amount += Float.parseFloat(sub_total);
                     }
                 }
-                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));
+                iView.goodsTotalPrice(data.total_count, Common.formatFloat(total_amount));*/
+                setDate(entity);
             }
         });
     }

@@ -16,4 +16,6 @@ public class Code {
     public static final int CODE_NO_LOGIN = 203;//未登录
     public static final int CODE_REFRESH_TOKEN_VALIDE = 204;//刷新token过期,让用户登录
     public static final int CREDIT_PHONE_ERROR = 2010;//话费充值手机号错误
+    public static final int CREDIT_NO_BELONGING = 2011;//话费充值手机号查不到归属地
+    public static final int CREDIT_NO_SUPPORT = 2012;//话费充值手机号港澳台不支持
 }

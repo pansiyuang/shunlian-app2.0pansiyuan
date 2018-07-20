@@ -26,4 +26,10 @@ public interface IConfirmOrderView extends IView{
      */
     void goodsTotalPrice(String count,String price);
 
+    /**
+     * 平台优惠券
+     * @param user_stage_voucher 1 表示使用平台优惠券时最优
+     * @param stage_voucher
+     */
+    void stageVoucher(String user_stage_voucher,List<ConfirmOrderEntity.Voucher> stage_voucher);
 }

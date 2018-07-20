@@ -620,7 +620,7 @@ public class OrderDetailAct extends BaseActivity implements View.OnClickListener
                 if (getString(R.string.order_fukuan).equals(text)) {//付款
                     AllFrag.isRefreshItem = true;
                     SearchOrderResultActivity.isRefreshItem = true;
-                    PayListActivity.startAct(this, null, null, orderId, orderdetailEntity.total_amount);
+                    PayListActivity.startAct(this, null, null, orderId, orderdetailEntity.total_amount,"");
                 } else if (getString(R.string.confirm_goods).equals(text)) {//确认收货
                     confirmreceipt();
                 } else if (getString(R.string.comment).equals(text)) {//评价
