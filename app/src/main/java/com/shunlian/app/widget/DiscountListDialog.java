@@ -16,6 +16,8 @@ import com.shunlian.app.R;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.ConfirmOrderEntity;
+import com.shunlian.app.presenter.ConfirmOrderPresenter;
+import com.shunlian.app.ui.confirm_order.ConfirmOrderAct;
 import com.shunlian.app.utils.TransformUtil;
 
 import java.util.Arrays;
@@ -107,11 +109,11 @@ public class DiscountListDialog extends Dialog {
      * 优惠券
      * @param enabled
      */
-    public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled){
+    public void setGoodsDiscount(ConfirmOrderEntity.Enabled  enabled,String title){
         mVouchers = enabled.voucher;
-        mtv_title.setText(mContext.getResources().getString(R.string.goods_voucher));
+        mtv_title.setText(title);
         currentPosition = enabled.selectVoucherId;
-        ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
+       /* ConfirmOrderEntity.Voucher voucher1 = mVouchers.get(mVouchers.size() - 1);
         if (!"".equals(voucher1.voucher_id)){
             ConfirmOrderEntity.Voucher voucher = new ConfirmOrderEntity.Voucher();
             voucher.title = mContext.getResources().getString(R.string.not_use_voucher);
@@ -119,7 +121,7 @@ public class DiscountListDialog extends Dialog {
             voucher.voucher_id = "";
             voucher.denomination = "0";
             mVouchers.add(voucher);
-        }
+        }*/
         final SimpleRecyclerAdapter recyclerAdapter = new SimpleRecyclerAdapter<ConfirmOrderEntity.Voucher>(mContext,
                 R.layout.item_changeprefer, mVouchers) {
 
@@ -143,6 +145,13 @@ public class DiscountListDialog extends Dialog {
         recyclerAdapter.setOnItemClickListener((view, position) -> {
             currentPosition = position;
             recyclerAdapter.notifyDataSetChanged();
+            if (title.contains("平台")){
+                if (ConfirmOrderPresenter.isSelectStoreVoucher && position < mVouchers.size()-1)
+                ConfirmOrderAct.selectVoucherTip(false);
+            }else {
+                if (ConfirmOrderPresenter.isSelectStageVoucher && position < mVouchers.size()-1)
+                ConfirmOrderAct.selectVoucherTip(true);
+            }
         });
     }
 

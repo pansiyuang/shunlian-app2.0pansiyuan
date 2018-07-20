@@ -66,7 +66,7 @@ public class MoreCreditAdapter extends BaseRecyclerAdapter<MoreCreditEntity.List
             if ("1".equals(listBean.isBuy)) {
                 mHolder.rlayout_root.setEnabled(true);
             }else {
-                rootGB.setColor(Color.parseColor("#70f7f7f7"));
+                rootGB.setColor(Color.parseColor("#90f7f7f7"));
                 mHolder.rlayout_root.setEnabled(false);
             }
             if (position == currentPos) {

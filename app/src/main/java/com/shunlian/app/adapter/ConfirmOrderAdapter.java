@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ConfirmOrderEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.presenter.ConfirmOrderPresenter;
 import com.shunlian.app.ui.receive_adress.AddressListActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
@@ -206,8 +207,12 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
 
             List<ConfirmOrderEntity.Voucher> voucher = enabled.voucher;
             if (!isEmpty(voucher)) {//有可用优惠券，默认使用第一张
-                ConfirmOrderEntity.Voucher voucher1 = voucher.get(0);
-                mHolder.mtv_discount.setText(voucher1.voucher_hint );
+                ConfirmOrderEntity.Voucher voucher1 = voucher.get(enabled.selectVoucherId);
+                if (enabled.selectVoucherId == voucher.size()){
+                    mHolder.mtv_discount.setText("请选择");
+                }else {
+                    mHolder.mtv_discount.setText(voucher1.voucher_hint);
+                }
                 String temp = Common.formatFloat(enabled.sub_total, voucher1.denomination);
                 if (Float.parseFloat(temp) <= 0) temp = "0.00";
                 enabled.store_discount_price = temp;
@@ -216,6 +221,7 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
                 if (mListener != null){
                     mListener.onSelectVoucher(0);
                 }
+
             }else {
                 enabled.selectVoucherId = -1;
                 enabled.store_discount_price = enabled.sub_total;
@@ -339,13 +345,22 @@ public class ConfirmOrderAdapter extends BaseRecyclerAdapter<ConfirmOrderEntity.
             switch (v.getId()){
                 case R.id.mllayout_discount://选择优惠券
                     DiscountListDialog discountDialog = new DiscountListDialog(context);
-                    discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1));
+                    discountDialog.setGoodsDiscount(lists.get(getAdapterPosition()-1),getString(R.string.goods_voucher));
                     discountDialog.setSelectListener(position -> {
                         if (position < 0){
                             return;
                         }
+                        if (ConfirmOrderPresenter.isSelectStageVoucher){
+                            return;
+                        }
+
                         ConfirmOrderEntity.Enabled enabled = lists.get(getAdapterPosition() - 1);
                         ConfirmOrderEntity.Voucher voucher = enabled.voucher.get(position);
+                        if (position + 1== enabled.voucher.size()){
+                            ConfirmOrderPresenter.isSelectStoreVoucher = false;
+                        }else {
+                            ConfirmOrderPresenter.isSelectStoreVoucher = true;
+                        }
                         mtv_discount.setText(voucher.voucher_hint);
 
                         String sub_total = enabled.sub_total;
