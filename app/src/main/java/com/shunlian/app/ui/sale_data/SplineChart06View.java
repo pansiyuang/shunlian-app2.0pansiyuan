@@ -368,6 +368,9 @@ public class SplineChart06View extends ChartView {
         List<String> data = new ArrayList<>();
         for (int i = 0; i < mChartData.size(); i++) {
             SplineData splineData = mChartData.get(i);
+            if (splineData.getLineKey().contains("分店")){//去掉分店数据
+                continue;
+            }
             if (record.getDataChildID() < splineData.getLineDataSet().size()) {
                 PointD pointD = splineData.getLineDataSet().get(record.getDataChildID());
                 LogUtil.zhLogW(splineData.getLineKey()+"："+pointD.y);

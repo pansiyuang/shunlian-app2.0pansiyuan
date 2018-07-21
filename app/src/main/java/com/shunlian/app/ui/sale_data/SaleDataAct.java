@@ -294,6 +294,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 return;
             }
             visible(llayout_appoint_sale);
+            gone(mtv_appoint_child_sale,mtv_appoint_grand_child_sale,mtv_appoint_consume_sale);
             mtv_date.setText(date);
             for (int i = 0; i < data.size(); i++) {
                 switch (i){
@@ -641,7 +642,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             case 3:
                 mtv_mark1.setText(chart_view.key_line1 = "小店会员");
                 mtv_mark2.setText(chart_view.key_line2 = "PLUS会员");
-                visible(rlayout_vip);
+                visible(rlayout_vip,llayout_mark2);
                 gone(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
                 break;
         }
