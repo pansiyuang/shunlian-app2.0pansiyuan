@@ -84,6 +84,17 @@ public class SortFrag extends BaseFragment implements ISortFragView, MessageCoun
         return view;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            ImmersionBar.with(this).fitsSystemWindows(true)
+                    .statusBarColor(R.color.white)
+                    .statusBarDarkFont(true, 0.2f)
+                    .init();
+        }
+    }
+
     /**
      * 初始化数据
      */
