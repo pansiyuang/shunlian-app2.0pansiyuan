@@ -83,7 +83,7 @@ public class DiscoverPublishPhotoAct extends BaseActivity implements IExperience
         setStatusBarColor(R.color.white);
         setStatusBarFontDark();
         circle_id = getIntent().getStringExtra("circle_id");
-        tv_title.setText(getStringResouce(R.string.discover_fabiaozhaopian));
+        tv_title.setText(getStringResouce(R.string.discover_fabiaodongtai));
         tv_title_right.setText(getString(R.string.comment_release));
         tv_title_right.setTextColor(getColorResouce(R.color.pink_color));
         tv_title_right.setVisibility(View.VISIBLE);

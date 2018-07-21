@@ -60,6 +60,7 @@ public class StoreFirstAdapter extends BaseRecyclerAdapter<StoreIndexEntity.Body
         baseFooterHolder.layout_no_more.setBackgroundColor(getColor(R.color.white));
         baseFooterHolder.layout_no_more.setText(getString(R.string.rv_chakansuoyou));
         baseFooterHolder.layout_no_more.setTextSize(12);
+        baseFooterHolder.layout_no_more.setTextColor(getColor(R.color.new_text));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, TransformUtil.dip2px(context, 40));
         int margin = TransformUtil.dip2px(context, 10);
         params.setMargins(margin, margin, margin, margin);

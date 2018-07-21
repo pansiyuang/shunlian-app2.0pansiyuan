@@ -13,13 +13,23 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.shunlian.app.adapter.BaseRecyclerAdapter;
+import com.shunlian.app.adapter.SinglePicAdapter;
+import com.shunlian.app.bean.BigImgEntity;
+import com.shunlian.app.ui.my_comment.LookBigImgAct;
+import com.shunlian.app.widget.MyImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,7 +39,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import static android.graphics.Bitmap.createBitmap;
 import static com.shunlian.mylibrary.ImmersionBar.checkDeviceHasNavigationBar;
@@ -173,23 +185,90 @@ public class BitmapUtil {
     }
 
     //    发现中的图片宽高换算
-    public static int[] imgParam(String width, String height) {
+    public static int[] imgParam(String width, String height,int maxWidth,int maxHeight) {
         try {
             if (!TextUtils.isEmpty(width) && !TextUtils.isEmpty(height)) {
                 int mWidth = Integer.parseInt(width);
                 int mHeight = Integer.parseInt(height);
                 if (mWidth >= mHeight) {
-                    return new int[]{190, 190 * mHeight / mWidth};
+                    return new int[]{maxWidth, maxWidth * mHeight / mWidth, 1};
                 } else {
 //                    mWidth / mHeight * 192
 //                    如果像上面一样写计算结果为0，先算的乘法
-                    return new int[]{mWidth*192 / mHeight, 192};
+                    return new int[]{mWidth * maxHeight / mHeight, maxHeight, 0};
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void discoverImg(MyImageView miv_pic, RecyclerView rv_pics, SinglePicAdapter picAdapter, List<String> imgs, Activity activity,
+                                   int maxWidth,int maxHeight, float left, float top, float right, float bottom) {
+//        maxWidth和maxHeight传0则使用默认参数
+        boolean isReset= (picAdapter != null);
+        if (imgs == null || 0 == imgs.size()) {
+            rv_pics.setVisibility(View.GONE);
+            miv_pic.setVisibility(View.GONE);
+        } else {
+            if (imgs.size() == 1 && !TextUtils.isEmpty(imgs.get(0))) {
+                rv_pics.setVisibility(View.GONE);
+                miv_pic.setVisibility(View.VISIBLE);
+                int[] params = BitmapUtil.imgParam(Common.getURLParameterValue(imgs.get(0), "w"), Common.getURLParameterValue(imgs.get(0), "h"),0==maxWidth?190:maxWidth,0==maxHeight?192:maxHeight);
+                LinearLayout.LayoutParams param;
+                if (params != null) {
+                    miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
+                    param = new LinearLayout.LayoutParams(TransformUtil.dip2px(activity, params[0]), TransformUtil.dip2px(activity, params[1]));
+                    miv_pic.setAdjustViewBounds(false);
+                } else {
+                    miv_pic.setAdjustViewBounds(true);
+                    param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                }
+                param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
+                miv_pic.setLayoutParams(param);
+                if (params != null && 0 == params[2]) {
+                    GlideUtils.getInstance().loadImageShu(activity, miv_pic, imgs.get(0));
+                } else {
+                    GlideUtils.getInstance().loadImageChang(activity, miv_pic, imgs.get(0));
+                }
+                if (!isReset)
+                    miv_pic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //点击查看大图
+                            BigImgEntity bigImgEntity = new BigImgEntity();
+                            bigImgEntity.itemList = (ArrayList<String>) imgs;
+                            bigImgEntity.index = 0;
+                            LookBigImgAct.startAct(activity, bigImgEntity);
+                        }
+                    });
+            } else {
+                rv_pics.setVisibility(View.VISIBLE);
+                miv_pic.setVisibility(View.GONE);
+                if (picAdapter==null)
+                picAdapter = new SinglePicAdapter(activity, false, imgs);
+                rv_pics.setLayoutManager(new GridLayoutManager(activity, 3));
+                LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                param.setMargins(TransformUtil.dip2px(activity, left), TransformUtil.dip2px(activity, top), TransformUtil.dip2px(activity, right), TransformUtil.dip2px(activity, bottom));
+                rv_pics.setLayoutParams(param);
+                rv_pics.setNestedScrollingEnabled(false);
+                rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(activity, 9), false));
+                rv_pics.setAdapter(picAdapter);
+                if (!isReset) {
+                    picAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            //点击查看大图
+                            BigImgEntity bigImgEntity = new BigImgEntity();
+                            bigImgEntity.itemList = (ArrayList<String>) imgs;
+                            bigImgEntity.index = position;
+                            LookBigImgAct.startAct(activity, bigImgEntity);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     /**

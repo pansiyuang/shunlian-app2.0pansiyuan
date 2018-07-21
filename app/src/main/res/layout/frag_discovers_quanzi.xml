@@ -41,6 +41,7 @@
                         app:bb_delay="5"
                         app:bb_dimColor="@color/dim50"
                         app:bb_period="3"
+                        app:bb_isCorp="true"
                         app:bb_scale="0.4" />
                     <com.shunlian.app.widget.MyTextView
                         android:id="@+id/mtv_title"

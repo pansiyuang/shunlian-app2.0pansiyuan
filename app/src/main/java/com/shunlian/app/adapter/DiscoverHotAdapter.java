@@ -62,63 +62,64 @@ public class DiscoverHotAdapter extends BaseRecyclerAdapter<DiscoveryTieziEntity
             viewHolder.mtv_like.setTextColor(getColor(R.color.value_878B8A));
         }
         GlideUtils.getInstance().loadCircleImage(context,viewHolder.miv_avar,hot.avatar);
-        if (isEmpty(hot.imgs)) {
-            viewHolder.rv_pics.setVisibility(View.GONE);
-            viewHolder.miv_pic.setVisibility(View.GONE);
-        } else {
-            if (hot.imgs.size() == 1&&!isEmpty(hot.imgs.get(0))) {
-                viewHolder.rv_pics.setVisibility(View.GONE);
-                viewHolder.miv_pic.setVisibility(View.VISIBLE);
-                int[] params=BitmapUtil.imgParam(Common.getURLParameterValue(hot.imgs.get(0), "w"),Common.getURLParameterValue(hot.imgs.get(0), "h"));
-                LinearLayout.LayoutParams param;
-                if (params!=null){
-                    viewHolder.miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
-                    param=new LinearLayout.LayoutParams(TransformUtil.dip2px(context,params[0]),TransformUtil.dip2px(context,params[1]));
-                    viewHolder.miv_pic.setAdjustViewBounds(false);
-                }else {
-                    viewHolder.miv_pic.setAdjustViewBounds(true);
-                    param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                }
-                param.setMargins(0,TransformUtil.dip2px(context,12),0,0);
-                viewHolder.miv_pic.setLayoutParams(param);
-                GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,hot.imgs.get(0));
-                viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //点击查看大图
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList<String>) hot.imgs;
-                        bigImgEntity.index = 0;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
-                });
-            } else {
-                viewHolder.miv_pic.setVisibility(View.GONE);
-                viewHolder.rv_pics.setVisibility(View.VISIBLE);
-                if (viewHolder.picAdapter==null){
-                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false,  hot.imgs);
-                    viewHolder.rv_pics.setLayoutManager(new GridLayoutManager(context, 3));
-                    viewHolder.rv_pics.setNestedScrollingEnabled(false);
-                    viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
-                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
-                }else {
-                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false, hot.imgs);
-                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
-                    //viewHolder.picAdapter.notifyDataSetChanged();
-                }
-                viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        //点击查看大图
-                        BigImgEntity bigImgEntity = new BigImgEntity();
-                        bigImgEntity.itemList = (ArrayList<String>)  hot.imgs;
-                        bigImgEntity.index = position;
-                        LookBigImgAct.startAct(context, bigImgEntity);
-                    }
-                });
-            }
-        }
-
+        BitmapUtil.discoverImg(viewHolder.miv_pic,viewHolder.rv_pics,viewHolder.picAdapter,hot.imgs
+        ,activity,0,0,0,12,0,0);
+        //        if (isEmpty(hot.imgs)) {
+//            viewHolder.rv_pics.setVisibility(View.GONE);
+//            viewHolder.miv_pic.setVisibility(View.GONE);
+//        } else {
+//            if (hot.imgs.size() == 1&&!isEmpty(hot.imgs.get(0))) {
+//                viewHolder.rv_pics.setVisibility(View.GONE);
+//                viewHolder.miv_pic.setVisibility(View.VISIBLE);
+//                int[] params=BitmapUtil.imgParam(Common.getURLParameterValue(hot.imgs.get(0), "w"),Common.getURLParameterValue(hot.imgs.get(0), "h"));
+//                LinearLayout.LayoutParams param;
+//                if (params!=null){
+//                    viewHolder.miv_pic.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    param=new LinearLayout.LayoutParams(TransformUtil.dip2px(context,params[0]),TransformUtil.dip2px(context,params[1]));
+//                    viewHolder.miv_pic.setAdjustViewBounds(false);
+//                }else {
+//                    viewHolder.miv_pic.setAdjustViewBounds(true);
+//                    param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                }
+//                param.setMargins(0,TransformUtil.dip2px(context,12),0,0);
+//                viewHolder.miv_pic.setLayoutParams(param);
+//                GlideUtils.getInstance().loadImageShu(context,viewHolder.miv_pic,hot.imgs.get(0));
+//                viewHolder.miv_pic.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        //点击查看大图
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList<String>) hot.imgs;
+//                        bigImgEntity.index = 0;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    }
+//                });
+//            } else {
+//                viewHolder.miv_pic.setVisibility(View.GONE);
+//                viewHolder.rv_pics.setVisibility(View.VISIBLE);
+//                if (viewHolder.picAdapter==null){
+//                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false,  hot.imgs);
+//                    viewHolder.rv_pics.setLayoutManager(new GridLayoutManager(context, 3));
+//                    viewHolder.rv_pics.setNestedScrollingEnabled(false);
+//                    viewHolder.rv_pics.addItemDecoration(new GridSpacingItemDecoration(TransformUtil.dip2px(context,9),false));
+//                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
+//                }else {
+//                    viewHolder.picAdapter  = new SinglePicAdapter(activity, false, hot.imgs);
+//                    viewHolder.rv_pics.setAdapter(viewHolder.picAdapter);
+//                    //viewHolder.picAdapter.notifyDataSetChanged();
+//                }
+//                viewHolder.picAdapter.setOnItemClickListener(new OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        //点击查看大图
+//                        BigImgEntity bigImgEntity = new BigImgEntity();
+//                        bigImgEntity.itemList = (ArrayList<String>)  hot.imgs;
+//                        bigImgEntity.index = position;
+//                        LookBigImgAct.startAct(context, bigImgEntity);
+//                    }
+//                });
+//            }
+//        }
     }
 
 
