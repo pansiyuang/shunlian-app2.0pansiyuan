@@ -567,17 +567,17 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
     @Override
     public void goodsOffShelf(String status) {
         if ("0".equals(status)){//下架
-            visible(mtv_off_shelf,mtv_want);
-            gone(mtv_add_car,mtv_buy_immediately);
-            /*mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
+            visible(mtv_off_shelf/*,mtv_want*/);
+            //gone(mtv_add_car,mtv_buy_immediately);
+            mtv_add_car.setBackgroundColor(getColorResouce(R.color.value_FDCD22));
             mtv_add_car.setTextColor(getColorResouce(R.color.value_CDA101));
             mtv_add_car.setEnabled(false);
             mtv_buy_immediately.setBackgroundColor(getColorResouce(R.color.value_CACACA));
             mtv_buy_immediately.setTextColor(getColorResouce(R.color.value_A0A0A0));
-            mtv_buy_immediately.setEnabled(false);*/
+            mtv_buy_immediately.setEnabled(false);
         }else {
             gone(mtv_off_shelf);
-            visible(mtv_add_car,mtv_buy_immediately);
+            //visible(mtv_add_car,mtv_buy_immediately);
             mtv_add_car.setBackgroundColor(getColorResouce(R.color.my_black_one));
             mtv_add_car.setTextColor(getColorResouce(R.color.white));
             mtv_add_car.setEnabled(true);
@@ -1168,6 +1168,20 @@ public class GoodsDetailAct extends SideslipBaseActivity implements IGoodsDetail
         }
         if (mtv_add_car != null)
             mtv_add_car.setBackgroundColor(Color.parseColor("#111111"));
+    }
+
+    /**
+     * 库存不足
+     */
+    @Override
+    public void stockDeficiency(String stock) {
+        if (!isEmpty(stock) && Integer.parseInt(stock) <= 0){
+            visible(mtv_want);
+            gone(mtv_add_car,mtv_buy_immediately);
+        }else {
+            gone(mtv_want);
+            visible(mtv_add_car,mtv_buy_immediately);
+        }
     }
 
     @Override

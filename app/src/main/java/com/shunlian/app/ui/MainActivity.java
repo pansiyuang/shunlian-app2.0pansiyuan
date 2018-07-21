@@ -25,6 +25,7 @@ import com.shunlian.app.presenter.PMain;
 import com.shunlian.app.ui.fragment.DiscoverFrag;
 import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
+import com.shunlian.app.ui.fragment.SortFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
 import com.shunlian.app.ui.h5.H5Frag;
@@ -90,6 +91,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
     //    private MainPageFrag mainPageFrag;
     private FirstPageFrag mainPageFrag;
 //    private MyPlusFrag myPlusFrag;
+    private SortFrag sortFrag;
     private H5PlusFrag h5PlusFrag;
     private DiscoverFrag discoverFrag;
     private ShoppingCarFrag shoppingCarFrag;
@@ -261,7 +263,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                         }
                         break;
                     case R.id.ll_tab_sort:
-                        myPlusClick();
+                        //myPlusClick();
+                        sortClick();
                         break;
                     case R.id.ll_tab_discover:
                         discoverClick();
@@ -320,6 +323,7 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         pageIndex = 1;
         chageTabItem(pageIndex);
     }
+
 //    public void myPlusClick() {
 //        isFirst = false;
 //        if (!Common.isAlreadyLogin() || !Common.isPlus()) {
@@ -342,6 +346,23 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 //        pageIndex = 1;
 //        chageTabItem(pageIndex);
 //    }
+
+    public void sortClick(){
+        isFirst = false;
+        //先判断此碎片是否第一次点击，是的话初始化碎片
+        if (sortFrag== null) {
+            sortFrag = (SortFrag) fragmentMap.get(flags[1]);
+            if (sortFrag == null) {
+                sortFrag = new SortFrag();
+                fragmentMap.put(flags[1], sortFrag);
+            }
+        }
+
+        //把当前点击的碎片作为参数，表示显示当前碎片，并且隐藏其他碎片
+        switchContent(sortFrag);
+        pageIndex = 1;
+        chageTabItem(pageIndex);
+    }
 
     public void discoverClick() {
         isFirst = false;
@@ -486,7 +507,8 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 mainPageClick();
                 break;
             case "myplus":
-                myPlusClick();
+                //myPlusClick();
+                sortClick();
                 break;
             case "focus":
             case "discover":

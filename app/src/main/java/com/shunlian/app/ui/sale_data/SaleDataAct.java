@@ -19,7 +19,6 @@ import com.shunlian.app.bean.SaleDataEntity;
 import com.shunlian.app.bean.SalesChartEntity;
 import com.shunlian.app.presenter.SaleDataPresenter;
 import com.shunlian.app.ui.BaseActivity;
-import com.shunlian.app.ui.more_credit.MoreCreditAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.DeviceInfoUtil;
@@ -174,9 +173,6 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
     @BindView(R.id.llayout_mark3)
     LinearLayout llayout_mark3;
 
-    @BindView(R.id.mtv_this_month)
-    MyTextView mtv_this_month;
-
     @BindView(R.id.mtv_sale_Explain)
     MyTextView mtv_sale_Explain;
 
@@ -215,6 +211,9 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
 
     @BindView(R.id.view_perch)
     View view_perch;
+
+    @BindView(R.id.mtv_detail)
+    MyTextView mtv_detail;
 
     private SaleDataPresenter presenter;
     private int currentPos;//当前所在位置，销售 订单 会员
@@ -260,6 +259,7 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             int[] ints = TransformUtil.countRealWH(this, 720, 320);
             layoutParams.width = ints[0];
             layoutParams.height = ints[1];
+            layoutParams.height = ints[1];
             chart_view.setLayoutParams(layoutParams);
         }
         presenter = new SaleDataPresenter(this, this);
@@ -284,8 +284,8 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
         llayout_order.setOnClickListener(this);
         llayout_vip.setOnClickListener(this);
 
+        mtv_detail.setOnClickListener(this);
         mtv_sale_sum.setOnClickListener(this);
-        mtv_this_month.setOnClickListener(this);
         //mtv_tip.setOnClickListener(this);
 
         chart_view.setOnSaleChartListener((data, date) -> {
@@ -572,10 +572,10 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
                 }
                 break;
 
+            case R.id.mtv_detail:
             case R.id.mtv_sale_sum:
-            case R.id.mtv_this_month:
-                //SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
-                MoreCreditAct.startAct(this);
+                SaleDetailAct.startAct(this,SaleDetailAct.SALE_DETAIL);
+                //MoreCreditAct.startAct(this);
                 break;
             /*case R.id.mtv_tip:
                 if (slHeadDialog == null)
@@ -630,13 +630,13 @@ public class SaleDataAct extends BaseActivity implements ISaleDataView {
             case 1:
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售额");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售额");
-                gone(rlayout_vip);
                 visible(llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
+                gone(rlayout_vip,llayout_mark2);
                 break;
             case 2:
                 mtv_mark1.setText(chart_view.key_line1 = "小店销售订单");
                 mtv_mark2.setText(chart_view.key_line2 = "分店销售订单");
-                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale);
+                gone(rlayout_vip,llayout_mark3,mtv_sale_Explain,mtv_appoint_consume_sale,llayout_mark2);
                 break;
             case 3:
                 mtv_mark1.setText(chart_view.key_line1 = "小店会员");

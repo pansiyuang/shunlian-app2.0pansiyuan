@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:padding="15dp"
+            android:visibility="gone"
             android:src="@mipmap/icon_common_back_black" />
 
         <com.shunlian.app.widget.MyLinearLayout

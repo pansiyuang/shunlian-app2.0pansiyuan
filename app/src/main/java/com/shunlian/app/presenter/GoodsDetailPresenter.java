@@ -94,7 +94,8 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
                 if (data != null) {
                     iView.goodsDetailData(data);
                     iView.isFavorite(data.is_fav);
-                    iView.goodsOffShelf(data.status);
+                    iView.goodsOffShelf(data.status);//是否下架
+                    //iView.stockDeficiency(data.status);//是否有库存
                     if (!"0".equals(data.status)){//非下架商品
                         GoodsDeatilEntity.TTAct tt_act = data.tt_act;
                         if (tt_act != null){
