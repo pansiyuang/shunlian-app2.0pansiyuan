@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.BigImgEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.ui.store.StoreAct;
@@ -21,7 +22,6 @@ import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.DeviceInfoUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.HorItemDecoration;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.timer.DDPDownTimerView;
 import com.shunlian.app.widget.MyImageView;
@@ -31,6 +31,10 @@ import com.shunlian.app.widget.MyTextView;
 import com.shunlian.app.widget.ParamDialog;
 import com.shunlian.app.widget.RecyclerDialog;
 import com.shunlian.app.widget.banner.Kanner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1463,6 +1467,13 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             }
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void followStoreState(DefMessageEvent event){
+            setCollectionState(event.followStoreState);
+            EventBus.getDefault().unregister(this);
+        }
+
+
         /**
          * Called when a view has been clicked.
          *
@@ -1473,17 +1484,18 @@ public class GoodsDetailAdapter extends BaseRecyclerAdapter<String> implements P
             GoodsDeatilEntity.StoreInfo store_info = mGoodsEntity.store_info;
             switch (v.getId()){
                 case R.id.mtv_collection:
-                    if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
+                    /*if (TextUtils.isEmpty(SharedPrefUtil.getSharedPrfString("token",""))){
                         Common.staticToast("尚未登录");
                         return;
-                    }
+                    }*/
+                    EventBus.getDefault().register(this);
                     GoodsDetailAct detailAct = (GoodsDetailAct) context;
                     if (isAttentionShop){
                         detailAct.delFollowStore();
-                        setCollectionState(0);
+                        //setCollectionState(0);
                     }else {
                         detailAct.followStore();
-                        setCollectionState(1);
+                        //setCollectionState(1);
                     }
                     isAttentionShop = !isAttentionShop;
                     break;

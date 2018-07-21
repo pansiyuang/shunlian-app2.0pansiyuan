@@ -15,10 +15,13 @@ import com.shunlian.app.bean.FootprintEntity;
 import com.shunlian.app.bean.GoodsDeatilEntity;
 import com.shunlian.app.bean.ProbablyLikeEntity;
 import com.shunlian.app.bean.ShareInfoParam;
+import com.shunlian.app.eventbus_bean.DefMessageEvent;
 import com.shunlian.app.listener.SimpleNetDataCallback;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.view.IGoodsDetailView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,6 +176,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                DefMessageEvent event = new DefMessageEvent();
+                event.followStoreState = 1;
+                EventBus.getDefault().post(event);
                 Common.staticToast(entity.message);
             }
 
@@ -202,6 +208,9 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
             @Override
             public void onSuccess(BaseEntity<EmptyEntity> entity) {
                 super.onSuccess(entity);
+                DefMessageEvent event = new DefMessageEvent();
+                event.followStoreState = 0;
+                EventBus.getDefault().post(event);
                 Common.staticToast(entity.message);
             }
 

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,14 +27,12 @@ import com.shunlian.app.ui.fragment.PersonalCenterFrag;
 import com.shunlian.app.ui.fragment.ShoppingCarFrag;
 import com.shunlian.app.ui.fragment.first_page.CateGoryFrag;
 import com.shunlian.app.ui.fragment.first_page.FirstPageFrag;
-import com.shunlian.app.ui.h5.H5Act;
 import com.shunlian.app.ui.h5.H5Frag;
 import com.shunlian.app.ui.h5.H5PlusFrag;
 import com.shunlian.app.ui.login.LoginAct;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.MyOnClickListener;
 import com.shunlian.app.utils.PromptDialog;
 import com.shunlian.app.utils.SharedPrefUtil;
@@ -153,9 +150,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         }
         Common.parseClipboard(this);
         if ("1".equals(SharedPrefUtil.getCacheSharedPrf("is_open", ""))){
-            ll_tab_sort.setVisibility(View.VISIBLE);
+            visible(ll_tab_sort);
         }else {
-            ll_tab_sort.setVisibility(View.GONE);
+            gone(ll_tab_sort);
         }
     }
 
@@ -195,10 +192,14 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
         super.onNewIntent(intent);
         setIntent(intent);
         flag = getIntent().getStringExtra("flag");
-        if (TextUtils.isEmpty(flag)) {
+        /*if (TextUtils.isEmpty(flag)) {
             mainPageClick();
         } else {
             switch2jump(flag);
+        }*/
+        switch2jump(flag);
+        if ("route_login".equals(flag)){
+            Common.goGoGo(this,"login");
         }
     }
 
@@ -496,6 +497,9 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
                 break;
             case "personCenter":
                 personCenterClick();
+                break;
+            default:
+                mainPageClick();
                 break;
         }
     }

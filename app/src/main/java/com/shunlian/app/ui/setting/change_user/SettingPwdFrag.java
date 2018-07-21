@@ -16,7 +16,7 @@ import com.shunlian.app.R;
 import com.shunlian.app.eventbus_bean.DispachJump;
 import com.shunlian.app.presenter.ChangeUserPresenter;
 import com.shunlian.app.ui.BaseFragment;
-import com.shunlian.app.ui.login.LoginAct;
+import com.shunlian.app.ui.MainActivity;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.SimpleTextWatcher;
 import com.shunlian.app.utils.TransformUtil;
@@ -241,7 +241,7 @@ public class SettingPwdFrag extends BaseFragment implements IChangeUserView, Vie
     public void bindMobileSuccess() {
         // TODO: 2018/4/25 绑定成功
         /***登录成功后去个人中心***/
-        LoginAct.startAct(baseContext);
+        MainActivity.startAct(baseActivity,"route_login");//先到首页再路由到登录界面
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = dispachJump.personal;
         EventBus.getDefault().postSticky(dispachJump);
@@ -252,7 +252,7 @@ public class SettingPwdFrag extends BaseFragment implements IChangeUserView, Vie
     public void modifyPwdSuccess() {
         // TODO: 2018/4/25 修改密码成功
         /***登录成功后去个人中心***/
-        LoginAct.startAct(baseActivity);
+        MainActivity.startAct(baseActivity,"route_login");//先到首页再路由到登录界面
         DispachJump dispachJump = new DispachJump();
         dispachJump.jumpType = dispachJump.personal;
         EventBus.getDefault().postSticky(dispachJump);

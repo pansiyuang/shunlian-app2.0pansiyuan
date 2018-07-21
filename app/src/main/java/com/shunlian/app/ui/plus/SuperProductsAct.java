@@ -105,6 +105,7 @@ public class SuperProductsAct extends BaseActivity implements ISuperProductView,
 
     @Override
     public void onShare(ShareInfoParam infoParam,String id) {
+        infoParam.goods_id = id;
         mInfoParam = infoParam;
         if (!Common.isAlreadyLogin()){
             Common.goGoGo(this,"login");

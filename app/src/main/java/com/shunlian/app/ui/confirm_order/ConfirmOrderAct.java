@@ -88,7 +88,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     public static void startAct(Context context,String cart_ids,String type){
         if (!Common.isAlreadyLogin()){
-            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
@@ -99,7 +99,7 @@ public class ConfirmOrderAct extends BaseActivity implements IConfirmOrderView, 
 
     public static void startAct(Context context,String goods_id,String qty,String sku_id){
         if (!Common.isAlreadyLogin()){
-            Common.staticToast(context.getResources().getString(R.string.plase_login));
+            Common.goGoGo(context,"login");
             return;
         }
         Intent intent = new Intent(context, ConfirmOrderAct.class);
