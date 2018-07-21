@@ -216,7 +216,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
     private boolean isShowData = true;
     private PersonalcenterEntity personalcenterEntity;
     private PromptDialog promptDialog;
-    private MainActivity mainActivity;
+//    private MainActivity mainActivity;
     private String one, two, three, four;
     private int flag = 0;
     private String invite_code;
@@ -282,7 +282,7 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
 //                .statusBarDarkFont(true, 0.2f)
 //                .init();
         //新增下拉刷新
-        mainActivity = (MainActivity) getActivity();
+//        mainActivity = (MainActivity) getActivity();
         NestedRingHeader header = new NestedRingHeader(getContext());
         lay_refresh.setRefreshHeaderView(header);
 
@@ -864,7 +864,8 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 //会员订单
                 break;
             case R.id.mtv_chakan:
-                mainActivity.myPlusClick();
+//                mainActivity.myPlusClick();
+                H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
                 //点击查看特权
                 break;
             case R.id.mtv_yaoqingma:

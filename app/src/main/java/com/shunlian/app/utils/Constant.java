@@ -49,11 +49,6 @@ public final class Constant {
      */
     public static final float DRAWING_HEIGHT = 1280.0f;
 
-    /**
-     * 帮助中心手机号
-     */
-    public static String HELP_PHONE ="";
-
     public static final String KEY = "sdf21111111111";//接口加密
     public static final String WX_APP_ID = "wxbffd8c8c412e4c73";// 正式 微信开放平台申请到的app_id
 //        public static final String WX_APP_ID = "wx32f8315ee438f6be";// 易云商城app_id

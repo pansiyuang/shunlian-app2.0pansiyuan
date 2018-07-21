@@ -1,11 +1,13 @@
 package com.shunlian.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.shunlian.app.bean.ShareInfoParam;
 import com.shunlian.app.bean.SuperProductEntity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.store.StoreAct;
+import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -209,6 +212,10 @@ public class SuperProductAdapter extends BaseRecyclerAdapter<SuperProductEntity.
 
         public GoodsViewHolder(View itemView) {
             super(itemView);
+            int picWidth = Common.getScreenWidth((Activity) context)-TransformUtil.dip2px(context,20);
+            int picHeight=picWidth*158/341;
+            miv_icon.setLayoutParams(new LinearLayout.LayoutParams(picWidth,picHeight));
+            miv_icon.setScaleType(ImageView.ScaleType.FIT_XY);
         }
     }
 

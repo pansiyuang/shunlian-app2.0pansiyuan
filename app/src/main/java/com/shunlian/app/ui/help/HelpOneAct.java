@@ -17,13 +17,11 @@ import com.shunlian.app.bean.AllMessageCountEntity;
 import com.shunlian.app.bean.HelpcenterIndexEntity;
 import com.shunlian.app.eventbus_bean.NewMessageEvent;
 import com.shunlian.app.newchat.entity.ChatMemberEntity;
-import com.shunlian.app.newchat.ui.ChatActivity;
 import com.shunlian.app.newchat.util.ChatManager;
 import com.shunlian.app.newchat.util.MessageCountManager;
 import com.shunlian.app.presenter.PHelpOne;
 import com.shunlian.app.ui.BaseActivity;
 import com.shunlian.app.utils.Common;
-import com.shunlian.app.utils.Constant;
 import com.shunlian.app.utils.MHorItemDecoration;
 import com.shunlian.app.utils.MVerticalItemDecoration;
 import com.shunlian.app.utils.PromptDialog;
@@ -31,7 +29,6 @@ import com.shunlian.app.utils.QuickActions;
 import com.shunlian.app.view.IHelpOneView;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyLinearLayout;
-import com.shunlian.app.widget.MyRelativeLayout;
 import com.shunlian.app.widget.MyTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,20 +59,20 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
 
     @BindView(R.id.mllayout_kefu)
     MyLinearLayout mllayout_kefu;
-
-    private PHelpOne pHelpOne;
-    private PromptDialog promptDialog;
-
     @BindView(R.id.rl_more)
     RelativeLayout rl_more;
-
     @BindView(R.id.quick_actions)
     QuickActions quick_actions;
-
     @BindView(R.id.tv_msg_count)
     MyTextView tv_msg_count;
-
+    private PHelpOne pHelpOne;
     private MessageCountManager messageCountManager;
+
+    public static void startAct(Context context) {
+        Intent intent = new Intent(context, HelpOneAct.class);
+//        intent.putExtra("storeId", storeId);//店铺id
+        context.startActivity(intent);
+    }
 
     @Override
     public void onResume() {
@@ -133,15 +130,8 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         setStatusBarFontDark();
 //        storeId = getIntent().getStringExtra("storeId");
         pHelpOne = new PHelpOne(this, this);
-        pHelpOne.getHelpPhone();
         miv_search.setVisibility(View.VISIBLE);
         mtv_title.setText(getStringResouce(R.string.help_bangzhuzhongxin));
-    }
-
-    public static void startAct(Context context) {
-        Intent intent = new Intent(context, HelpOneAct.class);
-//        intent.putExtra("storeId", storeId);//店铺id
-        context.startActivity(intent);
     }
 
     @Override
@@ -156,11 +146,7 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
                 pHelpOne.getUserId();
                 break;
             case R.id.mllayout_dianhua:
-                if (promptDialog == null) {
-                    initDialog();
-                } else {
-                    promptDialog.show();
-                }
+                pHelpOne.getHelpPhone();
                 break;
             case R.id.miv_search:
                 SearchQuestionAct.startAct(this);
@@ -168,10 +154,10 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         }
     }
 
-    public void initDialog() {
-        promptDialog = new PromptDialog(this);
-        promptDialog.setSureAndCancleListener(Constant.HELP_PHONE, "呼叫", view -> {
-            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.HELP_PHONE));
+    public void initDialog(String phone) {
+        PromptDialog promptDialog = new PromptDialog(this);
+        promptDialog.setSureAndCancleListener(phone, "呼叫", view -> {
+            Intent intentServePhoneOne = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
             startActivity(intentServePhoneOne);
             promptDialog.dismiss();
         }, "取消", view -> promptDialog.dismiss()).show();
@@ -222,13 +208,13 @@ public class HelpOneAct extends BaseActivity implements View.OnClickListener, IH
         rv_qTwo.addItemDecoration(new MVerticalItemDecoration(this, 0.5f, 0, 0, getColorResouce(R.color.value_EFEEEE)));
         helpQtwoAdapter.setOnItemClickListener((view, position) -> {
             HelpcenterIndexEntity.QuestionCommon common = helpcenterIndexEntity.questionCommon.get(position);
-            HelpSolutionAct.startAct(getBaseContext(),common.id);
+            HelpSolutionAct.startAct(getBaseContext(), common.id);
         });
     }
 
     @Override
     public void setPhoneNum(String phoneNum) {
-        Constant.HELP_PHONE = phoneNum;
+        initDialog(phoneNum);
     }
 
     @Override

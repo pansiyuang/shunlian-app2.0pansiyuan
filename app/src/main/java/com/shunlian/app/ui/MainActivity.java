@@ -172,11 +172,11 @@ public class MainActivity extends BaseActivity implements MessageCountManager.On
 
     @Override
     protected void onResume() {
-        if (Common.isPlus()) {
-            tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
-        } else {
-            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
-        }
+//        if (Common.isPlus()) {
+//            tv_tab_sort.setText(getStringResouce(R.string.main_wodedian));
+//        } else {
+//            tv_tab_sort.setText(getStringResouce(R.string.main_shengjiplus));
+//        }
         if (Common.isAlreadyLogin()) {
             if (isPerson) {
                 personCenterClick();

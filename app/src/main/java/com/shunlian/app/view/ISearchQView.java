@@ -12,4 +12,5 @@ import java.util.List;
 public interface ISearchQView extends IView {
     void setApiData(List<HelpSearchEntity.Content> contents);
     void getUserId(String userId);
+    void setPhoneNum(String phoneNum);
 }
