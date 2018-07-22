@@ -81,7 +81,6 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
-    public final static String Add_COOKIE = "addCookie";//解决当前页onStop后cookie失效的问题
     @BindView(R.id.mar_title)
     public MarqueeTextView mar_title;
     @BindView(R.id.mtv_title)
@@ -430,10 +429,13 @@ public abstract class H5Frag extends BaseFragment implements MyWebView.ScrollLis
             @Override
             public void onReceivedTitle(WebView view, String titles) {
                 super.onReceivedTitle(view, titles);
-                if (!isEmpty(titles)){
-                    title=titles;
-                    setTitle();
+                if (activity!=null&&!activity.isFinishing()) {
+                    if (!isEmpty(titles)) {
+                        title = titles;
+                        setTitle();
+                    }
                 }
+
             }
 
             // For Android < 3.0

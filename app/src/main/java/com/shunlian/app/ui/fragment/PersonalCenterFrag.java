@@ -865,7 +865,11 @@ public class PersonalCenterFrag extends BaseFragment implements IPersonalView, V
                 break;
             case R.id.mtv_chakan:
 //                mainActivity.myPlusClick();
-                H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                if (Common.isPlus()) {
+                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_index", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                } else {
+                    H5Act.startAct(baseContext, SharedPrefUtil.getCacheSharedPrf("plus_url", Constant.PLUS_ADD), H5Act.MODE_SONIC);
+                }
                 //点击查看特权
                 break;
             case R.id.mtv_yaoqingma:

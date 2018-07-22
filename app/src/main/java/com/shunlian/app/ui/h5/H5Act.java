@@ -73,7 +73,6 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
     public static final int MODE_DEFAULT = 0;//默认模式，没有缓存
     public static final int MODE_SONIC = 1;//有缓存
     public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;//清除缓存
-    public final static String Add_COOKIE = "addCookie";//解决当前页onStop后cookie失效的问题
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
     @BindView(R.id.mtv_close)
     public MyTextView mtv_close;
@@ -431,9 +430,11 @@ public class H5Act extends BaseActivity implements MyWebView.ScrollListener {
             @Override
             public void onReceivedTitle(WebView view, String titles) {
                 super.onReceivedTitle(view, titles);
-                if (!isEmpty(titles)){
-                    title=titles;
-                    setTitle();
+                if (!isFinishing()) {
+                    if (!isEmpty(titles)){
+                        title=titles;
+                        setTitle();
+                    }
                 }
             }
 

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.shunlian.app.R;
 import com.shunlian.app.bean.DiscoveryNavEntity;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.widget.MyImageView;
 import com.shunlian.app.widget.MyTextView;
 
@@ -53,7 +52,8 @@ public class DiscoverFlashAdapter extends BaseRecyclerAdapter<DiscoveryNavEntity
             }else {
                 gone(twoHolder.view_left,twoHolder.view_right);
             }
-            GlideUtils.getInstance().communityTopPic(context,twoHolder.miv_photo,data.thumb,4);
+//            GlideUtils.getInstance().loadImageChang(context,twoHolder.miv_photo,data.thumb);
+            GlideUtils.getInstance().communityTopPic(context,twoHolder.miv_photo,data.thumb,4,false);
         }
     }
 

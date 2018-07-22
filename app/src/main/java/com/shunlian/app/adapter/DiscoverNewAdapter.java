@@ -61,7 +61,7 @@ public class DiscoverNewAdapter extends BaseRecyclerAdapter<DiscoveryCircleEntit
         viewHolder.mtv_desc.setText(String.format(getString(R.string.discover_yiyourencanyu),content.comments));
         viewHolder.mtv_like.setText(String.format(getString(R.string.discover_renxihuan),content.likes));
         viewHolder.mtv_title.setText(content.title);
-        GlideUtils.getInstance().communityTopPic(context,viewHolder.miv_photo,content.img,4);
+        GlideUtils.getInstance().communityTopPic(context,viewHolder.miv_photo,content.img,4,false);
     }
 
     @Override
