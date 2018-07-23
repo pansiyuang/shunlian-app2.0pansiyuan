@@ -2,23 +2,24 @@ package com.shunlian.app.newchat.adapter;
 
 
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.ImageSpan;
+import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ import com.shunlian.app.adapter.BaseRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleRecyclerAdapter;
 import com.shunlian.app.adapter.SimpleViewHolder;
 import com.shunlian.app.bean.BigImgEntity;
-import com.shunlian.app.bean.MyOrderEntity;
 import com.shunlian.app.newchat.entity.BaseMessage;
 import com.shunlian.app.newchat.entity.EvaluateEntity;
 import com.shunlian.app.newchat.entity.EvaluateMessage;
@@ -48,19 +48,17 @@ import com.shunlian.app.newchat.entity.TextMessage;
 import com.shunlian.app.newchat.entity.TransferMessage;
 import com.shunlian.app.newchat.entity.UserInfoEntity;
 import com.shunlian.app.newchat.ui.ChatActivity;
+import com.shunlian.app.newchat.ui.CouponMsgAct;
 import com.shunlian.app.newchat.websocket.MemberStatus;
 import com.shunlian.app.newchat.websocket.MessageStatus;
 import com.shunlian.app.ui.confirm_order.OrderLogisticsActivity;
 import com.shunlian.app.ui.goods_detail.GoodsDetailAct;
 import com.shunlian.app.ui.help.HelpSolutionAct;
-import com.shunlian.app.ui.help.HelpTwoAct;
 import com.shunlian.app.ui.my_comment.LookBigImgAct;
 import com.shunlian.app.utils.CenterAlignImageSpan;
 import com.shunlian.app.utils.Common;
 import com.shunlian.app.utils.EmojisUtils;
 import com.shunlian.app.utils.GlideUtils;
-import com.shunlian.app.utils.LogUtil;
-import com.shunlian.app.utils.SharedPrefUtil;
 import com.shunlian.app.utils.TimeUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.widget.MyImageView;
@@ -69,7 +67,6 @@ import com.shunlian.app.widget.RatingBarView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -216,6 +213,12 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             }
         }
         ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
+    }
+
+    public void copyTextFromTextView(String content) {
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(content);
+        Common.staticToast("复制成功");
     }
 
     @Override
@@ -391,11 +394,11 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
     public void handLeftTxt(RecyclerView.ViewHolder holder, BaseMessage baseMessage) {
         TextMessage textMessage = (TextMessage) baseMessage;
         TextMessage.TextMessageBody messageBody = textMessage.msg_body;
-        LeftTxtViewHolder leftTxtViewHolder = (LeftTxtViewHolder) holder;
+        final LeftTxtViewHolder leftTxtViewHolder = (LeftTxtViewHolder) holder;
         leftTxtViewHolder.tv_name.setText(textMessage.from_nickname);
         GlideUtils.getInstance().loadCornerImage(context, leftTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
-        leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text, leftTxtViewHolder.tv_content));
-
+        leftTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
+        checkTextViewUrl(leftTxtViewHolder.tv_content);
         leftTxtViewHolder.tv_content.setBackgroundResource(getLeftNomalDrawableRes());
     }
 
@@ -404,7 +407,8 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         TextMessage.TextMessageBody messageBody = textMessage.msg_body;
         RightTxtViewHolder rightTxtViewHolder = (RightTxtViewHolder) holder;
         GlideUtils.getInstance().loadCornerImage(context, rightTxtViewHolder.miv_icon, textMessage.from_headurl, 3);
-        rightTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text, rightTxtViewHolder.tv_content));
+        rightTxtViewHolder.tv_content.setText(getEmotionContent(messageBody.text));
+        checkTextViewUrl(rightTxtViewHolder.tv_content);
 
         if (baseMessage.getStatus() == MessageStatus.SendFail) {
             rightTxtViewHolder.miv_status_error.setVisibility(View.VISIBLE);
@@ -1198,7 +1202,7 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
         return m;
     }
 
-    public SpannableString getEmotionContent(String source, TextView tv) {
+    public SpannableString getEmotionContent(String source) {
         int position = -1;
         SpannableString spannableString = new SpannableString(source);
         Matcher matcherEmotion = patternEmotion.matcher(spannableString);
@@ -1398,5 +1402,40 @@ public class ChatMessageAdapter extends BaseRecyclerAdapter<MsgInfo> {
             }
         }
         return R.drawable.bg_chat_other;
+    }
+
+    public void checkTextViewUrl(TextView textView) {
+        CharSequence text = textView.getText();
+        if (text instanceof Spannable) {
+            int end = text.length();
+            Spannable sp = (Spannable) textView.getText();
+            URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
+            SpannableStringBuilder style = new SpannableStringBuilder(text);
+            style.clearSpans();
+            for (URLSpan url : urls) {
+                MyURLSpan myURLSpan = new MyURLSpan(url.getURL());
+                style.setSpan(myURLSpan, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            }
+            textView.setText(style);
+        }
+    }
+
+    public class MyURLSpan extends ClickableSpan {
+        private String mUrl;
+
+        public MyURLSpan(String url) {
+            mUrl = url;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            String voucherId = Common.getURLParameterValue(mUrl, "voucher_id");
+            if (TextUtils.isEmpty(voucherId)) {
+                return;
+            }
+            Intent intent = new Intent(context, CouponMsgAct.class);
+            intent.putExtra("coupon_id", voucherId);
+            context.startActivity(intent);
+        }
     }
 }

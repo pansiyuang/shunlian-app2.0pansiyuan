@@ -512,13 +512,10 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             fastAdapter = new FastAdapter(getContext(), replysetList);
             recyclerView_fast.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView_fast.setAdapter(fastAdapter);
-            fastAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    ReplysetEntity.Replyset replyset = replysetList.get(position);
-                    if (!TextUtils.isEmpty(replyset.item)) {
-                        chatView.sendFast(replyset.item);
-                    }
+            fastAdapter.setOnItemClickListener((view, position) -> {
+                ReplysetEntity.Replyset replyset = replysetList.get(position);
+                if (!TextUtils.isEmpty(replyset.item)) {
+                    chatView.sendFast(replyset.item);
                 }
             });
         } else {

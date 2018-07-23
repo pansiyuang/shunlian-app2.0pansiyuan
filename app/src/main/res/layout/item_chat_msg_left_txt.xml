@@ -33,10 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:autoLink="web"
             android:background="@drawable/bg_chat_other"
             android:gravity="center_vertical"
+            android:linksClickable="true"
             android:maxWidth="260dp"
             android:textColor="@color/new_text"
+            android:textIsSelectable="true"
             android:textSize="17dp" />
     </RelativeLayout>
 </RelativeLayout>

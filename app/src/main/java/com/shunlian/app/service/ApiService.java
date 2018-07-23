@@ -2386,4 +2386,13 @@ public interface ApiService {
      */
     @GET("chat/chat/quickList")
     Call<BaseEntity<ReplysetEntity>> replysetList(@QueryMap Map<String, String> map);
+
+    /**
+     * 指定优惠券
+     *
+     * @param map
+     * @return
+     */
+    @GET("voucher/getassignvoucher")
+    Call<BaseEntity<VoucherEntity>> getAssignVoucher(@QueryMap Map<String, String> map);
 }

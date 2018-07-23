@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/img_pingtai"
@@ -19,7 +20,7 @@
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6.5dp"
@@ -46,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="¥200"
-                    android:textColor="@color/new_text"
+                    android:textColor="@color/pink_color"
                     android:textSize="18sp" />
 
                 <TextView
@@ -76,10 +77,10 @@
                     android:layout_below="@+id/tv_date"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/shape_dash_line"
-                    android:text="有效期：2018/06/23-2018/06/28"
-                    android:textSize="9sp" />
+                    android:visibility="invisible" />
 
                 <TextView
+                    android:id="@+id/tv_use"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view_dash_line"
@@ -90,10 +91,11 @@
             </RelativeLayout>
 
             <com.shunlian.app.widget.MyImageView
+                android:id="@+id/miv_pick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/img_quan_hong"></com.shunlian.app.widget.MyImageView>
+                android:src="@mipmap/img_quan_hong" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -152,13 +152,34 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
             setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);
 
-            if ("0".equals(article.thumb_type)) {
+            if ("0".equals(article.thumb_type)) { //0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）, 2九宫格，3小视频
                 visible(articleViewHolder.rl_small);
                 gone(articleViewHolder.ll_big);
             } else {
-                visible(articleViewHolder.ll_big);
-                gone(articleViewHolder.rl_small);
+                showViewType(article.thumb_type, articleViewHolder);
             }
+        }
+    }
+
+    public void showViewType(String type, ArticleViewHolder articleViewHolder) {
+        visible(articleViewHolder.ll_big);
+        gone(articleViewHolder.rl_small);
+        switch (type) {
+            case "1":
+                visible(articleViewHolder.miv_big_icon);
+                gone(articleViewHolder.recycler_nine);
+                gone(articleViewHolder.rl_video);
+                break;
+            case "2":
+                gone(articleViewHolder.miv_big_icon);
+                visible(articleViewHolder.recycler_nine);
+                gone(articleViewHolder.rl_video);
+                break;
+            case "3":
+                gone(articleViewHolder.miv_big_icon);
+                gone(articleViewHolder.recycler_nine);
+                visible(articleViewHolder.rl_video);
+                break;
         }
     }
 
@@ -314,6 +335,15 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
         @BindView(R.id.ll_big)
         LinearLayout ll_big;
+
+        @BindView(R.id.rl_video)
+        RelativeLayout rl_video;
+
+        @BindView(R.id.miv_video)
+        MyImageView miv_video;
+
+        @BindView(R.id.recycler_nine)
+        RecyclerView recycler_nine;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);

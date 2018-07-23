@@ -95,7 +95,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_content.setEllipsize(TextUtils.TruncateAt.END);
 
             if (!isEmpty(experience.image)) {
-                if (experience.image.size()==1){
+                if (experience.image.size() == 1) {
                     gone(holderView.recycler_img);
                     visible(holderView.miv_pic);
                     GlideUtils.getInstance().loadImageShu(context, holderView.miv_pic, experience.image.get(0));
@@ -108,7 +108,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
                             LookBigImgAct.startAct(context, bigImgEntity);
                         }
                     });
-                }else {
+                } else {
                     gone(holderView.miv_pic);
                     visible(holderView.recycler_img);
                     GridImageAdapter gridImageAdapter = new GridImageAdapter(context, experience.image);
@@ -136,7 +136,7 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
             holderView.tv_comment_count.setText(experience.comment_num);
             holderView.tv_evaluate_count.setText(experience.praise_num);
 
-            holderView.tv_add_car.setOnClickListener(v -> {
+            holderView.ll_goods.setOnClickListener(v -> {
                 if (!isEmpty(goods.id)) {
                     GoodsDetailAct.startAct(context, goods.id);
                 }
@@ -200,9 +200,6 @@ public class ExperienceAdapter extends BaseRecyclerAdapter<ExperienceEntity.Expe
 
         @BindView(R.id.tv_price)
         TextView tv_price;
-
-        @BindView(R.id.tv_add_car)
-        TextView tv_add_car;
 
         @BindView(R.id.tv_comment_count)
         TextView tv_comment_count;

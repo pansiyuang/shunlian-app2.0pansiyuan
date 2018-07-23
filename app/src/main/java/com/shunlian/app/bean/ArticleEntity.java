@@ -28,6 +28,7 @@ public class ArticleEntity {
         public String full_title;
         public String thumb;
         public String thumb_type;
+        public String video_url;
         public List<Tag> tags;
         public String share_url;
         public String likes;
