@@ -58,4 +58,12 @@ public class CommonEntity {
     public String url;
     public String is_plus;
     public String ducha_email;
+
+    //发现未读数
+    public int circle;
+    public int material;
+    public int experience;
+    public int nice;
+    public int focus;
+    public int total;
 }

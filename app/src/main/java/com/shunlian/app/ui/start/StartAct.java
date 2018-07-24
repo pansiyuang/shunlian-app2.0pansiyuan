@@ -275,6 +275,11 @@ public class StartAct extends MBaseActivity implements IMain {
     }
 
     @Override
+    public void setDiscoveryUnreadCount(CommonEntity data) {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }

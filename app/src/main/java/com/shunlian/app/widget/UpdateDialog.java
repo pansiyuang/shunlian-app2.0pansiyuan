@@ -284,6 +284,11 @@ public class UpdateDialog implements IMain {
     }
 
     @Override
+    public void setDiscoveryUnreadCount(CommonEntity data) {
+
+    }
+
+    @Override
     public void showFailureView(int request_code) {
 
     }
