@@ -399,8 +399,6 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
         @BindView(R.id.tv_price)
         TextView tv_price;
 
-        @BindView(R.id.tv_add_car)
-        TextView tv_add_car;
 
         @BindView(R.id.tv_comment_count)
         TextView tv_comment_count;
@@ -430,7 +428,6 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
             recycler_img.addItemDecoration(gridSpacingItemDecoration);
             itemView.setOnClickListener(this);
             ll_goods.setOnClickListener(this);
-            tv_add_car.setOnClickListener(this);
         }
 
         /**
@@ -447,7 +444,6 @@ public class ExperienceDetailAdapter extends BaseRecyclerAdapter<FindCommentList
                     EventBus.getDefault().post(event);
                     break;
                 case R.id.ll_goods:
-                case R.id.tv_add_car:
                     String id = mExperience_info.goods.id;
                     GoodsDetailAct.startAct(context,id);
                     break;

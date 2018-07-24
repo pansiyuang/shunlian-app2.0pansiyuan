@@ -125,6 +125,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     private GoodsDeatilEntity mGoodsDeatilEntity;
     private int firstPosition;
     private int refreshViewHeight;
+    private String currentSid;
 
     public static void startAct(Context context, ChatMemberEntity.ChatMember chatMember) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -240,6 +241,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             }
             chatShopId = currentChatMember.shop_id;
             chatRoleType = currentChatMember.type;
+            currentSid = currentChatMember.sid;
         } else {
             chatRoleType = getIntent().getStringExtra("role_type");
         }
@@ -273,12 +275,14 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             case Admin: //
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showCommentBtn();
+                et_input.showFastComment();
                 tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Seller:
                 tv_title_right.setText(getStringResouce(R.string.switch_other));
                 et_input.showGoodsBtn();
                 et_input.showCommentBtn();
+                et_input.showFastComment();
                 tv_title_right.setVisibility(View.VISIBLE);
                 break;
             case Member:
@@ -335,16 +339,16 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     public void switch2Jump() {
         switch (mWebsocketClient.getMemberStatus()) {
             case Admin: //
-                if (isEmpty(currentChatMember.sid)) {
+                if (isEmpty(currentSid)) {
                     return;
                 }
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentChatMember.sid);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentSid);
                 break;
             case Seller:
-                if (isEmpty(currentChatMember.sid)) {
+                if (isEmpty(currentSid)) {
                     return;
                 }
-                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentChatMember.sid);
+                SwitchOtherActivity.startAct(this, currentUserId, chat_m_user_Id, currentSid);
                 break;
             case Member:
                 if ("1".equals(chatRoleType) || "2".equals(chatRoleType)) { // 对方是平台客服
@@ -365,7 +369,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             from_id = user.join_id;
             from_nickname = user.nickname;
             from_type = user.type;
+
+            et_input.setJoinId(user.join_id);
+            et_input.setRoleType(from_type);
         }
+
     }
 
     @Override
@@ -424,6 +432,11 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
     @Override
     public void sendComment() {
         sendEvaluteMessage();
+    }
+
+    @Override
+    public void sendFast(String content) {
+        sendTextMessage(content);
     }
 
     /**
@@ -649,12 +662,12 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
         evaluateMessage.tag_id = currentTagId;
         evaluateMessage.type = "send_message";
 
-        if (isEmpty(currentChatMember.sid)) {
+        if (isEmpty(currentSid)) {
             return;
         }
         EvaluateMessage.EvaluateMessageBody evaluateMessageBody = new EvaluateMessage.EvaluateMessageBody();
         EvaluateMessage.Evaluate evaluate = new EvaluateMessage.Evaluate();
-        evaluate.sid = currentChatMember.sid;
+        evaluate.sid = currentSid;
         evaluateMessageBody.evaluate = evaluate;
         evaluateMessage.msg_body = evaluateMessageBody;
 
@@ -967,7 +980,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
             currentChatMember.m_user_id = baseMessage.from_user_id;
             currentChatMember.nickname = baseMessage.from_nickname;
             currentChatMember.headurl = baseMessage.from_headurl;
-            currentChatMember.sid = baseMessage.sid;
+            currentSid = baseMessage.sid;
         }
     }
 
@@ -1011,6 +1024,7 @@ public class ChatActivity extends BaseActivity implements ChatView, IChatView, C
                 if (msgInfo.m_user_id.equals(chat_m_user_Id) || baseMessage.from_user_id.equals(chat_m_user_Id)) {
                     mAdapter.addMsgInfo(msgInfo);
                     readedMsg(chat_m_user_Id);
+                    currentSid = msgInfo.sid;
                 }
             } else if (getSendType(baseMessage.from_user_id) == BaseMessage.VALUE_RIGHT) {
                 if (baseMessage.from_user_id.equals(currentUserId)) {

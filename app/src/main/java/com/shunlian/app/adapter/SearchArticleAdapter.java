@@ -35,7 +35,7 @@ public class SearchArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Arti
         if (holder instanceof ArticleViewHolder) {
             ArticleViewHolder viewHolder = (ArticleViewHolder) holder;
             ArticleEntity.Article article = lists.get(position);
-            viewHolder.tv_title.setText(HighLightKeyWordUtil.getHighLightKeyWord(R.color.value_40A5FF, article.title, article.full_title_keywords));
+            viewHolder.tv_title.setText(HighLightKeyWordUtil.getHighLightKeyWord(R.color.value_40A5FF, article.title, article.title_keywords));
             viewHolder.tv_content.setText(HighLightKeyWordUtil.getHighLightKeyWord(R.color.value_40A5FF, article.full_title, article.full_title_keywords));
             viewHolder.tv_from.setText("来源：" + article.pub_by);
             viewHolder.tv_date.setText(article.pub_time);

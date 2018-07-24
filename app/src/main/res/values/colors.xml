@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <color name="white_10dim">#E5ffffff</color>
     <color name="shape1">#5d8df7</color>
     <color name="shape2">#5EB9F8</color>

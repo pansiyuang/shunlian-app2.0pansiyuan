@@ -16,15 +16,18 @@ import android.widget.TextView;
 
 import com.shunlian.app.R;
 import com.shunlian.app.bean.ArticleEntity;
+import com.shunlian.app.ui.discover.VideoPlayActivity;
 import com.shunlian.app.ui.discover.other.CommentListAct;
 import com.shunlian.app.ui.discover.DiscoverJingxuanFrag;
 import com.shunlian.app.ui.discover.jingxuan.TagDetailActivity;
+import com.shunlian.app.utils.BitmapUtil;
 import com.shunlian.app.utils.GlideUtils;
 import com.shunlian.app.utils.LogUtil;
 import com.shunlian.app.utils.TransformUtil;
 import com.shunlian.app.utils.VerticalItemDecoration;
 import com.shunlian.app.widget.MyImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,11 +44,13 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
     private ChangeTopicAdapter mAdapter;
     private List<ArticleEntity.Tag> mTags;
     private ChosenTagAdapter chosenTagAdapter;
+    private List<String> imgList;
 
     public ArticleAdapter(Context context, List<ArticleEntity.Article> lists, DiscoverJingxuanFrag frag, List<ArticleEntity.Tag> tags) {
         super(context, true, lists);
         this.mFragment = frag;
         this.mTags = tags;
+        imgList = new ArrayList<>();
     }
 
     @Override
@@ -152,13 +157,50 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
             setTopicData(article.topic_list, articleViewHolder.ll_change, articleViewHolder.recycler_change);
 
-            if ("0".equals(article.thumb_type)) {
+            imgList.clear();
+            if (article.thumb_list != null && article.thumb_list.length != 0) {
+                for (String s : article.thumb_list) {
+                    imgList.add(s);
+                }
+            }
+
+            if ("0".equals(article.thumb_type)) { //0小图（左右布局，图在右侧），1大图（上下布局，图是通栏显示）, 2九宫格，3小视频
                 visible(articleViewHolder.rl_small);
                 gone(articleViewHolder.ll_big);
             } else {
-                visible(articleViewHolder.ll_big);
-                gone(articleViewHolder.rl_small);
+                showViewType(article.thumb_type, articleViewHolder, article);
             }
+        }
+    }
+
+    public void showViewType(String type, ArticleViewHolder articleViewHolder, ArticleEntity.Article article) {
+        visible(articleViewHolder.ll_big);
+        gone(articleViewHolder.rl_small);
+        switch (type) {
+            case "1":
+                visible(articleViewHolder.miv_big_icon);
+                gone(articleViewHolder.recycler_nine);
+                gone(articleViewHolder.rl_video);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0);
+                break;
+            case "2":
+                gone(articleViewHolder.miv_big_icon);
+                visible(articleViewHolder.recycler_nine);
+                gone(articleViewHolder.rl_video);
+                BitmapUtil.discoverImg(articleViewHolder.miv_big_icon, articleViewHolder.recycler_nine, null, imgList, mFragment.getActivity(), 0, 0, 0, 12, 0, 0);
+                break;
+            case "3":
+                gone(articleViewHolder.miv_big_icon);
+                gone(articleViewHolder.recycler_nine);
+                visible(articleViewHolder.rl_video);
+                GlideUtils.getInstance().loadImage(context, articleViewHolder.miv_video, article.thumb);
+                articleViewHolder.miv_video.setOnClickListener(v -> {
+                    if (isEmpty(article.video_url)) {
+                        return;
+                    }
+                    VideoPlayActivity.startActivity(context, article.video_url, article.thumb);
+                });
+                break;
         }
     }
 
@@ -314,6 +356,15 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleEntity.Article> {
 
         @BindView(R.id.ll_big)
         LinearLayout ll_big;
+
+        @BindView(R.id.rl_video)
+        RelativeLayout rl_video;
+
+        @BindView(R.id.miv_video)
+        MyImageView miv_video;
+
+        @BindView(R.id.recycler_nine)
+        RecyclerView recycler_nine;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);

@@ -17,4 +17,6 @@ public interface ChatView {
     void sendOrder();
 
     void sendComment();
+
+    void sendFast(String content);
 }
